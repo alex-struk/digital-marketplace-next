@@ -5419,23 +5419,55 @@ export default function create(
   //
   // /opportunities/code-with-us/:opportunityId: "Code With Us opportunity" over the title,
   // then Status, Proposal deadline, Reward, Location, Remote work, Published, Created by and
-  // Last changed by as terms and definitions, "Opportunity ID: <id>", and the Description
-  // (with its Attachments), Skills, Key dates ("Assignment date: <date>", ...) and Addenda
-  // sections. Walked as the administrator, a public sector employee and a vendor on the
-  // seeded published, draft and awarded opportunities and on one just published: it offers
-  // no watch control and no way to start a proposal, and an awarded opportunity names no
+  // Last changed by as terms and definitions (Created by and Last changed by only to staff),
+  // "Opportunity ID: <id>", a "Watch this opportunity" checkbox under "Watching sends you an
+  // email whenever this opportunity changes." (to anybody signed in; it says "You are no
+  // longer watching this opportunity." and the like once pressed), to staff who may manage it
+  // a "Manage this opportunity" link, and the Description (with its Attachments), Skills, Key
+  // dates ("Assignment date: <date>", ...) and Addenda sections. Walked as the administrator,
+  // a public sector employee and a vendor on the seeded published, draft and awarded
+  // opportunities: it offers no way to start a proposal, and an awarded opportunity names no
   // successful proponent anywhere on it.
+  //
+  // A draft is shown only to whoever may see it: the seeded draft of another staff member
+  // opens for the administrator (its Status "Draft") and answers a vendor and the other
+  // public sector employee "Page not found". That answer, for an opportunity known to exist
+  // (a seeded one, or one this run has already seen open), is the page withholding it from
+  // this reader, so every reading of it is empty. For an identifier nobody has seen open it
+  // cannot be told apart from a page that never existed, and is reported unbound.
   const cwuView = signedInScreen(CWU_VIEW, "/opportunities/code-with-us/:opportunityId");
-  async function onCwuView(member: string): Promise<void> {
+  const knownOpportunities = new Set<string>(
+    Object.values(seed.opportunities as unknown as Record<string, { id?: string }>)
+      .map((one) => one.id ?? "")
+      .filter(Boolean),
+  );
+  const cwuIdShown = (): string => /^\/opportunities\/code-with-us\/([^/?#]+)/.exec(new URL(page.url()).pathname)?.[1] ?? "";
+  // True when the page is shown; false when it is withheld from this reader.
+  async function onCwuView(member: string): Promise<boolean> {
     const refused = await refusalShown();
-    if (refused) unbound(cwuView.where(member), `the opportunity did not open at ${page.url()}: ${refused}`);
+    const id = cwuIdShown();
+    if (!refused) {
+      if (id) knownOpportunities.add(id);
+      return true;
+    }
+    if (id && knownOpportunities.has(id)) {
+      noteRefusal(`${cwuView.where(member)} — the opportunity ${id}, which exists, answered ${actingId()} with ${refused.replace(/\n+/g, " ")}`);
+      return false;
+    }
+    return unbound(cwuView.where(member), `the opportunity did not open at ${page.url()}: ${refused}`);
+  }
+  // The same, for an action: there is nothing to press on a page that was withheld.
+  async function cwuViewShown(member: string): Promise<void> {
+    if (!(await onCwuView(member))) {
+      unbound(cwuView.where(member), `${page.url()} answered ${actingId()} "Page not found", so there is nothing on it to press`);
+    }
   }
   async function cwuViewTerm(member: string, term: RegExp): Promise<string> {
-    await onCwuView(member);
+    if (!(await onCwuView(member))) return "";
     return definitionOf(term);
   }
   async function cwuKeyDate(member: string, label: RegExp): Promise<string> {
-    await onCwuView(member);
+    if (!(await onCwuView(member))) return "";
     const region = seen(page.getByRole("region", { name: /^key dates$/i }));
     if (!(await region.count())) return "";
     for (const line of lined(await region.first().innerText())) {
@@ -5445,25 +5477,45 @@ export default function create(
     return "";
   }
   const CWU_VIEW_WALKED =
-    "walked as the administrator, a public sector employee and a vendor on the seeded published, draft and awarded Code With Us opportunities and on one just published";
+    "walked as the administrator, a public sector employee and a vendor on the seeded published, draft and awarded Code With Us opportunities";
   const opportunityCwuView: S.OpportunityCwuViewPage = {
     open: (params) => go("/opportunities/code-with-us/:opportunityId", params as unknown as Record<string, string>),
-    toggleWatch: async () => {
-      await onCwuView("toggle_watch");
-      const control = await findControl(page, /^\s*(watch|watching|unwatch|stop watching)( this opportunity)?\s*$/i);
-      if (!control) unbound(cwuView.where("toggle_watch"), `${CWU_VIEW_WALKED}: the page offers no control to watch the opportunity; on ${page.url()} it offers ${await offered()}`);
-      await control.click();
+    // "Watch this opportunity", a checkbox; pressing it saves at once. An input that says
+    // which way it should end up is honoured, and a box already that way is left alone.
+    toggleWatch: async (input) => {
+      const where = cwuView.where("toggle_watch");
+      await cwuViewShown("toggle_watch");
+      const box = seen(page.getByRole("main").getByRole("checkbox", { name: /^\s*watch( this opportunity)?\s*$/i })).first();
+      await box.waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+      if (!(await box.count())) {
+        unbound(where, `${CWU_VIEW_WALKED}: the page offers a signed-in person a "Watch this opportunity" box, and on ${page.url()} as ${actingId()} there is none; it offers ${await offered()}`);
+      }
+      if (await isDisabled(box)) throw new Error(`${where} — the "Watch this opportunity" box is disabled on ${page.url()}`);
+      const was = await box.isChecked();
+      const wanted = boxWanted(input, ["watch", "watching", "watched", "subscribed"]);
+      if (wanted !== undefined && wanted === was) return;
+      await box.click();
       await settle();
+      await page
+        .waitForFunction(
+          (before) => {
+            const found = Array.from(document.querySelectorAll("main input[type=checkbox]")) as HTMLInputElement[];
+            return found.some((one) => one.checked !== before);
+          },
+          was,
+          { timeout: 5000 },
+        )
+        .catch(() => undefined);
     },
     startProposal: async () => {
-      await onCwuView("start_proposal");
+      await cwuViewShown("start_proposal");
       const control = await findControl(page, /^\s*(start|create|submit|write)( a)? proposal\s*$/i);
-      if (!control) unbound(cwuView.where("start_proposal"), `${CWU_VIEW_WALKED}: the page offers no way to start a proposal, and /opportunities/code-with-us/:opportunityId/proposals/create answers "Page not found" to the vendor; on ${page.url()} it offers ${await offered()}`);
+      if (!control) unbound(cwuView.where("start_proposal"), `${CWU_VIEW_WALKED}: signed in as a vendor on the seeded published opportunity (proposal deadline in 2030), the page offers only "Watch this opportunity" and no way to start a proposal, and /opportunities/code-with-us/:opportunityId/proposals/create answers "Page not found" to the vendor; on ${page.url()} it offers ${await offered()}`);
       await control.click();
       await settle();
     },
     opportunityIdentifier: async () => {
-      await onCwuView("opportunity_identifier");
+      if (!(await onCwuView("opportunity_identifier"))) return "";
       return shownIdentifier();
     },
     status: () => cwuViewTerm("status", /^status$/i),
@@ -5479,7 +5531,7 @@ export default function create(
     reward: () => cwuViewTerm("reward", /^reward$/i),
     // The Addenda section's entries; "No addenda have been added." is none.
     addenda: async () => {
-      await onCwuView("addenda");
+      if (!(await onCwuView("addenda"))) return "";
       const region = seen(page.getByRole("region", { name: /^addenda$/i }));
       if (!(await region.count())) return "";
       return lined(await region.first().innerText())
@@ -5490,16 +5542,16 @@ export default function create(
     // An awarded opportunity's page names no winner (seen on the seeded awarded one), so
     // these read as nothing on a page that opened.
     successfulProponent: async () => {
-      await onCwuView("successful_proponent");
+      if (!(await onCwuView("successful_proponent"))) return "";
       const said = (await textLines()).find((line) => /awarded to\s+\S/i.test(line));
       return said ? (/awarded to\s+(.+)$/i.exec(said)?.[1] ?? "").replace(/\.$/, "").trim() : definitionOf(/^(successful proponent|awarded to)$/i);
     },
     successfulProponentContactDetails: async () => {
-      await onCwuView("successful_proponent_contact_details");
+      if (!(await onCwuView("successful_proponent_contact_details"))) return "";
       return awardDetail(`${CWU_VIEW}.successful_proponent_contact_details`, CONTACT_DETAIL);
     },
     successfulProponentScore: async () => {
-      await onCwuView("successful_proponent_score");
+      if (!(await onCwuView("successful_proponent_score"))) return "";
       return awardDetail(`${CWU_VIEW}.successful_proponent_score`, SCORE_DETAIL);
     },
   };
@@ -5670,13 +5722,22 @@ export default function create(
   }
   // Views, watchers and proposals: a draft's summary says "Views, watchers and proposals are
   // counted once the opportunity is published." and a published one shows no count at all.
+  // Looked for again on the running build: the Summary section of a published, lapsed,
+  // in-processing or awarded opportunity carries only Proposal deadline, Reward, Published,
+  // Created by and Last changed by, to the administrator and to the owning public sector
+  // employee alike, and still none after the administrator ticked "Watch this opportunity"
+  // on its page and came back; the sections offered are Summary, Opportunity, Addenda and
+  // History, none of them a report; and the opportunity the screen loads from
+  // /api/opportunities/code-with-us/:id carries no view, watcher or proposal count to show.
+  const REPORTING_LOOKED =
+    "looked again as the administrator and as the owning public sector employee on the seeded published, lapsed-with-three-proposals, in-processing and awarded Code With Us opportunities (and on the published one after the administrator ticked \"Watch this opportunity\" on its page): the Summary carries only Proposal deadline, Reward, Published, Created by and Last changed by, the only sections are Summary, Opportunity, Addenda and History, and the opportunity the screen loads from /api/opportunities/code-with-us/:id carries no view, watcher or proposal count";
   async function reportingCount(member: string, term: RegExp): Promise<string> {
     const shown = await summaryTerm(member, term);
     if (shown) return shown;
     if ((await textLines()).some((line) => /counted once the opportunity is published/i.test(line))) return "";
     return unbound(
       cwuManage.where(member),
-      `the summary on ${page.url()} shows no ${term} count (it shows ${(await textLines()).filter((line) => !/^(summary|opportunity|addenda|history)$/i.test(line)).slice(0, 14).join(" / ")}); ${CWU_MANAGE_WALKED}`,
+      `the summary on ${page.url()} shows no ${term} count (it shows ${(await textLines()).filter((line) => !/^(summary|opportunity|addenda|history)$/i.test(line)).slice(0, 14).join(" / ")}); ${REPORTING_LOOKED}`,
     );
   }
   const opportunityCwuEdit: S.OpportunityCwuEditPage = {
@@ -5798,6 +5859,124 @@ export default function create(
     assignmentDate: () => cwuFormDate("assignment_date", /assignment\s*date/i),
     startDate: () => cwuFormDate("start_date", /^\s*start\s*date/i),
     completionDate: () => cwuFormDate("completion_date", /completion\s*date/i),
+  };
+
+  // ---------------------------------------------------------------- new-opportunity emails on the list
+  //
+  // /opportunities, to anybody signed in (seen as a vendor, a public sector employee and the
+  // administrator): under the filters and the "Showing N opportunities" line, a region headed
+  // "New opportunity emails" with one sentence and one button. Subscribed: "You are emailed
+  // at <address> when new opportunities are posted." and "Stop emailing me about new
+  // opportunities"; not: "You are not emailed when new opportunities are posted." and "Email
+  // me about new opportunities". Pressing it saves at once and its status says so ("Saved.
+  // You will no longer be emailed when new opportunities are posted."). A signed-out visitor
+  // is shown the list with no such region, and that absence is the answer, read as nothing.
+  // It stays shown at a phone's width (375 pixels).
+  const OPTIN = "notification-optin-opportunity-list";
+  const OPTIN_ON = /^\s*stop emailing me about new opportunities\s*$/i;
+  const OPTIN_OFF = /^\s*email me about new opportunities\s*$/i;
+  async function onOptinList(member: string): Promise<Locator | null> {
+    if (new URL(page.url()).pathname !== "/opportunities" || originOf(page.url()) !== originOf(baseURL)) {
+      await go("/opportunities");
+    }
+    await ready();
+    const refused = await refusalShown();
+    if (refused) unbound(`${OPTIN}.${member}`, `/opportunities did not open at ${page.url()}: ${refused}`);
+    // The list has loaded once it says how many it shows; the region follows the session.
+    await seen(page.getByRole("main").getByText(/^showing \d+ opportunit/i))
+      .first()
+      .waitFor({ state: "visible", timeout: 10000 })
+      .catch(() => undefined);
+    const heading = page.getByRole("main").getByRole("heading", { name: /^\s*new opportunity emails\s*$/i });
+    // A signed-in person's region comes with their account; a visitor's never comes.
+    const signedIn = !!(actingAs as unknown as { signIn?: unknown } | null)?.signIn;
+    await heading.first().waitFor({ state: "attached", timeout: signedIn ? 5000 : 1500 }).catch(() => undefined);
+    if (!(await heading.count())) return null;
+    // The filter's inner locator is looked for inside each region, so it starts from the page.
+    const region = page
+      .getByRole("main")
+      .getByRole("region")
+      .filter({ has: page.getByRole("heading", { name: /^\s*new opportunity emails\s*$/i }) });
+    return (await region.count()) ? region.first() : heading.first().locator("xpath=..");
+  }
+  function optinButton(region: Locator): Locator {
+    return region.getByRole("button", { name: /email(ing)? me about new opportunities/i }).first();
+  }
+  async function optinState(region: Locator): Promise<"checked" | "unchecked" | ""> {
+    const button = optinButton(region);
+    if (!(await button.count())) return "";
+    const name = (await button.innerText()).trim();
+    if (OPTIN_ON.test(name)) return "checked";
+    if (OPTIN_OFF.test(name)) return "unchecked";
+    return "";
+  }
+  // The region's heading, its sentence and its button, without the passing "Saved." status.
+  async function optinWords(region: Locator): Promise<string> {
+    const status = region.getByRole("status");
+    const said = (await status.count()) ? lined(await status.first().innerText()) : [];
+    return lined(await region.innerText())
+      .filter((line) => !said.includes(line))
+      .join("\n");
+  }
+  const optinList: S.NotificationOptinOpportunityListPage = {
+    open: () => go("/opportunities"),
+    toggleNewOpportunityNotifications: async (input) => {
+      const where = `${OPTIN}.toggle_new_opportunity_notifications`;
+      const region = await onOptinList("toggle_new_opportunity_notifications");
+      if (!region) {
+        unbound(where, `/opportunities shows ${actingId()} no "New opportunity emails" control; it is offered to a signed-in person (seen as a vendor, a public sector employee and the administrator), and a signed-out visitor has none to press`);
+      }
+      const button = optinButton(region);
+      if (!(await button.count())) unbound(where, `the "New opportunity emails" region on ${page.url()} offers no button; it reads ${(await optinWords(region)).replace(/\n/g, " / ")}`);
+      if (await isDisabled(button)) throw new Error(`${where} — "${(await button.innerText()).trim()}" is disabled on ${page.url()}`);
+      const was = await optinState(region);
+      const wanted = boxWanted(input, NOTICE_KEYS);
+      if (wanted !== undefined && (was === "checked") === wanted) return;
+      await button.click();
+      await settle();
+      const flipped = await page
+        .waitForFunction(
+          (before) => {
+            const buttons = Array.from(document.querySelectorAll("main button")) as HTMLElement[];
+            const one = buttons.find((b) => /email(ing)? me about new opportunities/i.test(b.innerText));
+            if (!one) return false;
+            const on = /stop emailing/i.test(one.innerText);
+            return on !== (before === "checked");
+          },
+          was,
+          { timeout: 10000 },
+        )
+        .then(() => true)
+        .catch(() => false);
+      if (!flipped) {
+        const status = region.getByRole("status");
+        const said = (await status.count()) ? (await status.first().innerText()).trim() : "";
+        throw new Error(`${where} — pressing the "New opportunity emails" button on ${page.url()} left it ${was}${said ? `; it says "${said}"` : ""}`);
+      }
+    },
+    notificationControl: async () => {
+      const region = await onOptinList("notification_control");
+      return region ? optinWords(region) : "";
+    },
+    // "checked" when the person is emailed about new opportunities, "unchecked" when not, as
+    // the profile's own box reads; nothing when no control is shown.
+    notificationControlState: async () => {
+      const region = await onOptinList("notification_control_state");
+      return region ? optinState(region) : "";
+    },
+    // The control as it is shown at a phone's width (375 pixels): its words when it is on
+    // screen there, nothing when it is hidden. The window is put back as it was.
+    notificationControlHiddenOnNarrowScreen: async () => {
+      const before = page.viewportSize();
+      await page.setViewportSize({ width: 375, height: before?.height ?? 800 });
+      try {
+        const region = await onOptinList("notification_control_hidden_on_narrow_screen");
+        if (!region || !(await region.isVisible())) return "";
+        return optinWords(region);
+      } finally {
+        if (before) await page.setViewportSize(before);
+      }
+    },
   };
 
   // ---------------------------------------------------------------- the attachment control
@@ -6942,21 +7121,7 @@ export default function create(
 
     notificationUnsubscribeLanding: unsubscribeLanding(),
 
-    // The list itself opens for anybody; the notification control on it is a signed-in
-    // person's own, and none is drawn for a signed-out visitor.
-    notificationOptinOpportunityList: {
-      open: () => go("/opportunities"),
-      ...unboundMembers(
-        "notification-optin-opportunity-list",
-        `opened /opportunities signed out: it carries a program chooser, "Remote OK" and a search box and no control about new-opportunity notifications, which is offered only to a signed-in person, and ${NOBODY_SIGNS_IN}`,
-        [
-          "toggle_new_opportunity_notifications",
-          "notification_control",
-          "notification_control_state",
-          "notification_control_hidden_on_narrow_screen",
-        ],
-      ),
-    } as S.NotificationOptinOpportunityListPage,
+    notificationOptinOpportunityList: optinList,
 
     notificationTermsBroadcast: termsBroadcast,
 
