@@ -345,6 +345,15 @@
 - 16:39:23 propose contract-v34 at G1
 - 16:39:26 drive: step 18: `sdlc rule contract-v34 --by agent:product-owner` — contract-v34 is open at G1, held by agent:product-owner
 - 16:39:54 rule contract-v34 approve at G1 by agent:product-owner (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 16:40:00 drive: step 19: `sdlc run bind-adapter --target new --revise` — 1 revision request for target new owed by bind-adapter; request request/build-slice-10-4#1
+- 16:40:01 run bind-adapter: pre-checks failed
+- 16:40:01 drive: step 19 recovery: the new target's sandbox was not up; starting it from proposal/build-slice-10-4 (sdlc sandbox up --target new --from proposal/build-slice-10-4), running the step once more, and taking it down after (sdlc sandbox down --target new --from proposal/build-slice-10-4)
+- 16:42:31 run bind-adapter: ok, cost 0.5723636, turns 21, on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 16:42:31 propose bind-adapter-new-54 at G3
+- 16:42:32 rule bind-adapter-new-54 escalated at G3 to tech-lead by runner:bind-adapter
+- 16:42:32 drive: step 19 recovery: taking the new target's sandbox down (sdlc sandbox down --target new --from proposal/build-slice-10-4)
+- 16:42:51 drive: step 20: `sdlc rule bind-adapter-new-54 --by agent:tech-lead` — bind-adapter-new-54 was escalated at G3 by runner:bind-adapter to tech-lead, a role an agent plays in this project
+- 16:43:43 rule bind-adapter-new-54 approve at G3 by agent:tech-lead (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-10-01
 

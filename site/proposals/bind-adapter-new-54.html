@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-54 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">515</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">509</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">425</span></a></li><li><a href="../runs.html">Run log <span class="count">20</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-54</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-02 23:42</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I fixed the question-adding actions on both opportunity create forms.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I fixed the question-adding actions on both opportunity create forms. They now use the form&#39;s opening blank question instead of pressing &quot;Add&quot; first. I checked this on the running target, but I couldn&#39;t run a type check on the edited file because the command needed approval that never came.</p>
+<p><strong>The problem.</strong> The Sprint With Us and Team With Us create forms both open with one blank &quot;Question 1&quot; already there. <code>opportunitySwuCreate.addTeamQuestion</code> and <code>opportunityTwuCreate.addResourceQuestion</code> pressed &quot;Add a team question&quot; or &quot;Add a resource question&quot; every time they were called. So 100 calls left 101 rows on the form, the button switched off, and both 101-question R-1.17 cases failed during setup before reaching their 102nd question.</p>
+<p><strong>The change.</strong> It is only in <code>addQuestion</code> inside the shared form builder in <code>tests/adapters/new/index.ts</code>; both actions go through that function. When the form holds exactly one question and its Question and Guideline boxes are both empty, the action fills that row. Otherwise it presses Add as before. This mirrors how <code>addResource</code> already treats the blank &quot;Resource 1&quot;. The opening row is reused only while it is the only question, so calls that supply no question text still add one row each and the count stays right.</p>
+<p>The same builder also drives the two edit forms. There, a saved opportunity whose only question is filled in still gets Add pressed, as before.</p>
+<p><strong>Checked on the target.</strong> Signed in through the identity provider as the administrator persona:</p>
+<ul><li>Both create pages open with a &quot;Team questions&quot; or &quot;Resource questions&quot; section holding one &quot;Question 1&quot; group, its Question and Guideline boxes empty, and the Add button present.</li><li>On the Team With Us form, I ran the new logic in the browser 101 times, filling each question. It left exactly 101 rows, with &quot;Add a resource question&quot; disabled after the 101st. So a test asking for a 102nd question now reaches the form&#39;s limit, which the original driver never did.</li></ul>
+<p>I didn&#39;t run the Sprint With Us version of that loop. It goes through the same code, and its opening state matches.</p>
+<p><strong>Left unchanged.</strong> Everything else in the adapter, and <code>bindings.yaml</code>, which already lists <code>add_team_question</code> and <code>add_resource_question</code> as bound. No file outside <code>tests/adapters/new/</code> was touched, and no password or environment value was written anywhere.</p>
+<p><strong>Not done.</strong> A type check of the adapter, because running it needed approval that never came. The edit uses only names and patterns already in the file.</p>
+<p>No request was deferred.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:tech-lead (persona agent · claude claude-opus-5-5) on 2026-10-02 23:43.</p>
+<div class="body"><p>Question: does bind-adapter-new-54 bind the question-adding actions on the two opportunity create forms correctly, and nothing else? Ruling: approve. This came to tech-lead because bind-adapter&#39;s owed work from build-slice-10 went past policy.loops.request&#39;s limit of 2. That is a loop count, not a pipeline that cannot do what is asked, and the tier is STANDARD with no platform article touched, so it is ruled here. The escalation lists 17 requests; the conditions check shows only request 17 (request/build-slice-10-4#1) still untaken, and this diff answers exactly that one. The Sprint With Us and Team With Us create forms open with one blank question row, and the driver pressed Add for every call, so 100 calls made 101 rows and disabled the button before R-1.17&#39;s 102nd question. The change is confined to programForm&#39;s addQuestion in tests/adapters/new/index.ts. It reuses the opening row only while it is the sole row with empty Question and Guideline boxes, and otherwise presses Add as before, mirroring addResource&#39;s treatment of &#39;Resource 1&#39;. The edit forms keep their behaviour when the only saved question is filled. The agent ran the loop 101 times on the target&#39;s Team With Us form and got 101 rows with Add disabled, and the runner&#39;s typecheck passed with no diagnostics under adapters/new. One accepted edge: two consecutive calls with no question or guideline text would both fill the opening row, so the inline comment overstates. No spec does this; every addTeamQuestion and addResourceQuestion call under tests/acceptance supplies question text, so no criterion is affected today. What would change the ruling: a verify run in which R-1.17&#39;s 101-question cases still fail in setup, or a create-form spec whose question count comes out one short.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
