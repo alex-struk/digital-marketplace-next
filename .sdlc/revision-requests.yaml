@@ -915,3 +915,20 @@ requests:
     at: 2026-10-02T23:02:41.091Z
     taken: 2026-10-02T23:09:04.761Z
     taken_by: plan-19
+  - stage: bind-adapter
+    target: new
+    why: "opportunitySwuCreate.addTeamQuestion (and, by the same pattern,
+      opportunityTwuCreate.addResourceQuestion) must fill the form's existing
+      blank question row before pressing 'Add a team question' / 'Add a resource
+      question', as addResource already does for 'Resource 1'. The Sprint With
+      Us and Team With Us create forms open with one blank question
+      (opportunity-other-form.tsx:165, questions: [BLANK_QUESTION]). The driver
+      presses Add for every question, so after 100 presses the form holds 101
+      rows and the button correctly disables at 101 (QUESTIONS_MAX). Verify on
+      build-slice-10-4 failed both 101-question R-1.17 cases at
+      R-1.17.spec.ts:100, inside the setup loop, with 'the control named /add a
+      team question/ is disabled'. The spec never reached its 102nd question."
+    from: build-slice-10-4
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-02T23:31:10.897Z
