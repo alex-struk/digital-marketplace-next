@@ -1,103 +1,157 @@
 // criterion: @R-6.17 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-14
+// provenance: blind, spec@76d9da180ae1fba4b970cd40bf8a0a55a680eb3e, derived 2026-10-02
 import { test, expect, persona, seed } from "../../fixtures";
+import type { Persona, Surface } from "../../fixtures";
 
-// "No notification of any kind" is checked against a notice that reaches one person at their
-// own visible address — an invitation to join an organization — with an active person invited
-// straight afterwards, so that the active person's message proves the catcher is reachable and
-// the absence for the deactivated account is evidence of what the service decided.
+// The given is a published opportunity watched by two vendors, one of whom then has their
+// account deactivated. The seed's published Code With Us opportunity is used: the target is put
+// back to the seed before every test, so it starts watched by nobody. users.vendorOne and
+// users.proponentTwo each ask to watch it while still able to sign in, and an administrator then
+// deactivates users.vendorOne. users.proponentTwo stays active, so that the notice reaching them
+// proves the catcher is reachable and the change did send a notice; absence for the deactivated
+// account is then evidence of what the service decided.
 //
-// The notice about a watched opportunity, which the criterion names, is not asserted: it goes
-// out as a batch of blind copies, and the mail fixture searches only by visible recipient, so
-// neither its arrival nor its absence for one account can be read.
+// The when is the watched opportunity being changed or given an addendum; each is its own test.
+// The catcher is emptied just before the change, so everything it holds afterwards follows from
+// the change, and the deactivated account must appear on none of it — neither as a visible
+// recipient nor as a blind copy (a notice to a group is addressed to the service's own address
+// with everyone else blind-copied, spec/contract/observables.yaml, email.notes).
 //
-// Each test reactivates the account it deactivated, so it is left as it was found.
+// The watch being retained is observed the way a watch shows itself to its holder: once the
+// account is reactivated, the next change to the opportunity reaches it again, although nobody
+// asked to watch it in between (a deactivated account cannot sign in to ask).
 
-function inDays(days: number): string {
-  const date = new Date();
-  date.setDate(date.getDate() + days);
-  return date.toISOString().slice(0, 10);
+const statement =
+  "A deactivated account receives no notification of any kind, including notices about opportunities it was watching, while the watch itself is retained so that reactivating the account restores it.";
+
+// email.configured_sender_address in spec/contract/observables.yaml.
+const serviceAddress = "donotreply@example.test";
+
+const settle = { timeout: 30000 };
+const opportunityId = seed.opportunities.publishedCodeWithUs.id;
+const deactivated = seed.users.vendorOne;
+const activeWatcher = seed.users.proponentTwo;
+
+type Mail = { messagesTo(address: string): Promise<Array<{ ID: string }>>; clear(): Promise<void> };
+
+async function readOrEmpty(read: () => Promise<string>): Promise<string> {
+  try {
+    return (await read()) ?? "";
+  } catch {
+    return "";
+  }
 }
 
-const complete = {
-  teaser: "A short summary of the work to be done.",
-  location: "Victoria",
-  description: "A full description of the work to be done.",
-  remoteOk: true,
-  remoteDescription: "Remote work is acceptable anywhere in the province.",
-  reward: 5000,
-  skills: ["Backend Development"],
-  proposalDeadline: inDays(14),
-  assignmentDate: inDays(21),
-  startDate: inDays(28),
-  completionDate: inDays(90),
-};
+function identifiersIn(listing: string): string[] {
+  try {
+    const parsed = JSON.parse(listing);
+    if (Array.isArray(parsed)) return parsed.map(String);
+  } catch {
+    // Not JSON; read as a plain list below.
+  }
+  return listing
+    .split(/[\s,;[\]"']+/)
+    .map((id) => id.trim())
+    .filter(Boolean);
+}
 
-test("a deactivated account receives no notification of any kind", async ({ surface, mail }) => {
-  const deactivated = seed.users.vendorWithTermsReset;
-  const active = seed.users.proponentThree;
+// Every recipient, visible or blind-copied, of every message caught since the catcher was emptied.
+async function everyRecipient(surface: Surface, mail: Mail): Promise<string> {
+  const ids = new Set<string>();
+  await surface.caughtMessageList.open();
+  for (const id of identifiersIn(await readOrEmpty(() => surface.caughtMessageList.messageIdentifiers()))) ids.add(id);
+  for (const address of [serviceAddress, deactivated.email, activeWatcher.email]) {
+    for (const { ID } of await mail.messagesTo(address)) ids.add(ID);
+  }
+  const recipients: string[] = [];
+  for (const messageId of ids) {
+    await surface.caughtMessage.open({ messageId });
+    recipients.push(await readOrEmpty(() => surface.caughtMessage.visibleRecipients()));
+    recipients.push(await readOrEmpty(() => surface.caughtMessage.copiedRecipients()));
+  }
+  return recipients.join(" ").toLowerCase();
+}
+
+async function watch(surface: Surface, who: Persona): Promise<void> {
+  await surface.signIn(who);
+  await surface.opportunityWatchRequest.open({ program: "code-with-us" });
+  await surface.opportunityWatchRequest.watchByRequest({ opportunityId });
+  await surface.signOut();
+}
+
+// Both vendors watch the opportunity, then an administrator deactivates one of them; leaves the
+// administrator signed in.
+async function arrangeGiven(surface: Surface): Promise<void> {
+  await watch(surface, persona.vendor);
+  await watch(surface, persona.competingVendor);
 
   await surface.signIn(persona.administrator);
   await surface.userProfile.open({ userId: deactivated.id });
   await surface.userProfile.deactivateAccount();
   await surface.userProfile.confirmActivationChange();
+}
 
-  // Deactivation itself may tell the person. Let that message land before counting, so that
-  // what is counted afterwards is only what follows the deactivation.
+async function changeOpportunity(surface: Surface, how: "edit" | "addendum", note: string): Promise<void> {
+  await surface.opportunityCwuEdit.open({ opportunityId });
+  if (how === "edit") {
+    await surface.opportunityCwuEdit.editDetails({ description: `R-6.17 the description as changed ${note}.` });
+  } else {
+    await surface.opportunityCwuEdit.addAddendum({ text: `R-6.17 an addendum added ${note}.` });
+  }
+}
+
+async function expectOnlyActiveWatcherReached(surface: Surface, mail: Mail): Promise<void> {
   await expect
-    .poll(async () => (await mail.messagesTo(deactivated.email)).length, { timeout: 5000 })
-    .toBeGreaterThan(0)
-    .catch(() => undefined);
-  const deactivatedBefore = (await mail.messagesTo(deactivated.email)).length;
-  const activeBefore = (await mail.messagesTo(active.email)).length;
-  await surface.signOut();
+    .poll(async () => (await everyRecipient(surface, mail)).includes(activeWatcher.email.toLowerCase()), {
+      ...settle,
+      message: "the active watcher is notified of the change",
+    })
+    .toBe(true);
+  expect(
+    (await everyRecipient(surface, mail)).includes(deactivated.email.toLowerCase()),
+    "the deactivated watcher is among the recipients, visible or blind-copied",
+  ).toBe(false);
+}
 
-  await surface.signIn(persona.organizationOwner);
-  await surface.organizationEdit.open({ orgId: seed.organizations.withPendingInvitation.id });
-  await surface.organizationEdit.addTeamMembers({ emails: [deactivated.email] });
-  await surface.organizationEdit.addTeamMembers({ emails: [active.email] });
+test(`${statement} — the watched opportunity is changed`, async ({ surface, mail }) => {
+  test.slow();
+  await arrangeGiven(surface);
 
-  await expect
-    .poll(async () => (await mail.messagesTo(active.email)).length, { timeout: 10000 })
-    .toBeGreaterThan(activeBefore);
-  expect((await mail.messagesTo(deactivated.email)).length).toBe(deactivatedBefore);
-  await surface.signOut();
+  await mail.clear();
+  await changeOpportunity(surface, "edit", "while one watcher is deactivated");
 
-  await surface.signIn(persona.administrator);
-  await surface.userProfile.open({ userId: deactivated.id });
-  await surface.userProfile.reactivateAccount();
-  await surface.userProfile.confirmActivationChange();
+  await expectOnlyActiveWatcherReached(surface, mail);
 });
 
-test("the watch itself is retained so that reactivating the account restores it", async ({ surface }) => {
-  const watcher = seed.users.invitedVendor;
-  const title = "R-6.17 published opportunity watched by an account that is later deactivated";
+test(`${statement} — the watched opportunity is given an addendum`, async ({ surface, mail }) => {
+  test.slow();
+  await arrangeGiven(surface);
 
-  await surface.signIn(persona.administrator);
-  await surface.opportunityCwuCreate.open();
-  await surface.opportunityCwuCreate.publish({ ...complete, title });
-  const opportunityId = await surface.opportunityCwuEdit.opportunityIdentifier();
-  await surface.opportunityCwuEdit.open({ opportunityId });
-  const unwatched = await surface.opportunityCwuEdit.reportingWatchers();
-  await surface.signOut();
+  await mail.clear();
+  await changeOpportunity(surface, "addendum", "while one watcher is deactivated");
 
-  await surface.signIn(persona.invitedVendor);
-  await surface.opportunityCwuView.open({ opportunityId });
-  await surface.opportunityCwuView.toggleWatch();
-  await surface.signOut();
+  await expectOnlyActiveWatcherReached(surface, mail);
+});
 
-  await surface.signIn(persona.administrator);
-  await surface.opportunityCwuEdit.open({ opportunityId });
-  const watched = await surface.opportunityCwuEdit.reportingWatchers();
-  expect(watched).not.toBe(unwatched);
+test(`${statement} — reactivating the account restores the watch`, async ({ surface, mail }) => {
+  test.slow();
+  await arrangeGiven(surface);
 
-  await surface.userProfile.open({ userId: watcher.id });
-  await surface.userProfile.deactivateAccount();
-  await surface.userProfile.confirmActivationChange();
-  await surface.userProfile.open({ userId: watcher.id });
+  await mail.clear();
+  await changeOpportunity(surface, "edit", "while one watcher is deactivated");
+  await expectOnlyActiveWatcherReached(surface, mail);
+
+  await surface.userProfile.open({ userId: deactivated.id });
   await surface.userProfile.reactivateAccount();
   await surface.userProfile.confirmActivationChange();
 
-  await surface.opportunityCwuEdit.open({ opportunityId });
-  expect(await surface.opportunityCwuEdit.reportingWatchers()).toBe(watched);
+  await mail.clear();
+  await changeOpportunity(surface, "addendum", "after the watcher was reactivated");
+
+  await expect
+    .poll(async () => (await everyRecipient(surface, mail)).includes(deactivated.email.toLowerCase()), {
+      ...settle,
+      message: "the reactivated watcher is notified again without having asked to watch",
+    })
+    .toBe(true);
 });
