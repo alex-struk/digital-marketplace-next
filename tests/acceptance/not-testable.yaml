@@ -182,21 +182,3 @@ criteria:
       property of the migration rather than of anything the running service
       answers with. No addition to the surface would help; this is a claim a
       human accepts about the rebuild rather than one a test can settle."
-  - id: R-1.33
-    version: 2
-    clause: but no screen of the application offers a way to add one
-    reason: "blocked: the test now adds notes through opportunity-history-request
-      (add_note_by_request) and reads who sees them through history_shown and
-      history_entries, but nothing on the screens where a note would be added
-      reports whether a control for adding one is offered. opportunity-cwu-edit
-      and opportunity-swu-edit no longer declare add_note, and that absence is a
-      fact about the contract, not something a test run observes on the target:
-      a target that did offer a note control on its History tab would still pass
-      every test written today."
-    missing: an observation on opportunity-cwu-edit and opportunity-swu-edit (for
-      example note_control_offered), read on the History tab as
-      persona.administrator and as the opportunity's author
-      (persona.publicSectorStaff on seed.opportunities.cwuWithPrivateNote and
-      seed.opportunities.swuOpenWithSubmittedProposal), that reports whether any
-      control for adding a note to the opportunity's history is offered.
-    owner: contract
