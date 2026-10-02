@@ -142,6 +142,10 @@ screens:
     states: [default, not-found, loading]
   - page: scheduled-transition-trigger
     states: [default]
+  - page: opportunity-watch-request
+    states: [default, refused]
+  - page: opportunity-counters
+    states: [default, refused]
 
   # organizations domain — see design/DESIGN.md, "Domain: organizations"
   - page: organization-list
@@ -173,6 +177,8 @@ screens:
         changelog,
         not-found,
         loading,
+        logo-stored,
+        logo-refused,
       ]
   - page: organization-swu-terms
     states: [default, accepted, administrator]
@@ -182,6 +188,12 @@ screens:
     states: [default, empty, loading, accept-confirm, decline-confirm, leave-confirm, section-unavailable]
   - page: organization-user-memberships-self
     states: [default, empty, loading, accept-confirm, decline-confirm, leave-confirm, section-unavailable]
+  - page: organization-acting-for-list
+    states: [default, refused]
+  - page: affiliation-invitation-request
+    states: [default, invalid]
+  - page: affiliation-approval-request
+    states: [default, refused, not-pending]
 
   # notifications domain — see design/DESIGN.md, "Domain: notifications"
   - page: notification-unsubscribe-landing
@@ -192,6 +204,14 @@ screens:
     states: [default, notify-confirm, notified, notify-failed]
   - page: notification-email-reference
     states: [default, loading, not-found]
+  - page: caught-message
+    states: [default]
+  - page: caught-message-list
+    states: [default]
+  - page: mail-delivery-fault
+    states: [default]
+  - page: mail-delivery-delay
+    states: [default]
 
   # content domain — see design/DESIGN.md, "Domain: content"
   - page: content-footer
@@ -220,6 +240,8 @@ screens:
       ]
   - page: content-view
     states: [default, loading, not-found]
+  - page: content-request
+    states: [default, refused, invalid, not-found]
 
   # files domain — see design/DESIGN.md, "Domain: files"
   - page: file-upload
@@ -234,6 +256,8 @@ screens:
     states: [default, empty, chosen, rejected]
   - page: file-embedded-image
     states: [default, uploading, inserted, failed, published]
+  - page: file-attach-by-identifier
+    states: [default, refused]
 
   # proposals domain — see design/DESIGN.md, "Domain: proposals"
   - page: proposal-cwu-create
@@ -350,6 +374,12 @@ screens:
     states: [default, no-organization, empty, loading]
   - page: proposal-list-stub
     states: [default]
+  - page: proposal-cwu-request
+    states: [default, refused]
+  - page: proposal-team-request
+    states: [default, refused]
+  - page: proposal-evaluation-request
+    states: [default, refused]
 
   # evaluation domain — see design/DESIGN.md, "Domain: evaluation"
   - page: evaluation-panel-dashboard
@@ -410,3 +440,13 @@ screens:
     states: [default, invalid, duplicate, chair-only, not-found, loading]
   - page: evaluation-consensus-edit-twu
     states: [default, submitted, invalid, not-found, loading]
+  - page: evaluation-individual-request-swu
+    states: [default, refused, duplicate]
+  - page: evaluation-individual-request-twu
+    states: [default, refused, duplicate]
+  - page: evaluation-consensus-request-swu
+    states: [default, refused]
+  - page: evaluation-consensus-request-twu
+    states: [default, refused]
+  - page: evaluation-panel-request
+    states: [default, refused]

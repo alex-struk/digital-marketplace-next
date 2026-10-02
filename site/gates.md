@@ -2,6 +2,15 @@
 
 | When | Proposal | Gate | Verdict | By | Made by | Cost | Sample |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-10-02T01:43:37.539Z | design-proposals-2 | G-DESIGN | approve | agent:ux-reviewer | persona agent · claude claude-opus-5-5 | $0.7239178 |  |
+| 2026-10-02T01:22:33.266Z | design-evaluation-2 | G-DESIGN | approve | agent:ux-reviewer | persona agent · claude claude-opus-5-5 | $0.7588984000000001 |  |
+| 2026-10-02T01:10:04.105Z | design-opportunities-3 | G-DESIGN | approve | agent:ux-reviewer | persona agent · claude claude-opus-5-5 | $0.7117566000000001 |  |
+| 2026-10-02T00:46:25.662Z | design-users-4 | G-DESIGN | approve | agent:ux-reviewer | persona agent · claude claude-opus-5-5 | $0.7086466000000001 |  |
+| 2026-10-02T00:33:50.024Z | design-organizations-2 | G-DESIGN | approve | agent:ux-reviewer | persona agent · claude claude-opus-5-5 | $0.7933254000000001 |  |
+| 2026-10-02T00:22:03.393Z | design-notifications-2 | G-DESIGN | approve | agent:ux-reviewer | persona agent · claude claude-opus-5-5 | $0.7067319999999999 | sample |
+| 2026-10-02T00:08:44.474Z | design-files-2 | G-DESIGN | approve | agent:ux-reviewer | persona agent · claude claude-opus-5-5 | $0.5870148 | sample |
+| 2026-10-01T23:55:48.355Z | design-content-3 | G-DESIGN | approve | agent:ux-reviewer | persona agent · claude claude-opus-5-5 | $0.5746864 | sample |
+| 2026-10-01T23:48:38.964Z | design-content-2 | G-DESIGN | return | agent:ux-reviewer | persona agent · claude claude-opus-5-5 | $0.7909980000000001 | sample |
 | 2026-10-01T14:03:09.590Z | derive-tests-opportunities-12 | G3 | approve | agent:reviewer | persona agent · claude claude-opus-5-5 | $0.2695664 |  |
 | 2026-10-01T14:01:50.651Z | derive-tests-opportunities-stale-15 | G3 | return | agent:reviewer | persona agent · claude claude-opus-5-5 | $0.2949816 |  |
 | 2026-10-01T14:00:09.192Z | bind-adapter-new-37 | G3 | approve | agent:reviewer | persona agent · claude claude-opus-5-5 | $0.3182984 |  |
@@ -12,6 +21,7 @@
 | 2026-10-01T13:34:34.546Z | bind-adapter-old-58 | G3 | approve | agent:reviewer | persona agent · claude claude-opus-5-5 | $0.3630764 |  |
 | 2026-10-01T13:28:32.536Z | contract-v28 | G1 | approve | agent:product-owner | persona agent · claude claude-opus-5-5 | $0.3781744 |  |
 | 2026-10-01T13:19:31.826Z | bind-adapter-new-35 | G3 | return | agent:reviewer | persona agent · claude claude-opus-5-5 | $0.38843780000000006 |  |
+| 2026-10-01T13:15:34.301Z | build-slice-8-2 | G3 | return | runner:verify | the runner, automatically |  |  |
 | 2026-10-01T12:44:39.173Z | bind-adapter-new-34 | G3 | approve | agent:reviewer | persona agent · claude claude-opus-5-5 | $0.4231214 |  |
 | 2026-10-01T12:35:12.657Z | build-slice-8 | G3 | return | runner:verify | the runner, automatically |  |  |
 | 2026-10-01T12:10:18.584Z | build-slice-7-10 | G3 | approve | agent:reviewer | persona agent · claude claude-opus-5-5 | $0.7672648 |  |

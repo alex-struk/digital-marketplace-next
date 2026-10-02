@@ -1,5 +1,334 @@
 # Journal
 
+## 387 · design · 2026-10-02
+
+cost $12.500379 · turns 115 · claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+I moved all 115 proposals-domain stories onto the shared page container and stack, covering all 17 designed pages and every state they declare. Nothing else in the stories changed: every page, state, test ID, component choice and word is as it was. I had no compiler, so nothing was type-checked or rendered; the pipeline's scan after this turn will be the first real check.
+
+**What I changed.** `design/catalogue/layout.tsx` already existed from the content domain, so I reused it unchanged. Every story now uses one `PageContainer` with one `Stack gap="large"` inside it. No story sets its own width, outer padding or gap any more. The spacing rhythm is the same one the other domains use:
+- **Large** between the regions of a page.
+- **Medium** between form fields, between a section's heading and what follows it, between the key facts, between tabs and between list rows.
+- **Small** between the small page-kind line and the H1, between a `dt` and its `dd`, between a question and its response, and between a loading spinner and its text.
+
+The bordered cards, fieldsets and attachment rows keep their border, radius and inner padding, and lay out their contents with a stack. A fieldset's `legend` stays its first child so it still names the group. Dialog bodies are a padded `div` holding a stack. On not-found screens, the `not-found-page` test ID moved from the outer `div` to the outer stack, because the container takes no attributes; the opportunities domain does the same.
+
+I converted one story myself as the model and split the other 114 across six helper agents working to written rules. I then checked them against a snapshot of the originals I had taken first:
+- **Imports:** all 115 import the layout.
+- **Test IDs:** there are 830 test-ID attributes in both the old and new versions, spread over the same 102 files.
+- **Leftover spacing:** no spacing constant, grid or flex display, or `Form` style remains.
+- **Spot checks:** a line-by-line diff of three stories showed only layout changes.
+
+I fixed one place an agent left wrong: on the Team With Us manage page, a question and its response sat in a list item with no stack between them.
+
+**Design system use** is what it was. The stories still lean on `Heading`, `Text`, `Button`/`ButtonGroup`, `Link`, `TextField`, `TextArea`, `NumberField`, `Select`, `Checkbox`, `RadioGroup`, `Form`, `InlineAlert`, `Modal` with `Dialog`/`AlertDialog`, and `ProgressCircle`. No new component was added. In `DESIGN.md` I added the page container and stack to the domain's list of the project's own components, and rewrote the domain's token list and "How a screen is laid out" to match the new layout.
+
+**Gaps, recorded in `DESIGN.md` as L1–L5:**
+- **L1. Question numbers are gone.** The stack removes list markers, so the numbered question lists on the Sprint With Us and Team With Us manage pages no longer show visible numbers. Screen readers still announce the order. Other domains already accept this.
+- **L2. Some gaps are tighter.** The single rhythm made some old gaps tighter: key facts and tabs went from large to medium, and a `dt` above its `dd` went from extra-small to small. The Scores heading went the other way, from small to medium. I invented no token to keep the old look.
+- **L3. Tables keep their own sizing.** They keep `width: 100%` and their cell padding, as other domains' tables do.
+- **L4. 23 test IDs on this domain's pages are still `null`.** They are entries the surface added after this domain was designed, such as `field_errors_by_field`, `team_member_choices`, `history_entries`, `rank`, and `choose_organization` on the manage pages. Several match elements the stories already carry. I left them `null` because this run was ordered to change no element or test ID, and the opportunities domain made the same call on its own layout pass. Binding them needs a design run for this domain.
+- **L5. Three request pages have no screens or stories at all.** They are `proposal-cwu-request`, `proposal-team-request` and `proposal-evaluation-request`, and all their test IDs are `null`. This run added no pages or states, so they are left for the next design run.
+
+I didn't change `design/screens.yaml` or `spec/contract/surface.yaml`, and touched nothing outside `design/`.
+
+## Fix turn
+
+The three request pages that failed the screens check (`proposal-cwu-request`, `proposal-team-request` and `proposal-evaluation-request`) now each have a screen and a story for every state, and their test IDs are filled in. I could not compile or scan the new stories myself. The pipeline's scan after this turn will show whether they pass.
+
+**Journal addition.** I added the three pages to the end of the proposals entries in `design/screens.yaml`, each with two states: `default` for an accepted answer and `refused` for a refusal. Those two states match the way the surface splits each page's observations. I wrote the six stories under `design/catalogue/` as response references, built the same way as the evaluation domain's request pages. Each one sits in the existing `PageContainer` and `Stack` from `layout.tsx` and uses only the design system's `Heading` and `Text` plus plain definition lists. The refusal examples come straight from the criteria: R-2.2's duplicate-proposal message, R-2.18's "not an active member" and "unique team members" messages, and R-2.28's wrong-stage message. In `spec/contract/surface.yaml` I replaced every `test_id: null` on the three pages with the ID the stories actually render, in the forms `proposal-cwu-request-*`, `proposal-team-request-*` and `proposal-evaluation-request-*`. In `design/DESIGN.md` I marked gap L5, which had said these pages had no screens, as resolved. I then appended a "Request addresses" subsection describing how the three pages are built, with four new gaps I did not fill:
+- **R1:** the criteria give no refusal status for a Code With Us proposal or a stage score. The team request's 400 and 503 come from the surface.
+- **R2:** no criterion says which field R-2.2's message is reported against.
+- **R3:** no criterion names a proposal's status after a stage score is accepted.
+- **R4:** neither the criteria nor the surface gives the requests' HTTP methods, so the stories name none.
+
+No other page, state, test ID or wording was changed.
+
+## 386 · design · 2026-10-02
+
+cost $9.642009199999993 · turns 93 · claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+I brought all 97 of the evaluation domain's existing stories into line with the new layout rule. I also designed the domain's five request addresses, which no earlier run had designed. I couldn't compile or scan anything myself: the pipeline does that after this turn and writes `design/report.json`. The previous report was clean for every story.
+
+**Layout.** I didn't create a new container or stack, because the content domain had already defined both in `design/catalogue/layout.tsx`. Every evaluation story now sits inside that one page container, with one large-gap stack holding the page's regions. The small page-kind line and the heading under it are grouped with the small gap. Status rows, tab lists and loading rows are wrapping row stacks, and each form holds one medium-gap stack. Inside a fieldset the legend stays first and everything after it is one stack. No story sets its own width, outer padding, margin or gap any more. The only spacing a story still writes is inside the project's own boxes: fieldset and section padding, the response block's padding, the badge's and legend's inline padding, and table cell padding.
+
+I converted two stories by hand as models and wrote a conversion rulebook. Five parallel helpers then converted the rest under those rules, and I spot-checked their output. Every story file now imports the layout. No grid, flex, gap or raw colour/pixel value is left. The test-ID lines across the 80 original story files that carry any still total exactly 549, file by file, the same as before. Pages, states, test IDs, component choices and wording are unchanged.
+
+Three small visual differences followed from the rule:
+- The manage-page tab lists and the dashboard's section links had used the large gap; they now use medium, matching the opportunities domain's converted manage page they sit on.
+- The extra-small gaps inside a response block and between a key fact's label and value became small, since the rule has three gaps only.
+- The key facts on a submitted evaluation are now medium apart instead of large.
+
+In `DESIGN.md` I listed the page container and the stack among this domain's own components. I rewrote "How a screen is laid out" with the large/medium/small rhythm and updated the token list.
+
+**The five request addresses** had no states, no stories and null test IDs, although they are on this domain's page list. They are the Sprint With Us and Team With Us individual-evaluation requests, the two consensus requests, and the panel request. I designed them as response references, the way the users, content and opportunities domains do theirs: a small "Response reference" line and the heading, then a Request section and an Answer section. The states are:
+
+| Address | States | What each shows |
+|---|---|---|
+| Individual evaluation (both programs) | `default`, `refused`, `duplicate` | A draft stored as sent, unchecked; one evaluation submitted alone refused as unrecognised, and the set refused with the incomplete-evaluation message; a second start refused as a duplicate |
+| Consensus (both programs) | `default`, `refused` | The chair's change accepted; a non-chair or late change refused as not permitted |
+| Panel | `default`, `refused` | The panel as stored; a member with no role and a panel with no chair, both refused |
+
+That adds 12 stories and 12 entries in `design/screens.yaml`.
+
+**Test IDs filled in the surface:** 37 on the request pages, all named `evaluation-individual-request-*`, `evaluation-consensus-request-*` and `evaluation-panel-request-*`, shared between the two programs as this domain's IDs already are. There were also four `refused_when_not_permitted` nulls on the individual create and edit pages. I bound them to `not-found-page`, which those pages' existing `not-found` stories already render, so no story changed for them. No test ID on this domain's pages is still null; the 99 left in the surface belong to other domains.
+
+**New gaps, added to `DESIGN.md` as 18 to 20:**
+- **18.** The surface puts "refused at submission" on the single-evaluation address. But the service only accepts the whole set, sent to the opportunity, so which request reaches that refusal from here isn't stated.
+- **19.** No criterion gives the status code of a refused request, so the references don't name one.
+- **20.** The criterion on members with no role asks for a message naming the member but gives no words. The wording used is the design's own, and the missing-chair refusal reuses the panel form's message.
+
+The earlier gaps 1 to 17 still stand. I changed nothing under `spec/` other than the surface's test IDs, nothing in `constitution.md`, and nothing other domains wrote in `DESIGN.md` or `screens.yaml`.
+
+**Components leaned on most:** the design system's `Heading`, `Text`, `Link`, `Button`/`ButtonGroup`, `Form` with `NumberField`/`TextArea`/`Select`/`Checkbox`, `InlineAlert`, `Modal` with `AlertDialog`, and `ProgressCircle`. The project's own pieces are all listed in `DESIGN.md`. All but one are reused from earlier domains: the container, stack, status badge, data table, tabs, fieldset group and key facts list. The one this domain added earlier is the response block.
+
+## 385 · design · 2026-10-02
+
+cost $11.312435600000002 · turns 122 · claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+I've moved all 97 opportunities stories onto the shared page container and stack, and changed nothing but layout. The catalogue hasn't been compiled or scanned yet: the dependencies aren't installed here, so `design/report.json` from the pipeline's run after this turn is the first real check that the files still compile and pass the accessibility scan.
+
+**What was redone.** The 97 stories cover every state of the home page, the dashboard, the opportunity list, program select, `/status`, and the create, view, manage and complete-report pages of all three programs. Before this pass none of them used `design/catalogue/layout.tsx`; each set its own page grid, padding and gaps. The content domain had already defined `PageContainer` and `Stack` there, and organizations and users use them, so I reused them unchanged rather than writing a second pair.
+
+Each story now has one `PageContainer` holding one large-gap stack whose items are the page's regions. Inside that:
+- **Sections and forms:** H2 sections are medium stacks, and a `Form` holds one medium stack.
+- **Rows:** these are wrapping row stacks. The filter row and the score weights line up on their bottom edge; every other row is centred.
+- **The project's own components:** cards, card sections and fieldsets keep only their border, radius and inner padding, with a stack inside. A fieldset's legend stays outside its stack.
+- **Key facts:** a row stack of small stacks. The `xsmall` gap between label and value is gone; `small` is now the label gap everywhere.
+- **Dialogs:** each `Modal` moved out of the page stack, and its body is one medium stack.
+- **Wrappers carrying a test ID** (`home-page`, `service-status-page`, `not-found-page`): the outer stack now carries the ID.
+- **Data tables:** left exactly as they were.
+
+No story sets its own width, outer padding, margin or gap any more.
+
+**What I chose.** A few spacing values had to change to follow one rhythm:
+- **Heading block:** the small program line ("Code With Us opportunity", "Manage a … opportunity", "… opportunity report") and the H1 under it are grouped at the small gap, as organizations does.
+- **Tabs and key facts:** both had used the large gap between items; they now use medium, matching users, content and organizations.
+- **Complete report:** its sections now sit at the large gap, like the view pages' sections.
+- **Two status rows:** in the Sprint With Us and Team With Us `editing` stories, the status row had picked up bottom alignment from a shared row style; I set it back to centred like every other manage page.
+
+**What stayed the same.** No page, state, wording, component choice or test ID changed, and nothing in `spec/contract/surface.yaml` or `design/screens.yaml` was touched. I couldn't keep a copy of the originals, because copying files is blocked here. Instead I compared test-ID counts: 884 across 86 files, matching the count taken before any edit, file by file. Every one of the 97 files imports the layout and has exactly one outer large stack.
+
+**How it was split.** I converted the reference set myself: home, `/status`, the list, dashboard, program select, the Code With Us manage default, view default, cancel dialog, loading and not-found. Three helper agents did the remaining create, view, manage and report stories for each program, following a written rule sheet and those references. I checked their output by grep, then read through a create-invalid story and a report story.
+
+**`DESIGN.md`.** In the opportunities section:
+- **Own components:** the page container and stack are now listed among the project's own components, and the entries for key facts, opportunity card, card section and fieldset group describe how each uses the stack inside.
+- **"How a screen is laid out":** rewritten with the large, medium and small rhythm, the row rules, how dialogs and test-ID wrappers sit, and the tokens actually written.
+- **New gap 26 (below).**
+
+The components the stories lean on most are still the design system's: `Heading`, `Text`, `Button` and `ButtonGroup`, `Link`, the form fields (`TextField`, `TextArea`, `NumberField`, `DatePicker`, `Select`, `RadioGroup`, `Checkbox`, `Form`), `InlineAlert`, `Modal` with `AlertDialog`, and `ProgressCircle`.
+
+**Gap found.** The surface now has observations on this domain's pages still set to `test_id: null` that no story binds:
+- the separate key dates on the views and manage pages
+- the successful proponent's contact details and score
+- `scope_section`, `terms_section` and `evaluation_question_fields`
+- `instructions_tab`, `evaluation_tab` and `offered_state_changes`
+
+Binding them means adding or marking elements, which this layout-only run was ordered not to do, so I left them `null` and recorded them as gap 26 in `DESIGN.md`. They need a design run for this domain.
+
+**Other domains.** The proposals and evaluation sections of `DESIGN.md` still describe the old single-column grid; that is theirs to update. Their stories don't use `layout.tsx` either.
+
+**Leftovers.** The helper agents left two unused helper scripts in this session's scratchpad (`convert.py`, `twu/twu_convert.py`). They are outside the workspace and travel with nothing.
+
+## Fix turn
+
+Both failed checks are fixed: `opportunity-watch-request` and `opportunity-counters` now each have a screen.
+
+**Journal addition.** The two pages had no entry in `design/screens.yaml`, no stories, and `null` test IDs in the surface, so I added them. Both are request addresses that answer with data rather than a page. I gave each two states, `default` and `refused`, and wrote four new stories as response references, built the same way as the organizations domain's `affiliation-approval-request`. Each one uses `PageContainer` and `Stack` from `layout.tsx`, the design system's `Heading` and `Text`, and a `dl` of request and answer.
+
+- **Watch request.** The `default` story shows the watch and stop-watching requests and an accepted answer, with watching read back as Yes. The `refused` story shows an author asking to watch their own opportunity: it is filed under `opportunity`, carries R-1.5's message "You cannot subscribe to your own opportunity.", and watching stays No. I filled in its seven test IDs, from `opportunity-watch-request-watch` to `opportunity-watch-request-watching`.
+- **Counters.** The `default` story shows an administrator reading the view count. The number shown is illustrative, and the story says a missing counter reads as 0. The `refused` story shows a vendor or a request with no session refused as not permitted. Its two test IDs are `opportunity-counters-view-count` and `opportunity-counters-refused`.
+
+Every test ID appears in at least one story. In the opportunities section of `DESIGN.md` I added per-screen notes and the test-ID bindings, plus gap 27: R-1.5 gives no wording for the duplicate-watch refusal and no response status for any refusal. Because of that, the `refused` story shows the own-opportunity case and labels the status "Refused (the criteria do not state the status)" instead of making one up. I changed no other page, state, test ID or wording.
+
+## 384 · design · 2026-10-02
+
+cost $4.1276678 · turns 108 · claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+I've brought all 60 users-domain stories into line with the new layout rule, changing layout only. The catalogue hasn't been compiled or scanned yet: that runs when my turn ends and writes `design/report.json`. The last report from before this change compiled cleanly and found no accessibility violations on any of these 60 stories.
+
+**What I did.** The content domain had already defined the page container and the stack in `design/catalogue/layout.tsx`, so I reused them unchanged and did not touch that file. Every users story now wraps its content in one `PageContainer` holding one `Stack gap="large"`. Each section is a `Stack as="section" gap="medium"`, and each form is a design-system `Form` holding one `Stack gap="medium"`. Every inline `page`, `stack`, `tabs`, `row`, `toolbar`, `facts` and `fact` style object is gone. A grep confirms no users story still sets its own grid, gap, width or outer padding.
+
+These are the only styles a story still sets itself, since the stack cannot supply them:
+- the border and inner padding of the sign-in and sign-up cards;
+- the rule and padding of each capability row;
+- the padding inside the export dialog;
+- the table's cell borders and scroll region;
+- the status badge;
+- the bold `dt` of a response reference.
+
+The rhythm is the one the rule sets:
+- **Large** between the regions of a page.
+- **Medium** between the items of a region: the fields of a form, the section navigation links, capability rows, the contents of a card or dialog, and the facts of a response reference.
+- **Small** between a label and what it labels: the profile-picture label, its "no picture" line and its trigger; the terms links and the agreement box; the Administrator box and its hint or refusal; a capability's box, toggle and description; the spinner and words of a loading row; a `dt` and its `dd`.
+
+**Spacing decisions I made:**
+- **Section navigation gap.** It was large; I set it to medium. That matches how the organizations and notifications domains already lay out the same profile navigation.
+- **Export dialog gap.** It was large between items; it is now medium, since those items are the fields of one form.
+- **Response references.** These used `--layout-margin-xsmall` between a term and its value. That is now small, following the rule and the files domain's response references.
+- **Buttons.** Where a button is a direct item of a stack it sits in a plain `div`, so it keeps its own width instead of stretching across the column. Before this, "Export contact list" on the two export states, and "Review and agree to the updated terms" on the two accept-terms states, stretched to the full width.
+- **Dialogs.** These are portalled by `Modal`, so in the stories they now sit inside the container but after its stack.
+
+**What stayed exactly as it was.** Every page, every state, every component choice and all wording are unchanged, and so is each story's title. I compared the count of `data-testid` attributes in each file before and after: all 56 files that carry IDs match, 365 in total. Every action and observation on the 17 users pages in `spec/contract/surface.yaml` already had a test ID from the earlier run, and each still appears on an element that does what the surface says. So I did not edit `surface.yaml`, and `design/screens.yaml` needed no change because no state was added or removed.
+
+**DESIGN.md.** In the users section:
+- The page container and the stack are now listed under the project's own components, beside the profile section navigation, the status badge and the user table.
+- "How a screen is laid out" is rewritten to describe the container, the stack and the three gap sizes.
+- The token line now names `--layout-padding-medium` (used by the container) and the bold font-weight token, and drops `xsmall`, which is no longer used.
+
+Nothing outside the users section was touched.
+
+**Gaps.** Layout raised no new gap. The eleven gaps already recorded in the users section still stand, for example no designed empty state for a user-list search that matches nobody, and no status number stated for a refused request.
+
+**Components leaned on most:** `Heading`, `Text`, `TextField` (read-only for profile details), `Button`, `Checkbox`, `Link`, `InlineAlert`, and `Modal` with `AlertDialog`. `Form`, `ButtonGroup`, `CheckboxGroup`, `Dialog`, `ProgressCircle` and react-aria's `FileTrigger` are used where needed. The project's own pieces are still only the five named in DESIGN.md.
+
+## 383 · design · 2026-10-02
+
+cost $7.179552 · turns 93 · claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+I designed nothing new for the screens that already existed. All 51 organizations stories now sit on the shared page container and stack, with no wording, test ID, page or component changed. I also went past the operator's layout-only reason in one respect: three request addresses and three logo entries were still unbound, and the stage's own scope required designing them.
+
+**The layout change.** `PageContainer` and `Stack` already existed in `design/catalogue/layout.tsx`, and I reused them without editing them. Every story is now one container holding one large-gap stack whose items are the page's regions. The rhythm:
+- **Large:** between regions.
+- **Medium:** between the items of a region: a form's fields and card sections, the links of a navigation row, the badge row, the body of a dialog.
+- **Small:** between a label and what it labels: "Edit Organization" and the H1, a spinner and its text, the commands in one table row, requirement items.
+
+No story sets its own width, outer padding, margin or gap any more. The only spacing left is inside the project's own components: table cell padding, badge padding, card-section padding, and the inner padding of the two `Dialog` bodies (Add team members, Change owner). `DESIGN.md` lists the container and the stack among the project's own components, and its "How a screen is laid out" section now describes this.
+
+**Spacing that visibly changed:**
+- The management page's tabs moved from the large gap to medium, to follow the rule for a navigation row.
+- On the memberships pages the H1 and the profile navigation became one heading block at the medium gap, matching how the notifications domain lays out the same profile section.
+- The admin-rights and archive dialog bodies now space their content with a stack, not the components' own margins.
+- The Organization ID line is wrapped in the same row stack on every management-page state.
+
+**Checks.** I had no shell that could run node, so nothing was typechecked or rendered during my turn. The pipeline compiles and scans the catalogue after I finish. Five agents did the conversion in parallel; I then went back over the result:
+- **Test IDs:** the count per file matches what I recorded before the change, file for file.
+- **Layout styles:** a search finds none left in this domain's stories except the tables' `width: 100%`.
+- **Consistency:** I evened out the two things the agents did differently (the ID row and the dialog bodies).
+
+**Request addresses, newly designed.** `organization-acting-for-list`, `affiliation-invitation-request` and `affiliation-approval-request` had no screens entry, no stories and only `null` test IDs. I built them as response references, the pattern the users, content and files domains use:
+- **`organization-acting-for-list`:** `default` (R-3.15) and `refused` (R-3.20).
+- **`affiliation-invitation-request`:** `default` and `invalid` (R-3.17, shown with ADMIN).
+- **`affiliation-approval-request`:** `default`, `refused` (the owner accepting on someone's behalf) and `not-pending` (a second acceptance), all R-3.9. The two refusals are separate states because they are different answers: one is about who asked, the other about the membership.
+
+I filled all eleven of their test IDs with names prefixed by the page id. `invalid_membership_type_error` here is deliberately not the Team tab's ID, because one is a screen alert and the other is part of an HTTP answer.
+
+**Logo on the management page.** `organization-edit` had three later surface entries still `null`. I filled them and added two states, `logo-stored` and `logo-refused`. Both follow the files domain's ruling that the logo uses its image picker:
+- **`change_logo`** is `organization-logo-button`, the trigger the create page already binds.
+- **`current_logo`** is `organization-current-logo`, the stored logo's image on the read-only tab.
+- **`logo_refused_error`** is `organization-logo-refused-error`.
+
+No organizations page in `spec/contract/surface.yaml` has a `null` test ID left.
+
+**Components most used:** the design system's `Heading`, `Text`, `Button`/`ButtonGroup`, `TextField`, `Link`, `InlineAlert` and `Modal` with `AlertDialog` or `Dialog`. Beside them are the project's own data table, status badge, card section, section navigation, pagination and requirement list, all already listed in `DESIGN.md`, plus the shared container and stack.
+
+**New gaps, numbered 17–20 in the organizations section of `DESIGN.md`:**
+17. No criterion gives the wording of the permission message when the owner tries to accept on someone's behalf, so the story shows a placeholder.
+18. No criterion gives a status number for the refusals by request.
+19. The surface quotes the old service's words for a refused logo ("Please select a different logo image."), but no criterion fixes them; the story uses the files domain's wording.
+20. Whether anyone other than the owner may invite by request is not stated.
+
+Gaps 1–16 from the earlier design are unchanged. I changed nothing under `spec/` except the test IDs in `surface.yaml`.
+
+## 382 · design · 2026-10-02
+
+cost $2.3038638000000002 · turns 60 · claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+I moved all fourteen notifications stories onto the shared page container and stack. I changed layout only. Every page, state, test ID, component choice and line of wording is the same as before. I couldn't compile or scan the catalogue in this workspace because its dependencies aren't installed. The pipeline does both when this turn ends, and the last report (`design/report.json`) came back clean.
+
+**What changed in the stories.** All four of this domain's pages now have their stories in line:
+- `notification-unsubscribe-landing`: default, loading, unsubscribed, sign-in-required
+- `notification-optin-opportunity-list`: default, subscribed, signed-out
+- `notification-terms-broadcast`: default, notify-confirm, notified, notify-failed
+- `notification-email-reference`: default, loading, not-found
+
+Each story is now wrapped in `PageContainer`, with one `Stack gap="large"` holding the regions of the screen. Before, each story had its own wrapper with its own padding and spacing. No story now sets its own width, outer padding, margin or gap.
+
+Spacing follows the layout rule's three-step rhythm: large between regions, medium between items in a region, small between a label and what it labels. Rows that used to be hand-built flex boxes are now wrapping row stacks: the profile section links, the filter row, the opt-in card and the loading rows. The only spacing a story still writes is the inner padding of its bordered frames, the rule between sample emails, and the status badge's own padding.
+
+**Two small visible shifts:**
+- On the terms page, the gap between "Manage a page" and the H1 is now small instead of medium.
+- On the settings page, the profile section links are now spaced medium instead of large.
+
+**Layout component.** `PageContainer` and `Stack` already existed in `design/catalogue/layout.tsx`. The content domain wrote them, and I reused them as they were apart from one addition. I added an `align="end"` option to `Stack` so the filter row reproduced around the opt-in still lines its controls up on their bottom edge. The change is additive and no other domain's story uses it. It is described in `DESIGN.md`.
+
+**`DESIGN.md`.** I added to the notifications section and replaced nothing:
+- Container and stack are now listed among the project's own components.
+- The layout section opens with the container-and-stack rule and the rhythm for this domain's screens.
+- The token list now includes `--layout-padding-medium`, which the container uses.
+- There is a note on the four mail-catcher entries and a new gap 14.
+
+**Mail-catcher pages.** The brief also gave this domain `caught-message`, `caught-message-list`, `mail-delivery-fault` and `mail-delivery-delay`. All four are marked `origin: mail-catcher` in the contract, meaning the test harness's mail catcher serves them, not the application. No screen renders them, so there are no states or stories for them, and their test IDs stay `null`. A test ID there would name an element that appears in no story. Gap 14 asks the contract stage to say whether those fields apply at all.
+
+**Untouched.** I filled in no new test IDs and changed none in `spec/contract/surface.yaml`, because every action and observation on the four designed pages already had one. `design/screens.yaml` is unchanged. Gaps 1 to 13 from the earlier design still stand as written, including the superseded name `notification_control_hidden_on_narrow_screen` and the conflict between R-6.6 and R-6.16. The components I relied on most are all from the design system: `Heading`, `Text`, `Button`, `InlineAlert`, `Modal` with `AlertDialog`, `ProgressCircle` and `Checkbox`.
+
+## Fix turn
+
+All four check failures are fixed: `caught-message`, `caught-message-list`, `mail-delivery-fault` and `mail-delivery-delay` now each have a screen. The earlier design had left them out on purpose, because they belong to the mail catcher (`origin: mail-catcher`) and the service never renders them. The check now requires a screen for every entry in the surface. I gave each one a single `default` state in `design/screens.yaml`, below this domain's existing entries.
+
+Every declared state needs a story, so I wrote one for each at `design/catalogue/<page>.default.stories.tsx`. I followed the files domain's approach for its service addresses: each story is a response reference showing the request and the parts of the catcher's answer that the surface reads, described only from the surface's own comments. Each uses `PageContainer` and `Stack` from `design/catalogue/layout.tsx` and the design system's `Heading` and `Text`, and sets no width, padding or gap of its own.
+
+The check did not mention test IDs, so I filled none in. The `test_id`s on these four entries in `spec/contract/surface.yaml` stay `null`, and the stories carry none. Gap 14 is still open: the contract stage should rule whether a test ID belongs on a mail-catcher entry at all.
+
+In `design/DESIGN.md` I rewrote the paragraph that said these entries had no screen and no story, and the matching sentence in gap 14, so both now describe the response-reference stories. I changed nothing else in the existing stories, the other entries or the test IDs.
+
+## 381 · design · 2026-10-02
+
+cost $3.8247532 · turns 112 · claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+I re-laid all 28 existing story files in the files domain with the shared page container and stack. I also designed one page that had never been designed: `file-attach-by-identifier`, which is in the surface but had no stories, no entry in `screens.yaml` and no test IDs. I couldn't compile or scan anything myself. The pipeline does that once I stop, and its last report showed every files-domain story compiling with no accessibility violations.
+
+**Layout.** The content domain had already defined `PageContainer` and `Stack` in `design/catalogue/layout.tsx`, so I reused them. Every story is now one container holding one `Stack gap="large"`, with the same rhythm as the content domain: `large` between regions, `medium` between items, `small` between a label and what it labels. No story in this domain sets its own width, outer padding, margin or gap any more. All 30 story files import the layout module.
+
+The cards and attachment rows keep their own border and inner padding, which belongs to those components, and lay out their contents with a stack. The only non-spacing values left in the stories are those that keep a picture inside its column. On the published image I added `align-self: flex-start`, because a column stack would otherwise stretch the image to the full column width.
+
+**One change to the shared stack.** The attachment list, the opportunity tabs and the public view's download links are lists, and `Stack` could not render as a list. I added `as="ul"` and `as="ol"` to it, rendering a list with no markers and no indent. The change only adds options; no other domain's story used a list as a stack, so none of them changes. I recorded it in `DESIGN.md`.
+
+**What looks different.** I kept every page, state, test ID, component and word as it was. Two visible changes came with the new layout:
+- The public view's download links lose their bullets.
+- Some gaps moved one step to fit the rhythm:
+  - the tabs went from `large` to `medium`;
+  - the heading block and the gap between a fact's term and its value went to `small`;
+  - the editor's parts went from `medium` to `small`, so it matches the content domain's editor.
+
+The response references no longer use `--layout-margin-xsmall`. All of this is written down in `DESIGN.md`.
+
+**The new page.** `file-attach-by-identifier` has two states, `default` and `refused`. Both are response references like the other three service addresses: they show what is sent and what comes back, and a build does not render them. Only one accepted criterion, R-8.22, governs this page: a file may be attached only by someone permitted to read it. Its two outcomes, accepted and refused, are the two states, so I added no others.
+- **`default`:** a vendor attaches a file they uploaded to their own Code With Us proposal.
+- **`refused`:** a vendor names the identifier of a file another vendor uploaded and marked readable by no one else.
+
+I filled in its four test IDs in `spec/contract/surface.yaml`:
+- `attach_stored_file` → `file-attach-request`
+- `attachment_accepted` → `file-attach-accepted`
+- `attachment_refused` → `file-attach-refused`
+- `attached_file_identifiers` → `file-attach-identifiers`
+
+No test ID that was already filled in changed.
+
+**Gaps I recorded rather than filled** (files gaps 14 and 15 in `DESIGN.md`):
+- **What a refused attachment looks like.** R-8.22 does not say which kind of refusal it is, or whether the rest of the save is kept. It also does not say what happens with an identifier no stored file carries; R-8.15, which it replaces, checked only that the file exists. The `refused` story claims only what R-8.22 fixes: the file is not attached, the record's attachments are unchanged, and nobody new can read the file. Its outcome line and message are my own wording.
+- **No screen can attach a stored file by its identifier.** The attachment control only uploads new files, so R-8.22 can only be met or broken through the address.
+
+**Components leaned on most:** the design system's `Heading`, `Text`, `Button`, `TextField`, `Link` and `InlineAlert`, plus `FileTrigger` and `Toolbar` from `react-aria-components`. The project's own components (the page container, the stack, the card section, the attachment list, the picture preview, the response reference and the status line) are all listed in `DESIGN.md` as the project's own. I added no new component.
+
+I wrote nothing outside `design/` and the four test IDs in `spec/contract/surface.yaml`.
+
+## 380 · design · 2026-10-01
+
+cost $0.221717 · turns 8 · claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+I made the one change the ruling asked for. Before this fix, the page content on every screen started 16px to the right of the design system's Footer content.
+
+**The fix.** It is in `design/catalogue/layout.tsx`. `PageContainer` was counting its side padding (`--layout-padding-medium`) inside the 1100px limit because of `border-box`, which left the content column 1100px minus two paddings. The Footer, by contrast, uses its whole 1100px for content. I changed the container's maximum width to `calc(1100px + 2 * var(--layout-padding-medium))` and kept `border-box`. The padding now sits outside the 1100px, so at desktop width the content column is 1100px and its left edge lands where the Footer's does (x=90 at a 1280px viewport). On a narrow screen the padding still keeps content off the window edge. The 1100px value is still written only in `layout.tsx`, and I added a comment there saying why the padding sits outside it. Every story imports this container, so every screen in the catalogue (content and the other domains) picks up the fix without its own file changing.
+
+**DESIGN.md.** I made two edits:
+- The page-container entry in the list of the project's own components now says the content is at most 1100px wide, with the padding outside it, and gives the `calc(...)` width.
+- Gap 18 is now marked resolved. It records the old mismatch, what the 1280px screenshot showed, what changed, and that the change was confined to `layout.tsx`. Its note on the vertical `--layout-padding-large` padding is unchanged.
+
+**What I left alone.** I changed no screen, no state, no entry in `screens.yaml` and no story, as the ruling asked. I also made no edits to `spec/contract/surface.yaml`: the 11 test IDs filled in last round are kept exactly as they were. Gaps 15 to 17, the content-request problems with the criteria, are still open and are work for the spec stage, not this one.
+
+The ruling's conditions were all addressed to this stage, so none are left for a person. The new alignment will be confirmed by the pipeline's own compile and scan, and by the reviewer's screenshot of `content-footer.default`. That screenshot should show the content's left edge at the Footer's, not 16px to its right.
+
 ## 379 · calibrate · 2026-10-01
 
 cost $0 · turns 0

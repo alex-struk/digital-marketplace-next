@@ -11,3 +11,4 @@ app/*/dist/
 app/frontend/.vite/
 .agents/
 .codex/
+design/screenshots/

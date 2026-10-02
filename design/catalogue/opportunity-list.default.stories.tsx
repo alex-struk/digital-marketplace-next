@@ -1,17 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Checkbox, Heading, Link, Select, Text, TextField } from "@bcgov/design-system-react-components";
+import { PageContainer, Stack } from "./layout";
 
 // opportunity-list · default — a signed-in vendor: open and closed groups, and every opportunity can be watched (R-1.2, R-1.5, R-1.38, R-1.39)
 const meta: Meta = { title: "opportunities/opportunity-list/default" };
 export default meta;
 
-const page = { display: "grid", gap: "var(--layout-margin-large)", padding: "var(--layout-padding-large)" } as const;
-const stack = { display: "grid", gap: "var(--layout-margin-medium)" } as const;
-const filters = { display: "flex", flexWrap: "wrap", alignItems: "end", gap: "var(--layout-margin-medium)" } as const;
-const cardList = { display: "grid", gap: "var(--layout-margin-medium)", listStyle: "none", margin: "var(--layout-margin-none)", padding: "var(--layout-padding-none)" } as const;
 const card = {
-  display: "grid",
-  gap: "var(--layout-margin-small)",
   padding: "var(--layout-padding-large)",
   border: "var(--layout-border-width-small) solid var(--surface-color-border-default)",
   borderRadius: "var(--layout-border-radius-medium)",
@@ -67,43 +62,49 @@ const groups: { key: string; heading: string; order: string; items: Opportunity[
 
 export const Default: StoryObj = {
   render: () => (
-    <div style={page}>
-      <Heading level={1}>Opportunities</Heading>
-      <form role="search" aria-label="Filter opportunities" style={filters}>
-        <Select label="Program" items={programs} defaultValue="all" data-testid="opportunity-filter-program" />
-        <Select label="Status" items={statuses} defaultValue="all" data-testid="opportunity-filter-status" />
-        <Checkbox data-testid="opportunity-filter-remote">Remote work accepted only</Checkbox>
-        <TextField type="search" label="Search by title or location" data-testid="opportunity-search" />
-      </form>
-      <div role="status">
-        <Text elementType="p" size="small" color="secondary">Showing 4 opportunities. The list changes as you choose.</Text>
-      </div>
-      <Text elementType="p">Tick Watch on an opportunity to be emailed whenever it changes.</Text>
-      {groups.map((g) => (
-        <section key={g.key} aria-labelledby={`group-${g.key}`} style={stack} data-testid={`opportunity-group-${g.key}`}>
-          <Heading level={2} id={`group-${g.key}`}>{g.heading}</Heading>
-          <Text elementType="p" size="small" color="secondary">{g.order}</Text>
-          <ul style={cardList}>
-            {g.items.map((o) => (
-              <li key={o.id}>
-                <article aria-labelledby={`opportunity-${o.id}`} style={card}>
-                  <Text elementType="p" size="small" color="secondary">{o.programName}</Text>
-                  <Heading level={3} id={`opportunity-${o.id}`}>
-                    <Link href={`/opportunities/${o.program}/${o.id}`}>{o.title}</Link>
-                  </Heading>
-                  <div><span style={badge} data-testid="opportunity-status">{o.status}</span></div>
-                  <Text elementType="p">{o.where}</Text>
-                  <Text elementType="p">{o.valueTerm}: {o.value}</Text>
-                  <Text elementType="p">
-                    Proposal deadline: <span data-testid="opportunity-proposal-deadline">{o.deadline}</span>
-                  </Text>
-                  <Checkbox defaultSelected={o.watching} aria-label={`Watch ${o.title}`} data-testid="opportunity-watch-toggle">Watch</Checkbox>
-                </article>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ))}
-    </div>
+    <PageContainer>
+      <Stack gap="large">
+        <Heading level={1}>Opportunities</Heading>
+        <form role="search" aria-label="Filter opportunities">
+          <Stack direction="row" align="end" gap="medium">
+            <Select label="Program" items={programs} defaultValue="all" data-testid="opportunity-filter-program" />
+            <Select label="Status" items={statuses} defaultValue="all" data-testid="opportunity-filter-status" />
+            <Checkbox data-testid="opportunity-filter-remote">Remote work accepted only</Checkbox>
+            <TextField type="search" label="Search by title or location" data-testid="opportunity-search" />
+          </Stack>
+        </form>
+        <div role="status">
+          <Text elementType="p" size="small" color="secondary">Showing 4 opportunities. The list changes as you choose.</Text>
+        </div>
+        <Text elementType="p">Tick Watch on an opportunity to be emailed whenever it changes.</Text>
+        {groups.map((g) => (
+          <Stack as="section" gap="medium" key={g.key} aria-labelledby={`group-${g.key}`} data-testid={`opportunity-group-${g.key}`}>
+            <Heading level={2} id={`group-${g.key}`}>{g.heading}</Heading>
+            <Text elementType="p" size="small" color="secondary">{g.order}</Text>
+            <Stack as="ul" gap="medium">
+              {g.items.map((o) => (
+                <li key={o.id}>
+                  <article aria-labelledby={`opportunity-${o.id}`} style={card}>
+                    <Stack gap="small">
+                      <Text elementType="p" size="small" color="secondary">{o.programName}</Text>
+                      <Heading level={3} id={`opportunity-${o.id}`}>
+                        <Link href={`/opportunities/${o.program}/${o.id}`}>{o.title}</Link>
+                      </Heading>
+                      <div><span style={badge} data-testid="opportunity-status">{o.status}</span></div>
+                      <Text elementType="p">{o.where}</Text>
+                      <Text elementType="p">{o.valueTerm}: {o.value}</Text>
+                      <Text elementType="p">
+                        Proposal deadline: <span data-testid="opportunity-proposal-deadline">{o.deadline}</span>
+                      </Text>
+                      <Checkbox defaultSelected={o.watching} aria-label={`Watch ${o.title}`} data-testid="opportunity-watch-toggle">Watch</Checkbox>
+                    </Stack>
+                  </article>
+                </li>
+              ))}
+            </Stack>
+          </Stack>
+        ))}
+      </Stack>
+    </PageContainer>
   ),
 };

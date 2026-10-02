@@ -1,12 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button, Heading, Link, Text, TextField } from "@bcgov/design-system-react-components";
+import { PageContainer, Stack } from "./layout";
 
 // user-list · default — administrator browsing everyone registered (R-4.14, R-4.21)
 const meta: Meta = { title: "users/user-list/default" };
 export default meta;
 
-const page = { display: "grid", gap: "var(--layout-margin-large)", padding: "var(--layout-padding-large)" } as const;
-const toolbar = { display: "flex", flexWrap: "wrap", alignItems: "end", justifyContent: "space-between", gap: "var(--layout-margin-medium)" } as const;
 const cell = {
   textAlign: "start",
   padding: "var(--layout-padding-small)",
@@ -28,37 +27,39 @@ const users = [
 
 export const Default: StoryObj = {
   render: () => (
-    <div style={page}>
-      <Heading level={1}>Digital Marketplace Users</Heading>
-      <div style={toolbar}>
-        <TextField type="search" label="Search by name" data-testid="user-list-search" />
-        <Button variant="secondary" data-testid="contact-list-open-export">Export contact list</Button>
-      </div>
-      <div role="region" aria-labelledby="user-list-caption" tabIndex={0} style={{ overflowX: "auto" }}>
-        <table style={{ borderCollapse: "collapse", width: "100%" }}>
-          <caption id="user-list-caption" style={{ textAlign: "start" }}>
-            <Text size="small" color="secondary">Everyone registered, active accounts first, then by account type and name</Text>
-          </caption>
-          <thead>
-            <tr>
-              <th scope="col" style={cell}>Status</th>
-              <th scope="col" style={cell}>Account type</th>
-              <th scope="col" style={cell}>Name</th>
-              <th scope="col" style={cell}>Administrator</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((u) => (
-              <tr key={u.id} data-testid="user-list-row">
-                <td style={cell}><span style={badge} data-testid="user-list-status-badge">{u.status}</span></td>
-                <td style={cell}><span data-testid="user-list-account-type">{u.type}</span></td>
-                <td style={cell}><Link href={`/users/${u.id}`} data-testid="user-list-profile-link">{u.name}</Link></td>
-                <td style={cell}><span data-testid="user-list-admin-check">{u.admin ? "Yes" : "No"}</span></td>
+    <PageContainer>
+      <Stack gap="large">
+        <Heading level={1}>Digital Marketplace Users</Heading>
+        <Stack direction="row" gap="medium" align="end" justify="space-between">
+          <TextField type="search" label="Search by name" data-testid="user-list-search" />
+          <Button variant="secondary" data-testid="contact-list-open-export">Export contact list</Button>
+        </Stack>
+        <div role="region" aria-labelledby="user-list-caption" tabIndex={0} style={{ overflowX: "auto" }}>
+          <table style={{ borderCollapse: "collapse", width: "100%" }}>
+            <caption id="user-list-caption" style={{ textAlign: "start" }}>
+              <Text size="small" color="secondary">Everyone registered, active accounts first, then by account type and name</Text>
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col" style={cell}>Status</th>
+                <th scope="col" style={cell}>Account type</th>
+                <th scope="col" style={cell}>Name</th>
+                <th scope="col" style={cell}>Administrator</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+            </thead>
+            <tbody>
+              {users.map((u) => (
+                <tr key={u.id} data-testid="user-list-row">
+                  <td style={cell}><span style={badge} data-testid="user-list-status-badge">{u.status}</span></td>
+                  <td style={cell}><span data-testid="user-list-account-type">{u.type}</span></td>
+                  <td style={cell}><Link href={`/users/${u.id}`} data-testid="user-list-profile-link">{u.name}</Link></td>
+                  <td style={cell}><span data-testid="user-list-admin-check">{u.admin ? "Yes" : "No"}</span></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Stack>
+    </PageContainer>
   ),
 };

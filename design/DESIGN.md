@@ -76,9 +76,19 @@ All from `@bcgov/design-system-react-components`, unless the entry says otherwis
 | `ProgressCircle` | Indeterminate loading, always inside a `role="status"` container, next to visible text. |
 | `FileTrigger` (from `react-aria-components`) | Opens the profile-picture chooser behind a `Button`. The picker's own states belong to the files domain (`file-image-picker`). |
 
-Three things are **project-specific adaptations**, not design-system components, and must not be
+These are **the project's own components**, not design-system components, and must not be
 presented as official:
 
+- **Page container** (`PageContainer`, `design/catalogue/layout.tsx`). Reused unchanged from the
+  content domain. It is the one column every screen of this domain sits in: the content at most
+  1100 pixels wide and centred, with `--layout-padding-medium` on either side outside those 1100
+  pixels, so the content's left edge lines up with the banner's logo. The design system has no page
+  container or grid, which is why it is the project's own.
+- **Stack** (`Stack`, `design/catalogue/layout.tsx`). Reused unchanged from the content domain. It
+  is the only way items on these screens are spaced: a flex column (or, with `direction="row"`, a
+  wrapping row) whose gap is `--layout-margin-small`, `-medium` or `-large`. It removes the margins
+  of the design system's `Text` and `Heading` from its items, so a gap is never the token plus a
+  component's margin. The design system has no stack or spacing primitive.
 - **Profile section navigation.** No released tabs component was used. Each section has its own
   route (`?tab=…`), so the sections are a `<nav aria-label="Profile sections">` holding a list of
   `Link`s, with `aria-current="page"` on the section being shown. Only the sections that belong to
@@ -90,20 +100,42 @@ presented as official:
   focusable `role="region"` labelled by the caption, which scrolls horizontally at narrow widths.
   This is the one legitimate two-dimensional reflow exception on these screens.
 
-Layout uses only tokens: `--layout-margin-{none,small,medium,large}` for gaps,
-`--layout-padding-{none,small,large}` for padding, `--layout-border-width-small`,
-`--layout-border-radius-{medium,circular}`, and `--surface-color-border-{default,medium}`. No colour,
-size or radius value is written anywhere in the catalogue.
+Layout uses only tokens: `--layout-margin-{none,small,medium,large}` for gaps (through the stack
+only), `--layout-padding-{small,medium,large}` for padding, `--layout-border-width-small`,
+`--layout-border-radius-{medium,circular}`, `--surface-color-border-{default,medium}`, and
+`--typography-font-weights-bold` for the terms of a response reference. No colour, size or radius
+value is written anywhere in this domain's stories; the one literal size, the container's 1100
+pixels, is written only in `layout.tsx`.
 
 ### How a screen is laid out
 
-A single-column grid, with `--layout-margin-large` between regions and `--layout-margin-medium`
-inside a section. The regions come in this order: the H1; the profile section navigation, where
-there is one; any page-level alert or error summary; then the content sections, each a
-`<section aria-labelledby>` with its own H2. Action rows wrap (`flex-wrap`) instead of overflowing.
-Cards on the sign-in and sign-up screens stack vertically at every width, so there is no breakpoint
-to maintain. The layout must reflow at 320 CSS pixels and 400% zoom with nothing lost. The user
-table is the only thing allowed to scroll horizontally.
+Every screen of this domain is built from `layout.tsx` and nothing else: one `PageContainer`, and
+inside it one `Stack gap="large"` whose items are the screen's regions. No story sets a width, an
+outer padding, a margin or a gap of its own. The regions come in this order: the H1; the profile
+section navigation, where there is one; any page-level alert or error summary; then the content
+sections, each a `Stack as="section" gap="medium"` labelled by its own H2. The rhythm is fixed:
+
+- **`large`** between the regions of a page: the H1, the section navigation, an alert, the key
+  facts (account type, status, account ID), a form, each section, each sign-in card.
+- **`medium`** between the items of a region: the fields of a form, a section's H2 and what follows
+  it, the lines of the key facts, the links of the section navigation, the capability rows, the
+  contents of a sign-in card, the contents of the export dialog, and the facts of a response
+  reference.
+- **`small`** between a label and what it labels: the profile-picture label, its "no picture" line
+  and its trigger; the terms links and the agreement box; the Administrator box and its hint or
+  refusal; a capability's box, its description toggle and the description; the spinner and the
+  words of a loading row; a `dt` and its `dd`; and the "Response reference" line over its H1.
+
+A form is a design-system `Form` holding one `Stack gap="medium"`. Rows (the section navigation,
+the user list's search and export row, the notice's two links, a loading row) are
+`Stack direction="row"`, which always wraps, so nothing is pushed off a 320-pixel screen or at 400%
+zoom. A button that is a stack item sits in a plain `div`, so it keeps its own width rather than
+stretching across the column. A card (sign-in, sign-up), a capability row and the export dialog's
+body keep their own border, rule or inner padding, and lay their content out with a stack inside.
+Dialogs are portalled by `Modal`, so they sit inside the container but outside its stack. The cards
+on the sign-in and sign-up screens stack vertically at every width, so there is no breakpoint to
+maintain. The user table is the only thing allowed to scroll horizontally, inside its own focusable
+region.
 
 ### Forms and validation
 
@@ -426,26 +458,40 @@ the visible text (WCAG 2.5.3). On the view page the label is "Watch this opportu
 These are built from standard HTML and styled only with tokens. None of them is a design-system
 component, and none may be presented as one.
 
+- **Page container** (`PageContainer`, `design/catalogue/layout.tsx`). Reused unchanged from the
+  content domain, which defined it. It is the one column every screen of this domain sits in: the
+  content at most 1100 pixels wide and centred, so its left edge meets the banner's logo, with
+  `--layout-padding-medium` either side outside those 1100 pixels and `--layout-padding-large` above
+  and below. The design system ships no page container or grid. Every story of this domain is
+  wrapped in it, and no story sets a width or outer padding of its own.
+- **Stack** (`Stack`, `design/catalogue/layout.tsx`). Reused unchanged from the content domain. A
+  flex column, or with `direction="row"` a row that always wraps, spaced only by its `gap`
+  (`--layout-margin-small`, `-medium` or `-large`). It removes the margins of the design system's
+  `Text` and `Heading` (and of `dt`, `dd`, `p` and headings one level down) from its items, so a gap
+  is never the token plus a component's margin; as a `ul` it drops markers and indent. The design
+  system has no stack or spacing primitive. It is the only way items on these screens are spaced.
 - **Status badge.** It is the users domain's badge, reused unchanged: a `<span>` with a
   `--surface-color-border-medium` border and a `--layout-border-radius-circular` radius. It always
   carries the status in words (for example "Draft" or "Team questions: consensus") and sits after a
   visible "Status:" label or in a Status column. The design system's `Tag` is an interactive grid
   item inside `TagGroup`, which is the wrong role for a static status.
-- **Key facts list.** A `<dl>` whose items are `div`s holding a `dt` (bold, via
-  `--typography-font-weights-bold`) and a `dd`. The items flex-wrap with `--layout-margin-large`
-  gaps, so they reflow at 320 pixels without a breakpoint. The design system has no
-  description-list component.
+- **Key facts list.** A `<dl>` that is a wrapping row stack (`Stack as="dl" direction="row"
+  gap="medium"`), each fact a `Stack gap="small"` holding a `dt` (bold, via
+  `--typography-font-weights-bold`) and a `dd`. It reflows at 320 pixels without a breakpoint. The
+  design system has no description-list component.
 - **Opportunity card.** An `<article>` in a `<li>`, labelled by its H3 title link, with a
-  `--surface-color-border-default` border and a `--layout-border-radius-medium` radius. It is used on
-  the opportunity list. The design system's `Callout` is an emphasis box with its own title
-  markup, not a list item, so it does not fit.
-- **Card section.** A `<section aria-labelledby>` with the same border and radius. It is used for
-  the program cards and to group each part of a long form. This is the same treatment the users
-  domain gives its sign-in cards.
+  `--surface-color-border-default` border, a `--layout-border-radius-medium` radius and
+  `--layout-padding-large` inside; its content is one `Stack gap="small"`. It is used on the
+  opportunity list, whose cards are a `Stack as="ul" gap="medium"`. The design system's `Callout` is
+  an emphasis box with its own title markup, not a list item, so it does not fit.
+- **Card section.** A `<section aria-labelledby>` with the same border, radius and inner padding,
+  its content one `Stack gap="medium"`. It is used for the program cards and to group each part of
+  a long form. This is the same treatment the users domain gives its sign-in cards.
 - **Repeated-item group.** A `<fieldset>` and `<legend>` ("Question 1", "Resource 1", "Implementation
-  phase", "Panel member 2"), with a token border and the legend set in `--typography-bold-body`. The
-  design system has no fieldset component, and a legend is what names the group to assistive
-  technology.
+  phase", "Panel member 2"), with a token border and inner padding and the legend set in
+  `--typography-bold-body`. The legend stays the fieldset's first child; the fields after it are one
+  `Stack gap="medium"`. The design system has no fieldset component, and a legend is what names the
+  group to assistive technology.
 - **Data table.** It is the users domain's table, reused: a native `<table>` with a `<caption>`
   and `scope="col"` headers, inside a focusable `role="region"` that scrolls horizontally at narrow
   widths. It is used for the dashboard and the History tab.
@@ -456,13 +502,52 @@ component, and none may be presented as one.
 
 ### How a screen is laid out
 
-The layout is the users domain's: a single-column grid with `--layout-margin-large` between regions
-and `--layout-padding-large` around the page. Action rows and filter rows flex-wrap. No value is
-typed anywhere. The only tokens used are `--layout-margin-{none,xsmall,small,medium,large}`,
-`--layout-padding-{none,small,large}`, `--layout-border-width-small`,
+Every story of this domain is built from `layout.tsx`, the same way as the users, content and
+organizations domains': one `PageContainer`, and inside it one `Stack gap="large"` whose items are
+the screen's regions. No story sets a width, an outer padding, a margin or a gap of its own. The
+only spacing a story still writes is inside the project's own components: a card's, card section's
+or fieldset's inner padding, a status badge's inline padding, a legend's inline padding and a data
+table's cell padding. The rhythm is fixed:
+
+- **`large`** between the regions of a page: the heading block, the teaser, the key facts, the
+  opportunity ID, the Watch block, Start a proposal, the status and ID row, the action bar, the
+  tabs, a page alert or error summary, the form, each H2 section, each list group, each program
+  card, and the parts of the complete report.
+- **`medium`** between the items of a region: a section's H2 and what follows it, the fields and
+  card sections of a form and its submit row, the facts of a key facts list, the tabs of the
+  manage-page navigation, the controls of the list's filter row, the cards of a list group, the
+  buttons of a row, the score-weight fields, the contents of a dialog's body, and the members of
+  the evaluation panel editor.
+- **`small`** between a label and what it labels: the small program line ("Code With Us
+  opportunity", "Manage a … opportunity", "… opportunity report") and the H1 under it, which
+  together are the heading block; a `dt` and its `dd`; the lines inside an opportunity card; the
+  Watch sentence, its checkbox and its status region; an addendum's H3 and its text; a spinner and
+  its words.
+
+Rows (the home page's three links, the status and ID row, the tabs, the filter row, button rows,
+the score weights, a loading row) are `Stack direction="row"`, which always wraps, so nothing is
+pushed off a 320-pixel screen or at 400% zoom. The filter row and the score weights align their
+items on the bottom edge (`align="end"`), so the remote-only checkbox and the fields with labels
+above sit on one line; every other row is centred. A form is a design-system `Form` holding one
+`Stack gap="medium"`, and the filter `form role="search"` holds one row stack. A button or link
+that is a stack item on its own sits in a plain `div`, so it keeps its own width rather than
+stretching across the column. A bulleted list whose bullets are content (skills, key dates, the
+report's history, the home page's program links) stays a plain `<ul>`. Dialogs are portalled by
+`Modal`; the `Modal` sits inside the page container but after the page stack, and an
+`AlertDialog`'s body is one `Stack gap="medium"`. A page wrapper that carries a test ID
+(`home-page`, `service-status-page`, `not-found-page`) is the outer stack, since the container
+takes no attributes. The data tables (dashboard, History tab) are the only things allowed to
+scroll horizontally, inside their own focusable region.
+
+No value is typed anywhere; the container's 1100 pixels live in `layout.tsx` and nowhere else. The
+tokens this domain's stories write are `--layout-margin-none` (a fieldset's margin),
+`--layout-padding-{small,large}`, `--layout-border-width-small`,
 `--layout-border-radius-{medium,circular}`, `--surface-color-border-{default,medium}`,
-`--typography-font-weights-bold`, `--typography-bold-body` and `--typography-regular-display`
-(the home page's figures, which the token set describes as extra-large body text, not a heading).
+`--typography-font-weights-bold`, `--typography-bold-body` and `--typography-regular-display` (the
+home page's figures, which the token set describes as extra-large body text, not a heading); the
+gaps come from `layout.tsx` as `--layout-margin-{small,medium,large}`. The `--layout-margin-xsmall`
+gap that used to sit between a fact's `dt` and `dd` is gone: the stack's `small` is the label gap
+everywhere.
 
 The regions of each kind of page come in this order:
 
@@ -642,6 +727,16 @@ The following bindings are not obvious from their names:
   returns. Requesting the address is the action, and the wrapper shows the request landed.
 - `add_attachment` is `attachment-add-button`. It is used wherever this domain places the
   attachment trigger (the create forms, the Opportunity tab and the history note).
+- `opportunity-watch-request`: `watch_by_request` is `opportunity-watch-request-watch`,
+  `stop_watching_by_request` is `opportunity-watch-request-stop`, `request_accepted` is
+  `opportunity-watch-request-accepted`, `refusal_status` is
+  `opportunity-watch-request-refusal-status`, `refusal_reason` is
+  `opportunity-watch-request-refusal-reason`, `refusal_messages` is
+  `opportunity-watch-request-refusal-messages` (an ordered list) and `watching` is
+  `opportunity-watch-request-watching`. These name parts of a data answer; an adapter reads the
+  response, not markup.
+- `opportunity-counters`: `view_count` is `opportunity-counters-view-count` and
+  `refused_when_not_permitted` is `opportunity-counters-refused`.
 
 **Other domains should reuse these IDs for the same controls:**
 `finalize-consensus-button` for the evaluation domain's `finalize_consensus_scores` (it is one
@@ -722,6 +817,21 @@ prints, as one continuous document (R-1.40).
 **scheduled-transition-trigger** — `default`. The page has an H1 "Service status" and one sentence
 saying the service is up. A request to it also runs the closing hook (R-1.1). The page shows
 nothing about what closed, because the criterion does not say it should.
+
+**opportunity-watch-request** — `default`, `refused`. A request address, not a screen. Its stories
+are response references built the same way as the organizations domain's
+(`affiliation-approval-request`): a small "Response reference" line and the H1, then a Request
+section and an Answer section, each a `Stack as="dl"` of `dt`/`dd` pairs. `default` shows the watch
+and stop-watching requests and an accepted answer, with watching read back as Yes (R-1.5).
+`refused` shows the author asking to watch their own opportunity: filed under `opportunity`, with
+the message R-1.5's note gives, and watching still No. A duplicate watch (`conflict`), an unknown
+opportunity (`notFound`) and a refusal on permissions have the same shape, so they have no state of
+their own.
+
+**opportunity-counters** — `default`, `refused`. A request address, laid out as the response
+reference above. `default` shows an administrator's reading of the view count (the number is
+illustrative), and says that a missing counter reads as 0. `refused` shows a vendor or a request
+with no session refused as not permitted, as the surface states (R-1.6).
 
 ### Gaps
 
@@ -812,6 +922,21 @@ had to show something, the story marks it as illustrative or placeholder.
 25. **Dates in the stories are empty.** A `DatePicker` value needs `@internationalized/date`, which
     the catalogue's `package.json` does not declare, and this stage does not own that file. So the
     date pickers render empty, even in the `editing` stories. A build sets them from the record.
+26. **Observations on this domain's pages that are still `null` in the surface.** The surface now
+    names observations that no story of this domain binds: the separate key dates on the views and
+    manage pages (`proposal_deadline`, `assignment_date`, `start_date`, `completion_date` where
+    listed), `successful_proponent_contact_details` and `successful_proponent_score` (see gap 18),
+    `scope_section` (Sprint With Us view), `terms_section` (Team With Us view),
+    `evaluation_question_fields` (the Sprint With Us and Team With Us create and manage pages),
+    `instructions_tab` and `evaluation_tab` (Sprint With Us and Team With Us manage pages) and
+    `offered_state_changes` (Team With Us manage page). They were left `null` on the 2026-10-01
+    layout-only pass, which was ordered to change no element, wording or test ID. Binding them means
+    adding or marking elements in the stories, which is a design run for this domain, not a layout
+    one.
+27. **The watch request's refusals.** R-1.5 gives the words only for watching one's own
+    opportunity. The duplicate refusal's message, and the status each refusal is answered with,
+    are not stated, so the `refused` story shows the own-opportunity case and names the status as
+    unstated.
 
 ---
 
@@ -822,7 +947,11 @@ management page (`/organizations/:orgId/edit`, with five tabs), the two program-
 vendor's own organizations, which is a section of their profile reached two ways: by account
 identifier (`organization-user-memberships`) and as the signed-in person
 (`organization-user-memberships-self`). The two memberships pages render the same design and differ
-only in their addresses. Every state named in `design/screens.yaml` has a story at
+only in their addresses. Three more addresses answer with data rather than a page: the
+organizations one may act for (`organization-acting-for-list`), an invitation made by request
+(`affiliation-invitation-request`) and a membership accepted by request
+(`affiliation-approval-request`). Each is a response reference, as in the users, content and files
+domains. Every state named in `design/screens.yaml` has a story at
 `design/catalogue/<page>.<state>.stories.tsx`, and the story is what a build copies.
 
 One decision shapes most of the domain: **a control is offered only to the people the service
@@ -863,9 +992,20 @@ words in the Membership column rather than from a control's appearance.
 ### This project's own components (not design-system components)
 
 These are built from standard HTML and styled only with tokens. None of them is a design-system
-component, and none may be presented as one. The first four are the users and opportunities
-domains' own components, reused unchanged.
+component, and none may be presented as one. The page container and the stack are the content
+domain's, in `design/catalogue/layout.tsx`; the next four are the users and opportunities domains'
+own components, reused unchanged.
 
+- **Page container** (`PageContainer`, `design/catalogue/layout.tsx`). Reused unchanged: the one
+  column every screen sits in, its content at most 1100 pixels wide and centred so its left edge
+  meets the banner's logo, with `--layout-padding-medium` either side outside those 1100 pixels and
+  `--layout-padding-large` above and below. The design system ships no page grid or container.
+  Every story of this domain is wrapped in it.
+- **Stack** (`Stack`, `design/catalogue/layout.tsx`). Reused unchanged: a flex column, or with
+  `direction="row"` a row that always wraps, spaced only by its `gap` (`--layout-margin-small`,
+  `-medium` or `-large`). It removes the margins of the design system's `Text` and `Heading` from
+  its items, so a gap is never the token plus a component's margin, and as a `ul` it drops markers
+  and indent. The design system has no stack or spacing primitive.
 - **Status badge.** A `<span>` with a `--surface-color-border-medium` border and a
   `--layout-border-radius-circular` radius, always carrying its meaning in words. Here it shows
   Owner, Administrator, Member and Pending in team and membership tables, the "Sprint With Us
@@ -880,7 +1020,8 @@ domains' own components, reused unchanged.
   pages carry the users domain's `<nav aria-label="Profile sections">` with Organizations current.
 - **Card section.** A `<section aria-labelledby>` with a `--surface-color-border-default` border and
   a `--layout-border-radius-medium` radius. Used to group the create form's three parts and to set
-  off the terms text.
+  off the terms text. Its border and inner padding (`--layout-padding-large`) are its own; its
+  contents are laid out by a stack inside it.
 - **Pagination.** New in this domain. A `<nav aria-label="Pages of organizations">` holding a list:
   "Page N of M" as text, a `Link` per page number (`aria-label="Page N"`, `aria-current="page"` on
   the current one), and "Previous page" / "Next page" `Link`s where there is such a page. Links,
@@ -893,14 +1034,45 @@ domains' own components, reused unchanged.
   screen reader announces as "list, three items".
 
 The tokens used are the ones the two earlier domains list, and no others:
-`--layout-margin-{none,small,medium,large}`, `--layout-padding-{none,small,large}`,
-`--layout-border-width-small`, `--layout-border-radius-{medium,circular}` and
-`--surface-color-border-{default,medium}`. No colour, size or radius value is written anywhere.
+`--layout-margin-{none,small,medium,large}`, `--layout-padding-{none,small,medium,large}`,
+`--layout-border-width-small`, `--layout-border-radius-{medium,circular}`,
+`--surface-color-border-{default,medium}`, and `--typography-font-weights-bold` (the terms of a
+response reference's description list). No colour, size or radius value is written anywhere; the
+one number in the layout, the container's 1100 pixels, lives in `layout.tsx` and nowhere else. A
+stored logo is kept inside its column with `max-width: 100%`, the files domain's image rule; that
+is a containment, not spacing (files domain, gap 11).
 
 ### How a screen is laid out
 
-The users domain's layout: a single-column grid with `--layout-margin-large` between regions and
-`--layout-padding-large` around the page. Action rows flex-wrap. The regions come in this order:
+Every story of this domain is built from `layout.tsx`, the same way as the content, files and
+notifications domains': one `PageContainer`, and inside it one `Stack gap="large"` whose items are
+the screen's regions. No story sets a width, an outer padding, a margin or a gap of its own. The
+only spacing a story writes is inside the project's own components: a data table's cell padding,
+a status badge's inline padding, and a card section's inner padding. The rhythm:
+
+- **`large`** between the regions of a page: the heading block, the ID and badge row, the
+  management page's tabs, a page alert, each tab's `<section>`, the table and the pagination.
+- **`medium`** between the items of a region: a section's H2 and what follows it, a form's fields
+  and card sections and its submit row, the links of a navigation row, the badges and ID in the row
+  under the H1, the items of a dialog's body, and the vendor's Create organization and My
+  organizations. On the memberships pages the H1 and the profile section navigation are one heading
+  block at this gap, as the profile's other sections are in the notifications domain.
+- **`small`** between a label and what it labels: "Edit Organization" (or the organization's name
+  on a terms page) and the H1 under it; a spinner and its text; the commands in one table row; the
+  items of a requirement list.
+
+Rows (navigation, toolbars, badge rows, a table row's commands) are `Stack direction="row"`, which
+always wraps, so nothing is pushed off a 320-pixel screen or at 400% zoom; the data tables scroll
+inside their own focusable region instead. A navigation list is a `Stack as="ul"`, so it keeps its
+list semantics without markers or indent. A bulleted list whose markers are content (team
+capabilities) stays a plain `<ul>`. Dialogs are portalled by `Modal` and laid out by the design
+system; the `Modal` sits inside the page container but outside the stack. An `AlertDialog`'s body
+is one `Stack gap="medium"`. The two `Dialog`s (Add team members, Change owner) keep the inner
+padding their body always had: a `div` with `--layout-padding-large` holding one
+`Stack gap="medium"`, as a card section does. If the installed `Dialog` pads its own content, that
+`div` goes and the stack sits directly in the dialog. A page wrapper that
+carries a test ID (`not-found-page`) is the outer stack, since the container takes no attributes.
+The regions come in this order:
 
 - **Organization list.** The H1; the vendor's "Create organization" and "My organizations"; the
   table; the pagination.
@@ -1102,6 +1274,33 @@ field (`organization-legal-name-field`, `organization-website-field`,
 approved area shown as text); `organization-cancel-service-areas-button`;
 `organization-swu-terms-accepted-on` (the acceptance date on the qualification tab).
 
+**The logo on the management page.** `change_logo` is `organization-logo-button`, the trigger the
+create page already binds, because it is the same control. `current_logo` is
+`organization-current-logo`, the stored logo's `img` on the read-only Organization tab, whose `src`
+is the address the test reads. With no logo, no such element is rendered and "No logo has been
+added." is shown, which the adapter reads as empty. `logo_refused_error` is
+`organization-logo-refused-error`, the wrapper of the refusal's alert inside the form's logo picker.
+
+**The three request addresses.** As in the users, content and files domains, **the adapter reads
+these as names for parts of the request and the HTTP answer**, not as elements in a browser.
+
+- `organization-acting-for-list`: `organizations_offered` is
+  `organization-acting-for-list-organizations`, and `refused_when_not_permitted` is
+  `organization-acting-for-list-refused`.
+- `affiliation-invitation-request`: `invite_with_membership_type` is
+  `affiliation-invitation-request-invite`, `invitation_created` is
+  `affiliation-invitation-request-created`, `membership_identifier` is
+  `affiliation-invitation-request-membership-id`, and `invalid_membership_type_error` is
+  `affiliation-invitation-request-invalid-membership-type`. That last one is deliberately not the
+  Team tab's `organization-invalid-membership-type-error`: one is a screen's alert, the other a part
+  of an HTTP answer.
+- `affiliation-approval-request`: `accept_membership_by_request` is
+  `affiliation-approval-request-accept`, `request_accepted` is
+  `affiliation-approval-request-accepted`, `membership_status` is
+  `affiliation-approval-request-membership-status`, `refusal_messages` is
+  `affiliation-approval-request-refusal-messages` (an ordered list, empty or absent when the
+  request was accepted), and `refusal_status` is `affiliation-approval-request-refusal-status`.
+
 ### Per-screen notes
 
 **organization-list** — `default` (a vendor, owning one listed organization and administering
@@ -1126,7 +1325,27 @@ qualified), `swu-qualified` (all met, the badge showing, the acceptance date, R-
 two kept, one cleared, a third ticked). And `changelog` (R-3.33's two entries, "Admin Rights Removed"
 above "Admin Rights Given"), `not-found`, `loading`. A fully qualified Team With Us tab is the
 `swu-qualified` story's pattern applied to the Team With Us requirements; it has no story of its own
-because no criterion turns on it.
+because no criterion turns on it. The logo: `logo-stored` (the read-only Organization tab after a
+logo was saved, the logo shown at its stored size, R-8.13, R-8.28) and `logo-refused` (the form
+still open after Save, the stored logo kept, the refusal in the logo picker with focus moved to
+it, R-8.30, R-8.21). The logo picker in the form is the files domain's image picker
+(`file-image-picker`) with "Logo" in place of "Profile picture"; in `editing` and `invalid`, where
+no logo is stored, it is the shorter "No logo has been added." and the trigger, as before.
+
+**organization-acting-for-list** — `default` (R-3.15's vendor: the organization they own and the one
+they administer, not the one they are an ordinary member of nor their archived one) and `refused`
+(anyone who is not a signed-in vendor, R-3.20, answered as not permitted and never as an empty
+list).
+
+**affiliation-invitation-request** — `default` (the owner names a member; a pending membership is
+created and its identifier returned, R-3.7) and `invalid` (any type other than member or owner,
+shown with ADMIN, which the interface description lists but R-3.17 refuses; nothing is created).
+
+**affiliation-approval-request** — `default` (the invited person accepts; the status is ACTIVE),
+`refused` (the owner tries to accept on the invited person's behalf) and `not-pending` (a second
+acceptance of a membership already active, with the service's message "Membership is not
+pending."), all R-3.9. The two refusals are separate states because they are different answers: one
+is about who asked, the other about the membership.
 
 **organization-swu-terms / organization-twu-terms** — `default` (Accept offered), `accepted` (the
 date, no Accept), `administrator` (no Accept).
@@ -1203,6 +1422,21 @@ something, the story says it is the design's own wording or a placeholder.
 16. **Failures of immediate changes.** No criterion says what a person sees when withdrawing
     rights, approving an invitation or saving service areas fails, or when a create or save fails
     for a reason other than validation.
+17. **The permission message on an acceptance by request.** R-3.9 says the owner's attempt to
+    accept on another's behalf is refused, and the surface says `refusal_messages` carries "its
+    permission message", but neither gives the words. The `refused` story shows a placeholder. Only
+    "Membership is not pending." is worded, and that by the surface's comment, not a criterion.
+18. **Status numbers of the refusals by request.** R-3.20, R-3.17 and R-3.9 say "refused", "refused
+    as an invalid membership type" and "refused as not pending", with no status number. The stories
+    use the users domain's words ("Refused: not permitted", "Refused: invalid request"). Which
+    number each is remains the build's to state, as in the users domain's gap 11.
+19. **The wording of a refused logo.** The surface quotes the old service's "Please select a
+    different logo image."; no criterion words the message. The story uses the files domain's
+    wording for a refused picture, with "logo" in place of "profile picture". If a test compares
+    the message's words, the spec needs to say which.
+20. **Who else may invite by request.** R-3.17 has the owner inviting. Whether an organization
+    administrator or a service administrator invites by request with the same answers is not
+    stated beyond R-3.7, so the stories name the owner only.
 
 ---
 
@@ -1224,6 +1458,15 @@ small. It covers four places, and three of them are parts of pages other domains
   the terms and conditions page.
 - **notification-email-reference.** This is the one page the domain owns outright: the
   administrator's preview of every email.
+
+The surface gives this domain four more entries, `caught-message`, `caught-message-list`,
+`mail-delivery-fault` and `mail-delivery-delay`. Each carries `origin: mail-catcher`: they are
+addresses of the test harness's mail catcher and its fault and delay controls, not of the
+application. No screen of the service renders them. Because the catalogue's check asks every
+surface entry for a screen, each has one `default` entry in `design/screens.yaml` and a story that
+is a response reference, like the files domain's service addresses: the request and the parts of
+the catcher's answer the surface reads, laid out with the page container and the stack. Their
+`test_id`s stay `null` (gap 14).
 
 Every state named in `design/screens.yaml` has a story at
 `design/catalogue/<page>.<state>.stories.tsx`, and the story is what a build copies. Where a story
@@ -1259,10 +1502,26 @@ the opportunities domain already ruled out for Watch.
 
 These are built from standard HTML and styled only with tokens. None is a design-system component.
 
+- **Page container** (`PageContainer`, `design/catalogue/layout.tsx`). Reused from the content
+  domain, unchanged in what it does: the one column every screen sits in, its content at most 1100
+  pixels wide and centred so its left edge meets the banner's logo, with `--layout-padding-medium`
+  either side outside those 1100 pixels and `--layout-padding-large` above and below. The design
+  system ships no page grid or container, so it is the project's own. Every story of this domain
+  is wrapped in it.
+- **Stack** (`Stack`, `design/catalogue/layout.tsx`). Reused from the content domain: a flex column,
+  or with `direction="row"` a row that always wraps, spaced only by its `gap`
+  (`--layout-margin-small`, `-medium` or `-large`). It strips the margins of the design system's
+  `Text` and `Heading` (and of `dt`/`dd`) from its items, so a gap is never the token plus a
+  component's margin, and it takes no `style` or `className`. The design system has no stack or
+  spacing primitive. This domain added one value to it, `align="end"`, for the opportunities
+  domain's filter row reproduced around the opt-in: the two `Select`s and the search field carry a
+  label above them and the checkbox does not, and the row's controls line up on their bottom edge
+  as they did before. The change is additive and alters no other domain's story.
 - **Card section.** This is the earlier domains' `<section aria-labelledby>` with a
   `--surface-color-border-default` border and a `--layout-border-radius-medium` radius, reused. It
   holds the opt-in control on the list, and the placeholder frame for the content domain's part of
-  the terms page.
+  the terms page. Its border and inner padding (`--layout-padding-large`) are its own; its content
+  is laid out by a stack inside it.
 - **Key facts list.** This is the opportunities domain's `<dl>`, reused. Each sample message's
   Subject and "Who receives it and why" is a `dt` in `--typography-font-weights-bold` followed by
   its `dd`.
@@ -1273,14 +1532,41 @@ These are built from standard HTML and styled only with tokens. None is a design
   title is set in bold text, not as a heading, so the page's outline stays page → event → message.
   The emails' own formatting belongs to the sending machinery. A build renders the message's body
   markup into this frame. It does not use an `iframe`, because an unlabelled or untitled frame
-  would break the outline and the scan.
+  would break the outline and the scan. Its border and inner padding are its own; the message's
+  lines are laid out by a stack inside it.
 
 No token beyond those the earlier domains list is used:
-`--layout-margin-{none,small,medium,large}`, `--layout-padding-{none,small,large}`,
+`--layout-margin-{none,small,medium,large}`, `--layout-padding-{none,small,medium,large}`,
 `--layout-border-width-small`, `--layout-border-radius-{medium,circular}`,
 `--surface-color-border-{default,medium}`, and `--typography-font-weights-bold`.
 
 ### How each screen is laid out
+
+Every story of this domain is built from `layout.tsx` and nothing else, the same way as the content
+and files domains': one `PageContainer`, and inside it one `Stack gap="large"` whose items are the
+screen's regions. No story sets a width, an outer padding, a margin or a gap of its own; the only
+spacing a story writes is the inner padding of a bordered frame (a card section, the placeholder
+frame, the email preview frame), the rule above each sample message, and the status badge's own
+inline padding. The rhythm:
+
+- **`large`** between the regions of a page: the H1 or heading block, an alert, the filter form,
+  the opt-in card, each `<section>`, each sign-in card, the reference page's contents `nav` and
+  each event section.
+- **`medium`** between the items of a region: a section's H2 and what follows it, the paragraphs
+  and button of the terms broadcast, the settings page's sentences, checkbox and status region,
+  the profile section links in a row, the filter controls in a row, the opt-in card's heading,
+  sentence, button and status region in a row, the cards of a group, and the lines of an email
+  preview.
+- **`small`** between a label and what it labels: "Manage a page" and the H1 under it; the lines
+  of an opportunity card; the reference page's contents links; Subject and "Who receives it and
+  why" in the key facts; and the spinner and text of a loading row.
+
+Rows (the profile section links, the filter row, the opt-in card's contents, a loading row) are
+`Stack direction="row"`, which always wraps, so nothing is pushed off a 320-pixel screen or at
+400% zoom and the opt-in is never hidden by width (R-6.27). Dialogs are portalled by `Modal` and
+laid out by the design system, so the `Modal` sits inside the page container but outside the
+stack. A page wrapper that carries a test ID (`email-reference-page`, `not-found-page`) is now the
+outer stack, inside the container, since the container itself takes no attributes.
 
 - **Unsubscribe landing.** This is the users domain's notifications section, unchanged: the H1
   "Notifications", the profile section navigation, the sentence naming the address, the checkbox,
@@ -1492,17 +1778,24 @@ words that no criterion gives, the story or this list says so.
     marker. The samples show none.
 13. **Loading states are the design's own.** No criterion describes a delay on the landing or the
     reference page. They exist because both depend on data that arrives after the page.
+14. **Four surface entries with no markup to bind.** `caught-message`, `caught-message-list`,
+    `mail-delivery-fault` and `mail-delivery-delay` are served by the mail catcher, not by the
+    application (`origin: mail-catcher`). Their actions and observations are read from the
+    catcher's answers, not from markup the service renders. Each has a response-reference story so
+    that it has a screen, but those stories carry no test IDs and the fields are left `null`. The contract stage should say whether a
+    `test_id` belongs on an entry with that origin at all, or mark those fields as not applicable.
 
 ---
 
 ## Domain: content
 
 The service's own prose is held as pages: a title, a body of formatted text and a short address,
-readable by anyone at `/content/<address>` and managed by an administrator. This domain designs six
+readable by anyone at `/content/<address>` and managed by an administrator. This domain designs seven
 surfaces: the footer's five links to those pages (`content-footer`), the service level agreement
 link on the Code With Us learn-more screen (`content-service-level-agreement-link`), the
 administrator's list of pages (`content-list`), creating a page (`content-create`), a page's
-managing screen (`content-edit`), and the public page itself (`content-view`). Every state named in
+managing screen (`content-edit`), the public page itself (`content-view`), and the requests the
+service answers about pages (`content-request`, a response reference rather than a screen). Every state named in
 `design/screens.yaml` has a story at `design/catalogue/<page>.<state>.stories.tsx`, and the story is
 what a build copies.
 
@@ -1545,6 +1838,20 @@ These are built from standard HTML, or from `react-aria-components` (the library
 is itself built on), and styled only with tokens. None of them is a design-system component, and
 none may be presented as one.
 
+- **Page container** (`PageContainer`, `design/catalogue/layout.tsx`). The one column every screen's
+  content sits in: the content itself at most 1100 pixels wide, centred, with `--layout-padding-medium`
+  on either side outside those 1100 pixels (the box is `calc(1100px + 2 * var(--layout-padding-medium))`
+  wide under `border-box`), and `--layout-padding-large` above and below. It matches the content width of the design system's
+  own `Header` and `Footer`, so a screen lines up with the banner. The design system ships no page
+  grid or container component, which is why it is the project's own. 1100px is the one literal
+  size in the catalogue, because no token carries it, and it is written only here.
+- **Stack** (`Stack`, `design/catalogue/layout.tsx`). The one way items are spaced: a flex column
+  (or, with `direction="row"`, a wrapping row) whose `gap` is `--layout-margin-small`, `-medium` or
+  `-large` and nothing else. It removes the margins the design system's `Text` and `Heading` carry
+  (and a `dt`'s or `dd`'s) from each of its items, and from a heading or paragraph that is the only
+  content of an item's wrapper, so a gap is never the token plus a component's margin. It takes no
+  `style` or `className`, so no screen can add spacing beside it. The design system has no stack or
+  spacing primitive.
 - **Body editor.** This is new in this domain. The design system has no rich-text or markdown
   editor, and the opportunities domain's gap 21 left this decision to the content domain. The
   editor is a composition, not a new widget: a `Toolbar` from `react-aria-components`, labelled
@@ -1571,14 +1878,33 @@ none may be presented as one.
   either way.
 
 No token beyond those the earlier domains list is used: `--layout-margin-{none,small,medium,large}`,
-`--layout-padding-{small,large}`, `--layout-border-width-small`,
+`--layout-padding-{small,medium,large}`, `--layout-border-width-small`,
 `--layout-border-radius-{medium,circular}`, `--surface-color-border-{default,medium}` and
 `--typography-font-weights-bold`.
 
 ### How each screen is laid out
 
-The users domain's layout applies: a single-column grid, with `--layout-margin-large` between
-regions and `--layout-padding-large` around the page. Action rows wrap.
+Every screen of this domain is built the same way, from `layout.tsx` and nothing else: one
+`PageContainer`, and inside it one `Stack gap="large"` whose items are the screen's regions. No story
+sets a width, an outer padding, a margin or a gap of its own. The rhythm is fixed:
+
+- **`large`** between the regions of a page: the heading block, an alert, the key facts, the action
+  row, each `<section>`.
+- **`medium`** between the items of a region: the fields of a form, a section's heading and what
+  follows it, the key facts beside one another, the placeholder frame's content.
+- **`small`** between a label and what it labels: "Manage a page" and the H1 it sits over; the
+  address field, its rule and the resulting address; the formatting toolbar, the body and the
+  formatting-guide link; a `dt` and its `dd` in a response reference; and between the buttons of
+  the formatting toolbar and the spinner and text of a loading row.
+
+A form is a design-system `Form` holding one `Stack gap="medium"`. Rows (the list's H1 with Create
+page, the key facts, the toolbar's buttons, the loading row) are `Stack direction="row"`, which
+always wraps, so nothing is pushed off a 320-pixel screen or at 400% zoom; the key facts fall into a
+column when they no longer fit. The list's table keeps its own scrolling region, the one place that
+scrolls sideways. Dialogs are portalled by `Modal` and laid out by the design system. The footer sits
+after the container, not inside it, because the design system's `Footer` centres its own content to
+the same width. The placeholder frames (footer and service level agreement stories) keep their own
+border and inner padding and lay out their content with a stack.
 
 - **Footer.** It sits on every screen, after the main content, whatever the viewer's sign-in state
   (R-7.19). The five links appear in the order R-7.19 names them (About, Disclaimer, Privacy,
@@ -1717,6 +2043,9 @@ WCAG 2.1 AA applies (P1, J5). The users domain's list applies here too. This dom
   visible text label rather than an icon.
 - **A link that opens a new tab says so** in its text ("How to format text (opens in a new tab)").
 - **Dates** are `<time datetime>` elements.
+- **Reflow (WCAG 1.4.10).** Every screen stays usable at 320 pixels wide and at 400% zoom. The
+  page container has no minimum width, every row is a wrapping stack, and the only sideways scroll
+  is the list's table, in its own labelled, focusable region.
 - **Checks still required.** Keyboard use of the formatting toolbar and the image chooser, a
   screen-reader check of the address rule and the resulting-address line as the person types, and
   a check of a real body with headings, lists and images through the renderer have not been done.
@@ -1759,6 +2088,18 @@ The following bindings are not obvious from their names:
   `content-list-title-link`s inside it.
 - **Links in a body.** `follow_body_link` is `content-body-link`, which the renderer puts on every
   link it renders.
+- **What the body turned into.** `body_element_names` and `body_script_ran` are both
+  `content-page-body`, the element the renderer writes the body into. The first is read as the
+  names of the elements inside it, in document order. The second is not an element at all: it is
+  whether a dialog was raised while that element rendered, so the ID names the body the adapter
+  waits for before it starts watching (see gap 16). With R-7.17's renderer the first never
+  contains `script` and the second is always empty.
+- **Requests.** On `content-request` the six actions are `content-request-read-list`,
+  `-read-page`, `-create`, `-change`, `-rename` and `-remove`, one per request.
+  `request_accepted` is `content-request-accepted`, `refusal_status` is
+  `content-request-refusal-status`, and `refusal_shape` is `content-request-refusal-shape`. As in
+  the users and files domains, **the adapter reads these as names for parts of the request and the
+  HTTP answer**, not as elements in a browser.
 - **Something that must be absent.** `version_history` is `content-version-history`, and **no story
   renders it, on purpose**. R-7.23 says nothing in the service shows an earlier version, and the
   surface's own comment says the observation exists to come back empty. A build must never render
@@ -1799,7 +2140,28 @@ long, R-7.20), `duplicate-slug` (a rename to "about" refused, R-7.22), `publish-
 broadcast section, and its states, are the notifications domain's.
 
 **content-view** — `default` (the page at "privacy" read by a visitor who is not signed in,
-R-7.1), `loading`, `not-found` (R-7.2, R-7.3).
+R-7.1), `loading`, `not-found` (R-7.2, R-7.3). A body that carries raw markup is not a state of its
+own: the renderer shows it as text inside the same `content-page-body`, which is exactly what
+`body_element_names` and `body_script_ran` check (R-7.17).
+
+**content-request** — `default`, `refused`, `invalid`, `not-found`. The address answers with data,
+so, as with the users domain's and the files domain's service addresses, each story is a response
+reference: the requests, then the answer, each part on an element carrying its test ID, built from
+`Heading`, `Text` and a description list in a stack. The methods and addresses are those of
+`spec/contract/openapi.yaml` (GET and POST `/api/content`; GET, PUT and DELETE
+`/api/content/<address>`, a rename being a PUT that sends a new address). The states are the
+distinct answers:
+
+- `default`: an administrator's six requests are answered (`content-request-accepted`).
+- `refused`: anyone but an administrator reads the list, or creates, changes, renames or removes a
+  page. Nothing changes (R-7.10), and every one of those refusals is a permission refusal in one
+  form, never reported as a faulty submission (R-7.16, which replaces R-7.11). The status reads
+  "Refused: not permitted", in the users domain's words.
+- `invalid`: what an administrator sent is refused, with nothing changed: a title or body of the
+  wrong length naming the failing field (R-7.20), an address that breaks the rule (R-7.21) or that
+  another page holds (R-7.22), a rename or removal of a page the service needs (R-7.25), or a read
+  at an address that is not well formed (R-7.3). The status reads "Refused: invalid request".
+- `not-found`: a read at a well-formed address no page holds (R-7.2).
 
 ### Gaps
 
@@ -1868,6 +2230,34 @@ words that no criterion gives, the story or this list says so.
 14. **Content the spec does not carry.** Every page body in the stories is a placeholder, marked as
     such. The people named ("Test Administrator", "Test Administrator Two") are synthetic, in the
     users domain's style, and the page "hackathon-rules" is an invented ordinary page.
+15. **Reading one page refused for lack of permission.** R-7.16 lists reading one page among the
+    requests whose permission refusal must share one form. But R-7.1 lets anyone, signed in or not,
+    read a page, and no criterion names anyone who may not. So `content-request.refused` shows five
+    requests, not six, and a permission refusal of a read has no case to design. Either R-7.16
+    should drop reading one page, or a criterion should say who is refused it.
+16. **An observation that is not an element.** `content-view.body_script_ran` is read as a dialog
+    the browser raises, which no element carries. It is bound to `content-page-body` because that
+    is the rendered body the adapter must wait for before it watches. If the contract wants every
+    test ID to name the element that shows the value, this observation should be marked as read
+    from the browser, the way `content-edit.version_history` is a statement that something is
+    absent (gap 1).
+17. **Refusal statuses and the form of an answer.** The criteria say "permission refusal",
+    "invalid request" and "not found" but give no status numbers for the content requests, and the
+    interface description gives one only for reading a page (400 and 404). Neither says which
+    fields a refused answer carries. The stories say what each refusal must name (the lack of
+    permission, or the failing field or address) and leave the numbers and field names to the
+    build. Which refusal R-7.25's refused rename or removal of a needed page is, a permission
+    refusal or an invalid request, is not stated. The design files it under `invalid`, because the
+    administrator is permitted and the request itself is what the service will not take.
+18. **The page container's box (resolved).** The design system's `Footer` measures its 1100 pixels
+    for content alone. An earlier `PageContainer` counted its side padding inside the 1100 pixels,
+    and the screenshot at 1280 pixels showed the content starting one `--layout-padding-medium`
+    (16 pixels) right of the Footer's. The container is now `calc(1100px + 2 *
+    var(--layout-padding-medium))` wide under `border-box`, so the content column is 1100 pixels and
+    its left edge is the Footer's; on a narrow screen the padding still keeps it off the edge. The
+    change is in `layout.tsx` alone, and every screen picks it up. The container also adds `--layout-padding-large` above and below, which the rule does not
+    mention, because the catalogue renders full-screen and content would otherwise touch the top
+    edge.
 
 ---
 
@@ -1876,12 +2266,13 @@ words that no criterion gives, the story or this list says so.
 A stored file is the same thing wherever it comes from: an attachment on an opportunity or a
 proposal, a profile picture, an organization's logo, or an image placed in formatted text. It has a
 name, an uploader, a date and a rule about who may read it. It is written once and never changed
-(R-8.6). This domain owns no screen of its own. The surface gives it six entries, and they come in
+(R-8.6). This domain owns no screen of its own. The surface gives it seven entries, and they come in
 two kinds:
 
-- **Three service addresses** (`file-upload`, `file-description`, `file-download`). These answer
-  with data or with the file itself, never with a page. Most of this domain's criteria are about
-  them: who may upload, what is refused and how, and who may read.
+- **Four service addresses** (`file-upload`, `file-description`, `file-download`,
+  `file-attach-by-identifier`). These answer with data or with the file itself, never with a page.
+  Most of this domain's criteria are about them: who may upload, what is refused and how, who may
+  read, and who may attach a stored file to an opportunity or a proposal.
 - **Three shared controls** that sit on pages other domains own. `file-attachment-control` is the
   attachment list on the three opportunity forms, the Code With Us proposal form and the opportunity
   history note. `file-image-picker` is the profile picture on the profile screens and at sign-up,
@@ -1891,7 +2282,7 @@ two kinds:
 Every state named in `design/screens.yaml` has a story at
 `design/catalogue/<page>.<state>.stories.tsx`. For the three controls, the story is what a build
 copies. The host page around each control is trimmed to a frame, and a line in the story says
-whose design the trimmed part is. For the three addresses, the story is a **response reference**
+whose design the trimmed part is. For the four addresses, the story is a **response reference**
 (see below). A build does not render it.
 
 Two decisions shape the domain:
@@ -1913,7 +2304,7 @@ stories already compile with.
 
 | Component | Used for |
 | --- | --- |
-| `Heading` | The host page's H1 (kept in each frame so the outline is real), the host section's H2, and the "Attachments" H3 in the opportunity form. On the three service addresses, the H1 is the surface title and there are H2s for "Request" and "Answer". |
+| `Heading` | The host page's H1 (kept in each frame so the outline is real), the host section's H2, and the "Attachments" H3 in the opportunity form. On the four service addresses, the H1 is the surface title and there are H2s for "Request" and "Answer". |
 | `Text` | Body copy. `size="small" color="secondary"` is used for the stated rule next to each file trigger, the resulting-name line under a renamed attachment, and the notes that mark a trimmed frame. |
 | `Button` | "Add attachment" and the profile picture trigger are `secondary`. "Insert image" is `tertiary size="small"`, inside the content domain's toolbar. Remove is `secondary size="small"`, with an `aria-label` that begins with its visible text and names the file ("Remove Statement of work.pdf"). |
 | `FileTrigger` (from `react-aria-components`) | Every file chooser. `acceptedFileTypes={["image/jpeg", "image/png"]}` is set on the image picker and on "Insert image". The attachment trigger accepts any type, because no criterion restricts an attachment's type (R-8.23 note). |
@@ -1928,36 +2319,82 @@ stories already compile with.
 These are built from standard HTML and styled only with tokens. None of them is a design-system
 component, and none may be presented as one.
 
-- **Attachment list.** This is new in this domain. It is a `<ul>` with no bullets. Each `<li>` is a
-  row with a `--surface-color-border-medium` border and a `--layout-border-radius-medium` radius. A
-  stored row holds the read-only name, the download link and Remove. A new row holds a line giving
-  the chosen file's name and size, the name field, the resulting-name line and Remove. The design
-  system has no file list or file-upload component. `FileTrigger` only opens the chooser, and it
-  shows nothing about what was chosen.
+- **Page container** (`PageContainer`, `design/catalogue/layout.tsx`). Reused from the content
+  domain, which defined it; see its entry there. Every story of this domain sits in exactly one. The
+  content is at most 1100 pixels wide and centred, so it lines up with the design system's `Header`
+  and `Footer`. `--layout-padding-medium` on either side sits outside those 1100 pixels. The design
+  system has no page container.
+- **Stack** (`Stack`, `design/catalogue/layout.tsx`). Reused from the content domain. It is the only
+  source of spacing between items, and it removes the margins of the design system's `Text` and
+  `Heading`. This domain added one thing to it: `as="ul"` and `as="ol"`, which give a list with no
+  markers and no indent whose items are spaced by the gap alone. The attachment list, the opportunity
+  tabs and the public view's download links need that, because a list could not be a stack before.
+  The change is additive, and no other domain's story used a list as a stack, so none changes. The
+  design system has no stack or spacing primitive.
+- **Attachment list.** This is new in this domain. It is a `Stack as="ul"`. Each `<li>` is a row
+  with a `--surface-color-border-medium` border, a `--layout-border-radius-medium` radius and
+  `--layout-padding-small` inside, and it lays out its content with a `Stack gap="small"`. A stored
+  row holds the read-only name, then the download link and Remove side by side. A new row holds a
+  line giving the chosen file's name and size, the name field, the resulting-name line and Remove.
+  The design system has no file list or file-upload component. `FileTrigger` only opens the chooser,
+  and it shows nothing about what was chosen.
+- **Card section.** This is the opportunities domain's card, reused. The attachment control sits
+  inside one. It has a `--surface-color-border-default` border, a `--layout-border-radius-medium`
+  radius and `--layout-padding-large` inside, and it holds one `Stack gap="medium"`. That inner
+  padding belongs to the card. It is not a story's outer padding.
 - **Picture preview.** This is new in this domain. It is a plain `<img>` with `max-width: 100%` and
   `height: auto`, so a picture is shown at the size it was stored, up to the width of the column. The
   design system has no image or avatar component. The **alternative text** says what the image is for
   ("Your current profile picture"), or, for an image in formatted text, whatever the author wrote.
 - **Response reference.** This is new in this domain, and it exists only in the catalogue. It is a
-  `<dl>` built as the opportunities domain's key facts list, stacked in one column. There are two of
-  them under "Request" and "Answer" H2s. It sets out what a caller sends to one of the three service
-  addresses and what comes back, so that each part of the answer the surface names has an element to
-  carry its test ID. **A build does not render it.** The service answers these addresses with data
-  or with the file. See "The three service addresses" below.
+  `<dl>` built as the opportunities domain's key facts list, stacked in one column. It is a
+  `Stack as="dl" gap="medium"`, and each fact in it is a `Stack gap="small"` holding the `dt` and the
+  `dd`. There are two of them, under "Request" and "Answer" H2s. It sets out what a caller sends to
+  one of the four service addresses and what comes back, so that each part of the answer the surface
+  names has an element to carry its test ID. **A build does not render it.** The service answers
+  these addresses with data or with the file. See "The four service addresses" below.
 - **Status line.** This is the users domain's pattern, reused. It is a `role="status"` container
   holding visible text, used for "harbour.png is ready…" and "…was inserted at the cursor".
 
-No token beyond those the earlier domains list is used: `--layout-margin-{none,xsmall,small,medium,large}`,
-`--layout-padding-{none,small,large}`, `--layout-border-width-small`,
+No token beyond those the earlier domains list is used: `--layout-margin-{none,small,medium,large}`
+(through the stack), `--layout-padding-{none,small,medium,large}`, `--layout-border-width-small`,
 `--layout-border-radius-medium`, `--surface-color-border-{default,medium}` and
-`--typography-font-weights-bold`. `max-width: 100%` and `height: auto` on the picture preview are
-not spacing, type or radius values. They stop an image overflowing its column (see gap 11 on
-display size).
+`--typography-font-weights-bold`. `--layout-margin-xsmall`, which the response references used
+between a term and its value, is no longer used. That spacing is now the stack's `small`. Three
+values on the picture preview and the published image are not spacing, type or radius values:
+`max-width: 100%`, `height: auto`, and, for the published image, `align-self: flex-start`. They
+keep an image inside its column, at its own size rather than stretched across the stack (see gap 11
+on display size).
 
 ### How each control is laid out
 
-The users domain's layout applies: a single column, with `--layout-margin-large` between regions,
-`--layout-margin-medium` inside a section, and action rows that wrap.
+Every story of this domain is built from `layout.tsx` the same way as the content domain's: one
+`PageContainer`, and inside it one `Stack gap="large"` whose items are the regions of the frame. No
+story sets its own width, outer padding, margin or gap. The rhythm is the same everywhere:
+
+- **`large`** between the regions of a frame: the heading block, the tab bar, each `<section>`, the
+  profile form, and on a response reference, "Request" and "Answer".
+- **`medium`** between the items of a region: a section's heading and what follows it, the parts of
+  the attachment card, the attachment rows, the fields of the profile form, the tabs in the tab bar,
+  the download link and Remove in a stored row, and the facts of a response reference.
+- **`small`** between a label and what it labels: the small "Manage a…" line and the H1; the parts
+  of one attachment row; the picture group (its label, the picture, the status, any refusal, the
+  rule and the trigger); the editor's toolbar, rule, status line, body and formatting-guide link,
+  as in the content domain's editor; the toolbar's buttons; the spinner and its text; a `dt` and its
+  `dd`; and the H3 "Attachments" and the download links under it on the public view.
+
+Rows (the tab bar, a stored row's link and Remove, the toolbar's buttons, the uploading line) are
+`Stack direction="row"`, which always wraps, so nothing is pushed off a 320-pixel screen. The picture
+group is a `Stack role="group" align="start"`, so the picture and the trigger keep their own width
+and are not stretched. A `Button` that sits alone in a column stack is wrapped in a plain `div` so it
+keeps its own width. A design-system `Form` holds one `Stack gap="medium"`.
+
+Moving to the container and the stack changed how two things look, and nothing else. The download
+links on the public view were a bulleted list. They are now a list with no markers, like every list
+in a stack, and each link's visible "Download" says what it is. Some gaps also moved one step to fit
+the rhythm: the tabs from `large` to `medium`, the heading block and a fact's term and value to
+`small`, and the editor's parts from `medium` to `small`, so that it matches the content domain's
+editor. Every page, state, test ID, component and word is as it was.
 
 - **Attachment control** (`file-attachment-control`). This is the last card section of the
   Opportunity tab in edit mode, headed "Attachments" (H3), where the opportunities domain placed
@@ -2009,10 +2446,10 @@ The users domain's layout applies: a single column, with `--layout-margin-large`
   The marker's exact spelling is the build's choice (see gap 9). "Describe this image" is selected
   when it is inserted, so that typing replaces it, and the success line asks for a description.
 
-### The three service addresses
+### The four service addresses
 
-`file-upload`, `file-description` and `file-download` answer with data or with the file, so there is
-nothing on them for a person to see. What the stories give instead is the response reference: the
+`file-upload`, `file-description`, `file-download` and `file-attach-by-identifier` answer with data
+or with the file, so there is nothing on them for a person to see. What the stories give instead is the response reference: the
 request a caller sends, and the parts of the answer the surface names, each on an element carrying
 its test ID. **The adapter reads the test IDs as names for those parts of the HTTP answer**, not as
 elements it will find in a browser:
@@ -2031,10 +2468,15 @@ elements it will find in a browser:
 | `file-download-response`, `file-download-request` | A successful answer at all, with the request that got it. `readable_when_signed_out_if_public` binds to the response, because the default story's request is made signed out. |
 | `file-refused` | Not authorized. It is shared by both addresses and by both of their refusals, because R-8.12 gives a missing file and a forbidden one the same answer for anyone but an administrator. |
 | `file-not-found` | The administrator's "not found" for an identifier no file carries (R-8.12). |
+| `file-attach-request` | The save of an opportunity or a proposal as it stands, with one stored file's identifier added to its attachments (`attach_stored_file`). |
+| `file-attach-accepted` | The save was accepted with the file attached (R-8.22): the sender may read the file. |
+| `file-attach-refused` | The save was refused because the sender may not read the file named (R-8.22). |
+| `file-attach-identifiers` | The identifiers of the record's attachments as stored after the answer. When the save is refused, the named file is not among them. |
 
 The states are the distinct answers: for the upload, `default` (stored), `signed-out`, `too-large`,
 `name-too-long`, `invalid-read-access`, `no-file` and `fault`; for the description and the download,
-`default`, `refused` and `not-found`. Every refusal says what was stored, which is always nothing,
+`default`, `refused` and `not-found`; for attaching by identifier, `default` (accepted) and
+`refused`. Every refusal says what was stored, which is always nothing,
 and that the working copy is gone (R-8.18). A refusal of the no-file kind is not written to the
 error log (R-8.18).
 
@@ -2110,6 +2552,12 @@ the same element share its ID. The same control keeps its ID on every page it ap
 refused). `attachment-list` is bound to `attachment_list_on_public_view`, and the edit-mode list
 carries the same ID.
 
+**Filled in this run**, for `file-attach-by-identifier`, the one page of this domain that had none:
+`attach_stored_file` is `file-attach-request`, `attachment_accepted` is `file-attach-accepted`,
+`attachment_refused` is `file-attach-refused`, and `attached_file_identifiers` is
+`file-attach-identifiers`. The adapter reads them as names for parts of the HTTP answer, as it does
+for the other three. No ID already filled in was changed.
+
 ### Per-screen notes
 
 **file-upload** — `default` (stored), `signed-out` (R-8.1), `too-large` (R-8.17), `name-too-long`
@@ -2138,6 +2586,12 @@ organizations domain's trigger ID, `organization-logo-button`.
 `failed` (too large, and the body unchanged), `published` (the reader's view of the same page, where
 the marker has become the image). `published` is the content domain's public page, shown here
 because two of this control's observations are only visible there.
+
+**file-attach-by-identifier** — `default` (a vendor who uploaded a file attaches it to their own Code
+With Us proposal, R-8.22, R-8.20) and `refused` (a vendor names the identifier of a file another
+vendor uploaded and marked readable by no one else, R-8.22, which replaces R-8.15). These are
+response references. The same address takes an opportunity in place of a proposal, and any of the
+three programs. No criterion makes the answer differ between them, so there is no state for each.
 
 ### Gaps
 
@@ -2198,6 +2652,19 @@ words that no criterion gives, the story or this list says so.
     keeping its proportions.
 13. **Content the spec does not carry.** File names, sizes, identifiers, the fingerprint, dates and
     the page text in the stories are illustrative. The identifiers are synthetic.
+14. **What a refused attachment looks like** (R-8.22). The criterion says only that a file may be
+    attached only by someone permitted to read it. It does not say:
+    - which kind of refusal this is (not permitted, not authorized or bad request);
+    - whether the rest of the save is kept or the whole save is refused;
+    - what an identifier that no stored file carries gets. R-8.15, which R-8.22 replaces, checked
+      only that the file exists.
+
+    The `refused` story says only what R-8.22 fixes: the file is not attached, the record's
+    attachments are as they were, and the file's readers are unchanged. Its outcome line and
+    message are the design's own. None of these questions was given a state.
+15. **Which file a person may attach through the controls.** The attachment control only uploads
+    new files. Nothing on a screen attaches an existing stored file by its identifier. So R-8.22
+    can only be met or broken through the address, and no control needs a state for it.
 
 ---
 
@@ -2265,10 +2732,22 @@ stories already compile with.
 These are all reused from earlier domains, unchanged, and none is new here. None of them is a
 design-system component, and none may be presented as one.
 
+- **Page container** (`PageContainer`, `design/catalogue/layout.tsx`). Reused unchanged from the
+  content domain. It is the one column every screen of this domain sits in: the content at most
+  1100 pixels wide and centred, with `--layout-padding-medium` on either side outside those 1100
+  pixels, so the content's left edge lines up with the banner's logo. The design system has no page
+  container or grid, which is why it is the project's own.
+- **Stack** (`Stack`, `design/catalogue/layout.tsx`). Reused unchanged from the content domain. It
+  is the only way items on these screens are spaced: a flex column (or, with `direction="row"`, a
+  wrapping row) whose gap is `--layout-margin-small`, `-medium` or `-large`. It removes the margins
+  of the design system's `Text` and `Heading` (and of a `dt` or `dd`) from its items, so a gap is
+  never the token plus a component's margin. It takes no `style`, so no screen can add spacing
+  beside it. The design system has no stack or spacing primitive.
 - **Status badge.** The users domain's `<span>` with a token border and circular radius. It always
   carries the status in words ("Draft", "Under review: team questions", "Not awarded"). Team
   member membership ("Active", "Membership pending") uses the same badge.
-- **Key facts list.** The opportunities domain's `<dl>` of `dt`/`dd` pairs that flex-wrap. It is
+- **Key facts list.** The opportunities domain's `<dl>` of `dt`/`dd` pairs, laid out as
+  `Stack as="dl" direction="row"` with each pair in a small stack. It is
   used for the manage and evaluate headers, the Scores section, the Scoresheet and the export
   headers. The design system has no description-list component.
 - **Card section.** A `<section aria-labelledby>` with the token border and radius, used for each
@@ -2285,16 +2764,57 @@ design-system component, and none may be presented as one.
   are in-page links to the two sections (see gap 9).
 - **Attachment list.** The files domain's control, placed in the proposal forms.
 
-Layout uses only the tokens earlier domains list: `--layout-margin-{none,xsmall,small,medium,large}`,
-`--layout-padding-{none,small,large}`, `--layout-border-width-small`,
+Layout uses only the tokens earlier domains list: `--layout-margin-{small,medium,large}` for gaps
+(through the stack only), `--layout-margin-none` on a fieldset, `--layout-padding-medium` (the
+container's sides, in `layout.tsx` only), `--layout-padding-{small,large}` for the inner padding of
+a card, fieldset, attachment row, dialog body, table cell and badge, `--layout-border-width-small`,
 `--layout-border-radius-{medium,circular}`, `--surface-color-border-{default,medium}`,
 `--typography-font-weights-bold` and `--typography-bold-body`. No colour, size or radius value is
-written anywhere in the catalogue.
+written anywhere in this domain's stories. The one literal size, the container's 1100 pixels, is
+written only in `layout.tsx`.
 
 ### How a screen is laid out
 
-The users domain's single column, with `--layout-margin-large` between regions and action rows
-that wrap.
+Every screen of this domain is built from `layout.tsx` and nothing else: one `PageContainer`, and
+inside it one `Stack gap="large"` whose items are the screen's regions. No story sets a width, an
+outer padding, a margin or a gap of its own. The rhythm is fixed:
+
+- **`large`** between the regions of a page: the page-kind line and H1 together, the opportunity
+  summary card, the sentence on drafts, an error summary or refusal, the form, the key facts, the
+  Scores section, the link row, the action bar, the tabs, and the current tab's section.
+- **`medium`** between the items of a region: the card sections of a form and its submit row; the
+  fields inside a card or fieldset; a section's heading and what follows it, including the Scores
+  section's H2 and its facts; the key facts beside one another; the tabs; the rows of a team-member
+  list, an attachment list or a question list; the proposals of export-all; the contents of a
+  dialog.
+- **`small`** between a label and what it labels: the small page-kind line ("Manage a … proposal",
+  "… proposal") and the H1 under it; a `dt` and its `dd`; a question and its response; the lines of
+  one attachment row; the spinner and the words of a loading row.
+
+A form is a design-system `Form` holding one `Stack gap="medium"`. A card section, a fieldset and an
+attachment row keep their own border, radius and inner padding, and lay their content out with a
+stack inside; a fieldset's `legend` stays its first child, outside that stack, so it still names
+the group. The key facts are a `Stack as="dl" direction="row"` whose facts are each a small stack,
+and fall into a column when they no longer fit. Rows (the opportunity and printable-copy links, the
+tabs, a team member's name beside its badge, the select-and-add row under a phase or resource, a
+loading row) are `Stack direction="row"`, which always wraps, so nothing is pushed off a 320-pixel
+screen or at 400% zoom. A button or a `FileTrigger` that is a stack item sits in a plain `div`, so it
+keeps its own width. Dialogs are portalled by `Modal`, so they sit inside the container but after
+its stack; a `Dialog`'s body is a `div` with `--layout-padding-large` holding the form or a stack,
+and an `AlertDialog` with more than one child lays them out with a `Stack gap="medium"`. Tables keep
+their own scrolling region and are the only thing that scrolls sideways. On a not-found screen the
+`not-found-page` test ID sits on the page's outer stack, because the container takes no attributes.
+
+Lists laid out by a stack lose their markers and indent. That is intended for the tab list, the
+team-member rows in a phase or resource fieldset, and the attachment rows while editing, each of
+which is a bordered row or a link. The question-and-response lists on the Sprint With Us and Team
+With Us manage pages are still `<ol>` elements, so assistive technology announces their order and
+count, but they no longer show visible numbers (see gap L1 below). Export-all's proposals are a
+stack of bordered `<article>`s inside `proposal-export-document`, not a list. Lists that are not
+stacks keep their bullets: the error summaries inside an `InlineAlert`, the plain attachment and
+team lists on the manage, evaluate and export pages, and the capabilities list on the Sprint With
+Us form. Their items are plain text and links with no margins of their own, so they add no
+spacing beside the stack's.
 
 - **Create.** The H1 ("Create a … proposal"), then the opportunity summary card, which gives the
   opportunity, its reward or budget, and its deadline (`proposal-opportunity-summary`). Then one
@@ -2672,6 +3192,68 @@ to show something, the story marks it as illustrative or placeholder.
 18. **Content the spec does not carry.** Every name, organization, capability, question, amount,
     score, rank, date and identifier in the stories is illustrative and synthetic.
 
+Layout gaps, from bringing this domain onto the page container and stack (2026-10-01). Only the
+layout changed: every page, state, test ID, component and word is as it was.
+
+- **L1. Question numbers are no longer visible.** The stack removes list markers from any `ul` or
+  `ol` it lays out, so the question-and-response `<ol>` on `proposal-swu-edit` and
+  `proposal-twu-edit` no longer shows "1." before each question. The order is still announced. If
+  the visible number matters to vendors, it belongs in the question's wording or in `layout.tsx`,
+  which keeps `ol` numbering for every domain, not in a style on one story.
+- **L2. The rhythm tightened some gaps.** Before, the key facts were `large` apart, a `dt` sat
+  `xsmall` above its `dd`, the tabs were `large` apart, and a section's heading sat `small` above
+  the Scores facts. The layout rule's single rhythm makes those `medium`, `small`, `medium` and
+  `medium`. No token was invented, and nothing was given a gap of its own to keep the old look.
+- **L3. Tables keep their own sizing.** A data table keeps `width: 100%` and `borderCollapse`, and
+  its cells keep `--layout-padding-small`. These are the table's internals, not the story's width
+  or spacing, and the other domains' tables do the same.
+- **L4. Surface entries on this domain's pages that are still `null`.** The surface now names
+  actions and observations that no story of this domain binds: `field_errors_by_field`
+  (`proposal-cwu-create`); `team_member_choices` (Sprint With Us and Team With Us create);
+  `phase_team_sections`, `phase_requirements` and `cost_errors` (Sprint With Us create);
+  `choose_organization`, `submission_refusal`, `field_error` and `organization` (Sprint With Us and
+  Team With Us manage), with `add_phase_team_member` and `set_scrum_master` (Sprint With Us) and
+  `add_team_member_for_resource` (Team With Us); `history_entries`, `rank` and
+  `offered_score_actions` (Sprint With Us and Team With Us evaluate). Several of them match elements
+  the stories already carry (`proposal-organization-field`, `proposal-add-team-member`,
+  `proposal-scrum-master`, `field-error`, `proposal-rank`), but whether each such element is on the
+  page and state the surface means has to be checked story by story. They were left `null` on the
+  2026-10-01 layout-only pass, which was ordered to change no element, wording or test ID, as the
+  opportunities domain's pass did (its gap 26). Binding them is a design run for this domain.
+- **L5. The three request pages have no screens.** `proposal-cwu-request`
+  (`/api/proposals/code-with-us`), `proposal-team-request` (`/api/proposals/:program`) and
+  `proposal-evaluation-request` (`/api/proposals/:program/:proposalId`) are in the surface but not
+  in `design/screens.yaml`, and have no stories. All their test IDs are `null`. Other domains
+  draw such an address as a response reference: a page naming the request and the answer, with
+  the test IDs on the answer's parts (see `affiliation-approval-request`). The layout-only pass
+  added no page or state, so these are left for this domain's next design run.
+  *Resolved on the follow-up pass:* the screens check requires every surface page to have a screen,
+  so all three were added as response references (see "Request addresses" below).
+
+### Request addresses
+
+`proposal-cwu-request`, `proposal-team-request` and `proposal-evaluation-request` are not screens.
+They are the service's answers to requests that no screen sends. Each has two states, `default`
+(accepted) and `refused`, because the surface's observations divide into what an accepted answer
+carries and what a refusal carries. Each story is a response reference built the way the
+evaluation, users and affiliations domains build theirs. It has a `size="small" color="secondary"`
+note saying the address answers with data, then a "Request(s)" section and an "Answer" section, each a
+`dl` laid out with `Stack`, inside `PageContainer`. Every test ID sits on the `dd` (or list) that
+holds the part the surface names. An action's test ID marks the request's description. The design
+system has no component for a definition list, so this uses plain HTML, as in the other domains.
+
+Gaps, named and not filled:
+
+- **R1.** The criteria give no HTTP status for a refused Code With Us proposal or a refused stage
+  score. The stories say "Refused (the criteria do not state the status)". Only the team request has
+  stated statuses: the surface gives 400 for a validation refusal and 503 for a failure to store.
+- **R2.** R-2.2's duplicate-proposal message is not tied to a field by any criterion, so
+  `proposal-cwu-request.refused` does not name the field it is reported against.
+- **R3.** No criterion names the status a proposal has after an accepted stage score, so
+  `proposal-evaluation-request.default` shows the status without a value.
+- **R4.** The criteria and the surface give the requests' addresses but not their HTTP methods, so the
+  stories name none.
+
 ---
 
 ## Domain: evaluation
@@ -2691,6 +3273,10 @@ panel. There are five kinds of screen:
   (R-5.12 to R-5.14, R-5.31 to R-5.33).
 - **Scoring forms** (`evaluation-individual-create-*`, `-edit-*`, `evaluation-consensus-create-*`,
   `-edit-*`). One proponent, one score and one comment per question (R-5.22, R-5.29).
+- **Request addresses** (`evaluation-individual-request-*`, `evaluation-consensus-request-*`,
+  `evaluation-panel-request`). Not screens: the service's answers to requests no screen sends
+  (R-5.3, R-5.9, R-5.23, R-5.26, R-5.29, R-5.37). Each story is a response reference, built the
+  way the users, content and opportunities domains build theirs.
 
 Every state named in `design/screens.yaml` has a story at
 `design/catalogue/<page>.<state>.stories.tsx`, and the story is what a build copies. As in the
@@ -2736,6 +3322,19 @@ every one used here already compiles in an earlier domain's stories.
 All but one are reused unchanged from earlier domains. None is a design-system component, and
 none may be presented as one.
 
+- **Page container** (`PageContainer`, `design/catalogue/layout.tsx`). Reused unchanged from the
+  content domain, which defined it. It is the one column every screen of this domain sits in: the
+  content at most 1100 pixels wide and centred, so its left edge meets the banner's logo, with
+  `--layout-padding-medium` either side outside those 1100 pixels and `--layout-padding-large`
+  above and below. The design system ships no page container or grid. Every story of this domain
+  is wrapped in it, and no story sets a width or outer padding of its own.
+- **Stack** (`Stack`, `design/catalogue/layout.tsx`). Reused unchanged from the content domain. A
+  flex column, or with `direction="row"` a row that always wraps, spaced only by its `gap`
+  (`--layout-margin-small`, `-medium` or `-large`). It removes the margins of the design system's
+  `Text` and `Heading` (and of `dt`, `dd`, `p` and headings one level down) from its items, so a
+  gap is never the token plus a component's margin; as a `ul` or `ol` it drops markers and indent.
+  The design system has no stack or spacing primitive. It is the only way items on these screens
+  are spaced.
 - **Status badge.** The users domain's `<span>` with a token border and circular radius. Here it
   carries an evaluation's or a consensus's state in words: "Not started", "Draft: incomplete",
   "Draft: complete", "Submitted".
@@ -2747,25 +3346,57 @@ none may be presented as one.
   as the opportunities domain uses it for the manage page. On the dashboard the two links are
   in-page links to the two sections, as the proposals domain's dashboard does.
 - **Repeated-item group.** A `<fieldset>` and `<legend>` for each evaluator on the panel and each
-  question on a scoring form.
-- **Key facts list.** The opportunities domain's `<dl>`, used on a submitted evaluation for "Your
-  score" and "Your comment".
+  question on a scoring form, with a token border, `--layout-padding-large` inside and the legend
+  in `--typography-bold-body`. The legend stays the fieldset's first child; everything after it is
+  one `Stack gap="medium"`. A submitted evaluation's question is the same box as a `<section
+  aria-labelledby>`, because nothing in it is a field.
+- **Key facts list.** The opportunities domain's `<dl>` as a wrapping row stack (`Stack as="dl"
+  direction="row" gap="medium"`), each fact a `Stack gap="small"` of a bold `dt` and a `dd`. Used
+  on a submitted evaluation for "Your score" and "Your comment", and on the response references.
 - **Response block (new).** A `div` with a `--layout-border-width-small` inline-start border in
   `--surface-color-border-medium` and `--layout-padding-small`, holding a small "Proponent 2's
-  response" label and the response text, so the proponent's words are set apart from the question
-  and from the evaluator's own fields. The design system's `Callout` is an emphasis box with its own
-  title and icon, which would make every response look like a warning or a note; a quotation needs
-  no emphasis.
+  response" label and the response text in a `Stack gap="small"`, so the proponent's words are set
+  apart from the question and from the evaluator's own fields. The design system's `Callout` is an
+  emphasis box with its own title and icon, which would make every response look like a warning or
+  a note; a quotation needs no emphasis.
 
-The only tokens used are those earlier domains list: `--layout-margin-{none,xsmall,small,medium,large}`,
-`--layout-padding-{none,small,large}`, `--layout-border-width-small`,
+The tokens this domain's stories write are `--layout-margin-none` (a fieldset's margin),
+`--layout-padding-{small,large}`, `--layout-border-width-small`,
 `--layout-border-radius-{medium,circular}`, `--surface-color-border-{default,medium}`,
-`--typography-font-weights-bold` and `--typography-bold-body`. No colour, size or radius value is
-written anywhere in the catalogue.
+`--typography-font-weights-bold` and `--typography-bold-body`; the gaps come from `layout.tsx` as
+`--layout-margin-{small,medium,large}`. No colour, size or radius value is written anywhere in the
+catalogue, and the container's 1100 pixels live in `layout.tsx` and nowhere else.
 
 ### How a screen is laid out
 
-The users domain's single column, with `--layout-margin-large` between regions and rows that wrap.
+Every story of this domain is built from `layout.tsx`, the same way as the opportunities domain's
+manage page that these tabs sit on: one `PageContainer`, and inside it one `Stack gap="large"`
+whose items are the screen's regions. No story sets a width, an outer padding, a margin or a gap
+of its own. The only spacing a story still writes is inside the project's own components: a
+fieldset's or bordered section's inner padding, a response block's padding, a status badge's
+and a legend's inline padding, and a data table's cell padding. The rhythm is fixed:
+
+- **`large`** between the regions of a page: the heading block, the status and ID row, the action
+  bar, the tabs, a page alert, refusal or error summary, the back link, the sentence on how scores
+  are entered, the form, and each H2 section (on a response reference, Request and Answer).
+- **`medium`** between the items of a region: a tab section's H2 and what follows it, the fieldsets
+  and fields of a form and its save row, the contents of a fieldset, the tabs of the manage-page
+  navigation, the items of a row, and the facts of a key facts list.
+- **`small`** between a label and what it labels: the page-kind line ("Manage a … opportunity",
+  "Evaluate a … proponent", "Agree a … consensus", "Response reference") and the H1 under it, which
+  together are the heading block; a `dt` and its `dd`; a response block's label and the response;
+  a spinner and its words; the lines of an ordered answer on a response reference.
+
+Rows (the status and ID row, the opportunity's title with "Proponent 2 of 3", the tabs, a loading
+row) are `Stack direction="row"`, which always wraps, so nothing is pushed off a 320-pixel screen
+or at 400% zoom. A form is a design-system `Form` holding one `Stack gap="medium"`. A button or link
+that is a stack item on its own sits in a plain `div`, so it keeps its own width. An error summary's
+list inside an `InlineAlert` stays a plain `<ul>`, because its bullets are content. The wrapper
+`div`s that carry an alert's test ID, or take focus with `tabIndex={-1}`, stay plain `div`s, as
+items of the stack. Dialogs are portalled by `Modal`; the `Modal` sits inside the page container but
+after the page stack. The page wrapper of the shared missing page carries `not-found-page` on the
+outer stack, since the container takes no attributes. The data tables are the only things allowed
+to scroll sideways, inside their own focusable region.
 
 - **Tabs** (panel, instructions, evaluation, consensus). The opportunities domain's manage page,
   unchanged: "Manage a … opportunity" as small text, the H1, status and ID, the action bar, the tabs,
@@ -2942,6 +3573,33 @@ The following bindings are not obvious from their names:
 - `read_only_after_submitted`, `editable_after_submitted`, `chair_only`, `empty_for_owner_not_on_panel`
   and `panel_locked_after_consensus` are each the wrapper of the `info` notice that explains the
   state.
+- `refused_when_not_permitted` on the individual create and edit pages is `not-found-page`, the
+  shared missing page their `not-found` stories show: a person who may not record or read the
+  evaluation is answered as if it did not exist (R-5.11, R-5.21; gap 5), which is distinct from a
+  form with nothing in it.
+
+**The request addresses.** Each part of a request or an answer is the `dd` that describes it on the
+response reference, as in the content and opportunities domains; an ordered answer (scores, notes,
+the panel) is the `ol` inside it, one item per question or member, in order. The Sprint With Us and
+Team With Us addresses share every ID.
+
+- `evaluation-individual-request-*`: `create_evaluation_by_request` is
+  `evaluation-individual-request-create`, `save_draft_as_entered` is `-save-draft`,
+  `submit_this_evaluation_alone` is `-submit-alone`; `evaluation_created` is `-created`,
+  `creation_refusal_message` is `-creation-refusal-message`, `evaluation_status` is `-status`,
+  `stored_scores` and `stored_notes` are `-stored-scores` and `-stored-notes`,
+  `refused_as_unrecognised` is `-refused-unrecognised`, and `refused_at_submission` is
+  `-refused-at-submission` (gap 18).
+- `evaluation-consensus-request-*`: `change_consensus_by_request` is
+  `evaluation-consensus-request-change`; `request_accepted` is `-accepted`,
+  `refused_when_not_permitted` is `-refused`, `consensus_status` is `-status`, and `stored_scores`
+  and `stored_notes` are `-stored-scores` and `-stored-notes`.
+- `evaluation-panel-request`: `submit_panel_with_member_holding_no_role` is
+  `evaluation-panel-request-member-no-role`, `submit_panel_with_no_chair` is
+  `evaluation-panel-request-no-chair`, `member_without_role_error` is
+  `evaluation-panel-request-member-without-role-error`, `missing_chair_error` is
+  `evaluation-panel-request-missing-chair-error`, and `panel_as_stored` is
+  `evaluation-panel-request-panel-as-stored`.
 
 **Extra IDs, not named in the surface, that the stories carry for the adapter:**
 `evaluation-panel-member-field` (each member's `Select`), `evaluation-consensus-table`,
@@ -2985,6 +3643,28 @@ save controls, R-5.24), `not-found`, `loading`.
 
 **evaluation-consensus-edit-swu / -twu**: `default` (a draft), `submitted` (still editable,
 R-5.30), `invalid`, `not-found`, `loading`.
+
+**evaluation-individual-request-swu / -twu** — `default`, `refused`, `duplicate`. Request
+addresses, not screens; each story is a response reference: a small "Response reference" line and
+the H1 (the surface title), then a Request section and an Answer section, each a `Stack as="dl"` of
+`dt`/`dd` pairs. The methods are those of `spec/contract/openapi.yaml` (POST to the proponent's
+evaluations to start one; PUT tagged `edit` to change one). The states are the distinct answers:
+`default`, an evaluation started and a draft saved with an out-of-range score and an empty comment,
+both stored as sent and still Draft (R-5.21, R-5.23); `refused`, one evaluation submitted alone and
+refused as unrecognised, and the set containing the bad draft refused with R-5.25's message, still
+Draft (R-5.23, R-5.25, R-5.26); `duplicate`, a second start refused with R-5.3's message, the first
+draft's 3, 3, 3, 3 unchanged. Refusals on permission or stage (R-5.21, R-5.24) have the shape of
+`refused` and need no state of their own.
+
+**evaluation-consensus-request-swu / -twu** — `default` (the chair's change accepted and read back
+by an administrator, R-5.28 to R-5.30), `refused` (an evaluator who is not the chair, or anyone past
+consensus, refused as not permitted, the consensus unchanged, R-5.29). Laid out as above.
+
+**evaluation-panel-request** — `default` (the panel as stored, read by the owner or an
+administrator, R-5.18), `refused` (a member with no role refused with a message naming them, R-5.37,
+and a panel with no chair refused, R-5.9; the opportunity keeps its panel, R-5.1). Laid out as above.
+The two messages are the panel form's own words (gap 6); `refused` shows the Sprint With Us address,
+and Team With Us differs only in its address.
 
 ### Gaps
 
@@ -3050,3 +3730,15 @@ show something, the story marks it as illustrative or says which gap it rests on
     note). Their address and text are the content domain's; the stories' text is a placeholder.
 17. **Content the spec does not carry.** Every name, question, response, score, comment, date and
     identifier in the stories is illustrative and synthetic, and none is the seed's.
+18. **Where `refused_at_submission` is read.** The surface puts it on the single evaluation's
+    address, but the only submission the service accepts is the whole set, sent to the opportunity
+    (`submitIndividualQuestionEvaluations`), and this address refuses a submission of its own
+    (R-5.26). The response reference shows R-5.25's refusal of the set containing the draft; which
+    request a test sends to reach it from this address is not stated.
+19. **The status of a refused request.** R-5.26 says "rejected as unrecognised" and R-5.29 says
+    "refused", but no criterion gives the status the service answers with. The references say so
+    rather than naming one.
+20. **The member-with-no-role message** (R-5.37). The criterion asks for a field-level message
+    identifying the member, without its words. The reference uses the design's own: "Panel member
+    2: Test Evaluator Two must be an evaluator, the chair, or both." The missing-chair refusal
+    reuses the panel form's message (R-5.9 asks only that the service apply the form's rule).

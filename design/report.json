@@ -1,7 +1,7 @@
 {
-  "generated": "2026-10-01T01:58:49.669Z",
+  "generated": "2026-10-02T01:39:17.918Z",
   "axe": "4.13.0",
-  "catalogue": "2eb8e996c968c0f44407ed8190fb0129522b9e2a1e260353b222c03a3e51bc71",
+  "catalogue": "3eedbb76f924cb81e3291f5ed6370cdc125508b8087204d907ea090370521861",
   "ok": true,
   "messages": [],
   "compile": [
@@ -17,6 +17,48 @@
     }
   ],
   "stories": [
+    {
+      "id": "organizations-affiliation-approval-request-default--default",
+      "title": "organizations/affiliation-approval-request/default",
+      "file": "./catalogue/affiliation-approval-request.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "organizations-affiliation-approval-request-not-pending--not-pending",
+      "title": "organizations/affiliation-approval-request/not-pending",
+      "file": "./catalogue/affiliation-approval-request.not-pending.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "organizations-affiliation-approval-request-refused--refused",
+      "title": "organizations/affiliation-approval-request/refused",
+      "file": "./catalogue/affiliation-approval-request.refused.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "organizations-affiliation-invitation-request-default--default",
+      "title": "organizations/affiliation-invitation-request/default",
+      "file": "./catalogue/affiliation-invitation-request.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "organizations-affiliation-invitation-request-invalid--invalid",
+      "title": "organizations/affiliation-invitation-request/invalid",
+      "file": "./catalogue/affiliation-invitation-request.invalid.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "notifications-caught-message-list-default--default",
+      "title": "notifications/caught-message-list/default",
+      "file": "./catalogue/caught-message-list.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "notifications-caught-message-default--default",
+      "title": "notifications/caught-message/default",
+      "file": "./catalogue/caught-message.default.stories.tsx",
+      "violations": []
+    },
     {
       "id": "content-content-create-default--default",
       "title": "content/content-create/default",
@@ -153,6 +195,30 @@
       "id": "content-content-list-not-found--not-found",
       "title": "content/content-list/not-found",
       "file": "./catalogue/content-list.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-request-default--default",
+      "title": "content/content-request/default",
+      "file": "./catalogue/content-request.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-request-invalid--invalid",
+      "title": "content/content-request/invalid",
+      "file": "./catalogue/content-request.invalid.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-request-not-found--not-found",
+      "title": "content/content-request/not-found",
+      "file": "./catalogue/content-request.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-request-refused--refused",
+      "title": "content/content-request/refused",
+      "file": "./catalogue/content-request.refused.stories.tsx",
       "violations": []
     },
     {
@@ -432,6 +498,30 @@
       "violations": []
     },
     {
+      "id": "evaluation-evaluation-consensus-request-swu-default--default",
+      "title": "evaluation/evaluation-consensus-request-swu/default",
+      "file": "./catalogue/evaluation-consensus-request-swu.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-request-swu-refused--refused",
+      "title": "evaluation/evaluation-consensus-request-swu/refused",
+      "file": "./catalogue/evaluation-consensus-request-swu.refused.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-request-twu-default--default",
+      "title": "evaluation/evaluation-consensus-request-twu/default",
+      "file": "./catalogue/evaluation-consensus-request-twu.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-request-twu-refused--refused",
+      "title": "evaluation/evaluation-consensus-request-twu/refused",
+      "file": "./catalogue/evaluation-consensus-request-twu.refused.stories.tsx",
+      "violations": []
+    },
+    {
       "id": "evaluation-evaluation-individual-create-swu-default--default",
       "title": "evaluation/evaluation-individual-create-swu/default",
       "file": "./catalogue/evaluation-individual-create-swu.default.stories.tsx",
@@ -624,6 +714,42 @@
       "violations": []
     },
     {
+      "id": "evaluation-evaluation-individual-request-swu-default--default",
+      "title": "evaluation/evaluation-individual-request-swu/default",
+      "file": "./catalogue/evaluation-individual-request-swu.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-request-swu-duplicate--duplicate",
+      "title": "evaluation/evaluation-individual-request-swu/duplicate",
+      "file": "./catalogue/evaluation-individual-request-swu.duplicate.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-request-swu-refused--refused",
+      "title": "evaluation/evaluation-individual-request-swu/refused",
+      "file": "./catalogue/evaluation-individual-request-swu.refused.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-request-twu-default--default",
+      "title": "evaluation/evaluation-individual-request-twu/default",
+      "file": "./catalogue/evaluation-individual-request-twu.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-request-twu-duplicate--duplicate",
+      "title": "evaluation/evaluation-individual-request-twu/duplicate",
+      "file": "./catalogue/evaluation-individual-request-twu.duplicate.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-request-twu-refused--refused",
+      "title": "evaluation/evaluation-individual-request-twu/refused",
+      "file": "./catalogue/evaluation-individual-request-twu.refused.stories.tsx",
+      "violations": []
+    },
+    {
       "id": "evaluation-evaluation-instructions-swu-default--default",
       "title": "evaluation/evaluation-instructions-swu/default",
       "file": "./catalogue/evaluation-instructions-swu.default.stories.tsx",
@@ -675,6 +801,18 @@
       "id": "evaluation-evaluation-panel-dashboard-loading--loading",
       "title": "evaluation/evaluation-panel-dashboard/loading",
       "file": "./catalogue/evaluation-panel-dashboard.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-panel-request-default--default",
+      "title": "evaluation/evaluation-panel-request/default",
+      "file": "./catalogue/evaluation-panel-request.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-panel-request-refused--refused",
+      "title": "evaluation/evaluation-panel-request/refused",
+      "file": "./catalogue/evaluation-panel-request.refused.stories.tsx",
       "violations": []
     },
     {
@@ -759,6 +897,18 @@
       "id": "evaluation-evaluation-panel-twu-too-few--too-few",
       "title": "evaluation/evaluation-panel-twu/too-few",
       "file": "./catalogue/evaluation-panel-twu.too-few.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-attach-by-identifier-default--default",
+      "title": "files/file-attach-by-identifier/default",
+      "file": "./catalogue/file-attach-by-identifier.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-attach-by-identifier-refused--refused",
+      "title": "files/file-attach-by-identifier/refused",
+      "file": "./catalogue/file-attach-by-identifier.refused.stories.tsx",
       "violations": []
     },
     {
@@ -942,6 +1092,18 @@
       "violations": []
     },
     {
+      "id": "notifications-mail-delivery-delay-default--default",
+      "title": "notifications/mail-delivery-delay/default",
+      "file": "./catalogue/mail-delivery-delay.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "notifications-mail-delivery-fault-default--default",
+      "title": "notifications/mail-delivery-fault/default",
+      "file": "./catalogue/mail-delivery-fault.default.stories.tsx",
+      "violations": []
+    },
+    {
       "id": "notifications-notification-email-reference-default--default",
       "title": "notifications/notification-email-reference/default",
       "file": "./catalogue/notification-email-reference.default.stories.tsx",
@@ -1023,6 +1185,18 @@
       "id": "notifications-notification-unsubscribe-landing-unsubscribed--unsubscribed",
       "title": "notifications/notification-unsubscribe-landing/unsubscribed",
       "file": "./catalogue/notification-unsubscribe-landing.unsubscribed.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-counters-default--default",
+      "title": "opportunities/opportunity-counters/default",
+      "file": "./catalogue/opportunity-counters.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-counters-refused--refused",
+      "title": "opportunities/opportunity-counters/refused",
+      "file": "./catalogue/opportunity-counters.refused.stories.tsx",
       "violations": []
     },
     {
@@ -1590,6 +1764,30 @@
       "violations": []
     },
     {
+      "id": "opportunities-opportunity-watch-request-default--default",
+      "title": "opportunities/opportunity-watch-request/default",
+      "file": "./catalogue/opportunity-watch-request.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-watch-request-refused--refused",
+      "title": "opportunities/opportunity-watch-request/refused",
+      "file": "./catalogue/opportunity-watch-request.refused.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "organizations-organization-acting-for-list-default--default",
+      "title": "organizations/organization-acting-for-list/default",
+      "file": "./catalogue/organization-acting-for-list.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "organizations-organization-acting-for-list-refused--refused",
+      "title": "organizations/organization-acting-for-list/refused",
+      "file": "./catalogue/organization-acting-for-list.refused.stories.tsx",
+      "violations": []
+    },
+    {
       "id": "organizations-organization-create-default--default",
       "title": "organizations/organization-create/default",
       "file": "./catalogue/organization-create.default.stories.tsx",
@@ -1683,6 +1881,18 @@
       "id": "organizations-organization-edit-loading--loading",
       "title": "organizations/organization-edit/loading",
       "file": "./catalogue/organization-edit.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "organizations-organization-edit-logo-refused--logo-refused",
+      "title": "organizations/organization-edit/logo-refused",
+      "file": "./catalogue/organization-edit.logo-refused.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "organizations-organization-edit-logo-stored--logo-stored",
+      "title": "organizations/organization-edit/logo-stored",
+      "file": "./catalogue/organization-edit.logo-stored.stories.tsx",
       "violations": []
     },
     {
@@ -2040,6 +2250,18 @@
       "violations": []
     },
     {
+      "id": "proposals-proposal-cwu-request-default--default",
+      "title": "proposals/proposal-cwu-request/default",
+      "file": "./catalogue/proposal-cwu-request.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "proposals-proposal-cwu-request-refused--refused",
+      "title": "proposals/proposal-cwu-request/refused",
+      "file": "./catalogue/proposal-cwu-request.refused.stories.tsx",
+      "violations": []
+    },
+    {
       "id": "proposals-proposal-cwu-view-award-confirm--award-confirm",
       "title": "proposals/proposal-cwu-view/award-confirm",
       "file": "./catalogue/proposal-cwu-view.award-confirm.stories.tsx",
@@ -2097,6 +2319,18 @@
       "id": "proposals-proposal-cwu-view-score-invalid--score-invalid",
       "title": "proposals/proposal-cwu-view/score-invalid",
       "file": "./catalogue/proposal-cwu-view.score-invalid.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "proposals-proposal-evaluation-request-default--default",
+      "title": "proposals/proposal-evaluation-request/default",
+      "file": "./catalogue/proposal-evaluation-request.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "proposals-proposal-evaluation-request-refused--refused",
+      "title": "proposals/proposal-evaluation-request/refused",
+      "file": "./catalogue/proposal-evaluation-request.refused.stories.tsx",
       "violations": []
     },
     {
@@ -2331,6 +2565,18 @@
       "id": "proposals-proposal-swu-view-wrong-stage--wrong-stage",
       "title": "proposals/proposal-swu-view/wrong-stage",
       "file": "./catalogue/proposal-swu-view.wrong-stage.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "proposals-proposal-team-request-default--default",
+      "title": "proposals/proposal-team-request/default",
+      "file": "./catalogue/proposal-team-request.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "proposals-proposal-team-request-refused--refused",
+      "title": "proposals/proposal-team-request/refused",
+      "file": "./catalogue/proposal-team-request.refused.stories.tsx",
       "violations": []
     },
     {
@@ -2953,7 +3199,7 @@
     }
   ],
   "totals": {
-    "stories": 489,
+    "stories": 530,
     "violations": 0,
     "failed": 0
   }

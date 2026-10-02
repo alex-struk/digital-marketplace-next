@@ -1,16 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button, ButtonGroup, Form, Heading, InlineAlert, Link, NumberField, Text, TextArea } from "@bcgov/design-system-react-components";
+import { PageContainer, Stack } from "./layout";
 
 // evaluation-consensus-create-twu · invalid — an agreed score above the maximum, one with three decimal places and an
 // empty comment, checked by the same rules as an individual evaluation (R-5.22, R-5.29 note)
 const meta: Meta = { title: "evaluation/evaluation-consensus-create-twu/invalid" };
 export default meta;
 
-const page = { display: "grid", gap: "var(--layout-margin-large)", padding: "var(--layout-padding-large)" } as const;
-const stack = { display: "grid", gap: "var(--layout-margin-medium)" } as const;
 const group = {
-  display: "grid",
-  gap: "var(--layout-margin-medium)",
   margin: "var(--layout-margin-none)",
   padding: "var(--layout-padding-large)",
   border: "var(--layout-border-width-small) solid var(--surface-color-border-default)",
@@ -41,55 +38,63 @@ const questions = [
 
 export const Invalid: StoryObj = {
   render: () => (
-    <div style={page}>
-      <Text elementType="p" size="small" color="secondary">Agree a Team With Us consensus</Text>
-      <Heading level={1}><span data-testid="proposal-proponent-name">Proponent 3</span></Heading>
-      <Text elementType="p" size="small" color="secondary">
-        The opportunity line, back link, each response and the evaluators' scores are as in the default story and are trimmed
-        here.
-      </Text>
-      <div tabIndex={-1}>
-        <InlineAlert variant="danger" title="This consensus has 3 problems" role="alert">
-          <Text elementType="p">Your draft was saved as you entered it. The consensus scores cannot be submitted until these are fixed.</Text>
-          <ul>
-            <li data-testid="field-error"><Link href="#question-1-score" data-testid="evaluation-score-error">Question 1: enter a score between 0 and 5</Link></li>
-            <li data-testid="field-error"><Link href="#question-2-score" data-testid="evaluation-score-error">Question 2: enter a score with no more than two decimal places</Link></li>
-            <li data-testid="field-error"><Link href="#question-2-notes" data-testid="evaluation-notes-error">Question 2: enter a comment</Link></li>
-          </ul>
-        </InlineAlert>
-      </div>
-      <Form validationBehavior="aria" style={stack}>
-        {questions.map((q) => (
-          <fieldset key={q.n} style={group} id={`question-${q.n}`}>
-            <legend style={legend}>Question {q.n}</legend>
-            <Text elementType="p">{q.text}</Text>
-            <NumberField
-              id={`question-${q.n}-score`}
-              label={`Agreed score for question ${q.n}`}
-              isRequired
-              description={`Between 0 and ${q.max}, with up to two decimal places.`}
-              defaultValue={q.score}
-              isInvalid={q.scoreError !== ""}
-              errorMessage={q.scoreError}
-              data-testid="evaluation-question-score-field"
-            />
-            <TextArea
-              id={`question-${q.n}-notes`}
-              label={`Agreed comment for question ${q.n}`}
-              isRequired
-              description="At least one word, explaining the score."
-              defaultValue={q.notes}
-              isInvalid={q.notesError !== ""}
-              errorMessage={q.notesError}
-              data-testid="evaluation-question-notes-field"
-            />
-          </fieldset>
-        ))}
-        <ButtonGroup ariaLabel="Consensus actions">
-          <Button variant="secondary" data-testid="evaluation-save-draft">Save draft</Button>
-          <Button type="submit" variant="primary" data-testid="evaluation-save-next">Save and go to next proponent</Button>
-        </ButtonGroup>
-      </Form>
-    </div>
+    <PageContainer>
+      <Stack gap="large">
+        <Stack gap="small">
+          <Text elementType="p" size="small" color="secondary">Agree a Team With Us consensus</Text>
+          <Heading level={1}><span data-testid="proposal-proponent-name">Proponent 3</span></Heading>
+        </Stack>
+        <Text elementType="p" size="small" color="secondary">
+          The opportunity line, back link, each response and the evaluators' scores are as in the default story and are trimmed
+          here.
+        </Text>
+        <div tabIndex={-1}>
+          <InlineAlert variant="danger" title="This consensus has 3 problems" role="alert">
+            <Text elementType="p">Your draft was saved as you entered it. The consensus scores cannot be submitted until these are fixed.</Text>
+            <ul>
+              <li data-testid="field-error"><Link href="#question-1-score" data-testid="evaluation-score-error">Question 1: enter a score between 0 and 5</Link></li>
+              <li data-testid="field-error"><Link href="#question-2-score" data-testid="evaluation-score-error">Question 2: enter a score with no more than two decimal places</Link></li>
+              <li data-testid="field-error"><Link href="#question-2-notes" data-testid="evaluation-notes-error">Question 2: enter a comment</Link></li>
+            </ul>
+          </InlineAlert>
+        </div>
+        <Form validationBehavior="aria">
+          <Stack gap="medium">
+            {questions.map((q) => (
+              <fieldset key={q.n} style={group} id={`question-${q.n}`}>
+                <legend style={legend}>Question {q.n}</legend>
+                <Stack gap="medium">
+                  <Text elementType="p">{q.text}</Text>
+                  <NumberField
+                    id={`question-${q.n}-score`}
+                    label={`Agreed score for question ${q.n}`}
+                    isRequired
+                    description={`Between 0 and ${q.max}, with up to two decimal places.`}
+                    defaultValue={q.score}
+                    isInvalid={q.scoreError !== ""}
+                    errorMessage={q.scoreError}
+                    data-testid="evaluation-question-score-field"
+                  />
+                  <TextArea
+                    id={`question-${q.n}-notes`}
+                    label={`Agreed comment for question ${q.n}`}
+                    isRequired
+                    description="At least one word, explaining the score."
+                    defaultValue={q.notes}
+                    isInvalid={q.notesError !== ""}
+                    errorMessage={q.notesError}
+                    data-testid="evaluation-question-notes-field"
+                  />
+                </Stack>
+              </fieldset>
+            ))}
+            <ButtonGroup ariaLabel="Consensus actions">
+              <Button variant="secondary" data-testid="evaluation-save-draft">Save draft</Button>
+              <Button type="submit" variant="primary" data-testid="evaluation-save-next">Save and go to next proponent</Button>
+            </ButtonGroup>
+          </Stack>
+        </Form>
+      </Stack>
+    </PageContainer>
   ),
 };

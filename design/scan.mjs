@@ -10,12 +10,15 @@
 //
 //   node scan.mjs            typecheck, build, scan, write design/report.json
 //   node scan.mjs --no-build reuse the existing storybook-static
+//   node scan.mjs --screens <dir> [--only <a.stories.tsx,b.stories.tsx>] [--no-build]
+//                            build, then save a picture of each story (or of the named story
+//                            files' stories) into <dir>; no report is written
 import { createHash } from "node:crypto";
 import { createServer } from "node:http";
 import { createRequire } from "node:module";
 import { execFile } from "node:child_process";
-import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
-import { extname, join, normalize, resolve } from "node:path";
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { basename, extname, join, normalize, resolve } from "node:path";
 import { promisify } from "node:util";
 
 const run = promisify(execFile);
@@ -67,12 +70,13 @@ function fail(report, message) {
 }
 
 // What the report is a report about. A scan is evidence only for the catalogue it read, so
-// the gate recomputes this and refuses a report whose stories have been edited since.
+// the gate recomputes this and refuses a report whose stories have been edited since. The
+// modules the stories share are read too: an edit to one changes every story importing it.
 function catalogueDigest() {
   const dir = join(here, "catalogue");
   if (!existsSync(dir)) return null;
   const hash = createHash("sha256");
-  for (const f of readdirSync(dir).filter((n) => n.endsWith(".stories.tsx")).sort()) {
+  for (const f of readdirSync(dir).filter((n) => /\.tsx?$/.test(n)).sort()) {
     hash.update(f).update("\0").update(readFileSync(join(dir, f))).update("\0");
   }
   return hash.digest("hex");
@@ -107,6 +111,70 @@ async function scan(page) {
   }
 }
 
+const args = process.argv.slice(2);
+const build = !args.includes("--no-build");
+const valueOf = (flag) => (args.includes(flag) ? args[args.indexOf(flag) + 1] ?? null : null);
+
+// A story is ready to be looked at once Storybook has put something in its root, or has
+// drawn its own error page for a story that threw.
+async function rendered(page, port, entry) {
+  await page.goto(`http://127.0.0.1:${port}/iframe.html?id=${encodeURIComponent(entry.id)}&viewMode=story`, { waitUntil: "load", timeout: 30000 });
+  await page.waitForFunction(() => {
+    const root = document.querySelector("#storybook-root");
+    return document.querySelector(".sb-show-errordisplay, #error-message") || (root && root.children.length > 0);
+  }, null, { timeout: 30000 });
+}
+
+function builtStories() {
+  const indexPath = join(STATIC_DIR, "index.json");
+  if (!existsSync(indexPath)) return null;
+  return Object.values(JSON.parse(readFileSync(indexPath, "utf8")).entries ?? {}).filter((e) => e.type === "story");
+}
+
+// Pictures for whoever rules the design: how each screen looks at desktop width, which no
+// check here can judge and the story source does not show. Taken to the full height of the
+// page up to a limit, so a long list is seen as long without one picture costing the ruler
+// the reading of all the others.
+const screensAt = valueOf("--screens");
+if (screensAt) {
+  if (build) {
+    const c = await compile("build", process.execPath, [binOf("storybook"), "build", "-o", STATIC_DIR, "--quiet"]);
+    if (!c.ok) { console.error(`the catalogue does not build:\n${c.output}`); process.exit(1); }
+  }
+  const entries = builtStories();
+  if (!entries) { console.error("storybook-static/index.json is missing; the catalogue was never built"); process.exit(1); }
+  const only = valueOf("--only") ? new Set(valueOf("--only").split(",").filter(Boolean)) : null;
+  const wanted = only ? entries.filter((e) => only.has(basename(e.importPath))) : entries;
+  const out = resolve(here, screensAt);
+  mkdirSync(out, { recursive: true });
+  const { chromium } = await import("playwright");
+  const { server, port } = await serve(STATIC_DIR);
+  const browser = await chromium.launch();
+  const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  const taken = new Set();
+  for (const entry of wanted) {
+    let name = basename(entry.importPath).replace(/\.stories\.tsx$/, "");
+    if (taken.has(name)) name = `${name}--${entry.id.split("--").pop()}`;
+    taken.add(name);
+    try {
+      await rendered(page, port, entry);
+      // Text set in a web font is invisible until the font arrives, and `fonts.ready` resolves
+      // early for a font nothing has asked for yet: every face the page declares is loaded first.
+      await page.evaluate(async () => { await Promise.all([...document.fonts].map((f) => f.load().catch(() => null))); await document.fonts.ready; });
+      const height = await page.evaluate(() => Math.ceil(Math.max(
+        document.documentElement.scrollHeight, document.body.scrollHeight,
+        document.querySelector("#storybook-root")?.getBoundingClientRect().bottom ?? 0)));
+      await page.screenshot({ path: join(out, `${name}.png`), fullPage: true, clip: { x: 0, y: 0, width: 1280, height: Math.min(height, 3000) } });
+    } catch (e) {
+      console.error(`${entry.id}: no picture — ${String(e.message ?? e).split("\n")[0]}`);
+    }
+  }
+  await browser.close();
+  server.close();
+  console.log(`${readdirSync(out).filter((f) => f.endsWith(".png")).length} pictures in ${screensAt}`);
+  process.exit(0);
+}
+
 const report = {
   generated: new Date().toISOString(),
   axe: require("axe-core/package.json").version,
@@ -118,15 +186,12 @@ const report = {
   totals: { stories: 0, violations: 0, failed: 0 },
 };
 
-const build = !process.argv.includes("--no-build");
-
 report.compile.push(await compile("typecheck", process.execPath, [require.resolve("typescript/bin/tsc"), "--noEmit", "--pretty", "false"]));
 if (build) report.compile.push(await compile("build", process.execPath, [binOf("storybook"), "build", "-o", STATIC_DIR, "--quiet"]));
 for (const c of report.compile) if (!c.ok) fail(report, `the catalogue does not ${c.step === "build" ? "build" : "typecheck"}:\n${c.output}`);
 
-const indexPath = join(STATIC_DIR, "index.json");
-if (!existsSync(indexPath)) fail(report, "storybook-static/index.json is missing; the catalogue was never built");
-const entries = Object.values(JSON.parse(readFileSync(indexPath, "utf8")).entries ?? {}).filter((e) => e.type === "story");
+const entries = builtStories();
+if (!entries) fail(report, "storybook-static/index.json is missing; the catalogue was never built");
 if (!entries.length) fail(report, "the built catalogue contains no stories");
 
 const { chromium } = await import("playwright");
@@ -140,13 +205,9 @@ const axeSource = readFileSync(require.resolve("axe-core/axe.min.js"), "utf8");
 for (const entry of entries) {
   const row = { id: entry.id, title: entry.title, file: entry.importPath, violations: [] };
   try {
-    await page.goto(`http://127.0.0.1:${port}/iframe.html?id=${encodeURIComponent(entry.id)}&viewMode=story`, { waitUntil: "load", timeout: 30000 });
+    await rendered(page, port, entry);
     // Storybook reports a story that threw by rendering its own error page, which is a
     // perfectly accessible document and would otherwise be scanned and pass.
-    await page.waitForFunction(() => {
-      const root = document.querySelector("#storybook-root");
-      return document.querySelector(".sb-show-errordisplay, #error-message") || (root && root.children.length > 0);
-    }, null, { timeout: 30000 });
     const threw = await page.$eval("body", (b) => b.querySelector(".sb-show-errordisplay, #error-message")?.textContent?.trim().slice(0, 400) ?? null);
     if (threw) { row.error = threw; report.totals.failed += 1; report.stories.push(row); continue; }
     await page.addScriptTag({ content: axeSource });

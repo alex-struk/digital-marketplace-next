@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Checkbox, Heading, Link, Select, Text, TextField } from "@bcgov/design-system-react-components";
+import { PageContainer, Stack } from "./layout";
 
 // notification-optin-opportunity-list · signed-out — a visitor who is not signed in has no account to record the
 // choice on, so the control is not rendered (R-6.21 offers it to a signed-in person). Nothing takes its place: the
@@ -8,13 +9,8 @@ import { Checkbox, Heading, Link, Select, Text, TextField } from "@bcgov/design-
 const meta: Meta = { title: "notifications/notification-optin-opportunity-list/signed-out" };
 export default meta;
 
-const page = { display: "grid", gap: "var(--layout-margin-large)", padding: "var(--layout-padding-large)" } as const;
-const stack = { display: "grid", gap: "var(--layout-margin-medium)" } as const;
-const filters = { display: "flex", flexWrap: "wrap", alignItems: "end", gap: "var(--layout-margin-medium)" } as const;
-const cardList = { display: "grid", gap: "var(--layout-margin-medium)", listStyle: "none", margin: "var(--layout-margin-none)", padding: "var(--layout-padding-none)" } as const;
+// A card's border and inner padding are its own; its content is laid out by the stack.
 const card = {
-  display: "grid",
-  gap: "var(--layout-margin-small)",
   padding: "var(--layout-padding-large)",
   border: "var(--layout-border-width-small) solid var(--surface-color-border-default)",
   borderRadius: "var(--layout-border-radius-medium)",
@@ -41,34 +37,40 @@ const statuses = [
 
 export const SignedOut: StoryObj = {
   render: () => (
-    <div style={page}>
-      <Heading level={1}>Opportunities</Heading>
-      <form role="search" aria-label="Filter opportunities" style={filters}>
-        <Select label="Program" items={programs} defaultValue="all" data-testid="opportunity-filter-program" />
-        <Select label="Status" items={statuses} defaultValue="all" data-testid="opportunity-filter-status" />
-        <Checkbox data-testid="opportunity-filter-remote">Remote work accepted only</Checkbox>
-        <TextField type="search" label="Search by title or location" data-testid="opportunity-search" />
-      </form>
-      <section aria-labelledby="group-open" style={stack} data-testid="opportunity-group-open">
-        <Heading level={2} id="group-open">Open</Heading>
-        <Text elementType="p" size="small" color="secondary">Accepting proposals, nearest proposal deadline first.</Text>
-        <ul style={cardList}>
-          <li>
-            <article aria-labelledby="opportunity-101" style={card}>
-              <Text elementType="p" size="small" color="secondary">Code With Us</Text>
-              <Heading level={3} id="opportunity-101">
-                <Link href="/opportunities/code-with-us/7c1e2d40-5b1a-4c2e-9d3f-000000000101">Build an accessible permit tracker</Link>
-              </Heading>
-              <div><span style={badge} data-testid="opportunity-status">Published</span></div>
-              <Text elementType="p">Victoria · Remote work accepted</Text>
-              <Text elementType="p">Reward: $45,000</Text>
-              <Text elementType="p">
-                Proposal deadline: <span data-testid="opportunity-proposal-deadline">October 2, 2026 at 4:00 p.m. Pacific time</span>
-              </Text>
-            </article>
-          </li>
-        </ul>
-      </section>
-    </div>
+    <PageContainer>
+      <Stack gap="large">
+        <Heading level={1}>Opportunities</Heading>
+        <form role="search" aria-label="Filter opportunities">
+          <Stack direction="row" gap="medium" align="end">
+            <Select label="Program" items={programs} defaultValue="all" data-testid="opportunity-filter-program" />
+            <Select label="Status" items={statuses} defaultValue="all" data-testid="opportunity-filter-status" />
+            <Checkbox data-testid="opportunity-filter-remote">Remote work accepted only</Checkbox>
+            <TextField type="search" label="Search by title or location" data-testid="opportunity-search" />
+          </Stack>
+        </form>
+        <Stack as="section" gap="medium" aria-labelledby="group-open" data-testid="opportunity-group-open">
+          <Heading level={2} id="group-open">Open</Heading>
+          <Text elementType="p" size="small" color="secondary">Accepting proposals, nearest proposal deadline first.</Text>
+          <Stack as="ul" gap="medium">
+            <li>
+              <article aria-labelledby="opportunity-101" style={card}>
+                <Stack gap="small">
+                  <Text elementType="p" size="small" color="secondary">Code With Us</Text>
+                  <Heading level={3} id="opportunity-101">
+                    <Link href="/opportunities/code-with-us/7c1e2d40-5b1a-4c2e-9d3f-000000000101">Build an accessible permit tracker</Link>
+                  </Heading>
+                  <div><span style={badge} data-testid="opportunity-status">Published</span></div>
+                  <Text elementType="p">Victoria · Remote work accepted</Text>
+                  <Text elementType="p">Reward: $45,000</Text>
+                  <Text elementType="p">
+                    Proposal deadline: <span data-testid="opportunity-proposal-deadline">October 2, 2026 at 4:00 p.m. Pacific time</span>
+                  </Text>
+                </Stack>
+              </article>
+            </li>
+          </Stack>
+        </Stack>
+      </Stack>
+    </PageContainer>
   ),
 };

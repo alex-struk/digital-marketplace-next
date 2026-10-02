@@ -175,6 +175,7 @@ Profile: rebuild
 - [build-slice-7-8](proposals/build-slice-7-8.md)
 - [build-slice-7-9](proposals/build-slice-7-9.md)
 - [build-slice-8](proposals/build-slice-8.md)
+- [build-slice-8-2](proposals/build-slice-8-2.md)
 - [calibrate-old-10](proposals/calibrate-old-10.md)
 - [calibrate-old-11](proposals/calibrate-old-11.md)
 - [calibrate-old-12](proposals/calibrate-old-12.md)
@@ -413,17 +414,26 @@ Profile: rebuild
 - [derive-tests-users-stale-6](proposals/derive-tests-users-stale-6.md)
 - [derive-tests-users-stale-7](proposals/derive-tests-users-stale-7.md)
 - [design-content](proposals/design-content.md)
+- [design-content-2](proposals/design-content-2.md)
+- [design-content-3](proposals/design-content-3.md)
 - [design-evaluation](proposals/design-evaluation.md)
+- [design-evaluation-2](proposals/design-evaluation-2.md)
 - [design-files](proposals/design-files.md)
+- [design-files-2](proposals/design-files-2.md)
 - [design-harness-v1](proposals/design-harness-v1.md)
 - [design-notifications](proposals/design-notifications.md)
+- [design-notifications-2](proposals/design-notifications-2.md)
 - [design-opportunities](proposals/design-opportunities.md)
 - [design-opportunities-2](proposals/design-opportunities-2.md)
+- [design-opportunities-3](proposals/design-opportunities-3.md)
 - [design-organizations](proposals/design-organizations.md)
+- [design-organizations-2](proposals/design-organizations-2.md)
 - [design-proposals](proposals/design-proposals.md)
+- [design-proposals-2](proposals/design-proposals-2.md)
 - [design-users](proposals/design-users.md)
 - [design-users-2](proposals/design-users-2.md)
 - [design-users-3](proposals/design-users-3.md)
+- [design-users-4](proposals/design-users-4.md)
 - [gates-simulated-v1](proposals/gates-simulated-v1.md)
 - [intent-digital-marketplace-rebuild](proposals/intent-digital-marketplace-rebuild.md)
 - [plan](proposals/plan.md)
@@ -478,11 +488,11 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $790.095378
-- Rulings cost: $431.930972
-- Total cost: $1222.02635
-- Agent-held rulings: 406
-- Runner rulings (automatic, no seat held): 21
+- Journal cost: $841.207756
+- Rulings cost: $438.286948
+- Total cost: $1279.494704
+- Agent-held rulings: 415
+- Runner rulings (automatic, no seat held): 22
 - Human rulings: 21
 - Rulings whose seat this page does not recognise: 0
 - Open escalations: 0

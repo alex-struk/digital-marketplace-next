@@ -893,15 +893,15 @@ pages:
       # edit_organization has opened the form; the logo is stored when save_changes is
       # made. The chooser lists only .jpg, .jpeg and .png, but a file with any other ending
       # can still be handed to it, and the service is what refuses it.
-      change_logo: { test_id: null }
+      change_logo: { test_id: organization-logo-button }
     observations:
       # The address of the logo the organization holds, as the page shows it once the form
       # is closed, or empty when it holds none. A refused logo leaves it as it was.
-      current_logo: { test_id: null }
+      current_logo: { test_id: organization-current-logo }
       # The message the form shows against the logo after save_changes is refused for it —
       # on the oracle "Please select a different logo image." — or empty when the logo was
       # accepted.
-      logo_refused_error: { test_id: null }
+      logo_refused_error: { test_id: organization-logo-refused-error }
       organization_identifier: { test_id: organization-identifier }
       organization_tab: { test_id: organization-tab-organization }
       team_tab: { test_id: organization-tab-team }
@@ -1399,7 +1399,7 @@ pages:
       duplicate_evaluation_error: { test_id: evaluation-duplicate-error }
       # The person may not record an evaluation of this proponent — not an evaluator on the
       # panel, or not at this stage — as distinct from a form that simply recorded nothing.
-      refused_when_not_permitted: { test_id: null }
+      refused_when_not_permitted: { test_id: not-found-page }
 
   - id: evaluation-individual-edit-swu
     domain: evaluation
@@ -1418,7 +1418,7 @@ pages:
       # The reader may not see this evaluation at all, as distinct from an evaluation with
       # nothing in it. Read by a public sector employee with no connection to the
       # opportunity, on seed.opportunities.swuCodeChallengeOfOtherStaff.
-      refused_when_not_permitted: { test_id: null }
+      refused_when_not_permitted: { test_id: not-found-page }
 
   - id: evaluation-consensus-create-swu
     domain: evaluation
@@ -1467,7 +1467,7 @@ pages:
       score_out_of_range_error: { test_id: evaluation-score-error }
       empty_notes_error: { test_id: evaluation-notes-error }
       duplicate_evaluation_error: { test_id: evaluation-duplicate-error }
-      refused_when_not_permitted: { test_id: null }
+      refused_when_not_permitted: { test_id: not-found-page }
 
   - id: evaluation-individual-edit-twu
     domain: evaluation
@@ -1483,7 +1483,7 @@ pages:
       read_only_after_submitted: { test_id: evaluation-read-only-notice }
       score_out_of_range_error: { test_id: evaluation-score-error }
       empty_notes_error: { test_id: evaluation-notes-error }
-      refused_when_not_permitted: { test_id: null }
+      refused_when_not_permitted: { test_id: not-found-page }
 
   - id: evaluation-consensus-create-twu
     domain: evaluation
@@ -1718,8 +1718,8 @@ pages:
       # a dialog (alert, confirm or prompt) the page raised on opening or within a few
       # seconds after — and empty otherwise. seed.content.scriptProbePage carries markup
       # that raises one if it runs.
-      body_element_names: { test_id: null }
-      body_script_ran: { test_id: null }
+      body_element_names: { test_id: content-page-body }
+      body_script_ran: { test_id: content-page-body }
       published_date: { test_id: content-published-date }
       updated_date: { test_id: content-updated-date }
       readable_when_signed_out: { test_id: content-page }
@@ -1999,22 +1999,22 @@ pages:
     title: "Watch an opportunity, by request"
     actions:
       # Input: the opportunity's identifier. Always asks to start watching.
-      watch_by_request: { test_id: null }
+      watch_by_request: { test_id: opportunity-watch-request-watch }
       # Input: the opportunity's identifier. Asks to stop watching it.
-      stop_watching_by_request: { test_id: null }
+      stop_watching_by_request: { test_id: opportunity-watch-request-stop }
     observations:
       # The service accepted the last request (the subscription it answers with).
-      request_accepted: { test_id: null }
-      refusal_status: { test_id: null }
+      request_accepted: { test_id: opportunity-watch-request-accepted }
+      refusal_status: { test_id: opportunity-watch-request-refusal-status }
       # The name the refusal is filed under: conflict for a duplicate watch, opportunity
       # for one's own opportunity, notFound, or permissions. Absent when accepted.
-      refusal_reason: { test_id: null }
+      refusal_reason: { test_id: opportunity-watch-request-refusal-reason }
       # The refusal's messages, in the order the service gives them. Empty when accepted.
-      refusal_messages: { test_id: null }
+      refusal_messages: { test_id: opportunity-watch-request-refusal-messages }
       # Whether the signed-in person watches the opportunity, as the service reports it on
       # the opportunity itself (/api/opportunities/:program/<identifier>, its subscribed
       # flag) — independent of the answer to the watch request.
-      watching: { test_id: null }
+      watching: { test_id: opportunity-watch-request-watching }
 
   # The organizations the signed-in person may act on behalf of, as the service answers
   # when asked for them — the list a proposal's organization is chosen from.
@@ -2024,9 +2024,9 @@ pages:
     title: "Organizations one may act for"
     actions: {}
     observations:
-      organizations_offered: { test_id: null }
+      organizations_offered: { test_id: organization-acting-for-list-organizations }
       # Answered as not permitted, as distinct from an empty list.
-      refused_when_not_permitted: { test_id: null }
+      refused_when_not_permitted: { test_id: organization-acting-for-list-refused }
 
   # An invitation to join an organization, made as a request so that it can name any
   # membership type.
@@ -2037,13 +2037,13 @@ pages:
     actions:
       # Input: the inviting organization (a seed.organizations handle), the invited
       # person's email address, and the membership type to name.
-      invite_with_membership_type: { test_id: null }
+      invite_with_membership_type: { test_id: affiliation-invitation-request-invite }
     observations:
-      invitation_created: { test_id: null }
-      invalid_membership_type_error: { test_id: null }
+      invitation_created: { test_id: affiliation-invitation-request-created }
+      invalid_membership_type_error: { test_id: affiliation-invitation-request-invalid-membership-type }
       # The identifier of the membership the invitation created, from the service's answer,
       # for affiliation-approval-request.
-      membership_identifier: { test_id: null }
+      membership_identifier: { test_id: affiliation-invitation-request-membership-id }
 
   # Accepting a membership, as a request, so that an acceptance the screens never send can
   # be sent and its answer read. The organizations tab offers accepting only on a pending
@@ -2060,15 +2060,15 @@ pages:
     route: /api/affiliations/:affiliationId
     title: "Accept a membership, by request"
     actions:
-      accept_membership_by_request: { test_id: null }
+      accept_membership_by_request: { test_id: affiliation-approval-request-accept }
     observations:
-      request_accepted: { test_id: null }
+      request_accepted: { test_id: affiliation-approval-request-accepted }
       # The membership's status as the service answers an accepted request (ACTIVE).
-      membership_status: { test_id: null }
+      membership_status: { test_id: affiliation-approval-request-membership-status }
       # The refusal's messages, in the order the service gives them. Empty when the
       # request was accepted.
-      refusal_messages: { test_id: null }
-      refusal_status: { test_id: null }
+      refusal_messages: { test_id: affiliation-approval-request-refusal-messages }
+      refusal_status: { test_id: affiliation-approval-request-refusal-status }
 
   # The list of everyone registered with the service, as the service answers the request
   # for it, whatever the screen shows.
@@ -2099,18 +2099,18 @@ pages:
     route: /api/content/:slug
     title: "Requests about a page"
     actions:
-      read_page_list_by_request: { test_id: null }
-      read_page_by_request: { test_id: null }
-      create_page_by_request: { test_id: null }
-      change_page_by_request: { test_id: null }
-      rename_page_by_request: { test_id: null }
-      remove_page_by_request: { test_id: null }
+      read_page_list_by_request: { test_id: content-request-read-list }
+      read_page_by_request: { test_id: content-request-read-page }
+      create_page_by_request: { test_id: content-request-create }
+      change_page_by_request: { test_id: content-request-change }
+      rename_page_by_request: { test_id: content-request-rename }
+      remove_page_by_request: { test_id: content-request-remove }
     observations:
-      request_accepted: { test_id: null }
-      refusal_status: { test_id: null }
+      request_accepted: { test_id: content-request-accepted }
+      refusal_status: { test_id: content-request-refusal-status }
       # The form of the refused answer — which fields it carries and how the reason is
       # named — so that two refusals can be compared (observables.yaml, refusals.shape).
-      refusal_shape: { test_id: null }
+      refusal_shape: { test_id: content-request-refusal-shape }
 
   # One panel member's individual evaluation of one proponent, as a request. :userId is
   # the panel member, as on evaluation-individual-edit-swu.
@@ -2130,44 +2130,44 @@ pages:
     actions:
       # Input: the four scores and notes exactly as given, including a score above the
       # question's maximum or an empty note, which the form refuses as it is typed.
-      save_draft_as_entered: { test_id: null }
+      save_draft_as_entered: { test_id: evaluation-individual-request-save-draft }
       # Asks for this one evaluation to be submitted by itself, rather than the whole set.
-      submit_this_evaluation_alone: { test_id: null }
+      submit_this_evaluation_alone: { test_id: evaluation-individual-request-submit-alone }
       # Input: the four scores and notes. Starts the signed-in evaluator's evaluation of
       # the proponent.
-      create_evaluation_by_request: { test_id: null }
+      create_evaluation_by_request: { test_id: evaluation-individual-request-create }
     observations:
-      stored_scores: { test_id: null }
-      stored_notes: { test_id: null }
-      evaluation_status: { test_id: null }
-      refused_as_unrecognised: { test_id: null }
-      refused_at_submission: { test_id: null }
+      stored_scores: { test_id: evaluation-individual-request-stored-scores }
+      stored_notes: { test_id: evaluation-individual-request-stored-notes }
+      evaluation_status: { test_id: evaluation-individual-request-status }
+      refused_as_unrecognised: { test_id: evaluation-individual-request-refused-unrecognised }
+      refused_at_submission: { test_id: evaluation-individual-request-refused-at-submission }
       # Whether the service accepted create_evaluation_by_request (the evaluation it
       # answers with), as distinct from refusing it.
-      evaluation_created: { test_id: null }
+      evaluation_created: { test_id: evaluation-individual-request-created }
       # The message the service answers a refused create_evaluation_by_request with, as
       # text, absent when the start was accepted. On the oracle an evaluator who already
       # holds an evaluation of the proponent is answered "You already have a team question
       # evaluation for this proposal." (Team With Us: "resource question" in place of
       # "team question"); spec/contract/openapi.yaml gives the answer's form.
-      creation_refusal_message: { test_id: null }
+      creation_refusal_message: { test_id: evaluation-individual-request-creation-refusal-message }
 
   - id: evaluation-individual-request-twu
     domain: evaluation
     route: /api/proposal/team-with-us/:proposalId/resource-questions/evaluations/:userId
     title: "A Team With Us individual evaluation, by request"
     actions:
-      save_draft_as_entered: { test_id: null }
-      submit_this_evaluation_alone: { test_id: null }
-      create_evaluation_by_request: { test_id: null }
+      save_draft_as_entered: { test_id: evaluation-individual-request-save-draft }
+      submit_this_evaluation_alone: { test_id: evaluation-individual-request-submit-alone }
+      create_evaluation_by_request: { test_id: evaluation-individual-request-create }
     observations:
-      stored_scores: { test_id: null }
-      stored_notes: { test_id: null }
-      evaluation_status: { test_id: null }
-      refused_as_unrecognised: { test_id: null }
-      refused_at_submission: { test_id: null }
-      evaluation_created: { test_id: null }
-      creation_refusal_message: { test_id: null }
+      stored_scores: { test_id: evaluation-individual-request-stored-scores }
+      stored_notes: { test_id: evaluation-individual-request-stored-notes }
+      evaluation_status: { test_id: evaluation-individual-request-status }
+      refused_as_unrecognised: { test_id: evaluation-individual-request-refused-unrecognised }
+      refused_at_submission: { test_id: evaluation-individual-request-refused-at-submission }
+      evaluation_created: { test_id: evaluation-individual-request-created }
+      creation_refusal_message: { test_id: evaluation-individual-request-creation-refusal-message }
 
   # One consensus — the chair's agreed scores and notes for one proponent — as a request.
   # :userId is the panel member whose consensus it is, which is the chair: on the seeded
@@ -2189,31 +2189,31 @@ pages:
     actions:
       # Input: an agreed score and note for each of the four questions, by question order.
       # Replaces what the consensus holds, as the edit screen's save does.
-      change_consensus_by_request: { test_id: null }
+      change_consensus_by_request: { test_id: evaluation-consensus-request-change }
     observations:
       # The agreed score for each question, by question order, as stored.
-      stored_scores: { test_id: null }
+      stored_scores: { test_id: evaluation-consensus-request-stored-scores }
       # The note for each question, by question order, as stored.
-      stored_notes: { test_id: null }
-      consensus_status: { test_id: null }
+      stored_notes: { test_id: evaluation-consensus-request-stored-notes }
+      consensus_status: { test_id: evaluation-consensus-request-status }
       # The service accepted the change (a successful answer carrying the consensus).
-      request_accepted: { test_id: null }
+      request_accepted: { test_id: evaluation-consensus-request-accepted }
       # The service refused the change or the read (an answer naming a permission or
       # not-found error), as distinct from one it accepted.
-      refused_when_not_permitted: { test_id: null }
+      refused_when_not_permitted: { test_id: evaluation-consensus-request-refused }
 
   - id: evaluation-consensus-request-twu
     domain: evaluation
     route: /api/proposal/team-with-us/:proposalId/resource-questions/consensus/:userId
     title: "A Team With Us consensus, by request"
     actions:
-      change_consensus_by_request: { test_id: null }
+      change_consensus_by_request: { test_id: evaluation-consensus-request-change }
     observations:
-      stored_scores: { test_id: null }
-      stored_notes: { test_id: null }
-      consensus_status: { test_id: null }
-      request_accepted: { test_id: null }
-      refused_when_not_permitted: { test_id: null }
+      stored_scores: { test_id: evaluation-consensus-request-stored-scores }
+      stored_notes: { test_id: evaluation-consensus-request-stored-notes }
+      consensus_status: { test_id: evaluation-consensus-request-status }
+      request_accepted: { test_id: evaluation-consensus-request-accepted }
+      refused_when_not_permitted: { test_id: evaluation-consensus-request-refused }
 
   # An opportunity's evaluation panel submitted as a request, so that it can hold a
   # panel none of the panel screen's controls can compose: a member who is neither an
@@ -2226,17 +2226,17 @@ pages:
     route: /api/opportunities/:program/:opportunityId
     title: "An evaluation panel, by request"
     actions:
-      submit_panel_with_member_holding_no_role: { test_id: null }
+      submit_panel_with_member_holding_no_role: { test_id: evaluation-panel-request-member-no-role }
       # Input: two public sector members (seed users handles), both evaluators and
       # neither marked as chair. The browser form will not send this panel; the request
       # carries it to the service as given.
-      submit_panel_with_no_chair: { test_id: null }
+      submit_panel_with_no_chair: { test_id: evaluation-panel-request-no-chair }
     observations:
-      member_without_role_error: { test_id: null }
+      member_without_role_error: { test_id: evaluation-panel-request-member-without-role-error }
       # The service's refusal of a panel that names no chair, read from its answer. Absent
       # when the service accepts the panel, which panel_as_stored then shows.
-      missing_chair_error: { test_id: null }
-      panel_as_stored: { test_id: null }
+      missing_chair_error: { test_id: evaluation-panel-request-missing-chair-error }
+      panel_as_stored: { test_id: evaluation-panel-request-panel-as-stored }
 
   # A stored file named as an attachment by its identifier, on something the signed-in
   # person may edit. :recordKind is opportunities or proposals, :program one of
@@ -2250,11 +2250,11 @@ pages:
     actions:
       # Input: the stored file's identifier. Saves the record as it stands with that file
       # added to its attachments.
-      attach_stored_file: { test_id: null }
+      attach_stored_file: { test_id: file-attach-request }
     observations:
-      attachment_accepted: { test_id: null }
-      attachment_refused: { test_id: null }
-      attached_file_identifiers: { test_id: null }
+      attachment_accepted: { test_id: file-attach-accepted }
+      attachment_refused: { test_id: file-attach-refused }
+      attached_file_identifiers: { test_id: file-attach-identifiers }
 
   # A Code With Us proposal made and submitted in one request, as the signed-in vendor,
   # with its proponent given exactly as stated. The screen's organization choice lists only
@@ -2280,26 +2280,26 @@ pages:
     actions:
       # Input: the opportunity identifier, the organization identifier, proposal text and
       # additional comments. Sent as a submission, not a draft.
-      submit_with_organization_proponent: { test_id: null }
+      submit_with_organization_proponent: { test_id: proposal-cwu-request-submit-organization }
       # Input: the opportunity identifier, proposal text, additional comments, and the
       # individual's legal name, email address, phone, street address, second address
       # line, city, province, postal code and country, each exactly as given — blank or
       # malformed included. Sent as a submission, not a draft.
-      submit_with_individual_proponent: { test_id: null }
+      submit_with_individual_proponent: { test_id: proposal-cwu-request-submit-individual }
     observations:
       # The service accepted the proposal (a successful answer carrying it).
-      request_accepted: { test_id: null }
+      request_accepted: { test_id: proposal-cwu-request-accepted }
       # The accepted proposal's identifier, for proposal-cwu-edit and proposal-cwu-view.
-      proposal_identifier: { test_id: null }
-      proposal_status: { test_id: null }
+      proposal_identifier: { test_id: proposal-cwu-request-proposal-id }
+      proposal_status: { test_id: proposal-cwu-request-status }
       # Every message in a refusal, each with the field it is reported against — the
       # proponent's own fields by name (legal name, email address, phone, street address,
       # city, province, postal code, country), "organization" for an organization
       # proponent, and the proposal's own fields. Empty when the request was accepted.
-      refusal_by_field: { test_id: null }
+      refusal_by_field: { test_id: proposal-cwu-request-refusal-by-field }
       # The refusal's messages alone, in the order the service gives them.
-      refusal_messages: { test_id: null }
-      refusal_status: { test_id: null }
+      refusal_messages: { test_id: proposal-cwu-request-refusal-messages }
+      refusal_status: { test_id: proposal-cwu-request-refusal-status }
 
   # A Sprint With Us or Team With Us proposal made and submitted in one request, as the
   # signed-in vendor, with its team given by account. :program is sprint-with-us or
@@ -2349,11 +2349,11 @@ pages:
       # team. The screens always send one.
       #
       # Either way, sent as a submission, not a draft.
-      submit_team_proposal: { test_id: null }
+      submit_team_proposal: { test_id: proposal-team-request-submit }
     observations:
-      request_accepted: { test_id: null }
-      proposal_identifier: { test_id: null }
-      proposal_status: { test_id: null }
+      request_accepted: { test_id: proposal-team-request-accepted }
+      proposal_identifier: { test_id: proposal-team-request-proposal-id }
+      proposal_status: { test_id: proposal-team-request-status }
       # Every message in a refusal, each with where it is reported: the team (for
       # team-with-us, by position in the team list, or the team as a whole), the phase and
       # position (for sprint-with-us), the organization, one answer to an opportunity
@@ -2376,12 +2376,12 @@ pages:
       # that is empty or longer than its question's word limit is refused against its
       # wording with "Response must be between 1 and N words long.", N being that
       # question's limit.
-      refusal_by_field: { test_id: null }
+      refusal_by_field: { test_id: proposal-team-request-refusal-by-field }
       # The refusal's messages alone, in the order the service gives them — where "User is
       # not an active member of the organization." or "Please select unique team members."
       # is read.
-      refusal_messages: { test_id: null }
-      refusal_status: { test_id: null }
+      refusal_messages: { test_id: proposal-team-request-refusal-messages }
+      refusal_status: { test_id: proposal-team-request-refusal-status }
 
   # A stage score for one Sprint With Us or Team With Us proposal, sent to the service as a
   # request rather than through proposal-swu-view or proposal-twu-view, which offer a stage's
@@ -2408,20 +2408,20 @@ pages:
     title: "A stage score, by request"
     actions:
       # Input: a score out of 100. Sprint With Us only.
-      score_team_scenario_by_request: { test_id: null }
+      score_team_scenario_by_request: { test_id: proposal-evaluation-request-score-team-scenario }
       # Input: a score out of 100. Sprint With Us only.
-      score_code_challenge_by_request: { test_id: null }
+      score_code_challenge_by_request: { test_id: proposal-evaluation-request-score-code-challenge }
       # Input: a score out of 100. Team With Us only.
-      score_challenge_by_request: { test_id: null }
+      score_challenge_by_request: { test_id: proposal-evaluation-request-score-challenge }
     observations:
       # The service accepted the score (a successful answer carrying the proposal).
-      request_accepted: { test_id: null }
+      request_accepted: { test_id: proposal-evaluation-request-accepted }
       # The proposal's status as the service answers an accepted request.
-      proposal_status: { test_id: null }
+      proposal_status: { test_id: proposal-evaluation-request-status }
       # The refusal's messages, in the order the service gives them. Empty when the
       # request was accepted.
-      refusal_messages: { test_id: null }
-      refusal_status: { test_id: null }
+      refusal_messages: { test_id: proposal-evaluation-request-refusal-messages }
+      refusal_status: { test_id: proposal-evaluation-request-refusal-status }
 
   # The signed-in person's own account record, as the service holds it. The profile screens
   # show whether new-opportunity notices are on, not when they were turned on; the account
@@ -2477,5 +2477,5 @@ pages:
     observations:
       # The count as a whole number. An opportunity never opened has no counter yet, and
       # the service leaves it out of its answer; that reads as 0.
-      view_count: { test_id: null }
-      refused_when_not_permitted: { test_id: null }
+      view_count: { test_id: opportunity-counters-view-count }
+      refused_when_not_permitted: { test_id: opportunity-counters-refused }

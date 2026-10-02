@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AlertDialog, Button, ButtonGroup, Heading, Modal, Text, TextArea } from "@bcgov/design-system-react-components";
+import { PageContainer, Stack } from "./layout";
 
 // proposal-twu-view · disqualify-dialog — Disqualify was pressed during the challenge. It is offered at every stage and
 // needs a written reason, which is kept in the history. A missing reason is refused at the field, as in
@@ -7,7 +8,6 @@ import { AlertDialog, Button, ButtonGroup, Heading, Modal, Text, TextArea } from
 const meta: Meta = { title: "proposals/proposal-twu-view/disqualify-dialog" };
 export default meta;
 
-const page = { display: "grid", gap: "var(--layout-margin-large)", padding: "var(--layout-padding-large)" } as const;
 const badge = {
   display: "inline-block",
   paddingInline: "var(--layout-padding-small)",
@@ -17,16 +17,20 @@ const badge = {
 
 export const DisqualifyDialog: StoryObj = {
   render: () => (
-    <div style={page}>
-      <Text elementType="p" size="small" color="secondary">Team With Us proposal</Text>
-      <Heading level={1}><span data-testid="proposal-proponent-name">Example Digital Ltd.</span></Heading>
-      <Text elementType="p">Status: <span style={badge} data-testid="proposal-status">Under review: challenge</span></Text>
-      <div data-testid="proposal-actions">
-        <ButtonGroup ariaLabel="Proposal actions">
-          <Button variant="secondary" danger data-testid="proposal-disqualify-button">Disqualify</Button>
-        </ButtonGroup>
-      </div>
-      <Text elementType="p" size="small" color="secondary">The rest of the page is as in the challenge-tab story and is trimmed here.</Text>
+    <PageContainer>
+      <Stack gap="large">
+        <Stack gap="small">
+          <Text elementType="p" size="small" color="secondary">Team With Us proposal</Text>
+          <Heading level={1}><span data-testid="proposal-proponent-name">Example Digital Ltd.</span></Heading>
+        </Stack>
+        <Text elementType="p">Status: <span style={badge} data-testid="proposal-status">Under review: challenge</span></Text>
+        <div data-testid="proposal-actions">
+          <ButtonGroup ariaLabel="Proposal actions">
+            <Button variant="secondary" danger data-testid="proposal-disqualify-button">Disqualify</Button>
+          </ButtonGroup>
+        </div>
+        <Text elementType="p" size="small" color="secondary">The rest of the page is as in the challenge-tab story and is trimmed here.</Text>
+      </Stack>
       <Modal isOpen isDismissable>
         <AlertDialog
           variant="destructive"
@@ -39,16 +43,18 @@ export const DisqualifyDialog: StoryObj = {
             </>
           }
         >
-          <Text elementType="p">The proposal will no longer be evaluated. The reason is kept in its history.</Text>
-          <TextArea
-            label="Reason"
-            isRequired
-            maxLength={5000}
-            description="Between 1 and 5,000 characters."
-            data-testid="proposal-disqualify-reason-field"
-          />
+          <Stack gap="medium">
+            <Text elementType="p">The proposal will no longer be evaluated. The reason is kept in its history.</Text>
+            <TextArea
+              label="Reason"
+              isRequired
+              maxLength={5000}
+              description="Between 1 and 5,000 characters."
+              data-testid="proposal-disqualify-reason-field"
+            />
+          </Stack>
         </AlertDialog>
       </Modal>
-    </div>
+    </PageContainer>
   ),
 };

@@ -1622,3 +1622,28 @@ conditions:
         and its own exactly-one assertion
       by: agent:reviewer
       at: 2026-10-01T14:03:09.618Z
+  - ref: design-content-2#1
+    text: "In design/catalogue/layout.tsx, make PageContainer's content column match
+      the design system's Header and Footer content width. Its left edge must
+      line up with the Footer's (x=90 at a 1280px viewport, where it is now
+      x=106). For example, set maxWidth to calc(1100px + 2 *
+      var(--layout-padding-medium)) under border-box, so the side padding sits
+      outside the 1100px. Keep 1100px written only in layout.tsx, and update
+      DESIGN.md's page-container entry and gap 18 to say what is now true. Shown
+      by content-footer.default.png: the container's content starts 16px (one
+      --layout-padding-medium) to the right of the Footer's content."
+    from: design-content-2
+    family: design-content
+    gate: G-DESIGN
+    stage: design
+    by: agent:ux-reviewer
+    at: 2026-10-01T23:48:38.980Z
+    closed:
+      outcome: met
+      why: PageContainer in design/catalogue/layout.tsx now uses maxWidth calc(1100px
+        + 2 * var(--layout-padding-medium)) with border-box.
+        content-footer.default.png shows the content's left edge at x=90,
+        matching the Footer. DESIGN.md's page-container entry and gap 18 are
+        updated.
+      by: agent:ux-reviewer
+      at: 2026-10-01T23:55:48.385Z

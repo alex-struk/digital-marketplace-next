@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AlertDialog, Button, ButtonGroup, Heading, Modal, Text } from "@bcgov/design-system-react-components";
+import { PageContainer, Stack } from "./layout";
 
 // opportunity-cwu-edit · publish-confirm — an administrator who pressed Publish on an opportunity under review is asked
 // to confirm (R-1.22, R-1.23, R-1.34)
 const meta: Meta = { title: "opportunities/opportunity-cwu-edit/publish-confirm" };
 export default meta;
 
-const page = { display: "grid", gap: "var(--layout-margin-large)", padding: "var(--layout-padding-large)" } as const;
 const badge = {
   display: "inline-block",
   paddingInline: "var(--layout-padding-small)",
@@ -16,15 +16,19 @@ const badge = {
 
 export const PublishConfirm: StoryObj = {
   render: () => (
-    <div style={page}>
-      <Text elementType="p" size="small" color="secondary">Manage a Code With Us opportunity</Text>
-      <Heading level={1}>Build an accessible permit tracker</Heading>
-      <Text elementType="p">Status: <span style={badge} data-testid="opportunity-status">Under review</span></Text>
-      <ButtonGroup ariaLabel="Opportunity actions">
-        <Button variant="secondary" data-testid="opportunity-edit-button">Edit</Button>
-        <Button variant="primary" data-testid="opportunity-publish">Publish</Button>
-        <Button variant="secondary" danger data-testid="opportunity-delete-button">Delete</Button>
-      </ButtonGroup>
+    <PageContainer>
+      <Stack gap="large">
+        <Stack gap="small">
+          <Text elementType="p" size="small" color="secondary">Manage a Code With Us opportunity</Text>
+          <Heading level={1}>Build an accessible permit tracker</Heading>
+        </Stack>
+        <Text elementType="p">Status: <span style={badge} data-testid="opportunity-status">Under review</span></Text>
+        <ButtonGroup ariaLabel="Opportunity actions">
+          <Button variant="secondary" data-testid="opportunity-edit-button">Edit</Button>
+          <Button variant="primary" data-testid="opportunity-publish">Publish</Button>
+          <Button variant="secondary" danger data-testid="opportunity-delete-button">Delete</Button>
+        </ButtonGroup>
+      </Stack>
       <Modal isOpen isDismissable>
         <AlertDialog
           variant="confirmation"
@@ -43,6 +47,6 @@ export const PublishConfirm: StoryObj = {
           </Text>
         </AlertDialog>
       </Modal>
-    </div>
+    </PageContainer>
   ),
 };

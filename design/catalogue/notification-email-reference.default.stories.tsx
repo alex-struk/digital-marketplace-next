@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Heading, Link, Text } from "@bcgov/design-system-react-components";
+import { PageContainer, Stack } from "./layout";
 
 // notification-email-reference · default — a signed-in administrator opens the reference page. Every message the
 // service can send is shown, grouped under the event that sends it, each with its subject, the one-line summary of who
@@ -9,21 +10,15 @@ import { Heading, Link, Text } from "@bcgov/design-system-react-components";
 const meta: Meta = { title: "notifications/notification-email-reference/default" };
 export default meta;
 
-const page = { display: "grid", gap: "var(--layout-margin-large)", padding: "var(--layout-padding-large)" } as const;
-const stack = { display: "grid", gap: "var(--layout-margin-medium)" } as const;
-const plainList = { display: "grid", gap: "var(--layout-margin-small)", margin: "var(--layout-margin-none)" } as const;
-const facts = { display: "grid", gap: "var(--layout-margin-small)", margin: "var(--layout-margin-none)" } as const;
 const term = { fontWeight: "var(--typography-font-weights-bold)" } as const;
-const detail = { margin: "var(--layout-margin-none)" } as const;
+// Each message is set off from the one before by a rule, with the rule's own padding beneath it. Its content is laid
+// out by the stack.
 const message = {
-  display: "grid",
-  gap: "var(--layout-margin-medium)",
   paddingBlockStart: "var(--layout-padding-large)",
   borderBlockStart: "var(--layout-border-width-small) solid var(--surface-color-border-default)",
 } as const;
+// The email preview frame. Its border and inner padding are its own; its content is laid out by the stack.
 const body = {
-  display: "grid",
-  gap: "var(--layout-margin-medium)",
   padding: "var(--layout-padding-large)",
   border: "var(--layout-border-width-small) solid var(--surface-color-border-medium)",
   borderRadius: "var(--layout-border-radius-medium)",
@@ -142,54 +137,62 @@ const groups: Group[] = [
 
 export const Default: StoryObj = {
   render: () => (
-    <div style={page} data-testid="email-reference-page">
-      <Heading level={1}>Email Notification Reference</Heading>
-      <Text elementType="p">
-        Every email the service sends, shown as its recipient would see it. The names, addresses and records in these
-        samples are invented.
-      </Text>
-      <nav aria-labelledby="email-reference-contents">
-        <div style={stack}>
-          <Heading level={2} id="email-reference-contents">Events that send email</Heading>
-          <ul style={plainList}>
-            {groups.map((g) => (
-              <li key={g.id}><Link href={`#${g.id}`}>{g.event}</Link></li>
-            ))}
-          </ul>
-        </div>
-      </nav>
-      {groups.map((g) => (
-        <section key={g.id} aria-labelledby={g.id} style={stack}>
-          <Heading level={2} id={g.id}>
-            <span data-testid="email-reference-group-title">{g.event}</span>
-          </Heading>
-          {g.messages.map((m) => (
-            <article key={m.id} aria-labelledby={m.id} style={message}>
-              <Heading level={3} id={m.id}>{m.recipient}</Heading>
-              <dl style={facts}>
-                <div>
-                  <dt style={term}>Subject</dt>
-                  <dd style={detail} data-testid="email-reference-subject">{m.subject}</dd>
-                </div>
-                {m.summary && (
-                  <div>
-                    <dt style={term}>Who receives it and why</dt>
-                    <dd style={detail} data-testid="email-reference-summary">{m.summary}</dd>
+    <PageContainer>
+      <Stack gap="large" data-testid="email-reference-page">
+        <Stack gap="medium">
+          <Heading level={1}>Email Notification Reference</Heading>
+          <Text elementType="p">
+            Every email the service sends, shown as its recipient would see it. The names, addresses and records in these
+            samples are invented.
+          </Text>
+        </Stack>
+        <nav aria-labelledby="email-reference-contents">
+          <Stack gap="medium">
+            <Heading level={2} id="email-reference-contents">Events that send email</Heading>
+            <Stack as="ul" gap="small">
+              {groups.map((g) => (
+                <li key={g.id}><Link href={`#${g.id}`}>{g.event}</Link></li>
+              ))}
+            </Stack>
+          </Stack>
+        </nav>
+        {groups.map((g) => (
+          <Stack as="section" key={g.id} gap="medium" aria-labelledby={g.id}>
+            <Heading level={2} id={g.id}>
+              <span data-testid="email-reference-group-title">{g.event}</span>
+            </Heading>
+            {g.messages.map((m) => (
+              <article key={m.id} aria-labelledby={m.id} style={message}>
+                <Stack gap="medium">
+                  <Heading level={3} id={m.id}>{m.recipient}</Heading>
+                  <Stack as="dl" gap="small">
+                    <div>
+                      <dt style={term}>Subject</dt>
+                      <dd data-testid="email-reference-subject">{m.subject}</dd>
+                    </div>
+                    {m.summary && (
+                      <div>
+                        <dt style={term}>Who receives it and why</dt>
+                        <dd data-testid="email-reference-summary">{m.summary}</dd>
+                      </div>
+                    )}
+                  </Stack>
+                  <div role="group" aria-label={`Email body: ${m.subject}`} style={body} data-testid="email-reference-body">
+                    <Stack gap="medium">
+                      <Text elementType="p"><span style={emailTitle}>{m.title}</span></Text>
+                      {m.paragraphs.map((p) => (
+                        <Text key={p} elementType="p">{p}</Text>
+                      ))}
+                      {m.link && <Text elementType="p"><Link href={m.link.href}>{m.link.text}</Link></Text>}
+                      <Text elementType="p" size="small" color="secondary"><Link href={m.footer.href}>{m.footer.text}</Link></Text>
+                    </Stack>
                   </div>
-                )}
-              </dl>
-              <div role="group" aria-label={`Email body: ${m.subject}`} style={body} data-testid="email-reference-body">
-                <Text elementType="p"><span style={emailTitle}>{m.title}</span></Text>
-                {m.paragraphs.map((p) => (
-                  <Text key={p} elementType="p">{p}</Text>
-                ))}
-                {m.link && <Text elementType="p"><Link href={m.link.href}>{m.link.text}</Link></Text>}
-                <Text elementType="p" size="small" color="secondary"><Link href={m.footer.href}>{m.footer.text}</Link></Text>
-              </div>
-            </article>
-          ))}
-        </section>
-      ))}
-    </div>
+                </Stack>
+              </article>
+            ))}
+          </Stack>
+        ))}
+      </Stack>
+    </PageContainer>
   ),
 };
