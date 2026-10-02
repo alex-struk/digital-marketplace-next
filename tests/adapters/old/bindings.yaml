@@ -1439,3 +1439,20 @@ pages:
     observations:
       view_count: bound
       refused_when_not_permitted: bound
+  opportunity-history-request:
+    actions:
+      add_note_by_request: bound
+    observations:
+      history_shown: bound
+      history_entries: bound
+      request_accepted: bound
+      refusal_messages: bound
+      refusal_status: bound
+  opportunity-status-request:
+    actions:
+      request_status_change: bound
+    observations:
+      request_accepted: bound
+      refusal_status: bound
+      refusal_messages: bound
+      stored_status: bound
