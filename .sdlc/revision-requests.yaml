@@ -668,3 +668,169 @@ requests:
     at: 2026-10-02T16:54:27.612Z
     taken: 2026-10-02T16:55:16.999Z
     taken_by: contract-v31
+  - stage: bind-adapter
+    target: new
+    why: "R-1.8: opportunitySwuView.status() returns the line after one reading
+      exactly 'Sprint With Us', which this page never draws. The page at
+      /opportunities/sprint-with-us/<id> shows a paragraph 'Sprint With Us
+      opportunity' and then a 'Status' term whose value read 'Draft'
+      (.sdlc/evidence/slice-10/R-1.8.txt), yet the adapter read ''. Read the
+      value given under the 'Status' term (the design story marks it data-testid
+      opportunity-status)."
+    from: build-slice-10-2
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-02T22:35:27.367Z
+  - stage: bind-adapter
+    target: new
+    why: "R-1.18: opportunityTwuView.status() has the same fault on
+      /opportunities/team-with-us/<id>: it looks for a line reading exactly
+      'Team With Us' and the page shows the state under a 'Status' term, so all
+      four reads returned ''. Read the value under 'Status'."
+    from: build-slice-10-2
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-02T22:35:27.367Z
+  - stage: bind-adapter
+    target: new
+    why: "R-1.43: opportunitySwuView.status() read '' on
+      /opportunities/sprint-with-us/00000000-0000-4000-a011-000000000001, whose
+      'Status' term reads 'Team questions: consensus'
+      (.sdlc/evidence/slice-10/R-1.43.txt). Read the value under 'Status' rather
+      than the line after an exact program-name line."
+    from: build-slice-10-2
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-02T22:35:27.367Z
+  - stage: bind-adapter
+    target: new
+    why: "R-1.48: opportunitySwuView.status() read '' on the created opportunity's
+      view, which shows its state under a 'Status' term. Same fix as R-1.8.
+      Separately, programForm.setPanel ignores the top-level 'chair' given to
+      setEvaluationPanel({members, chair}) and only reads a per-member chair
+      flag, so no Chair box is ticked and the create form refuses with
+      'Evaluation panel: choose a chair'. Tick the Chair box of the member the
+      input names as chair."
+    from: build-slice-10-2
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-02T22:35:27.367Z
+  - stage: bind-adapter
+    target: new
+    why: "R-1.53: opportunitySwuView.status() read '' on
+      /opportunities/sprint-with-us/<id>, where the state is shown under a
+      'Status' term. Same fix as R-1.8."
+    from: build-slice-10-2
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-02T22:35:27.367Z
+  - stage: bind-adapter
+    target: new
+    why: "R-1.13: opportunityTwuCreate.setEvaluationPanel({members, chair}) never
+      ticks the Chair box of the member named by the top-level 'chair', because
+      programForm.setPanel reads 'chair' only on each member. The form then
+      refused with 'Evaluation panel: choose a chair. The panel needs one person
+      to record the agreed scores.' (.sdlc/evidence/slice-10/R-1.13.txt). Apply
+      the top-level chair to the matching member's Chair box."
+    from: build-slice-10-2
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-02T22:35:27.367Z
+  - stage: bind-adapter
+    target: new
+    why: "R-1.16: after a publish the form refused,
+      opportunitySwuEdit.opportunityIdentifier() read 'create' from
+      /opportunities/sprint-with-us/create and returned it as an opportunity id,
+      so the test 'viewed' the create form and phases() read ''. Return '' while
+      the page is still the create form, so the test takes its 'nothing was
+      created' branch. setEvaluationPanel's chair must also be applied, as for
+      R-1.13."
+    from: build-slice-10-2
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-02T22:35:27.367Z
+  - stage: bind-adapter
+    target: new
+    why: "R-1.17: the publish was refused because setEvaluationPanel ticked no chair
+      (see R-1.13), and opportunityIdentifier() then returned 'create', so
+      opportunitySwuView.status() was read on
+      /opportunities/sprint-with-us/create and returned ''. Apply the top-level
+      chair, return no identifier from the create form, and read status under
+      the 'Status' term."
+    from: build-slice-10-2
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-02T22:35:27.367Z
+  - stage: bind-adapter
+    target: new
+    why: "R-5.17: setEvaluationPanel({members: [first, second], chair: second})
+      ticked no chair, the publish stayed on
+      /opportunities/sprint-with-us/create, and opportunityIdentifier() returned
+      'create', so every status() read was taken on a blank create form
+      (.sdlc/evidence/slice-10/R-5.17.png). Apply the top-level chair, return no
+      identifier from the create form, and read status under 'Status'."
+    from: build-slice-10-2
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-02T22:35:27.367Z
+  - stage: bind-adapter
+    target: new
+    why: "R-5.16: evaluationPanelSwu was opened at
+      /opportunities/sprint-with-us/create/edit?tab=evaluationPanel because the
+      id it was given was 'create', returned by opportunityIdentifier() after a
+      create refused for want of a chair. The panel tab does open for a real
+      opportunity, as R-1.55's evidence at
+      /opportunities/sprint-with-us/<id>/edit?tab=evaluationPanel shows. Fix the
+      chair and identifier faults and the binding has a real opportunity to
+      open."
+    from: build-slice-10-2
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-02T22:35:27.367Z
+  - stage: bind-adapter
+    target: new
+    why: "R-1.55: on /opportunities/sprint-with-us/<id>/edit?tab=evaluationPanel the
+      'Public sector employee' chooser correctly does not offer the vendor.
+      addPanelMember's pick() calls noteRefusal and returns false without
+      throwing, while the test reads a refusal only from a throw, so it
+      concluded the vendor was added and found only the administrator. When the
+      chooser does not offer the person asked for, addPanelMember must raise the
+      refusal."
+    from: build-slice-10-2
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-02T22:35:27.367Z
+  - stage: bind-adapter
+    target: new
+    why: "R-5.1: same fault as R-1.55. evaluationPanelSwu.addPanelMember({member:
+      vendor}) found the vendor not offered by the chooser, noted the refusal
+      and returned normally, so the test's refused() saw no refusal and failed
+      when panelMemberRow() lacked the vendor. Raise the refusal when the
+      chooser does not offer the person."
+    from: build-slice-10-2
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-02T22:35:27.367Z
+  - stage: bind-adapter
+    target: new
+    why: "R-1.19: opportunitySwuView.status() read '' on
+      /opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701, whose
+      'Status' term reads 'Published' (.sdlc/evidence/slice-10/R-1.19.txt). Read
+      the value under 'Status'."
+    from: build-slice-10-2
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-02T22:35:27.367Z
+  - stage: plan
+    why: slice 10 claims R-1.19, whose case 'an opportunity moves on to a
+      program-specific evaluation stage' needs a lapsed Sprint With Us
+      opportunity to leave Published when scheduled transitions run.
+      plan/tasks.md line 87 delivers 'the deadline hook in front of /api and
+      /status that closes opportunities in all three programs' in a later slice,
+      and the seeded closed opportunity still reads 'Published' after
+      scheduledTransitionTrigger.runPendingTransitions(). Either move R-1.19 to
+      the slice that delivers the hook, or bring the hook into slice 10.
+    from: build-slice-10-2
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-02T22:35:27.367Z
