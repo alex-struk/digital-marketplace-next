@@ -36,3 +36,23 @@ Each case sends `requestStatusChange({ status })` and then checks three things:
 **The not-testable entry.** I removed the R-1.20 entry from `tests/acceptance/not-testable.yaml`, so the criterion now has a test and no entry. I wrote no clause entry, because every clause the criterion states is asserted.
 
 Nothing is missing from the surface for this criterion, and nothing asked me to change paths this stage does not own.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether the R-1.20 test follows from the criterion and nothing else. It does, so I approve. The criterion says a request off the program's permitted path is refused and the opportunity's state is unchanged. Each of the five cases asserts both: requestAccepted reads false (and refusalStatus is not empty, which is how the contract says a refused request shows, without pinning a code), and storedStatus, read again after the request, equals the status beforehand (the seed's seeded_status, or for a fresh draft the status read just before the request). The cases are the criterion's own examples (awarded Code With Us and Sprint With Us asked back to PUBLISHED, cancelled Code With Us asked to PUBLISHED, Sprint With Us and Team With Us drafts asked straight to EVAL_CC and EVAL_C). They match the starting points the contract gives on the opportunity-status-request page. The status values are contract and seed vocabulary, not implementation detail. Leaving out a Code With Us draft case follows the contract's statement that the program has no operation leading to an evaluation stage. The writer flagged an assumption: the draft cases read stored_status before any request. That holds, because both adapters read it fresh from the opened opportunity whether or not a request has been sent. Removing the not-testable entry is right, since the page and seed.opportunities.cwuCancelled it asked for now exist and every clause is asserted, so no clause entry is owed. The runner's typecheck of the proposal checkout passed with no diagnostics. missing-test/R-1.20 stays open until the test runs, which a ruling cannot settle, and build-slice-9-3#6 is not touched by this proposal. A run showing the page unbound, or a new criterion version, would change this ruling.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `af6acad981b1f76bfbbbad69deca2a8b64b10b99`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/opportunities/`, which this proposal answers for.
+
+    No diagnostics.
