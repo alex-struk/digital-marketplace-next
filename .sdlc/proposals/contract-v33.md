@@ -43,3 +43,14 @@ Nothing else changed. Every other page, all the personas, `openapi.yaml`, `obser
 **Something the shell refused.** It would not expand `$SDLC_BIN` ("Contains simple_expansion"), so I ran the CLI by its absolute path, `~/GitHub/agentic-sdlc/bin/sdlc.mjs`. I also couldn't run a YAML parser over the edited file, because the command needed approval that no one was there to give. Both edits only added comment lines and a key that matches the neighbouring entries.
 
 re-address missing-test/R-1.33 to derive-tests: added observation `note_control_offered` on `opportunity-cwu-edit` and `opportunity-swu-edit`, read on the History tab as the administrator or as the author (`public-sector-staff`, author of `seed.opportunities.cwuWithPrivateNote` and `seed.opportunities.swuOpenWithSubmittedProposal`); true when any add-a-note control is offered.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:product-owner
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: is this the contract the tests will act through? Ruling: approve. The run adds a single observation, note_control_offered, to opportunity-cwu-edit and opportunity-swu-edit, read on the History tab as an administrator or the opportunity's author. That is exactly the gap the open missing-test/R-1.33 condition names: nothing in the contract could report whether a screen offers a way to add a note, which is the half of R-1.33 ('no screen of the application offers a way to add one') that its test could not assert. The definition is observable and implementation-neutral (true if any text entry, attach control or save button for a note is offered; false if the tab only lists history), so a blind test can read it without knowing how the page is built. The references hold against the repo: seed.opportunities.cwuWithPrivateNote exists and carries the R-1.33 attachment, swuOpenWithSubmittedProposal is owned by users.staffOne, and persona public-sector-staff signs in as users.staffOne on the oracle, so the reader the comments name can actually see the tab. The old front end contains no note-adding code (NOTE_ADDED appears only in shared resource types, the back end and a migration), so the expected oracle reading of false agrees with the criterion as recovered. The change is additive (two observation keys plus the matching generated accessors), touches no criterion, persona, seed or API surface, and leaves test_id null for the design gate in line with the other new observations. The YAML was not machine-parsed during the run, but the edited region is comments plus a key in the same shape as its neighbours. What would change the ruling: evidence that the History tab is not reachable at ?tab=history on the edit pages for these personas, or that the seeded opportunities are not authored by the account the comments name. The missing-test/R-1.33 condition stays open until the derived test runs, and this ruling does not withdraw it.
+
+**Conditions:**
+none
