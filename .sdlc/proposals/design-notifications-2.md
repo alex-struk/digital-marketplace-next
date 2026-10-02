@@ -52,3 +52,14 @@ Every declared state needs a story, so I wrote one for each at `design/catalogue
 The check did not mention test IDs, so I filled none in. The `test_id`s on these four entries in `spec/contract/surface.yaml` stay `null`, and the stories carry none. Gap 14 is still open: the contract stage should rule whether a test ID belongs on a mail-catcher entry at all.
 
 In `design/DESIGN.md` I rewrote the paragraph that said these entries had no screen and no story, and the matching sentence in gap 14, so both now describe the response-reference stories. I changed nothing else in the existing stories, the other entries or the test IDs.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:ux-reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: do the notifications screens serve their criteria and are they built from the design system? Approve. design/report.json is ok with typecheck and build passing and zero accessibility violations across every story. The screenshots I reviewed (each main page's default state, the opt-in subscribed state, the terms failure state, the sign-in-required state and caught-message) show content in the shared PageContainer, aligned with the banner width (x 90 to 1190 at 1280px), with an even large/medium/small token rhythm and no doubled margins. Components come from the design system (Heading, Text, Button, InlineAlert, Select, Checkbox, TextField, ProgressCircle). The project's own components (PageContainer, Stack, the card section and the email frame) are built from standard HTML and tokens and are named in DESIGN.md. The align="end" addition to Stack is additive and visibly correct on the filter row. The diff changes nothing under spec/, so no test ID was altered. The opt-in row always wraps, so R-6.27 holds at any width. The four mail-catcher entries get consistently laid-out reference stories; whether a test ID applies to them (gap 14) is the contract stage's question and not a design defect. What would change this: any accessibility violation, a change to a filled-in test ID, or a screen leaving the shared container.
+
+**Conditions:**
+none
