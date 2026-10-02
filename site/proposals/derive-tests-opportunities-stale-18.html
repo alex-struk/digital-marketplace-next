@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-opportunities-stale-18 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">486</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">480</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">404</span></a></li><li><a href="../runs.html">Run log <span class="count">20</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-opportunities-stale-18</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-02 16:34</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the opportunities criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I wrote one test file, <code>tests/acceptance/opportunities/R-1.20.spec.ts</code>, for R-1.20, the only criterion handed back this run.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I wrote one test file, <code>tests/acceptance/opportunities/R-1.20.spec.ts</code>, for R-1.20, the only criterion handed back this run. It has not been type-checked or run: the workspace refused approval to run <code>tsc</code>, and there is no target here to run it against.</p>
+<p><strong>What the test does.</strong> The contract stage added the page <code>opportunity-status-request</code> and the seeded record <code>seed.opportunities.cwuCancelled</code>, which is what the old entry asked for. With them, the whole criterion can now be reached through the surface. Its one given/when/then is a single <code>describe</code> titled with the criterion&#39;s statement. Inside it there is one test for each example the criterion gives, and each test title also carries the statement. Every request is made as <code>persona.administrator</code>, who may make every change on the permitted path, so a refusal is about the path and not about who asked. The five cases are:</p>
+<ul><li><code>seed.opportunities.cwuAwarded</code> asked to go back to PUBLISHED.</li><li><code>seed.opportunities.swuAwarded</code> asked to go back to PUBLISHED.</li><li><code>seed.opportunities.cwuCancelled</code> asked to go to PUBLISHED.</li><li>A new Sprint With Us draft, saved through <code>opportunitySwuCreate</code>, asked to go straight to EVAL_CC (the code challenge).</li><li>A new Team With Us draft, saved through <code>opportunityTwuCreate</code>, asked to go straight to EVAL_C (the challenge).</li></ul>
+<p>Each draft&#39;s identifier is read with <code>opportunityIdentifier()</code> on its edit page. I left out a Code With Us draft case because the contract says that program has no operation leading to an evaluation stage at all.</p>
+<p>Each case sends <code>requestStatusChange({ status })</code> and then checks three things:</p>
+<ul><li><code>requestAccepted</code> reads as not accepted.</li><li><code>refusalStatus</code> is not empty.</li><li><code>storedStatus</code> still equals the status before the request: the seed&#39;s <code>seeded_status</code> for the seeded records, or, for a draft, a <code>storedStatus</code> read just before the request.</li></ul>
+<p><strong>One assumption to watch.</strong> The contract describes <code>stored_status</code> as read afresh after the request. The draft cases also read it before the request, which the contract neither promises nor rules out. If an adapter only answers it after a request, those two cases will fail for that reason rather than because of the criterion.</p>
+<p><strong>The not-testable entry.</strong> I removed the R-1.20 entry from <code>tests/acceptance/not-testable.yaml</code>, so the criterion now has a test and no entry. I wrote no clause entry, because every clause the criterion states is asserted.</p>
+<p>Nothing is missing from the surface for this criterion, and nothing asked me to change paths this stage does not own.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-02 16:35.</p>
+<div class="body"><p>The question is whether the R-1.20 test follows from the criterion and nothing else. It does, so I approve. The criterion says a request off the program&#39;s permitted path is refused and the opportunity&#39;s state is unchanged. Each of the five cases asserts both: requestAccepted reads false (and refusalStatus is not empty, which is how the contract says a refused request shows, without pinning a code), and storedStatus, read again after the request, equals the status beforehand (the seed&#39;s seeded_status, or for a fresh draft the status read just before the request). The cases are the criterion&#39;s own examples (awarded Code With Us and Sprint With Us asked back to PUBLISHED, cancelled Code With Us asked to PUBLISHED, Sprint With Us and Team With Us drafts asked straight to EVAL_CC and EVAL_C). They match the starting points the contract gives on the opportunity-status-request page. The status values are contract and seed vocabulary, not implementation detail. Leaving out a Code With Us draft case follows the contract&#39;s statement that the program has no operation leading to an evaluation stage. The writer flagged an assumption: the draft cases read stored_status before any request. That holds, because both adapters read it fresh from the opened opportunity whether or not a request has been sent. Removing the not-testable entry is right, since the page and seed.opportunities.cwuCancelled it asked for now exist and every clause is asserted, so no clause entry is owed. The runner&#39;s typecheck of the proposal checkout passed with no diagnostics. missing-test/R-1.20 stays open until the test runs, which a ruling cannot settle, and build-slice-9-3#6 is not touched by this proposal. A run showing the page unbound, or a new criterion version, would change this ruling.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
