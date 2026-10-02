@@ -35,7 +35,7 @@ import {
 } from "../api/accounts";
 import { fileAddress, uploadPicture } from "../api/files";
 import { ImagePicker, PictureRejection, checkChosenPicture } from "../app/image-picker";
-import { page, stack } from "../app/layout";
+import { Stack } from "../app/page-layout";
 import { Loading } from "../app/loading";
 import { NotFound } from "../app/not-found";
 import { RequireSignIn } from "../app/require-sign-in";
@@ -88,15 +88,6 @@ const STATUS_LABELS: Record<Account["status"], string> = {
   INACTIVE_ADMIN: "Inactive",
 };
 
-const tabs = {
-  display: "flex",
-  flexWrap: "wrap",
-  gap: "var(--layout-margin-large)",
-  listStyle: "none",
-  margin: "var(--layout-margin-none)",
-  padding: "var(--layout-padding-none)",
-} as const;
-
 const badge = {
   display: "inline-block",
   paddingInline: "var(--layout-padding-small)",
@@ -104,22 +95,13 @@ const badge = {
   borderRadius: "var(--layout-border-radius-circular)",
 } as const;
 
+// Keeps a picture inside its column. Not spacing.
 const image = { maxWidth: "100%", height: "auto" } as const;
 
-const list = {
-  display: "grid",
-  gap: "var(--layout-margin-medium)",
-  listStyle: "none",
-  margin: "var(--layout-margin-none)",
-  padding: "var(--layout-padding-none)",
-} as const;
-
+// A capability row's rule and inner padding are its own; its content is laid out by the stack.
 const capabilityItem = {
-  display: "grid",
-  gap: "var(--layout-margin-small)",
-  padding: "var(--layout-padding-small)",
-  border: "var(--layout-border-width-small) solid var(--surface-color-border-default)",
-  borderRadius: "var(--layout-border-radius-medium)",
+  paddingBlock: "var(--layout-padding-small)",
+  borderBottom: "var(--layout-border-width-small) solid var(--surface-color-border-default)",
 } as const;
 
 /** `/users/me`, and `/users/:userId`. */
@@ -170,10 +152,10 @@ function SomebodyElsesProfile({ viewer, userId }: { viewer: Account; userId: str
   if (answer === "refused") return <NotFound />;
   if (answer === "loading") {
     return (
-      <div style={page}>
+      <Stack gap="large">
         <Heading level={1}>User Profile</Heading>
         <Loading label="Loading profile…" />
-      </div>
+      </Stack>
     );
   }
   return <AdministratorsView account={answer} />;
@@ -185,19 +167,19 @@ function AdministratorsView({ account: read }: { account: Account }) {
   const [account, setAccount] = useState(read);
   useEffect(() => setAccount(read), [read]);
   return (
-    <div style={page}>
+    <Stack gap="large">
       <Heading level={1}>User Profile</Heading>
       <AccountFacts account={account} />
-      <section aria-labelledby="details-heading" style={stack}>
+      <Stack as="section" gap="medium" aria-labelledby="details-heading">
         <Heading level={2} id="details-heading">
           Details
         </Heading>
         <StoredPicture account={account} whose="their" />
         <ReadOnlyDetails account={account} />
-      </section>
+      </Stack>
       <AdministratorRights account={account} onSaved={setAccount} />
       <AccountStatusControls account={account} onSaved={setAccount} />
-    </div>
+    </Stack>
   );
 }
 
@@ -238,29 +220,31 @@ function AdministratorRights({ account, onSaved }: { account: Account; onSaved: 
   }
 
   return (
-    <section aria-labelledby="permissions-heading" style={stack}>
+    <Stack as="section" gap="medium" aria-labelledby="permissions-heading">
       <Heading level={2} id="permissions-heading">
         Permissions
       </Heading>
-      <Text id="admin-hint" elementType="p" size="small" color="secondary">
-        The change takes effect as soon as you tick or untick the box.
-      </Text>
-      <Checkbox
-        isSelected={on}
-        isDisabled={saving}
-        onChange={(value) => void save(value)}
-        aria-describedby={refusal ? "admin-hint admin-refused" : "admin-hint"}
-        data-testid="profile-admin-checkbox"
-      >
-        Administrator
-      </Checkbox>
-      {refusal ? (
-        <div id="admin-refused">
-          <InlineAlert variant="danger" role="alert" title={refusal} />
-        </div>
-      ) : null}
+      <Stack gap="small">
+        <Checkbox
+          isSelected={on}
+          isDisabled={saving}
+          onChange={(value) => void save(value)}
+          aria-describedby={refusal ? "admin-hint admin-refused" : "admin-hint"}
+          data-testid="profile-admin-checkbox"
+        >
+          Administrator
+        </Checkbox>
+        <Text id="admin-hint" elementType="p" size="small" color="secondary">
+          The change takes effect as soon as you tick or untick the box.
+        </Text>
+        {refusal ? (
+          <div id="admin-refused">
+            <InlineAlert variant="danger" role="alert" title={refusal} />
+          </div>
+        ) : null}
+      </Stack>
       <div role="status">{status ? <Text elementType="p">{status}</Text> : null}</div>
-    </section>
+    </Stack>
   );
 }
 
@@ -311,7 +295,7 @@ function AccountStatusControls({ account, onSaved }: { account: Account; onSaved
   }
 
   return (
-    <section aria-labelledby="status-heading" style={stack}>
+    <Stack as="section" gap="medium" aria-labelledby="status-heading">
       <Heading level={2} id="status-heading">
         Account status
       </Heading>
@@ -377,7 +361,7 @@ function AccountStatusControls({ account, onSaved }: { account: Account; onSaved
           </Text>
         </AlertDialog>
       </Modal>
-    </section>
+    </Stack>
   );
 }
 
@@ -399,10 +383,10 @@ function OwnProfile({
   // question asked, whatever section was named (R-6.6, R-4.29).
   const section = unsubscribe && offered.includes("notifications") ? "notifications" : profileSectionShown(offered, asked);
   return (
-    <div style={page}>
+    <Stack gap="large">
       <Heading level={1}>{HEADINGS[section]}</Heading>
       <nav aria-label="Profile sections">
-        <ul style={tabs}>
+        <Stack as="ul" direction="row" gap="medium">
           {offered.map((name) => (
             <li key={name}>
               <Link
@@ -414,7 +398,7 @@ function OwnProfile({
               </Link>
             </li>
           ))}
-        </ul>
+        </Stack>
       </nav>
       {section === "capabilities" ? (
         <CapabilitiesSection account={account} />
@@ -427,7 +411,7 @@ function OwnProfile({
       ) : (
         <ProfileSectionOwn account={account} />
       )}
-    </div>
+    </Stack>
   );
 }
 
@@ -442,7 +426,7 @@ function AccountFacts({ account }: { account: Account }) {
     account.email,
   ].filter((part): part is string => Boolean(part));
   return (
-    <div style={stack}>
+    <Stack gap="medium">
       {whose.length > 0 ? (
         <Text elementType="p">
           <strong>{whose[0]}</strong>
@@ -461,7 +445,7 @@ function AccountFacts({ account }: { account: Account }) {
       <Text elementType="p" size="small" color="secondary">
         Account ID: <span data-testid="profile-user-identifier">{account.id}</span>
       </Text>
-    </div>
+    </Stack>
   );
 }
 
@@ -515,7 +499,7 @@ function ProfileSectionOwn({ account }: { account: Account }) {
           }}
         />
       ) : (
-        <section aria-labelledby="details-heading" style={stack}>
+        <Stack as="section" gap="medium" aria-labelledby="details-heading">
           <Heading level={2} id="details-heading">
             Details
           </Heading>
@@ -533,11 +517,11 @@ function ProfileSectionOwn({ account }: { account: Account }) {
               Edit profile
             </Button>
           </div>
-        </section>
+        </Stack>
       )}
       <div role="status">{saved ? <Text elementType="p">Your profile has been saved.</Text> : null}</div>
       {isPublicSector(account.type) ? (
-        <section aria-labelledby="permissions-heading" style={stack}>
+        <Stack as="section" gap="medium" aria-labelledby="permissions-heading">
           <Heading level={2} id="permissions-heading">
             Permissions
           </Heading>
@@ -546,7 +530,7 @@ function ProfileSectionOwn({ account }: { account: Account }) {
               ? "You have administrator permissions."
               : "You do not have administrator permissions."}
           </Text>
-        </section>
+        </Stack>
       ) : null}
       {offersOwnDeactivation(account.type) ? <DeactivateOwnAccount account={account} /> : null}
     </>
@@ -693,62 +677,64 @@ function ProfileForm({ account, onDone }: { account: Account; onDone: (saved: bo
           </InlineAlert>
         </div>
       ) : null}
-      <Form validationBehavior="aria" style={stack} onSubmit={save}>
-        <Heading level={2}>Edit your details</Heading>
-        <ImagePicker
-          storedFileId={account.avatarImageFile}
-          chosen={chosen}
-          rejection={rejection}
-          rejectionFocus={rejectionFocus}
-          onChoose={choose}
-        />
-        <TextField
-          label="Sign-in username"
-          value={account.idpUsername}
-          isReadOnly
-          description="This cannot be changed."
-          data-testid="idp-username-field"
-        />
-        <TextField
-          id="profile-name"
-          label="Name"
-          value={name}
-          onChange={setName}
-          isRequired
-          isInvalid={Boolean(errors.name)}
-          errorMessage={errors.name}
-          data-testid="name-field"
-        />
-        <TextField
-          id="profile-email"
-          label="Email address"
-          type="email"
-          value={email}
-          onChange={setEmail}
-          isRequired
-          isInvalid={Boolean(errors.email)}
-          errorMessage={errors.email}
-          data-testid="email-field"
-        />
-        {asksJobTitle ? (
-          <TextField
-            id="profile-job-title"
-            label="Job title (optional)"
-            value={jobTitle}
-            onChange={setJobTitle}
-            isInvalid={Boolean(errors.jobTitle)}
-            errorMessage={errors.jobTitle}
-            data-testid="job-title-field"
+      <Form validationBehavior="aria" onSubmit={save}>
+        <Stack gap="medium">
+          <Heading level={2}>Edit your details</Heading>
+          <ImagePicker
+            storedFileId={account.avatarImageFile}
+            chosen={chosen}
+            rejection={rejection}
+            rejectionFocus={rejectionFocus}
+            onChoose={choose}
           />
-        ) : null}
-        <ButtonGroup ariaLabel="Profile actions">
-          <Button type="submit" variant="primary" isDisabled={saving} data-testid="profile-save-button">
-            Save changes
-          </Button>
-          <Button variant="secondary" onPress={() => onDone(false)} data-testid="profile-cancel-button">
-            Cancel
-          </Button>
-        </ButtonGroup>
+          <TextField
+            label="Sign-in username"
+            value={account.idpUsername}
+            isReadOnly
+            description="This cannot be changed."
+            data-testid="idp-username-field"
+          />
+          <TextField
+            id="profile-name"
+            label="Name"
+            value={name}
+            onChange={setName}
+            isRequired
+            isInvalid={Boolean(errors.name)}
+            errorMessage={errors.name}
+            data-testid="name-field"
+          />
+          <TextField
+            id="profile-email"
+            label="Email address"
+            type="email"
+            value={email}
+            onChange={setEmail}
+            isRequired
+            isInvalid={Boolean(errors.email)}
+            errorMessage={errors.email}
+            data-testid="email-field"
+          />
+          {asksJobTitle ? (
+            <TextField
+              id="profile-job-title"
+              label="Job title (optional)"
+              value={jobTitle}
+              onChange={setJobTitle}
+              isInvalid={Boolean(errors.jobTitle)}
+              errorMessage={errors.jobTitle}
+              data-testid="job-title-field"
+            />
+          ) : null}
+          <ButtonGroup ariaLabel="Profile actions">
+            <Button type="submit" variant="primary" isDisabled={saving} data-testid="profile-save-button">
+              Save changes
+            </Button>
+            <Button variant="secondary" onPress={() => onDone(false)} data-testid="profile-cancel-button">
+              Cancel
+            </Button>
+          </ButtonGroup>
+        </Stack>
       </Form>
     </>
   );
@@ -781,7 +767,7 @@ function DeactivateOwnAccount({ account }: { account: Account }) {
   }
 
   return (
-    <section aria-labelledby="status-heading" style={stack}>
+    <Stack as="section" gap="medium" aria-labelledby="status-heading">
       <Heading level={2} id="status-heading">
         Deactivate your account
       </Heading>
@@ -832,7 +818,7 @@ function DeactivateOwnAccount({ account }: { account: Account }) {
           </Text>
         </AlertDialog>
       </Modal>
-    </section>
+    </Stack>
   );
 }
 
@@ -876,56 +862,58 @@ function CapabilitiesSection({ account }: { account: Account }) {
       <Text elementType="p">
         Tick each capability you have. Your choices are saved as you make them, and you may leave them all unticked.
       </Text>
-      <ul style={list} aria-label="Capabilities">
+      <Stack as="ul" gap="medium" aria-label="Capabilities">
         {CAPABILITIES.map((capability, index) => {
           const isExpanded = expanded.includes(capability.name);
           const descriptionId = `capability-${index}-description`;
           return (
             <li key={capability.name} style={capabilityItem} data-testid="capability-row">
-              <Checkbox
-                isSelected={held.includes(capability.name)}
-                onChange={(on) => void toggle(capability.name, on)}
-                data-testid="capability-checkbox"
-              >
-                {capability.name}
-              </Checkbox>
-              <div>
-                <Button
-                  variant="tertiary"
-                  size="small"
-                  aria-expanded={isExpanded}
-                  aria-controls={descriptionId}
-                  onPress={() =>
-                    setExpanded(
-                      isExpanded
-                        ? expanded.filter((entry) => entry !== capability.name)
-                        : [...expanded, capability.name],
-                    )
-                  }
-                  data-testid="capability-description-toggle"
+              <Stack gap="small">
+                <Checkbox
+                  isSelected={held.includes(capability.name)}
+                  onChange={(on) => void toggle(capability.name, on)}
+                  data-testid="capability-checkbox"
                 >
-                  {isExpanded ? `Hide description of ${capability.name}` : `Show description of ${capability.name}`}
-                </Button>
-              </div>
-              <div id={descriptionId} hidden={!isExpanded}>
-                {isExpanded ? (
-                  <Text elementType="p" size="small" color="secondary" data-testid="capability-description">
-                    {capability.description}
-                  </Text>
+                  {capability.name}
+                </Checkbox>
+                <div>
+                  <Button
+                    variant="tertiary"
+                    size="small"
+                    aria-expanded={isExpanded}
+                    aria-controls={descriptionId}
+                    onPress={() =>
+                      setExpanded(
+                        isExpanded
+                          ? expanded.filter((entry) => entry !== capability.name)
+                          : [...expanded, capability.name],
+                      )
+                    }
+                    data-testid="capability-description-toggle"
+                  >
+                    {isExpanded ? `Hide description of ${capability.name}` : `Show description of ${capability.name}`}
+                  </Button>
+                </div>
+                <div id={descriptionId} hidden={!isExpanded}>
+                  {isExpanded ? (
+                    <Text elementType="p" size="small" color="secondary" data-testid="capability-description">
+                      {capability.description}
+                    </Text>
+                  ) : null}
+                </div>
+                {refused === capability.name ? (
+                  <InlineAlert
+                    variant="danger"
+                    role="alert"
+                    title="That change could not be saved"
+                    description={`${capability.name} is as it was. Please try again.`}
+                  />
                 ) : null}
-              </div>
-              {refused === capability.name ? (
-                <InlineAlert
-                  variant="danger"
-                  role="alert"
-                  title="That change could not be saved"
-                  description={`${capability.name} is as it was. Please try again.`}
-                />
-              ) : null}
+              </Stack>
             </li>
           );
         })}
-      </ul>
+      </Stack>
       <div role="status">{status ? <Text elementType="p">{status}</Text> : null}</div>
     </>
   );
@@ -1116,7 +1104,7 @@ function LegalSection({ account: held }: { account: Account }) {
 
   return (
     <>
-      <section aria-labelledby="privacy-heading" style={stack} data-testid="legal-privacy-policy">
+      <Stack as="section" gap="medium" aria-labelledby="privacy-heading" data-testid="legal-privacy-policy">
         <Heading level={2} id="privacy-heading">
           Privacy policy
         </Heading>
@@ -1126,8 +1114,8 @@ function LegalSection({ account: held }: { account: Account }) {
           <Link href="/content/privacy">Read the Digital Marketplace privacy policy</Link>.
         </Text>
         <Text elementType="p">You agreed to this policy when your account was created.</Text>
-      </section>
-      <section aria-labelledby="terms-heading" style={stack}>
+      </Stack>
+      <Stack as="section" gap="medium" aria-labelledby="terms-heading">
         <Heading level={2} id="terms-heading">
           Terms and conditions
         </Heading>
@@ -1188,12 +1176,12 @@ function LegalSection({ account: held }: { account: Account }) {
             "You have not agreed to the terms and conditions."
           )}
         </Text>
-      </section>
-      <section aria-labelledby="program-terms-heading" style={stack}>
+      </Stack>
+      <Stack as="section" gap="medium" aria-labelledby="program-terms-heading">
         <Heading level={2} id="program-terms-heading">
           Program terms
         </Heading>
-        <ul style={{ ...stack, margin: "var(--layout-margin-none)" }}>
+        <ul>
           <li>
             <Link href="/content/code-with-us-terms-and-conditions" data-testid="legal-program-terms-link">
               Code With Us terms and conditions
@@ -1210,7 +1198,7 @@ function LegalSection({ account: held }: { account: Account }) {
             </Link>
           </li>
         </ul>
-      </section>
+      </Stack>
       <Modal isOpen={asking} isDismissable onOpenChange={(open) => (saving ? undefined : setAsking(open))}>
         <AlertDialog
           variant="confirmation"

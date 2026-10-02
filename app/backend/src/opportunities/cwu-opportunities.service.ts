@@ -4,8 +4,10 @@ import {
   Injectable,
   Logger,
   NotFoundException,
+  Optional,
   UnauthorizedException,
 } from "@nestjs/common";
+import { WatchingService } from "../watching/watching.service";
 import { MAIL_SETTINGS, Mailer } from "../mail/mailer";
 import { Envelope, blindCopiedBatches } from "../mail/message";
 import {
@@ -103,14 +105,15 @@ export class CwuOpportunitiesService {
     private readonly mailer: Mailer,
     @Inject(MAIL_SETTINGS) private readonly mail: Pick<MailSettings, "serviceOrigin" | "batchSize">,
     @Inject(CLOCK) private readonly clock: Clock,
+    @Optional() private readonly watching?: WatchingService,
   ) {}
 
-  /** Every opportunity the person may read (R-1.2, R-1.3). */
+  /** Every opportunity the person may read (R-1.2, R-1.3), with whether they watch each (R-1.5). */
   async list(viewer: OpportunityViewer | null): Promise<CwuOpportunityAnswer[]> {
-    const all = await this.store.list();
+    const [all, watched] = await Promise.all([this.store.list(), this.watchedBy(viewer)]);
     return all
       .filter((opportunity) => mayReadOpportunity(viewer, standingOf(opportunity)))
-      .map((opportunity) => answerFor(opportunity, viewer));
+      .map((opportunity) => answerFor(opportunity, viewer, watched.has(opportunity.id)));
   }
 
   /**
@@ -118,7 +121,7 @@ export class CwuOpportunitiesService {
    * that does not exist (R-1.2).
    */
   async read(viewer: OpportunityViewer | null, id: string): Promise<CwuOpportunityAnswer> {
-    return answerFor(await this.readable(viewer, id), viewer);
+    return this.answer(await this.readable(viewer, id), viewer);
   }
 
   /** A new opportunity, as a draft, under review or published (R-1.7, R-1.48). */
@@ -138,7 +141,7 @@ export class CwuOpportunitiesService {
     const created = await this.mustFind(id);
     if (status === "UNDER_REVIEW") this.tellOfReview(created);
     if (status === "PUBLISHED") this.tellOfPublication(created);
-    return answerFor(created, viewer);
+    return this.answer(created, viewer);
   }
 
   /** One tagged change: an edit, a submission for review, or publication. */
@@ -157,7 +160,7 @@ export class CwuOpportunitiesService {
       default:
         throw new BadRequestException([ACTION_NOT_AVAILABLE]);
     }
-    return answerFor(await this.mustFind(id), viewer);
+    return this.answer(await this.mustFind(id), viewer);
   }
 
   /** Deletes a draft, or an opportunity under review, for those permitted (R-1.53). */
@@ -166,6 +169,14 @@ export class CwuOpportunitiesService {
     if (!mayDeleteOpportunity(viewer, standingOf(current))) throw new UnauthorizedException(NOT_PERMITTED_TO_DELETE);
     await this.store.remove(id);
     return answerFor(current, viewer);
+  }
+
+  private async answer(opportunity: StoredCwuOpportunity, viewer: OpportunityViewer | null): Promise<CwuOpportunityAnswer> {
+    return answerFor(opportunity, viewer, (await this.watchedBy(viewer)).has(opportunity.id));
+  }
+
+  private async watchedBy(viewer: OpportunityViewer | null): Promise<ReadonlySet<string>> {
+    return this.watching ? this.watching.watchedBy(viewer, "code-with-us") : new Set();
   }
 
   // ---------------------------------------------------------------------- the changes
@@ -322,7 +333,11 @@ export function mergedInput(content: CwuContent, value: unknown): CwuInput {
  * named only to an administrator and to those people (R-1.29); the history only to the author and
  * administrators (R-1.30).
  */
-export function answerFor(opportunity: StoredCwuOpportunity, viewer: OpportunityViewer | null): CwuOpportunityAnswer {
+export function answerFor(
+  opportunity: StoredCwuOpportunity,
+  viewer: OpportunityViewer | null,
+  subscribed = false,
+): CwuOpportunityAnswer {
   const { content } = opportunity;
   const authorship = maySeeAuthorship(viewer, {
     createdBy: opportunity.createdBy?.id ?? null,
@@ -354,6 +369,7 @@ export function answerFor(opportunity: StoredCwuOpportunity, viewer: Opportunity
     evaluationCriteria: content.evaluationCriteria,
     attachments: opportunity.attachments,
     addenda: [],
+    subscribed,
     ...(manages
       ? {
           history: opportunity.history.map((entry) => ({

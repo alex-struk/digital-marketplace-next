@@ -3,8 +3,8 @@ import { Heading } from "@bcgov/design-system-react-components";
 import { mayCreateOpportunity } from "@rules/opportunities";
 import type { Account } from "../api/accounts";
 import { useSession } from "../auth/session";
-import { page } from "./layout";
-import { Loading } from "./loading";
+import { Stack } from "./page-layout";
+import { Loading, useLoadingShown } from "./loading";
 import { NotFound } from "./not-found";
 
 /**
@@ -22,12 +22,16 @@ export function StaffOnly({
   children: (account: Account) => ReactNode;
 }) {
   const session = useSession();
+  // Nothing is drawn until it is known who is asking, unless that takes long enough to say so
+  // (decision record 0039).
+  const loadingShown = useLoadingShown(session.status === "starting");
   if (session.status === "starting") {
+    if (!loadingShown) return null;
     return (
-      <div style={page}>
+      <Stack gap="large">
         <Heading level={1}>{title}</Heading>
         <Loading label={loadingLabel} />
-      </div>
+      </Stack>
     );
   }
   if (session.status === "signed-in" && mayCreateOpportunity(session.account)) return <>{children(session.account)}</>;

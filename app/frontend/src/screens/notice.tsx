@@ -1,6 +1,6 @@
 import { Heading, Link, Text } from "@bcgov/design-system-react-components";
 import { NotFound } from "../app/not-found";
-import { page, row, stack } from "../app/layout";
+import { Stack } from "../app/page-layout";
 import { useScreenTitle } from "../app/screen-title";
 
 /** The notices the service defines; any other name is not found (surface.yaml, user-notice). */
@@ -24,39 +24,39 @@ export function NoticeScreen({ noticeId }: { noticeId: string }) {
 function SignInFailed() {
   useScreenTitle("Sign in failed");
   return (
-    <div style={page}>
-      <div style={stack} data-testid="notice-sign-in-failed">
+    <Stack gap="large">
+      <Stack gap="medium" data-testid="notice-sign-in-failed">
         <Heading level={1}>Sign in failed</Heading>
         <Text elementType="p">We could not sign you in. Please try again.</Text>
-      </div>
-      <div style={row}>
+      </Stack>
+      <Stack direction="row" gap="medium">
         <Link href="/sign-in" isButton buttonVariant="primary">
           Try signing in again
         </Link>
         <Link href="/" isButton buttonVariant="secondary" data-testid="notice-back-to-home">
           Back to home
         </Link>
-      </div>
-    </div>
+      </Stack>
+    </Stack>
   );
 }
 
 function DeactivatedOwnAccount() {
   useScreenTitle("Your account has been deactivated");
   return (
-    <div style={page}>
-      <div style={stack} data-testid="notice-deactivated-own-account">
+    <Stack gap="large">
+      <Stack gap="medium" data-testid="notice-deactivated-own-account">
         <Heading level={1}>Your account has been deactivated</Heading>
         <Text elementType="p">
           You have deactivated your Digital Marketplace account and have been signed out.
         </Text>
         <Text elementType="p">You can reactivate your account at any time by signing in again.</Text>
-      </div>
+      </Stack>
       <div>
         <Link href="/" isButton buttonVariant="primary" data-testid="notice-back-to-home">
           Back to home
         </Link>
       </div>
-    </div>
+    </Stack>
   );
 }

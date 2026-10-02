@@ -4,9 +4,9 @@ import { useRouterState } from "@tanstack/react-router";
 import { comparePagesByTitle } from "@rules/content";
 import { Page, fetchPageList } from "../api/content";
 import { AdministratorsOnly } from "../app/administrators-only";
-import { page as pageLayout } from "../app/layout";
 import { Loading } from "../app/loading";
 import { NotFound } from "../app/not-found";
+import { Stack } from "../app/page-layout";
 import { useScreenTitle } from "../app/screen-title";
 import { TitledAlert } from "../app/titled-alert";
 import { readDate } from "../lib/dates";
@@ -26,14 +26,6 @@ export function ContentListScreen() {
     </AdministratorsOnly>
   );
 }
-
-const toolbar = {
-  display: "flex",
-  flexWrap: "wrap",
-  alignItems: "center",
-  justifyContent: "space-between",
-  gap: "var(--layout-margin-medium)",
-} as const;
 
 const cell = {
   textAlign: "start",
@@ -75,13 +67,13 @@ function ContentList() {
 
   if (answer === "refused") return <NotFound />;
   return (
-    <div style={pageLayout}>
-      <div style={toolbar}>
+    <Stack gap="large">
+      <Stack direction="row" align="center" justify="space-between" gap="medium">
         <Heading level={1}>Content Management</Heading>
         <Link href="/content/create" isButton buttonVariant="primary" data-testid="content-create-link">
           Create page
         </Link>
-      </div>
+      </Stack>
       {removed?.kind === "removed" ? <RemovedPageNotice title={removed.title} slug={removed.slug} /> : null}
       {answer === "loading" ? (
         <Loading label="Loading pages…" />
@@ -150,6 +142,6 @@ function ContentList() {
           </div>
         </>
       )}
-    </div>
+    </Stack>
   );
 }

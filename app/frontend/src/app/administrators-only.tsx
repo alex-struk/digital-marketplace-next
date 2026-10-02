@@ -3,7 +3,7 @@ import { Heading } from "@bcgov/design-system-react-components";
 import { mayManagePages } from "@rules/content";
 import type { Account } from "../api/accounts";
 import { useSession } from "../auth/session";
-import { page } from "./layout";
+import { Stack } from "./page-layout";
 import { Loading } from "./loading";
 import { NotFound } from "./not-found";
 
@@ -24,10 +24,10 @@ export function AdministratorsOnly({
   const session = useSession();
   if (session.status === "starting") {
     return (
-      <div style={page}>
+      <Stack gap="large">
         <Heading level={1}>{title}</Heading>
         <Loading label={loadingLabel} />
-      </div>
+      </Stack>
     );
   }
   if (session.status === "signed-in" && mayManagePages(session.account)) {

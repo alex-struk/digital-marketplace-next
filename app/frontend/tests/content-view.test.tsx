@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { PublishedPage } from "../src/screens/content-view";
-import { answerFor, readPage } from "../src/api/content";
+import { answerFor, fetchPage, readPage } from "../src/api/content";
 import { NotFound } from "../src/app/not-found";
 
 const privacy = {
@@ -105,5 +105,46 @@ describe("an address that does not answer (R-7.2, R-7.3)", () => {
 
   it("reads a page the service answered with", () => {
     expect(answerFor(200, privacy)).toEqual({ kind: "found", page: privacy });
+  });
+});
+
+describe("a page the service could not answer for at once (decision record 0039)", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("is asked for again after a fault, rather than shown as not found", async () => {
+    let faults = 1;
+    const fetch = vi.fn(async () => {
+      if (faults > 0) {
+        faults -= 1;
+        return new Response(JSON.stringify({ errors: ["The service is unavailable."] }), { status: 503 });
+      }
+      return new Response(JSON.stringify(privacy), { status: 200, headers: { "content-type": "application/json" } });
+    });
+    vi.stubGlobal("fetch", fetch);
+
+    expect(await fetchPage("privacy", [0])).toEqual({ kind: "found", page: privacy });
+    expect(fetch).toHaveBeenCalledTimes(2);
+  });
+
+  it("takes the service's own refusal as it is, without asking again", async () => {
+    const fetch = vi.fn(
+      async () => new Response(JSON.stringify({ errors: ["No page is held at that address."] }), { status: 404 }),
+    );
+    vi.stubGlobal("fetch", fetch);
+
+    expect(await fetchPage("nowhere", [0])).toEqual({ kind: "missing" });
+    expect(fetch).toHaveBeenCalledTimes(1);
+  });
+
+  it("is not found once every attempt has gone unanswered", async () => {
+    const fetch = vi.fn(async () => {
+      throw new TypeError("Failed to fetch");
+    });
+    vi.stubGlobal("fetch", fetch);
+
+    expect(await fetchPage("privacy", [0, 0])).toEqual({ kind: "missing" });
+    expect(fetch).toHaveBeenCalledTimes(3);
   });
 });

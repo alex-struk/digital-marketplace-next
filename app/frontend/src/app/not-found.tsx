@@ -1,5 +1,5 @@
 import { Heading, Link, Text } from "@bcgov/design-system-react-components";
-import { page } from "./layout";
+import { Stack } from "./page-layout";
 import { useScreenTitle } from "./screen-title";
 
 /**
@@ -12,7 +12,7 @@ import { useScreenTitle } from "./screen-title";
 export function NotFound() {
   useScreenTitle("Page not found");
   return (
-    <div style={page} data-testid="not-found-page">
+    <Stack gap="large" data-testid="not-found-page">
       <Heading level={1}>Page not found</Heading>
       <Text elementType="p">The page you are looking for does not exist.</Text>
       <div>
@@ -20,6 +20,6 @@ export function NotFound() {
           Back to home
         </Link>
       </div>
-    </div>
+    </Stack>
   );
 }

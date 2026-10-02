@@ -18,6 +18,24 @@ export interface Refusal {
   readonly errors: readonly string[];
 }
 
+/**
+ * A refusal filed under a named reason rather than under `errors`, for the few routes whose
+ * refusals the contract names that way: watching an opportunity answers `{ "conflict": [...] }`
+ * for a second watch, `{ "opportunity": [...] }` for one's own, `{ "notFound": [...] }` and
+ * `{ "permissions": [...] }` (spec/contract/surface.yaml, opportunity-watch-request).
+ */
+export class NamedRefusal extends HttpException {
+  constructor(
+    status: number,
+    readonly reason: string,
+    readonly messages: readonly string[],
+  ) {
+    super({ [reason]: messages }, status);
+  }
+}
+
+export type RefusalBody = Refusal | Readonly<Record<string, readonly string[]>>;
+
 interface ValidationLikeError {
   status?: number;
   statusCode?: number;
@@ -27,8 +45,11 @@ interface ValidationLikeError {
 
 export function refusalFor(exception: unknown): {
   status: number;
-  body: Refusal;
+  body: RefusalBody;
 } {
+  if (exception instanceof NamedRefusal) {
+    return { status: exception.getStatus(), body: { [exception.reason]: [...exception.messages] } };
+  }
   if (exception instanceof HttpException) {
     const status = exception.getStatus();
     const response = exception.getResponse();

@@ -1,6 +1,7 @@
 import { Heading, Link, Text } from "@bcgov/design-system-react-components";
 import { PROGRAM_NAMES, Program } from "@rules/opportunities";
-import { page, panel } from "../app/layout";
+import { card } from "../app/layout";
+import { Stack } from "../app/page-layout";
 import { useScreenTitle } from "../app/screen-title";
 import { StaffOnly } from "../app/staff-only";
 
@@ -8,6 +9,9 @@ import { StaffOnly } from "../app/staff-only";
  * Create an opportunity, at `/opportunities/create` (opportunity-program-select). Public sector
  * staff and administrators choose the program the opportunity belongs to, which cannot be changed
  * afterwards (R-1.8); anybody else is shown the missing page (R-1.7).
+ *
+ * Each card offers the service level agreement beside the program's budget, with the same test id
+ * as the learn-more screens (R-7.18).
  */
 
 const PROGRAMS: readonly { slug: Program; description: string; maxBudget: string }[] = [
@@ -35,32 +39,41 @@ export function OpportunityProgramSelectScreen() {
 
 function ProgramSelect() {
   return (
-    <div style={page}>
+    <Stack gap="large">
       <Heading level={1}>Create an opportunity</Heading>
       <Text elementType="p">
         Choose the program the opportunity belongs to. The program cannot be changed once the opportunity is created.
       </Text>
       {PROGRAMS.map((program) => (
-        <section key={program.slug} aria-labelledby={`program-${program.slug}`} style={panel} data-testid="program-card">
-          <Heading level={2} id={`program-${program.slug}`}>
-            {PROGRAM_NAMES[program.slug]}
-          </Heading>
-          <Text elementType="p">{program.description}</Text>
-          <Text elementType="p">
-            Maximum budget: <span data-testid="program-max-budget">{program.maxBudget}</span>
-          </Text>
-          <div>
-            <Link
-              href={`/opportunities/${program.slug}/create`}
-              isButton
-              buttonVariant="primary"
-              data-testid={`program-choose-${program.slug}`}
-            >
-              {`Create a ${PROGRAM_NAMES[program.slug]} opportunity`}
-            </Link>
-          </div>
+        <section key={program.slug} aria-labelledby={`program-${program.slug}`} style={card} data-testid="program-card">
+          <Stack gap="medium">
+            <Heading level={2} id={`program-${program.slug}`}>
+              {PROGRAM_NAMES[program.slug]}
+            </Heading>
+            <Text elementType="p">{program.description}</Text>
+            <Text elementType="p">
+              Maximum budget: <span data-testid="program-max-budget">{program.maxBudget}</span>
+            </Text>
+            <Text elementType="p">
+              What the service commits to, and what it asks of you, is set out in the{" "}
+              <Link href="/content/service-level-agreement" data-testid="service-level-agreement-link">
+                service level agreement
+              </Link>
+              .
+            </Text>
+            <div>
+              <Link
+                href={`/opportunities/${program.slug}/create`}
+                isButton
+                buttonVariant="primary"
+                data-testid={`program-choose-${program.slug}`}
+              >
+                {`Create a ${PROGRAM_NAMES[program.slug]} opportunity`}
+              </Link>
+            </div>
+          </Stack>
         </section>
       ))}
-    </div>
+    </Stack>
   );
 }

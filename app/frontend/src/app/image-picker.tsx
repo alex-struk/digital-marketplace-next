@@ -9,6 +9,7 @@ import {
   imageKindOf,
 } from "@rules/files";
 import { fileAddress } from "../api/files";
+import { Stack } from "./page-layout";
 
 /**
  * The profile picture (and, later, an organization's logo) as a host form offers it
@@ -24,7 +25,7 @@ export interface PictureRejection {
   readonly reason: string;
 }
 
-const picture = { display: "grid", gap: "var(--layout-margin-small)", justifyItems: "start" } as const;
+// Keeps a picture inside its column. Not spacing.
 const image = { maxWidth: "100%", height: "auto" } as const;
 const hiddenInput = { display: "none" } as const;
 
@@ -110,7 +111,7 @@ export function ImagePicker({
   }, [rejection, rejectionFocus]);
 
   return (
-    <div role="group" aria-labelledby="picture-label" style={picture}>
+    <Stack role="group" aria-labelledby="picture-label" gap="small" align="start">
       <Text elementType="p" id="picture-label">
         Profile picture (optional)
       </Text>
@@ -180,6 +181,6 @@ export function ImagePicker({
       >
         {storedFileId || chosen ? "Choose a different profile picture" : "Choose a profile picture"}
       </Button>
-    </div>
+    </Stack>
   );
 }

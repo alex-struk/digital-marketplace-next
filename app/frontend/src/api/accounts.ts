@@ -182,25 +182,40 @@ export async function deactivateOwnAccount(accountId: string): Promise<Deactivat
 export type SessionAnswer =
   | { readonly kind: "signed-in"; readonly account: Account }
   | { readonly kind: "visitor" }
-  | { readonly kind: "refused" };
+  | { readonly kind: "refused" }
+  /**
+   * The token that went with the question is no longer accepted — expired, or from a session
+   * signed out of. Only a token is ever refused this way: a question without one is answered.
+   */
+  | { readonly kind: "token-refused" }
+  /** No answer: the request never completed (the page was left, the network failed) or the service faulted. */
+  | { readonly kind: "unanswered" };
+
+/** What a status, and the body that came with it, say about the current session. */
+export function readSessionAnswer(status: number, body: unknown): SessionAnswer {
+  if (status === 401) return { kind: "token-refused" };
+  // A fault is not a refusal: nothing has been said about this person.
+  if (status >= 500) return { kind: "unanswered" };
+  // Anything else the service will not answer is a refused sign-in (R-4.1, R-4.4).
+  if (status !== 200) return { kind: "refused" };
+  const account = readAccount((body as { user?: unknown } | undefined)?.user);
+  return account ? { kind: "signed-in", account } : { kind: "visitor" };
+}
 
 /**
  * The current session. Reading it with a token is what completes a sign-in: the service makes
- * the account on a first sign-in and refuses one that may not sign in (R-4.1, R-4.4).
+ * the account on a first sign-in and refuses one that may not sign in (R-4.1, R-4.4). A request
+ * that never completed is `unanswered`, never a refusal: leaving a page while it is on its way
+ * aborts it, and that says nothing about who is signed in (decision record 0038).
  */
 export async function fetchCurrentSession(): Promise<SessionAnswer> {
   try {
     const { data, response } = await api.GET("/api/sessions/{id}", {
       params: { path: { id: "current" } },
     });
-    // A token the service no longer accepts — expired, or from a session signed out of — is
-    // no sign-in at all; anything else it will not answer is a refused one.
-    if (response.status === 401) return { kind: "visitor" };
-    if (response.status !== 200) return { kind: "refused" };
-    const account = readAccount((data as { user?: unknown } | undefined)?.user);
-    return account ? { kind: "signed-in", account } : { kind: "visitor" };
+    return readSessionAnswer(response.status, data);
   } catch {
-    return { kind: "refused" };
+    return { kind: "unanswered" };
   }
 }
 

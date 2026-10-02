@@ -43,7 +43,12 @@ signed in, until they sign out (decision record 0017).
 The browser keeps only the tokens, in local storage, and they count only while its `dm-signed-in`
 cookie is there too, so a browser whose cookies are cleared is signed out (decision record
 0020). The account is read from `GET /api/sessions/current` on every
-visit. Signing out is one request, `DELETE /api/sessions/current`, which ends both the service's
+visit, with or without tokens, so the screens show whoever the service's own session names. A
+question that goes unanswered — the page was left while it was on its way — changes nothing the
+browser holds: only the service's own answer signs a browser out or refuses it (decision record
+0038). An unanswered question is asked again before the visit is drawn as anybody's, and a token
+the service refuses is dropped and the question asked once more on the session cookie alone
+(decision record 0039). Signing out is one request, `DELETE /api/sessions/current`, which ends both the service's
 session and the identity provider's. The `/sign-out` page makes that request once it is drawn,
 and it says how signing out went once the service has answered (decision record 0018).
 
@@ -96,6 +101,41 @@ version. The states and permitted changes of all three programs, and who may do 
 Submitting for review emails every administrator, publishing emails everyone with new-opportunity
 notices on, each in batches of `MAILER_BATCH_SIZE` (50) blind copies, and both confirm to the
 author.
+
+## Finding and following opportunities
+
+Anybody browses at `/opportunities` ("Browse opportunities" on the home page). The list reads all
+three programs and shows what the service lets the person read — published opportunities, and to
+staff their own unpublished ones and to administrators every one — grouped into unpublished, open
+and closed, narrowed by program, state, remote work and words in the title or location. The rules
+for that are `backend/src/rules/opportunity-list.ts`, shared by the screen and the service.
+
+A signed-in person watches an opportunity they did not create from its card or its page
+(`/api/subscribers/<program>`), and turns the new-opportunity emails on or off from the control at
+the top of the list, which saves at once. Opening a Code With Us opportunity's page counts a view
+(`PUT /api/counters/opportunity.code-with-us.<id>.views`); counts are read at
+`GET /api/counters?counters=<name>`. The home page's awarded figures come from `/api/metrics`.
+Decision record 0034 has the answers; a refused watch is filed under the reason the contract
+names — `conflict` for a second watch, `opportunity` for one's own, `notFound`, `permissions` —
+rather than under `errors` (decision record 0037).
+
+## Screens and dates
+
+Every screen sits in one page container, put round all of them by the root layout, and is spaced
+by the `Stack` in `frontend/src/app/page-layout.tsx`, both as `design/catalogue/layout.tsx`
+defines them. A day is shown as the day it was in Pacific time, as every deadline is (decision
+record 0037).
+
+The opportunity list and the screens for staff alone are drawn whole once they know whom they are
+for and have what they show; their loading state appears only if that takes more than a second
+(`useLoadingShown` in `frontend/src/app/loading.tsx`). The list is asked for beside the session
+question, and a program, or a page of prose, the service faulted on is asked for again (decision
+record 0039).
+
+Until slice 10 builds them out, a Sprint With Us or Team With Us opportunity can be created only as
+a draft, from the fields every program shares, at `/opportunities/sprint-with-us/create` and
+`/opportunities/team-with-us/create`; it lands on an interim manage page at
+`/opportunities/<program>/<id>/edit` (decision record 0035).
 
 ## The first administrator
 

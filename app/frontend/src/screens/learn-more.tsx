@@ -1,5 +1,5 @@
 import { Heading, Link, Text } from "@bcgov/design-system-react-components";
-import { page, stack } from "../app/layout";
+import { Stack } from "../app/page-layout";
 import { useScreenTitle } from "../app/screen-title";
 
 /**
@@ -41,16 +41,16 @@ export function LearnMoreScreen({ program }: { readonly program: ProgramSlug }) 
   const details = PROGRAMS[program];
   useScreenTitle(details.name);
   return (
-    <div style={page}>
+    <Stack gap="large">
       <Heading level={1}>{details.name}</Heading>
-      <section aria-labelledby="learn-more-what-heading" style={stack}>
+      <Stack as="section" gap="medium" aria-labelledby="learn-more-what-heading">
         <Heading level={2} id="learn-more-what-heading">
           How {details.name} works
         </Heading>
         <Text elementType="p">{details.what}</Text>
         <Text elementType="p">{details.who}</Text>
-      </section>
-      <section aria-labelledby="learn-more-cost-heading" style={stack}>
+      </Stack>
+      <Stack as="section" gap="medium" aria-labelledby="learn-more-cost-heading">
         <Heading level={2} id="learn-more-cost-heading">
           What it costs
         </Heading>
@@ -65,7 +65,7 @@ export function LearnMoreScreen({ program }: { readonly program: ProgramSlug }) 
           </Link>
           .
         </Text>
-      </section>
-    </div>
+      </Stack>
+    </Stack>
   );
 }

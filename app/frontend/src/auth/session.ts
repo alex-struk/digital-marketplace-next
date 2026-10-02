@@ -76,27 +76,54 @@ export const SIGN_OUT_PAGE = "/sign-out";
 /**
  * Finds out who is using the app, as it starts: takes over the tokens of a sign-in the service
  * has just completed, or resumes one this browser holds, and asks the service whose they are.
- * A browser holding no tokens is a visitor's, and the service need not be asked.
+ *
+ * The service is asked even when the browser holds no tokens, because it also knows the person
+ * by its own session cookie (decision record 0017), and the screens show whoever the service
+ * answers for. A browser whose cookies are cleared holds neither and is a visitor's (decision
+ * record 0020).
  */
 export function startSession(client: IdentityClient = new RealmIdentityClient()): Promise<void> {
   identity = client;
   useTokensFrom(() => client.accessToken());
-  if (!client.start()) {
-    become({ status: "visitor" });
-    return Promise.resolve();
-  }
+  client.start();
   return askTheService(client);
 }
 
+/**
+ * How long to wait before asking again when the question went unanswered, once per wait. The
+ * screens wait as they do for the first answer (decision record 0039).
+ */
+export const UNANSWERED_RETRY_DELAYS_MS: readonly number[] = [250, 750, 1500];
+
+const pause = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+
 async function askTheService(client: IdentityClient): Promise<void> {
-  const answer = await fetchCurrentSession();
-  if (answer.kind === "signed-in") become({ status: "signed-in", account: answer.account });
-  // The tokens are kept for now: leaving a refused sign-in ends the identity provider's
-  // session with them (leaveRefusedSignIn).
-  else if (answer.kind === "refused") become({ status: "refused" });
-  else {
+  let retries = 0;
+  let askedWithoutToken = false;
+  for (;;) {
+    const answer = await fetchCurrentSession();
+    if (answer.kind === "signed-in") return become({ status: "signed-in", account: answer.account });
+    // The tokens are kept for now: leaving a refused sign-in ends the identity provider's
+    // session with them (leaveRefusedSignIn).
+    if (answer.kind === "refused") return become({ status: "refused" });
+    if (answer.kind === "unanswered") {
+      // No answer says nothing about the person — the service faulted for a moment, or the page
+      // is being left — so nothing the browser holds is dropped (decision record 0038), and the
+      // question is asked again before the page is drawn as anybody's (decision record 0039).
+      const wait = UNANSWERED_RETRY_DELAYS_MS[retries];
+      if (wait === undefined) return become({ status: "visitor" });
+      retries += 1;
+      await pause(wait);
+      continue;
+    }
     client.forget();
-    become({ status: "visitor" });
+    // A refused token is dropped, and the question asked once more without it: the service may
+    // still know the person by its own session cookie (decision records 0017, 0039).
+    if (answer.kind === "token-refused" && !askedWithoutToken) {
+      askedWithoutToken = true;
+      continue;
+    }
+    return become({ status: "visitor" });
   }
 }
 
