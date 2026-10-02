@@ -200,6 +200,20 @@ reader's attention.
   change. The fit is uneasy in the same way: a rule about all three programs is answered for by the
   Sprint With Us slice, and a rule about attaching to opportunities and proposals by the proposal
   slice, because that is where their tests first can run.
+- **R-1.35 and R-1.36 (Slice 14)** say that changing or adding an addendum, and cancelling, notify
+  the opportunity's watchers, everyone who has submitted a proposal to it, and its author. Slice 9
+  builds addenda, cancellation and both notices, and the criteria were first placed there. A G3
+  ruling on the build of Slice 9 found both unbound, because each test sets up its given by
+  submitting a Code With Us proposal on
+  `/opportunities/code-with-us/:opportunityId/proposals/create` (proposal-cwu-create), which only
+  Slice 14 serves; in Slice 9 a signed-in person sent there lands on `/dashboard`. Both now sit in
+  Slice 14, and Slice 14 now depends on Slice 9 as well as Slices 8 and 11, so its closure holds
+  the addendum tab, the cancel action and the proposal screen. Build order does not change, because
+  Slice 9 is already earlier. Slice 14 is chosen over a later slice because it is the first where a
+  proposer exists to be notified. The fit is uneasy in the same way as the items above: a rule
+  about running an opportunity is answered for by the proposal slice, only because that is where
+  its test first can run, and until Slice 14 lands the proposer half of both notices is built but
+  shown to nobody.
 - **R-1.39 (Slice 10)** says the opportunity list can be narrowed by program, by state, to
   remote-friendly opportunities, and by free text. That is the list Slice 8 builds, and Slice 8
   still builds every one of those filters. A G3 ruling on the build of Slice 8 found it unbound
@@ -469,6 +483,9 @@ stay in the content domain, and both land in slices the table below already list
 it is unchanged. A later revision moved R-8.19 and R-8.25 from Slice 7 to Slice 15; the files row
 now lists Slice 15, and no count changes. The latest revision moved R-1.39 from Slice 8 to Slice
 10; Slice 8 still answers for other opportunities criteria, so the opportunities row is unchanged.
+The most recent revision moved R-1.35 and R-1.36 from Slice 9 to Slice 14 and added Slice 9 to
+Slice 14's dependencies; Slice 9 still answers for other opportunities criteria and Slice 14 was
+already in the opportunities row, so no row changes.
 
 | Domain | Accepted, not superseded | Placed | Slices |
 | --- | --- | --- | --- |
