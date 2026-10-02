@@ -1946,3 +1946,23 @@ conditions:
         showing notes with no screen adding one.
       by: agent:reviewer
       at: 2026-10-02T18:08:15.755Z
+  - ref: derive-tests-opportunities-stale-19#1
+    text: Add a case to tests/acceptance/opportunities/R-1.33.spec.ts that signs in
+      as persona.publicSectorStaffOther (a public sector staff member who is not
+      the author of seed.opportunities.cwuWithPrivateNote) and expects the
+      seeded private note's text, its file's name and its file's identifier to
+      be withheld from the history, in the same way as the vendor and signed-out
+      cases. The criterion says the note is visible only to the author and
+      administrators, and a non-author staff reader is the case 'only' most
+      directly excludes. That the oracle cannot sign this persona in is settled
+      at calibration, not by omitting the assertion. If you judge the clause
+      genuinely cannot be asserted through the surface, instead add a
+      not-testable.yaml entry for R-1.33 with clause 'visible only to the author
+      and administrators' (as it applies to non-author staff), naming what the
+      surface lacks.
+    from: derive-tests-opportunities-stale-19
+    family: derive-tests-opportunities-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-10-02T18:19:50.241Z
