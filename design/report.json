@@ -1,7 +1,7 @@
 {
-  "generated": "2026-10-02T01:06:18.778Z",
+  "generated": "2026-10-02T01:18:24.263Z",
   "axe": "4.13.0",
-  "catalogue": "992b30379a1f17d46e525003b87f80090a3f3ee7022c746323dcc36aec71892d",
+  "catalogue": "5971b4a0ccfd4cf48dcb9a6467384ccaffa006ac84942770379c3376c2c37b05",
   "ok": true,
   "messages": [],
   "compile": [
@@ -498,6 +498,30 @@
       "violations": []
     },
     {
+      "id": "evaluation-evaluation-consensus-request-swu-default--default",
+      "title": "evaluation/evaluation-consensus-request-swu/default",
+      "file": "./catalogue/evaluation-consensus-request-swu.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-request-swu-refused--refused",
+      "title": "evaluation/evaluation-consensus-request-swu/refused",
+      "file": "./catalogue/evaluation-consensus-request-swu.refused.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-request-twu-default--default",
+      "title": "evaluation/evaluation-consensus-request-twu/default",
+      "file": "./catalogue/evaluation-consensus-request-twu.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-request-twu-refused--refused",
+      "title": "evaluation/evaluation-consensus-request-twu/refused",
+      "file": "./catalogue/evaluation-consensus-request-twu.refused.stories.tsx",
+      "violations": []
+    },
+    {
       "id": "evaluation-evaluation-individual-create-swu-default--default",
       "title": "evaluation/evaluation-individual-create-swu/default",
       "file": "./catalogue/evaluation-individual-create-swu.default.stories.tsx",
@@ -690,6 +714,42 @@
       "violations": []
     },
     {
+      "id": "evaluation-evaluation-individual-request-swu-default--default",
+      "title": "evaluation/evaluation-individual-request-swu/default",
+      "file": "./catalogue/evaluation-individual-request-swu.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-request-swu-duplicate--duplicate",
+      "title": "evaluation/evaluation-individual-request-swu/duplicate",
+      "file": "./catalogue/evaluation-individual-request-swu.duplicate.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-request-swu-refused--refused",
+      "title": "evaluation/evaluation-individual-request-swu/refused",
+      "file": "./catalogue/evaluation-individual-request-swu.refused.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-request-twu-default--default",
+      "title": "evaluation/evaluation-individual-request-twu/default",
+      "file": "./catalogue/evaluation-individual-request-twu.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-request-twu-duplicate--duplicate",
+      "title": "evaluation/evaluation-individual-request-twu/duplicate",
+      "file": "./catalogue/evaluation-individual-request-twu.duplicate.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-request-twu-refused--refused",
+      "title": "evaluation/evaluation-individual-request-twu/refused",
+      "file": "./catalogue/evaluation-individual-request-twu.refused.stories.tsx",
+      "violations": []
+    },
+    {
       "id": "evaluation-evaluation-instructions-swu-default--default",
       "title": "evaluation/evaluation-instructions-swu/default",
       "file": "./catalogue/evaluation-instructions-swu.default.stories.tsx",
@@ -741,6 +801,18 @@
       "id": "evaluation-evaluation-panel-dashboard-loading--loading",
       "title": "evaluation/evaluation-panel-dashboard/loading",
       "file": "./catalogue/evaluation-panel-dashboard.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-panel-request-default--default",
+      "title": "evaluation/evaluation-panel-request/default",
+      "file": "./catalogue/evaluation-panel-request.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-panel-request-refused--refused",
+      "title": "evaluation/evaluation-panel-request/refused",
+      "file": "./catalogue/evaluation-panel-request.refused.stories.tsx",
       "violations": []
     },
     {
@@ -3091,7 +3163,7 @@
     }
   ],
   "totals": {
-    "stories": 512,
+    "stories": 524,
     "violations": 0,
     "failed": 0
   }
