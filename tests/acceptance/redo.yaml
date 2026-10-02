@@ -846,3 +846,23 @@ redo:
       their own proposals.
     verb: test-overreaches
     closed: *a17
+  - id: R-6.17
+    version: 1
+    why: the test calls mail.clear() straight after confirmActivationChange and then
+      counts every message to the deactivated address, so the
+      account-deactivated notice that R-4.30 requires, which must be sent after
+      the answer because R-4.9 ends the session at once, can arrive after the
+      clear and be counted as a leak. The test must wait until that notice has
+      been caught before clearing, or leave that one message out, and then
+      assert that nothing about the opportunity reaches the deactivated account.
+    verb: test-overreaches
+  - id: R-1.20
+    version: 1
+    why: both tests cancel an opportunity and then require a Publish or Submit for
+      review control to be offered on it, through opportunityCwuEdit.publish()
+      and submitForReview(). The criterion asks only that a request for a change
+      that is not permitted is refused and the state is unchanged, which a
+      screen meets by not offering the control at all. The test should make the
+      request without depending on the screen offering the control, for example
+      through the service, and then check that the state is unchanged.
+    verb: test-overreaches
