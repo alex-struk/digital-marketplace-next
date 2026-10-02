@@ -2057,6 +2057,17 @@ conditions:
     stage: build
     by: agent:tech-lead
     at: 2026-10-02T23:02:41.322Z
+    closed:
+      outcome: met
+      why: questions have their own limit QUESTIONS_MAX = 101 in
+        app/backend/src/rules/other-program-drafts.ts, separate from LIST_MAX =
+        100. otherProblems refuses a 102nd question with 'Add no more than 101
+        …' under teamQuestions/resourceQuestions, draftOf keeps up to 101
+        questions, and the form's add button disables at QUESTIONS_MAX
+        (opportunity-other-form.tsx:807). Unit tests in
+        app/backend/tests/other-program-content.test.ts cover this.
+      by: agent:tech-lead
+      at: 2026-10-02T23:31:11.238Z
   - ref: build-slice-10-3#2
     text: "R-1.53: the case 'Sprint With Us: an administrator deletes a draft' timed
       out waiting for the title to leave the administrator's list, while the
@@ -2070,3 +2081,12 @@ conditions:
     stage: build
     by: agent:tech-lead
     at: 2026-10-02T23:02:41.322Z
+    closed:
+      outcome: met
+      why: R-1.53 passes in verify for build-slice-10-4
+        (tests/results/new/slice-10.json). Build added an end-to-end case of an
+        administrator deleting their own sparse draft, their own complete draft
+        and a staff member's Sprint With Us draft, plus a frontend test of the
+        manage page's Delete for an administrator.
+      by: agent:tech-lead
+      at: 2026-10-02T23:31:11.255Z
