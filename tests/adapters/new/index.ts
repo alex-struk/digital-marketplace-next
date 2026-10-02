@@ -1625,10 +1625,15 @@ export default function create(
       startProposal: () => pressOffered("start_proposal", /^start proposal$/i, "starting a proposal"),
       opportunityIdentifier: async () => {
         await opportunityLines(where("opportunity_identifier"));
-        return new RegExp(`^/opportunities/${program}/([^/?#]+)`).exec(new URL(page.url()).pathname)?.[1] ?? "";
+        const segment = new RegExp(`^/opportunities/${program}/([^/?#]+)`).exec(new URL(page.url()).pathname)?.[1] ?? "";
+        return segment === "create" ? "" : segment;
       },
+      // The value given under the page's "Status" term ("Status" over "Published"); the
+      // program's name over its status badge, as an older layout drew it, otherwise.
       status: async () => {
         const lines = await opportunityLines(where("status"));
+        const term = await definitionOf(/^status$/i);
+        if (term) return term;
         const at = lines.indexOf(PROGRAM_NAME[program]);
         return at >= 0 && at + 1 < lines.length ? lines[at + 1] : "";
       },
@@ -4043,8 +4048,8 @@ export default function create(
     }
 
     // Choose a person by name in a chooser. A person the chooser does not offer (a vendor is
-    // never offered; only public sector employees are) is a refusal: noted, not thrown, and
-    // nothing is chosen, so the test's own reading of the panel or its save decides.
+    // never offered; only public sector employees are) is a refusal: noted, nothing is
+    // chosen, and false returned for the caller to raise or let the save decide.
     async function pick(member: string, chooser: Locator, name: string, person: unknown): Promise<boolean> {
       if ((await chosen(chooser)).toLowerCase() === name.toLowerCase()) return true;
       await chooser.click();
@@ -4168,7 +4173,11 @@ export default function create(
             if ((await members().count()) <= before) unbound(where(member), `"Add an evaluator" made no new member on ${page.url()}`);
             group = members().last();
           }
-          if (!(await pick(member, memberChooser(group), name, one.person))) continue;
+          // A person the chooser does not offer is refused a place on the panel, raised here
+          // so the test reads the refusal from the action itself.
+          if (!(await pick(member, memberChooser(group), name, one.person))) {
+            throw new Error(`refused: ${refusalLog[refusalLog.length - 1] ?? `${where(member)} — the chooser on ${page.url()} does not offer "${name}"`}`);
+          }
           if (one.chair !== undefined && one.chair !== null) await tickChair(group, saysYes(one.chair));
         }
       },
@@ -4663,6 +4672,21 @@ export default function create(
       const members = [Array.isArray(input) ? input : given(input, ["members", ...PANEL_KEYS]) ?? input].flat().filter((one) => one !== undefined && one !== null);
       if (!members.length) unbound(where(member), `the input names nobody for the panel (${JSON.stringify(input)})`);
       const groups = () => seen(region.getByRole("group", { name: /^panel member \d+$/i }));
+      // A chair named beside the members ({ members, chair }) rather than flagged on one of
+      // them: the member it names gets the Chair box, and every other member goes without.
+      const named = Array.isArray(input) ? undefined : given(input, ["chair", "panelChair", "chairperson"]);
+      let chairAt = -1;
+      if (named !== undefined && named !== null && typeof named !== "boolean") {
+        if (typeof named === "number" && Number.isInteger(named) && named >= 0 && named < members.length) chairAt = named;
+        else {
+          const chairName = (await personName(given(named, ["user", "person", "member", "evaluator"]) ?? named)).toLowerCase();
+          for (let i = 0; i < members.length && chairAt < 0; i++) {
+            const one = members[i];
+            if (one === named || (chairName && (await personName(given(one, ["user", "person", "member", "evaluator"]) ?? one)).toLowerCase() === chairName)) chairAt = i;
+          }
+        }
+        if (chairAt < 0) unbound(where(member), `the chair the input names (${JSON.stringify(named)}) is none of the members it gives for the panel`);
+      }
       for (let i = 0; i < members.length; i++) {
         if ((await groups().count()) <= i) await press(where(member), /^\s*add a panel member\s*$/i, region);
         const group = seen(region.getByRole("group", { name: new RegExp(`^panel member ${i + 1}$`, "i") })).first();
@@ -4674,7 +4698,7 @@ export default function create(
           await choose(member, group, /public sector employee/i, name);
         }
         for (const [box, keys] of [[/^\s*evaluator\s*$/i, ["evaluator", "isEvaluator"]], [/^\s*chair\b/i, ["chair", "isChair"]]] as [RegExp, string[]][]) {
-          const said = given(one, keys);
+          const said = chairAt >= 0 && keys[0] === "chair" ? chairAt === i : given(one, keys);
           if (said === undefined || said === null) continue;
           const tick = seen(group.getByRole("checkbox", { name: box })).first();
           if (!(await tick.count())) unbound(where(member), `panel member ${i + 1} on ${page.url()} offers no box named ${box}`);
@@ -6219,7 +6243,9 @@ export default function create(
   async function shownIdentifier(): Promise<string> {
     const line = (await textLines()).find((one) => /^opportunity id:/i.test(one));
     if (line) return line.replace(/^opportunity id:\s*/i, "").trim();
-    return /^\/opportunities\/[^/]+\/([^/?#]+)/.exec(new URL(page.url()).pathname)?.[1] ?? "";
+    // Still on a program's create form (a create it refused): no opportunity was made.
+    const segment = /^\/opportunities\/[^/]+\/([^/?#]+)/.exec(new URL(page.url()).pathname)?.[1] ?? "";
+    return segment === "create" ? "" : segment;
   }
 
   // ---------------------------------------------------------------- a Code With Us opportunity's page
