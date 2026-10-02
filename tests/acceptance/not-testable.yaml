@@ -184,26 +184,19 @@ criteria:
       human accepts about the rebuild rather than one a test can settle."
   - id: R-1.33
     version: 2
-    reason: "blocked: at v2 the criterion states that no screen of the application
-      offers a way to add a private note, so a note can only reach an
-      opportunity's history without the surface — yet the surface still declares
-      add_note on opportunity-cwu-edit and opportunity-swu-edit, a control the
-      criterion says does not exist, and a test acting through it would
-      contradict the criterion rather than check it. What a test could see is a
-      note already on an opportunity's history and who can read it, but no
-      seeded Code With Us or Sprint With Us opportunity carries a private note
-      with a file, and no observation says whether an edit screen offers a note
-      control at all. The service's acceptance of a note from its author or an
-      administrator is a claim about a request no screen sends, which no page
-      could show."
-    missing: remove add_note from opportunity-cwu-edit and opportunity-swu-edit;
-      seed one Code With Us and one Sprint With Us opportunity each carrying a
-      private note with an attached file in its history, one written by the
-      opportunity's author (a public sector staff persona) and one by an
-      administrator, with handles in the manifest's opportunities group, so
-      history_tab can be read as the author, as an administrator and as another
-      staff member; add an observation on both edit screens reporting whether
-      any control for adding a note to the history is offered. The acceptance
-      clause, which only a request no screen sends could show, needs restating
-      in ratify in terms something observes, or withdrawing.
+    clause: but no screen of the application offers a way to add one
+    reason: "blocked: the test now adds notes through opportunity-history-request
+      (add_note_by_request) and reads who sees them through history_shown and
+      history_entries, but nothing on the screens where a note would be added
+      reports whether a control for adding one is offered. opportunity-cwu-edit
+      and opportunity-swu-edit no longer declare add_note, and that absence is a
+      fact about the contract, not something a test run observes on the target:
+      a target that did offer a note control on its History tab would still pass
+      every test written today."
+    missing: an observation on opportunity-cwu-edit and opportunity-swu-edit (for
+      example note_control_offered), read on the History tab as
+      persona.administrator and as the opportunity's author
+      (persona.publicSectorStaff on seed.opportunities.cwuWithPrivateNote and
+      seed.opportunities.swuOpenWithSubmittedProposal), that reports whether any
+      control for adding a note to the opportunity's history is offered.
     owner: contract

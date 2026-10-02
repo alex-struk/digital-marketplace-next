@@ -36,7 +36,7 @@
 | R-1.30 | acceptance/opportunities/R-1.30.spec.ts |  | pass |
 | R-1.31 | acceptance/opportunities/R-1.31.spec.ts |  | pass |
 | R-1.32 | acceptance/opportunities/R-1.32.spec.ts |  | pass |
-| R-1.33 | not testable: blocked: at v2 the criterion states that no screen of the application offers a way to add a private note, so a note can only reach an opportunity's history without the surface — yet the surface still declares add_note on opportunity-cwu-edit and opportunity-swu-edit, a control the criterion says does not exist, and a test acting through it would contradict the criterion rather than check it. What a test could see is a note already on an opportunity's history and who can read it, but no seeded Code With Us or Sprint With Us opportunity carries a private note with a file, and no observation says whether an edit screen offers a note control at all. The service's acceptance of a note from its author or an administrator is a claim about a request no screen sends, which no page could show. |  | not-testable |
+| R-1.33 | acceptance/opportunities/R-1.33.spec.ts |  | not-testable |
 | R-1.34 | acceptance/opportunities/R-1.34.spec.ts |  | pass |
 | R-1.35 | acceptance/opportunities/R-1.35.spec.ts |  | pass |
 | R-1.36 | acceptance/opportunities/R-1.36.spec.ts |  | pass |

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-opportunities-14 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">498</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">492</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">413</span></a></li><li><a href="../runs.html">Run log <span class="count">20</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-opportunities-14</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-02 18:20</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do the revised opportunities tests now follow from their criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I acted on the reviewer&#39;s one condition, and the change is confined to <code>tests/acceptance/opportunities/R-1.33.spec.ts</code>.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I acted on the reviewer&#39;s one condition, and the change is confined to <code>tests/acceptance/opportunities/R-1.33.spec.ts</code>. I did not compile or run it: the type check needed an approval this session could not get.</p>
+<p><strong>Condition 1: the non-author staff reader.</strong> I added the case the reviewer asked for. It signs in as <code>persona.publicSectorStaffOther</code>, opens the history of <code>seed.opportunities.cwuWithPrivateNote</code>, and expects the seeded note&#39;s text, its file&#39;s name and its file&#39;s identifier to be absent. It uses the same <code>expectSeededNoteWithheld</code> check as the vendor and signed-out cases, and sits just before the vendor case. Its title is the criterion&#39;s statement followed by &quot;a public sector staff member who is not the opportunity&#39;s author is not shown a private note or its file.&quot;</p>
+<p>I wrote a test rather than a <code>not-testable.yaml</code> entry because the surface does reach this clause. The persona is defined in <code>tests/generated/personas.ts</code> and signs in on <code>sandbox-idp</code> as <code>gov-second</code>. Only the oracle&#39;s session route cannot sign it in, and as the reviewer said, that is settled at calibration rather than by leaving the clause unasserted. So the oracle should be expected to fail this case at sign-in and the run will need to record that limit at calibration.</p>
+<p>I also updated the file&#39;s opening comment, which had said &quot;only the author and administrators&quot; was checked against a vendor and a signed-out reader only. It now names all three excluded readers. The header lines are unchanged; the &quot;derived 2026-10-02&quot; date is today&#39;s date and the file&#39;s content did change.</p>
+<p>Unchanged: every other file in <code>tests/acceptance/opportunities/</code>, all of <code>tests/acceptance/not-testable.yaml</code> (including the existing R-1.33 entry for &quot;but no screen of the application offers a way to add one&quot;, which still stands), and <code>tests/generated</code>. Nothing asked me to touch a path outside this stage&#39;s boundary.</p>
+<p>The contract needs no new surface action or observation for this.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-02 18:21.</p>
+<div class="body"><p>Question: do the revised R-1.33 opportunities tests follow from their criterion and from nothing else? Ruling: approve. The one owed condition is met: a case now signs in as persona.publicSectorStaffOther and expects the seeded note&#39;s text, file name and file identifier to be withheld from the history of seed.opportunities.cwuWithPrivateNote, using the same check as the vendor and signed-out cases, so &#39;visible only to the author and administrators&#39; is asserted against all three readers it excludes. The other assertions follow from the criterion: a note of exactly 1,000 characters with a file is added by the author on a published Sprint With Us and a published Code With Us opportunity, and by an administrator on a cancelled Code With Us one, and it then appears in the history; the author and an administrator both see the seeded note. The NOTE_ADDED literal is the contract&#39;s own vocabulary for a note entry (spec/contract/surface.yaml history_entries), not an implementation leak. The remaining clause, &#39;but no screen of the application offers a way to add one&#39;, has a clause-scoped not-testable entry owned by contract that names the missing observation on opportunity-cwu-edit and opportunity-swu-edit, which is a real gap in the surface. The runner&#39;s typecheck passed on this revision. The missing test for R-1.33 stays open until a result row shows the test ran. What would change this: a test asserting something the criterion does not state, or a typecheck failure on this revision.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met derive-tests-opportunities-stale-19#1: tests/acceptance/opportunities/R-1.33.spec.ts adds the case &#39;a public sector staff member who is not the opportunity&#39;s author is not shown a private note or its file&#39;, which signs in as persona.publicSectorStaffOther and uses expectSeededNoteWithheld to assert that the seeded note&#39;s text, seed.stored_files.opportunityNoteAttachment&#39;s name and its identifier are absent from the history of seed.opportunities.cwuWithPrivateNote</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
