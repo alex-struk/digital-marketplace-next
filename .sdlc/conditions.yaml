@@ -1861,6 +1861,16 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-10-02T09:48:29.883Z
+    closed:
+      outcome: met
+      why: opportunity-swu-create and opportunity-twu-create are bound in full
+        (tests/adapters/new/bindings.yaml, opportunity-twu-create at line 279
+        and opportunity-swu-create above it), implemented by programForm in
+        tests/adapters/new/index.ts and wired as
+        opportunitySwuCreate/opportunityTwuCreate in place of the former
+        absent(...) entries
+      by: agent:reviewer
+      at: 2026-10-02T10:00:33.573Z
   - ref: bind-adapter-new-40#5
     text: "tests/adapters/new: rebind opportunity-list.filter_by_program,
       filter_remote_only and search to the controls the list renders on the
@@ -1877,3 +1887,13 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-10-02T09:48:29.883Z
+    closed:
+      outcome: met
+      why: opportunity-list filter_by_program, filter_by_status, filter_remote_only
+        and search now use listFilters()/listChoice() against the 'Program' and
+        'Status' choosers, the 'Remote work accepted only' checkbox and the
+        'Search by title or location' searchbox in tests/adapters/new/index.ts,
+        and the opportunity-list comment in bindings.yaml is rewritten to the
+        current controls
+      by: agent:reviewer
+      at: 2026-10-02T10:00:33.591Z
