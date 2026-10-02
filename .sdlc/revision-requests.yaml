@@ -627,6 +627,13 @@ requests:
     gate: G3
     by: agent:tech-lead
     at: 2026-10-02T14:24:25.110Z
+    deferred:
+      at: 2026-10-02T16:52:53.146Z
+      why: removing `add_note` from the `opportunity-cwu-edit` and
+        `opportunity-swu-edit` surfaces changes the contract's actions, and the
+        design gate's check refuses that because this stage may only fill in
+        test IDs; the contract stage has to make the change.
+      proposal: design-opportunities-4
   - stage: contract
     why: R-1.33 can only be checked against a note already on an opportunity's
       history and who may read it, and verify found no seeded opportunity
