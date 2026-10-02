@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-47 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">491</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">485</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">409</span></a></li><li><a href="../runs.html">Run log <span class="count">20</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-47</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-02 17:05</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I removed the two members the contract dropped.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I removed the two members the contract dropped. The Code With Us proposal form that R-1.35 and R-1.36 need is still not served by the target, so those two criteria stay unbound.</p>
+<p><strong>Removed.</strong> <code>add_note</code> is gone from <code>opportunity-cwu-edit</code> and <code>opportunity-swu-edit</code> in <code>tests/adapters/new/bindings.yaml</code>. In <code>tests/adapters/new/index.ts</code> I removed its two implementations: the Code With Us management screen&#39;s <code>addNote</code>, and the Sprint With Us one along with the line that wired it into <code>opportunitySwuEdit</code>. <code>tests/generated/surface.d.ts</code> no longer declares <code>addNote</code> on any page. A few remaining mentions of <code>addNote</code> belong to <code>add_note_by_request</code> (on a separate page of the contract), which sends the service&#39;s own <code>addNote</code> request. That member is still in the contract, so it stays, bound as before.</p>
+<p><strong>R-1.35 and R-1.36 (<code>proposal-cwu-create</code>).</strong> I checked again on the running target. I signed in as the seeded vendor (<code>test-vendor-1</code>) through the identity provider&#39;s form (&quot;Sign in as a vendor&quot;, then the provider&#39;s Username / Password / Sign In). Then:</p>
+<ul><li><code>/opportunities/code-with-us/00000000-0000-4000-8000-000000000601/proposals/create</code>, the form&#39;s route with the seeded published opportunity, still shows &quot;Page not found&quot;.</li><li>That opportunity&#39;s public page shows a Proposal deadline, Description, Skills, Key dates and Addenda. Its only control is the &quot;Watch this opportunity&quot; tick box, with no link or button to start a proposal.</li><li>The vendor&#39;s header offers only Dashboard, My profile and Sign out, and the dashboard shows only &quot;You are signed in as …&quot;.</li></ul>
+<p>That matches the existing reason, which already covers the other roles, the alternative addresses and the profile tabs from earlier walks. I left all thirteen <code>proposal-cwu-create</code> members unbound with that reason unchanged. The route exists in the contract, but on this target it shows &quot;Page not found&quot; to every persona tried. That is the only page here whose route did not resolve; the rest of the adapter&#39;s bound and unbound members are as the earlier run left them.</p>
+<p><strong>Checks.</strong></p>
+<ul><li>I couldn&#39;t run either full check. The type check (<code>tsc</code>) and a small script comparing the bindings file against the surface both needed approval that this session doesn&#39;t have.</li><li>By hand: the bindings file and <code>surface.yaml</code> both list 112 pages. The action and observation lists of the two edited pages match the contract exactly, and <code>add_note</code> no longer appears anywhere except as <code>add_note_by_request</code>. The code I removed was self-contained, and the tsconfig doesn&#39;t reject unused helpers.</li></ul>
+<p>The password field only ever received the variable&#39;s name, as instructed, and no password or environment value is written in the adapter, the bindings or here. One snapshot file the browser tool saved into the workspace root, by a filename I gave it, has been deleted. Its other snapshots sit under <code>.playwright-mcp/</code>, which I didn&#39;t touch.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-02 17:06.</p>
+<div class="body"><p>Question: does the bind-adapter-new-47 adapter bind every action and observation the contract lists for the new target, and nothing else? Ruling: approve. spec/contract/surface.yaml no longer lists add_note on opportunity-cwu-edit or opportunity-swu-edit; only add_note_by_request remains, and it stays bound. The proposal removes add_note from bindings.yaml and both of its implementations from index.ts, and no test under tests/acceptance references add_note. The remaining addNote mentions in index.ts belong to add_note_by_request&#39;s service request, which is still in the contract. The diff only deletes code, adds no assertion or business logic, and leaves tests/acceptance unchanged. The runner&#39;s type check on this revision passed with no diagnostics under adapters/new. R-1.35 and R-1.36 stay unbound through proposal-cwu-create, with the reason unchanged and checked again on the running target as the seeded vendor: the form&#39;s route shows &#39;Page not found&#39; and the published opportunity offers no control that starts a proposal. That names a surface the target does not serve, so it is a real unbound reason. Open instruction build-slice-9-3#6 is the build stage&#39;s work, and this adapter proposal does not settle it, so it stays open. The ruling would change to a return if the contract still listed add_note on either page, if a test called it, or if the target turned out to serve the proposal form.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

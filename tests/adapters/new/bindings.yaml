@@ -157,7 +157,6 @@ pages:
       cancel_opportunity: bound
       delete_opportunity: bound
       add_addendum: bound
-      add_note: bound
     observations:
       opportunity_identifier: bound
       created_by_name: bound
@@ -243,7 +242,6 @@ pages:
       cancel_opportunity: bound
       delete_opportunity: "unbound: the management screen offers no 'Delete' in any state walked, a draft just saved from /opportunities/sprint-with-us/create included (whose actions are none), as the administrator or as the owning public sector employee; its only action is 'Cancel opportunity', from published to processing"
       add_addendum: bound
-      add_note: bound
       edit_evaluation_panel: "unbound: the management screen offers no 'Evaluation panel' section and no control to change the panel in any state walked (seeded published, lapsed, at individual evaluation, at consensus, at the code challenge, at the team scenario, in processing and awarded, and a fresh draft) as the administrator or as the owning public sector employee; its sections are only Summary, Addenda and History, and an unknown ?tab= falls back to the Summary"
       finalize_question_consensuses: "unbound: the management screen offers no 'Consensus' section and no control to finalize question consensuses, walked as the administrator on the seeded Sprint With Us opportunities at consensus (one consensus outstanding, every consensus agreed, six proponents) and as their owning public sector employee; its sections are only Summary, Addenda and History and its only action is 'Cancel opportunity'"
       start_team_scenario: "unbound: the management screen offers no 'Team scenario' section and no control to start the team scenario, walked as the administrator on the seeded Sprint With Us opportunities at the code challenge (with and without a proponent screened in) and at the team scenario; its sections are only Summary, Addenda and History and its only action is 'Cancel opportunity'"
