@@ -2732,10 +2732,22 @@ stories already compile with.
 These are all reused from earlier domains, unchanged, and none is new here. None of them is a
 design-system component, and none may be presented as one.
 
+- **Page container** (`PageContainer`, `design/catalogue/layout.tsx`). Reused unchanged from the
+  content domain. It is the one column every screen of this domain sits in: the content at most
+  1100 pixels wide and centred, with `--layout-padding-medium` on either side outside those 1100
+  pixels, so the content's left edge lines up with the banner's logo. The design system has no page
+  container or grid, which is why it is the project's own.
+- **Stack** (`Stack`, `design/catalogue/layout.tsx`). Reused unchanged from the content domain. It
+  is the only way items on these screens are spaced: a flex column (or, with `direction="row"`, a
+  wrapping row) whose gap is `--layout-margin-small`, `-medium` or `-large`. It removes the margins
+  of the design system's `Text` and `Heading` (and of a `dt` or `dd`) from its items, so a gap is
+  never the token plus a component's margin. It takes no `style`, so no screen can add spacing
+  beside it. The design system has no stack or spacing primitive.
 - **Status badge.** The users domain's `<span>` with a token border and circular radius. It always
   carries the status in words ("Draft", "Under review: team questions", "Not awarded"). Team
   member membership ("Active", "Membership pending") uses the same badge.
-- **Key facts list.** The opportunities domain's `<dl>` of `dt`/`dd` pairs that flex-wrap. It is
+- **Key facts list.** The opportunities domain's `<dl>` of `dt`/`dd` pairs, laid out as
+  `Stack as="dl" direction="row"` with each pair in a small stack. It is
   used for the manage and evaluate headers, the Scores section, the Scoresheet and the export
   headers. The design system has no description-list component.
 - **Card section.** A `<section aria-labelledby>` with the token border and radius, used for each
@@ -2752,16 +2764,57 @@ design-system component, and none may be presented as one.
   are in-page links to the two sections (see gap 9).
 - **Attachment list.** The files domain's control, placed in the proposal forms.
 
-Layout uses only the tokens earlier domains list: `--layout-margin-{none,xsmall,small,medium,large}`,
-`--layout-padding-{none,small,large}`, `--layout-border-width-small`,
+Layout uses only the tokens earlier domains list: `--layout-margin-{small,medium,large}` for gaps
+(through the stack only), `--layout-margin-none` on a fieldset, `--layout-padding-medium` (the
+container's sides, in `layout.tsx` only), `--layout-padding-{small,large}` for the inner padding of
+a card, fieldset, attachment row, dialog body, table cell and badge, `--layout-border-width-small`,
 `--layout-border-radius-{medium,circular}`, `--surface-color-border-{default,medium}`,
 `--typography-font-weights-bold` and `--typography-bold-body`. No colour, size or radius value is
-written anywhere in the catalogue.
+written anywhere in this domain's stories. The one literal size, the container's 1100 pixels, is
+written only in `layout.tsx`.
 
 ### How a screen is laid out
 
-The users domain's single column, with `--layout-margin-large` between regions and action rows
-that wrap.
+Every screen of this domain is built from `layout.tsx` and nothing else: one `PageContainer`, and
+inside it one `Stack gap="large"` whose items are the screen's regions. No story sets a width, an
+outer padding, a margin or a gap of its own. The rhythm is fixed:
+
+- **`large`** between the regions of a page: the page-kind line and H1 together, the opportunity
+  summary card, the sentence on drafts, an error summary or refusal, the form, the key facts, the
+  Scores section, the link row, the action bar, the tabs, and the current tab's section.
+- **`medium`** between the items of a region: the card sections of a form and its submit row; the
+  fields inside a card or fieldset; a section's heading and what follows it, including the Scores
+  section's H2 and its facts; the key facts beside one another; the tabs; the rows of a team-member
+  list, an attachment list or a question list; the proposals of export-all; the contents of a
+  dialog.
+- **`small`** between a label and what it labels: the small page-kind line ("Manage a … proposal",
+  "… proposal") and the H1 under it; a `dt` and its `dd`; a question and its response; the lines of
+  one attachment row; the spinner and the words of a loading row.
+
+A form is a design-system `Form` holding one `Stack gap="medium"`. A card section, a fieldset and an
+attachment row keep their own border, radius and inner padding, and lay their content out with a
+stack inside; a fieldset's `legend` stays its first child, outside that stack, so it still names
+the group. The key facts are a `Stack as="dl" direction="row"` whose facts are each a small stack,
+and fall into a column when they no longer fit. Rows (the opportunity and printable-copy links, the
+tabs, a team member's name beside its badge, the select-and-add row under a phase or resource, a
+loading row) are `Stack direction="row"`, which always wraps, so nothing is pushed off a 320-pixel
+screen or at 400% zoom. A button or a `FileTrigger` that is a stack item sits in a plain `div`, so it
+keeps its own width. Dialogs are portalled by `Modal`, so they sit inside the container but after
+its stack; a `Dialog`'s body is a `div` with `--layout-padding-large` holding the form or a stack,
+and an `AlertDialog` with more than one child lays them out with a `Stack gap="medium"`. Tables keep
+their own scrolling region and are the only thing that scrolls sideways. On a not-found screen the
+`not-found-page` test ID sits on the page's outer stack, because the container takes no attributes.
+
+Lists laid out by a stack lose their markers and indent. That is intended for the tab list, the
+team-member rows in a phase or resource fieldset, and the attachment rows while editing, each of
+which is a bordered row or a link. The question-and-response lists on the Sprint With Us and Team
+With Us manage pages are still `<ol>` elements, so assistive technology announces their order and
+count, but they no longer show visible numbers (see gap L1 below). Export-all's proposals are a
+stack of bordered `<article>`s inside `proposal-export-document`, not a list. Lists that are not
+stacks keep their bullets: the error summaries inside an `InlineAlert`, the plain attachment and
+team lists on the manage, evaluate and export pages, and the capabilities list on the Sprint With
+Us form. Their items are plain text and links with no margins of their own, so they add no
+spacing beside the stack's.
 
 - **Create.** The H1 ("Create a … proposal"), then the opportunity summary card, which gives the
   opportunity, its reward or budget, and its deadline (`proposal-opportunity-summary`). Then one
@@ -3138,6 +3191,68 @@ to show something, the story marks it as illustrative or placeholder.
     domain's.
 18. **Content the spec does not carry.** Every name, organization, capability, question, amount,
     score, rank, date and identifier in the stories is illustrative and synthetic.
+
+Layout gaps, from bringing this domain onto the page container and stack (2026-10-01). Only the
+layout changed: every page, state, test ID, component and word is as it was.
+
+- **L1. Question numbers are no longer visible.** The stack removes list markers from any `ul` or
+  `ol` it lays out, so the question-and-response `<ol>` on `proposal-swu-edit` and
+  `proposal-twu-edit` no longer shows "1." before each question. The order is still announced. If
+  the visible number matters to vendors, it belongs in the question's wording or in `layout.tsx`,
+  which keeps `ol` numbering for every domain, not in a style on one story.
+- **L2. The rhythm tightened some gaps.** Before, the key facts were `large` apart, a `dt` sat
+  `xsmall` above its `dd`, the tabs were `large` apart, and a section's heading sat `small` above
+  the Scores facts. The layout rule's single rhythm makes those `medium`, `small`, `medium` and
+  `medium`. No token was invented, and nothing was given a gap of its own to keep the old look.
+- **L3. Tables keep their own sizing.** A data table keeps `width: 100%` and `borderCollapse`, and
+  its cells keep `--layout-padding-small`. These are the table's internals, not the story's width
+  or spacing, and the other domains' tables do the same.
+- **L4. Surface entries on this domain's pages that are still `null`.** The surface now names
+  actions and observations that no story of this domain binds: `field_errors_by_field`
+  (`proposal-cwu-create`); `team_member_choices` (Sprint With Us and Team With Us create);
+  `phase_team_sections`, `phase_requirements` and `cost_errors` (Sprint With Us create);
+  `choose_organization`, `submission_refusal`, `field_error` and `organization` (Sprint With Us and
+  Team With Us manage), with `add_phase_team_member` and `set_scrum_master` (Sprint With Us) and
+  `add_team_member_for_resource` (Team With Us); `history_entries`, `rank` and
+  `offered_score_actions` (Sprint With Us and Team With Us evaluate). Several of them match elements
+  the stories already carry (`proposal-organization-field`, `proposal-add-team-member`,
+  `proposal-scrum-master`, `field-error`, `proposal-rank`), but whether each such element is on the
+  page and state the surface means has to be checked story by story. They were left `null` on the
+  2026-10-01 layout-only pass, which was ordered to change no element, wording or test ID, as the
+  opportunities domain's pass did (its gap 26). Binding them is a design run for this domain.
+- **L5. The three request pages have no screens.** `proposal-cwu-request`
+  (`/api/proposals/code-with-us`), `proposal-team-request` (`/api/proposals/:program`) and
+  `proposal-evaluation-request` (`/api/proposals/:program/:proposalId`) are in the surface but not
+  in `design/screens.yaml`, and have no stories. All their test IDs are `null`. Other domains
+  draw such an address as a response reference: a page naming the request and the answer, with
+  the test IDs on the answer's parts (see `affiliation-approval-request`). The layout-only pass
+  added no page or state, so these are left for this domain's next design run.
+  *Resolved on the follow-up pass:* the screens check requires every surface page to have a screen,
+  so all three were added as response references (see "Request addresses" below).
+
+### Request addresses
+
+`proposal-cwu-request`, `proposal-team-request` and `proposal-evaluation-request` are not screens.
+They are the service's answers to requests that no screen sends. Each has two states, `default`
+(accepted) and `refused`, because the surface's observations divide into what an accepted answer
+carries and what a refusal carries. Each story is a response reference built the way the
+evaluation, users and affiliations domains build theirs. It has a `size="small" color="secondary"`
+note saying the address answers with data, then a "Request(s)" section and an "Answer" section, each a
+`dl` laid out with `Stack`, inside `PageContainer`. Every test ID sits on the `dd` (or list) that
+holds the part the surface names. An action's test ID marks the request's description. The design
+system has no component for a definition list, so this uses plain HTML, as in the other domains.
+
+Gaps, named and not filled:
+
+- **R1.** The criteria give no HTTP status for a refused Code With Us proposal or a refused stage
+  score. The stories say "Refused (the criteria do not state the status)". Only the team request has
+  stated statuses: the surface gives 400 for a validation refusal and 503 for a failure to store.
+- **R2.** R-2.2's duplicate-proposal message is not tied to a field by any criterion, so
+  `proposal-cwu-request.refused` does not name the field it is reported against.
+- **R3.** No criterion names the status a proposal has after an accepted stage score, so
+  `proposal-evaluation-request.default` shows the status without a value.
+- **R4.** The criteria and the surface give the requests' addresses but not their HTTP methods, so the
+  stories name none.
 
 ---
 

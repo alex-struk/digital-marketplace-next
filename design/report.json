@@ -1,7 +1,7 @@
 {
-  "generated": "2026-10-02T01:18:24.263Z",
+  "generated": "2026-10-02T01:39:17.918Z",
   "axe": "4.13.0",
-  "catalogue": "5971b4a0ccfd4cf48dcb9a6467384ccaffa006ac84942770379c3376c2c37b05",
+  "catalogue": "3eedbb76f924cb81e3291f5ed6370cdc125508b8087204d907ea090370521861",
   "ok": true,
   "messages": [],
   "compile": [
@@ -2250,6 +2250,18 @@
       "violations": []
     },
     {
+      "id": "proposals-proposal-cwu-request-default--default",
+      "title": "proposals/proposal-cwu-request/default",
+      "file": "./catalogue/proposal-cwu-request.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "proposals-proposal-cwu-request-refused--refused",
+      "title": "proposals/proposal-cwu-request/refused",
+      "file": "./catalogue/proposal-cwu-request.refused.stories.tsx",
+      "violations": []
+    },
+    {
       "id": "proposals-proposal-cwu-view-award-confirm--award-confirm",
       "title": "proposals/proposal-cwu-view/award-confirm",
       "file": "./catalogue/proposal-cwu-view.award-confirm.stories.tsx",
@@ -2307,6 +2319,18 @@
       "id": "proposals-proposal-cwu-view-score-invalid--score-invalid",
       "title": "proposals/proposal-cwu-view/score-invalid",
       "file": "./catalogue/proposal-cwu-view.score-invalid.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "proposals-proposal-evaluation-request-default--default",
+      "title": "proposals/proposal-evaluation-request/default",
+      "file": "./catalogue/proposal-evaluation-request.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "proposals-proposal-evaluation-request-refused--refused",
+      "title": "proposals/proposal-evaluation-request/refused",
+      "file": "./catalogue/proposal-evaluation-request.refused.stories.tsx",
       "violations": []
     },
     {
@@ -2541,6 +2565,18 @@
       "id": "proposals-proposal-swu-view-wrong-stage--wrong-stage",
       "title": "proposals/proposal-swu-view/wrong-stage",
       "file": "./catalogue/proposal-swu-view.wrong-stage.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "proposals-proposal-team-request-default--default",
+      "title": "proposals/proposal-team-request/default",
+      "file": "./catalogue/proposal-team-request.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "proposals-proposal-team-request-refused--refused",
+      "title": "proposals/proposal-team-request/refused",
+      "file": "./catalogue/proposal-team-request.refused.stories.tsx",
       "violations": []
     },
     {
@@ -3163,7 +3199,7 @@
     }
   ],
   "totals": {
-    "stories": 524,
+    "stories": 530,
     "violations": 0,
     "failed": 0
   }
