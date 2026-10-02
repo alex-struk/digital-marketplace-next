@@ -173,6 +173,7 @@ pages:
       assignment_date: bound
       start_date: bound
       completion_date: bound
+      note_control_offered: bound
 
   opportunity-cwu-complete:
     actions: {}
@@ -264,6 +265,7 @@ pages:
       proposal_deadline: bound
       assignment_date: bound
       evaluation_question_fields: "unbound: the management screen offers no 'Team questions' section and no form to edit them in, in any state walked (seeded published, lapsed, at individual evaluation, at consensus, at the code challenge, at the team scenario, in processing and awarded, and a fresh draft) as the administrator or as the owning public sector employee; ?tab=opportunity falls back to the Summary"
+      note_control_offered: bound
 
   opportunity-swu-complete:
     actions: {}
