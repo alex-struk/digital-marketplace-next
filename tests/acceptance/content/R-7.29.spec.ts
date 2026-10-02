@@ -2,11 +2,16 @@
 // provenance: blind, spec@76d9da180ae1fba4b970cd40bf8a0a55a680eb3e, derived 2026-10-02
 import { test, expect, persona, seed } from "../../fixtures";
 
-// Runs only against an instance started in the configuration service_page_absent
-// (spec/contract/observables.yaml), where the page seed.content
-// .servicePageSprintWithUsOpportunityScope has been removed. Every Sprint With Us
-// opportunity's screen embeds that page's body as its scope section; a seeded one is opened
-// as a vendor and the rest of the screen is read alongside the empty section.
+// Each test runs only against an instance started in the configuration its tag names
+// (spec/contract/observables.yaml), where one page the service embeds has been removed:
+//   @service_page_absent                 the Sprint With Us opportunity scope page, embedded
+//                                        as opportunity-swu-view's scope section;
+//   @evaluation_instructions_absent_swu  the Sprint With Us evaluation instructions page,
+//                                        embedded as evaluation-instructions-swu's body;
+//   @evaluation_instructions_absent_twu  its Team With Us sibling.
+// The criterion is one statement about every screen that embeds a page, and each removal
+// needs its own instance, so each screen is its own test, titled with the statement and the
+// screen it is about.
 const statement =
   "Where a screen embeds the body of a page beside its own material, a page that is missing or unreadable leaves that part of the screen empty and the screen otherwise works.";
 
@@ -20,7 +25,7 @@ async function readOrEmpty(read: () => Promise<string>): Promise<string> {
   }
 }
 
-test(statement, { tag: "@service_page_absent" }, async ({ surface }) => {
+test(`${statement} (Sprint With Us opportunity, scope)`, { tag: "@service_page_absent" }, async ({ surface }) => {
   const opportunity = seed.opportunities.closedSprintWithUs;
 
   await surface.signIn(persona.vendor);
@@ -39,8 +44,53 @@ test(statement, { tag: "@service_page_absent" }, async ({ surface }) => {
     .poll(() => readOrEmpty(() => surface.opportunitySwuView.phases()), settle)
     .toMatch(/implementation/i);
 
-  // The embedded scope page is missing: that section is empty, with nothing said about why.
-  // Read directly, so a section the adapter cannot reach fails the test rather than reading
-  // as empty.
+  // The embedded scope page is missing: that section is empty. Read directly, so a section
+  // the adapter cannot reach fails the test rather than reading as empty.
   expect((await surface.opportunitySwuView.scopeSection()).trim()).toBe("");
 });
+
+test(
+  `${statement} (Sprint With Us evaluation instructions)`,
+  { tag: "@evaluation_instructions_absent_swu" },
+  async ({ surface }) => {
+    const opportunityId = seed.opportunities.closedSprintWithUs.id;
+
+    // The seeded opportunity's deadline has passed; the application closes it into
+    // evaluation, where its panel works from the instructions.
+    await surface.scheduledTransitionTrigger.open();
+    await surface.scheduledTransitionTrigger.runPendingTransitions();
+
+    // persona.publicSectorStaff signs in as users.staffOne, an evaluator on its panel.
+    await surface.signIn(persona.publicSectorStaff);
+    await surface.evaluationInstructionsSwu.open({ opportunityId });
+
+    // The screen still loads around the missing page: its instructions tab is offered.
+    await expect
+      .poll(() => readOrEmpty(() => surface.evaluationInstructionsSwu.visibleToEvaluatorsOnly()), settle)
+      .toMatch(/\S/);
+
+    // The embedded instructions page is missing: its body is empty. Read directly.
+    expect((await surface.evaluationInstructionsSwu.instructionsBody()).trim()).toBe("");
+  },
+);
+
+test(
+  `${statement} (Team With Us evaluation instructions)`,
+  { tag: "@evaluation_instructions_absent_twu" },
+  async ({ surface }) => {
+    const opportunityId = seed.opportunities.closedTeamWithUs.id;
+
+    await surface.scheduledTransitionTrigger.open();
+    await surface.scheduledTransitionTrigger.runPendingTransitions();
+
+    // persona.publicSectorStaff signs in as users.staffOne, an evaluator on its panel.
+    await surface.signIn(persona.publicSectorStaff);
+    await surface.evaluationInstructionsTwu.open({ opportunityId });
+
+    await expect
+      .poll(() => readOrEmpty(() => surface.evaluationInstructionsTwu.visibleToEvaluatorsOnly()), settle)
+      .toMatch(/\S/);
+
+    expect((await surface.evaluationInstructionsTwu.instructionsBody()).trim()).toBe("");
+  },
+);
