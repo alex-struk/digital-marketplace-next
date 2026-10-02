@@ -22,6 +22,14 @@ import type { Persona, Surface } from "../../fixtures";
 // (a notice to a group is addressed to the service's own address with everyone else
 // blind-copied, spec/contract/observables.yaml, email.notes).
 //
+// "Of any kind" is also judged on a second kind of message: the announcement of a newly published
+// Code With Us opportunity, which reaches every account that has asked for new-opportunity
+// notices and is not deactivated (email.received_by_an_active_vendor in
+// spec/contract/observables.yaml). users.vendorDeactivated has asked for them and is already
+// deactivated in the seed, so that test deactivates nobody and no deactivation notice is in play;
+// users.vendorOne has asked for them and is active, so its being reached proves the announcement
+// was sent and the catcher was reachable.
+//
 // The watch being retained is observed the way a watch shows itself to its holder: once the
 // account is reactivated, the next change to the opportunity reaches it again, although nobody
 // asked to watch it in between (a deactivated account cannot sign in to ask).
@@ -81,6 +89,26 @@ async function recipientsOfNoticesAboutTheOpportunity(surface: Surface, mail: Ma
       .join(" ")
       .toLowerCase();
     if (!said.includes(title)) continue;
+    recipients.push(await readOrEmpty(() => surface.caughtMessage.visibleRecipients()));
+    recipients.push(await readOrEmpty(() => surface.caughtMessage.copiedRecipients()));
+  }
+  return recipients.join(" ").toLowerCase();
+}
+
+// Every recipient, visible or blind-copied, of every caught new-opportunity announcement.
+const announcementSubject = "A New Code With Us Opportunity Has Been Posted".toLowerCase();
+async function recipientsOfAnnouncements(surface: Surface, mail: Mail): Promise<string> {
+  const ids = new Set<string>();
+  await surface.caughtMessageList.open();
+  for (const id of identifiersIn(await readOrEmpty(() => surface.caughtMessageList.messageIdentifiers()))) ids.add(id);
+  for (const address of [serviceAddress, seed.users.vendorOne.email, seed.users.vendorDeactivated.email]) {
+    for (const { ID } of await mail.messagesTo(address)) ids.add(ID);
+  }
+  const recipients: string[] = [];
+  for (const messageId of ids) {
+    await surface.caughtMessage.open({ messageId });
+    const subject = (await readOrEmpty(() => surface.caughtMessage.subject())).toLowerCase();
+    if (!subject.includes(announcementSubject)) continue;
     recipients.push(await readOrEmpty(() => surface.caughtMessage.visibleRecipients()));
     recipients.push(await readOrEmpty(() => surface.caughtMessage.copiedRecipients()));
   }
@@ -171,4 +199,24 @@ test(`${statement} — reactivating the account restores the watch`, async ({ su
       { ...settle, message: "the reactivated watcher is notified of the opportunity again without having asked to watch" },
     )
     .toBe(true);
+});
+
+test(`${statement} — a new opportunity is announced`, async ({ surface, mail }) => {
+  test.slow();
+  await surface.signIn(persona.administrator);
+
+  await mail.clear();
+  await surface.opportunityCwuEdit.open({ opportunityId: seed.opportunities.draftOfOtherStaff.id });
+  await surface.opportunityCwuEdit.publish();
+
+  await expect
+    .poll(
+      async () => (await recipientsOfAnnouncements(surface, mail)).includes(seed.users.vendorOne.email.toLowerCase()),
+      { ...settle, message: "the active vendor who asked for new-opportunity notices is sent the announcement" },
+    )
+    .toBe(true);
+  expect(
+    (await recipientsOfAnnouncements(surface, mail)).includes(seed.users.vendorDeactivated.email.toLowerCase()),
+    "the deactivated account is among the recipients, visible or blind-copied, of the new-opportunity announcement",
+  ).toBe(false);
 });

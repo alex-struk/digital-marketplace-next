@@ -4946,12 +4946,10 @@ owed:
     id: R-6.17
     version: 1
     domain: notifications
-    stage: derive-tests
+    stage: calibrate
     why: name at least one other kind of notification an active vendor account
       receives, and a surface action that triggers it without the organization
       screens, so that its absence for a deactivated account can be asserted
-    clause: a deactivated account receives no notification of any kind beyond
-      notices about an opportunity it was watching
     from: derive-tests-notifications-stale-11
     gate: G3
     by: agent:reviewer
@@ -4969,3 +4967,15 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-10-02T16:16:38.411Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-10-02T16:37:36.128Z
+    asserted:
+      - clause: a deactivated account receives no notification of any kind beyond
+          notices about an opportunity it was watching
+        by: derive-tests-notifications-stale-12
+        gate: G3
+        at: 2026-10-02T16:37:36.128Z
+    target: old
