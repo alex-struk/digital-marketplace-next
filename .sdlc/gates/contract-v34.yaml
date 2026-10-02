@@ -1,0 +1,15 @@
+gate: G1
+verdict: approve
+by: agent:product-owner
+held_by: agent
+rationale: |2-
+  The question is whether this contract change gives R-7.29's open clause a usable starting state without changing behaviour that has already been ruled. It does. R-7.29 says that when a screen embeds a page's body and that page is missing, the screen still works and the embedded section is empty. R-7.25 says no screen and no request can remove a page the service needs, and 000-installation.sql puts every such page back on every reset. So the only honest way to reach the R-7.29 state is a separate oracle instance whose data is different, and that is what this proposal builds: the configuration `service_page_absent`. I checked three things against the branch. First, the override's `db` command is the base file's own command (`postgres -c log_statement=all`, sources/old/docker-compose.yml) with one custom database setting added. Second, 017-absent-service-page.sql uses `NULLIF(current_setting('sdlc.absent_page', true), '')`, so under the default the setting is empty and the file deletes nothing. It also deletes `contentVersions` before `content`, so it does not trip a foreign key. Third, the configuration sets up only the condition, the page being gone, and leaves the outcome (an empty scope section) to the application. That keeps the test blind. Neither criterion's statement, version or confidence changes, so there is nothing to confirm or edit, and no condition lines are needed. The observables entry lists what such an instance makes false (any criterion about the scope section's content) and keeps it out of the default run, which keeps the shared suite sound. The proposal says the startup proof was run on the oracle (404 on the scope page in the configuration copy, 200 in the default copy, and the same after a reset). I did not re-run it. The missing-test/R-7.29 condition stays open until derive-tests writes a test tagged `@service_page_absent`. That is correctly routed to derive-tests and is not a reason to hold this back. What would change the ruling: evidence that the setting leaks into the default instance (for example, a default run where the scope section comes back empty), or a claim that R-7.29's clause also needs the Team With Us terms page absent. That second case would need its own configuration value and a separate ruling, not a change to this one. Tier is STANDARD and there is only one plausible reading of the intent, so nothing escalates.
+conditions: []
+cost: 0.3016596
+turns: 3
+session: "a7670cc2-5127-488e-ab56-db28260a4af8"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-02T23:39:54.315Z

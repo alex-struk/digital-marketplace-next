@@ -5061,7 +5061,7 @@ owed:
     id: R-7.29
     version: 1
     domain: content
-    stage: contract
+    stage: derive-tests
     why: a seed state in which the embedded page
       (/content/sprint-with-us-opportunity-scope or
       /content/team-with-us-terms-and-conditions) is absent. R-7.25 means no
@@ -5072,3 +5072,18 @@ owed:
     gate: G3
     by: agent:tech-lead
     at: 2026-10-02T23:31:11.521Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: the configuration `service_page_absent` in spec/contract/observables.yaml
+          (select SDLC_ORACLE_ABSENT_PAGE=sprint-with-us-opportunity-scope, tag
+          "@service_page_absent") starts an oracle copy where
+          tests/seed/017-absent-service-page.sql has removed the page at
+          sprint-with-us-opportunity-scope; a test tagged "@service_page_absent"
+          opens any seeded Sprint With Us opportunity (e.g.
+          opportunities.closedSprintWithUs) on opportunity-swu-view and reads
+          scope_section alongside the screen's other observations.
+        by: contract-v34
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-10-02T23:39:55.306Z

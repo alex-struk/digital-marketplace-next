@@ -257,9 +257,10 @@ pages:
       # when that page cannot be read. That page is one the service needs: no screen and
       # no request removes it or changes its address, its body cannot be saved empty, and
       # reading it needs no sign-in. It can therefore be unreadable only if its database
-      # row is absent, which the application never produces. The seed does not remove it,
-      # because every Sprint With Us opportunity reads the same page at the same address,
-      # so removing it would empty this section for every test.
+      # row is absent, which the application never produces. The default seed keeps it,
+      # because every Sprint With Us opportunity reads the same page at the same address;
+      # an instance started in the configuration service_page_absent
+      # (observables.yaml, configurations) is the one where it is missing.
       scope_section: { test_id: null }
       addenda: { test_id: opportunity-addenda }
       successful_proponent: { test_id: opportunity-successful-proponent }

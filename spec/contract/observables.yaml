@@ -220,6 +220,39 @@ configurations:
       - Every other criterion that expects a message is false on such an instance, so it
         is started for R-6.1 alone and never shared with the rest of the suite.
 
+  service_page_absent:
+    for: [R-7.29]
+    select: SDLC_ORACLE_ABSENT_PAGE=sprint-with-us-opportunity-scope
+    default: every page the service needs is present
+    sets: >-
+      the database setting sdlc.absent_page, read by tests/seed/017-absent-service-page.sql,
+      which removes the page held at that address after the rest of the seed has restored
+      it, at start-up and again on every reset. The application itself is started exactly
+      as under the default.
+    observable:
+      in_force: >-
+        GET {base_url}/api/content/sprint-with-us-opportunity-scope is answered as not
+        found, and the published-page screen at /content/sprint-with-us-opportunity-scope
+        shows the not-found screen
+    tag: "@service_page_absent"
+    notes:
+      - The page a Sprint With Us opportunity's screen embeds as its scope section
+        (surface.yaml, opportunity-swu-view.scope_section) is one the service needs. No
+        screen and no request removes it (R-7.25), and the seed restores it on every
+        reset, so its absence is a state only a separate instance can hold. The seeded
+        Sprint With Us opportunities (tests/seed/manifest.yaml) are what a test opens on
+        such an instance; nothing about them differs from the default.
+      - The instance is started for R-7.29 alone. Every Sprint With Us opportunity reads
+        the same page at the same address, so on this instance every one of them shows an
+        empty scope section, and any criterion about that section's content is false here.
+      - A test written for it carries the tag above, runs only against an instance started
+        with SDLC_ORACLE_ABSENT_PAGE=sprint-with-us-opportunity-scope, and does not try to
+        detect which instance it is on. It is left out of the default run, where the page
+        is present and the scope section is not empty.
+      - The variable takes any one service page's address, and the seed removes whichever
+        page it names; this configuration names the scope page because that is the page
+        R-7.29's clause is about.
+
 files:
   # A stored file is reached at its own address, whatever page put it there. The
   # application decides on each request whether the requester may read it.

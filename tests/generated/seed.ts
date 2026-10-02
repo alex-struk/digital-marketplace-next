@@ -17,7 +17,8 @@ export const seed = {
     "013-content-pages.sql",
     "014-proposal-team-candidates.sql",
     "015-profile-completion.sql",
-    "016-opportunity-note-and-cancellation.sql"
+    "016-opportunity-note-and-cancellation.sql",
+    "017-absent-service-page.sql"
   ],
   "users": {
     "administratorOne": {
@@ -653,6 +654,9 @@ export const seed = {
       "fixed": true,
       "embedded_by": [
         "opportunity-swu-view"
+      ],
+      "absent_in": [
+        "service_page_absent"
       ]
     },
     "servicePageSprintWithUsProposalEvaluation": {
