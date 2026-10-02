@@ -2103,6 +2103,14 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-10-02T23:46:09.033Z
+    closed:
+      outcome: met
+      why: tests/acceptance/content/R-7.29.spec.ts final assertion now reads
+        surface.opportunitySwuView.scopeSection() directly, without readOrEmpty,
+        with a comment saying why; readOrEmpty remains only on the five presence
+        checks
+      by: agent:reviewer
+      at: 2026-10-02T23:48:03.836Z
   - ref: derive-tests-content-stale-7#2
     text: "tests/acceptance/not-testable.yaml: add an R-7.29 entry with a clause
       naming 'with nothing said about why' as it applies to the Sprint With Us
@@ -2116,3 +2124,12 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-10-02T23:46:09.033Z
+    closed:
+      outcome: met
+      why: tests/acceptance/not-testable.yaml R-7.29 entry now names 'with nothing
+        said about why' on opportunity-swu-view outside its scope section in its
+        clause, explains in its reason that no observation exists for an
+        explanatory message elsewhere on that screen, names a
+        notices/page_messages observation in missing, and has owner contract
+      by: agent:reviewer
+      at: 2026-10-02T23:48:03.854Z
