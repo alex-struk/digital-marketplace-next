@@ -184,7 +184,20 @@ reader's attention.
   17 back through 7) holds every screen it walks. The blind-copy batching it answers for is still
   built in Slice 7 and used by every multi-recipient notice from then on, so for eleven slices a
   rule is in force that no slice yet answers for — a gap the Slice 7 build condition already
-  names. R-1.20 needs a cancel action, so it sits in Slice 9, which
+  names. R-5.16 was first placed in Slice 10, which builds the panel tab and the window in which
+  the panel may change. A G3 ruling on the build of Slice 10 found its test unbound there: both
+  its starting state (questions being evaluated individually) and its refused second change
+  (once the opportunity has moved to consensus) are only reached through the individual
+  evaluation screens, `evaluation-individual-create-swu` among them, which Slice 17 delivers
+  together with the automatic move to consensus. R-5.16 therefore sits in Slice 17, whose
+  closure (Slices 16 back through 7) holds the panel tab, the deadline hook that puts an
+  opportunity into individual evaluation and the screens that move it on. Naming a seeded
+  opportunity already at consensus as Slice 10's starting state was considered and rejected:
+  it would answer only the second clause, the first still needs an opportunity in individual
+  evaluation that nothing before Slice 16 can produce, and a seed standing in for stages no
+  slice has built would test the rule against data the service could not itself have made. The
+  window is still built and enforced from Slice 10, so for seven slices it is in force but
+  answered for by no slice. R-1.20 needs a cancel action, so it sits in Slice 9, which
   builds cancellation (closure: Slices 8, 7). Its "out of an awarded opportunity" example is only
   reachable once Slice 16 awards; the cancelled-is-final and skip-a-stage refusals are walkable in
   Slice 9, and the awarded half is exercised again when Slice 16 lands. R-6.2's test reaches
