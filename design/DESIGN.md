@@ -1974,12 +1974,13 @@ words that no criterion gives, the story or this list says so.
 A stored file is the same thing wherever it comes from: an attachment on an opportunity or a
 proposal, a profile picture, an organization's logo, or an image placed in formatted text. It has a
 name, an uploader, a date and a rule about who may read it. It is written once and never changed
-(R-8.6). This domain owns no screen of its own. The surface gives it six entries, and they come in
+(R-8.6). This domain owns no screen of its own. The surface gives it seven entries, and they come in
 two kinds:
 
-- **Three service addresses** (`file-upload`, `file-description`, `file-download`). These answer
-  with data or with the file itself, never with a page. Most of this domain's criteria are about
-  them: who may upload, what is refused and how, and who may read.
+- **Four service addresses** (`file-upload`, `file-description`, `file-download`,
+  `file-attach-by-identifier`). These answer with data or with the file itself, never with a page.
+  Most of this domain's criteria are about them: who may upload, what is refused and how, who may
+  read, and who may attach a stored file to an opportunity or a proposal.
 - **Three shared controls** that sit on pages other domains own. `file-attachment-control` is the
   attachment list on the three opportunity forms, the Code With Us proposal form and the opportunity
   history note. `file-image-picker` is the profile picture on the profile screens and at sign-up,
@@ -1989,7 +1990,7 @@ two kinds:
 Every state named in `design/screens.yaml` has a story at
 `design/catalogue/<page>.<state>.stories.tsx`. For the three controls, the story is what a build
 copies. The host page around each control is trimmed to a frame, and a line in the story says
-whose design the trimmed part is. For the three addresses, the story is a **response reference**
+whose design the trimmed part is. For the four addresses, the story is a **response reference**
 (see below). A build does not render it.
 
 Two decisions shape the domain:
@@ -2011,7 +2012,7 @@ stories already compile with.
 
 | Component | Used for |
 | --- | --- |
-| `Heading` | The host page's H1 (kept in each frame so the outline is real), the host section's H2, and the "Attachments" H3 in the opportunity form. On the three service addresses, the H1 is the surface title and there are H2s for "Request" and "Answer". |
+| `Heading` | The host page's H1 (kept in each frame so the outline is real), the host section's H2, and the "Attachments" H3 in the opportunity form. On the four service addresses, the H1 is the surface title and there are H2s for "Request" and "Answer". |
 | `Text` | Body copy. `size="small" color="secondary"` is used for the stated rule next to each file trigger, the resulting-name line under a renamed attachment, and the notes that mark a trimmed frame. |
 | `Button` | "Add attachment" and the profile picture trigger are `secondary`. "Insert image" is `tertiary size="small"`, inside the content domain's toolbar. Remove is `secondary size="small"`, with an `aria-label` that begins with its visible text and names the file ("Remove Statement of work.pdf"). |
 | `FileTrigger` (from `react-aria-components`) | Every file chooser. `acceptedFileTypes={["image/jpeg", "image/png"]}` is set on the image picker and on "Insert image". The attachment trigger accepts any type, because no criterion restricts an attachment's type (R-8.23 note). |
@@ -2026,36 +2027,82 @@ stories already compile with.
 These are built from standard HTML and styled only with tokens. None of them is a design-system
 component, and none may be presented as one.
 
-- **Attachment list.** This is new in this domain. It is a `<ul>` with no bullets. Each `<li>` is a
-  row with a `--surface-color-border-medium` border and a `--layout-border-radius-medium` radius. A
-  stored row holds the read-only name, the download link and Remove. A new row holds a line giving
-  the chosen file's name and size, the name field, the resulting-name line and Remove. The design
-  system has no file list or file-upload component. `FileTrigger` only opens the chooser, and it
-  shows nothing about what was chosen.
+- **Page container** (`PageContainer`, `design/catalogue/layout.tsx`). Reused from the content
+  domain, which defined it; see its entry there. Every story of this domain sits in exactly one. The
+  content is at most 1100 pixels wide and centred, so it lines up with the design system's `Header`
+  and `Footer`. `--layout-padding-medium` on either side sits outside those 1100 pixels. The design
+  system has no page container.
+- **Stack** (`Stack`, `design/catalogue/layout.tsx`). Reused from the content domain. It is the only
+  source of spacing between items, and it removes the margins of the design system's `Text` and
+  `Heading`. This domain added one thing to it: `as="ul"` and `as="ol"`, which give a list with no
+  markers and no indent whose items are spaced by the gap alone. The attachment list, the opportunity
+  tabs and the public view's download links need that, because a list could not be a stack before.
+  The change is additive, and no other domain's story used a list as a stack, so none changes. The
+  design system has no stack or spacing primitive.
+- **Attachment list.** This is new in this domain. It is a `Stack as="ul"`. Each `<li>` is a row
+  with a `--surface-color-border-medium` border, a `--layout-border-radius-medium` radius and
+  `--layout-padding-small` inside, and it lays out its content with a `Stack gap="small"`. A stored
+  row holds the read-only name, then the download link and Remove side by side. A new row holds a
+  line giving the chosen file's name and size, the name field, the resulting-name line and Remove.
+  The design system has no file list or file-upload component. `FileTrigger` only opens the chooser,
+  and it shows nothing about what was chosen.
+- **Card section.** This is the opportunities domain's card, reused. The attachment control sits
+  inside one. It has a `--surface-color-border-default` border, a `--layout-border-radius-medium`
+  radius and `--layout-padding-large` inside, and it holds one `Stack gap="medium"`. That inner
+  padding belongs to the card. It is not a story's outer padding.
 - **Picture preview.** This is new in this domain. It is a plain `<img>` with `max-width: 100%` and
   `height: auto`, so a picture is shown at the size it was stored, up to the width of the column. The
   design system has no image or avatar component. The **alternative text** says what the image is for
   ("Your current profile picture"), or, for an image in formatted text, whatever the author wrote.
 - **Response reference.** This is new in this domain, and it exists only in the catalogue. It is a
-  `<dl>` built as the opportunities domain's key facts list, stacked in one column. There are two of
-  them under "Request" and "Answer" H2s. It sets out what a caller sends to one of the three service
-  addresses and what comes back, so that each part of the answer the surface names has an element to
-  carry its test ID. **A build does not render it.** The service answers these addresses with data
-  or with the file. See "The three service addresses" below.
+  `<dl>` built as the opportunities domain's key facts list, stacked in one column. It is a
+  `Stack as="dl" gap="medium"`, and each fact in it is a `Stack gap="small"` holding the `dt` and the
+  `dd`. There are two of them, under "Request" and "Answer" H2s. It sets out what a caller sends to
+  one of the four service addresses and what comes back, so that each part of the answer the surface
+  names has an element to carry its test ID. **A build does not render it.** The service answers
+  these addresses with data or with the file. See "The four service addresses" below.
 - **Status line.** This is the users domain's pattern, reused. It is a `role="status"` container
   holding visible text, used for "harbour.png is ready…" and "…was inserted at the cursor".
 
-No token beyond those the earlier domains list is used: `--layout-margin-{none,xsmall,small,medium,large}`,
-`--layout-padding-{none,small,large}`, `--layout-border-width-small`,
+No token beyond those the earlier domains list is used: `--layout-margin-{none,small,medium,large}`
+(through the stack), `--layout-padding-{none,small,medium,large}`, `--layout-border-width-small`,
 `--layout-border-radius-medium`, `--surface-color-border-{default,medium}` and
-`--typography-font-weights-bold`. `max-width: 100%` and `height: auto` on the picture preview are
-not spacing, type or radius values. They stop an image overflowing its column (see gap 11 on
-display size).
+`--typography-font-weights-bold`. `--layout-margin-xsmall`, which the response references used
+between a term and its value, is no longer used. That spacing is now the stack's `small`. Three
+values on the picture preview and the published image are not spacing, type or radius values:
+`max-width: 100%`, `height: auto`, and, for the published image, `align-self: flex-start`. They
+keep an image inside its column, at its own size rather than stretched across the stack (see gap 11
+on display size).
 
 ### How each control is laid out
 
-The users domain's layout applies: a single column, with `--layout-margin-large` between regions,
-`--layout-margin-medium` inside a section, and action rows that wrap.
+Every story of this domain is built from `layout.tsx` the same way as the content domain's: one
+`PageContainer`, and inside it one `Stack gap="large"` whose items are the regions of the frame. No
+story sets its own width, outer padding, margin or gap. The rhythm is the same everywhere:
+
+- **`large`** between the regions of a frame: the heading block, the tab bar, each `<section>`, the
+  profile form, and on a response reference, "Request" and "Answer".
+- **`medium`** between the items of a region: a section's heading and what follows it, the parts of
+  the attachment card, the attachment rows, the fields of the profile form, the tabs in the tab bar,
+  the download link and Remove in a stored row, and the facts of a response reference.
+- **`small`** between a label and what it labels: the small "Manage a…" line and the H1; the parts
+  of one attachment row; the picture group (its label, the picture, the status, any refusal, the
+  rule and the trigger); the editor's toolbar, rule, status line, body and formatting-guide link,
+  as in the content domain's editor; the toolbar's buttons; the spinner and its text; a `dt` and its
+  `dd`; and the H3 "Attachments" and the download links under it on the public view.
+
+Rows (the tab bar, a stored row's link and Remove, the toolbar's buttons, the uploading line) are
+`Stack direction="row"`, which always wraps, so nothing is pushed off a 320-pixel screen. The picture
+group is a `Stack role="group" align="start"`, so the picture and the trigger keep their own width
+and are not stretched. A `Button` that sits alone in a column stack is wrapped in a plain `div` so it
+keeps its own width. A design-system `Form` holds one `Stack gap="medium"`.
+
+Moving to the container and the stack changed how two things look, and nothing else. The download
+links on the public view were a bulleted list. They are now a list with no markers, like every list
+in a stack, and each link's visible "Download" says what it is. Some gaps also moved one step to fit
+the rhythm: the tabs from `large` to `medium`, the heading block and a fact's term and value to
+`small`, and the editor's parts from `medium` to `small`, so that it matches the content domain's
+editor. Every page, state, test ID, component and word is as it was.
 
 - **Attachment control** (`file-attachment-control`). This is the last card section of the
   Opportunity tab in edit mode, headed "Attachments" (H3), where the opportunities domain placed
@@ -2107,10 +2154,10 @@ The users domain's layout applies: a single column, with `--layout-margin-large`
   The marker's exact spelling is the build's choice (see gap 9). "Describe this image" is selected
   when it is inserted, so that typing replaces it, and the success line asks for a description.
 
-### The three service addresses
+### The four service addresses
 
-`file-upload`, `file-description` and `file-download` answer with data or with the file, so there is
-nothing on them for a person to see. What the stories give instead is the response reference: the
+`file-upload`, `file-description`, `file-download` and `file-attach-by-identifier` answer with data
+or with the file, so there is nothing on them for a person to see. What the stories give instead is the response reference: the
 request a caller sends, and the parts of the answer the surface names, each on an element carrying
 its test ID. **The adapter reads the test IDs as names for those parts of the HTTP answer**, not as
 elements it will find in a browser:
@@ -2129,10 +2176,15 @@ elements it will find in a browser:
 | `file-download-response`, `file-download-request` | A successful answer at all, with the request that got it. `readable_when_signed_out_if_public` binds to the response, because the default story's request is made signed out. |
 | `file-refused` | Not authorized. It is shared by both addresses and by both of their refusals, because R-8.12 gives a missing file and a forbidden one the same answer for anyone but an administrator. |
 | `file-not-found` | The administrator's "not found" for an identifier no file carries (R-8.12). |
+| `file-attach-request` | The save of an opportunity or a proposal as it stands, with one stored file's identifier added to its attachments (`attach_stored_file`). |
+| `file-attach-accepted` | The save was accepted with the file attached (R-8.22): the sender may read the file. |
+| `file-attach-refused` | The save was refused because the sender may not read the file named (R-8.22). |
+| `file-attach-identifiers` | The identifiers of the record's attachments as stored after the answer. When the save is refused, the named file is not among them. |
 
 The states are the distinct answers: for the upload, `default` (stored), `signed-out`, `too-large`,
 `name-too-long`, `invalid-read-access`, `no-file` and `fault`; for the description and the download,
-`default`, `refused` and `not-found`. Every refusal says what was stored, which is always nothing,
+`default`, `refused` and `not-found`; for attaching by identifier, `default` (accepted) and
+`refused`. Every refusal says what was stored, which is always nothing,
 and that the working copy is gone (R-8.18). A refusal of the no-file kind is not written to the
 error log (R-8.18).
 
@@ -2208,6 +2260,12 @@ the same element share its ID. The same control keeps its ID on every page it ap
 refused). `attachment-list` is bound to `attachment_list_on_public_view`, and the edit-mode list
 carries the same ID.
 
+**Filled in this run**, for `file-attach-by-identifier`, the one page of this domain that had none:
+`attach_stored_file` is `file-attach-request`, `attachment_accepted` is `file-attach-accepted`,
+`attachment_refused` is `file-attach-refused`, and `attached_file_identifiers` is
+`file-attach-identifiers`. The adapter reads them as names for parts of the HTTP answer, as it does
+for the other three. No ID already filled in was changed.
+
 ### Per-screen notes
 
 **file-upload** — `default` (stored), `signed-out` (R-8.1), `too-large` (R-8.17), `name-too-long`
@@ -2236,6 +2294,12 @@ organizations domain's trigger ID, `organization-logo-button`.
 `failed` (too large, and the body unchanged), `published` (the reader's view of the same page, where
 the marker has become the image). `published` is the content domain's public page, shown here
 because two of this control's observations are only visible there.
+
+**file-attach-by-identifier** — `default` (a vendor who uploaded a file attaches it to their own Code
+With Us proposal, R-8.22, R-8.20) and `refused` (a vendor names the identifier of a file another
+vendor uploaded and marked readable by no one else, R-8.22, which replaces R-8.15). These are
+response references. The same address takes an opportunity in place of a proposal, and any of the
+three programs. No criterion makes the answer differ between them, so there is no state for each.
 
 ### Gaps
 
@@ -2296,6 +2360,19 @@ words that no criterion gives, the story or this list says so.
     keeping its proportions.
 13. **Content the spec does not carry.** File names, sizes, identifiers, the fingerprint, dates and
     the page text in the stories are illustrative. The identifiers are synthetic.
+14. **What a refused attachment looks like** (R-8.22). The criterion says only that a file may be
+    attached only by someone permitted to read it. It does not say:
+    - which kind of refusal this is (not permitted, not authorized or bad request);
+    - whether the rest of the save is kept or the whole save is refused;
+    - what an identifier that no stored file carries gets. R-8.15, which R-8.22 replaces, checked
+      only that the file exists.
+
+    The `refused` story says only what R-8.22 fixes: the file is not attached, the record's
+    attachments are as they were, and the file's readers are unchanged. Its outcome line and
+    message are the design's own. None of these questions was given a state.
+15. **Which file a person may attach through the controls.** The attachment control only uploads
+    new files. Nothing on a screen attaches an existing stored file by its identifier. So R-8.22
+    can only be met or broken through the address, and no control needs a state for it.
 
 ---
 

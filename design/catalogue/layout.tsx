@@ -13,6 +13,10 @@ const css = `
 .layout-stack.layout-stack.layout-stack > * > :is(h1, h2, h3, h4, h5, h6, p, dt, dd) {
   margin: var(--layout-margin-none);
 }
+.layout-stack:is(ul, ol) {
+  list-style: none;
+  padding: var(--layout-padding-none);
+}
 `;
 
 // One column the width of the design system's Header and Footer content, centred. 1100px is the value those containers
@@ -42,7 +46,8 @@ type Gap = "small" | "medium" | "large";
 
 // No `style` or `className`: a stack's spacing is its gap and nothing else.
 type StackProps = Omit<HTMLAttributes<HTMLElement>, "style" | "className"> & {
-  as?: "div" | "section" | "article" | "dl";
+  // A `ul` or `ol` stack is a list of rows: no markers and no indent, its items spaced by the gap alone.
+  as?: "div" | "section" | "article" | "dl" | "ul" | "ol";
   gap?: Gap;
   // A row lays its items side by side and always wraps, so nothing is pushed off a 320-pixel screen.
   direction?: "column" | "row";

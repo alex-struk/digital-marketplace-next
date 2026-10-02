@@ -1,7 +1,7 @@
 {
-  "generated": "2026-10-01T23:51:28.608Z",
+  "generated": "2026-10-02T00:05:02.216Z",
   "axe": "4.13.0",
-  "catalogue": "9d20abd3661c813d01ba7bb5242e07e54c8c0fd2fbdb3c271fae26283442c572",
+  "catalogue": "ba5d3cadcdeb710b2e6193eb1860dc9dbca3f4edb77427ce0ab1a2f08a36a586",
   "ok": true,
   "messages": [],
   "compile": [
@@ -783,6 +783,18 @@
       "id": "evaluation-evaluation-panel-twu-too-few--too-few",
       "title": "evaluation/evaluation-panel-twu/too-few",
       "file": "./catalogue/evaluation-panel-twu.too-few.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-attach-by-identifier-default--default",
+      "title": "files/file-attach-by-identifier/default",
+      "file": "./catalogue/file-attach-by-identifier.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-attach-by-identifier-refused--refused",
+      "title": "files/file-attach-by-identifier/refused",
+      "file": "./catalogue/file-attach-by-identifier.refused.stories.tsx",
       "violations": []
     },
     {
@@ -2977,7 +2989,7 @@
     }
   ],
   "totals": {
-    "stories": 493,
+    "stories": 495,
     "violations": 0,
     "failed": 0
   }
