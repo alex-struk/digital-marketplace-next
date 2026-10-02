@@ -2216,6 +2216,25 @@ export default function create(
     return "";
   }
 
+  // A reader not offered the History tab never reaches the place the question is asked, so
+  // that is reported unbound rather than read as "no control".
+  async function noteControlOffered(where: string): Promise<string> {
+    await openTab(where, ["History"]);
+    await seen(page.getByRole("heading", { name: "History" }))
+      .first()
+      .waitFor({ state: "visible", timeout: 5000 })
+      .catch(() => undefined);
+    const main = page.getByRole("main").first();
+    const offered = [
+      seen(main.getByRole("textbox")),
+      seen(main.getByLabel(/\bnotes?\b|attach|\bfiles?\b/i)),
+      seen(main.getByRole("button", { name: /note|attach|upload|file|save/i })),
+      seen(main.getByRole("link", { name: /add note|attach|upload|save note/i })),
+    ];
+    for (const control of offered) if (await control.count()) return "true";
+    return "false";
+  }
+
   // ---------------------------------------------------------------- answers from addresses
 
   // A few surfaces are addresses that answer with a document rather than screens. They
@@ -3792,6 +3811,11 @@ export default function create(
           await seen(page.getByRole("table")).first().waitFor({ state: "visible", timeout: 3000 }).catch(() => undefined);
           return tableRows(false);
         }),
+      // Whether the History tab offers any way to add a note: a text entry, a file to attach,
+      // or a control to add or save one. Seen as the author (Code With Us) and as an
+      // administrator (Sprint With Us), the tab holds the "History" heading and its table and
+      // nothing else, which reads "false".
+      noteControlOffered: () => noteControlOffered(`${where}.note_control_offered`),
       // Before an opportunity closes the tab withholds every proposal, showing only a notice
       // that they will be displayed later; that withholding reads as nothing.
       proposalsTab: () =>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-old-62 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">500</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">494</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">415</span></a></li><li><a href="../runs.html">Run log <span class="count">20</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-old-62</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-02 18:33</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on old, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I bound both new observations, <code>opportunity-cwu-edit.note_control_offered</code> and <code>opportunity-swu-edit.note_control_offered</code>, against the running target, and both read &quot;false&quot; there.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I bound both new observations, <code>opportunity-cwu-edit.note_control_offered</code> and <code>opportunity-swu-edit.note_control_offered</code>, against the running target, and both read &quot;false&quot; there. Both are now listed as <code>bound</code> in <code>tests/adapters/old/bindings.yaml</code>. I left all the existing bindings as they were.</p>
+<p><strong>What the target shows.</strong> The contract says to read each History tab as an administrator or as the opportunity&#39;s author:</p>
+<ul><li><strong>Code With Us:</strong> I signed in as public-sector staff, the seeded author of the opportunity with a private note. On its management screen the History tab shows a &quot;History&quot; heading and a table with three rows: &quot;Note Added&quot;, &quot;Published&quot; and &quot;Draft&quot;.</li><li><strong>Sprint With Us:</strong> I signed in as an administrator and opened the seeded open opportunity with a submitted proposal. Its History tab is the same heading and a two-row table.</li></ul>
+<p>Neither tab has a text box, a file control, or any button or link for adding or saving a note. The only way the target offers to add a note is by request, not on a screen.</p>
+<p><strong>How the adapter reads it.</strong> Both pages share one builder in <code>tests/adapters/old/index.ts</code>, so I added a single <code>noteControlOffered</code> reader that both use. It opens the History tab, waits for the heading, and returns &quot;true&quot; if the main area holds any of these, otherwise &quot;false&quot;:</p>
+<ul><li>a text box</li><li>a field whose label mentions a note, attaching, or a file</li><li>a button named for a note, attaching, uploading, a file or saving</li><li>a link named for adding a note, attaching, uploading or saving a note</li></ul>
+<p>If the History tab isn&#39;t offered to the signed-in reader, it throws <code>unbound:</code> instead of returning &quot;false&quot;. That reader never reached the place the contract describes, and the contract says to read this as an administrator or the author.</p>
+<p><strong>Verification.</strong> I ran the same checks in the browser against both seeded opportunities, and every one found nothing, which gives &quot;false&quot; on both pages. I couldn&#39;t type-check the edited file: the compiler command needed approval and none was available in this session, so that check is still to be done. I didn&#39;t test the &quot;true&quot; case, because neither History tab on this target offers a note control.</p>
+<p>Every route I opened resolved on the target. I wrote nothing outside <code>tests/adapters/old/</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-02 18:34.</p>
+<div class="body"><p>Question: does the bind-adapter-old-62 adapter bind every surface action and observation on old, and nothing else? Approve. The change binds exactly the two observations the generated surface declares (opportunity-cwu-edit.note_control_offered and opportunity-swu-edit.note_control_offered, the observation not-testable.yaml names as missing for R-1.33) through one shared reader that only navigates and locates: it opens the History tab via openTab, waits for the heading, and counts visible textbox/labelled-field/button/link locators scoped to main, returning &#39;true&#39; or &#39;false&#39; for the test to judge, with no assertion or business logic. A reader not offered the History tab is reported unbound rather than read as &#39;false&#39;, which matches the contract&#39;s instruction to read the tab as an administrator or the author. bindings.yaml marks just the two new keys bound; nothing under tests/acceptance changed and no existing binding was altered. The runner&#39;s typecheck reports no diagnostics under adapters/old/ (the failures are in adapters/new/, outside this proposal). The &#39;true&#39; branch was not exercised because the old target offers no note control, which is the expected observation there. The existing missing-test R-1.33 clause stays owed by derive-tests, which can now write the test against this observation; it is not this stage&#39;s work. What would change the ruling: a typecheck diagnostic under adapters/old/, evidence that the locators match an unrelated History-tab element such as a filter box and so read &#39;true&#39; falsely, or a change reaching outside tests/adapters/old/.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
