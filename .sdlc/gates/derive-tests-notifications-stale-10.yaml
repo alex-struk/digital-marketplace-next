@@ -1,0 +1,17 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The question is whether the rewritten R-6.17 tests follow from the criterion and nothing else; they do, and I approve. Tests 1 and 2 assert that, after the watched opportunity is changed or given an addendum, the deactivated watcher is among no recipients (visible or blind-copied) of any caught message, which asserts 'no notification of any kind, including notices about opportunities it was watching' without introducing a message kind the criterion does not name; the active watcher must be found by the same reads, so absence cannot pass vacuously on a broken catcher or a failed observation. Test 3 asserts the watch is retained and restored by reactivation through its observable effect: an addendum reaches the reactivated account with no new watch request in between. Nothing implementation-specific leaks in; the earlier overreach (an organization invitation standing in for the notification) is gone, and the runner's typecheck passed with no diagnostics. The ruling would change if calibration showed blind-copied recipients cannot be observed (the clause would then need recording as owed), or if the contract's watching() observation were made specific to an opportunity and the test kept inferring the retained watch only from a notice.
+reprompt: |2-
+  You ruled approve. "R-6.17" is not an open condition. No condition is open in this project, so there is nothing here to close.
+conditions: []
+cost: 0.796411
+turns: 11
+session: "cf1497ca-9eb5-45b4-99ac-a6c30023da33"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-02T10:57:12.799Z

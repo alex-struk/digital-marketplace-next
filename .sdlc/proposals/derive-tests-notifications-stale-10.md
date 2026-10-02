@@ -34,3 +34,23 @@ The check covers every message caught after the change, not only the watch notic
 **Surface gaps:** I found no missing actions or observations; everything needed was in the contract. One thing would help whoever writes the contract next: say which opportunity `opportunity-watch-request.watching` refers to. A precise version would let a test check a kept watch directly as well as by its effect.
 
 I changed nothing outside `tests/acceptance`, and nothing asked me to.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether the rewritten R-6.17 tests follow from the criterion and nothing else; they do, and I approve. Tests 1 and 2 assert that, after the watched opportunity is changed or given an addendum, the deactivated watcher is among no recipients (visible or blind-copied) of any caught message, which asserts 'no notification of any kind, including notices about opportunities it was watching' without introducing a message kind the criterion does not name; the active watcher must be found by the same reads, so absence cannot pass vacuously on a broken catcher or a failed observation. Test 3 asserts the watch is retained and restored by reactivation through its observable effect: an addendum reaches the reactivated account with no new watch request in between. Nothing implementation-specific leaks in; the earlier overreach (an organization invitation standing in for the notification) is gone, and the runner's typecheck passed with no diagnostics. The ruling would change if calibration showed blind-copied recipients cannot be observed (the clause would then need recording as owed), or if the contract's watching() observation were made specific to an opportunity and the test kept inferring the retained watch only from a notice.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `23f54462754d4fb566c0fce70178abed0983b00d`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/notifications/`, which this proposal answers for.
+
+    No diagnostics.
