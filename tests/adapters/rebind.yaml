@@ -5256,6 +5256,11 @@ rebind:
     app_tree: 552ceac571aff139ba67f427de383d3eb7ef2480
     by: runner:verify
     at: 2026-10-02T09:20:27.492Z
+    closed: &a31
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-02T10:41:30.266Z
   - id: R-1.28
     target: new
     why: "unbound: opportunity-cwu-edit.cancel_opportunity — no control named
@@ -5279,6 +5284,7 @@ rebind:
     app_tree: 552ceac571aff139ba67f427de383d3eb7ef2480
     by: runner:verify
     at: 2026-10-02T09:20:27.492Z
+    closed: *a31
   - id: R-1.30
     target: new
     why: "unbound: opportunity-cwu-edit.reporting_proposals — the summary on
@@ -5342,6 +5348,7 @@ rebind:
     app_tree: 552ceac571aff139ba67f427de383d3eb7ef2480
     by: runner:verify
     at: 2026-10-02T09:20:27.492Z
+    closed: *a31
   - id: R-1.32
     target: new
     why: 'unbound: opportunity-cwu-edit.add_addendum — the management screen at
@@ -5356,6 +5363,7 @@ rebind:
     app_tree: 552ceac571aff139ba67f427de383d3eb7ef2480
     by: runner:verify
     at: 2026-10-02T09:20:27.492Z
+    closed: *a31
   - id: R-1.35
     target: new
     why: 'unbound: proposal-vendor-dashboard.show_my_proposals — signed in,
@@ -5368,6 +5376,7 @@ rebind:
     app_tree: 552ceac571aff139ba67f427de383d3eb7ef2480
     by: runner:verify
     at: 2026-10-02T09:20:27.492Z
+    closed: *a31
   - id: R-1.36
     target: new
     why: 'unbound: proposal-vendor-dashboard.show_my_proposals — signed in,
@@ -5380,3 +5389,75 @@ rebind:
     app_tree: 552ceac571aff139ba67f427de383d3eb7ef2480
     by: runner:verify
     at: 2026-10-02T09:20:27.492Z
+    closed: *a31
+  - id: R-6.17
+    target: new
+    why: "unbound: organization-edit.add_team_members — /organizations/:orgId/edit
+      did not open as a screen at
+      http://localhost:4300/organizations/00000000-0000-4000-8000-000000000304/\
+      edit: Page not found The page you are looking for does not exist.; the
+      screen is offered only to a signed-in person who may have it; walked
+      signed in (as the administrator, as a public sector employee, and as a
+      vendor for a vendor's screens — the seeded organization owner for the
+      organization screens — with the seeded records' identifiers), the running
+      build serves a signed-in person /dashboard (to the administrator \"Create
+      an opportunity\" over \"All opportunities\"; to public sector staff the
+      same over \"My opportunities\"; to a vendor only \"Dashboard\" and \"You
+      are signed in as <name>.\"), /opportunities, the account screens under
+      /users (whose Organizations tab says organizations \"will be listed here
+      once organizations can be registered\"), to the administrator the
+      content-management screens under /content, and to the administrator and
+      public sector staff /opportunities/create, the three programs' forms
+      /opportunities/{code,sprint,team}-with-us/create and the management
+      screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit; the
+      proposal, organization and evaluation screens — the Code With Us proposal
+      screens (tried as a vendor with the seeded published Code With Us
+      opportunity, whose page offers no way to start one), /proposals,
+      /opportunities/code-with-us/:opportunityId/complete, /organizations and
+      /organizations/:orgId/edit included — answer \"Page not found\", and
+      /users/:userId opens for the signed-in person's own identifier and, to the
+      administrator, for another account's"
+    found: unbound
+    adapter: d10f4df207a54888ca97177767ba38bed84f3ae7
+    slice: 9
+    app_tree: 552ceac571aff139ba67f427de383d3eb7ef2480
+    by: runner:verify
+    at: 2026-10-02T10:41:30.266Z
+  - id: R-1.35
+    target: new
+    why: "unbound: proposal-vendor-dashboard.show_my_proposals — signed in as
+      vendor, /dashboard at http://localhost:4300/dashboard reads only
+      \"Dashboard / You are signed in as Alex Placeholder.\" and offers no
+      control named /my proposals/i; looked again signed in as the
+      organization-owner vendor, who wrote a seeded proposal: the dashboard is
+      that heading and sentence alone, the header offers only Dashboard, My
+      profile and Sign out, /proposals and /organizations answer \"Page not
+      found\", the seeded published Code With Us opportunity's page offers no
+      way to start a proposal, and the profile's Organizations tab says
+      organizations \"will be listed here once organizations can be
+      registered\""
+    found: unbound
+    adapter: d10f4df207a54888ca97177767ba38bed84f3ae7
+    slice: 9
+    app_tree: 552ceac571aff139ba67f427de383d3eb7ef2480
+    by: runner:verify
+    at: 2026-10-02T10:41:30.266Z
+  - id: R-1.36
+    target: new
+    why: "unbound: proposal-vendor-dashboard.show_my_proposals — signed in as
+      vendor, /dashboard at http://localhost:4300/dashboard reads only
+      \"Dashboard / You are signed in as Alex Placeholder.\" and offers no
+      control named /my proposals/i; looked again signed in as the
+      organization-owner vendor, who wrote a seeded proposal: the dashboard is
+      that heading and sentence alone, the header offers only Dashboard, My
+      profile and Sign out, /proposals and /organizations answer \"Page not
+      found\", the seeded published Code With Us opportunity's page offers no
+      way to start a proposal, and the profile's Organizations tab says
+      organizations \"will be listed here once organizations can be
+      registered\""
+    found: unbound
+    adapter: d10f4df207a54888ca97177767ba38bed84f3ae7
+    slice: 9
+    app_tree: 552ceac571aff139ba67f427de383d3eb7ef2480
+    by: runner:verify
+    at: 2026-10-02T10:41:30.266Z
