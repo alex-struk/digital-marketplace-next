@@ -32,3 +32,23 @@ I checked this by signing in as the administrator, saving a Sprint With Us draft
 **R-5.16 (scoring a question in an individual evaluation).** This stays unbound with its existing reason. Signed in as the administrator, I opened the route with the seeded Sprint With Us opportunity at "Questions: individual evaluation" and its evaluated proposal, and it still answers "Page not found". The manage screens I opened during this run still list only Summary, Opportunity, Addenda, History and Evaluation panel.
 
 Every page I opened during this run resolved. I touched nothing outside `tests/adapters/new/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does this adapter bind every surface action and observation on new, and nothing else? Approve. The diff touches only tests/adapters/new and the pipeline's own records; nothing under tests/acceptance changed, and the runner's typecheck on this revision passed with no diagnostics under adapters/new. The changes are navigation and reading only: savedForm opens the Opportunity section, reloads so the boxes hold saved values, and serialises the form's labels with their values (ticked choices marked), optionally narrowed to one named sub-section; it decides nothing about pass or fail, and returning empty where the form has no such sub-section is an accurate observation rather than a hidden missing surface. teamQuestionsTab and resourceQuestionsTab move from unbound to bound on that reader, which is justified because the questions do appear in the saved Opportunity form; opportunityTab reads the saved form rather than the edit form's labels; maxBudget reads the 'Maximum budget' term with the old label as fallback. These answer the three revision requests build-slice-10-3 addressed to bind-adapter. R-5.16 stays unbound with a real reason (the individual-evaluation route answers 'Page not found'), and its consensus clause is already with plan. The build-owed instructions build-slice-10-3#1 and #2 are not settled here and stay open. What would change this: a verify run showing these readers return something other than the saved values, or a test that relies on reading unsaved input, which the reload in savedForm discards.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `2d1a7bcbd4a3d7866a61004f4527c7b0a5e01ae4`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
