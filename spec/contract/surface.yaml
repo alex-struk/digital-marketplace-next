@@ -2280,26 +2280,26 @@ pages:
     actions:
       # Input: the opportunity identifier, the organization identifier, proposal text and
       # additional comments. Sent as a submission, not a draft.
-      submit_with_organization_proponent: { test_id: null }
+      submit_with_organization_proponent: { test_id: proposal-cwu-request-submit-organization }
       # Input: the opportunity identifier, proposal text, additional comments, and the
       # individual's legal name, email address, phone, street address, second address
       # line, city, province, postal code and country, each exactly as given — blank or
       # malformed included. Sent as a submission, not a draft.
-      submit_with_individual_proponent: { test_id: null }
+      submit_with_individual_proponent: { test_id: proposal-cwu-request-submit-individual }
     observations:
       # The service accepted the proposal (a successful answer carrying it).
-      request_accepted: { test_id: null }
+      request_accepted: { test_id: proposal-cwu-request-accepted }
       # The accepted proposal's identifier, for proposal-cwu-edit and proposal-cwu-view.
-      proposal_identifier: { test_id: null }
-      proposal_status: { test_id: null }
+      proposal_identifier: { test_id: proposal-cwu-request-proposal-id }
+      proposal_status: { test_id: proposal-cwu-request-status }
       # Every message in a refusal, each with the field it is reported against — the
       # proponent's own fields by name (legal name, email address, phone, street address,
       # city, province, postal code, country), "organization" for an organization
       # proponent, and the proposal's own fields. Empty when the request was accepted.
-      refusal_by_field: { test_id: null }
+      refusal_by_field: { test_id: proposal-cwu-request-refusal-by-field }
       # The refusal's messages alone, in the order the service gives them.
-      refusal_messages: { test_id: null }
-      refusal_status: { test_id: null }
+      refusal_messages: { test_id: proposal-cwu-request-refusal-messages }
+      refusal_status: { test_id: proposal-cwu-request-refusal-status }
 
   # A Sprint With Us or Team With Us proposal made and submitted in one request, as the
   # signed-in vendor, with its team given by account. :program is sprint-with-us or
@@ -2349,11 +2349,11 @@ pages:
       # team. The screens always send one.
       #
       # Either way, sent as a submission, not a draft.
-      submit_team_proposal: { test_id: null }
+      submit_team_proposal: { test_id: proposal-team-request-submit }
     observations:
-      request_accepted: { test_id: null }
-      proposal_identifier: { test_id: null }
-      proposal_status: { test_id: null }
+      request_accepted: { test_id: proposal-team-request-accepted }
+      proposal_identifier: { test_id: proposal-team-request-proposal-id }
+      proposal_status: { test_id: proposal-team-request-status }
       # Every message in a refusal, each with where it is reported: the team (for
       # team-with-us, by position in the team list, or the team as a whole), the phase and
       # position (for sprint-with-us), the organization, one answer to an opportunity
@@ -2376,12 +2376,12 @@ pages:
       # that is empty or longer than its question's word limit is refused against its
       # wording with "Response must be between 1 and N words long.", N being that
       # question's limit.
-      refusal_by_field: { test_id: null }
+      refusal_by_field: { test_id: proposal-team-request-refusal-by-field }
       # The refusal's messages alone, in the order the service gives them — where "User is
       # not an active member of the organization." or "Please select unique team members."
       # is read.
-      refusal_messages: { test_id: null }
-      refusal_status: { test_id: null }
+      refusal_messages: { test_id: proposal-team-request-refusal-messages }
+      refusal_status: { test_id: proposal-team-request-refusal-status }
 
   # A stage score for one Sprint With Us or Team With Us proposal, sent to the service as a
   # request rather than through proposal-swu-view or proposal-twu-view, which offer a stage's
@@ -2408,20 +2408,20 @@ pages:
     title: "A stage score, by request"
     actions:
       # Input: a score out of 100. Sprint With Us only.
-      score_team_scenario_by_request: { test_id: null }
+      score_team_scenario_by_request: { test_id: proposal-evaluation-request-score-team-scenario }
       # Input: a score out of 100. Sprint With Us only.
-      score_code_challenge_by_request: { test_id: null }
+      score_code_challenge_by_request: { test_id: proposal-evaluation-request-score-code-challenge }
       # Input: a score out of 100. Team With Us only.
-      score_challenge_by_request: { test_id: null }
+      score_challenge_by_request: { test_id: proposal-evaluation-request-score-challenge }
     observations:
       # The service accepted the score (a successful answer carrying the proposal).
-      request_accepted: { test_id: null }
+      request_accepted: { test_id: proposal-evaluation-request-accepted }
       # The proposal's status as the service answers an accepted request.
-      proposal_status: { test_id: null }
+      proposal_status: { test_id: proposal-evaluation-request-status }
       # The refusal's messages, in the order the service gives them. Empty when the
       # request was accepted.
-      refusal_messages: { test_id: null }
-      refusal_status: { test_id: null }
+      refusal_messages: { test_id: proposal-evaluation-request-refusal-messages }
+      refusal_status: { test_id: proposal-evaluation-request-refusal-status }
 
   # The signed-in person's own account record, as the service holds it. The profile screens
   # show whether new-opportunity notices are on, not when they were turned on; the account

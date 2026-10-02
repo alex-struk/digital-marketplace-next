@@ -374,6 +374,12 @@ screens:
     states: [default, no-organization, empty, loading]
   - page: proposal-list-stub
     states: [default]
+  - page: proposal-cwu-request
+    states: [default, refused]
+  - page: proposal-team-request
+    states: [default, refused]
+  - page: proposal-evaluation-request
+    states: [default, refused]
 
   # evaluation domain — see design/DESIGN.md, "Domain: evaluation"
   - page: evaluation-panel-dashboard
