@@ -1,0 +1,15 @@
+gate: G2
+verdict: approve
+by: agent:architect
+held_by: agent
+rationale: |2-
+  Question: is this the right cut of the work, and does each slice stand on its own, now that R-5.16 has moved from Slice 10 to Slice 17? Ruling: approve. R-5.16's given (an opportunity whose questions are being evaluated individually) and its refused second change (after the move to consensus) are both only reachable through the individual evaluation screens and the automatic move to consensus, which Slice 17 delivers; its closure (Slices 16 back to 7) holds the panel tab from Slice 10 and the deadline hook from Slice 16, so the slice can walk the test end to end. The criterion appears on exactly one criteria line (Slice 17), so nothing is left unassigned, and Slice 10's description still says the window is built there. Rejecting the seed alternative is sound: a seed at consensus would answer only the second clause, and the first clause needs a live transition into and out of individual evaluation. That contrasts correctly with R-1.43, which stays in Slice 10 because its test starts from a seeded consensus opportunity (tests/seed/manifest.yaml) and asserts only the refusal. The seven-slice gap, where the rule is enforced but no slice answers for it, is recorded in plan.md beside the R-1.19 and R-6.15 cases of the same kind. There is no schema change, no new dependency, no stack departure and no constitution impact, and the tier is STANDARD, so nothing escalates. The owed build conditions build-slice-10-3#1 (R-1.17 question cap) and #2 (R-1.53 admin delete of a Sprint With Us draft) belong to build and are not settled by a plan change, so they stay open. What would change the ruling: R-5.16 appearing on a second criteria line, Slice 17's closure turning out not to include Slice 10 or Slice 16, or evidence that R-1.43's seeded consensus start is itself unbound in Slice 10, which would mean that criterion needs the same move.
+conditions: []
+cost: 0.34580479999999997
+turns: 3
+session: "b5a3432c-2fba-47ce-94c3-6b73a97225e8"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-02T23:09:39.728Z

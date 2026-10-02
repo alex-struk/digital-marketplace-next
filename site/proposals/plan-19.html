@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>plan-19 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">512</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">506</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">423</span></a></li><li><a href="../runs.html">Run log <span class="count">20</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>plan-19</h1>
+<p class="lede">G2 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G2</td></tr><tr><th scope="row">opened</th><td>2026-10-02 23:09</td></tr><tr><th scope="row">holder</th><td>agent:architect</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Is this the right cut of the work, and does each slice stand on its own?</h2>
+<p><strong>Recommendation.</strong> I took up the one condition: R-5.16 has moved out of Slice 10 and into Slice 17.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I took up the one condition: R-5.16 has moved out of Slice 10 and into Slice 17. Nothing else in the plan changed. I couldn&#39;t run the coverage script because the command needed approval. A search of <code>plan/tasks.md</code> shows R-5.16 on exactly one criteria line, Slice 17&#39;s. Slice 10&#39;s description still mentions it, but only in prose, which the check doesn&#39;t count.</p>
+<p><strong>The condition.</strong> A G3 ruling on the build of Slice 10 found R-5.16&#39;s test unbound there. The criterion says the evaluation panel may change during individual question evaluation and is fixed from consensus onwards. Its second clause can only be reached through the individual evaluation screens (<code>evaluation-individual-create-swu</code> and its Team With Us counterpart), which no slice up to 10 builds. The ruling offered two remedies: move the clause to the slice that delivers individual evaluation, or name a seeded opportunity already at consensus as Slice 10&#39;s starting state.</p>
+<p><strong>What I chose.</strong> I took the first remedy and moved the whole criterion, because one criterion ID can&#39;t be split across two slices. It now sits in Slice 17 (&quot;Panel evaluators score proponents individually&quot;). That slice&#39;s closure, Slices 16 back through 7, holds three things the test needs:</p>
+<ul><li>the panel tab, from Slice 10;</li><li>the deadline hook that puts an opportunity into individual evaluation, from Slice 16;</li><li>the individual evaluation screens and the automatic move to consensus, from Slice 17 itself.</li></ul>
+<p><strong>Why I rejected the seed.</strong> It would cover only the second clause. The first clause also starts from an opportunity whose questions are being evaluated individually, and nothing before Slice 16 can produce one. A seed would also test the rule against data the service could not have made itself at that point.</p>
+<p><strong>Edits made:</strong></p>
+<ul><li><strong><code>plan/tasks.md</code>:</strong> R-5.16 is off Slice 10&#39;s criteria line and on Slice 17&#39;s. Slice 10&#39;s description now says it builds the panel-change window and that Slice 17 answers for it. Slice 17&#39;s description now says why the criterion sits there.</li><li><strong><code>plan/plan.md</code>:</strong> a new passage under &quot;Criteria that sit awkwardly where they are&quot; records the move, the rejected seed option and the gap it leaves. The window is built and enforced from Slice 10, but no slice answers for it until Slice 17, seven slices later. This is the same kind of gap the section already records for R-1.19 and R-6.15.</li></ul>
+<p><strong>What stays the same.</strong> There are still 21 slices in the same order. No dependencies changed, since Slice 17 already depended (indirectly) on Slice 10. The Constitution check section is unchanged, because the move brings no new constitution rule to bear. I wrote no decision record: the choice is recorded beside the earlier moves of the same kind, and it changes no framework, data store or boundary.</p>
+<p><strong>Assumptions.</strong> I made no new assumption about the stack or the platform.</p>
+<p>No condition was addressed to a person, so I left none for anyone. I touched nothing outside <code>plan/</code> and <code>docs/decisions/</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:architect (persona agent · claude claude-opus-5-5) on 2026-10-02 23:09.</p>
+<div class="body"><p>Question: is this the right cut of the work, and does each slice stand on its own, now that R-5.16 has moved from Slice 10 to Slice 17? Ruling: approve. R-5.16&#39;s given (an opportunity whose questions are being evaluated individually) and its refused second change (after the move to consensus) are both only reachable through the individual evaluation screens and the automatic move to consensus, which Slice 17 delivers; its closure (Slices 16 back to 7) holds the panel tab from Slice 10 and the deadline hook from Slice 16, so the slice can walk the test end to end. The criterion appears on exactly one criteria line (Slice 17), so nothing is left unassigned, and Slice 10&#39;s description still says the window is built there. Rejecting the seed alternative is sound: a seed at consensus would answer only the second clause, and the first clause needs a live transition into and out of individual evaluation. That contrasts correctly with R-1.43, which stays in Slice 10 because its test starts from a seeded consensus opportunity (tests/seed/manifest.yaml) and asserts only the refusal. The seven-slice gap, where the rule is enforced but no slice answers for it, is recorded in plan.md beside the R-1.19 and R-6.15 cases of the same kind. There is no schema change, no new dependency, no stack departure and no constitution impact, and the tier is STANDARD, so nothing escalates. The owed build conditions build-slice-10-3#1 (R-1.17 question cap) and #2 (R-1.53 admin delete of a Sprint With Us draft) belong to build and are not settled by a plan change, so they stay open. What would change the ruling: R-5.16 appearing on a second criteria line, Slice 17&#39;s closure turning out not to include Slice 10 or Slice 16, or evidence that R-1.43&#39;s seeded consensus start is itself unbound in Slice 10, which would mean that criterion needs the same move.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
