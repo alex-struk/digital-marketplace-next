@@ -44,3 +44,14 @@ I then ran `oracle down` and nothing is left running. I made no changes to the o
 Neither new configuration has been seen to remove its page. To run the oracle with a variable set, the command has to set it or read `$SDLC_BIN`, and the sandbox blocks both forms without an approval nobody here can give. The existing seed and database setting do this work for `service_page_absent`, but I did not watch them do it in this run either. The calibration run, which starts a copy with each `select`, will be the first to see an instructions page actually gone.
 
 re-address missing-test/R-7.29 to derive-tests: added configurations evaluation_instructions_absent_swu (select SDLC_ORACLE_ABSENT_PAGE=sprint-with-us-evaluation-instructions, tag @evaluation_instructions_absent_swu) and evaluation_instructions_absent_twu (select SDLC_ORACLE_ABSENT_PAGE=team-with-us-evaluation-instructions, tag @evaluation_instructions_absent_twu) in spec/contract/observables.yaml. Each removes that program's instructions page through tests/seed/017-absent-service-page.sql, so instructions_body on evaluation-instructions-swu / evaluation-instructions-twu can be observed empty for the seeded closed opportunities, opened as users.staffOne.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:product-owner
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does this contract change give the tests a way to reach R-7.29's clause about the two evaluation-instructions screens? Ruling: approve. Reason: the two new configurations reuse the existing SDLC_ORACLE_ABSENT_PAGE switch, which 017-absent-service-page.sql already implements by deleting whichever page's slug is in sdlc.absent_page. The slugs they name (sprint-with-us-evaluation-instructions, team-with-us-evaluation-instructions) are seeded with those exact slugs in tests/seed/manifest.yaml (content.servicePage*EvaluationInstructions), and each is embedded by the matching screen. users.staffOne is an evaluator on the panels of both opportunities.closedSprintWithUs and opportunities.closedTeamWithUs, so the stated persona can open both screens. Both screens and their instructions_body field exist in surface.yaml, which already records that the body stays empty when the page can't be read. There is one configuration per program because the variable names a single page, which is correct. The only change outside the contract is a comment fix in the seed file. Neither configuration has yet been seen to remove its page, because the sandbox would not start the oracle with the variable set. That is an honest gap, stated in the proposal, and calibration closes it by starting an oracle copy for each select. What would change the ruling: if calibration shows /api/content/<slug> still returning 200 under either select, the configuration fails to put its precondition in place and must come back to contract.
+
+**Conditions:**
+none
