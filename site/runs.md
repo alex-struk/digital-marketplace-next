@@ -57,6 +57,12 @@
 - 23:00:07 drive: step 6: `sdlc run verify --slice 8` — build-slice-8-8 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
 - 23:38:45 verify slice 8: returned — R-1.11 (slice 7) fail. Next: sdlc run build --slice 8 --revise
 - 23:38:46 run verify: regenerated 478 files in .sdlc, site
+- 23:38:51 drive: step 7: `sdlc run build --slice 8 --revise` — build-slice-8-8 was returned at G3 by runner:verify
+- 23:40:38 deviation: next named `sdlc run build --slice 8`; ran `sdlc run build --slice 8 --revise`; reason: Operator, under the tech lead's delegation: next names a fresh build only because an interrupted revision had already taken up build-slice-8-8's return; this is that revision. The one remaining failure, R-1.11 (passed when slice 7 was approved), is its first case: an opportunity whose form never answers 'Is remote work acceptable?' must be refused at publication. The application's Code With Us form starts that question on No (its own decision record 0031), so an unanswered form is published as on-site and the refusal never happens. The catalogue's opportunity-cwu-create story starts the question with neither Yes nor No chosen. Start it unanswered as the story does, keep the rule that refuses publication with no answer, and leave a saved draft free to have no answer. Revise or supersede decision record 0031 to say so.
+- 23:40:38 run build: pre-checks failed
+- 23:55:49 drive: step 2: `sdlc run verify --slice 8` — build-slice-8-9 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
+- 00:32:46 verify slice 8: 1 criteria still fail after 3 builds; escalated to tech-lead.
+- 00:32:48 run verify: regenerated 479 files in .sdlc, site
 
 # Run record 2026-10-01
 

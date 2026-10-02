@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-8-8 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">466</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">460</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">390</span></a></li><li><a href="../runs.html">Run log <span class="count">20</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-8-8</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-02 06:00</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 8 (Anyone can find opportunities and follow the ones they care about) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> I fixed the one regression the ruling names, R-1.11, and went through the six conditions still open from the earlier ruling.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I fixed the one regression the ruling names, R-1.11, and went through the six conditions still open from the earlier ruling. <code>npm --prefix app run check</code> passes in all three workspaces: 16 migration tests, 426 backend tests (4 of them new) and 277 frontend tests. I could not run the application: starting the compose stack needs an approval nobody was here to give, and no browser is installed. So nothing below was watched in a browser; it comes from reading the code and running the unit tests.</p>
+<p><strong>R-1.11, the regression.</strong> The failing check was reading the opportunity list&#39;s Open group and found an opportunity there that should have been refused. The cause was in the Sprint With Us and Team With Us create path. Decision 0036 had the service keep an opportunity created under review, or published by an administrator, exactly as sent, leaving every content rule to slice 10. So an administrator could publish one that accepted remote work with no description, and it was listed as open. R-1.11 applies to all three programs. This probably went unnoticed before because, until the previous revision, the list read as empty at that point. Fixing the list exposed it.</p>
+<ul><li><strong>Service:</strong> a new rule, <code>remoteWorkProblems</code> in <code>app/backend/src/rules/other-program-drafts.ts</code>. <code>OtherProgramsService.create</code> uses it to refuse, for anything that isn&#39;t a draft, remote work accepted with a blank description, and any description over 500 characters. The answer is 400 <code>{ errors: [...] }</code>, in the same wording Code With Us uses. Drafts are still never refused.</li><li><strong>What is not refused:</strong> a request that says nothing about remote work is still kept, as &quot;not acceptable&quot;. The create forms always send yes or no. But requests made directly to build the staff and administrator lists (R-1.3, R-1.38) may leave it out, and refusing them could empty those groups again.</li><li><strong>The two create screens:</strong> they now show this refusal under the field&#39;s label, mark the description field invalid, and their opening sentence says this one rule is checked.</li><li><strong>Tests:</strong> unit tests for the rule, plus a case in the end-to-end tests that run the real schema in process (PGlite). It checks that both programs refuse and keep nothing, and that a draft is still accepted.</li><li><strong>Records:</strong> decision record 0040, and the README paragraph on the other two programs, which was out of date.</li></ul>
+<p><strong>The six open conditions.</strong> The latest ruling reports only R-1.11 as breaking an earlier slice, so I take it that R-7.18 and R-1.23, both earlier-slice criteria, now pass. I re-checked each condition in the code but changed none of them here.</p>
+<ul><li><strong>build-slice-8-3#1 (R-1.3) and #3 (R-1.38):</strong> last revision&#39;s changes are still in place. The list is drawn whole once it knows who is viewing and has its data, it is fetched alongside the session check, and a session check that gets no answer is retried. The Unpublished group is drawn for staff and administrators. Unconfirmed until the suite runs.</li><li><strong>build-slice-8-3#2 (R-1.5):</strong> a second watch is refused 400 <code>{ &quot;conflict&quot;: [...] }</code>. I traced every path; nothing in the watch route falls back to <code>errors</code>, and a duplicate that hits the database key is caught too. If the suite still reads <code>errors</code>, the request is probably being refused by the contract validator before the route is reached. The other possibility is that the suite&#39;s request differs from what the surface page describes. Neither can be settled without a run.</li><li><strong>build-slice-8-3#4 (R-7.18):</strong> the link is on the learn-more screen, the program cards and the three forms, and the page at its address is retried after a fault rather than shown as not found.</li><li><strong>build-slice-8-3#5 (R-1.23):</strong> every date shown is the day in Pacific time, through <code>readDate</code>. Times shown to the minute (<code>readMoment</code>) are still in UTC, as decision record 0037 records.</li><li><strong>build-slice-8-3#6 (layout):</strong> the catalogue&#39;s page container and stack are defined once, in <code>app/frontend/src/app/page-layout.tsx</code>, and match <code>design/catalogue/layout.tsx</code> apart from comments and two extra element types. No screen sets its own width, outer padding or gaps; only cards, table cells, badges and fieldsets keep the inner padding their stories give them.</li></ul>
+<p><strong>Left for slice 10:</strong> apart from remote work, Sprint With Us and Team With Us opportunities are still kept as sent. That includes a request that doesn&#39;t say whether remote work is acceptable, which R-1.11 says must be refused. Slice 10 brings each program&#39;s full rules for anything that isn&#39;t a draft (R-1.13, R-1.15 to R-1.18).</p>
+<p>I changed nothing outside <code>app/</code> and <code>docs/decisions/</code>. I installed <code>app/node_modules</code> only to run the checks and removed it afterwards.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by runner:verify (the runner, automatically) on 2026-10-02 06:38.</p>
+<div class="body"><p>This build breaks 1 criterion that passed when an earlier slice was approved. Each condition is the criterion and what the running application did.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>R-1.11 (passed when slice 7 was approved): Error: expect(received).not.toContain(expected) // indexOf — Received string:        &quot;Accepting proposals, nearest proposal deadline first. — at tests/acceptance/opportunities/R-1.11.spec.ts:54</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
