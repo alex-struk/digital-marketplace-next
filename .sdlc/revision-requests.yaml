@@ -634,6 +634,12 @@ requests:
         design gate's check refuses that because this stage may only fill in
         test IDs; the contract stage has to make the change.
       proposal: design-opportunities-4
+    withdrawn:
+      why: removing an action from spec/contract/surface.yaml is refused at the design
+        gate, which may only fill in test IDs; the request is re-addressed to
+        the contract stage below
+      by: agent:ux-reviewer
+      at: 2026-10-02T16:54:27.687Z
   - stage: contract
     why: R-1.33 can only be checked against a note already on an opportunity's
       history and who may read it, and verify found no seeded opportunity
