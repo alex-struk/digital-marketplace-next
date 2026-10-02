@@ -264,7 +264,7 @@ pages:
       addenda_tab: bound
       history_tab: bound
       proposals_tab: "unbound: the management screen offers no 'Proposals' section in any state walked (seeded published with a submitted proposal, lapsed, at individual evaluation, at consensus, at the code challenge, at the team scenario, in processing and awarded) as the administrator or as the owning public sector employee; its sections are Summary, Opportunity, Addenda, History and Evaluation panel, its Summary counts 'Proposals submitted' only, and ?tab=proposals falls back to the Summary"
-      team_questions_tab: "unbound: the management screen offers no 'Team questions' section in any state walked (seeded published, lapsed, at individual evaluation, at consensus, at the code challenge, at the team scenario, in processing and awarded, and a fresh draft) as the administrator or as the owning public sector employee; its sections are Summary, Opportunity, Addenda, History and Evaluation panel, and the team questions are only a part of the Opportunity section's form (read by evaluation_question_fields)"
+      team_questions_tab: bound
       code_challenge_tab: "unbound: the management screen offers no 'Code challenge' section, walked as the administrator on the seeded Sprint With Us opportunities at the code challenge, at the team scenario, in processing and awarded; its sections are Summary, Opportunity, Addenda, History and Evaluation panel"
       team_scenario_tab: "unbound: the management screen offers no 'Team scenario' section, walked as the administrator on the seeded Sprint With Us opportunities at the team scenario, in processing and awarded; its sections are Summary, Opportunity, Addenda, History and Evaluation panel"
       evaluation_panel_tab: bound
@@ -357,7 +357,7 @@ pages:
       addenda_tab: bound
       history_tab: bound
       proposals_tab: "unbound: the management screen offers no 'Proposals' section in any state walked (seeded published, lapsed, at individual evaluation, at consensus and at the challenge) as the administrator or as the owning public sector employee; its sections are Summary, Opportunity, Addenda, History and Evaluation panel, its Summary counts 'Proposals submitted' only, and ?tab=proposals falls back to the Summary"
-      resource_questions_tab: "unbound: the management screen offers no 'Resource questions' section in any state walked (seeded published, lapsed, at individual evaluation, at consensus and at the challenge, and a fresh draft) as the administrator or as the owning public sector employee; its sections are Summary, Opportunity, Addenda, History and Evaluation panel, and the resource questions are only a part of the Opportunity section's form (read by evaluation_question_fields)"
+      resource_questions_tab: bound
       challenge_tab: "unbound: the management screen offers no 'Challenge' section, walked as the administrator on the seeded Team With Us opportunity at the challenge; its sections are Summary, Opportunity, Addenda, History and Evaluation panel"
       evaluation_panel_tab: bound
       consensus_tab: "unbound: the management screen offers no 'Consensus' section, walked as the administrator on the seeded Team With Us opportunities at consensus (five proponents, every consensus agreed); its sections are Summary, Opportunity, Addenda, History and Evaluation panel, and ?tab=consensus falls back to the Summary"
