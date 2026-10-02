@@ -37,6 +37,17 @@ bulk:
   mail catcher) — are declared in `app/compose/` and are never referenced
   from a deploy or production workflow.
   Source: convention
+- Every host port `app/compose/compose.yaml` publishes is read from a variable
+  that defaults to the port it publishes today, and so is every address that
+  names one of those ports: `"${SDLC_APP_PORT:-4300}:3000"`, an issuer of
+  `http://localhost:${SDLC_IDP_PORT:-8080}/realms/...`, an application origin of
+  `http://localhost:${SDLC_APP_PORT:-4300}`, and the identity provider's allowed
+  redirect addresses rendered from the same variable. An address the frontend
+  bakes in at build time reaches it as a build argument that reads the same
+  variable. The pipeline starts several copies of the application side by side,
+  each with its own variables, to run the acceptance suite in parallel; with
+  none set, the sandbox is exactly what it was (`docs/decisions/0090`).
+  Source: convention
 
 ## Naming
 
