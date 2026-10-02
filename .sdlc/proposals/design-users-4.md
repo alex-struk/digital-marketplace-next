@@ -51,3 +51,14 @@ Nothing outside the users section was touched.
 **Gaps.** Layout raised no new gap. The eleven gaps already recorded in the users section still stand, for example no designed empty state for a user-list search that matches nobody, and no status number stated for a refused request.
 
 **Components leaned on most:** `Heading`, `Text`, `TextField` (read-only for profile details), `Button`, `Checkbox`, `Link`, `InlineAlert`, and `Modal` with `AlertDialog`. `Form`, `ButtonGroup`, `CheckboxGroup`, `Dialog`, `ProgressCircle` and react-aria's `FileTrigger` are used where needed. The project's own pieces are still only the five named in DESIGN.md.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:ux-reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: do the users screens serve the users criteria and are they built from the design system, now laid out with the shared page container and stack? Ruling: approve. The scan report on the branch is newer than this change (generated 00:42, proposal opened 00:45). Typecheck and build pass, and all 508 stories scanned have zero accessibility violations. A search of every users story finds no literal pixel or rem value, no raw colour, and no inline gap, margin or maxWidth. Spacing comes only from the Stack's --layout-margin-{small,medium,large} tokens, and the remaining inner padding, borders and rules use tokens. PageContainer and Stack are reused unchanged from design/catalogue/layout.tsx, and DESIGN.md names them as the project's own components because the design system provides no page container or spacing primitive, which this persona accepts. Components otherwise come from @bcgov/design-system-react-components. The data-testid count is unchanged (365 across 56 files), surface.yaml is untouched and the hand-edits check passes, so no filled-in test_id changed. In the eight screenshots I opened (user-profile, user-list, user-list export-open, sign-in, sign-up-complete, capabilities, self-legal and account-request), content sits in the shared column lined up with the banner, and the large, medium and small rhythm is even with no doubled margins. Buttons that are stack items keep their own width. Tier is STANDARD, so nothing is escalated. Two things would change this ruling: a fresh scan reporting any violation, or a screen whose content leaves the container or carries a component margin on top of a stack gap.
+
+**Conditions:**
+none
