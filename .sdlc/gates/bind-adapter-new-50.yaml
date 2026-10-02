@@ -1,0 +1,17 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The question is whether this adapter binds the surface on new without itself deciding any test's outcome. Most of the change is sound: only tests/adapters/new is touched, the runner's typecheck passed with no diagnostics there, regionNamed and the heading-first section reader are pure locators, add_resource filling the blank first resource is navigation, the locked panel is noted as a refusal rather than thrown, and the remaining unbound reasons name real missing sections or 'Page not found' answers. It is returned for two reasons. First, evaluationPanelPage's pick() throws an Error when the named person is not public sector staff, and its comment says this is so 'the test sees the member was not added'. That is the adapter deciding the outcome: a test that adds a vendor and then reads non_public_sector_member_error fails at the action before its own assertion runs, while every other refusal in the file is logged with noteRefusal and left to the test. Second, opportunity-twu-edit.publish is marked bound although the proposal says Publish was seen only on a Sprint With Us draft and assumed for Team With Us, so if the control is absent, act() logs a missing control as a product refusal rather than unbound. Fixing both, with nothing else changed, would turn this into an approval.
+conditions:
+  - "tests/adapters/new/index.ts evaluationPanelPage pick(): when the chooser does not offer the named person (a vendor or any account it does not list), log it with noteRefusal naming the chooser's offered names and return, instead of throwing an Error, so the test's own reading of non_public_sector_member_error, panel_member_row or the save decides; keep unbound only for input that names no resolvable person"
+  - "tests/adapters/new/bindings.yaml opportunity-twu-edit.publish: walk a Team With Us draft as the administrator and confirm the 'Publish' control and its confirmation ('Publish this opportunity?' / 'Publish opportunity') are offered; keep it bound and record what was seen in the page comment if so, otherwise mark it unbound with the reason observed and have index.ts report it unbound rather than through act()'s noteRefusal"
+cost: 0.730804
+turns: 1
+session: "521eaa44-3860-4bee-9048-2197da30a109"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-02T20:08:32.344Z
