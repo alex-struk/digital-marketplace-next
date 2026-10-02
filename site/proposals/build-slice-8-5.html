@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-8-5 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">462</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">456</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">389</span></a></li><li><a href="../runs.html">Run log <span class="count">20</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-8-5</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-02 04:00</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 8 (Anyone can find opportunities and follow the ones they care about) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> I found and fixed a real defect in how the app checks who is signed in, and it accounts for all three empty reads in the ruling.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I found and fixed a real defect in how the app checks who is signed in, and it accounts for all three empty reads in the ruling. I could not run the sandbox itself (<code>docker compose</code> and <code>docker run</code> need an approval nobody was here to give), so I can&#39;t confirm the fix against the acceptance suite. Instead I drove the real service over the seed in headless Chromium and reproduced the failure there.</p>
+<p><strong>What was wrong.</strong> Every screen starts by asking <code>GET /api/sessions/current</code> who is signed in. If the page was left while that request was still on its way, the aborted request was treated as a refused sign-in. The app then deleted the tokens it held in the browser and began sending the browser to the identity provider&#39;s sign-out. The next page found no tokens and was drawn for a visitor without asking the service:</p>
+<ul><li>The opportunity list had no Unpublished group (R-1.3, R-1.38).</li><li>The dashboard showed a sign-in prompt instead of its rows. Its contract observations are named after R-1.3&#39;s outcome, so R-1.3&#39;s test may well read it.</li><li>Where the redirect to sign-out won the race, the browser never reached the page the link led to (R-7.18).</li></ul>
+<p>This happens whenever a person, or a test, moves on as soon as a page appears.</p>
+<p><strong>Evidence from the local run.</strong> With 300 ms of delay on the session check, the old code left the browser with no tokens after following the service level agreement link. On the next list load the administrator&#39;s Unpublished group and the dashboard rows never appeared within 15 seconds. With the fix, the tokens survive and both draw in about 0.4 seconds. Without the delay, every list, dashboard and content screen draws in about 0.1 seconds.</p>
+<p><strong>What I changed</strong> (decision record <code>docs/decisions/0038-an-unanswered-session-check-signs-nobody-out.md</code>):</p>
+<ul><li><code>fetchCurrentSession</code> in <code>app/frontend/src/api/accounts.ts</code> now gives a separate &quot;unanswered&quot; result when the request never completed or the service failed. Only the service&#39;s own answers decide anything: 401 means a visitor and the tokens are dropped, 200 names the account or nobody, and any other refusal is a refused sign-in.</li><li>An unanswered check draws that page as a visitor&#39;s but leaves the tokens, the <code>dm-signed-in</code> cookie and the identity provider&#39;s session alone, so the next page asks again.</li><li>The service is now asked on every visit, even when the browser holds no tokens, because it also knows the person by its own session cookie. A browser whose cookies are cleared still comes out as a visitor&#39;s.</li><li>The README&#39;s session paragraph says the same.</li></ul>
+<p><strong>Unit tests.</strong> In <code>app/frontend/tests/signing-in.test.tsx</code> I replaced the test that expected no request without tokens, and added four:</p>
+<ul><li>a visitor is asked without a token;</li><li>a person is recognised by the service&#39;s own session alone;</li><li>an aborted request keeps the sign-in and sends nobody to sign-out;</li><li>a server failure keeps the sign-in.</li></ul>
+<p><code>npm --prefix app run check</code> passes: typecheck plus 705 tests across the three workspaces. I removed the scratch harness, the build output and the <code>node_modules</code> I installed.</p>
+<p><strong>The six owed conditions:</strong></p>
+<ul><li><strong><code>build-slice-8-3#1</code> (R-1.3) and <code>#3</code> (R-1.38):</strong> addressed by the fix above. Locally, drafts made through all three programs&#39; forms appear in the right group and on the right person&#39;s dashboard.</li><li><strong><code>#4</code> (R-7.18):</strong> addressed by the same fix, which is why it broke with slice 8 rather than earlier. The service level agreement link stays on the learn-more screens, the program cards and the three forms, and opening it shows the page.</li><li><strong><code>#2</code> (R-1.5, conflict):</strong> met by the previous revision (decision record 0037), and the latest ruling no longer lists it.</li><li><strong><code>#5</code> (R-1.23, dates in Pacific time):</strong> met the same way.</li><li><strong><code>#6</code> (layout):</strong> I re-checked that every screen sits inside the one page container and spaces itself with the one stack. The paddings and widths left are a card&#39;s inner padding, table cells and badges, as in the stories.</li></ul>
+<p>One behaviour change for a later reviewer: a browser whose tokens are gone but whose service session cookie still lives is now shown as signed in. Decision record 0038 says what would reverse that. The next slice will find nothing new missing from this one. The Sprint With Us and Team With Us public pages remain slice 10&#39;s, as before.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by runner:verify (the runner, automatically) on 2026-10-02 04:40.</p>
+<div class="body"><p>Slice 8 does not yet do what 2 of its criteria say. This build breaks 1 criterion that passed when an earlier slice was approved. Each condition is the criterion and what the running application did.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>R-1.3: Error: expect(received).toContain(expected) // indexOf — Received string:    &quot;&quot; — at tests/acceptance/opportunities/R-1.3.spec.ts:71</li><li>R-1.38: Error: expect(received).toContain(expected) // indexOf — Received string:    &quot;&quot; — at tests/acceptance/opportunities/R-1.38.spec.ts:54</li><li>R-7.18 (passed when slice 1 was approved): Error: the address the link leads to answers with a page — Received: &quot;&quot; — at tests/acceptance/content/R-7.18.spec.ts:41</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
