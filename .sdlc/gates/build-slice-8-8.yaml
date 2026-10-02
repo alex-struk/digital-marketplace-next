@@ -1,0 +1,13 @@
+gate: G3
+verdict: return
+by: runner:verify
+held_by: runner
+rationale: This build breaks 1 criterion that passed when an earlier slice was
+  approved. Each condition is the criterion and what the running application
+  did.
+conditions:
+  - 'R-1.11 (passed when slice 7 was approved): Error:
+    expect(received).not.toContain(expected) // indexOf — Received
+    string:        "Accepting proposals, nearest proposal deadline first. — at
+    tests/acceptance/opportunities/R-1.11.spec.ts:54'
+at: 2026-10-02T06:38:33.110Z
