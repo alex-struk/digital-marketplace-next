@@ -58,3 +58,10 @@ flow and exchange the code; the app renews the tokens and signs out as the same 
 realm name itself `localhost:8080` in every token either way. Its redirect and post-logout URIs are the
 one origin the application answers on, `http://localhost:4300`. Two mappers put the
 `identity_provider` claim and the client itself (as audience) into its access tokens.
+
+That origin is not written into the template either: `__APP_ORIGIN__` stands in each place, and
+`idp-realm` fills it from `APP_ORIGIN`, which the compose file sets to
+`http://localhost:${SDLC_APP_PORT:-4300}`. A copy of the sandbox started beside another on its
+own ports therefore lets the browser back in at its own address and no other (decision record
+0045). With `SDLC_APP_PORT` unset the rendered realm is the same as before; likewise
+`KC_HOSTNAME` follows `SDLC_IDP_PORT`.

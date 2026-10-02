@@ -1,4 +1,6 @@
-import { readFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { parse as parseYaml } from "yaml";
 import { describe, expect, it } from "vitest";
@@ -54,15 +56,52 @@ function keysOf(value: unknown, at = ""): { key: string; at: string }[] {
   return [];
 }
 
+/**
+ * A value from the compose file as compose interpolates it: each `${NAME:-default}` takes the
+ * variable when `vars` sets it and the default otherwise (decision record 0045).
+ */
+function interpolate(value: string, vars: Record<string, string> = {}): string {
+  return value.replace(/\$\{([A-Z0-9_]+):-([^}]*)\}/g, (_, name: string, fallback: string) =>
+    vars[name] ? vars[name] : fallback,
+  );
+}
+
 /** Every host port the sandbox publishes, with the service that publishes it. */
-function publishedPorts(): { service: string; host: string; container: string }[] {
+function publishedPorts(
+  vars: Record<string, string> = {},
+): { service: string; host: string; container: string }[] {
   return Object.entries(compose.services).flatMap(([name, definition]) =>
     (definition?.ports ?? []).map((mapping) => {
-      const [host = "", container = ""] = String(mapping).split(":");
+      const [host = "", container = ""] = interpolate(String(mapping), vars).split(":");
       return { service: name, host, container };
     }),
   );
 }
+
+/** The realm as the idp-realm service renders it, run here outside its container. */
+function renderRealm(env: Record<string, string>): unknown {
+  const out = mkdtempSync(path.join(tmpdir(), "realm-"));
+  try {
+    execFileSync(process.execPath, [path.join(composeDir, "idp/render-realm.mjs")], {
+      env: {
+        PATH: process.env.PATH ?? "",
+        REALM_TEMPLATE: path.join(composeDir, "idp/realm-template.json"),
+        REALM_OUTPUT: path.join(out, "realm.json"),
+        ...env,
+      },
+      stdio: "pipe",
+    });
+    return JSON.parse(readFileSync(path.join(out, "realm.json"), "utf8"));
+  } finally {
+    rmSync(out, { recursive: true, force: true });
+  }
+}
+
+type RenderedClient = {
+  redirectUris: string[];
+  webOrigins: string[];
+  attributes: Record<string, string>;
+};
 
 describe("the realm the sandbox identity provider imports", () => {
   it("carries no key of its own making, which would stop the import", () => {
@@ -225,7 +264,7 @@ describe("the mail path's settings in the sandbox (R-6.1 to R-6.4)", () => {
   it("sends from the one configured sender, marked as a test, and links to where the application answers", () => {
     expect(backend.environment.MAILER_FROM).toBe("Digital Marketplace <donotreply@example.test>");
     expect(backend.environment.SHOW_TEST_INDICATOR).toBe("1");
-    expect(backend.environment.SERVICE_ORIGIN).toBe("http://localhost:4300");
+    expect(interpolate(backend.environment.SERVICE_ORIGIN!)).toBe("http://localhost:4300");
   });
 
   it("switches notifications off only when the environment asks", () => {
@@ -237,7 +276,9 @@ describe("the mail path's settings in the sandbox (R-6.1 to R-6.4)", () => {
   });
 
   it("checks tokens against the realm the browser signs in at", () => {
-    expect(backend.environment.OIDC_ISSUER).toBe("http://localhost:8080/realms/digital-marketplace");
+    expect(interpolate(backend.environment.OIDC_ISSUER!)).toBe(
+      "http://localhost:8080/realms/digital-marketplace",
+    );
     expect(backend.environment.OIDC_CLIENT_ID).toBe("digital-marketplace-app");
   });
 });
@@ -254,16 +295,60 @@ describe("completing sign-in at the service (decision record 0015)", () => {
   it("has the identity provider name itself as the browser reaches it, whoever asks", () => {
     // Otherwise a token the service asked for at idp:8080 would name that as its issuer, and
     // neither the service nor the browser renewing it would accept it.
-    expect(idp.environment.KC_HOSTNAME).toBe("http://localhost:8080");
-    expect(`${idp.environment.KC_HOSTNAME}/realms/digital-marketplace`).toBe(
-      backend.environment.OIDC_ISSUER,
-    );
+    expect(interpolate(idp.environment.KC_HOSTNAME!)).toBe("http://localhost:8080");
+    for (const vars of [{}, { SDLC_IDP_PORT: "8081" }] as Record<string, string>[]) {
+      expect(`${interpolate(idp.environment.KC_HOSTNAME!, vars)}/realms/digital-marketplace`).toBe(
+        interpolate(backend.environment.OIDC_ISSUER!, vars),
+      );
+    }
   });
 
   it("lets the browser back in at the address the service answers at", () => {
-    const client = (realm as { clients: { redirectUris: string[] }[] }).clients[0]!;
-    expect(client.redirectUris).toContain("http://localhost:4300/*");
-    expect(`${backend.environment.SERVICE_ORIGIN}/auth/callback`).toMatch(/^http:\/\/localhost:4300\//);
+    const realmRenderer = compose.services["idp-realm"] as Service & { environment: Env };
+    const client = (
+      renderRealm({
+        SDLC_SANDBOX_PASSWORD: "x",
+        APP_ORIGIN: interpolate(realmRenderer.environment.APP_ORIGIN!),
+      }) as { clients: RenderedClient[] }
+    ).clients[0]!;
+    expect(client.redirectUris).toEqual(["http://localhost:4300/*"]);
+    expect(client.webOrigins).toEqual(["http://localhost:4300"]);
+    expect(client.attributes["post.logout.redirect.uris"]).toBe("http://localhost:4300/*");
+    expect(`${interpolate(backend.environment.SERVICE_ORIGIN!)}/auth/callback`).toMatch(
+      /^http:\/\/localhost:4300\//,
+    );
+  });
+
+  it("lets a copy on another port back in at its own address, and only there", () => {
+    const vars = { SDLC_APP_PORT: "4301" };
+    const realmRenderer = compose.services["idp-realm"] as Service & { environment: Env };
+    const origin = interpolate(realmRenderer.environment.APP_ORIGIN!, vars);
+    const client = (
+      renderRealm({ SDLC_SANDBOX_PASSWORD: "x", APP_ORIGIN: origin }) as {
+        clients: RenderedClient[];
+      }
+    ).clients[0]!;
+
+    expect(origin).toBe("http://localhost:4301");
+    expect(interpolate(backend.environment.SERVICE_ORIGIN!, vars)).toBe(origin);
+    expect(client.redirectUris).toEqual(["http://localhost:4301/*"]);
+    expect(client.webOrigins).toEqual(["http://localhost:4301"]);
+    expect(client.attributes["post.logout.redirect.uris"]).toBe("http://localhost:4301/*");
+  });
+
+  it("builds the app knowing where the browser reaches the identity provider", () => {
+    const frontend = compose.services.frontend as Service & {
+      build: { args: Record<string, string> };
+    };
+    const dockerfile = readFileSync(path.resolve(composeDir, "../frontend/Dockerfile"), "utf8");
+    const idp = compose.services.idp as Service & { environment: Env };
+
+    expect(dockerfile).toMatch(/^ARG VITE_OIDC_URL=http:\/\/localhost:8080$/m);
+    for (const vars of [{}, { SDLC_IDP_PORT: "8081" }] as Record<string, string>[]) {
+      expect(interpolate(frontend.build.args.VITE_OIDC_URL!, vars)).toBe(
+        interpolate(idp.environment.KC_HOSTNAME!, vars),
+      );
+    }
   });
 
   it("forwards /auth to the service rather than answering it as a screen", () => {
@@ -285,6 +370,25 @@ describe("the addresses the sandbox publishes", () => {
     expect(onEighty.map(({ service }) => service)).toEqual(["idp"]);
     expect(onEighty.map(({ container }) => container)).toEqual(["8080"]);
     expect(service("idp").command).toContain("--http-port=8080");
+  });
+
+  it("publishes the mail catcher's front on 8025", () => {
+    const onMail = publishedPorts().filter(({ host }) => host === "8025");
+
+    expect(onMail.map(({ service }) => service)).toEqual(["mail-front"]);
+  });
+
+  it("publishes every host port from a variable, so copies can run side by side (decision record 0045)", () => {
+    const vars = { SDLC_APP_PORT: "4301", SDLC_IDP_PORT: "8081", SDLC_MAIL_PORT: "8026" };
+    const published = publishedPorts(vars).map(({ service, host }) => `${service}:${host}`);
+
+    expect(published.sort()).toEqual(["frontend:4301", "idp:8081", "mail-front:8026"]);
+    // The container's side does not move; only what the host sees does.
+    expect(publishedPorts(vars).map(({ container }) => container).sort()).toEqual([
+      "3000",
+      "8025",
+      "8080",
+    ]);
   });
 
   it("starts the identity provider only once the realm has been rendered with a password", () => {

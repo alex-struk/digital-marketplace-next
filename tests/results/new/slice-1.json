@@ -1,9 +1,103 @@
 {
   "slice": 1,
-  "proposal": "build-slice-1-6",
-  "app_tree": "17112d4c60ac1422df706440435465d64b8971bb",
-  "at": "2026-09-25T02:13:47.992Z",
+  "proposal": "build-slice-1-7",
+  "app_tree": "f04d3de74a0bf9c1ce22abf0223bbc26deaf4ede",
+  "at": "2026-10-02T22:10:07.182Z",
   "verdict": "pass",
+  "adapter": "cf5819a3c962bf7c894cf677f4b10578a2532ca6",
+  "rechecked": [
+    "R-4.1",
+    "R-4.2",
+    "R-4.3",
+    "R-4.17",
+    "R-4.24",
+    "R-8.1",
+    "R-8.2",
+    "R-8.5",
+    "R-8.6",
+    "R-8.7",
+    "R-8.10",
+    "R-8.11",
+    "R-8.12",
+    "R-8.18",
+    "R-8.23",
+    "R-8.24",
+    "R-6.7",
+    "R-4.5",
+    "R-4.6",
+    "R-4.8",
+    "R-4.9",
+    "R-4.18",
+    "R-4.25",
+    "R-4.26",
+    "R-4.27",
+    "R-4.28",
+    "R-4.29",
+    "R-4.34",
+    "R-4.4",
+    "R-4.12",
+    "R-4.14",
+    "R-4.19",
+    "R-4.20",
+    "R-4.21",
+    "R-4.30",
+    "R-4.31",
+    "R-4.32",
+    "R-7.5",
+    "R-7.6",
+    "R-7.7",
+    "R-7.8",
+    "R-7.9",
+    "R-7.10",
+    "R-7.12",
+    "R-7.16",
+    "R-7.20",
+    "R-7.21",
+    "R-7.22",
+    "R-7.23",
+    "R-7.24",
+    "R-7.25",
+    "R-7.26",
+    "R-7.27",
+    "R-7.28",
+    "R-8.29",
+    "R-7.13",
+    "R-6.18",
+    "R-6.23",
+    "R-6.24",
+    "R-6.28",
+    "R-4.16",
+    "R-4.33",
+    "R-8.17",
+    "R-8.27",
+    "R-6.8",
+    "R-1.4",
+    "R-1.7",
+    "R-1.10",
+    "R-1.11",
+    "R-1.12",
+    "R-1.14",
+    "R-1.21",
+    "R-1.22",
+    "R-1.23",
+    "R-1.29",
+    "R-1.34",
+    "R-1.37",
+    "R-6.20",
+    "R-6.21",
+    "R-6.27",
+    "R-1.2",
+    "R-1.3",
+    "R-1.5",
+    "R-1.6",
+    "R-1.38",
+    "R-4.22",
+    "R-6.17",
+    "R-1.20",
+    "R-1.28",
+    "R-1.30",
+    "R-1.32"
+  ],
   "rows": [
     {
       "id": "R-7.1",
@@ -16,7 +110,9 @@
           "title": "anyone, including a visitor who has not signed in, can read a page by its address and sees its title, its body as formatted text, and the dates it was first published and last updated",
           "status": "passed"
         }
-      ]
+      ],
+      "file_sha": "09a8250ff44dff07264b1225c46adc382cb73c08",
+      "adapter": "cf5819a3c962bf7c894cf677f4b10578a2532ca6"
     },
     {
       "id": "R-7.2",
@@ -29,7 +125,9 @@
           "title": "a request for a page at an address that no page holds is answered as not found",
           "status": "passed"
         }
-      ]
+      ],
+      "file_sha": "4203b22723ee69352ac368c2d1d331c285273e13",
+      "adapter": "cf5819a3c962bf7c894cf677f4b10578a2532ca6"
     },
     {
       "id": "R-7.3",
@@ -42,7 +140,9 @@
           "title": "a visitor using the service sees the not-found screen either way, whether the address is malformed or merely one no page holds",
           "status": "passed"
         }
-      ]
+      ],
+      "file_sha": "cf697324cb49e379a3d57e6f2be1c5ece81afe8a",
+      "adapter": "cf5819a3c962bf7c894cf677f4b10578a2532ca6"
     },
     {
       "id": "R-7.4",
@@ -59,7 +159,9 @@
           "title": "the service falls back to treating the same value as an address when no page carries that identifier",
           "status": "passed"
         }
-      ]
+      ],
+      "file_sha": "9abad77aa6a76e4c9bf5f5b9b3a0ef2b72683e00",
+      "adapter": "cf5819a3c962bf7c894cf677f4b10578a2532ca6"
     },
     {
       "id": "R-7.18",
@@ -72,7 +174,9 @@
           "title": "The service level agreement page is one the service creates for itself, so every screen that links to it — the learn-more index, the program cards, and the Code With Us, Sprint With Us and Team With Us opportunity forms — resolves on a fresh installation",
           "status": "passed"
         }
-      ]
+      ],
+      "file_sha": "8fa616544ccf59720ca16735e0fc6774865da7fc",
+      "adapter": "cf5819a3c962bf7c894cf677f4b10578a2532ca6"
     },
     {
       "id": "R-7.19",
@@ -85,7 +189,9 @@
           "title": "the service links its own footer to five of its pages, so every screen offers the about, disclaimer, privacy, accessibility and copyright pages to any visitor",
           "status": "passed"
         }
-      ]
+      ],
+      "file_sha": "96fc1a8a3bce53b52748f48b55d92498658b34b3",
+      "adapter": "cf5819a3c962bf7c894cf677f4b10578a2532ca6"
     }
   ]
 }

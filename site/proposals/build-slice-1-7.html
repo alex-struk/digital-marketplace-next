@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-1-7 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">507</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">501</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">419</span></a></li><li><a href="../runs.html">Run log <span class="count">20</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-1-7</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-02 21:25</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 1 (A visitor can read the service&#39;s own pages) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> <code>npm --prefix app run check</code> passes: all three test suites green, 766 tests in all.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I&#39;ve made the sandbox&#39;s three published host ports configurable, so several copies of the application can run side by side. <code>npm --prefix app run check</code> passes: all three test suites green, 766 tests in all. With no variables set, the compose file resolves to exactly today&#39;s ports and addresses. I couldn&#39;t confirm that with Docker itself, because <code>docker compose config</code> wasn&#39;t allowed in this session.</p>
+<p>This was the operator&#39;s infrastructure request, not slice 1&#39;s criteria. R-7.1 to R-7.4, R-7.18 and R-7.19 were already in <code>app/</code> and I left them alone. Every screen, rule and behaviour is unchanged.</p>
+<p><strong>What reads from variables now, in <code>app/compose/compose.yaml</code>:</strong></p>
+<ul><li><strong>Application:</strong> published on <code>${SDLC_APP_PORT:-4300}</code>; <code>SERVICE_ORIGIN</code> follows it.</li><li><strong>Identity provider:</strong> published on <code>${SDLC_IDP_PORT:-8080}</code>; <code>KC_HOSTNAME</code> and <code>OIDC_ISSUER</code> follow it.</li><li><strong>Mail front:</strong> published on <code>${SDLC_MAIL_PORT:-8025}</code>.</li><li><strong>Frontend build:</strong> gets <code>VITE_OIDC_URL</code> as a build argument from <code>http://localhost:${SDLC_IDP_PORT:-8080}</code>. <code>app/frontend/Dockerfile</code> takes it with a default of <code>http://localhost:8080</code>. It comes after the dependency install, so the install stays cached.</li><li><strong>Realm:</strong> <code>app/compose/idp/realm-template.json</code> now has a placeholder, <code>__APP_ORIGIN__</code>, in place of the three fixed redirect, web-origin and post-logout addresses. <code>render-realm.mjs</code> fills it from <code>APP_ORIGIN</code> the same way it fills the password, and the compose file sets that to <code>http://localhost:${SDLC_APP_PORT:-4300}</code>.</li><li><strong>Unchanged:</strong> ports inside the compose network (<code>idp:8080</code>, <code>backend:3001</code>, <code>mail:8025</code>, the frontend&#39;s 3000) don&#39;t move.</li></ul>
+<p><strong>Other fixed addresses in <code>app/</code>, left as they were:</strong></p>
+<ul><li>The backend&#39;s fallback mail origin and the frontend&#39;s fallback identity-provider address only apply when their variable is unset, and compose now always sets both.</li><li>The Vite dev server&#39;s port 4300 is already moved by <code>PORT</code>, and nothing in compose uses that server.</li><li>The test files have their own fixed addresses, and they don&#39;t depend on the sandbox.</li></ul>
+<p><strong>Tests:</strong> I extended <code>app/backend/tests/sandbox-composition.test.ts</code>. It now applies compose&#39;s <code>${NAME:-default}</code> substitution both with no variables and with a second copy on 4301/8081/8026, and runs the real realm renderer into a temporary directory. It checks that:</p>
+<ul><li>by default the ports are 4300, 8080 and 8025, the mail front sits alone on 8025, and the rendered realm allows only <code>http://localhost:4300</code>;</li><li>a copy on 4301 allows only its own address;</li><li>the issuer, the identity provider&#39;s own name and the frontend&#39;s build argument always agree;</li><li>every published host port moves with its variable while the container-side ports stay put.</li></ul>
+<p>To make the renderer testable outside its container, it now takes two optional overrides, <code>REALM_TEMPLATE</code> and <code>REALM_OUTPUT</code>. The compose file sets neither.</p>
+<p><strong>Docs:</strong> I updated the comments in compose, <code>app/compose/idp/README.md</code> and <code>app/README.md</code>, and added decision record <code>docs/decisions/0045-the-sandbox-ports-are-read-from-variables.md</code>. It says each copy also needs its own project name (<code>docker compose -p …</code>) so its containers and volumes are separate. The file still defaults to <code>digital-marketplace</code>.</p>
+<p><strong>Not done:</strong></p>
+<ul><li>The realm placeholder and <code>VITE_OIDC_URL</code> are only checked by tests that read the files; I didn&#39;t build or start any container.</li><li>Whoever runs the side-by-side copies has to pass a different port set and project name to each one.</li></ul>
+<p>Nothing outside <code>app/</code> and <code>docs/decisions/</code> was touched.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-02 22:11.</p>
+<div class="body"><p>The question is whether slice 1 (a visitor can read the service&#39;s own pages) does what its criteria say. Approved: the verify result is current for this proposal (tree f04d3de) and passes all six claimed criteria (R-7.1, R-7.2, R-7.3, R-7.4, R-7.18, R-7.19), with none unasserted. The diff leaves every slice behaviour unchanged. It makes the sandbox&#39;s three published host ports (SDLC_APP_PORT, SDLC_IDP_PORT, SDLC_MAIL_PORT) configurable, and every address that names one (SERVICE_ORIGIN, OIDC_ISSUER, KC_HOSTNAME, the realm&#39;s redirect, web and post-logout origins, and the frontend&#39;s VITE_OIDC_URL build argument, which identity-client.ts does read) follows its variable and defaults to today&#39;s value. Container-side ports are unchanged. It touches only app/ and docs/decisions, carries no secret (the tests use a dummy password), records the change in decision record 0045, and extends sandbox-composition.test.ts to interpolate compose both with defaults and for a second copy on 4301/8081/8026 and to run the real realm renderer, which covers the new seams. The receipt states plainly that no container was built or started. That is an operational gap, not one against this slice&#39;s criteria. Minor: the reworded mail comment at compose.yaml:192 is longer than the lines around it. What would change this ruling: evidence that the sandbox, started with no variables set, no longer comes up on 4300/8080/8025, or that the realm renders differently from before.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

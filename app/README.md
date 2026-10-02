@@ -28,7 +28,10 @@ SDLC_SANDBOX_PASSWORD=... docker compose -f app/compose/compose.yaml up --build
 ```
 
 The application answers on <http://localhost:4300>. The identity provider is on :8080 and
-the mail catcher on :8025. Every account `tests/seed/manifest.yaml` names signs in at the
+the mail catcher on :8025. Each of those three host ports can be moved, so that several copies
+run side by side as separate compose projects: set `SDLC_APP_PORT`, `SDLC_IDP_PORT` and
+`SDLC_MAIL_PORT`, and every address that names one follows (decision record 0045). Unset, they
+are the ports above. Every account `tests/seed/manifest.yaml` names signs in at the
 identity provider with its `idp_id` as username and that password; the password is read from
 the environment and is written into no file here. So do the first-time identities
 `spec/contract/personas.yaml` names, which have no account until they sign in.
