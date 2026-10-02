@@ -53,16 +53,33 @@ export function answerFor(status: number, body: unknown): PageAnswer {
  * Read one page by its address. A page is readable by anyone, including a visitor who has not
  * signed in (R-7.1).
  */
-export async function fetchPage(address: string): Promise<PageAnswer> {
-  try {
-    const { data, error, response } = await api.GET("/api/content/{id}", {
-      params: { path: { id: address } },
-    });
-    return answerFor(response.status, data ?? error);
-  } catch {
-    return { kind: "missing" };
+export async function fetchPage(
+  address: string,
+  retryDelays: readonly number[] = PAGE_RETRY_DELAYS_MS,
+): Promise<PageAnswer> {
+  for (let attempt = 0; ; attempt++) {
+    let status: number | null = null;
+    try {
+      const { data, error, response } = await api.GET("/api/content/{id}", {
+        params: { path: { id: address } },
+      });
+      status = response.status;
+      // Only a fault or no answer at all is asked again; the service's own answer stands.
+      if (status < 500) return answerFor(status, data ?? error);
+    } catch {
+      // No answer: asked again below.
+    }
+    const wait = retryDelays[attempt];
+    if (wait === undefined) return { kind: "missing" };
+    await new Promise<void>((resolve) => setTimeout(resolve, wait));
   }
 }
+
+/**
+ * How long a page's screen waits before asking again when the service faulted or did not
+ * answer, rather than showing the not-found screen for a page that is there (decision record 0039).
+ */
+export const PAGE_RETRY_DELAYS_MS: readonly number[] = [300, 1000];
 
 // ------------------------------------------------------------------------ managing pages
 

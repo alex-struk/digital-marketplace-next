@@ -40,6 +40,15 @@ page instead of signing it in. The realm therefore carries its own profile (the
 `org.keycloak.userprofile.UserProfileProvider` component) in which the address is optional and
 attributes the profile does not declare, such as `identity_provider`, are kept.
 
+## How long a sign-in lasts
+
+An access token lasts an hour (`accessTokenLifespan`), and the identity provider's session ten
+hours whether used or not (`ssoSessionIdleTimeout`, `ssoSessionMaxLifespan`), the same ten hours
+the service's own session cookie lasts (decision record 0017). Keycloak's defaults — five minutes
+and half an hour idle — would leave a browser that signed in early in a long run holding tokens
+it can no longer renew, with only the service's cookie still saying who it is (decision record
+0039). Signing out ends both sessions whatever their length (R-4.17).
+
 ## The client
 
 One client, `digital-marketplace-app`: a public client under PKCE, so no secret is held

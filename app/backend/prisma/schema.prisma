@@ -5,8 +5,9 @@
 // `prisma db pull` against a migrated database and writes what is there. Slice 2 pulled the
 // whole kept schema, because signing in reads and writes `users` and every other table
 // refers to it; slice 3 pulled again after adding the three file read-access tables; slice 7
-// pulled again after adding the Code With Us attachments and the opportunity state checks. The
-// names below are Prisma's, not this project's. Nothing here is edited by hand except this
+// pulled again after adding the Code With Us attachments and the opportunity state checks;
+// slice 8 pulled again after adding the three programs' watcher tables and the view counters.
+// The names below are Prisma's, not this project's. Nothing here is edited by hand except this
 // comment, which a pull replaces and which is put back afterwards.
 
 generator client {
@@ -55,13 +56,14 @@ model affiliations {
 }
 
 model cwuOpportunities {
-  id                     String                   @id @db.Uuid
-  createdAt              DateTime                 @db.Timestamptz(6)
-  createdBy              String?                  @db.Uuid
-  users                  users?                   @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuopportunities_createdby_foreign")
-  cwuOpportunityStatuses cwuOpportunityStatuses[]
-  cwuOpportunityVersions cwuOpportunityVersions[]
-  cwuProposals           cwuProposals[]
+  id                        String                      @id @db.Uuid
+  createdAt                 DateTime                    @db.Timestamptz(6)
+  createdBy                 String?                     @db.Uuid
+  users                     users?                      @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuopportunities_createdby_foreign")
+  cwuOpportunityStatuses    cwuOpportunityStatuses[]
+  cwuOpportunitySubscribers cwuOpportunitySubscribers[]
+  cwuOpportunityVersions    cwuOpportunityVersions[]
+  cwuProposals              cwuProposals[]
 }
 
 model cwuOpportunityStatuses {
@@ -197,13 +199,14 @@ model swuEvaluationPanelMembers {
 }
 
 model swuOpportunities {
-  id                     String                   @id @db.Uuid
-  createdAt              DateTime                 @db.Timestamptz(6)
-  createdBy              String?                  @db.Uuid
-  users                  users?                   @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "swuopportunities_createdby_foreign")
-  swuOpportunityStatuses swuOpportunityStatuses[]
-  swuOpportunityVersions swuOpportunityVersions[]
-  swuProposals           swuProposals[]
+  id                        String                      @id @db.Uuid
+  createdAt                 DateTime                    @db.Timestamptz(6)
+  createdBy                 String?                     @db.Uuid
+  users                     users?                      @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "swuopportunities_createdby_foreign")
+  swuOpportunityStatuses    swuOpportunityStatuses[]
+  swuOpportunitySubscribers swuOpportunitySubscribers[]
+  swuOpportunityVersions    swuOpportunityVersions[]
+  swuProposals              swuProposals[]
 }
 
 model swuOpportunityPhases {
@@ -380,13 +383,14 @@ model twuEvaluationPanelMembers {
 }
 
 model twuOpportunities {
-  id                     String                   @id @db.Uuid
-  createdAt              DateTime                 @db.Timestamptz(6)
-  createdBy              String?                  @db.Uuid
-  users                  users?                   @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "twuopportunities_createdby_foreign")
-  twuOpportunityStatuses twuOpportunityStatuses[]
-  twuOpportunityVersions twuOpportunityVersions[]
-  twuProposals           twuProposals[]
+  id                        String                      @id @db.Uuid
+  createdAt                 DateTime                    @db.Timestamptz(6)
+  createdBy                 String?                     @db.Uuid
+  users                     users?                      @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "twuopportunities_createdby_foreign")
+  twuOpportunityStatuses    twuOpportunityStatuses[]
+  twuOpportunitySubscribers twuOpportunitySubscribers[]
+  twuOpportunityVersions    twuOpportunityVersions[]
+  twuProposals              twuProposals[]
 }
 
 model twuOpportunityStatuses {
@@ -548,6 +552,7 @@ model users {
   contentVersions                                        contentVersions[]
   cwuOpportunities                                       cwuOpportunities[]
   cwuOpportunityStatuses                                 cwuOpportunityStatuses[]
+  cwuOpportunitySubscribers                              cwuOpportunitySubscribers[]
   cwuOpportunityVersions                                 cwuOpportunityVersions[]
   cwuProponents_cwuProponents_createdByTousers           cwuProponents[]                                          @relation("cwuProponents_createdByTousers")
   cwuProponents_cwuProponents_updatedByTousers           cwuProponents[]                                          @relation("cwuProponents_updatedByTousers")
@@ -562,6 +567,7 @@ model users {
   swuOpportunities                                       swuOpportunities[]
   swuOpportunityPhases                                   swuOpportunityPhases[]
   swuOpportunityStatuses                                 swuOpportunityStatuses[]
+  swuOpportunitySubscribers                              swuOpportunitySubscribers[]
   swuOpportunityVersions                                 swuOpportunityVersions[]
   swuPhaseCapabilities                                   swuPhaseCapabilities[]
   swuProposalStatuses                                    swuProposalStatuses[]
@@ -576,6 +582,7 @@ model users {
   twuEvaluationPanelMembers                              twuEvaluationPanelMembers[]
   twuOpportunities                                       twuOpportunities[]
   twuOpportunityStatuses                                 twuOpportunityStatuses[]
+  twuOpportunitySubscribers                              twuOpportunitySubscribers[]
   twuOpportunityVersions                                 twuOpportunityVersions[]
   twuProposalMember                                      twuProposalMember[]
   twuProposalStatuses                                    twuProposalStatuses[]
@@ -791,4 +798,39 @@ model cwuOpportunityAttachments {
   cwuOpportunityVersions cwuOpportunityVersions @relation(fields: [opportunityVersion], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cwuopportunityattachments_opportunityversion_foreign")
 
   @@id([opportunityVersion, file])
+}
+
+model cwuOpportunitySubscribers {
+  opportunity      String           @db.Uuid
+  user             String           @db.Uuid
+  createdAt        DateTime         @db.Timestamptz(6)
+  cwuOpportunities cwuOpportunities @relation(fields: [opportunity], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cwuopportunitysubscribers_opportunity_foreign")
+  users            users            @relation(fields: [user], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cwuopportunitysubscribers_user_foreign")
+
+  @@id([opportunity, user])
+}
+
+model swuOpportunitySubscribers {
+  opportunity      String           @db.Uuid
+  user             String           @db.Uuid
+  createdAt        DateTime         @db.Timestamptz(6)
+  swuOpportunities swuOpportunities @relation(fields: [opportunity], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "swuopportunitysubscribers_opportunity_foreign")
+  users            users            @relation(fields: [user], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "swuopportunitysubscribers_user_foreign")
+
+  @@id([opportunity, user])
+}
+
+model twuOpportunitySubscribers {
+  opportunity      String           @db.Uuid
+  user             String           @db.Uuid
+  createdAt        DateTime         @db.Timestamptz(6)
+  twuOpportunities twuOpportunities @relation(fields: [opportunity], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "twuopportunitysubscribers_opportunity_foreign")
+  users            users            @relation(fields: [user], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "twuopportunitysubscribers_user_foreign")
+
+  @@id([opportunity, user])
+}
+
+model viewCounters {
+  name  String @id @db.VarChar(255)
+  count Int    @default(0)
 }

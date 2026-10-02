@@ -2,7 +2,7 @@ import { Heading, Text } from "@bcgov/design-system-react-components";
 import { useNavigate } from "@tanstack/react-router";
 import type { Account } from "../api/accounts";
 import { createCwuOpportunity } from "../api/opportunities";
-import { page } from "../app/layout";
+import { Stack } from "../app/page-layout";
 import { useScreenTitle } from "../app/screen-title";
 import { StaffOnly } from "../app/staff-only";
 import { BLANK_FORM, CwuOpportunityForm } from "./opportunity-cwu-form";
@@ -27,7 +27,7 @@ function CreateCwu({ account }: { account: Account }) {
   const today = todayInPacific();
   const administrator = account.type === "ADMIN";
   return (
-    <div style={page}>
+    <Stack gap="large">
       <Heading level={1}>Create a Code With Us opportunity</Heading>
       <Text elementType="p">
         Required fields are needed to submit for review or publish. A draft can be saved with any of them blank.
@@ -54,6 +54,6 @@ function CreateCwu({ account }: { account: Account }) {
           void navigate({ to: "/opportunities/code-with-us/$opportunityId/edit", params: { opportunityId: opportunity.id } })
         }
       />
-    </div>
+    </Stack>
   );
 }

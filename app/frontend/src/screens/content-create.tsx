@@ -2,7 +2,7 @@ import { Heading, Text } from "@bcgov/design-system-react-components";
 import { useNavigate } from "@tanstack/react-router";
 import { createPage } from "../api/content";
 import { AdministratorsOnly } from "../app/administrators-only";
-import { page } from "../app/layout";
+import { Stack } from "../app/page-layout";
 import { useScreenTitle } from "../app/screen-title";
 import { PageForm } from "./content-form";
 import { withContentNotice } from "./content-notices";
@@ -24,7 +24,7 @@ function ContentCreate() {
   useScreenTitle("Create a New Page");
   const navigate = useNavigate();
   return (
-    <div style={page}>
+    <Stack gap="large">
       <Heading level={1}>Create a New Page</Heading>
       <PageForm
         purpose="create"
@@ -45,6 +45,6 @@ function ContentCreate() {
           })
         }
       />
-    </div>
+    </Stack>
   );
 }

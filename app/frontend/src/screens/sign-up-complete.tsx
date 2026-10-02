@@ -14,7 +14,7 @@ import { needsProfileCompletion, ProfileErrors, validateProfile } from "@rules/u
 import { Account, changeOwnAccount } from "../api/accounts";
 import { uploadPicture } from "../api/files";
 import { ImagePicker, PictureRejection, checkChosenPicture } from "../app/image-picker";
-import { page, stack } from "../app/layout";
+import { Stack } from "../app/page-layout";
 import { Loading } from "../app/loading";
 import { useScreenTitle } from "../app/screen-title";
 import { holdAccount, useSession } from "../auth/session";
@@ -42,10 +42,10 @@ export function SignUpCompleteScreen() {
 
   if (session.status !== "signed-in" || !offered) {
     return (
-      <div style={page}>
+      <Stack gap="large">
         <Heading level={1}>Complete Your Profile</Heading>
         <Loading label="Loading…" />
-      </div>
+      </Stack>
     );
   }
   return <CompletionForm account={session.account} />;
@@ -143,7 +143,7 @@ function CompletionForm({ account }: { account: Account }) {
   }
 
   return (
-    <div style={page}>
+    <Stack gap="large">
       <Heading level={1}>Complete Your Profile</Heading>
       {saveFailed ? (
         <InlineAlert
@@ -175,91 +175,93 @@ function CompletionForm({ account }: { account: Account }) {
       ) : (
         <Text elementType="p">Confirm your details to finish creating your vendor account.</Text>
       )}
-      <Form validationBehavior="aria" style={stack} onSubmit={complete}>
-        <ImagePicker
-          storedFileId={account.avatarImageFile}
-          chosen={chosen}
-          rejection={rejection}
-          onChoose={(file) => {
-            // Only the latest choice counts: one still being read when another is made is set aside.
-            const turn = ++choosing.current.turn;
-            choosing.current.check = checkChosenPicture(file).then((refused) => {
-              const accepted = refused ? null : file;
-              if (turn === choosing.current.turn) {
-                choosing.current.check = null;
-                setRejection(refused);
-                setChosen(accepted);
-              }
-              return accepted;
-            });
-          }}
-        />
-        <TextField
-          label="Sign-in username"
-          value={account.idpUsername}
-          isReadOnly
-          description="The account you signed in with. It cannot be changed."
-          data-testid="idp-username-field"
-        />
-        <TextField
-          id="profile-name"
-          label="Name"
-          value={name}
-          onChange={setName}
-          isRequired
-          isInvalid={Boolean(errors.name)}
-          errorMessage={errors.name}
-          data-testid="name-field"
-        />
-        <TextField
-          id="profile-email"
-          label="Email address"
-          type="email"
-          value={email}
-          onChange={setEmail}
-          isRequired
-          isInvalid={Boolean(errors.email)}
-          errorMessage={errors.email}
-          data-testid="email-field"
-        />
-        <Checkbox
-          isSelected={notices}
-          onChange={setNotices}
-          data-testid="sign-up-notifications-checkbox"
-        >
-          Email me when new opportunities are posted
-        </Checkbox>
-        <div style={stack}>
-          <Text elementType="p">
-            Read the <Link href="/content/terms-and-conditions">terms and conditions</Link> and
-            the <Link href="/content/privacy">privacy policy</Link> before you agree to them.
-          </Text>
-          <Checkbox
+      <Form validationBehavior="aria" onSubmit={complete}>
+        <Stack gap="medium">
+          <ImagePicker
+            storedFileId={account.avatarImageFile}
+            chosen={chosen}
+            rejection={rejection}
+            onChoose={(file) => {
+              // Only the latest choice counts: one still being read when another is made is set aside.
+              const turn = ++choosing.current.turn;
+              choosing.current.check = checkChosenPicture(file).then((refused) => {
+                const accepted = refused ? null : file;
+                if (turn === choosing.current.turn) {
+                  choosing.current.check = null;
+                  setRejection(refused);
+                  setChosen(accepted);
+                }
+                return accepted;
+              });
+            }}
+          />
+          <TextField
+            label="Sign-in username"
+            value={account.idpUsername}
+            isReadOnly
+            description="The account you signed in with. It cannot be changed."
+            data-testid="idp-username-field"
+          />
+          <TextField
+            id="profile-name"
+            label="Name"
+            value={name}
+            onChange={setName}
             isRequired
-            isSelected={agreed}
-            onChange={setAgreed}
-            data-testid="sign-up-terms-checkbox"
+            isInvalid={Boolean(errors.name)}
+            errorMessage={errors.name}
+            data-testid="name-field"
+          />
+          <TextField
+            id="profile-email"
+            label="Email address"
+            type="email"
+            value={email}
+            onChange={setEmail}
+            isRequired
+            isInvalid={Boolean(errors.email)}
+            errorMessage={errors.email}
+            data-testid="email-field"
+          />
+          <Checkbox
+            isSelected={notices}
+            onChange={setNotices}
+            data-testid="sign-up-notifications-checkbox"
           >
-            I have read and agree to the terms and conditions and the privacy policy
+            Email me when new opportunities are posted
           </Checkbox>
-        </div>
-        {agreed ? null : (
-          <Text id="sign-up-complete-hint" elementType="p" size="small" color="secondary">
-            Agree to the terms and conditions and the privacy policy to complete your profile.
-          </Text>
-        )}
-        <div>
-          <Button
-            type="submit"
-            variant="primary"
-            isDisabled={!agreed || saving}
-            aria-describedby={agreed ? undefined : "sign-up-complete-hint"}
-            data-testid="sign-up-complete-button"
-          >
-            Complete profile
-          </Button>
-        </div>
+          <Stack gap="small">
+            <Text elementType="p">
+              Read the <Link href="/content/terms-and-conditions">terms and conditions</Link> and
+              the <Link href="/content/privacy">privacy policy</Link> before you agree to them.
+            </Text>
+            <Checkbox
+              isRequired
+              isSelected={agreed}
+              onChange={setAgreed}
+              data-testid="sign-up-terms-checkbox"
+            >
+              I have read and agree to the terms and conditions and the privacy policy
+            </Checkbox>
+          </Stack>
+          {agreed ? null : (
+            <Text id="sign-up-complete-hint" elementType="p" size="small" color="secondary">
+              Agree to the terms and conditions and the privacy policy to complete your profile.
+            </Text>
+          )}
+          <div>
+            <Button
+              type="submit"
+              variant="primary"
+              isDisabled={!agreed || saving}
+              aria-describedby={agreed ? undefined : "sign-up-complete-hint"}
+              data-testid="sign-up-complete-button"
+            >
+              Complete profile
+            </Button>
+          </div>
+        </Stack>
       </Form>
-    </div>
+    </Stack>
   );
 }

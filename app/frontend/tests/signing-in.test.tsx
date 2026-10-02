@@ -113,12 +113,44 @@ afterEach(() => {
 });
 
 describe("finding out who is using the app", () => {
-  it("is a visitor when the identity provider holds no sign-in", async () => {
+  it("is a visitor when neither the browser nor the service holds a sign-in", async () => {
     serve(() => json(200, { id: null, user: null }));
     await startSession(fakeIdentity(false));
 
     expect(currentSession()).toEqual({ status: "visitor" });
-    expect(requests).toEqual([]);
+    // Asked without a token: the service may still know the person by its own session cookie.
+    expect(requests).toEqual([{ method: "GET", path: "/api/sessions/current", body: undefined, authorization: null }]);
+  });
+
+  it("is whoever the service's own session names when the browser holds no tokens (decision record 0017)", async () => {
+    serve(() => json(200, { id: "s", user: agreedVendor }));
+    await startSession(fakeIdentity(false));
+
+    expect(currentSession()).toEqual({ status: "signed-in", account: agreedVendor });
+  });
+
+  it("keeps the browser's sign-in when the question goes unanswered, as when the page is left (decision record 0038)", async () => {
+    const identity = fakeIdentity();
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => {
+        throw new DOMException("The user aborted a request.", "AbortError");
+      }),
+    );
+    await startSession(identity);
+
+    expect(currentSession()).toEqual({ status: "visitor" });
+    expect(identity.forget).not.toHaveBeenCalled();
+    expect(identity.signOut).not.toHaveBeenCalled();
+  });
+
+  it("keeps the browser's sign-in when the service faults, which is not a refusal", async () => {
+    const identity = fakeIdentity();
+    serve(() => json(503, { errors: ["The service is unavailable."] }));
+    await startSession(identity);
+
+    expect(currentSession()).toEqual({ status: "visitor" });
+    expect(identity.forget).not.toHaveBeenCalled();
   });
 
   it("asks the service for the account with the person's token, which completes sign-in", async () => {
@@ -145,6 +177,47 @@ describe("finding out who is using the app", () => {
 
     expect(currentSession()).toEqual({ status: "visitor" });
     expect(identity.forget).toHaveBeenCalled();
+  });
+
+  it("asks once more without a refused token, and is whoever the service's own session names (decision record 0039)", async () => {
+    let token: string | null = "a-stale-token";
+    const identity = {
+      ...fakeIdentity(),
+      accessToken: vi.fn(async () => token),
+      forget: vi.fn(() => {
+        token = null;
+      }),
+    };
+    serve((request) =>
+      request.headers.get("authorization")
+        ? json(401, { errors: ["Sign in to do that."] })
+        : json(200, { id: "s", user: staff }),
+    );
+    await startSession(identity);
+
+    expect(currentSession()).toEqual({ status: "signed-in", account: staff });
+    expect(identity.forget).toHaveBeenCalledTimes(1);
+    expect(requests.map((request) => request.authorization)).toEqual(["Bearer a-stale-token", null]);
+  });
+
+  it("asks again when the question went unanswered, and holds whoever the next answer names (decision record 0039)", async () => {
+    let faults = 2;
+    serve(() => {
+      if (faults > 0) {
+        faults -= 1;
+        return json(503, { errors: ["The service is unavailable."] });
+      }
+      return json(200, { id: "s", user: staff });
+    });
+    const identity = fakeIdentity();
+    const started = startSession(identity);
+    // Still finding out while it asks again: no screen is told "visitor" in the meantime.
+    expect(currentSession()).toEqual({ status: "starting" });
+    await started;
+
+    expect(currentSession()).toEqual({ status: "signed-in", account: staff });
+    expect(requests).toHaveLength(3);
+    expect(identity.forget).not.toHaveBeenCalled();
   });
 
   it("keeps nothing of the account in the browser: the service is asked for it on every visit", async () => {

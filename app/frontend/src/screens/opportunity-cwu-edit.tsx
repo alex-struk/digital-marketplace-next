@@ -22,9 +22,9 @@ import {
   deleteCwuOpportunity,
   fetchCwuOpportunity,
 } from "../api/opportunities";
-import { facts, page, row, stack, tabList } from "../app/layout";
 import { Loading } from "../app/loading";
 import { NotFound } from "../app/not-found";
+import { Stack } from "../app/page-layout";
 import { RequireSignIn } from "../app/require-sign-in";
 import { useScreenTitle } from "../app/screen-title";
 import { TitledAlert } from "../app/titled-alert";
@@ -78,10 +78,10 @@ function ManageLoader({ account, opportunityId }: { account: Account; opportunit
 
   if (loaded.kind === "loading") {
     return (
-      <div style={page}>
+      <Stack gap="large">
         <Heading level={1}>Manage a Code With Us opportunity</Heading>
         <Loading label="Loading opportunity…" />
-      </div>
+      </Stack>
     );
   }
   if (
@@ -174,19 +174,21 @@ function Manage({ account, initial }: { account: Account; initial: CwuOpportunit
   }
 
   return (
-    <div style={page}>
-      <Text elementType="p" size="small" color="secondary">
-        Manage a Code With Us opportunity
-      </Text>
-      <Heading level={1}>{opportunity.title || "Untitled opportunity"}</Heading>
-      <div style={row}>
+    <Stack gap="large">
+      <Stack gap="small">
+        <Text elementType="p" size="small" color="secondary">
+          Manage a Code With Us opportunity
+        </Text>
+        <Heading level={1}>{opportunity.title || "Untitled opportunity"}</Heading>
+      </Stack>
+      <Stack direction="row" align="center" gap="medium">
         <Text elementType="p">
           Status: <StatusBadge status={opportunity.status} />
         </Text>
         <Text elementType="p" size="small" color="secondary">
           Opportunity ID: <span data-testid="opportunity-identifier">{opportunity.id}</span>
         </Text>
-      </div>
+      </Stack>
       {/* The actions stay on every tab, the Opportunity tab's form included, so a draft can be put
           forward from wherever its author is; only Edit is left off where the form is already
           open (decision record 0032). */}
@@ -215,7 +217,7 @@ function Manage({ account, initial }: { account: Account; initial: CwuOpportunit
         </ButtonGroup>
       ) : null}
       <nav aria-label="Opportunity sections">
-        <ul style={tabList}>
+        <Stack as="ul" direction="row" gap="medium">
           {offered.map((name) => (
             <li key={name}>
               <Link
@@ -227,9 +229,9 @@ function Manage({ account, initial }: { account: Account; initial: CwuOpportunit
               </Link>
             </li>
           ))}
-        </ul>
+        </Stack>
       </nav>
-      <section aria-labelledby="tab-heading" style={stack}>
+      <Stack as="section" gap="medium" aria-labelledby="tab-heading">
         <Heading level={2} id="tab-heading">
           {TAB_NAMES[tab]}
         </Heading>
@@ -276,7 +278,7 @@ function Manage({ account, initial }: { account: Account; initial: CwuOpportunit
         ) : null}
         {tab === "addenda" ? <Text elementType="p">No addenda have been added.</Text> : null}
         {tab === "history" ? <HistoryTab opportunity={opportunity} /> : null}
-      </section>
+      </Stack>
       <PublishDialog
         isOpen={dialog === "publish"}
         isSending={busy}
@@ -302,7 +304,7 @@ function Manage({ account, initial }: { account: Account; initial: CwuOpportunit
           <Text elementType="p">The opportunity and everything entered in it will be removed. This cannot be undone.</Text>
         </AlertDialog>
       </Modal>
-    </div>
+    </Stack>
   );
 }
 
@@ -358,7 +360,7 @@ function NoticeArea({ notice, noticeRef }: { notice: Notice | null; noticeRef: R
 function SummaryTab({ opportunity }: { opportunity: CwuOpportunity }) {
   return (
     <>
-      <dl style={facts}>
+      <Stack as="dl" direction="row" gap="medium">
         <Fact label="Proposal deadline">{deadlineLabel(opportunity.proposalDeadline)}</Fact>
         <Fact label="Reward">{rewardLabel(opportunity.reward)}</Fact>
         <Fact label="Published">{publishedLabel(opportunity.publishedAt)}</Fact>
@@ -372,7 +374,7 @@ function SummaryTab({ opportunity }: { opportunity: CwuOpportunity }) {
             {opportunity.updatedBy.name}
           </Fact>
         ) : null}
-      </dl>
+      </Stack>
       {isUnpublished(opportunity.status) ? (
         <Text elementType="p" size="small" color="secondary">
           Views, watchers and proposals are counted once the opportunity is published.
@@ -384,6 +386,7 @@ function SummaryTab({ opportunity }: { opportunity: CwuOpportunity }) {
 
 const cell = {
   textAlign: "start",
+  verticalAlign: "top",
   padding: "var(--layout-padding-small)",
   borderBottom: "var(--layout-border-width-small) solid var(--surface-color-border-default)",
 } as const;

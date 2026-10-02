@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { OpportunityStatus, STATUS_LABELS, pacificDayOf } from "@rules/opportunities";
-import { definition, fact, badge, term } from "../app/layout";
+import { badge, term } from "../app/layout";
+import { Stack } from "../app/page-layout";
 import { readDate, readDay } from "../lib/dates";
 
 /**
@@ -17,15 +18,13 @@ export function StatusBadge({ status }: { status: OpportunityStatus }) {
   );
 }
 
-/** One key fact: a term and what it is. */
+/** One key fact: a term and what it is, in a key facts list (`<Stack as="dl" direction="row">`). */
 export function Fact({ label, children, testId }: { label: string; children: ReactNode; testId?: string }) {
   return (
-    <div style={fact}>
+    <Stack gap="small">
       <dt style={term}>{label}</dt>
-      <dd style={definition} data-testid={testId}>
-        {children}
-      </dd>
-    </div>
+      <dd data-testid={testId}>{children}</dd>
+    </Stack>
   );
 }
 

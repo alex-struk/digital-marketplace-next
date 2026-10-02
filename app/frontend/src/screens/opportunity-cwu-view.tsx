@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
-import { Heading, Link, Text } from "@bcgov/design-system-react-components";
+import { useEffect, useRef, useState } from "react";
+import { Checkbox, Heading, Link, Text } from "@bcgov/design-system-react-components";
 import { mayManageOpportunity } from "@rules/opportunities";
+import { mayWatch } from "@rules/opportunity-list";
 import { CwuOpportunity, fetchCwuOpportunity } from "../api/opportunities";
+import { countView, setWatching } from "../api/watching";
 import { AttachmentList } from "../app/attachments";
-import { facts, page, stack, tight } from "../app/layout";
 import { Loading } from "../app/loading";
 import { NotFound } from "../app/not-found";
+import { Stack } from "../app/page-layout";
 import { useScreenTitle } from "../app/screen-title";
 import { useSession } from "../auth/session";
 import { FormattedText } from "../lib/formatted-text/formatted-text";
@@ -43,30 +45,40 @@ export function OpportunityCwuViewScreen({ opportunityId }: { opportunityId: str
     };
   }, [opportunityId, ready, viewerId]);
 
+  // Opening the page is one view, however often it is read again while open (R-1.6).
+  const counted = useRef(false);
+  useEffect(() => {
+    if (loaded.kind !== "found" || counted.current) return;
+    counted.current = true;
+    void countView("code-with-us", loaded.opportunity.id);
+  }, [loaded]);
+
   if (loaded.kind === "missing") return <NotFound />;
   if (loaded.kind === "loading") {
     return (
-      <div style={page}>
+      <Stack gap="large">
         <Heading level={1}>Code With Us opportunity</Heading>
         <Loading label="Loading opportunity…" />
-      </div>
+      </Stack>
     );
   }
   const { opportunity } = loaded;
   const viewer = session.status === "signed-in" ? session.account : null;
   const manages = mayManageOpportunity(viewer, { status: opportunity.status, createdBy: opportunity.createdBy?.id ?? null });
   return (
-    <div style={page}>
-      <Text elementType="p" size="small" color="secondary">
-        Code With Us opportunity
-      </Text>
-      <Heading level={1}>{opportunity.title || "Untitled opportunity"}</Heading>
+    <Stack gap="large">
+      <Stack gap="small">
+        <Text elementType="p" size="small" color="secondary">
+          Code With Us opportunity
+        </Text>
+        <Heading level={1}>{opportunity.title || "Untitled opportunity"}</Heading>
+      </Stack>
       {opportunity.teaser ? (
         <Text elementType="p" size="large">
           {opportunity.teaser}
         </Text>
       ) : null}
-      <dl style={facts}>
+      <Stack as="dl" direction="row" gap="medium">
         <Fact label="Status">
           <StatusBadge status={opportunity.status} />
         </Fact>
@@ -93,10 +105,13 @@ export function OpportunityCwuViewScreen({ opportunityId }: { opportunityId: str
             {opportunity.updatedBy.name}
           </Fact>
         ) : null}
-      </dl>
+      </Stack>
       <Text elementType="p" size="small" color="secondary">
         Opportunity ID: <span data-testid="opportunity-identifier">{opportunity.id}</span>
       </Text>
+      {mayWatch(viewer, { createdBy: opportunity.createdBy?.id ?? null }) ? (
+        <WatchControl key={opportunity.id} opportunity={opportunity} />
+      ) : null}
       {manages ? (
         <div>
           <Link href={`/opportunities/code-with-us/${opportunity.id}/edit`} isButton buttonVariant="secondary">
@@ -104,14 +119,14 @@ export function OpportunityCwuViewScreen({ opportunityId }: { opportunityId: str
           </Link>
         </div>
       ) : null}
-      <section aria-labelledby="view-description" style={stack}>
+      <Stack as="section" gap="medium" aria-labelledby="view-description">
         <Heading level={2} id="view-description">
           Description
         </Heading>
         <FormattedText markup={opportunity.description} />
         <AttachmentList attachments={opportunity.attachments} />
-      </section>
-      <section aria-labelledby="view-skills" style={stack}>
+      </Stack>
+      <Stack as="section" gap="medium" aria-labelledby="view-skills">
         <Heading level={2} id="view-skills">
           Skills
         </Heading>
@@ -124,8 +139,8 @@ export function OpportunityCwuViewScreen({ opportunityId }: { opportunityId: str
         ) : (
           <Text elementType="p">No skills have been named.</Text>
         )}
-      </section>
-      <section aria-labelledby="view-dates" style={stack}>
+      </Stack>
+      <Stack as="section" gap="medium" aria-labelledby="view-dates">
         <Heading level={2} id="view-dates">
           Key dates
         </Heading>
@@ -134,13 +149,57 @@ export function OpportunityCwuViewScreen({ opportunityId }: { opportunityId: str
           <li>{`Start date: ${dayLabel(opportunity.startDate)}`}</li>
           {opportunity.completionDate ? <li>{`Completion date: ${dayLabel(opportunity.completionDate)}`}</li> : null}
         </ul>
-      </section>
-      <section aria-labelledby="view-addenda" style={tight} data-testid="opportunity-addenda">
+      </Stack>
+      <Stack as="section" gap="medium" aria-labelledby="view-addenda" data-testid="opportunity-addenda">
         <Heading level={2} id="view-addenda">
           Addenda
         </Heading>
         <Text elementType="p">No addenda have been added.</Text>
-      </section>
-    </div>
+      </Stack>
+    </Stack>
+  );
+}
+
+/**
+ * Watching the opportunity, for anyone signed in who did not create it (R-1.5). Ticking or
+ * unticking saves at once, and the change is announced; a refusal puts the box back.
+ */
+function WatchControl({ opportunity }: { opportunity: CwuOpportunity }) {
+  const [watching, setWatched] = useState(opportunity.subscribed);
+  const [saving, setSaving] = useState(false);
+  const [status, setStatus] = useState<string | null>(null);
+
+  async function change(value: boolean) {
+    setWatched(value);
+    setSaving(true);
+    setStatus(null);
+    const saved = await setWatching("code-with-us", opportunity.id, value);
+    setSaving(false);
+    if (!saved) {
+      setWatched(!value);
+      setStatus("Your choice could not be saved. Please try again.");
+      return;
+    }
+    setStatus(
+      value
+        ? "You are watching this opportunity. You will be emailed whenever it changes."
+        : "You are no longer watching this opportunity.",
+    );
+  }
+
+  return (
+    <Stack gap="small">
+      <Text elementType="p" size="small" color="secondary">
+        Watching sends you an email whenever this opportunity changes.
+      </Text>
+      <Checkbox
+        isSelected={watching}
+        onChange={(value) => (saving ? undefined : void change(value))}
+        data-testid="opportunity-watch-toggle"
+      >
+        Watch this opportunity
+      </Checkbox>
+      <div role="status">{status ? <Text elementType="p">{status}</Text> : null}</div>
+    </Stack>
   );
 }

@@ -32,8 +32,8 @@ import {
 import { PageWording, PublishAnswer } from "../api/content";
 import { originOfThisApp } from "../api/client";
 import { uploadEmbeddedImage } from "../api/files";
-import { stack, statusRow } from "../app/layout";
 import { Loading } from "../app/loading";
+import { Stack } from "../app/page-layout";
 import { TitledAlert } from "../app/titled-alert";
 import {
   FORMATTING_LABELS,
@@ -53,7 +53,6 @@ import {
  * because a page is public as soon as it is published.
  */
 
-const tools = { display: "flex", flexWrap: "wrap", gap: "var(--layout-margin-small)" } as const;
 const hiddenInput = { display: "none" } as const;
 
 export const ADDRESS_RULE =
@@ -317,179 +316,185 @@ export function PageForm({
       {intro}
       <Form
         validationBehavior="aria"
-        style={stack}
         onSubmit={(event) => {
           event.preventDefault();
           if (ready) setConfirming(true);
         }}
       >
-        <TextField
-          id={FIELD_IDS.title}
-          label="Title"
-          isRequired
-          description="Between 1 and 100 characters."
-          value={wording.title}
-          onChange={(value) => change("title", value)}
-          onBlur={() => leave("title")}
-          isInvalid={fieldError("title") !== undefined}
-          errorMessage={fieldError("title")}
-          data-testid="content-title-field"
-        />
-        {addressLocked ? (
+        <Stack gap="medium">
           <TextField
-            id={FIELD_IDS.slug}
-            label="Address"
-            isReadOnly
-            description={addressDescription}
-            value={wording.slug}
-            data-testid="content-slug-field"
+            id={FIELD_IDS.title}
+            label="Title"
+            isRequired
+            description="Between 1 and 100 characters."
+            value={wording.title}
+            onChange={(value) => change("title", value)}
+            onBlur={() => leave("title")}
+            isInvalid={fieldError("title") !== undefined}
+            errorMessage={fieldError("title")}
+            data-testid="content-title-field"
           />
-        ) : (
-          <div style={stack}>
+          {addressLocked ? (
             <TextField
               id={FIELD_IDS.slug}
               label="Address"
-              isRequired
+              isReadOnly
               description={addressDescription}
               value={wording.slug}
-              onChange={(value) => change("slug", value)}
-              onBlur={() => leave("slug")}
-              isInvalid={fieldError("slug") !== undefined}
-              errorMessage={fieldError("slug")}
-              aria-describedby="content-slug-rule content-resulting-address"
               data-testid="content-slug-field"
             />
-            <div id="content-slug-rule" data-testid="content-slug-rule">
-              <Text elementType="p" size="small" color="secondary">
-                {ADDRESS_RULE}
+          ) : (
+            <Stack gap="small">
+              <TextField
+                id={FIELD_IDS.slug}
+                label="Address"
+                isRequired
+                description={addressDescription}
+                value={wording.slug}
+                onChange={(value) => change("slug", value)}
+                onBlur={() => leave("slug")}
+                isInvalid={fieldError("slug") !== undefined}
+                errorMessage={fieldError("slug")}
+                aria-describedby="content-slug-rule content-resulting-address"
+                data-testid="content-slug-field"
+              />
+              <div id="content-slug-rule" data-testid="content-slug-rule">
+                <Text elementType="p" size="small" color="secondary">
+                  {ADDRESS_RULE}
+                </Text>
+              </div>
+              <div id="content-resulting-address" data-testid="content-resulting-address">
+                <Text elementType="p" size="small" color="secondary">
+                  {publicAddress}
+                </Text>
+              </div>
+            </Stack>
+          )}
+          {/* A plain wrapper only so the editor can find its text area; the stack inside lays it out. */}
+          <div ref={editorRef}>
+            <Stack gap="small">
+              <Toolbar aria-label="Formatting for Body">
+                <Stack direction="row" gap="small">
+                  {FORMATTING_ORDER.map((formatting) => (
+                    <Button key={formatting} variant="tertiary" size="small" onPress={() => format(formatting)}>
+                      {FORMATTING_LABELS[formatting]}
+                    </Button>
+                  ))}
+                  {/* The editor's own file input, opened by the button. React Aria's FileTrigger is not
+                      used: the design system bundles its own copy of React Aria, so FileTrigger's press
+                      handler never reached its Button and no file chooser opened (as in image-picker). */}
+                  <input
+                    ref={imageInputRef}
+                    type="file"
+                    accept={IMAGE_TYPES.join(",")}
+                    tabIndex={-1}
+                    aria-hidden="true"
+                    style={hiddenInput}
+                    onChange={(event) => {
+                      const file = event.currentTarget.files?.[0];
+                      // Cleared so that choosing the same file again is still noticed.
+                      event.currentTarget.value = "";
+                      void insertImage(file);
+                    }}
+                  />
+                  <Button
+                    variant="tertiary"
+                    size="small"
+                    isDisabled={image.kind === "uploading"}
+                    aria-describedby="embedded-image-rule"
+                    data-testid="content-body-image-button"
+                    onPress={() => imageInputRef.current?.click()}
+                  >
+                    Insert image
+                  </Button>
+                </Stack>
+              </Toolbar>
+              <div id="embedded-image-rule" data-testid="image-file-rule">
+                <Text elementType="p" size="small" color="secondary">
+                  {`Insert image takes a JPEG or PNG image, up to ${FILE_SIZE_LIMIT_LABEL}. An inserted image is stored as soon as you choose it and anyone can see it.`}
+                </Text>
+              </div>
+              {image.kind === "uploading" ? (
+                <div data-testid="embedded-image-uploading">
+                  <Loading label={`Uploading ${image.name}…`} />
+                </div>
+              ) : null}
+              <div role="status">
+                {image.kind === "inserted" ? (
+                  <Text elementType="p">
+                    {`${image.name} was inserted at the cursor. Replace "${EMBEDDED_IMAGE_PLACEHOLDER_ALT}" with a description of what it shows.`}
+                  </Text>
+                ) : null}
+              </div>
+              {image.kind === "failed" ? (
+                <div data-testid="embedded-image-error">
+                  <TitledAlert variant="danger" role="alert" title={`${image.name} could not be inserted`}>
+                    <Text elementType="p">{image.reason}</Text>
+                  </TitledAlert>
+                </div>
+              ) : null}
+              <TextArea
+                id={FIELD_IDS.body}
+                label="Body"
+                isRequired
+                description="Formatted text, between 1 and 50,000 characters. An inserted image is placed at the cursor."
+                value={wording.body}
+                onChange={(value) => change("body", value)}
+                onBlur={() => leave("body")}
+                isInvalid={fieldError("body") !== undefined}
+                errorMessage={fieldError("body")}
+                data-testid="content-body-field"
+              />
+              <Text elementType="p" size="small">
+                <Link href="/content/markdown-guide" target="_blank">
+                  How to format text (opens in a new tab)
+                </Link>
               </Text>
-            </div>
-            <div id="content-resulting-address" data-testid="content-resulting-address">
-              <Text elementType="p" size="small" color="secondary">
-                {publicAddress}
-              </Text>
-            </div>
+            </Stack>
           </div>
-        )}
-        <div style={stack} ref={editorRef}>
-          <Toolbar aria-label="Formatting for Body" style={tools}>
-            {FORMATTING_ORDER.map((formatting) => (
-              <Button key={formatting} variant="tertiary" size="small" onPress={() => format(formatting)}>
-                {FORMATTING_LABELS[formatting]}
-              </Button>
-            ))}
-            {/* The editor's own file input, opened by the button. React Aria's FileTrigger is not
-                used: the design system bundles its own copy of React Aria, so FileTrigger's press
-                handler never reached its Button and no file chooser opened (as in image-picker). */}
-            <input
-              ref={imageInputRef}
-              type="file"
-              accept={IMAGE_TYPES.join(",")}
-              tabIndex={-1}
-              aria-hidden="true"
-              style={hiddenInput}
-              onChange={(event) => {
-                const file = event.currentTarget.files?.[0];
-                // Cleared so that choosing the same file again is still noticed.
-                event.currentTarget.value = "";
-                void insertImage(file);
-              }}
-            />
-            <Button
-              variant="tertiary"
-              size="small"
-              isDisabled={image.kind === "uploading"}
-              aria-describedby="embedded-image-rule"
-              data-testid="content-body-image-button"
-              onPress={() => imageInputRef.current?.click()}
-            >
-              Insert image
-            </Button>
-          </Toolbar>
-          <div id="embedded-image-rule" data-testid="image-file-rule">
-            <Text elementType="p" size="small" color="secondary">
-              {`Insert image takes a JPEG or PNG image, up to ${FILE_SIZE_LIMIT_LABEL}. An inserted image is stored as soon as you choose it and anyone can see it.`}
-            </Text>
-          </div>
-          {image.kind === "uploading" ? (
-            <div style={statusRow} data-testid="embedded-image-uploading">
-              <Loading label={`Uploading ${image.name}…`} />
-            </div>
-          ) : null}
-          <div role="status">
-            {image.kind === "inserted" ? (
-              <Text elementType="p">
-                {`${image.name} was inserted at the cursor. Replace "${EMBEDDED_IMAGE_PLACEHOLDER_ALT}" with a description of what it shows.`}
-              </Text>
-            ) : null}
-          </div>
-          {image.kind === "failed" ? (
-            <div data-testid="embedded-image-error">
-              <TitledAlert variant="danger" role="alert" title={`${image.name} could not be inserted`}>
-                <Text elementType="p">{image.reason}</Text>
+          {shown.length > 0 ? (
+            <div id="content-publish-hint">
+              <TitledAlert
+                variant="danger"
+                title={`Fix ${shown.length} ${shown.length === 1 ? "field" : "fields"} ${words.toPublish}`}
+              >
+                <ul>
+                  {shown.map((problem) => (
+                    <li key={problem.field} data-testid="field-error">
+                      <Link href={`#${FIELD_IDS[problem.field]}`}>
+                        {`${PAGE_FIELD_LABELS[problem.field]}: ${problem.summary}`}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </TitledAlert>
             </div>
-          ) : null}
-          <TextArea
-            id={FIELD_IDS.body}
-            label="Body"
-            isRequired
-            description="Formatted text, between 1 and 50,000 characters. An inserted image is placed at the cursor."
-            value={wording.body}
-            onChange={(value) => change("body", value)}
-            onBlur={() => leave("body")}
-            isInvalid={fieldError("body") !== undefined}
-            errorMessage={fieldError("body")}
-            data-testid="content-body-field"
-          />
-          <Text elementType="p" size="small">
-            <Link href="/content/markdown-guide" target="_blank">
-              How to format text (opens in a new tab)
-            </Link>
-          </Text>
-        </div>
-        {shown.length > 0 ? (
-          <div id="content-publish-hint">
-            <TitledAlert
-              variant="danger"
-              title={`Fix ${shown.length} ${shown.length === 1 ? "field" : "fields"} ${words.toPublish}`}
+          ) : (
+            <Text elementType="p" id="content-publish-hint">
+              {ready
+                ? words.ready
+                : purpose === "create"
+                  ? "Fill in the title, address and body to publish the page."
+                  : addressLocked
+                    ? "Fill in the title and body to publish your changes."
+                    : "Fill in the title, address and body to publish your changes."}
+            </Text>
+          )}
+          <ButtonGroup ariaLabel={words.actions}>
+            <Button variant="secondary" onPress={onCancel} data-testid="content-cancel-button">
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="primary"
+              isDisabled={!ready}
+              aria-describedby="content-publish-hint"
+              data-testid={words.buttonTestId}
             >
-              <ul>
-                {shown.map((problem) => (
-                  <li key={problem.field} data-testid="field-error">
-                    <Link href={`#${FIELD_IDS[problem.field]}`}>
-                      {`${PAGE_FIELD_LABELS[problem.field]}: ${problem.summary}`}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </TitledAlert>
-          </div>
-        ) : (
-          <Text elementType="p" id="content-publish-hint">
-            {ready
-              ? words.ready
-              : purpose === "create"
-                ? "Fill in the title, address and body to publish the page."
-                : addressLocked
-                  ? "Fill in the title and body to publish your changes."
-                  : "Fill in the title, address and body to publish your changes."}
-          </Text>
-        )}
-        <ButtonGroup ariaLabel={words.actions}>
-          <Button variant="secondary" onPress={onCancel} data-testid="content-cancel-button">
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            variant="primary"
-            isDisabled={!ready}
-            aria-describedby="content-publish-hint"
-            data-testid={words.buttonTestId}
-          >
-            {words.button}
-          </Button>
-        </ButtonGroup>
+              {words.button}
+            </Button>
+          </ButtonGroup>
+        </Stack>
       </Form>
       <Modal isOpen={confirming} isDismissable onOpenChange={(open) => (publishing ? undefined : setConfirming(open))}>
         <AlertDialog
