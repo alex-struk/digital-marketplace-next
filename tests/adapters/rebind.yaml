@@ -5667,6 +5667,11 @@ rebind:
     app_tree: 58bb4f140f5e5ebab1c24ad2dfe4d662bf21b357
     by: runner:verify
     at: 2026-10-02T19:48:17.110Z
+    closed: &a35
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-02T22:31:49.340Z
   - id: R-5.16
     target: new
     why: "unbound: evaluation-panel-swu.add_panel_member —
@@ -5727,6 +5732,7 @@ rebind:
     app_tree: 58bb4f140f5e5ebab1c24ad2dfe4d662bf21b357
     by: runner:verify
     at: 2026-10-02T19:48:17.110Z
+    closed: *a35
   - id: R-1.13
     target: new
     why: 'unbound: opportunity-twu-create.add_resource — no "Resources" section on
@@ -5761,6 +5767,7 @@ rebind:
     app_tree: 58bb4f140f5e5ebab1c24ad2dfe4d662bf21b357
     by: runner:verify
     at: 2026-10-02T19:48:17.110Z
+    closed: *a35
   - id: R-1.15
     target: new
     why: 'unbound: opportunity-twu-create.add_resource — no "Resources" section on
@@ -5795,3 +5802,76 @@ rebind:
     app_tree: 58bb4f140f5e5ebab1c24ad2dfe4d662bf21b357
     by: runner:verify
     at: 2026-10-02T19:48:17.110Z
+    closed: *a35
+  - id: R-5.16
+    target: new
+    why: "unbound: evaluation-panel-swu.add_panel_member —
+      /opportunities/sprint-with-us/:opportunityId/edit?tab=evaluationPanel did
+      not open as a screen at
+      http://localhost:4500/opportunities/sprint-with-us/create/edit?tab=evalua\
+      tionPanel: Page not found The page you are looking for does not exist.;
+      the screen is offered only to a signed-in person who may have it; walked
+      signed in (as the administrator, as a public sector employee, and as a
+      vendor for a vendor's screens — the seeded organization owner for the
+      organization screens — with the seeded records' identifiers), the running
+      build serves a signed-in person /dashboard (to the administrator \"Create
+      an opportunity\" over \"All opportunities\"; to public sector staff the
+      same over \"My opportunities\"; to a vendor only \"Dashboard\" and \"You
+      are signed in as <name>.\"), /opportunities, the account screens under
+      /users (whose Organizations tab says organizations \"will be listed here
+      once organizations can be registered\"), to the administrator the
+      content-management screens under /content, and to the administrator and
+      public sector staff /opportunities/create, the three programs' forms
+      /opportunities/{code,sprint,team}-with-us/create and the management
+      screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit
+      (whose \"Opportunity sections\" on the seeded closed and at-consensus
+      Sprint With Us and Team With Us opportunities are Summary, Opportunity,
+      Addenda, History and Evaluation panel — ?tab=evaluation, ?tab=consensus
+      and ?tab=instructions open it on Summary, with no evaluation, consensus or
+      instructions section); the proposal, organization and evaluation screens —
+      the Code With Us proposal screens (tried as a vendor with the seeded
+      published Code With Us opportunity, whose page offers no way to start
+      one), /proposals, /opportunities/code-with-us/:opportunityId/complete,
+      /organizations and /organizations/:orgId/edit included — answer \"Page not
+      found\", and /users/:userId opens for the signed-in person's own
+      identifier and, to the administrator, for another account's; unbound:
+      evaluation-individual-create-swu.enter_question_score —
+      /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-q\
+      uestions/evaluations/create is offered only to a signed-in person, and
+      walked signed in (as the administrator, as a public sector employee, and
+      as a vendor for a vendor's screens — the seeded organization owner for the
+      organization screens — with the seeded records' identifiers), the running
+      build serves a signed-in person /dashboard (to the administrator \"Create
+      an opportunity\" over \"All opportunities\"; to public sector staff the
+      same over \"My opportunities\"; to a vendor only \"Dashboard\" and \"You
+      are signed in as <name>.\"), /opportunities, the account screens under
+      /users (whose Organizations tab says organizations \"will be listed here
+      once organizations can be registered\"), to the administrator the
+      content-management screens under /content, and to the administrator and
+      public sector staff /opportunities/create, the three programs' forms
+      /opportunities/{code,sprint,team}-with-us/create and the management
+      screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit
+      (whose \"Opportunity sections\" on the seeded closed and at-consensus
+      Sprint With Us and Team With Us opportunities are Summary, Opportunity,
+      Addenda, History and Evaluation panel — ?tab=evaluation, ?tab=consensus
+      and ?tab=instructions open it on Summary, with no evaluation, consensus or
+      instructions section); the proposal, organization and evaluation screens —
+      the Code With Us proposal screens (tried as a vendor with the seeded
+      published Code With Us opportunity, whose page offers no way to start
+      one), /proposals, /opportunities/code-with-us/:opportunityId/complete,
+      /organizations and /organizations/:orgId/edit included — answer \"Page not
+      found\"; opened signed out (with the seeded record's identifier where it
+      takes one) it shows the \"Page not found\" screen; signed in as the public
+      sector employee who sits on the seeded panels, with the seeded Sprint With
+      Us opportunity at \"Questions: individual evaluation\"
+      (opportunities.swuEvaluationAlreadyBegun) and its seeded proposal, this
+      address and the proposal's own page answer \"Page not found\", and that
+      opportunity's management screen offers only Summary, Opportunity, Addenda,
+      History and Evaluation panel — nothing that opens a proponent's
+      evaluation"
+    found: unbound
+    adapter: cf5819a3c962bf7c894cf677f4b10578a2532ca6
+    slice: 10
+    app_tree: b69a691292ac7f565cb7d8fb00bfe0fab5dcd963
+    by: runner:verify
+    at: 2026-10-02T22:31:49.340Z

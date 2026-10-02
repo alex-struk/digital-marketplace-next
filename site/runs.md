@@ -298,6 +298,12 @@
 - 15:10:22 run verify: regenerated 519 files in .sdlc, site
 - 15:11:08 rule build-slice-1-7 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 - 15:11:15 init: pipeline f7c4e5b, packs 3, skills installed 0, skipped 0, briefs 0 written, 0 left as the project has them
+- 15:11:58 drive: step 1: `sdlc run verify --slice 10` — build-slice-10-2 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
+- 15:11:59 verify slice 10: proposal/build-slice-10-2 no longer merges with main, so nothing was verified.
+- 15:11:59 drive: stopped after 1 step — step 1 (`sdlc run verify --slice 10`) failed
+- 15:15:39 drive: step 1: `sdlc run verify --slice 10` — build-slice-10-2 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
+- 15:31:50 verify slice 10: R-1.8, R-1.13, R-1.16, R-1.17, R-1.18, R-1.19, R-1.43, R-1.48, R-1.53, R-1.55, R-5.1, R-5.17 fail. R-1.8, R-1.16, R-1.17, R-1.18, R-1.19, R-1.43, R-1.48, R-1.53, R-5.17 stopped on a read that came back with nothing, which can be the adapter's as easily as the application's, so build-slice-10-2 is left open for agent:reviewer to send each failure to the build or to bind-adapter.
+- 15:31:52 run verify: regenerated 4 files in .sdlc, site, tests
 
 # Run record 2026-10-01
 
