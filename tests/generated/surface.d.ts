@@ -198,7 +198,6 @@ export interface OpportunityCwuEditPage {
   cancelOpportunity(input?: unknown): Promise<void>;
   deleteOpportunity(input?: unknown): Promise<void>;
   addAddendum(input?: unknown): Promise<void>;
-  addNote(input?: unknown): Promise<void>;
   opportunityIdentifier(): Promise<string>;
   createdByName(): Promise<string>;
   lastChangedByName(): Promise<string>;
@@ -262,7 +261,6 @@ export interface OpportunitySwuEditPage {
   cancelOpportunity(input?: unknown): Promise<void>;
   deleteOpportunity(input?: unknown): Promise<void>;
   addAddendum(input?: unknown): Promise<void>;
-  addNote(input?: unknown): Promise<void>;
   editEvaluationPanel(input?: unknown): Promise<void>;
   finalizeQuestionConsensuses(input?: unknown): Promise<void>;
   startTeamScenario(input?: unknown): Promise<void>;

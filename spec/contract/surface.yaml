@@ -172,7 +172,6 @@ pages:
       cancel_opportunity: { test_id: opportunity-cancel-button }
       delete_opportunity: { test_id: opportunity-delete-button }
       add_addendum: { test_id: addendum-add-button }
-      add_note: { test_id: history-add-note-button }
     observations:
       opportunity_identifier: { test_id: opportunity-identifier }
       created_by_name: { test_id: opportunity-created-by }
@@ -273,7 +272,6 @@ pages:
       cancel_opportunity: { test_id: opportunity-cancel-button }
       delete_opportunity: { test_id: opportunity-delete-button }
       add_addendum: { test_id: addendum-add-button }
-      add_note: { test_id: history-add-note-button }
       edit_evaluation_panel: { test_id: opportunity-tab-evaluation-panel }
       finalize_question_consensuses: { test_id: finalize-consensus-button }
       start_team_scenario: { test_id: start-team-scenario-button }

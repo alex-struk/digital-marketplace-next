@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>contract-v31 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">489</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">483</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">407</span></a></li><li><a href="../runs.html">Run log <span class="count">20</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>contract-v31</h1>
+<p class="lede">G1 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G1</td></tr><tr><th scope="row">opened</th><td>2026-10-02 16:55</td></tr><tr><th scope="row">holder</th><td>agent:product-owner</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Is this the contract the tests will act through?</h2>
+<p><strong>Recommendation.</strong> I removed the <code>add_note</code> action from the two opportunity management pages, as the design-gate ruling asked.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I removed the <code>add_note</code> action from the two opportunity management pages, as the design-gate ruling asked. Starting the oracle was blocked, so I couldn&#39;t confirm it still starts.</p>
+<p><strong>What changed.</strong> In <code>spec/contract/surface.yaml</code>, the <code>add_note</code> line (bound to <code>history-add-note-button</code>) is gone from <code>opportunity-cwu-edit</code> (the Code With Us manage page) and from <code>opportunity-swu-edit</code> (the Sprint With Us one). Nothing else in that file or any other contract file changed; the diff is two deleted lines. Both pages still have their other actions and their History tab. <code>opportunity-history-request</code> still has <code>add_note_by_request</code>, which is now the only way the contract offers to add a note. Its comment already said the edit pages offer no way to add a note, so it now matches the pages.</p>
+<p>The ruling also said to keep <code>add_attachment</code> on those pages, but neither page ever had that action. There was nothing to keep, and I did not add one, since the ruling only asked for a removal.</p>
+<p><strong>Stale references in other stages&#39; files.</strong> The old and new adapter bindings, <code>tests/generated/surface.d.ts</code> and <code>app/frontend/src/api/contract.d.ts</code> still mention <code>add_note</code>. Those belong to bind-adapter and to generation, so I left them alone; they need regenerating against this surface.</p>
+<p><strong>The R-1.33 item.</strong> The owed list holds a missing-test item for R-1.33 (the private-note criterion), and it is currently with ratify, not this stage. It asks for more than this removal: a seed of a note-bearing opportunity for each programme, an observation of whether any add-note control is offered, and a restated acceptance clause. That is a different and larger set of changes, and the item isn&#39;t mine to hand on, so I wrote no re-address line.</p>
+<p><strong>Oracle.</strong> <code>node $SDLC_BIN oracle up</code> was refused before it ran: the permission layer rejected the variable expansion, both quoted and unquoted. Printing the variable&#39;s value needed approval, which this unattended session can&#39;t get. So I can&#39;t say whether the application started this run. The Compose override, the seed and the manifest are unchanged from the approved version, and this change touches only the contract surface, not anything the oracle loads. Because nothing started, I did not run <code>oracle down</code>, and no container was left running.</p>
+<p>The one request in this revision was taken up; nothing is deferred.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:product-owner (persona agent · claude claude-opus-5-5) on 2026-10-02 16:56.</p>
+<div class="body"><p>The question is whether the contract surface, with add_note removed from opportunity-cwu-edit and opportunity-swu-edit, is the one the acceptance tests should act through. I approve it. R-1.33 v2 (confirmed, accepted) says the service accepts a private note but no screen of the application offers a way to add one. A test acting through an add_note action on those pages would contradict that statement, so removing the action brings the contract in line with the criterion. I checked spec/contract/surface.yaml on the branch. Both edit pages keep their other actions (edit, submit, publish, cancel, delete, add addendum) and their observations. opportunity-history-request still has add_note_by_request, which is now the only way the contract offers to add a note, and that is what the design ruling asked to keep. The ruling also asked to keep add_attachment on those pages, but neither page has it, and declining to invent one was right, because the ruling asked only for a removal. tests/generated/surface.d.ts was regenerated to match. The bind-adapter bindings and app/frontend/src/api/contract.d.ts still mention add_note; they belong to later stages and need regenerating against this surface. The oracle (the old application run as the reference) was not started this run because of a permission refusal. That does not count against the proposal: the change touches only the contract surface, and none of the files the oracle loads (Compose override, seed, manifest) changed. The design revision request is settled by this change. build-slice-9-3#6 is not settled: it asks build to remove the NoteForm from the app screens, so it stays open for build. The open missing-test item for R-1.33 belongs to ratify and is not addressed here. R-1.33 itself is left exactly as recovered. What would change this ruling: evidence that some screen of the old application does render an add-note control, which would make R-1.33 v2 wrong rather than this contract, or finding that removing add_note left a page the tests still need to reach with no way in.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>contract R-1.33</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
