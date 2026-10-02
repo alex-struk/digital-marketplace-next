@@ -34,7 +34,7 @@
 | D-content-27 | — |  |  |
 | R-7.27 | acceptance/content/R-7.27.spec.ts |  | pass |
 | R-7.28 | acceptance/content/R-7.28.spec.ts |  | pass |
-| R-7.29 | not testable: The given is a page whose body another screen embeds having been removed. The embedded pages — an opportunity's scope page, a program's evaluation instructions — are ones the service needs, which R-7.25 records the service refuses to remove: content-edit withholds the removal and a request made another way is refused, so there is no path through the surface to the state the criterion starts from. |  | not-testable |
+| R-7.29 | acceptance/content/R-7.29.spec.ts |  | not-testable |
 
 ### R-7.1 · v1 · confirmed · accepted
 

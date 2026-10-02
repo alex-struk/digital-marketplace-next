@@ -5061,13 +5061,14 @@ owed:
     id: R-7.29
     version: 1
     domain: content
-    stage: derive-tests
+    stage: contract
     why: a seed state in which the embedded page
       (/content/sprint-with-us-opportunity-scope or
       /content/team-with-us-terms-and-conditions) is absent. R-7.25 means no
       path through the screens or the API removes it.
-    clause: an opportunity whose screen embeds the scope page's body, with that page
-      removed, shown in full with the scope section empty
+    clause: on the evaluation instructions screens (evaluation-instructions-swu,
+      evaluation-instructions-twu), a missing embedded instructions page leaves
+      instructions_body empty and the screen otherwise works
     from: build-slice-10-4
     gate: G3
     by: agent:tech-lead
@@ -5087,3 +5088,27 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-10-02T23:39:55.306Z
+      - from: derive-tests
+        to: contract
+        why: "a configuration in spec/contract/observables.yaml, like
+          service_page_absent, selecting
+          SDLC_ORACLE_ABSENT_PAGE=sprint-with-us-evaluation-instructions (and/or
+          the Team With Us instructions page) with its own tag and for:
+          [R-7.29], so a test tagged with it can open
+          evaluation-instructions-swu for a seeded opportunity as a panel member
+          and read instructions_body as empty beside visible_to_evaluators_only;
+          and an observation on opportunity-swu-view (for example notices or
+          page_messages) returning the text of any notice, alert or error
+          message the screen shows outside its sections, empty when none is
+          shown, so a test on an instance started in service_page_absent can
+          read it as empty"
+        by: agent:reviewer
+        at: 2026-10-02T23:48:03.930Z
+      - from: contract
+        to: contract
+        why: a configuration like service_page_absent that removes the Sprint With Us
+          and/or Team With Us evaluation-instructions page, with its own tag
+        by: agent:reviewer
+        proposal: derive-tests-content-11
+        gate: G3
+        at: 2026-10-02T23:48:04.986Z

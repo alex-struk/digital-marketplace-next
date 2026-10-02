@@ -74,6 +74,56 @@ criteria:
       documented manual route lies outside the service by definition. This is a
       property to be accepted by a reader of the rebuilt system's routes, not
       settled by a test."
+  - id: R-6.9
+    version: 1
+    reason: The claim is about the visible address line of a panel notice listing
+      all of its recipients. `mail.messagesTo` searches by one visible address
+      and hands back `To` as an opaque value, so the addresses of the other
+      recipients of the same message cannot be read.
+  - id: R-6.11
+    version: 1
+    reason: Both halves turn on the notice about a watched opportunity, which is
+      sent as a batch of blind copies. The mail fixture searches by visible
+      recipient only, so a message that did reach a deactivated watcher would
+      not be found, and its absence from a search would be equally consistent
+      with it having been sent.
+  - id: R-6.12
+    version: 1
+    reason: The criterion is about the wording inside one message. The mail fixture
+      exposes no message body, and the reference page's observations
+      (message_subject, message_summary, message_body) name no way to select one
+      message among the fifty on the page, so a containment assertion over the
+      page as a whole would be satisfied by any message that happens to name a
+      program.
+  - id: R-6.2
+    version: 1
+    clause: When a message cannot be composed
+    reason: "blocked: the test reaches the delivery half of the criterion through
+      mail-delivery-fault, but nothing in the contract sets up a message the
+      service cannot compose — no seeded record whose content makes a message
+      fail to render, and no fault any surface can inject into composition — so
+      no test can assert that the triggering action still succeeds, that nobody
+      is told and that nothing is tried again when composition, rather than
+      delivery, is what fails. Whether such a starting state can exist depends
+      on what makes composition fail in the service, which the contract stage
+      can see and this stage cannot."
+    missing: a starting state in which a message the service would send cannot be
+      composed — for example a seeded record, with a handle in the manifest,
+      whose content makes one named notice fail to render when an action a
+      surface already offers triggers it — together with the name of that
+      action; or, if no such state can be produced, a restatement from ratify of
+      the composition clause in terms something observes
+    owner: contract
+  - id: R-1.51
+    version: 1
+    reason: "unobservable: nothing the service does could show that a state it does
+      not define is gone. No action requests a move to a suspended state, no
+      observation returns the states an opportunity may hold or the states the
+      list's state filter offers, and the mapping of a historical record onto a
+      defined state happens before the rebuilt system reads it, which is a
+      property of the migration rather than of anything the running service
+      answers with. No addition to the surface would help; this is a claim a
+      human accepts about the rebuild rather than one a test can settle."
   - id: R-7.11
     version: 1
     reason: "The claim is about the shape of a refused answer — a permission refusal
@@ -126,59 +176,35 @@ criteria:
     owner: ratify
   - id: R-7.29
     version: 1
-    reason: "The given is a page whose body another screen embeds having been
-      removed. The embedded pages — an opportunity's scope page, a program's
-      evaluation instructions — are ones the service needs, which R-7.25 records
-      the service refuses to remove: content-edit withholds the removal and a
-      request made another way is refused, so there is no path through the
-      surface to the state the criterion starts from."
-  - id: R-6.9
-    version: 1
-    reason: The claim is about the visible address line of a panel notice listing
-      all of its recipients. `mail.messagesTo` searches by one visible address
-      and hands back `To` as an opaque value, so the addresses of the other
-      recipients of the same message cannot be read.
-  - id: R-6.11
-    version: 1
-    reason: Both halves turn on the notice about a watched opportunity, which is
-      sent as a batch of blind copies. The mail fixture searches by visible
-      recipient only, so a message that did reach a deactivated watcher would
-      not be found, and its absence from a search would be equally consistent
-      with it having been sent.
-  - id: R-6.12
-    version: 1
-    reason: The criterion is about the wording inside one message. The mail fixture
-      exposes no message body, and the reference page's observations
-      (message_subject, message_summary, message_body) name no way to select one
-      message among the fifty on the page, so a containment assertion over the
-      page as a whole would be satisfied by any message that happens to name a
-      program.
-  - id: R-6.2
-    version: 1
-    clause: When a message cannot be composed
-    reason: "blocked: the test reaches the delivery half of the criterion through
-      mail-delivery-fault, but nothing in the contract sets up a message the
-      service cannot compose — no seeded record whose content makes a message
-      fail to render, and no fault any surface can inject into composition — so
-      no test can assert that the triggering action still succeeds, that nobody
-      is told and that nothing is tried again when composition, rather than
-      delivery, is what fails. Whether such a starting state can exist depends
-      on what makes composition fail in the service, which the contract stage
-      can see and this stage cannot."
-    missing: a starting state in which a message the service would send cannot be
-      composed — for example a seeded record, with a handle in the manifest,
-      whose content makes one named notice fail to render when an action a
-      surface already offers triggers it — together with the name of that
-      action; or, if no such state can be produced, a restatement from ratify of
-      the composition clause in terms something observes
+    clause: Where a screen embeds the body of a page beside its own material, a page
+      that is missing or unreadable leaves that part of the screen empty and the
+      screen otherwise works — on the other screens that embed one, the
+      evaluation instructions an evaluation panel reads
+      (evaluation-instructions-swu and evaluation-instructions-twu,
+      instructions_body); and, on the Sprint With Us opportunity screen
+      (opportunity-swu-view), 'with nothing said about why' anywhere on that
+      screen outside its scope section
+    reason: "blocked: the test covers the Sprint With Us opportunity screen through
+      the configuration service_page_absent, which removes only the page at
+      sprint-with-us-opportunity-scope. No configuration removes the
+      evaluation-instructions page (seed.content
+      .servicePageSprintWithUsEvaluationInstructions or its Team With Us
+      sibling), and R-7.25 means no screen or request can, so no test can open
+      evaluation-instructions-swu on an instance where its embedded page is
+      missing. On opportunity-swu-view the test asserts that scope_section reads
+      empty, but the surface offers no observation of an explanatory message
+      shown elsewhere on that screen (a notice, alert or error text beside the
+      opportunity's own material), so no test can assert that nothing is said
+      about why the section is empty."
+    missing: "a configuration in spec/contract/observables.yaml, like
+      service_page_absent, selecting
+      SDLC_ORACLE_ABSENT_PAGE=sprint-with-us-evaluation-instructions (and/or the
+      Team With Us instructions page) with its own tag and for: [R-7.29], so a
+      test tagged with it can open evaluation-instructions-swu for a seeded
+      opportunity as a panel member and read instructions_body as empty beside
+      visible_to_evaluators_only; and an observation on opportunity-swu-view
+      (for example notices or page_messages) returning the text of any notice,
+      alert or error message the screen shows outside its sections, empty when
+      none is shown, so a test on an instance started in service_page_absent can
+      read it as empty"
     owner: contract
-  - id: R-1.51
-    version: 1
-    reason: "unobservable: nothing the service does could show that a state it does
-      not define is gone. No action requests a move to a suspended state, no
-      observation returns the states an opportunity may hold or the states the
-      list's state filter offers, and the mapping of a historical record onto a
-      defined state happens before the rebuilt system reads it, which is a
-      property of the migration rather than of anything the running service
-      answers with. No addition to the surface would help; this is a claim a
-      human accepts about the rebuild rather than one a test can settle."

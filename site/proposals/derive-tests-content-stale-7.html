@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-content-stale-7 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">517</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">511</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">426</span></a></li><li><a href="../runs.html">Run log <span class="count">20</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-content-stale-7</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-02 23:45</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the content criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> R-7.29 now has a test, but only for the Sprint With Us opportunity screen.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>R-7.29 now has a test, but only for the Sprint With Us opportunity screen. The criterion also covers the evaluation-instructions screens, and those remain listed as owed. I couldn&#39;t run anything here: there are no installed dependencies for a type-check, and the commands to check the YAML needed approval nobody was there to give. I checked both files by reading them.</p>
+<p><strong>The test</strong> (<code>tests/acceptance/content/R-7.29.spec.ts</code>). The contract stage handed this criterion back with a new configuration, <code>service_page_absent</code>. It starts a separate instance where the page at <code>sprint-with-us-opportunity-scope</code> has been removed. The test carries the tag <code>@service_page_absent</code>, so it runs only against that instance. It doesn&#39;t try to detect which instance it is on and doesn&#39;t skip itself.</p>
+<p>It signs in as <code>persona.vendor</code> and opens <code>seed.opportunities.closedSprintWithUs</code> on <code>opportunitySwuView</code>. It checks that the rest of the screen still works:</p>
+<ul><li>the opportunity identifier contains the seeded id;</li><li>status and proposal deadline are not empty;</li><li>the total budget reads as 500,000;</li><li>the phases show Implementation.</li></ul>
+<p>It then checks that <code>scopeSection()</code> is empty. On the default instance the page is present and the section is filled, so this test belongs only to that configured run.</p>
+<p><strong>The entry I kept, rewritten</strong> (<code>tests/acceptance/not-testable.yaml</code>). I replaced the old entry for the whole criterion with an entry for one part of it. The note on R-7.29 says the same empty-section handling applies to the evaluation instructions a panel reads. The seed marks those pages as embedded by <code>evaluation-instructions-swu</code> and <code>evaluation-instructions-twu</code>. The entry&#39;s clause is the criterion&#39;s statement as it applies to those two screens and their <code>instructions_body</code>.</p>
+<p>It is marked <code>blocked:</code> and owned by <code>contract</code>. <code>service_page_absent</code> removes only the scope page. R-7.25 means no screen or request can remove the instructions pages either. So no test can open those screens while their page is missing.</p>
+<p><strong>Needed from the contract:</strong> a configuration like <code>service_page_absent</code> that selects <code>SDLC_ORACLE_ABSENT_PAGE=sprint-with-us-evaluation-instructions</code> (and possibly the Team With Us one), with its own tag and <code>for: [R-7.29]</code>. A test could then read <code>instructions_body</code> as empty beside <code>visible_to_evaluators_only</code>.</p>
+<p><strong>Not asserted:</strong> the &quot;nothing said about why&quot; part of the outcome is checked only inside the scope section, which is empty. The surface has no observation for a message elsewhere on that screen, so that part is not asserted beyond the section.</p>
+<p>I changed nothing outside <code>tests/acceptance</code>, and nothing asked me to.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-02 23:46.</p>
+<div class="body"><p>Question: do the R-7.29 test and its rewritten not-testable entry follow from the criterion and nothing else? Ruling: return. Most of the work holds. The test runs only on instances started with service_page_absent. Its &#39;shown in full&#39; checks read back the seeded identifier, status, deadline, budget and phase, with nothing about the implementation leaking in. The narrowed not-testable entry for the evaluation-instructions screens gives a real reason (R-7.25 forbids removing those pages, and no configuration removes them) and names contract as the stage that owes the missing configuration. The defect is in the final check: the scope section is read through readOrEmpty, which catches any error and returns an empty string. The adapter reports something it cannot bind by throwing an error starting &#39;unbound:&#39;, as tests/results/old/2026-09-29-11.json shows. So a scope section the adapter cannot reach becomes an empty string, the check passes, and R-7.29 is closed with nothing established. The five presence checks can safely tolerate errors because each needs a non-empty value; the emptiness check cannot. Separately, the proposal says &#39;with nothing said about why&#39; is checked only inside the scope section, because the test interface cannot observe a message elsewhere on the screen. That part of the criterion has no not-testable entry naming it, so the first passing run would mark the whole criterion as tested. The ruling changes to approve once the scope section is read without swallowing errors and that part of the criterion has its own entry.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>tests/acceptance/content/R-7.29.spec.ts: read surface.opportunitySwuView.scopeSection() directly rather than through readOrEmpty, so an error thrown by the adapter (including an &#39;unbound:&#39; error) fails or reports the test instead of becoming an empty string that passes the toBe(&quot;&quot;) check. readOrEmpty may stay on the five presence checks, which need a non-empty value to pass.</li><li>tests/acceptance/not-testable.yaml: add an R-7.29 entry with a clause naming &#39;with nothing said about why&#39; as it applies to the Sprint With Us opportunity screen outside its scope section. Its reason should say that the surface offers no observation for an explanatory message elsewhere on opportunitySwuView. Its owner should be contract, and its missing field should say what observation would let a test assert it.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
