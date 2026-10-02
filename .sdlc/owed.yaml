@@ -5061,14 +5061,14 @@ owed:
     id: R-7.29
     version: 1
     domain: content
-    stage: derive-tests
+    stage: contract
     why: a seed state in which the embedded page
       (/content/sprint-with-us-opportunity-scope or
       /content/team-with-us-terms-and-conditions) is absent. R-7.25 means no
       path through the screens or the API removes it.
-    clause: on the evaluation instructions screens (evaluation-instructions-swu,
-      evaluation-instructions-twu), a missing embedded instructions page leaves
-      instructions_body empty and the screen otherwise works
+    clause: the scope section is empty, with nothing said about why — on
+      opportunity-swu-view, that no notice, alert or error message anywhere on
+      the screen outside its scope section explains the missing page
     from: build-slice-10-4
     gate: G3
     by: agent:tech-lead
@@ -5129,3 +5129,23 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-10-02T23:54:57.140Z
+      - from: derive-tests
+        to: contract
+        why: an observation on opportunity-swu-view (for example notices or
+          page_messages) returning the text of any notice, alert or error
+          message the screen shows outside its sections, empty when none is
+          shown, so a test on an instance started in service_page_absent can
+          read it as empty
+        by: agent:reviewer
+        at: 2026-10-02T23:57:56.265Z
+      - from: contract
+        to: contract
+        why: an observation on opportunity-swu-view (for example notices or
+          page_messages) returning the text of any notice, alert or error
+          message the screen shows outside its sections, empty when none is
+          shown, so a test on an instance started in service_page_absent can
+          read it as empty
+        by: agent:reviewer
+        proposal: derive-tests-content-stale-8
+        gate: G3
+        at: 2026-10-02T23:57:57.361Z

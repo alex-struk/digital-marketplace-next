@@ -176,35 +176,20 @@ criteria:
     owner: ratify
   - id: R-7.29
     version: 1
-    clause: Where a screen embeds the body of a page beside its own material, a page
-      that is missing or unreadable leaves that part of the screen empty and the
-      screen otherwise works — on the other screens that embed one, the
-      evaluation instructions an evaluation panel reads
-      (evaluation-instructions-swu and evaluation-instructions-twu,
-      instructions_body); and, on the Sprint With Us opportunity screen
-      (opportunity-swu-view), 'with nothing said about why' anywhere on that
-      screen outside its scope section
-    reason: "blocked: the test covers the Sprint With Us opportunity screen through
-      the configuration service_page_absent, which removes only the page at
-      sprint-with-us-opportunity-scope. No configuration removes the
-      evaluation-instructions page (seed.content
-      .servicePageSprintWithUsEvaluationInstructions or its Team With Us
-      sibling), and R-7.25 means no screen or request can, so no test can open
-      evaluation-instructions-swu on an instance where its embedded page is
-      missing. On opportunity-swu-view the test asserts that scope_section reads
-      empty, but the surface offers no observation of an explanatory message
-      shown elsewhere on that screen (a notice, alert or error text beside the
-      opportunity's own material), so no test can assert that nothing is said
-      about why the section is empty."
-    missing: "a configuration in spec/contract/observables.yaml, like
-      service_page_absent, selecting
-      SDLC_ORACLE_ABSENT_PAGE=sprint-with-us-evaluation-instructions (and/or the
-      Team With Us instructions page) with its own tag and for: [R-7.29], so a
-      test tagged with it can open evaluation-instructions-swu for a seeded
-      opportunity as a panel member and read instructions_body as empty beside
-      visible_to_evaluators_only; and an observation on opportunity-swu-view
-      (for example notices or page_messages) returning the text of any notice,
-      alert or error message the screen shows outside its sections, empty when
-      none is shown, so a test on an instance started in service_page_absent can
-      read it as empty"
+    clause: the scope section is empty, with nothing said about why — on the Sprint
+      With Us opportunity screen (opportunity-swu-view), that no notice, alert or
+      error message anywhere on the screen outside its scope section explains the
+      missing page
+    reason: "blocked: the test asserts, on an instance started in
+      service_page_absent, that scope_section on opportunity-swu-view reads empty
+      while the opportunity's own material is shown, and, on instances started in
+      evaluation_instructions_absent_swu and evaluation_instructions_absent_twu,
+      that instructions_body reads empty while the instructions tab is still
+      offered. But opportunity-swu-view offers no observation of an explanatory
+      message shown elsewhere on that screen, so no test can assert that nothing
+      is said about why the section is empty."
+    missing: "an observation on opportunity-swu-view (for example notices or
+      page_messages) returning the text of any notice, alert or error message the
+      screen shows outside its sections, empty when none is shown, so a test on
+      an instance started in service_page_absent can read it as empty"
     owner: contract
