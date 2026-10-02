@@ -48,8 +48,8 @@ the openshift-ts stack profile with the two departures recorded in `docs/decisio
 - depends on: Slice 7
 
 ### Slice 9 · An opportunity's author and administrators can run it after publication
-- criteria: R-1.20, R-1.28, R-1.30, R-1.32, R-1.33, R-1.35, R-1.36, R-6.17
-- delivers: the addenda tab, private notes with files on the history tab, cancellation, the reporting figures (views, watchers, proposals) and full history for the author and administrators, and the notices to watchers, proposers and the author when an addendum is added or an opportunity is cancelled — with no message of any kind to a deactivated account; and the permitted-transition refusals Slice 7 built (R-1.20), answered for here because cancellation is the first action that leaves an opportunity in a final state
+- criteria: R-1.20, R-1.28, R-1.30, R-1.32, R-1.33, R-6.17
+- delivers: the addenda tab, private notes with files on the history tab, cancellation, the reporting figures (views, watchers, proposals) and full history for the author and administrators, and the notices to watchers, proposers and the author when an addendum is added or an opportunity is cancelled (built here; R-1.35 and R-1.36 are answered for in Slice 14, because their tests submit a Code With Us proposal first) — with no message of any kind to a deactivated account; and the permitted-transition refusals Slice 7 built (R-1.20), answered for here because cancellation is the first action that leaves an opportunity in a final state
 - depends on: Slice 8
 
 ### Slice 10 · Staff can create Sprint With Us and Team With Us opportunities with an evaluation panel
@@ -73,9 +73,9 @@ the openshift-ts stack profile with the two departures recorded in `docs/decisio
 - depends on: Slice 12
 
 ### Slice 14 · A vendor can propose on a Code With Us opportunity
-- criteria: R-1.31, R-2.1, R-2.2, R-2.3, R-2.4, R-2.7, R-2.9, R-2.11, R-2.12, R-2.13, R-2.14, R-2.15, R-2.23, R-2.24, R-2.25, R-4.23, R-6.2, R-6.3, R-6.4, R-6.5, R-8.20, R-8.22, R-8.31
-- delivers: the Code With Us proposal create and manage pages, individual or organization proponent, attachments, draft and submit with terms acceptance, one proposal per vendor and per organization, deadline guard, withdraw and resubmit, delete of drafts, proposal history, the vendor dashboard with own and organization proposals and its empty message, the profile-completion page's redirect (built in Slice 2) shown landing a vendor who has agreed before on this dashboard and a public sector employee on Slice 8's opportunities dashboard (R-4.23), staff seeing no proposal until the opportunity has closed, one read rule for files attached to opportunities and proposals, withdrawn when the attachment goes, the refusal to attach a file the attacher may not read (R-8.22, built in Slice 7 with the opportunity attachment control and answered for here because its test goes through the proposal create screen), and the service-wide mail rules verified across every screen that sends a message by this point
-- depends on: Slice 8, Slice 11
+- criteria: R-1.31, R-1.35, R-1.36, R-2.1, R-2.2, R-2.3, R-2.4, R-2.7, R-2.9, R-2.11, R-2.12, R-2.13, R-2.14, R-2.15, R-2.23, R-2.24, R-2.25, R-4.23, R-6.2, R-6.3, R-6.4, R-6.5, R-8.20, R-8.22, R-8.31
+- delivers: the Code With Us proposal create and manage pages, individual or organization proponent, attachments, draft and submit with terms acceptance, one proposal per vendor and per organization, deadline guard, withdraw and resubmit, delete of drafts, proposal history, the vendor dashboard with own and organization proposals and its empty message, the profile-completion page's redirect (built in Slice 2) shown landing a vendor who has agreed before on this dashboard and a public sector employee on Slice 8's opportunities dashboard (R-4.23), staff seeing no proposal until the opportunity has closed, one read rule for files attached to opportunities and proposals, withdrawn when the attachment goes, the refusal to attach a file the attacher may not read (R-8.22, built in Slice 7 with the opportunity attachment control and answered for here because its test goes through the proposal create screen), the service-wide mail rules verified across every screen that sends a message by this point, and the addendum and cancellation notices reaching the vendors who have submitted a proposal (R-1.35, R-1.36, built in Slice 9 and answered for here because their tests submit a Code With Us proposal on this slice's create screen before adding the addendum or cancelling)
+- depends on: Slice 8, Slice 9, Slice 11
 
 ### Slice 15 · A vendor can propose on Sprint With Us and Team With Us opportunities
 - criteria: R-2.10, R-2.16, R-2.17, R-2.18, R-2.19, R-2.20, R-2.21, R-2.22, R-8.19, R-8.25
