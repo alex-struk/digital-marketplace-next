@@ -30,3 +30,14 @@ I took up the one condition sent to this stage: build-slice-8-3, ruled at G3 by 
 **Constitution rules.** The two this change touches are P5 (spec as source of truth) and P7 (test integrity). Under P7, a criterion goes in the slice whose screens can actually reach its test; when that conflicts with the criterion's wording, the plan records the conflict for ruling instead of quietly re-cutting a slice around the test.
 
 **Other notes.** I wrote no new decision record, because this is a placement correction rather than a design choice. I made no new assumptions about the stack or the platform. No conditions were addressed to a person, so I left none for anyone. I deferred nothing, and touched nothing under spec, design, constitution.md or `.claude/skills`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:architect
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: is moving R-1.39 from Slice 8 to Slice 10 the right cut, and does each slice still stand on its own? Ruling: approve. R-1.39's acceptance test (by-program case, lines 94-95) saves a Sprint With Us draft through opportunitySwuCreate, a screen only Slice 10 serves; Slice 10's closure (Slices 9, 8, 7) holds both that screen and the opportunity list, so placing the criterion there lets its test run without changing any dependency. R-1.39 now appears on exactly one criteria line in plan/tasks.md, so no criterion is left unassigned and none is double-placed. There is no schema change, no new dependency and no stack departure, and the tier is STANDARD, so nothing calls for escalation. One flaw in the plan's prose does not affect the cut: 'Criteria that sit awkwardly' and 'For ruling' item 11 say the criterion's text and its test disagree, and offer re-pointing the test at Code With Us opportunities alone as a way back to Slice 8. That is not a real disagreement. A program filter cannot be shown working without opportunities of at least two programs, so a Code With Us-only test would drop the program clause's only assertion. Whoever rules on item 11 should discard that option; the alternative, a Team With Us draft, also needs Slice 10. What would change this ruling: a revision that actually moved R-1.39 back to Slice 8 on the strength of that option, or a coverage run showing R-1.39 unplaced or placed twice.
+
+**Conditions:**
+none
