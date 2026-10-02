@@ -1,7 +1,7 @@
 {
-  "generated": "2026-10-02T00:42:42.670Z",
+  "generated": "2026-10-02T01:06:18.778Z",
   "axe": "4.13.0",
-  "catalogue": "7065a49a4c8a785d58e4cc521343bb5d80ebe0320f1a219d38644234b204dd16",
+  "catalogue": "992b30379a1f17d46e525003b87f80090a3f3ee7022c746323dcc36aec71892d",
   "ok": true,
   "messages": [],
   "compile": [
@@ -1116,6 +1116,18 @@
       "violations": []
     },
     {
+      "id": "opportunities-opportunity-counters-default--default",
+      "title": "opportunities/opportunity-counters/default",
+      "file": "./catalogue/opportunity-counters.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-counters-refused--refused",
+      "title": "opportunities/opportunity-counters/refused",
+      "file": "./catalogue/opportunity-counters.refused.stories.tsx",
+      "violations": []
+    },
+    {
       "id": "opportunities-opportunity-cwu-complete-default--default",
       "title": "opportunities/opportunity-cwu-complete/default",
       "file": "./catalogue/opportunity-cwu-complete.default.stories.tsx",
@@ -1677,6 +1689,18 @@
       "id": "opportunities-opportunity-twu-view-signed-out--signed-out",
       "title": "opportunities/opportunity-twu-view/signed-out",
       "file": "./catalogue/opportunity-twu-view.signed-out.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-watch-request-default--default",
+      "title": "opportunities/opportunity-watch-request/default",
+      "file": "./catalogue/opportunity-watch-request.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-watch-request-refused--refused",
+      "title": "opportunities/opportunity-watch-request/refused",
+      "file": "./catalogue/opportunity-watch-request.refused.stories.tsx",
       "violations": []
     },
     {
@@ -3067,7 +3091,7 @@
     }
   ],
   "totals": {
-    "stories": 508,
+    "stories": 512,
     "violations": 0,
     "failed": 0
   }

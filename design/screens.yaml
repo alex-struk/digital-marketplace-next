@@ -142,6 +142,10 @@ screens:
     states: [default, not-found, loading]
   - page: scheduled-transition-trigger
     states: [default]
+  - page: opportunity-watch-request
+    states: [default, refused]
+  - page: opportunity-counters
+    states: [default, refused]
 
   # organizations domain — see design/DESIGN.md, "Domain: organizations"
   - page: organization-list

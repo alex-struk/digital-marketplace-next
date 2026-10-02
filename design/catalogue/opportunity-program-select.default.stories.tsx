@@ -1,15 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Heading, Link, Text } from "@bcgov/design-system-react-components";
+import { PageContainer, Stack } from "./layout";
 
 // opportunity-program-select · default — a public sector employee choosing a program (R-1.7, R-1.8, R-1.12, R-1.13)
 // The one-line program descriptions are placeholder copy; the spec does not carry them.
 const meta: Meta = { title: "opportunities/opportunity-program-select/default" };
 export default meta;
 
-const page = { display: "grid", gap: "var(--layout-margin-large)", padding: "var(--layout-padding-large)" } as const;
 const card = {
-  display: "grid",
-  gap: "var(--layout-margin-medium)",
   padding: "var(--layout-padding-large)",
   border: "var(--layout-border-width-small) solid var(--surface-color-border-default)",
   borderRadius: "var(--layout-border-radius-medium)",
@@ -38,25 +36,29 @@ const programs = [
 
 export const Default: StoryObj = {
   render: () => (
-    <div style={page}>
-      <Heading level={1}>Create an opportunity</Heading>
-      <Text elementType="p">
-        Choose the program the opportunity belongs to. The program cannot be changed once the opportunity is created.
-      </Text>
-      {programs.map((p) => (
-        <section key={p.slug} aria-labelledby={`program-${p.slug}`} style={card} data-testid="program-card">
-          <Heading level={2} id={`program-${p.slug}`}>{p.name}</Heading>
-          <Text elementType="p">{p.description}</Text>
-          <Text elementType="p">
-            Maximum budget: <span data-testid="program-max-budget">{p.maxBudget}</span>
-          </Text>
-          <div>
-            <Link href={`/opportunities/${p.slug}/create`} isButton buttonVariant="primary" data-testid={`program-choose-${p.slug}`}>
-              Create a {p.name} opportunity
-            </Link>
-          </div>
-        </section>
-      ))}
-    </div>
+    <PageContainer>
+      <Stack gap="large">
+        <Heading level={1}>Create an opportunity</Heading>
+        <Text elementType="p">
+          Choose the program the opportunity belongs to. The program cannot be changed once the opportunity is created.
+        </Text>
+        {programs.map((p) => (
+          <section key={p.slug} aria-labelledby={`program-${p.slug}`} style={card} data-testid="program-card">
+            <Stack gap="medium">
+              <Heading level={2} id={`program-${p.slug}`}>{p.name}</Heading>
+              <Text elementType="p">{p.description}</Text>
+              <Text elementType="p">
+                Maximum budget: <span data-testid="program-max-budget">{p.maxBudget}</span>
+              </Text>
+              <div>
+                <Link href={`/opportunities/${p.slug}/create`} isButton buttonVariant="primary" data-testid={`program-choose-${p.slug}`}>
+                  Create a {p.name} opportunity
+                </Link>
+              </div>
+            </Stack>
+          </section>
+        ))}
+      </Stack>
+    </PageContainer>
   ),
 };

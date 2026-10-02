@@ -1,12 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Heading, Link, Text } from "@bcgov/design-system-react-components";
+import { PageContainer, Stack } from "./layout";
 
 // opportunity-dashboard · administrator — an administrator sees every opportunity, with who created it (R-1.3)
 const meta: Meta = { title: "opportunities/opportunity-dashboard/administrator" };
 export default meta;
 
-const page = { display: "grid", gap: "var(--layout-margin-large)", padding: "var(--layout-padding-large)" } as const;
-const stack = { display: "grid", gap: "var(--layout-margin-medium)" } as const;
 const cell = {
   textAlign: "start",
   verticalAlign: "top",
@@ -29,12 +28,13 @@ const rows = [
 
 export const Administrator: StoryObj = {
   render: () => (
-    <div style={page}>
+    <PageContainer>
+      <Stack gap="large">
       <Heading level={1}>Dashboard</Heading>
       <div>
         <Link href="/opportunities/create" isButton buttonVariant="primary" data-testid="dashboard-create-opportunity">Create an opportunity</Link>
       </div>
-      <section aria-labelledby="dashboard-mine-heading" style={stack}>
+      <Stack as="section" gap="medium" aria-labelledby="dashboard-mine-heading">
         <Heading level={2} id="dashboard-mine-heading">All opportunities</Heading>
         <div role="region" aria-labelledby="dashboard-caption" tabIndex={0} style={{ overflowX: "auto" }}>
           <table style={{ borderCollapse: "collapse", width: "100%" }} data-testid="dashboard-opportunities-table">
@@ -65,7 +65,8 @@ export const Administrator: StoryObj = {
             </tbody>
           </table>
         </div>
-      </section>
-    </div>
+      </Stack>
+      </Stack>
+    </PageContainer>
   ),
 };
