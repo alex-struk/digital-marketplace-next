@@ -300,14 +300,14 @@ describe("watching (R-1.5)", () => {
     expect(first.body.opportunity.id).toBe(PUBLISHED);
     expect((await ask("GET", `/api/opportunities/code-with-us/${PUBLISHED}`, vendor)).body.subscribed).toBe(true);
     const watchers = `opportunity.code-with-us.${PUBLISHED}.watchers`;
-    expect((await ask("GET", `/api/counters?counters=${watchers}`)).body).toEqual({ [watchers]: 1 });
+    expect((await ask("GET", `/api/counters?counters=${watchers}`, await tokens.admin())).body).toEqual({ [watchers]: 1 });
 
     // The second watch is refused as a duplicate, under the reason the contract names, and records nothing.
     expect(await ask("POST", BASE, vendor, { opportunity: PUBLISHED })).toEqual({
       status: 400,
       body: { conflict: ["This user is already subscribed to this opportunity."] },
     });
-    expect((await ask("GET", `/api/counters?counters=${watchers}`)).body).toEqual({ [watchers]: 1 });
+    expect((await ask("GET", `/api/counters?counters=${watchers}`, await tokens.admin())).body).toEqual({ [watchers]: 1 });
 
     expect((await ask("DELETE", `${BASE}/${PUBLISHED}`, vendor)).status).toBe(200);
     expect((await ask("GET", `/api/opportunities/code-with-us/${PUBLISHED}`, vendor)).body.subscribed).toBe(false);
@@ -345,7 +345,7 @@ describe("counting views (R-1.6)", () => {
   const views = `opportunity.code-with-us.${PUBLISHED}.views`;
 
   it("adds one view each time the public page is opened, by anyone", async () => {
-    const before = (await ask("GET", `/api/counters?counters=${views}`)).body[views];
+    const before = (await ask("GET", `/api/counters?counters=${views}`, await tokens.admin())).body[views];
     expect(typeof before).toBe("number");
     expect((await ask("PUT", `/api/counters/${views}`)).body).toEqual({ [views]: before + 1 });
     expect((await ask("PUT", `/api/counters/${views}`, await tokens.vendor())).body).toEqual({ [views]: before + 2 });
@@ -354,12 +354,22 @@ describe("counting views (R-1.6)", () => {
 
   it("reads several counters at once and refuses a name that is not a counter's", async () => {
     const watchers = `opportunity.code-with-us.${PUBLISHED}.watchers`;
-    const repeated = await ask("GET", `/api/counters?counters=${views}&counters=${watchers}`);
+    const admin = await tokens.admin();
+    const repeated = await ask("GET", `/api/counters?counters=${views}&counters=${watchers}`, admin);
     expect(Object.keys(repeated.body).sort()).toEqual([views, watchers].sort());
-    const separated = await ask("GET", `/api/counters?counters=${encodeURIComponent(`${views},${watchers}`)}`);
+    const separated = await ask("GET", `/api/counters?counters=${encodeURIComponent(`${views},${watchers}`)}`, admin);
     expect(separated.body).toEqual(repeated.body);
-    expect((await ask("GET", "/api/counters?counters=made.up")).status).toBe(400);
+    expect((await ask("GET", "/api/counters?counters=made.up", admin)).status).toBe(400);
     expect((await ask("PUT", `/api/counters/opportunity.code-with-us.${DRAFT_OF_STAFF_TWO}.views`)).status).toBe(400);
+  });
+
+  it("is read by public sector staff and administrators only (R-1.30)", async () => {
+    expect((await ask("GET", `/api/counters?counters=${views}`, await tokens.staff())).status).toBe(200);
+    for (const token of [await tokens.vendor(), undefined]) {
+      const refused = await ask("GET", `/api/counters?counters=${views}`, token);
+      expect(refused.status).toBe(401);
+      expect(Object.keys(refused.body)).toEqual(["errors"]);
+    }
   });
 });
 

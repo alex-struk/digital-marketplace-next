@@ -8,6 +8,7 @@ import {
   WeightsDraft,
 } from "../rules/other-program-drafts";
 import { Person } from "./cwu-opportunity";
+import type { RunningAnswer } from "./opportunity-running.service";
 
 /** The two programs whose opportunities slice 10 completes; until then they are listed, read and created. */
 export type { OtherProgram } from "../rules/other-program-drafts";
@@ -122,4 +123,11 @@ export interface SummaryAnswer {
   readonly questionsWeight?: number;
   readonly priceWeight?: number;
   readonly evaluationPanel?: readonly { readonly user: Person; readonly evaluator: boolean; readonly chair: boolean; readonly order: number }[];
+  // On reading one opportunity, what running it has gathered (decision record 0043).
+  /** Every addendum, oldest first (R-1.32). */
+  readonly addenda?: RunningAnswer["addenda"];
+  /** The author and administrators only (R-1.30). */
+  readonly history?: RunningAnswer["history"];
+  /** The author and administrators only, once it has been published (R-1.30). */
+  readonly reporting?: RunningAnswer["reporting"];
 }

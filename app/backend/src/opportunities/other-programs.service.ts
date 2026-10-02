@@ -17,6 +17,9 @@ import {
 } from "../rules/other-program-drafts";
 import { WatchingService } from "../watching/watching.service";
 import { CLOCK, Clock } from "./cwu-opportunities.service";
+import { OpportunityRunningService, RunningSubject } from "./opportunity-running.service";
+
+export const NOT_YET_AVAILABLE = "That action is not yet available on this opportunity.";
 import {
   OTHER_PROGRAMS_STORE,
   OtherProgram,
@@ -38,6 +41,7 @@ export class OtherProgramsService {
     @Inject(OTHER_PROGRAMS_STORE) private readonly store: OtherProgramsStore,
     private readonly watching: WatchingService,
     @Inject(CLOCK) private readonly clock: Clock,
+    private readonly running: OpportunityRunningService,
   ) {}
 
   async list(viewer: OpportunityViewer | null, program: OtherProgram): Promise<SummaryAnswer[]> {
@@ -49,10 +53,46 @@ export class OtherProgramsService {
 
   /** One opportunity, for someone who may read it; one they may not is answered as one not there (R-1.2). */
   async read(viewer: OpportunityViewer | null, program: OtherProgram, id: string): Promise<SummaryAnswer> {
+    const found = await this.readable(viewer, program, id);
+    const [watched, running] = await Promise.all([
+      this.watching.watchedBy(viewer, program),
+      this.running.answerFor(viewer, subjectOf(found)),
+    ]);
+    return { ...summaryAnswerFor(found, viewer, watched.has(found.id)), ...running };
+  }
+
+  /**
+   * One tagged change. Running an opportunity under way — cancelling it (R-1.28), adding an
+   * addendum (R-1.32) or, for Sprint With Us, a private note (R-1.33) — is the same in every
+   * program. Editing it and moving it along its evaluation stages are slice 10's and later.
+   */
+  async change(
+    viewer: OpportunityViewer | null,
+    program: OtherProgram,
+    id: string,
+    change: { readonly tag?: unknown; readonly value?: unknown },
+  ): Promise<SummaryAnswer> {
+    const subject = subjectOf(await this.readable(viewer, program, id));
+    switch (change?.tag) {
+      case "cancel":
+        await this.running.cancel(viewer, subject, change.value);
+        break;
+      case "addAddendum":
+        await this.running.addAddendum(viewer, subject, change.value);
+        break;
+      case "addNote":
+        await this.running.addNote(viewer, subject, change.value);
+        break;
+      default:
+        throw new BadRequestException([NOT_YET_AVAILABLE]);
+    }
+    return this.read(viewer, program, subject.id);
+  }
+
+  private async readable(viewer: OpportunityViewer | null, program: OtherProgram, id: string): Promise<StoredSummary> {
     const found = await this.store.find(program, id.toLowerCase());
     if (!found || !mayReadOpportunity(viewer, standingOf(found))) throw new NotFoundException(NO_OPPORTUNITY_THERE);
-    const watched = await this.watching.watchedBy(viewer, program);
-    return summaryAnswerFor(found, viewer, watched.has(found.id));
+    return found;
   }
 
   async create(viewer: OpportunityViewer | null, program: OtherProgram, body: unknown): Promise<SummaryAnswer> {
@@ -72,6 +112,10 @@ export class OtherProgramsService {
 
 function standingOf(opportunity: StoredSummary) {
   return { status: opportunity.status, createdBy: opportunity.createdBy?.id ?? null };
+}
+
+function subjectOf(opportunity: StoredSummary): RunningSubject {
+  return { program: opportunity.program, id: opportunity.id, title: opportunity.title, ...standingOf(opportunity) };
 }
 
 /** An opportunity as the person asking is answered with it; authorship as R-1.29 allows. */

@@ -25,8 +25,8 @@ export class CountersController {
   ) {}
 
   @Get()
-  read(@Query("counters") counters: unknown): Promise<Counts> {
-    return this.counters.read(counterNamesFrom(counters));
+  async read(@Query("counters") counters: unknown, @Req() request: IdentifiedRequest): Promise<Counts> {
+    return this.counters.read(await this.viewers.readingAccount(request.identity), counterNamesFrom(counters));
   }
 
   @Put(":id")

@@ -12,6 +12,7 @@ import { useScreenTitle } from "../app/screen-title";
 import { useSession } from "../auth/session";
 import { FormattedText } from "../lib/formatted-text/formatted-text";
 import { Fact, StatusBadge, dayLabel, deadlineLabel, publishedLabel, rewardLabel } from "./opportunity-parts";
+import { AddendaList } from "./opportunity-running";
 
 /**
  * A Code With Us opportunity, at `/opportunities/code-with-us/:opportunityId` (opportunity-cwu-view).
@@ -154,7 +155,7 @@ export function OpportunityCwuViewScreen({ opportunityId }: { opportunityId: str
         <Heading level={2} id="view-addenda">
           Addenda
         </Heading>
-        <Text elementType="p">No addenda have been added.</Text>
+        <AddendaList addenda={opportunity.addenda} showAuthor={false} />
       </Stack>
     </Stack>
   );

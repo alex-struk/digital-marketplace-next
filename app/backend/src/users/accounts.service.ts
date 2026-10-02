@@ -246,6 +246,9 @@ export class AccountsService {
    * An administrator deactivating somebody else's marks it as deactivated by an administrator,
    * and the person is told by email that their access has been removed (R-4.30). An account
    * already inactive is refused (R-4.31). Nobody else may deactivate another's account.
+   *
+   * The notice of deactivation goes after the answer, like every other message, and is the
+   * one message the mailer lets reach an account that is no longer active (R-6.17).
    */
   async deactivate(
     actor: Account,

@@ -24,6 +24,23 @@ export interface HistoryEntry {
   readonly status: string | null;
   readonly event: string | null;
   readonly note: string | null;
+  /** The files a private note carries (R-1.33). */
+  readonly attachments: readonly Attachment[];
+}
+
+/** An addendum, as it was added (R-1.32). */
+export interface Addendum {
+  readonly id: string;
+  readonly createdAt: string;
+  readonly createdBy: Person | null;
+  readonly description: string;
+}
+
+/** The figures reported to the author and administrators once it is published (R-1.30). */
+export interface Reporting {
+  readonly numViews: number;
+  readonly numWatchers: number;
+  readonly numProposals: number;
 }
 
 export interface CwuOpportunity {
@@ -48,8 +65,12 @@ export interface CwuOpportunity {
   readonly startDate: string;
   readonly completionDate: string | null;
   readonly attachments: readonly Attachment[];
+  /** Every addendum, oldest first (R-1.32). */
+  readonly addenda: readonly Addendum[];
   /** Absent unless the reader is the author or an administrator (R-1.30). */
   readonly history?: readonly HistoryEntry[];
+  /** Absent unless the reader is the author or an administrator and it has been published (R-1.30). */
+  readonly reporting?: Reporting;
   /** Whether the reader watches it (R-1.5). */
   readonly subscribed: boolean;
 }
@@ -70,7 +91,7 @@ function readAttachment(value: unknown): Attachment | null {
   return typeof record.id === "string" && typeof record.name === "string" ? { id: record.id, name: record.name } : null;
 }
 
-function readHistory(value: unknown): HistoryEntry[] {
+export function readHistory(value: unknown): HistoryEntry[] {
   if (!Array.isArray(value)) return [];
   return value
     .filter((entry): entry is Record<string, unknown> => typeof entry === "object" && entry !== null)
@@ -80,7 +101,30 @@ function readHistory(value: unknown): HistoryEntry[] {
       status: typeof entry.status === "string" ? entry.status : null,
       event: typeof entry.event === "string" ? entry.event : null,
       note: typeof entry.note === "string" ? entry.note : null,
+      attachments: Array.isArray(entry.attachments)
+        ? entry.attachments.map(readAttachment).filter((file): file is Attachment => file !== null)
+        : [],
     }));
+}
+
+export function readAddenda(value: unknown): Addendum[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .filter((entry): entry is Record<string, unknown> => typeof entry === "object" && entry !== null)
+    .filter((entry) => typeof entry.description === "string")
+    .map((entry, index) => ({
+      id: typeof entry.id === "string" ? entry.id : String(index),
+      createdAt: text(entry.createdAt),
+      createdBy: readPerson(entry.createdBy),
+      description: entry.description as string,
+    }));
+}
+
+export function readReporting(value: unknown): Reporting | null {
+  if (typeof value !== "object" || value === null) return null;
+  const record = value as Record<string, unknown>;
+  const count = (figure: unknown) => (typeof figure === "number" && Number.isFinite(figure) ? figure : 0);
+  return { numViews: count(record.numViews), numWatchers: count(record.numWatchers), numProposals: count(record.numProposals) };
 }
 
 export function readCwuOpportunity(value: unknown): CwuOpportunity | null {
@@ -110,7 +154,9 @@ export function readCwuOpportunity(value: unknown): CwuOpportunity | null {
     attachments: Array.isArray(record.attachments)
       ? record.attachments.map(readAttachment).filter((file): file is Attachment => file !== null)
       : [],
+    addenda: readAddenda(record.addenda),
     ...("history" in record ? { history: readHistory(record.history) } : {}),
+    ...(readReporting(record.reporting) ? { reporting: readReporting(record.reporting)! } : {}),
     subscribed: record.subscribed === true,
   };
 }
@@ -213,6 +259,34 @@ export async function changeCwuOpportunity(
     const { data, error, response } = await api.PUT("/api/opportunities/code-with-us/{id}", {
       params: { path: { id } },
       body: (value === undefined ? { tag } : { tag, value }) as never,
+    });
+    return saveAnswerFor(response.ok, data, error);
+  } catch {
+    return { kind: "failed" };
+  }
+}
+
+/**
+ * Running an opportunity under way (decision record 0043): an administrator cancelling it with an
+ * optional note (R-1.28) or an addendum (R-1.32). The service also takes a private note, but no
+ * screen offers one (R-1.33), so the client never sends it.
+ */
+export type RunningAction = { readonly tag: "cancel"; readonly note: string } | { readonly tag: "addAddendum"; readonly addendum: string };
+
+export function runningBody(action: RunningAction): { tag: string; value: unknown } {
+  switch (action.tag) {
+    case "cancel":
+      return { tag: "cancel", value: action.note };
+    case "addAddendum":
+      return { tag: "addAddendum", value: action.addendum };
+  }
+}
+
+export async function runCwuOpportunity(id: string, action: RunningAction): Promise<SaveAnswer> {
+  try {
+    const { data, error, response } = await api.PUT("/api/opportunities/code-with-us/{id}", {
+      params: { path: { id } },
+      body: runningBody(action) as never,
     });
     return saveAnswerFor(response.ok, data, error);
   } catch {

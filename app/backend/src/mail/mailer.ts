@@ -1,4 +1,4 @@
-import { Envelope } from "./message";
+import { Envelope, Message } from "./message";
 import { render } from "./render";
 import { MailSettings } from "./settings";
 
@@ -15,6 +15,15 @@ export interface OutgoingMail {
 /** Where mail is handed to be delivered. */
 export interface MailTransport {
   deliver(mail: OutgoingMail): Promise<void>;
+}
+
+/**
+ * Which addresses belong only to accounts that have been deactivated. An address no account
+ * holds (the contact address, say) is not among them, and nor is one an active account also
+ * holds. Answered in lower case.
+ */
+export interface RecipientStanding {
+  deactivatedOnly(addresses: readonly string[]): Promise<ReadonlySet<string>>;
 }
 
 export const MAIL_TRANSPORT = Symbol("MailTransport");
@@ -49,6 +58,9 @@ function addressesIn(list: readonly (string | null | undefined)[] | undefined): 
  * - sends nothing at all when notifications are switched off for the environment (R-6.1);
  * - skips a recipient that holds no email address, and sends nothing when that leaves nobody
  *   (R-6.28, R-4.2);
+ * - sends nothing to an address held only by a deactivated account, whatever the message and
+ *   whenever its recipients were chosen, except the message telling that person their account
+ *   has been deactivated (R-6.17, R-4.9, R-4.30);
  * - never makes the action it follows wait or fail: `send` hands the message over and returns
  *   at once, a failure to compose or deliver is written to the operational log only, and
  *   nothing is tried again (R-6.2).
@@ -58,6 +70,7 @@ export class Mailer {
     private readonly settings: MailSettings,
     private readonly transport: MailTransport,
     private readonly log: MailLog,
+    private readonly standing: RecipientStanding | null = null,
   ) {}
 
   /**
@@ -89,8 +102,11 @@ export class Mailer {
     try {
       if (this.settings.disabled) return "switched-off";
 
-      const to = addressesIn(envelope.to);
-      const bcc = addressesIn(envelope.bcc);
+      const { to, bcc } = await this.withoutDeactivated(
+        envelope.message,
+        addressesIn(envelope.to),
+        addressesIn(envelope.bcc),
+      );
       if (to.length === 0 && bcc.length === 0) {
         this.log({ level: "info", event: "mail-skipped-no-address", kind });
         return "no-recipient";
@@ -119,7 +135,35 @@ export class Mailer {
       return "not-delivered";
     }
   }
+
+  /**
+   * The addresses left once those held only by deactivated accounts are taken out. They are
+   * looked up as the message goes, not when its recipients were chosen, so an account
+   * deactivated in between is sent nothing either (R-6.17).
+   */
+  private async withoutDeactivated(
+    message: Message,
+    to: string[],
+    bcc: string[],
+  ): Promise<{ to: string[]; bcc: string[] }> {
+    if (!this.standing || TOLD_OF_DEACTIVATION.has(message.kind)) return { to, bcc };
+    const all = [...to, ...bcc];
+    if (all.length === 0) return { to, bcc };
+    const deactivated = await this.standing.deactivatedOnly(all);
+    if (deactivated.size === 0) return { to, bcc };
+    const kept = (address: string) => !deactivated.has(address.toLowerCase());
+    return { to: to.filter(kept), bcc: bcc.filter(kept) };
+  }
 }
+
+/**
+ * The messages that still reach an account once it has been deactivated: the ones telling the
+ * person it has been (R-4.9, R-4.30). Nothing else does (R-6.17).
+ */
+export const TOLD_OF_DEACTIVATION: ReadonlySet<string> = new Set([
+  "deactivated-own-account",
+  "deactivated-by-administrator",
+]);
 
 /** Why delivery failed, in words that carry no address: the error's code, or its class. */
 function reasonFor(error: unknown): string {

@@ -4,9 +4,12 @@ import { useNavigate, useSearch } from "@tanstack/react-router";
 import {
   CwuStatus,
   OPPORTUNITY_INCOMPLETE,
+  changeIsAnnounced,
   earliestDeadlineFor,
-  historyEntryLabel,
+  isPermittedTransition,
   isUnpublished,
+  mayAddAddendum,
+  mayCancelOpportunity,
   mayDeleteOpportunity,
   mayEditOpportunity,
   mayManageOpportunity,
@@ -16,11 +19,13 @@ import {
 import type { Account } from "../api/accounts";
 import {
   CwuOpportunity,
+  RunningAction,
   SaveAnswer,
   attachToCwuOpportunity,
   changeCwuOpportunity,
   deleteCwuOpportunity,
   fetchCwuOpportunity,
+  runCwuOpportunity,
 } from "../api/opportunities";
 import { Loading } from "../app/loading";
 import { NotFound } from "../app/not-found";
@@ -33,11 +38,11 @@ import {
   Fact,
   StatusBadge,
   deadlineLabel,
-  momentLabel,
   publishedLabel,
   rewardLabel,
   todayInPacific,
 } from "./opportunity-parts";
+import { AddendaTab, CancelDialog, HistoryTable, ReportingSection, Sent } from "./opportunity-running";
 
 /**
  * Manage a Code With Us opportunity, at `/opportunities/code-with-us/:opportunityId/edit`
@@ -48,7 +53,10 @@ import {
  * The action bar offers only what the person may do in the opportunity's state
  * (design/DESIGN.md, "Who is offered what on the manage page"): a draft's author may edit it,
  * submit it for review and delete it; an administrator may edit, publish and delete a draft or an
- * opportunity under review, and edit one that is published (R-1.20, R-1.22, R-1.53, R-1.56).
+ * opportunity under review, and edit and cancel one that is published, at its evaluation stage or
+ * in processing (R-1.20, R-1.22, R-1.28, R-1.53, R-1.56). Once it is no longer a draft, the Addenda
+ * tab adds an addendum (R-1.32); the History tab takes a private note with files (R-1.33); and the
+ * Summary tab reports its views, watchers and proposals once it is published (R-1.30).
  */
 
 type Tab = "summary" | "opportunity" | "addenda" | "history";
@@ -99,10 +107,12 @@ type Notice =
   | { readonly kind: "incomplete"; readonly action: "submit" | "publish" }
   | { readonly kind: "refused"; readonly text: string };
 
-const DONE: Readonly<Record<"submit" | "publish" | "save", string>> = {
+const DONE: Readonly<Record<"submit" | "publish" | "save" | RunningAction["tag"], string>> = {
   submit: "The opportunity has been submitted for review. Every administrator has been told.",
   publish: "The opportunity has been published.",
   save: "Your changes have been saved.",
+  cancel: "The opportunity has been cancelled. Everyone watching it and everyone who submitted a proposal is being told.",
+  addAddendum: "The addendum has been added.",
 };
 
 function Manage({ account, initial }: { account: Account; initial: CwuOpportunity }) {
@@ -110,7 +120,7 @@ function Manage({ account, initial }: { account: Account; initial: CwuOpportunit
   const search = useSearch({ strict: false }) as Record<string, unknown>;
   const [opportunity, setOpportunity] = useState(initial);
   const [notice, setNotice] = useState<Notice | null>(null);
-  const [dialog, setDialog] = useState<"publish" | "delete" | null>(null);
+  const [dialog, setDialog] = useState<"publish" | "delete" | "cancel" | null>(null);
   const [busy, setBusy] = useState(false);
   // Bumped when the form is saved, so it starts again from what was saved; attaching a file at
   // once changes the opportunity without throwing away what is being typed.
@@ -136,8 +146,34 @@ function Manage({ account, initial }: { account: Account; initial: CwuOpportunit
     submit: draft && !administrator && maySubmitForReview(account, standing),
     publish: isUnpublished(opportunity.status) && mayPublishOpportunity(account),
     delete: mayDeleteOpportunity(account, standing),
+    // Published, an evaluation stage or processing, by an administrator (R-1.20, R-1.28).
+    cancel: mayCancelOpportunity(account) && isPermittedTransition("code-with-us", opportunity.status, "CANCELED"),
   };
   const editing = tab === "opportunity" && mayEdit;
+
+  /**
+   * Cancelling or an addendum. A refusal is said in the tab's section, except for the addendum,
+   * whose form says it beside what was typed.
+   */
+  async function run(action: RunningAction): Promise<Sent> {
+    setBusy(true);
+    const answer = await runCwuOpportunity(opportunity.id, action);
+    setBusy(false);
+    if (answer.kind === "saved") {
+      setOpportunity(answer.opportunity);
+      setNotice({ kind: "done", text: DONE[action.tag] });
+      return null;
+    }
+    const why = answer.kind === "refused" ? answer.reasons.join(" ") : "The service could not do that. Try again.";
+    if (action.tag === "cancel") setNotice({ kind: "refused", text: why });
+    return why;
+  }
+
+  async function cancelOpportunity(note: string) {
+    if (busy) return;
+    await run({ tag: "cancel", note });
+    setDialog(null);
+  }
 
   function goToTab(next: Tab) {
     void navigate({ to: "/opportunities/code-with-us/$opportunityId/edit", params: { opportunityId: opportunity.id }, search: { tab: next } as never });
@@ -192,7 +228,7 @@ function Manage({ account, initial }: { account: Account; initial: CwuOpportunit
       {/* The actions stay on every tab, the Opportunity tab's form included, so a draft can be put
           forward from wherever its author is; only Edit is left off where the form is already
           open (decision record 0032). */}
-      {(offers.edit && !editing) || offers.submit || offers.publish || offers.delete ? (
+      {(offers.edit && !editing) || offers.submit || offers.publish || offers.delete || offers.cancel ? (
         <ButtonGroup ariaLabel="Opportunity actions">
           {offers.edit && !editing ? (
             <Button variant="secondary" onPress={() => goToTab("opportunity")} data-testid="opportunity-edit-button">
@@ -212,6 +248,11 @@ function Manage({ account, initial }: { account: Account; initial: CwuOpportunit
           {offers.delete ? (
             <Button variant="secondary" danger isDisabled={busy} onPress={() => setDialog("delete")} data-testid="opportunity-delete-button">
               Delete
+            </Button>
+          ) : null}
+          {offers.cancel ? (
+            <Button variant="secondary" danger isDisabled={busy} onPress={() => setDialog("cancel")} data-testid="opportunity-cancel-button">
+              Cancel opportunity
             </Button>
           ) : null}
         </ButtonGroup>
@@ -276,9 +317,24 @@ function Manage({ account, initial }: { account: Account; initial: CwuOpportunit
             onCancel={() => goToTab("summary")}
           />
         ) : null}
-        {tab === "addenda" ? <Text elementType="p">No addenda have been added.</Text> : null}
-        {tab === "history" ? <HistoryTab opportunity={opportunity} /> : null}
+        {tab === "addenda" ? (
+          <AddendaTab
+            addenda={opportunity.addenda}
+            mayAdd={mayAddAddendum(account, standing)}
+            announced={changeIsAnnounced(opportunity.status)}
+            onAdd={(addendum) => run({ tag: "addAddendum", addendum })}
+          />
+        ) : null}
+        {/* No screen adds a private note (R-1.33); the history shows the ones there are. */}
+        {tab === "history" ? <HistoryTable history={opportunity.history ?? []} /> : null}
       </Stack>
+      <CancelDialog
+        key={dialog === "cancel" ? "open" : "closed"}
+        isOpen={dialog === "cancel"}
+        isSending={busy}
+        onKeep={() => setDialog(null)}
+        onConfirm={(note) => void cancelOpportunity(note)}
+      />
       <PublishDialog
         isOpen={dialog === "publish"}
         isSending={busy}
@@ -375,62 +431,7 @@ function SummaryTab({ opportunity }: { opportunity: CwuOpportunity }) {
           </Fact>
         ) : null}
       </Stack>
-      {isUnpublished(opportunity.status) ? (
-        <Text elementType="p" size="small" color="secondary">
-          Views, watchers and proposals are counted once the opportunity is published.
-        </Text>
-      ) : null}
+      <ReportingSection reporting={opportunity.reporting} unpublished={isUnpublished(opportunity.status)} />
     </>
-  );
-}
-
-const cell = {
-  textAlign: "start",
-  verticalAlign: "top",
-  padding: "var(--layout-padding-small)",
-  borderBottom: "var(--layout-border-width-small) solid var(--surface-color-border-default)",
-} as const;
-
-/** Every change of state and every event, newest first, with who made it (R-1.4, R-1.30). */
-function HistoryTab({ opportunity }: { opportunity: CwuOpportunity }) {
-  const history = opportunity.history ?? [];
-  return (
-    <div role="region" aria-labelledby="history-caption" tabIndex={0} style={{ overflowX: "auto" }}>
-      <table style={{ borderCollapse: "collapse", width: "100%" }}>
-        <caption id="history-caption" style={{ textAlign: "start" }}>
-          <Text size="small" color="secondary">
-            Every change of state and every event, newest first
-          </Text>
-        </caption>
-        <thead>
-          <tr>
-            <th scope="col" style={cell}>
-              Date
-            </th>
-            <th scope="col" style={cell}>
-              Entry
-            </th>
-            <th scope="col" style={cell}>
-              By
-            </th>
-            <th scope="col" style={cell}>
-              Note
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {history.map((entry, index) => (
-            <tr key={`${entry.createdAt}-${index}`}>
-              <td style={cell}>
-                <time dateTime={entry.createdAt}>{momentLabel(entry.createdAt)}</time>
-              </td>
-              <td style={cell}>{historyEntryLabel(entry)}</td>
-              <td style={cell}>{entry.createdBy?.name ?? ""}</td>
-              <td style={cell}>{entry.note ?? ""}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
   );
 }
