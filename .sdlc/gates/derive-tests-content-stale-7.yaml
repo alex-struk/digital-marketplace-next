@@ -1,0 +1,17 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: do the R-7.29 test and its rewritten not-testable entry follow from the criterion and nothing else? Ruling: return. Most of the work holds. The test runs only on instances started with service_page_absent. Its 'shown in full' checks read back the seeded identifier, status, deadline, budget and phase, with nothing about the implementation leaking in. The narrowed not-testable entry for the evaluation-instructions screens gives a real reason (R-7.25 forbids removing those pages, and no configuration removes them) and names contract as the stage that owes the missing configuration. The defect is in the final check: the scope section is read through readOrEmpty, which catches any error and returns an empty string. The adapter reports something it cannot bind by throwing an error starting 'unbound:', as tests/results/old/2026-09-29-11.json shows. So a scope section the adapter cannot reach becomes an empty string, the check passes, and R-7.29 is closed with nothing established. The five presence checks can safely tolerate errors because each needs a non-empty value; the emptiness check cannot. Separately, the proposal says 'with nothing said about why' is checked only inside the scope section, because the test interface cannot observe a message elsewhere on the screen. That part of the criterion has no not-testable entry naming it, so the first passing run would mark the whole criterion as tested. The ruling changes to approve once the scope section is read without swallowing errors and that part of the criterion has its own entry.
+conditions:
+  - "tests/acceptance/content/R-7.29.spec.ts: read surface.opportunitySwuView.scopeSection() directly rather than through readOrEmpty, so an error thrown by the adapter (including an 'unbound:' error) fails or reports the test instead of becoming an empty string that passes the toBe(\"\") check. readOrEmpty may stay on the five presence checks, which need a non-empty value to pass."
+  - "tests/acceptance/not-testable.yaml: add an R-7.29 entry with a clause naming 'with nothing said about why' as it applies to the Sprint With Us opportunity screen outside its scope section. Its reason should say that the surface offers no observation for an explanatory message elsewhere on opportunitySwuView. Its owner should be contract, and its missing field should say what observation would let a test assert it."
+cost: 0.3715840000000001
+turns: 4
+session: "4c22d022-0ef8-4df4-b4c8-18bda2f09cd2"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-02T23:46:09.014Z
