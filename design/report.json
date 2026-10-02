@@ -1,7 +1,7 @@
 {
-  "generated": "2026-10-02T01:39:17.918Z",
+  "generated": "2026-10-02T17:11:35.926Z",
   "axe": "4.13.0",
-  "catalogue": "3eedbb76f924cb81e3291f5ed6370cdc125508b8087204d907ea090370521861",
+  "catalogue": "9aebcdc378f6e629d9b5fb59c47f9845ccd3a38d68fbc542d780c21db843c5ec",
   "ok": true,
   "messages": [],
   "compile": [
@@ -1380,6 +1380,24 @@
       "violations": []
     },
     {
+      "id": "opportunities-opportunity-history-request-default--default",
+      "title": "opportunities/opportunity-history-request/default",
+      "file": "./catalogue/opportunity-history-request.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-history-request-refused--refused",
+      "title": "opportunities/opportunity-history-request/refused",
+      "file": "./catalogue/opportunity-history-request.refused.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-history-request-withheld--withheld",
+      "title": "opportunities/opportunity-history-request/withheld",
+      "file": "./catalogue/opportunity-history-request.withheld.stories.tsx",
+      "violations": []
+    },
+    {
       "id": "opportunities-opportunity-list-default--default",
       "title": "opportunities/opportunity-list/default",
       "file": "./catalogue/opportunity-list.default.stories.tsx",
@@ -1413,6 +1431,18 @@
       "id": "opportunities-opportunity-program-select-not-found--not-found",
       "title": "opportunities/opportunity-program-select/not-found",
       "file": "./catalogue/opportunity-program-select.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-status-request-default--default",
+      "title": "opportunities/opportunity-status-request/default",
+      "file": "./catalogue/opportunity-status-request.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-status-request-refused--refused",
+      "title": "opportunities/opportunity-status-request/refused",
+      "file": "./catalogue/opportunity-status-request.refused.stories.tsx",
       "violations": []
     },
     {
@@ -3199,7 +3229,7 @@
     }
   ],
   "totals": {
-    "stories": 530,
+    "stories": 535,
     "violations": 0,
     "failed": 0
   }

@@ -431,11 +431,11 @@ them (see note 24).
 | --- | --- |
 | `Heading` | One H1 per screen, then H2 per section and H3 inside a section. Levels follow the outline. |
 | `Text` | Body copy. `size="small" color="secondary"` is used for the program line above an H1, the opportunity ID, captions and group ordering notes. `color="danger"` is used only for the group-level errors (phases, weights), which also appear in the error summary. |
-| `Button` | Every command. `primary` is used once per view for the next step (Submit for review, Publish, Finalize consensus scores, Start team scenario, Save changes, Add addendum, Add note). `secondary` is used for Edit, Save draft and "Add a …" repeaters. `secondary` with `danger` is used for Delete and Cancel opportunity. `tertiary size="small"` is used to remove one repeated item. |
+| `Button` | Every command. `primary` is used once per view for the next step (Submit for review, Publish, Finalize consensus scores, Start team scenario, Save changes, Add addendum). `secondary` is used for Edit, Save draft and "Add a …" repeaters. `secondary` with `danger` is used for Delete and Cancel opportunity. `tertiary size="small"` is used to remove one repeated item. |
 | `ButtonGroup` | The manage page's action bar (`ariaLabel="Opportunity actions"`), and each form's submit row. |
 | `Link` | Navigation: opportunity titles, manage-page tabs, and the dashboard's rows. `isButton` is used where navigation should look like a command (Browse opportunities, Sign in, Create an opportunity, the program choices, Start a proposal, Manage this opportunity). |
 | `TextField` | Title, location, and the list's `type="search"` box. |
-| `TextArea` | Teaser, remote-work description, description, question and guideline, the addendum, the private note, and the cancellation note. `maxLength` is always the limit the criterion states. |
+| `TextArea` | Teaser, remote-work description, description, question and guideline, the addendum, and the cancellation note. `maxLength` is always the limit the criterion states. |
 | `NumberField` | Reward and budgets (`formatOptions` currency CAD, narrow symbol, no decimals), scores, word limits, weights and allocations. **No `minValue`/`maxValue`.** The limits are stated in the description and checked on submit, so a field never silently changes what somebody typed, and the rejection the criteria describe can be shown. |
 | `DatePicker` | The proposal deadline, assignment, start and completion dates, and each phase's dates. |
 | `Select` | Program and status filters. Skills use `selectionMode="multiple"`. Also the service area and each panel member. |
@@ -625,10 +625,18 @@ opening button when the dialog closes, and Escape dismisses it.
 | Cancel opportunity | `destructive` | "Cancel opportunity" (`opportunity-cancel-confirm`) | Keep opportunity (`opportunity-dialog-cancel`); optional "Note" `TextArea`, up to 1,000 characters (R-1.28) |
 | Delete | `destructive` | "Delete opportunity" (`opportunity-delete-confirm`) | Cancel (`opportunity-dialog-cancel`) |
 
-The addendum and the private note do not ask first. The screen states each one's consequence in a
-sentence before its button: an addendum cannot be removed and notifies watchers, proponents and
-the author (R-1.32, R-1.35), and a note is private (R-1.33). Submit for review does not ask
-either. See gap 10 for what this means for the surface.
+The addendum does not ask first. The screen states its consequence in a sentence before its
+button: an addendum cannot be removed and notifies watchers, proponents and the author (R-1.32,
+R-1.35). Submit for review does not ask either. See gap 10 for what this means for the surface.
+
+**No screen adds a private note** (R-1.33 v2). The service accepts a private note, with files, on a
+Code With Us or Sprint With Us opportunity's history, but the criterion states that no screen of
+the application offers a way to add one. The History tab therefore shows notes already in the
+history (one row each, kind "Note", visible only to the author and administrators) and offers no
+form, field, attachment trigger or button for writing one. A note is reached only through
+`opportunity-history-request` or the seed. No story renders `history-add-note-button` or
+`note-text-field`, and a build must not render them, because R-1.33 v2 says no screen offers the
+control.
 
 ### Immediate saves: Watch
 
@@ -726,7 +734,7 @@ The following bindings are not obvious from their names:
 - `run_pending_transitions` is bound to `service-status-page`, the wrapper of the page `/status`
   returns. Requesting the address is the action, and the wrapper shows the request landed.
 - `add_attachment` is `attachment-add-button`. It is used wherever this domain places the
-  attachment trigger (the create forms, the Opportunity tab and the history note).
+  attachment trigger (the create forms and the Opportunity tab; the History tab has none, R-1.33).
 - `opportunity-watch-request`: `watch_by_request` is `opportunity-watch-request-watch`,
   `stop_watching_by_request` is `opportunity-watch-request-stop`, `request_accepted` is
   `opportunity-watch-request-accepted`, `refusal_status` is
@@ -748,7 +756,7 @@ status is shown.
 buttons (`opportunity-publish-confirm`, `opportunity-cancel-confirm`, `opportunity-delete-confirm`,
 `opportunity-dialog-cancel`), the dialogs themselves (`opportunity-*-dialog`), form fields
 (`opportunity-title-field` and the like), `opportunity-save-changes`, `opportunity-cancel-edit`,
-`addendum-text-field`, `note-text-field`, `opportunity-cancel-note-field`,
+`addendum-text-field`, `opportunity-cancel-note-field`,
 `opportunity-incomplete-message` and `advance-refused-message`.
 
 ### Per-screen notes
@@ -798,8 +806,8 @@ attachment list in the Description section.
 Summary with reporting counts), `draft` (the author: Submit for review, Delete, no counts),
 `under-review` (an administrator: Publish, Delete), `editing` (the Opportunity tab as a form, with
 a sentence that saving notifies watchers, proponents and the author, R-1.4, R-1.35), `incomplete`
-(R-1.21), `addenda-tab`, `history-tab` (the history, newest first; Code With Us and Sprint With Us
-add the private note form, R-1.33, and Team With Us has none), `publish-confirm`, `cancel-confirm`,
+(R-1.21), `addenda-tab`, `history-tab` (the history, newest first, including any private note the
+service holds; no program offers a way to add a note, R-1.33 v2), `publish-confirm`, `cancel-confirm`,
 `delete-confirm`, `not-found`, `loading`.
 
 Sprint With Us and Team With Us also have `consensus` (Finalize consensus scores offered, R-1.50,
@@ -832,6 +840,28 @@ their own.
 reference above. `default` shows an administrator's reading of the view count (the number is
 illustrative), and says that a missing counter reads as 0. `refused` shows a vendor or a request
 with no session refused as not permitted, as the surface states (R-1.6).
+
+**opportunity-history-request** — `default`, `withheld`, `refused`. A request address, laid out as
+the response reference above. `default` shows the author or an administrator adding a note with a
+file and the history read back with the note in it (R-1.33). `withheld` shows a vendor or a reader
+with no session reading the opportunity and getting no history at all; it is its own state because
+`history_shown` is false there and nothing is asked. `refused` shows a vendor's note refused, with
+the history unchanged. IDs: `add_note_by_request` is `opportunity-history-request-add-note`,
+`history_shown` is `opportunity-history-request-history-shown`, `history_entries` is
+`opportunity-history-request-entries` (an ordered list), `request_accepted` is
+`opportunity-history-request-accepted`, `refusal_status` is
+`opportunity-history-request-refusal-status` and `refusal_messages` is
+`opportunity-history-request-refusal-messages`. As with the watch request, an adapter reads the
+response, not markup.
+
+**opportunity-status-request** — `default`, `refused`. A request address, laid out the same way.
+`default` shows an administrator's change on the permitted path accepted and the stored status read
+afresh; `refused` shows an awarded opportunity asked back to published, refused, with the stored
+status unchanged (R-1.20). IDs: `request_status_change` is `opportunity-status-request-change`,
+`request_accepted` is `opportunity-status-request-accepted`, `refusal_status` is
+`opportunity-status-request-refusal-status`, `refusal_messages` is
+`opportunity-status-request-refusal-messages` and `stored_status` is
+`opportunity-status-request-stored-status`.
 
 ### Gaps
 
@@ -889,9 +919,9 @@ had to show something, the story marks it as illustrative or placeholder.
     table above changes. Whether an author may still edit an opportunity under review is not
     stated either (R-1.56 covers only published ones), so the design offers the author nothing
     there.
-17. **Private notes on Team With Us** (R-1.33's note). The design follows the criterion, so there
-    is no note on Team With Us. If that is ruled a gap to close, the Team With Us History tab takes
-    the same note form as the other two programs.
+17. **Private notes on Team With Us** (R-1.33's note). The service accepts no note on Team With
+    Us at all, and R-1.33 v2 says no screen adds one on any program, so no History tab carries a
+    note form. If Team With Us is ruled a gap to close, that is a service change, not a screen.
 18. **A proponent's contact details and score on an awarded opportunity** (R-1.27). They are shown
     to those permitted, but the surface has no observation for them and no criterion says where
     they go. The design puts them under "Successful proponent" for permitted viewers. There is no
@@ -937,6 +967,9 @@ had to show something, the story marks it as illustrative or placeholder.
     opportunity. The duplicate refusal's message, and the status each refusal is answered with,
     are not stated, so the `refused` story shows the own-opportunity case and names the status as
     unstated.
+28. **Refusals on the history and status requests.** Neither R-1.33 nor R-1.20 states the status a
+    refused note or a refused status change is answered with, or the words of the "general
+    permission message". The `refused` stories name both as unstated.
 
 ---
 

@@ -146,6 +146,10 @@ screens:
     states: [default, refused]
   - page: opportunity-counters
     states: [default, refused]
+  - page: opportunity-history-request
+    states: [default, withheld, refused]
+  - page: opportunity-status-request
+    states: [default, refused]
 
   # organizations domain — see design/DESIGN.md, "Domain: organizations"
   - page: organization-list

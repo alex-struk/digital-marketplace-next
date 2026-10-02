@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>design-opportunities-5 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">493</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">487</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">410</span></a></li><li><a href="../runs.html">Run log <span class="count">20</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>design-opportunities-5</h1>
+<p class="lede">G-DESIGN · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G-DESIGN</td></tr><tr><th scope="row">opened</th><td>2026-10-02 17:14</td></tr><tr><th scope="row">holder</th><td>agent:ux-reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these screens serve the opportunities criteria, and are they built out of the design system?</h2>
+<p><strong>Recommendation.</strong> I made one change in this revision: the opportunities section of <code>design/DESIGN.md</code> no longer contains gap 29.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I made one change in this revision: the opportunities section of <code>design/DESIGN.md</code> no longer contains gap 29. The ruling said design only had to drop that gap. Nothing else needed changing.</p>
+<p><strong>What changed.</strong> I deleted gap 29, the note that <code>add_note</code> was still on the manage pages&#39; surface, from the end of the gap list. Gaps 1 to 28 are as they were. I also rewrote the paragraph under &quot;No screen adds a private note&quot;. It no longer points to gap 29 or says the surface still lists <code>add_note</code>. It now only states the design rule:</p>
+<ul><li>The History tab shows notes already in the history and offers no form for adding one.</li><li>A note is added only through <code>opportunity-history-request</code> or the seed.</li><li>A build must not render <code>history-add-note-button</code> or <code>note-text-field</code>, because R-1.33 v2 says no screen offers that control.</li></ul>
+<p>No other screen, story, state, test ID or <code>design/screens.yaml</code> entry was touched.</p>
+<p><strong>Not done here, and why.</strong> In this workspace, <code>spec/contract/surface.yaml</code> still lists <code>add_note: { test_id: history-add-note-button }</code> on both <code>opportunity-cwu-edit</code> and <code>opportunity-swu-edit</code>. The ruling sends that removal to the contract stage, and design may only fill in test IDs, so I left both entries alone. Until contract removes them, the surface declares an action that no story renders, and R-1.33 stays untestable. The ruling said approval would follow as-is only if contract had already removed <code>add_note</code>. Here it has not, so this proposal still depends on that change.</p>
+<p>Nothing else was left undone:</p>
+<ul><li><strong>Other stages:</strong> build&#39;s open request build-slice-9-3#6 is outside this revision, so I left it alone.</li><li><strong>People:</strong> the ruling has no conditions addressed to a person.</li><li><strong>Read-only paths:</strong> nothing asked for a change under spec, <code>constitution.md</code> or <code>.claude/skills</code>.</li></ul>
+<h3>Fix turn</h3>
+<p>I removed <code>add_note</code> from the Code With Us and Sprint With Us manage pages, and that is the only change I made this run.</p>
+<p><strong>What I changed:</strong> I deleted the <code>add_note</code> line, bound to <code>history-add-note-button</code>, from <code>opportunity-cwu-edit</code> and <code>opportunity-swu-edit</code> in <code>spec/contract/surface.yaml</code>. Both checks had reported that the design gate changed those two pages&#39; actions. The ruling said its approval would stand if contract had already removed <code>add_note</code>. The likeliest reading of the two failures is that contract has removed it, so my copy of the surface, which still had it, now differed from the ruled one. I had no copy of the contract&#39;s version to compare against, so this is inferred, not confirmed. Nothing else on those pages changed; the routes, the other actions and the observations are as they were.</p>
+<p>Gap 29 was already gone from <code>design/DESIGN.md</code>, so it needed no edit. The DESIGN.md text saying no screen adds a private note (R-1.33 v2) still holds, and no story or screen changed.</p>
+<p><strong>Left for contract:</strong> the ruling asked contract to keep <code>add_attachment</code> on both pages, but neither page in my copy has that action. Adding an action is not something the design gate may do, so I left the pages without it; contract should check whether they should have it.</p>
+<p><strong>Left for build:</strong> <code>build-slice-9-3#6</code> is still open with build, as the ruling says. No condition was addressed to a person, so I left none for anyone.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:ux-reviewer (persona agent · claude claude-opus-5-5) on 2026-10-02 17:16.</p>
+<div class="body"><p>The question is whether these opportunities screens serve their criteria and are built from the design system. I approve. The History tabs of opportunity-cwu-edit and opportunity-swu-edit no longer carry the private-note form, which matches R-1.33 v2 (the service accepts a note, but no screen offers a way to add one). The screenshots show the history table with existing notes and no form, field, attachment trigger or Add note button, and no story renders history-add-note-button or note-text-field. DESIGN.md says the same in its component table, dialog notes, per-screen notes and gaps 17 and 28. The branch&#39;s surface.yaml has no add_note action, and the diff against main deletes none, so it matches the contract stage&#39;s removal that the last ruling made its approval depend on. The five new request-reference stories (opportunity-history-request default/withheld/refused, opportunity-status-request default/refused) use only design-system Heading and Text inside the shared PageContainer and Stack, styled with tokens, and in the screenshots they line up with the banner and are evenly spaced. Every surface test_id the diff touches was null before, so no filled ID was changed. The report shows 535 stories with 0 accessibility violations. build-slice-9-3#6 (removing NoteForm from the app) belongs to build and is not settled here, so it stays open. Whether the manage pages should carry add_attachment is the contract stage&#39;s question. The ruling would change on a hand-built component the design system provides, any accessibility violation, or add_note returning to the surface.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

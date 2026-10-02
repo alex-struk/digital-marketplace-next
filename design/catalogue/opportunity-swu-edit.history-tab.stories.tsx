@@ -1,10 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { FileTrigger } from "react-aria-components";
-import { Button, ButtonGroup, Form, Heading, Link, Text, TextArea } from "@bcgov/design-system-react-components";
+import { Button, ButtonGroup, Heading, Link, Text } from "@bcgov/design-system-react-components";
 import { PageContainer, Stack } from "./layout";
 
-// opportunity-swu-edit · history-tab — every change of state and every event, and a private note with an attachment
-// being added (R-1.4, R-1.30, R-1.32, R-1.33)
+// opportunity-swu-edit · history-tab — every change of state and every event, including a private note the service
+// accepted by request; no screen offers a way to add one (R-1.4, R-1.30, R-1.32, R-1.33)
 const meta: Meta = { title: "opportunities/opportunity-swu-edit/history-tab" };
 export default meta;
 
@@ -84,21 +83,6 @@ export const HistoryTab: StoryObj = {
               </tbody>
             </table>
           </div>
-          <Form validationBehavior="aria">
-            <Stack gap="medium">
-              <Heading level={3}>Add a private note</Heading>
-              <Text elementType="p">Notes are private. Only this opportunity's author and administrators can see them.</Text>
-              <TextArea label="Note" isRequired maxLength={1000} description="Up to 1,000 characters." data-testid="note-text-field" />
-              <div>
-                <FileTrigger>
-                  <Button variant="secondary" data-testid="attachment-add-button">Add attachment</Button>
-                </FileTrigger>
-              </div>
-              <div>
-                <Button type="submit" variant="primary" data-testid="history-add-note-button">Add note</Button>
-              </div>
-            </Stack>
-          </Form>
         </Stack>
       </Stack>
     </PageContainer>

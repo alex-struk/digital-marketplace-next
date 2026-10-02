@@ -2510,19 +2510,19 @@ pages:
       # update operation asking to add a note, as the signed-in person. Accepted from an
       # administrator or the opportunity's author in any status; the text may be up to
       # 1,000 characters.
-      add_note_by_request: { test_id: null }
+      add_note_by_request: { test_id: opportunity-history-request-add-note }
     observations:
       # Whether the answer carries a history at all. False for a reader the service does
       # not show it to; the answer is otherwise the opportunity as usual.
-      history_shown: { test_id: null }
+      history_shown: { test_id: opportunity-history-request-history-shown }
       # The history, newest first, one entry per row: its kind (a status, or an event —
       # NOTE_ADDED for a note), its text, who made it (by name) and when, and the names
       # and identifiers of the files attached to it. Empty when history_shown is false.
-      history_entries: { test_id: null }
+      history_entries: { test_id: opportunity-history-request-entries }
       # Whether the service accepted add_note_by_request, and the refusal when it did not.
-      request_accepted: { test_id: null }
-      refusal_messages: { test_id: null }
-      refusal_status: { test_id: null }
+      request_accepted: { test_id: opportunity-history-request-accepted }
+      refusal_messages: { test_id: opportunity-history-request-refusal-messages }
+      refusal_status: { test_id: opportunity-history-request-refusal-status }
 
   # A request to move an opportunity to a named status, sent to the service's update
   # operation as whoever is signed in, so that a change no screen offers — out of an
@@ -2557,15 +2557,15 @@ pages:
     title: "An opportunity status change, by request"
     actions:
       # Input: { status } — one of the statuses above.
-      request_status_change: { test_id: null }
+      request_status_change: { test_id: opportunity-status-request-change }
     observations:
       # Whether the service accepted the request (a successful answer carrying the
       # opportunity).
-      request_accepted: { test_id: null }
+      request_accepted: { test_id: opportunity-status-request-accepted }
       # The status code of a refused request; empty when accepted.
-      refusal_status: { test_id: null }
+      refusal_status: { test_id: opportunity-status-request-refusal-status }
       # The refusal's messages, in the order the service gives them. Empty when accepted.
-      refusal_messages: { test_id: null }
+      refusal_messages: { test_id: opportunity-status-request-refusal-messages }
       # The opportunity's status as the service holds it, read afresh after the request
       # (as the signed-in person) rather than taken from the request's answer.
-      stored_status: { test_id: null }
+      stored_status: { test_id: opportunity-status-request-stored-status }
