@@ -31,3 +31,23 @@ The service's own update operation, `updateCodeWithUsOpportunity` in `openapi.ya
 With that page in place, the test would be short: sign in as the administrator, ask an awarded opportunity to go back to published (or a new draft to jump to an evaluation stage), and check that the request is refused and the status hasn't changed.
 
 **Not checked:** I couldn't parse the edited YAML to confirm it is valid, because the command that would have checked it needed an approval nobody was here to give. The entry follows the indentation and quoting of the entries above it. I touched no paths outside this stage's own.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: do the opportunities tests follow from their criteria and nothing else? This run's only criterion is R-1.20 (v1): a state change outside the program's permitted path is refused and the state is unchanged. The proposal deletes the earlier R-1.20 test, which the prior ruling returned as test-overreaches because it depended on the edit screen still offering Publish or Submit for review after cancelling, and records R-1.20 as blocked in tests/acceptance/not-testable.yaml with owner contract. The reason is real. The generated surface's requests section covers watching, affiliations, user lists, content, evaluations, proposals and user accounts, and none of those pages asks for an opportunity's status to change. The only state-change actions are the controls on the three edit screens, and a screen satisfies the criterion just as well by not offering the control, so a test built on those controls would test the screen rather than the criterion. The missing field names what the surface lacks: a request page that sends the service's update operation for a named target status, observations of the service's answer and the stored status afterwards, and a seeded cancelled opportunity. The checks already show the criterion's missing test as owed by contract, so it stays unverified until that page exists and a test written against it binds and passes. No test asserts anything the criterion does not say, because no test remains. The proposal touches no protected path and no path outside the derive-tests stage's own. The tier is STANDARD and no residual risk is marked unaccepted. I could not parse the YAML by machine; by eye the entry matches the structure of the entries before it. This proposal does not settle build-slice-9-3#6, so it stays open. The ruling would change if the surface already offered a request that changes an opportunity's status, in which case the writer could assert the criterion and this would be a return; or if the blocked entry's missing field named something the contract stage could not supply.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `84b4ff41138a8a80f49bd8b0422c94d1f5ec4492`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/opportunities/`, which this proposal answers for.
+
+    No diagnostics.
