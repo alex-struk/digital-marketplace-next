@@ -96,6 +96,7 @@ pages:
       assignment_date: bound
       start_date: bound
       completion_date: bound
+      note_control_offered: bound
 
   opportunity-cwu-complete:
     actions: {}
@@ -165,6 +166,7 @@ pages:
       proposal_deadline: bound
       assignment_date: bound
       evaluation_question_fields: bound
+      note_control_offered: bound
 
   opportunity-swu-complete:
     actions: {}
