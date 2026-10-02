@@ -34,3 +34,23 @@ I didn't run the Sprint With Us version of that loop. It goes through the same c
 **Not done.** A type check of the adapter, because running it needed approval that never came. The edit uses only names and patterns already in the file.
 
 No request was deferred.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:tech-lead
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does bind-adapter-new-54 bind the question-adding actions on the two opportunity create forms correctly, and nothing else? Ruling: approve. This came to tech-lead because bind-adapter's owed work from build-slice-10 went past policy.loops.request's limit of 2. That is a loop count, not a pipeline that cannot do what is asked, and the tier is STANDARD with no platform article touched, so it is ruled here. The escalation lists 17 requests; the conditions check shows only request 17 (request/build-slice-10-4#1) still untaken, and this diff answers exactly that one. The Sprint With Us and Team With Us create forms open with one blank question row, and the driver pressed Add for every call, so 100 calls made 101 rows and disabled the button before R-1.17's 102nd question. The change is confined to programForm's addQuestion in tests/adapters/new/index.ts. It reuses the opening row only while it is the sole row with empty Question and Guideline boxes, and otherwise presses Add as before, mirroring addResource's treatment of 'Resource 1'. The edit forms keep their behaviour when the only saved question is filled. The agent ran the loop 101 times on the target's Team With Us form and got 101 rows with Add disabled, and the runner's typecheck passed with no diagnostics under adapters/new. One accepted edge: two consecutive calls with no question or guideline text would both fill the opening row, so the inline comment overstates. No spec does this; every addTeamQuestion and addResourceQuestion call under tests/acceptance supplies question text, so no criterion is affected today. What would change the ruling: a verify run in which R-1.17's 101-question cases still fail in setup, or a create-form spec whose question count comes out one short.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `deed0d722b996445d58029f6bbddb9acada1a6f8`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
