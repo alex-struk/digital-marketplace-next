@@ -5,6 +5,10 @@
 - 17:07:46 run design: ok, cost 3.8247532, turns 112, on claude claude-opus-5-5 (2.1.284 (Claude Code))
 - 17:07:46 propose design-files-2 at G-DESIGN
 - 17:08:44 rule design-files-2 approve at G-DESIGN by agent:ux-reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 17:08:51 deviation: next named `sdlc run verify --slice 8`; ran `sdlc run design --domain notifications`; reason: The pipeline's layout rules changed (docs/decisions/0086 in the pipeline; see "Layout" in your instructions). This domain's screens were designed before them. Bring every story of this domain into line: define the page container and the stack once in design/catalogue/layout.tsx (or reuse them if another domain already defined them there), list them in DESIGN.md among the project's own components, and lay out each of this domain's stories with them, so content sits in the container and spacing comes only from the stack with the design system's own Text and Heading margins removed. No story sets its own width, outer padding or gaps. Change layout only: keep every page, every state, every test_id, every component choice and all wording exactly as they are. This run is ordered by the tech lead's decision on 2026-10-01 to bring every approved design into line with the layout rule before more slices are built or verified, since every later build copies its screens from the catalogue.
+- 17:20:53 run design: ok after a fix turn, cost 2.3038638000000002, turns 60, on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 17:20:53 propose design-notifications-2 at G-DESIGN
+- 17:22:03 rule design-notifications-2 approve at G-DESIGN by agent:ux-reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-10-01
 

@@ -51,7 +51,9 @@ type StackProps = Omit<HTMLAttributes<HTMLElement>, "style" | "className"> & {
   gap?: Gap;
   // A row lays its items side by side and always wraps, so nothing is pushed off a 320-pixel screen.
   direction?: "column" | "row";
-  align?: "start" | "center" | "baseline";
+  // `end` lines a row's controls up on their bottom edge, so fields with labels above and a checkbox without one sit
+  // on one line (a filter row).
+  align?: "start" | "center" | "baseline" | "end";
   justify?: "start" | "space-between";
   children: ReactNode;
 };

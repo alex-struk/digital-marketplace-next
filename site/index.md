@@ -421,6 +421,7 @@ Profile: rebuild
 - [design-files-2](proposals/design-files-2.md)
 - [design-harness-v1](proposals/design-harness-v1.md)
 - [design-notifications](proposals/design-notifications.md)
+- [design-notifications-2](proposals/design-notifications-2.md)
 - [design-opportunities](proposals/design-opportunities.md)
 - [design-opportunities-2](proposals/design-opportunities-2.md)
 - [design-organizations](proposals/design-organizations.md)
@@ -482,10 +483,10 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $794.141848
-- Rulings cost: $433.883671
-- Total cost: $1228.025519
-- Agent-held rulings: 409
+- Journal cost: $796.445712
+- Rulings cost: $434.590403
+- Total cost: $1231.036115
+- Agent-held rulings: 410
 - Runner rulings (automatic, no seat held): 22
 - Human rulings: 21
 - Rulings whose seat this page does not recognise: 0
