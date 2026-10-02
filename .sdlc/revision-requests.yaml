@@ -575,3 +575,29 @@ requests:
     at: 2026-10-02T02:27:44.240Z
     taken: 2026-10-02T02:28:56.777Z
     taken_by: plan-16
+  - stage: bind-adapter
+    target: new
+    why: the opportunity list's group readers (unpublishedGroup, openGroup,
+      closedGroup) look for headings reading "Unpublished opportunities", "Open
+      opportunities" and "Closed opportunities". The catalogue's
+      opportunity-list stories (default and staff) and the application head the
+      groups "Unpublished", "Open" and "Closed", so every group reads as empty
+      and R-1.3 and R-1.38 fail with an empty string. Read the groups by the
+      headings the application shows.
+    from: build-slice-8-6
+    gate: G3
+    by: tech-lead
+    at: 2026-10-02T05:05:30.938Z
+  - stage: bind-adapter
+    target: new
+    why: content-service-level-agreement-link.answer_at_link_target looks for the
+      service level agreement link again after
+      follow_service_level_agreement_link has already navigated to the page it
+      leads to. That page carries no such link, so the reader returns an empty
+      string, and R-7.18 fails although /content/service-level-agreement answers
+      with the page (its title, dates, body and address are all in main). Read
+      the answer from the page the link led to.
+    from: build-slice-8-6
+    gate: G3
+    by: tech-lead
+    at: 2026-10-02T05:05:30.938Z
