@@ -1,0 +1,20 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does the bind-adapter-new-40 adapter bind every surface action and observation on the new target, and nothing else? Ruling: return. The revision does what bind-adapter-new-39 asked. The Sprint With Us and Team With Us management screens are bound with a shared helper that only navigates and locates. Each member left unbound names what the screen, walked in the seeded states, does not offer. filter_by_status and toggle_watch are bound after a signed-in walk. The Code With Us bindings and the refusedReader handling are kept. Nothing under tests/acceptance changed, and the runner's typecheck passed. It cannot be approved because this same diff rewrites every unbound reason on opportunity-swu-create and opportunity-twu-create to say the current build answers those routes with 'Page not found', while the proposal states that both create screens open and that it saved a draft from each. An unbound reason must be true. Second, opportunity-list.filter_by_program, filter_remote_only and search are recorded as bound, but their locators look for controls the author reports the page no longer has: a 'Filter Opportunities' combobox, a 'Remote OK' checkbox and a 'Search by Title or Location' textbox (index.ts:3386, 3423, 3434). A bound status that will report unbound when the suite runs is not a binding. What would change the ruling: the two create pages walked and bound, or their reasons replaced with what those screens actually lack; and the three list bindings repointed to the controls the list now renders, or marked unbound with a true reason.
+conditions:
+  - "condition-met bind-adapter-new-39#1: opportunity-swu-edit and opportunity-twu-edit are bound through programManage in tests/adapters/new/index.ts (cancel_opportunity, add_addendum, add_note on Sprint With Us only, identifier, created/last-changed names, the summary, addenda and history tabs, proposal_deadline, assignment_date, and offered_state_changes on Team With Us). Each remaining member in tests/adapters/new/bindings.yaml names what the screen does not offer and the seeded states walked (00000000-0000-4000-8000-000000000701 and 00000000-0000-4000-8000-000000000801 among them)."
+  - "condition-met bind-adapter-new-39#2: opportunity-list.filter_by_status and toggle_watch were re-walked signed in and bound: the 'Status' chooser in the 'Filter opportunities' search group, and the per-card 'Watch <title>' checkbox, with refusals logged for the reader's own cards and for signed-out visitors (tests/adapters/new/index.ts filterByStatus/toggleWatch; bindings.yaml opportunity-list)."
+  - "condition-met bind-adapter-new-39#3: the Code With Us cancel_opportunity, add_addendum, add_note and reporting_views/watchers/proposals bindings and refusedReader are unchanged from bind-adapter-new-39 in tests/adapters/new/index.ts."
+  - "tests/adapters/new: walk /opportunities/sprint-with-us/create and /opportunities/team-with-us/create signed in as the administrator and as a public sector employee. This proposal reports that both open and that it saved a draft from each. Bind the members of opportunity-swu-create and opportunity-twu-create, or replace each unbound reason, which now says the current build answers those routes with 'Page not found', with what the create screen actually does not offer."
+  - "tests/adapters/new: rebind opportunity-list.filter_by_program, filter_remote_only and search to the controls the list renders on the current build. This proposal reports an 'All programs / Program' button, a 'Remote work accepted only' checkbox and a search box of the searchbox role, where the code still looks for a 'Filter Opportunities' combobox, a 'Remote OK' checkbox and a 'Search by Title or Location' textbox. Alternatively, mark each unbound with a reason naming what the list does not offer. Also update the stale opportunity-list comment in bindings.yaml."
+cost: 0.6006484
+turns: 3
+session: "dbd9d915-397c-460b-b85b-1cf1e1e1832f"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-02T09:48:29.864Z
