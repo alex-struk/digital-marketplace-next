@@ -3,9 +3,12 @@ import { FileTrigger } from "react-aria-components";
 import { Button, ButtonGroup, Form, Heading, InlineAlert, Link, Text, TextField } from "@bcgov/design-system-react-components";
 import { PageContainer, Stack } from "./layout";
 
-// organization-edit · invalid — the owner cleared the city and typed a malformed website; each field says what is
-// wrong, the list before the buttons repeats it, and Save stays unavailable until both are fixed (R-3.22)
-const meta: Meta = { title: "organizations/organization-edit/invalid" };
+// organization-edit · logo-refused — the owner chose "northwind.gif" through the chooser's "all files" option and
+// saved. The logo is refused because its name does not end in .jpg, .jpeg or .png (R-8.30); a file whose name is
+// allowed but whose content is not a JPEG or PNG image is refused in the same place (R-8.21). Nothing is stored, the
+// stored logo is kept, the form stays open with what was typed, and focus moves to the message. The picker is the files
+// domain's image picker with "Logo" in place of "Profile picture".
+const meta: Meta = { title: "organizations/organization-edit/logo-refused" };
 export default meta;
 
 const badge = {
@@ -14,10 +17,12 @@ const badge = {
   border: "var(--layout-border-width-small) solid var(--surface-color-border-medium)",
   borderRadius: "var(--layout-border-radius-circular)",
 } as const;
+// Keeps a logo inside its column. Not spacing: the files domain's image rule (see DESIGN.md, files, gap 11).
+const image = { maxWidth: "100%", height: "auto" } as const;
 const orgId = "4a9e1c20-6d3b-4f1a-8e2c-000000000201";
 const base = `/organizations/${orgId}/edit`;
 
-export const Invalid: StoryObj = {
+export const LogoRefused: StoryObj = {
   render: () => (
     <PageContainer>
       <Stack gap="large">
@@ -27,6 +32,7 @@ export const Invalid: StoryObj = {
         </Stack>
         <Stack direction="row" align="center" gap="medium">
           <span style={badge} data-testid="organization-swu-qualified-badge">Sprint With Us qualified</span>
+          <span style={badge} data-testid="organization-twu-qualified-badge">Team With Us qualified</span>
           <Text elementType="p" size="small" color="secondary">
             Organization ID: <span data-testid="organization-identifier">{orgId}</span>
           </Text>
@@ -44,27 +50,38 @@ export const Invalid: StoryObj = {
           <Stack gap="medium">
             <Heading level={2} id="tab-heading">Edit organization</Heading>
             <Text elementType="p">Fields not marked “(optional)” are required.</Text>
-            <Text elementType="p" size="small" color="secondary">No logo has been added.</Text>
-            <div>
-              <FileTrigger acceptedFileTypes={["image/*"]}>
-                <Button variant="secondary" data-testid="organization-logo-button">Choose a logo (optional)</Button>
+            <Stack role="group" aria-labelledby="logo-label" gap="small" align="start">
+              <Text elementType="p" id="logo-label">Logo (optional)</Text>
+              <img
+                src="/api/files/5b2e0c3a-8d41-4f6e-a1c2-000000000811?type=blob"
+                alt="Northwind Digital Co-operative logo"
+                style={image}
+              />
+              <div data-testid="organization-logo-refused-error" tabIndex={-1}>
+                <InlineAlert variant="danger" role="alert" title="northwind.gif cannot be used as a logo">
+                  <Text elementType="p">
+                    Choose a JPEG or PNG image. Its name must end in .jpg, .jpeg or .png. The current logo has been kept.
+                  </Text>
+                </InlineAlert>
+              </div>
+              <div id="logo-file-rule">
+                <Text elementType="p" size="small" color="secondary">
+                  A JPEG or PNG image, up to 10 MB. A logo wider or taller than 500 pixels is made smaller to fit, keeping its
+                  proportions. Anyone can see the logo, including people who are not signed in.
+                </Text>
+              </div>
+              <FileTrigger acceptedFileTypes={["image/jpeg", "image/png"]}>
+                <Button variant="secondary" aria-describedby="logo-file-rule" data-testid="organization-logo-button">
+                  Choose a different logo
+                </Button>
               </FileTrigger>
-            </div>
+            </Stack>
             <TextField id="org-legal-name" label="Legal name" isRequired maxLength={100} description="Up to 100 characters." defaultValue="Northwind Digital Co-operative" data-testid="organization-legal-name-field" />
-            <TextField
-              id="org-website"
-              label="Website (optional)"
-              type="url"
-              description="The full address, like https://example.com"
-              defaultValue="northwind"
-              isInvalid
-              errorMessage="Enter the full website address, like https://example.com, or leave it blank"
-              data-testid="organization-website-field"
-            />
+            <TextField id="org-website" label="Website (optional)" type="url" description="The full address, like https://example.com" defaultValue="https://northwind.example.com" data-testid="organization-website-field" />
             <Heading level={3}>Address</Heading>
             <TextField id="org-street" label="Street address" isRequired maxLength={100} defaultValue="100 Example Street" data-testid="organization-street-address-field" />
             <TextField id="org-street-2" label="Address line 2 (optional)" maxLength={100} data-testid="organization-address-line-2-field" />
-            <TextField id="org-city" label="City" isRequired maxLength={100} defaultValue="" isInvalid errorMessage="Enter the city" data-testid="organization-city-field" />
+            <TextField id="org-city" label="City" isRequired maxLength={100} defaultValue="Victoria" data-testid="organization-city-field" />
             <TextField id="org-region" label="Province or state" isRequired maxLength={100} defaultValue="British Columbia" data-testid="organization-region-field" />
             <TextField id="org-mail-code" label="Postal code or ZIP code" isRequired maxLength={100} defaultValue="V0V 0V0" data-testid="organization-mail-code-field" />
             <TextField id="org-country" label="Country" isRequired maxLength={100} defaultValue="Canada" data-testid="organization-country-field" />
@@ -80,20 +97,8 @@ export const Invalid: StoryObj = {
               defaultValue="250-555-0100"
               data-testid="organization-contact-phone-field"
             />
-            <div id="org-save-hint">
-              <InlineAlert variant="danger" title="Fix 2 fields to save your changes">
-                <ul>
-                  <li data-testid="field-error">
-                    <Link href="#org-website">Website: enter the full website address, like https://example.com, or leave it blank</Link>
-                  </li>
-                  <li data-testid="field-error"><Link href="#org-city">City: enter the city</Link></li>
-                </ul>
-              </InlineAlert>
-            </div>
             <ButtonGroup ariaLabel="Organization actions">
-              <Button type="submit" variant="primary" isDisabled aria-describedby="org-save-hint" data-testid="organization-save-button">
-                Save changes
-              </Button>
+              <Button type="submit" variant="primary" data-testid="organization-save-button">Save changes</Button>
               <Button variant="secondary" data-testid="organization-cancel-edit-button">Cancel</Button>
             </ButtonGroup>
           </Stack>

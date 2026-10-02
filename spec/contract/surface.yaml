@@ -893,15 +893,15 @@ pages:
       # edit_organization has opened the form; the logo is stored when save_changes is
       # made. The chooser lists only .jpg, .jpeg and .png, but a file with any other ending
       # can still be handed to it, and the service is what refuses it.
-      change_logo: { test_id: null }
+      change_logo: { test_id: organization-logo-button }
     observations:
       # The address of the logo the organization holds, as the page shows it once the form
       # is closed, or empty when it holds none. A refused logo leaves it as it was.
-      current_logo: { test_id: null }
+      current_logo: { test_id: organization-current-logo }
       # The message the form shows against the logo after save_changes is refused for it —
       # on the oracle "Please select a different logo image." — or empty when the logo was
       # accepted.
-      logo_refused_error: { test_id: null }
+      logo_refused_error: { test_id: organization-logo-refused-error }
       organization_identifier: { test_id: organization-identifier }
       organization_tab: { test_id: organization-tab-organization }
       team_tab: { test_id: organization-tab-team }
@@ -2024,9 +2024,9 @@ pages:
     title: "Organizations one may act for"
     actions: {}
     observations:
-      organizations_offered: { test_id: null }
+      organizations_offered: { test_id: organization-acting-for-list-organizations }
       # Answered as not permitted, as distinct from an empty list.
-      refused_when_not_permitted: { test_id: null }
+      refused_when_not_permitted: { test_id: organization-acting-for-list-refused }
 
   # An invitation to join an organization, made as a request so that it can name any
   # membership type.
@@ -2037,13 +2037,13 @@ pages:
     actions:
       # Input: the inviting organization (a seed.organizations handle), the invited
       # person's email address, and the membership type to name.
-      invite_with_membership_type: { test_id: null }
+      invite_with_membership_type: { test_id: affiliation-invitation-request-invite }
     observations:
-      invitation_created: { test_id: null }
-      invalid_membership_type_error: { test_id: null }
+      invitation_created: { test_id: affiliation-invitation-request-created }
+      invalid_membership_type_error: { test_id: affiliation-invitation-request-invalid-membership-type }
       # The identifier of the membership the invitation created, from the service's answer,
       # for affiliation-approval-request.
-      membership_identifier: { test_id: null }
+      membership_identifier: { test_id: affiliation-invitation-request-membership-id }
 
   # Accepting a membership, as a request, so that an acceptance the screens never send can
   # be sent and its answer read. The organizations tab offers accepting only on a pending
@@ -2060,15 +2060,15 @@ pages:
     route: /api/affiliations/:affiliationId
     title: "Accept a membership, by request"
     actions:
-      accept_membership_by_request: { test_id: null }
+      accept_membership_by_request: { test_id: affiliation-approval-request-accept }
     observations:
-      request_accepted: { test_id: null }
+      request_accepted: { test_id: affiliation-approval-request-accepted }
       # The membership's status as the service answers an accepted request (ACTIVE).
-      membership_status: { test_id: null }
+      membership_status: { test_id: affiliation-approval-request-membership-status }
       # The refusal's messages, in the order the service gives them. Empty when the
       # request was accepted.
-      refusal_messages: { test_id: null }
-      refusal_status: { test_id: null }
+      refusal_messages: { test_id: affiliation-approval-request-refusal-messages }
+      refusal_status: { test_id: affiliation-approval-request-refusal-status }
 
   # The list of everyone registered with the service, as the service answers the request
   # for it, whatever the screen shows.

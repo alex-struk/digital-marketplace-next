@@ -1,7 +1,7 @@
 {
-  "generated": "2026-10-02T00:18:13.107Z",
+  "generated": "2026-10-02T00:29:50.047Z",
   "axe": "4.13.0",
-  "catalogue": "a9d2016ff92078d430390b4b3f628b81ec028c0477270a57ffa11449fedce50e",
+  "catalogue": "ee273fe9267d5a4f5183de816f64fd774c64b29ef120498fbec41d74dd04fb01",
   "ok": true,
   "messages": [],
   "compile": [
@@ -17,6 +17,36 @@
     }
   ],
   "stories": [
+    {
+      "id": "organizations-affiliation-approval-request-default--default",
+      "title": "organizations/affiliation-approval-request/default",
+      "file": "./catalogue/affiliation-approval-request.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "organizations-affiliation-approval-request-not-pending--not-pending",
+      "title": "organizations/affiliation-approval-request/not-pending",
+      "file": "./catalogue/affiliation-approval-request.not-pending.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "organizations-affiliation-approval-request-refused--refused",
+      "title": "organizations/affiliation-approval-request/refused",
+      "file": "./catalogue/affiliation-approval-request.refused.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "organizations-affiliation-invitation-request-default--default",
+      "title": "organizations/affiliation-invitation-request/default",
+      "file": "./catalogue/affiliation-invitation-request.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "organizations-affiliation-invitation-request-invalid--invalid",
+      "title": "organizations/affiliation-invitation-request/invalid",
+      "file": "./catalogue/affiliation-invitation-request.invalid.stories.tsx",
+      "violations": []
+    },
     {
       "id": "notifications-caught-message-list-default--default",
       "title": "notifications/caught-message-list/default",
@@ -1650,6 +1680,18 @@
       "violations": []
     },
     {
+      "id": "organizations-organization-acting-for-list-default--default",
+      "title": "organizations/organization-acting-for-list/default",
+      "file": "./catalogue/organization-acting-for-list.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "organizations-organization-acting-for-list-refused--refused",
+      "title": "organizations/organization-acting-for-list/refused",
+      "file": "./catalogue/organization-acting-for-list.refused.stories.tsx",
+      "violations": []
+    },
+    {
       "id": "organizations-organization-create-default--default",
       "title": "organizations/organization-create/default",
       "file": "./catalogue/organization-create.default.stories.tsx",
@@ -1743,6 +1785,18 @@
       "id": "organizations-organization-edit-loading--loading",
       "title": "organizations/organization-edit/loading",
       "file": "./catalogue/organization-edit.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "organizations-organization-edit-logo-refused--logo-refused",
+      "title": "organizations/organization-edit/logo-refused",
+      "file": "./catalogue/organization-edit.logo-refused.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "organizations-organization-edit-logo-stored--logo-stored",
+      "title": "organizations/organization-edit/logo-stored",
+      "file": "./catalogue/organization-edit.logo-stored.stories.tsx",
       "violations": []
     },
     {
@@ -3013,7 +3067,7 @@
     }
   ],
   "totals": {
-    "stories": 499,
+    "stories": 508,
     "violations": 0,
     "failed": 0
   }

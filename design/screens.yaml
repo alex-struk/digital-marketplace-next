@@ -173,6 +173,8 @@ screens:
         changelog,
         not-found,
         loading,
+        logo-stored,
+        logo-refused,
       ]
   - page: organization-swu-terms
     states: [default, accepted, administrator]
@@ -182,6 +184,12 @@ screens:
     states: [default, empty, loading, accept-confirm, decline-confirm, leave-confirm, section-unavailable]
   - page: organization-user-memberships-self
     states: [default, empty, loading, accept-confirm, decline-confirm, leave-confirm, section-unavailable]
+  - page: organization-acting-for-list
+    states: [default, refused]
+  - page: affiliation-invitation-request
+    states: [default, invalid]
+  - page: affiliation-approval-request
+    states: [default, refused, not-pending]
 
   # notifications domain — see design/DESIGN.md, "Domain: notifications"
   - page: notification-unsubscribe-landing
