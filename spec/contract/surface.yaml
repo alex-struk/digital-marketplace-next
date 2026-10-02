@@ -1999,22 +1999,22 @@ pages:
     title: "Watch an opportunity, by request"
     actions:
       # Input: the opportunity's identifier. Always asks to start watching.
-      watch_by_request: { test_id: null }
+      watch_by_request: { test_id: opportunity-watch-request-watch }
       # Input: the opportunity's identifier. Asks to stop watching it.
-      stop_watching_by_request: { test_id: null }
+      stop_watching_by_request: { test_id: opportunity-watch-request-stop }
     observations:
       # The service accepted the last request (the subscription it answers with).
-      request_accepted: { test_id: null }
-      refusal_status: { test_id: null }
+      request_accepted: { test_id: opportunity-watch-request-accepted }
+      refusal_status: { test_id: opportunity-watch-request-refusal-status }
       # The name the refusal is filed under: conflict for a duplicate watch, opportunity
       # for one's own opportunity, notFound, or permissions. Absent when accepted.
-      refusal_reason: { test_id: null }
+      refusal_reason: { test_id: opportunity-watch-request-refusal-reason }
       # The refusal's messages, in the order the service gives them. Empty when accepted.
-      refusal_messages: { test_id: null }
+      refusal_messages: { test_id: opportunity-watch-request-refusal-messages }
       # Whether the signed-in person watches the opportunity, as the service reports it on
       # the opportunity itself (/api/opportunities/:program/<identifier>, its subscribed
       # flag) — independent of the answer to the watch request.
-      watching: { test_id: null }
+      watching: { test_id: opportunity-watch-request-watching }
 
   # The organizations the signed-in person may act on behalf of, as the service answers
   # when asked for them — the list a proposal's organization is chosen from.
@@ -2477,5 +2477,5 @@ pages:
     observations:
       # The count as a whole number. An opportunity never opened has no counter yet, and
       # the service leaves it out of its answer; that reads as 0.
-      view_count: { test_id: null }
-      refused_when_not_permitted: { test_id: null }
+      view_count: { test_id: opportunity-counters-view-count }
+      refused_when_not_permitted: { test_id: opportunity-counters-refused }

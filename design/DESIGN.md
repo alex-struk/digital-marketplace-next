@@ -458,26 +458,40 @@ the visible text (WCAG 2.5.3). On the view page the label is "Watch this opportu
 These are built from standard HTML and styled only with tokens. None of them is a design-system
 component, and none may be presented as one.
 
+- **Page container** (`PageContainer`, `design/catalogue/layout.tsx`). Reused unchanged from the
+  content domain, which defined it. It is the one column every screen of this domain sits in: the
+  content at most 1100 pixels wide and centred, so its left edge meets the banner's logo, with
+  `--layout-padding-medium` either side outside those 1100 pixels and `--layout-padding-large` above
+  and below. The design system ships no page container or grid. Every story of this domain is
+  wrapped in it, and no story sets a width or outer padding of its own.
+- **Stack** (`Stack`, `design/catalogue/layout.tsx`). Reused unchanged from the content domain. A
+  flex column, or with `direction="row"` a row that always wraps, spaced only by its `gap`
+  (`--layout-margin-small`, `-medium` or `-large`). It removes the margins of the design system's
+  `Text` and `Heading` (and of `dt`, `dd`, `p` and headings one level down) from its items, so a gap
+  is never the token plus a component's margin; as a `ul` it drops markers and indent. The design
+  system has no stack or spacing primitive. It is the only way items on these screens are spaced.
 - **Status badge.** It is the users domain's badge, reused unchanged: a `<span>` with a
   `--surface-color-border-medium` border and a `--layout-border-radius-circular` radius. It always
   carries the status in words (for example "Draft" or "Team questions: consensus") and sits after a
   visible "Status:" label or in a Status column. The design system's `Tag` is an interactive grid
   item inside `TagGroup`, which is the wrong role for a static status.
-- **Key facts list.** A `<dl>` whose items are `div`s holding a `dt` (bold, via
-  `--typography-font-weights-bold`) and a `dd`. The items flex-wrap with `--layout-margin-large`
-  gaps, so they reflow at 320 pixels without a breakpoint. The design system has no
-  description-list component.
+- **Key facts list.** A `<dl>` that is a wrapping row stack (`Stack as="dl" direction="row"
+  gap="medium"`), each fact a `Stack gap="small"` holding a `dt` (bold, via
+  `--typography-font-weights-bold`) and a `dd`. It reflows at 320 pixels without a breakpoint. The
+  design system has no description-list component.
 - **Opportunity card.** An `<article>` in a `<li>`, labelled by its H3 title link, with a
-  `--surface-color-border-default` border and a `--layout-border-radius-medium` radius. It is used on
-  the opportunity list. The design system's `Callout` is an emphasis box with its own title
-  markup, not a list item, so it does not fit.
-- **Card section.** A `<section aria-labelledby>` with the same border and radius. It is used for
-  the program cards and to group each part of a long form. This is the same treatment the users
-  domain gives its sign-in cards.
+  `--surface-color-border-default` border, a `--layout-border-radius-medium` radius and
+  `--layout-padding-large` inside; its content is one `Stack gap="small"`. It is used on the
+  opportunity list, whose cards are a `Stack as="ul" gap="medium"`. The design system's `Callout` is
+  an emphasis box with its own title markup, not a list item, so it does not fit.
+- **Card section.** A `<section aria-labelledby>` with the same border, radius and inner padding,
+  its content one `Stack gap="medium"`. It is used for the program cards and to group each part of
+  a long form. This is the same treatment the users domain gives its sign-in cards.
 - **Repeated-item group.** A `<fieldset>` and `<legend>` ("Question 1", "Resource 1", "Implementation
-  phase", "Panel member 2"), with a token border and the legend set in `--typography-bold-body`. The
-  design system has no fieldset component, and a legend is what names the group to assistive
-  technology.
+  phase", "Panel member 2"), with a token border and inner padding and the legend set in
+  `--typography-bold-body`. The legend stays the fieldset's first child; the fields after it are one
+  `Stack gap="medium"`. The design system has no fieldset component, and a legend is what names the
+  group to assistive technology.
 - **Data table.** It is the users domain's table, reused: a native `<table>` with a `<caption>`
   and `scope="col"` headers, inside a focusable `role="region"` that scrolls horizontally at narrow
   widths. It is used for the dashboard and the History tab.
@@ -488,13 +502,52 @@ component, and none may be presented as one.
 
 ### How a screen is laid out
 
-The layout is the users domain's: a single-column grid with `--layout-margin-large` between regions
-and `--layout-padding-large` around the page. Action rows and filter rows flex-wrap. No value is
-typed anywhere. The only tokens used are `--layout-margin-{none,xsmall,small,medium,large}`,
-`--layout-padding-{none,small,large}`, `--layout-border-width-small`,
+Every story of this domain is built from `layout.tsx`, the same way as the users, content and
+organizations domains': one `PageContainer`, and inside it one `Stack gap="large"` whose items are
+the screen's regions. No story sets a width, an outer padding, a margin or a gap of its own. The
+only spacing a story still writes is inside the project's own components: a card's, card section's
+or fieldset's inner padding, a status badge's inline padding, a legend's inline padding and a data
+table's cell padding. The rhythm is fixed:
+
+- **`large`** between the regions of a page: the heading block, the teaser, the key facts, the
+  opportunity ID, the Watch block, Start a proposal, the status and ID row, the action bar, the
+  tabs, a page alert or error summary, the form, each H2 section, each list group, each program
+  card, and the parts of the complete report.
+- **`medium`** between the items of a region: a section's H2 and what follows it, the fields and
+  card sections of a form and its submit row, the facts of a key facts list, the tabs of the
+  manage-page navigation, the controls of the list's filter row, the cards of a list group, the
+  buttons of a row, the score-weight fields, the contents of a dialog's body, and the members of
+  the evaluation panel editor.
+- **`small`** between a label and what it labels: the small program line ("Code With Us
+  opportunity", "Manage a … opportunity", "… opportunity report") and the H1 under it, which
+  together are the heading block; a `dt` and its `dd`; the lines inside an opportunity card; the
+  Watch sentence, its checkbox and its status region; an addendum's H3 and its text; a spinner and
+  its words.
+
+Rows (the home page's three links, the status and ID row, the tabs, the filter row, button rows,
+the score weights, a loading row) are `Stack direction="row"`, which always wraps, so nothing is
+pushed off a 320-pixel screen or at 400% zoom. The filter row and the score weights align their
+items on the bottom edge (`align="end"`), so the remote-only checkbox and the fields with labels
+above sit on one line; every other row is centred. A form is a design-system `Form` holding one
+`Stack gap="medium"`, and the filter `form role="search"` holds one row stack. A button or link
+that is a stack item on its own sits in a plain `div`, so it keeps its own width rather than
+stretching across the column. A bulleted list whose bullets are content (skills, key dates, the
+report's history, the home page's program links) stays a plain `<ul>`. Dialogs are portalled by
+`Modal`; the `Modal` sits inside the page container but after the page stack, and an
+`AlertDialog`'s body is one `Stack gap="medium"`. A page wrapper that carries a test ID
+(`home-page`, `service-status-page`, `not-found-page`) is the outer stack, since the container
+takes no attributes. The data tables (dashboard, History tab) are the only things allowed to
+scroll horizontally, inside their own focusable region.
+
+No value is typed anywhere; the container's 1100 pixels live in `layout.tsx` and nowhere else. The
+tokens this domain's stories write are `--layout-margin-none` (a fieldset's margin),
+`--layout-padding-{small,large}`, `--layout-border-width-small`,
 `--layout-border-radius-{medium,circular}`, `--surface-color-border-{default,medium}`,
-`--typography-font-weights-bold`, `--typography-bold-body` and `--typography-regular-display`
-(the home page's figures, which the token set describes as extra-large body text, not a heading).
+`--typography-font-weights-bold`, `--typography-bold-body` and `--typography-regular-display` (the
+home page's figures, which the token set describes as extra-large body text, not a heading); the
+gaps come from `layout.tsx` as `--layout-margin-{small,medium,large}`. The `--layout-margin-xsmall`
+gap that used to sit between a fact's `dt` and `dd` is gone: the stack's `small` is the label gap
+everywhere.
 
 The regions of each kind of page come in this order:
 
@@ -674,6 +727,16 @@ The following bindings are not obvious from their names:
   returns. Requesting the address is the action, and the wrapper shows the request landed.
 - `add_attachment` is `attachment-add-button`. It is used wherever this domain places the
   attachment trigger (the create forms, the Opportunity tab and the history note).
+- `opportunity-watch-request`: `watch_by_request` is `opportunity-watch-request-watch`,
+  `stop_watching_by_request` is `opportunity-watch-request-stop`, `request_accepted` is
+  `opportunity-watch-request-accepted`, `refusal_status` is
+  `opportunity-watch-request-refusal-status`, `refusal_reason` is
+  `opportunity-watch-request-refusal-reason`, `refusal_messages` is
+  `opportunity-watch-request-refusal-messages` (an ordered list) and `watching` is
+  `opportunity-watch-request-watching`. These name parts of a data answer; an adapter reads the
+  response, not markup.
+- `opportunity-counters`: `view_count` is `opportunity-counters-view-count` and
+  `refused_when_not_permitted` is `opportunity-counters-refused`.
 
 **Other domains should reuse these IDs for the same controls:**
 `finalize-consensus-button` for the evaluation domain's `finalize_consensus_scores` (it is one
@@ -754,6 +817,21 @@ prints, as one continuous document (R-1.40).
 **scheduled-transition-trigger** — `default`. The page has an H1 "Service status" and one sentence
 saying the service is up. A request to it also runs the closing hook (R-1.1). The page shows
 nothing about what closed, because the criterion does not say it should.
+
+**opportunity-watch-request** — `default`, `refused`. A request address, not a screen. Its stories
+are response references built the same way as the organizations domain's
+(`affiliation-approval-request`): a small "Response reference" line and the H1, then a Request
+section and an Answer section, each a `Stack as="dl"` of `dt`/`dd` pairs. `default` shows the watch
+and stop-watching requests and an accepted answer, with watching read back as Yes (R-1.5).
+`refused` shows the author asking to watch their own opportunity: filed under `opportunity`, with
+the message R-1.5's note gives, and watching still No. A duplicate watch (`conflict`), an unknown
+opportunity (`notFound`) and a refusal on permissions have the same shape, so they have no state of
+their own.
+
+**opportunity-counters** — `default`, `refused`. A request address, laid out as the response
+reference above. `default` shows an administrator's reading of the view count (the number is
+illustrative), and says that a missing counter reads as 0. `refused` shows a vendor or a request
+with no session refused as not permitted, as the surface states (R-1.6).
 
 ### Gaps
 
@@ -844,6 +922,21 @@ had to show something, the story marks it as illustrative or placeholder.
 25. **Dates in the stories are empty.** A `DatePicker` value needs `@internationalized/date`, which
     the catalogue's `package.json` does not declare, and this stage does not own that file. So the
     date pickers render empty, even in the `editing` stories. A build sets them from the record.
+26. **Observations on this domain's pages that are still `null` in the surface.** The surface now
+    names observations that no story of this domain binds: the separate key dates on the views and
+    manage pages (`proposal_deadline`, `assignment_date`, `start_date`, `completion_date` where
+    listed), `successful_proponent_contact_details` and `successful_proponent_score` (see gap 18),
+    `scope_section` (Sprint With Us view), `terms_section` (Team With Us view),
+    `evaluation_question_fields` (the Sprint With Us and Team With Us create and manage pages),
+    `instructions_tab` and `evaluation_tab` (Sprint With Us and Team With Us manage pages) and
+    `offered_state_changes` (Team With Us manage page). They were left `null` on the 2026-10-01
+    layout-only pass, which was ordered to change no element, wording or test ID. Binding them means
+    adding or marking elements in the stories, which is a design run for this domain, not a layout
+    one.
+27. **The watch request's refusals.** R-1.5 gives the words only for watching one's own
+    opportunity. The duplicate refusal's message, and the status each refusal is answered with,
+    are not stated, so the `refused` story shows the own-opportunity case and names the status as
+    unstated.
 
 ---
 

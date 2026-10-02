@@ -1,22 +1,23 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AlertDialog, Button, ButtonGroup, Heading, Modal, Text, TextField } from "@bcgov/design-system-react-components";
+import { PageContainer, Stack } from "./layout";
 
 // opportunity-twu-create · publish-confirm — an administrator who pressed Publish is asked to confirm, because
 // publishing notifies everyone who asked to hear of new opportunities (R-1.22, R-1.34, R-1.48)
 const meta: Meta = { title: "opportunities/opportunity-twu-create/publish-confirm" };
 export default meta;
 
-const page = { display: "grid", gap: "var(--layout-margin-large)", padding: "var(--layout-padding-large)" } as const;
-
 export const PublishConfirm: StoryObj = {
   render: () => (
-    <div style={page}>
-      <Heading level={1}>Create a Team With Us opportunity</Heading>
-      <TextField label="Title" isRequired defaultValue="Data platform team" data-testid="opportunity-title-field" />
-      <ButtonGroup ariaLabel="Opportunity actions">
-        <Button variant="secondary" data-testid="opportunity-save-draft">Save draft</Button>
-        <Button variant="primary" data-testid="opportunity-publish">Publish</Button>
-      </ButtonGroup>
+    <PageContainer>
+      <Stack gap="large">
+        <Heading level={1}>Create a Team With Us opportunity</Heading>
+        <TextField label="Title" isRequired defaultValue="Data platform team" data-testid="opportunity-title-field" />
+        <ButtonGroup ariaLabel="Opportunity actions">
+          <Button variant="secondary" data-testid="opportunity-save-draft">Save draft</Button>
+          <Button variant="primary" data-testid="opportunity-publish">Publish</Button>
+        </ButtonGroup>
+      </Stack>
       <Modal isOpen isDismissable>
         <AlertDialog
           variant="confirmation"
@@ -36,6 +37,6 @@ export const PublishConfirm: StoryObj = {
           </Text>
         </AlertDialog>
       </Modal>
-    </div>
+    </PageContainer>
   ),
 };
