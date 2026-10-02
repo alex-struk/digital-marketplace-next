@@ -6374,42 +6374,6 @@ export default function create(
       await confirmIfAsked(where, /^\s*(add|publish|save|submit)( addendum)?\s*$/i);
       await ready();
     },
-    // The History section (?tab=history) ends with "Add a private note": a "Note (required)"
-    // box, "Add attachment" (a file chooser, any type up to 10 MB) and "Add note", which sends
-    // it. Seen as the administrator on the seeded published opportunity. Anybody who may not
-    // manage the opportunity is answered "Page not found", and that refusal is logged.
-    addNote: async (input) => {
-      const member = "add_note";
-      const where = cwuManage.where(member);
-      if (await refusedReader(member)) return;
-      if (!(await toSection(member, "History"))) unbound(where, `the management screen at ${page.url()} offers no "History" section`);
-      const region = seen(page.getByRole("main").getByRole("region", { name: /^history$/i })).first();
-      const box = seen(region.getByRole("textbox", { name: /^\s*note\b/i })).first();
-      if (!(await box.count())) {
-        unbound(where, `the History section on ${page.url()} offers ${actingId()} no "Note" box; seen as the administrator on the seeded published Code With Us opportunity, where "Add a private note" offers one`);
-      }
-      const name = field(input, "file", "fileName", "file_name", "attachment");
-      // A file's "content" is the file's, not the note's.
-      const words = givenText(input, name ? ["note", "text", "body"] : ["note", "text", "body", "content"]) || (typeof input === "string" ? input : "");
-      if (words) await box.fill(words);
-      if (name) {
-        const content = given(input, ["content", "contents"]);
-        const bytes = Number(field(input, "bytes", "size", "sizeBytes"));
-        const path = uploadFile({
-          name,
-          ...(typeof content === "string" || content instanceof Uint8Array ? { content } : {}),
-          ...(Number.isFinite(bytes) && bytes > 0 ? { bytes } : {}),
-        });
-        const chooser = page.waitForEvent("filechooser", { timeout: 10000 }).catch(() => null);
-        await press(where, /^\s*add attachment\s*$/i, region);
-        const offered = await chooser;
-        if (!offered) throw new Error(`${where} — "Add attachment" on ${page.url()} opened no file chooser`);
-        await offered.setFiles(path);
-        await settle();
-      }
-      await press(where, /^\s*add note\s*$/i, region);
-      await ready();
-    },
     opportunityIdentifier: async () => {
       await cwuManage.on("opportunity_identifier");
       return shownIdentifier();
@@ -6589,40 +6553,6 @@ export default function create(
         await confirmIfAsked(where(member), /^\s*(add|publish|save|submit)( addendum)?\s*$/i);
         await ready();
       },
-      // "Add a private note" at the end of the History section: "Note (required)", "Add
-      // attachment" (a file chooser) and "Add note". A draft's History carries no such form;
-      // that absence is the refusal, logged.
-      addNote: async (input?: unknown): Promise<void> => {
-        const member = "add_note";
-        if (await refused(member)) return;
-        if (!(await toSection(member, "History"))) return notOffered(member, '"History" section');
-        const region = sectionRegion("History");
-        const box = seen(region.getByRole("textbox", { name: /^\s*note\b/i })).first();
-        if (!(await box.count())) {
-          noteRefusal(`${where(member)} — the History section offers no "Add a private note" ${await context()}`);
-          return;
-        }
-        const name = field(input, "file", "fileName", "file_name", "attachment");
-        const words = givenText(input, name ? ["note", "text", "body"] : ["note", "text", "body", "content"]) || (typeof input === "string" ? input : "");
-        if (words) await box.fill(words);
-        if (name) {
-          const content = given(input, ["content", "contents"]);
-          const bytes = Number(field(input, "bytes", "size", "sizeBytes"));
-          const path = uploadFile({
-            name,
-            ...(typeof content === "string" || content instanceof Uint8Array ? { content } : {}),
-            ...(Number.isFinite(bytes) && bytes > 0 ? { bytes } : {}),
-          });
-          const chooser = page.waitForEvent("filechooser", { timeout: 10000 }).catch(() => null);
-          await press(where(member), /^\s*add attachment\s*$/i, region);
-          const offeredChooser = await chooser;
-          if (!offeredChooser) throw new Error(`${where(member)} — "Add attachment" on ${page.url()} opened no file chooser`);
-          await offeredChooser.setFiles(path);
-          await settle();
-        }
-        await press(where(member), /^\s*add note\s*$/i, region);
-        await ready();
-      },
       opportunityIdentifier: async (): Promise<string> => {
         if (await refused("opportunity_identifier")) return "";
         await screen.on("opportunity_identifier");
@@ -6663,7 +6593,6 @@ export default function create(
     cancelOpportunity: swuManage.cancelOpportunity,
     deleteOpportunity: () => swuManage.notOffered("delete_opportunity", '"Delete", not even on a draft'),
     addAddendum: swuManage.addAddendum,
-    addNote: swuManage.addNote,
     editEvaluationPanel: () => swuManage.notOffered("edit_evaluation_panel", '"Evaluation panel" section or control to change the panel'),
     finalizeQuestionConsensuses: () => swuManage.notOffered("finalize_question_consensuses", '"Consensus" section and no control to finalize the question consensuses, not even at consensus'),
     startTeamScenario: () => swuManage.notOffered("start_team_scenario", "section or control to start the team scenario, not even at the code challenge"),
