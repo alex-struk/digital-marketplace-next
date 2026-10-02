@@ -54,3 +54,14 @@ The three request pages that failed the screens check (`proposal-cwu-request`, `
 - **R4:** neither the criteria nor the surface gives the requests' HTTP methods, so the stories name none.
 
 No other page, state, test ID or wording was changed.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:ux-reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: do the proposals screens serve their criteria and use the design system? Approve. design/report.json covers 530 stories, including the six new request-page stories, with 0 accessibility violations and 0 failures. Every surface.yaml edit replaces a test_id that was null on proposal-cwu-request, proposal-team-request or proposal-evaluation-request; no filled test ID changed. The three request pages now have default and refused states in screens.yaml with stories, and their refusal wording is quoted from R-2.2, R-2.18 and R-2.28. A scan of the proposal stories finds no colour literals, pixel sizes, grids or ad-hoc gaps; the only remaining spacing is var(--layout-margin-none) on fieldsets, which DESIGN.md documents. PageContainer and Stack are the project's own components and DESIGN.md names them so. In the screenshots reviewed (create, SWU evaluate, TWU manage, dashboard, team-request refused, score dialog) content sits in the shared container with one left edge and one large/medium/small token rhythm, with no doubled gaps. Gaps L1 (question numbers not shown, order still announced), L2 (a few gaps tighter or looser under the single rhythm) and L4 (23 surface test IDs still null, left for this domain's next design run) are recorded in DESIGN.md and fall under what this persona accepts as missing states rather than violations. Tier is STANDARD, so no escalation. A new accessibility violation, a token bypassed, or a change to an already-filled test ID would turn this into a return.
+
+**Conditions:**
+none
