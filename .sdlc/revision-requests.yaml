@@ -564,3 +564,12 @@ requests:
     at: 2026-10-01T11:48:03.134Z
     taken: 2026-10-01T11:50:27.532Z
     taken_by: plan-15
+  - stage: plan
+    why: slice 8 claims R-1.39, whose test saves a Sprint With Us opportunity draft
+      on the Sprint With Us create screen (opportunity-swu-create.save_draft).
+      The plan gives that screen to slice 10, so nothing slice 8 builds
+      demonstrates R-1.39; it belongs with slice 10.
+    from: build-slice-8-3
+    gate: G3
+    by: tech-lead
+    at: 2026-10-02T02:27:44.240Z
