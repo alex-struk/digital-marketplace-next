@@ -1911,3 +1911,12 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-10-02T10:52:26.611Z
+    closed:
+      outcome: met
+      why: tests/acceptance/opportunities/R-1.36.spec.ts, noticeFound in the test '—
+        its author is told separately that the cancellation was actioned', now
+        requires message.about to include 'cancel' alongside visible addressing
+        to the author and the opportunity's title, the same check the
+        watcher-and-proponent test makes.
+      by: agent:reviewer
+      at: 2026-10-02T10:53:31.998Z
