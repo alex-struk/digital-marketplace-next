@@ -1,0 +1,17 @@
+gate: G-DESIGN
+verdict: return
+by: agent:ux-reviewer
+held_by: agent
+rationale: |2-
+  Question: do these opportunities screens serve the criteria and come from the design system? Return. The design work is sound. Both History tabs drop the private-note form as R-1.33 v2 requires and keep the seeded Note row; the screenshot shows the table in the shared PageContainer, aligned with the header. The new opportunity-history-request (default/withheld/refused) and opportunity-status-request (default/refused) stories copy the established response-reference layout, use only design-system Heading/Text with the project's PageContainer/Stack and a bold-weight token, and fill 11 previously-null test IDs, each rendered in a story. The scan reports zero accessibility violations over 535 stories, and add_note is restored with its existing ID. The one thing left is the request build-slice-9-3#2 to remove add_note from the opportunity-cwu-edit and opportunity-swu-edit surfaces, which the design gate refuses because design may only fill in test IDs. Until it is removed, the surface declares an action bound to history-add-note-button that no screen renders, and verify cannot test R-1.33. This return withdraws that request from design and addresses it to contract, which owns the surface's actions; design's revision afterwards only needs to drop gap 29 from DESIGN.md. build-slice-9-3#6 is build's and stays open. Approval would follow as-is if contract has already removed add_note.
+conditions:
+  - "condition-withdrawn request/build-slice-9-3#2: removing an action from spec/contract/surface.yaml is refused at the design gate, which may only fill in test IDs; the request is re-addressed to the contract stage below"
+  - "addressed-to contract: remove the add_note action from the opportunity-cwu-edit and opportunity-swu-edit pages in spec/contract/surface.yaml. R-1.33 v2 says the service accepts a private note but no screen of the application offers a way to add one, and verify found R-1.33 untestable because a test acting through add_note (bound to history-add-note-button, which no story renders now that the History-tab note form is gone) contradicts the criterion. Keep add_attachment on those pages and keep the opportunity-history-request page's add_note_by_request, which is how a note is added."
+cost: 0.4676144
+turns: 4
+session: "1b49c75c-9639-45c6-b315-58aebdd85f51"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-02T16:54:27.595Z
