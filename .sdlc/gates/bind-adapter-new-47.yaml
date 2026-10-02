@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does the bind-adapter-new-47 adapter bind every action and observation the contract lists for the new target, and nothing else? Ruling: approve. spec/contract/surface.yaml no longer lists add_note on opportunity-cwu-edit or opportunity-swu-edit; only add_note_by_request remains, and it stays bound. The proposal removes add_note from bindings.yaml and both of its implementations from index.ts, and no test under tests/acceptance references add_note. The remaining addNote mentions in index.ts belong to add_note_by_request's service request, which is still in the contract. The diff only deletes code, adds no assertion or business logic, and leaves tests/acceptance unchanged. The runner's type check on this revision passed with no diagnostics under adapters/new. R-1.35 and R-1.36 stay unbound through proposal-cwu-create, with the reason unchanged and checked again on the running target as the seeded vendor: the form's route shows 'Page not found' and the published opportunity offers no control that starts a proposal. That names a surface the target does not serve, so it is a real unbound reason. Open instruction build-slice-9-3#6 is the build stage's work, and this adapter proposal does not settle it, so it stays open. The ruling would change to a return if the contract still listed add_note on either page, if a test called it, or if the target turned out to serve the proposal form.
+conditions: []
+cost: 0.32904599999999995
+turns: 4
+session: "8a8da80a-f11f-47a7-b95c-5d5ecee66a8e"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-02T17:06:26.026Z

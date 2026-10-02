@@ -31,3 +31,23 @@ That matches the existing reason, which already covers the other roles, the alte
 - By hand: the bindings file and `surface.yaml` both list 112 pages. The action and observation lists of the two edited pages match the contract exactly, and `add_note` no longer appears anywhere except as `add_note_by_request`. The code I removed was self-contained, and the tsconfig doesn't reject unused helpers.
 
 The password field only ever received the variable's name, as instructed, and no password or environment value is written in the adapter, the bindings or here. One snapshot file the browser tool saved into the workspace root, by a filename I gave it, has been deleted. Its other snapshots sit under `.playwright-mcp/`, which I didn't touch.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does the bind-adapter-new-47 adapter bind every action and observation the contract lists for the new target, and nothing else? Ruling: approve. spec/contract/surface.yaml no longer lists add_note on opportunity-cwu-edit or opportunity-swu-edit; only add_note_by_request remains, and it stays bound. The proposal removes add_note from bindings.yaml and both of its implementations from index.ts, and no test under tests/acceptance references add_note. The remaining addNote mentions in index.ts belong to add_note_by_request's service request, which is still in the contract. The diff only deletes code, adds no assertion or business logic, and leaves tests/acceptance unchanged. The runner's type check on this revision passed with no diagnostics under adapters/new. R-1.35 and R-1.36 stay unbound through proposal-cwu-create, with the reason unchanged and checked again on the running target as the seeded vendor: the form's route shows 'Page not found' and the published opportunity offers no control that starts a proposal. That names a surface the target does not serve, so it is a real unbound reason. Open instruction build-slice-9-3#6 is the build stage's work, and this adapter proposal does not settle it, so it stays open. The ruling would change to a return if the contract still listed add_note on either page, if a test called it, or if the target turned out to serve the proposal form.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `f7a4c3a5a84df135792e8923801ecdd6f7d71739`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
