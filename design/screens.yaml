@@ -434,3 +434,13 @@ screens:
     states: [default, invalid, duplicate, chair-only, not-found, loading]
   - page: evaluation-consensus-edit-twu
     states: [default, submitted, invalid, not-found, loading]
+  - page: evaluation-individual-request-swu
+    states: [default, refused, duplicate]
+  - page: evaluation-individual-request-twu
+    states: [default, refused, duplicate]
+  - page: evaluation-consensus-request-swu
+    states: [default, refused]
+  - page: evaluation-consensus-request-twu
+    states: [default, refused]
+  - page: evaluation-panel-request
+    states: [default, refused]

@@ -1,13 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button, Heading, Link, Text } from "@bcgov/design-system-react-components";
+import { PageContainer, Stack } from "./layout";
 
 // evaluation-consensus-list-swu · submitted — the chair has submitted. Each consensus can still be reopened and submitted
 // again until the scores are finalized, unlike an individual evaluation (R-5.30)
 const meta: Meta = { title: "evaluation/evaluation-consensus-list-swu/submitted" };
 export default meta;
 
-const page = { display: "grid", gap: "var(--layout-margin-large)", padding: "var(--layout-padding-large)" } as const;
-const stack = { display: "grid", gap: "var(--layout-margin-medium)" } as const;
 const badge = {
   display: "inline-block",
   paddingInline: "var(--layout-padding-small)",
@@ -31,50 +30,54 @@ const rows = [
 
 export const Submitted: StoryObj = {
   render: () => (
-    <div style={page}>
-      <Text elementType="p" size="small" color="secondary">Manage a Sprint With Us opportunity</Text>
-      <Heading level={1}>Modernize the licence renewal service</Heading>
-      <Text elementType="p" size="small" color="secondary">The status and tabs are as in the default story and are trimmed here.</Text>
-      <section aria-labelledby="tab-heading" style={stack}>
-        <Heading level={2} id="tab-heading">Consensus</Heading>
-        <Text elementType="p">
-          You submitted the consensus scores on September 18, 2026. You can change a consensus until the scores are finalized.
-          If you do, submit the scores again.
-        </Text>
-        <div role="region" aria-labelledby="consensus-caption" tabIndex={0} style={{ overflowX: "auto" }}>
-          <table style={{ borderCollapse: "collapse", width: "100%" }} data-testid="evaluation-consensus-table">
-            <caption id="consensus-caption" style={{ textAlign: "start" }}>
-              <Text size="small" color="secondary">Agreed scores, by anonymous proponent name</Text>
-            </caption>
-            <thead>
-              <tr>
-                <th scope="col" style={cell}>Proponent</th>
-                <th scope="col" style={cell}>Consensus</th>
-                <th scope="col" style={cell}>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((r) => (
-                <tr key={r.name} data-testid="evaluation-proponent-row">
-                  <td style={cell}><span data-testid="proposal-proponent-name">{r.name}</span></td>
-                  <td style={cell}><span style={badge} data-testid="evaluation-consensus-status">Submitted</span></td>
-                  <td style={cell}>
-                    <Link href={r.href} aria-label={`Edit consensus: ${r.name}`} data-testid="evaluation-open-consensus">Edit consensus</Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div style={stack}>
-          <Text elementType="p" id="submit-hint">
-            Every proponent has a complete consensus. When you submit, the opportunity's owner and every administrator are told.
+    <PageContainer>
+      <Stack gap="large">
+        <Stack gap="small">
+          <Text elementType="p" size="small" color="secondary">Manage a Sprint With Us opportunity</Text>
+          <Heading level={1}>Modernize the licence renewal service</Heading>
+        </Stack>
+        <Text elementType="p" size="small" color="secondary">The status and tabs are as in the default story and are trimmed here.</Text>
+        <Stack as="section" gap="medium" aria-labelledby="tab-heading">
+          <Heading level={2} id="tab-heading">Consensus</Heading>
+          <Text elementType="p">
+            You submitted the consensus scores on September 18, 2026. You can change a consensus until the scores are finalized.
+            If you do, submit the scores again.
           </Text>
-          <div>
-            <Button variant="primary" aria-describedby="submit-hint" data-testid="evaluation-submit-consensus">Submit final consensus scores</Button>
+          <div role="region" aria-labelledby="consensus-caption" tabIndex={0} style={{ overflowX: "auto" }}>
+            <table style={{ borderCollapse: "collapse", width: "100%" }} data-testid="evaluation-consensus-table">
+              <caption id="consensus-caption" style={{ textAlign: "start" }}>
+                <Text size="small" color="secondary">Agreed scores, by anonymous proponent name</Text>
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col" style={cell}>Proponent</th>
+                  <th scope="col" style={cell}>Consensus</th>
+                  <th scope="col" style={cell}>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((r) => (
+                  <tr key={r.name} data-testid="evaluation-proponent-row">
+                    <td style={cell}><span data-testid="proposal-proponent-name">{r.name}</span></td>
+                    <td style={cell}><span style={badge} data-testid="evaluation-consensus-status">Submitted</span></td>
+                    <td style={cell}>
+                      <Link href={r.href} aria-label={`Edit consensus: ${r.name}`} data-testid="evaluation-open-consensus">Edit consensus</Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        </div>
-      </section>
-    </div>
+          <Stack gap="medium">
+            <Text elementType="p" id="submit-hint">
+              Every proponent has a complete consensus. When you submit, the opportunity's owner and every administrator are told.
+            </Text>
+            <div>
+              <Button variant="primary" aria-describedby="submit-hint" data-testid="evaluation-submit-consensus">Submit final consensus scores</Button>
+            </div>
+          </Stack>
+        </Stack>
+      </Stack>
+    </PageContainer>
   ),
 };

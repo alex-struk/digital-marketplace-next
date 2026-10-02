@@ -1399,7 +1399,7 @@ pages:
       duplicate_evaluation_error: { test_id: evaluation-duplicate-error }
       # The person may not record an evaluation of this proponent — not an evaluator on the
       # panel, or not at this stage — as distinct from a form that simply recorded nothing.
-      refused_when_not_permitted: { test_id: null }
+      refused_when_not_permitted: { test_id: not-found-page }
 
   - id: evaluation-individual-edit-swu
     domain: evaluation
@@ -1418,7 +1418,7 @@ pages:
       # The reader may not see this evaluation at all, as distinct from an evaluation with
       # nothing in it. Read by a public sector employee with no connection to the
       # opportunity, on seed.opportunities.swuCodeChallengeOfOtherStaff.
-      refused_when_not_permitted: { test_id: null }
+      refused_when_not_permitted: { test_id: not-found-page }
 
   - id: evaluation-consensus-create-swu
     domain: evaluation
@@ -1467,7 +1467,7 @@ pages:
       score_out_of_range_error: { test_id: evaluation-score-error }
       empty_notes_error: { test_id: evaluation-notes-error }
       duplicate_evaluation_error: { test_id: evaluation-duplicate-error }
-      refused_when_not_permitted: { test_id: null }
+      refused_when_not_permitted: { test_id: not-found-page }
 
   - id: evaluation-individual-edit-twu
     domain: evaluation
@@ -1483,7 +1483,7 @@ pages:
       read_only_after_submitted: { test_id: evaluation-read-only-notice }
       score_out_of_range_error: { test_id: evaluation-score-error }
       empty_notes_error: { test_id: evaluation-notes-error }
-      refused_when_not_permitted: { test_id: null }
+      refused_when_not_permitted: { test_id: not-found-page }
 
   - id: evaluation-consensus-create-twu
     domain: evaluation
@@ -2130,44 +2130,44 @@ pages:
     actions:
       # Input: the four scores and notes exactly as given, including a score above the
       # question's maximum or an empty note, which the form refuses as it is typed.
-      save_draft_as_entered: { test_id: null }
+      save_draft_as_entered: { test_id: evaluation-individual-request-save-draft }
       # Asks for this one evaluation to be submitted by itself, rather than the whole set.
-      submit_this_evaluation_alone: { test_id: null }
+      submit_this_evaluation_alone: { test_id: evaluation-individual-request-submit-alone }
       # Input: the four scores and notes. Starts the signed-in evaluator's evaluation of
       # the proponent.
-      create_evaluation_by_request: { test_id: null }
+      create_evaluation_by_request: { test_id: evaluation-individual-request-create }
     observations:
-      stored_scores: { test_id: null }
-      stored_notes: { test_id: null }
-      evaluation_status: { test_id: null }
-      refused_as_unrecognised: { test_id: null }
-      refused_at_submission: { test_id: null }
+      stored_scores: { test_id: evaluation-individual-request-stored-scores }
+      stored_notes: { test_id: evaluation-individual-request-stored-notes }
+      evaluation_status: { test_id: evaluation-individual-request-status }
+      refused_as_unrecognised: { test_id: evaluation-individual-request-refused-unrecognised }
+      refused_at_submission: { test_id: evaluation-individual-request-refused-at-submission }
       # Whether the service accepted create_evaluation_by_request (the evaluation it
       # answers with), as distinct from refusing it.
-      evaluation_created: { test_id: null }
+      evaluation_created: { test_id: evaluation-individual-request-created }
       # The message the service answers a refused create_evaluation_by_request with, as
       # text, absent when the start was accepted. On the oracle an evaluator who already
       # holds an evaluation of the proponent is answered "You already have a team question
       # evaluation for this proposal." (Team With Us: "resource question" in place of
       # "team question"); spec/contract/openapi.yaml gives the answer's form.
-      creation_refusal_message: { test_id: null }
+      creation_refusal_message: { test_id: evaluation-individual-request-creation-refusal-message }
 
   - id: evaluation-individual-request-twu
     domain: evaluation
     route: /api/proposal/team-with-us/:proposalId/resource-questions/evaluations/:userId
     title: "A Team With Us individual evaluation, by request"
     actions:
-      save_draft_as_entered: { test_id: null }
-      submit_this_evaluation_alone: { test_id: null }
-      create_evaluation_by_request: { test_id: null }
+      save_draft_as_entered: { test_id: evaluation-individual-request-save-draft }
+      submit_this_evaluation_alone: { test_id: evaluation-individual-request-submit-alone }
+      create_evaluation_by_request: { test_id: evaluation-individual-request-create }
     observations:
-      stored_scores: { test_id: null }
-      stored_notes: { test_id: null }
-      evaluation_status: { test_id: null }
-      refused_as_unrecognised: { test_id: null }
-      refused_at_submission: { test_id: null }
-      evaluation_created: { test_id: null }
-      creation_refusal_message: { test_id: null }
+      stored_scores: { test_id: evaluation-individual-request-stored-scores }
+      stored_notes: { test_id: evaluation-individual-request-stored-notes }
+      evaluation_status: { test_id: evaluation-individual-request-status }
+      refused_as_unrecognised: { test_id: evaluation-individual-request-refused-unrecognised }
+      refused_at_submission: { test_id: evaluation-individual-request-refused-at-submission }
+      evaluation_created: { test_id: evaluation-individual-request-created }
+      creation_refusal_message: { test_id: evaluation-individual-request-creation-refusal-message }
 
   # One consensus — the chair's agreed scores and notes for one proponent — as a request.
   # :userId is the panel member whose consensus it is, which is the chair: on the seeded
@@ -2189,31 +2189,31 @@ pages:
     actions:
       # Input: an agreed score and note for each of the four questions, by question order.
       # Replaces what the consensus holds, as the edit screen's save does.
-      change_consensus_by_request: { test_id: null }
+      change_consensus_by_request: { test_id: evaluation-consensus-request-change }
     observations:
       # The agreed score for each question, by question order, as stored.
-      stored_scores: { test_id: null }
+      stored_scores: { test_id: evaluation-consensus-request-stored-scores }
       # The note for each question, by question order, as stored.
-      stored_notes: { test_id: null }
-      consensus_status: { test_id: null }
+      stored_notes: { test_id: evaluation-consensus-request-stored-notes }
+      consensus_status: { test_id: evaluation-consensus-request-status }
       # The service accepted the change (a successful answer carrying the consensus).
-      request_accepted: { test_id: null }
+      request_accepted: { test_id: evaluation-consensus-request-accepted }
       # The service refused the change or the read (an answer naming a permission or
       # not-found error), as distinct from one it accepted.
-      refused_when_not_permitted: { test_id: null }
+      refused_when_not_permitted: { test_id: evaluation-consensus-request-refused }
 
   - id: evaluation-consensus-request-twu
     domain: evaluation
     route: /api/proposal/team-with-us/:proposalId/resource-questions/consensus/:userId
     title: "A Team With Us consensus, by request"
     actions:
-      change_consensus_by_request: { test_id: null }
+      change_consensus_by_request: { test_id: evaluation-consensus-request-change }
     observations:
-      stored_scores: { test_id: null }
-      stored_notes: { test_id: null }
-      consensus_status: { test_id: null }
-      request_accepted: { test_id: null }
-      refused_when_not_permitted: { test_id: null }
+      stored_scores: { test_id: evaluation-consensus-request-stored-scores }
+      stored_notes: { test_id: evaluation-consensus-request-stored-notes }
+      consensus_status: { test_id: evaluation-consensus-request-status }
+      request_accepted: { test_id: evaluation-consensus-request-accepted }
+      refused_when_not_permitted: { test_id: evaluation-consensus-request-refused }
 
   # An opportunity's evaluation panel submitted as a request, so that it can hold a
   # panel none of the panel screen's controls can compose: a member who is neither an
@@ -2226,17 +2226,17 @@ pages:
     route: /api/opportunities/:program/:opportunityId
     title: "An evaluation panel, by request"
     actions:
-      submit_panel_with_member_holding_no_role: { test_id: null }
+      submit_panel_with_member_holding_no_role: { test_id: evaluation-panel-request-member-no-role }
       # Input: two public sector members (seed users handles), both evaluators and
       # neither marked as chair. The browser form will not send this panel; the request
       # carries it to the service as given.
-      submit_panel_with_no_chair: { test_id: null }
+      submit_panel_with_no_chair: { test_id: evaluation-panel-request-no-chair }
     observations:
-      member_without_role_error: { test_id: null }
+      member_without_role_error: { test_id: evaluation-panel-request-member-without-role-error }
       # The service's refusal of a panel that names no chair, read from its answer. Absent
       # when the service accepts the panel, which panel_as_stored then shows.
-      missing_chair_error: { test_id: null }
-      panel_as_stored: { test_id: null }
+      missing_chair_error: { test_id: evaluation-panel-request-missing-chair-error }
+      panel_as_stored: { test_id: evaluation-panel-request-panel-as-stored }
 
   # A stored file named as an attachment by its identifier, on something the signed-in
   # person may edit. :recordKind is opportunities or proposals, :program one of

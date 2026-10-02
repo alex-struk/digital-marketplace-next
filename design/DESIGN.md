@@ -3158,6 +3158,10 @@ panel. There are five kinds of screen:
   (R-5.12 to R-5.14, R-5.31 to R-5.33).
 - **Scoring forms** (`evaluation-individual-create-*`, `-edit-*`, `evaluation-consensus-create-*`,
   `-edit-*`). One proponent, one score and one comment per question (R-5.22, R-5.29).
+- **Request addresses** (`evaluation-individual-request-*`, `evaluation-consensus-request-*`,
+  `evaluation-panel-request`). Not screens: the service's answers to requests no screen sends
+  (R-5.3, R-5.9, R-5.23, R-5.26, R-5.29, R-5.37). Each story is a response reference, built the
+  way the users, content and opportunities domains build theirs.
 
 Every state named in `design/screens.yaml` has a story at
 `design/catalogue/<page>.<state>.stories.tsx`, and the story is what a build copies. As in the
@@ -3203,6 +3207,19 @@ every one used here already compiles in an earlier domain's stories.
 All but one are reused unchanged from earlier domains. None is a design-system component, and
 none may be presented as one.
 
+- **Page container** (`PageContainer`, `design/catalogue/layout.tsx`). Reused unchanged from the
+  content domain, which defined it. It is the one column every screen of this domain sits in: the
+  content at most 1100 pixels wide and centred, so its left edge meets the banner's logo, with
+  `--layout-padding-medium` either side outside those 1100 pixels and `--layout-padding-large`
+  above and below. The design system ships no page container or grid. Every story of this domain
+  is wrapped in it, and no story sets a width or outer padding of its own.
+- **Stack** (`Stack`, `design/catalogue/layout.tsx`). Reused unchanged from the content domain. A
+  flex column, or with `direction="row"` a row that always wraps, spaced only by its `gap`
+  (`--layout-margin-small`, `-medium` or `-large`). It removes the margins of the design system's
+  `Text` and `Heading` (and of `dt`, `dd`, `p` and headings one level down) from its items, so a
+  gap is never the token plus a component's margin; as a `ul` or `ol` it drops markers and indent.
+  The design system has no stack or spacing primitive. It is the only way items on these screens
+  are spaced.
 - **Status badge.** The users domain's `<span>` with a token border and circular radius. Here it
   carries an evaluation's or a consensus's state in words: "Not started", "Draft: incomplete",
   "Draft: complete", "Submitted".
@@ -3214,25 +3231,57 @@ none may be presented as one.
   as the opportunities domain uses it for the manage page. On the dashboard the two links are
   in-page links to the two sections, as the proposals domain's dashboard does.
 - **Repeated-item group.** A `<fieldset>` and `<legend>` for each evaluator on the panel and each
-  question on a scoring form.
-- **Key facts list.** The opportunities domain's `<dl>`, used on a submitted evaluation for "Your
-  score" and "Your comment".
+  question on a scoring form, with a token border, `--layout-padding-large` inside and the legend
+  in `--typography-bold-body`. The legend stays the fieldset's first child; everything after it is
+  one `Stack gap="medium"`. A submitted evaluation's question is the same box as a `<section
+  aria-labelledby>`, because nothing in it is a field.
+- **Key facts list.** The opportunities domain's `<dl>` as a wrapping row stack (`Stack as="dl"
+  direction="row" gap="medium"`), each fact a `Stack gap="small"` of a bold `dt` and a `dd`. Used
+  on a submitted evaluation for "Your score" and "Your comment", and on the response references.
 - **Response block (new).** A `div` with a `--layout-border-width-small` inline-start border in
   `--surface-color-border-medium` and `--layout-padding-small`, holding a small "Proponent 2's
-  response" label and the response text, so the proponent's words are set apart from the question
-  and from the evaluator's own fields. The design system's `Callout` is an emphasis box with its own
-  title and icon, which would make every response look like a warning or a note; a quotation needs
-  no emphasis.
+  response" label and the response text in a `Stack gap="small"`, so the proponent's words are set
+  apart from the question and from the evaluator's own fields. The design system's `Callout` is an
+  emphasis box with its own title and icon, which would make every response look like a warning or
+  a note; a quotation needs no emphasis.
 
-The only tokens used are those earlier domains list: `--layout-margin-{none,xsmall,small,medium,large}`,
-`--layout-padding-{none,small,large}`, `--layout-border-width-small`,
+The tokens this domain's stories write are `--layout-margin-none` (a fieldset's margin),
+`--layout-padding-{small,large}`, `--layout-border-width-small`,
 `--layout-border-radius-{medium,circular}`, `--surface-color-border-{default,medium}`,
-`--typography-font-weights-bold` and `--typography-bold-body`. No colour, size or radius value is
-written anywhere in the catalogue.
+`--typography-font-weights-bold` and `--typography-bold-body`; the gaps come from `layout.tsx` as
+`--layout-margin-{small,medium,large}`. No colour, size or radius value is written anywhere in the
+catalogue, and the container's 1100 pixels live in `layout.tsx` and nowhere else.
 
 ### How a screen is laid out
 
-The users domain's single column, with `--layout-margin-large` between regions and rows that wrap.
+Every story of this domain is built from `layout.tsx`, the same way as the opportunities domain's
+manage page that these tabs sit on: one `PageContainer`, and inside it one `Stack gap="large"`
+whose items are the screen's regions. No story sets a width, an outer padding, a margin or a gap
+of its own. The only spacing a story still writes is inside the project's own components: a
+fieldset's or bordered section's inner padding, a response block's padding, a status badge's
+and a legend's inline padding, and a data table's cell padding. The rhythm is fixed:
+
+- **`large`** between the regions of a page: the heading block, the status and ID row, the action
+  bar, the tabs, a page alert, refusal or error summary, the back link, the sentence on how scores
+  are entered, the form, and each H2 section (on a response reference, Request and Answer).
+- **`medium`** between the items of a region: a tab section's H2 and what follows it, the fieldsets
+  and fields of a form and its save row, the contents of a fieldset, the tabs of the manage-page
+  navigation, the items of a row, and the facts of a key facts list.
+- **`small`** between a label and what it labels: the page-kind line ("Manage a … opportunity",
+  "Evaluate a … proponent", "Agree a … consensus", "Response reference") and the H1 under it, which
+  together are the heading block; a `dt` and its `dd`; a response block's label and the response;
+  a spinner and its words; the lines of an ordered answer on a response reference.
+
+Rows (the status and ID row, the opportunity's title with "Proponent 2 of 3", the tabs, a loading
+row) are `Stack direction="row"`, which always wraps, so nothing is pushed off a 320-pixel screen
+or at 400% zoom. A form is a design-system `Form` holding one `Stack gap="medium"`. A button or link
+that is a stack item on its own sits in a plain `div`, so it keeps its own width. An error summary's
+list inside an `InlineAlert` stays a plain `<ul>`, because its bullets are content. The wrapper
+`div`s that carry an alert's test ID, or take focus with `tabIndex={-1}`, stay plain `div`s, as
+items of the stack. Dialogs are portalled by `Modal`; the `Modal` sits inside the page container but
+after the page stack. The page wrapper of the shared missing page carries `not-found-page` on the
+outer stack, since the container takes no attributes. The data tables are the only things allowed
+to scroll sideways, inside their own focusable region.
 
 - **Tabs** (panel, instructions, evaluation, consensus). The opportunities domain's manage page,
   unchanged: "Manage a … opportunity" as small text, the H1, status and ID, the action bar, the tabs,
@@ -3409,6 +3458,33 @@ The following bindings are not obvious from their names:
 - `read_only_after_submitted`, `editable_after_submitted`, `chair_only`, `empty_for_owner_not_on_panel`
   and `panel_locked_after_consensus` are each the wrapper of the `info` notice that explains the
   state.
+- `refused_when_not_permitted` on the individual create and edit pages is `not-found-page`, the
+  shared missing page their `not-found` stories show: a person who may not record or read the
+  evaluation is answered as if it did not exist (R-5.11, R-5.21; gap 5), which is distinct from a
+  form with nothing in it.
+
+**The request addresses.** Each part of a request or an answer is the `dd` that describes it on the
+response reference, as in the content and opportunities domains; an ordered answer (scores, notes,
+the panel) is the `ol` inside it, one item per question or member, in order. The Sprint With Us and
+Team With Us addresses share every ID.
+
+- `evaluation-individual-request-*`: `create_evaluation_by_request` is
+  `evaluation-individual-request-create`, `save_draft_as_entered` is `-save-draft`,
+  `submit_this_evaluation_alone` is `-submit-alone`; `evaluation_created` is `-created`,
+  `creation_refusal_message` is `-creation-refusal-message`, `evaluation_status` is `-status`,
+  `stored_scores` and `stored_notes` are `-stored-scores` and `-stored-notes`,
+  `refused_as_unrecognised` is `-refused-unrecognised`, and `refused_at_submission` is
+  `-refused-at-submission` (gap 18).
+- `evaluation-consensus-request-*`: `change_consensus_by_request` is
+  `evaluation-consensus-request-change`; `request_accepted` is `-accepted`,
+  `refused_when_not_permitted` is `-refused`, `consensus_status` is `-status`, and `stored_scores`
+  and `stored_notes` are `-stored-scores` and `-stored-notes`.
+- `evaluation-panel-request`: `submit_panel_with_member_holding_no_role` is
+  `evaluation-panel-request-member-no-role`, `submit_panel_with_no_chair` is
+  `evaluation-panel-request-no-chair`, `member_without_role_error` is
+  `evaluation-panel-request-member-without-role-error`, `missing_chair_error` is
+  `evaluation-panel-request-missing-chair-error`, and `panel_as_stored` is
+  `evaluation-panel-request-panel-as-stored`.
 
 **Extra IDs, not named in the surface, that the stories carry for the adapter:**
 `evaluation-panel-member-field` (each member's `Select`), `evaluation-consensus-table`,
@@ -3452,6 +3528,28 @@ save controls, R-5.24), `not-found`, `loading`.
 
 **evaluation-consensus-edit-swu / -twu**: `default` (a draft), `submitted` (still editable,
 R-5.30), `invalid`, `not-found`, `loading`.
+
+**evaluation-individual-request-swu / -twu** — `default`, `refused`, `duplicate`. Request
+addresses, not screens; each story is a response reference: a small "Response reference" line and
+the H1 (the surface title), then a Request section and an Answer section, each a `Stack as="dl"` of
+`dt`/`dd` pairs. The methods are those of `spec/contract/openapi.yaml` (POST to the proponent's
+evaluations to start one; PUT tagged `edit` to change one). The states are the distinct answers:
+`default`, an evaluation started and a draft saved with an out-of-range score and an empty comment,
+both stored as sent and still Draft (R-5.21, R-5.23); `refused`, one evaluation submitted alone and
+refused as unrecognised, and the set containing the bad draft refused with R-5.25's message, still
+Draft (R-5.23, R-5.25, R-5.26); `duplicate`, a second start refused with R-5.3's message, the first
+draft's 3, 3, 3, 3 unchanged. Refusals on permission or stage (R-5.21, R-5.24) have the shape of
+`refused` and need no state of their own.
+
+**evaluation-consensus-request-swu / -twu** — `default` (the chair's change accepted and read back
+by an administrator, R-5.28 to R-5.30), `refused` (an evaluator who is not the chair, or anyone past
+consensus, refused as not permitted, the consensus unchanged, R-5.29). Laid out as above.
+
+**evaluation-panel-request** — `default` (the panel as stored, read by the owner or an
+administrator, R-5.18), `refused` (a member with no role refused with a message naming them, R-5.37,
+and a panel with no chair refused, R-5.9; the opportunity keeps its panel, R-5.1). Laid out as above.
+The two messages are the panel form's own words (gap 6); `refused` shows the Sprint With Us address,
+and Team With Us differs only in its address.
 
 ### Gaps
 
@@ -3517,3 +3615,15 @@ show something, the story marks it as illustrative or says which gap it rests on
     note). Their address and text are the content domain's; the stories' text is a placeholder.
 17. **Content the spec does not carry.** Every name, question, response, score, comment, date and
     identifier in the stories is illustrative and synthetic, and none is the seed's.
+18. **Where `refused_at_submission` is read.** The surface puts it on the single evaluation's
+    address, but the only submission the service accepts is the whole set, sent to the opportunity
+    (`submitIndividualQuestionEvaluations`), and this address refuses a submission of its own
+    (R-5.26). The response reference shows R-5.25's refusal of the set containing the draft; which
+    request a test sends to reach it from this address is not stated.
+19. **The status of a refused request.** R-5.26 says "rejected as unrecognised" and R-5.29 says
+    "refused", but no criterion gives the status the service answers with. The references say so
+    rather than naming one.
+20. **The member-with-no-role message** (R-5.37). The criterion asks for a field-level message
+    identifying the member, without its words. The reference uses the design's own: "Panel member
+    2: Test Evaluator Two must be an evaluator, the chair, or both." The missing-chair refusal
+    reuses the panel form's message (R-5.9 asks only that the service apply the form's rule).

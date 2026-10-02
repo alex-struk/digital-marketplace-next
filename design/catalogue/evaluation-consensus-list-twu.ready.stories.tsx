@@ -1,13 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button, Heading, Link, Text } from "@bcgov/design-system-react-components";
+import { PageContainer, Stack } from "./layout";
 
 // evaluation-consensus-list-twu · ready — every proponent has a complete consensus, so the chair may submit them
 // (R-5.13, R-5.31)
 const meta: Meta = { title: "evaluation/evaluation-consensus-list-twu/ready" };
 export default meta;
 
-const page = { display: "grid", gap: "var(--layout-margin-large)", padding: "var(--layout-padding-large)" } as const;
-const stack = { display: "grid", gap: "var(--layout-margin-medium)" } as const;
 const badge = {
   display: "inline-block",
   paddingInline: "var(--layout-padding-small)",
@@ -31,46 +30,50 @@ const rows = [
 
 export const Ready: StoryObj = {
   render: () => (
-    <div style={page}>
-      <Text elementType="p" size="small" color="secondary">Manage a Team With Us opportunity</Text>
-      <Heading level={1}>Data platform team</Heading>
-      <Text elementType="p" size="small" color="secondary">The status and tabs are as in the default story and are trimmed here.</Text>
-      <section aria-labelledby="tab-heading" style={stack}>
-        <Heading level={2} id="tab-heading">Consensus</Heading>
-        <div role="region" aria-labelledby="consensus-caption" tabIndex={0} style={{ overflowX: "auto" }}>
-          <table style={{ borderCollapse: "collapse", width: "100%" }} data-testid="evaluation-consensus-table">
-            <caption id="consensus-caption" style={{ textAlign: "start" }}>
-              <Text size="small" color="secondary">Agreed scores, by anonymous proponent name</Text>
-            </caption>
-            <thead>
-              <tr>
-                <th scope="col" style={cell}>Proponent</th>
-                <th scope="col" style={cell}>Consensus</th>
-                <th scope="col" style={cell}>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((r) => (
-                <tr key={r.name} data-testid="evaluation-proponent-row">
-                  <td style={cell}><span data-testid="proposal-proponent-name">{r.name}</span></td>
-                  <td style={cell}><span style={badge} data-testid="evaluation-consensus-status">Draft: complete</span></td>
-                  <td style={cell}>
-                    <Link href={r.href} aria-label={`Edit consensus: ${r.name}`} data-testid="evaluation-open-consensus">Edit consensus</Link>
-                  </td>
+    <PageContainer>
+      <Stack gap="large">
+        <Stack gap="small">
+          <Text elementType="p" size="small" color="secondary">Manage a Team With Us opportunity</Text>
+          <Heading level={1}>Data platform team</Heading>
+        </Stack>
+        <Text elementType="p" size="small" color="secondary">The status and tabs are as in the default story and are trimmed here.</Text>
+        <Stack as="section" gap="medium" aria-labelledby="tab-heading">
+          <Heading level={2} id="tab-heading">Consensus</Heading>
+          <div role="region" aria-labelledby="consensus-caption" tabIndex={0} style={{ overflowX: "auto" }}>
+            <table style={{ borderCollapse: "collapse", width: "100%" }} data-testid="evaluation-consensus-table">
+              <caption id="consensus-caption" style={{ textAlign: "start" }}>
+                <Text size="small" color="secondary">Agreed scores, by anonymous proponent name</Text>
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col" style={cell}>Proponent</th>
+                  <th scope="col" style={cell}>Consensus</th>
+                  <th scope="col" style={cell}>Action</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div style={stack}>
-          <Text elementType="p" id="submit-hint">
-            Every proponent has a complete consensus. When you submit, the opportunity's owner and every administrator are told.
-          </Text>
-          <div>
-            <Button variant="primary" aria-describedby="submit-hint" data-testid="evaluation-submit-consensus">Submit final consensus scores</Button>
+              </thead>
+              <tbody>
+                {rows.map((r) => (
+                  <tr key={r.name} data-testid="evaluation-proponent-row">
+                    <td style={cell}><span data-testid="proposal-proponent-name">{r.name}</span></td>
+                    <td style={cell}><span style={badge} data-testid="evaluation-consensus-status">Draft: complete</span></td>
+                    <td style={cell}>
+                      <Link href={r.href} aria-label={`Edit consensus: ${r.name}`} data-testid="evaluation-open-consensus">Edit consensus</Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        </div>
-      </section>
-    </div>
+          <Stack gap="medium">
+            <Text elementType="p" id="submit-hint">
+              Every proponent has a complete consensus. When you submit, the opportunity's owner and every administrator are told.
+            </Text>
+            <div>
+              <Button variant="primary" aria-describedby="submit-hint" data-testid="evaluation-submit-consensus">Submit final consensus scores</Button>
+            </div>
+          </Stack>
+        </Stack>
+      </Stack>
+    </PageContainer>
   ),
 };
