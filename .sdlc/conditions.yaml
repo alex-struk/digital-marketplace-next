@@ -1795,6 +1795,19 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-10-02T09:35:03.931Z
+    closed:
+      outcome: met
+      why: opportunity-swu-edit and opportunity-twu-edit are bound through
+        programManage in tests/adapters/new/index.ts (cancel_opportunity,
+        add_addendum, add_note on Sprint With Us only, identifier,
+        created/last-changed names, the summary, addenda and history tabs,
+        proposal_deadline, assignment_date, and offered_state_changes on Team
+        With Us). Each remaining member in tests/adapters/new/bindings.yaml
+        names what the screen does not offer and the seeded states walked
+        (00000000-0000-4000-8000-000000000701 and
+        00000000-0000-4000-8000-000000000801 among them).
+      by: agent:reviewer
+      at: 2026-10-02T09:48:29.928Z
   - ref: bind-adapter-new-39#2
     text: "tests/adapters/new: re-walk opportunity-list.filter_by_status and
       opportunity-list.toggle_watch signed in, now that /opportunities opens to
@@ -1807,6 +1820,16 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-10-02T09:35:03.931Z
+    closed:
+      outcome: met
+      why: "opportunity-list.filter_by_status and toggle_watch were re-walked signed
+        in and bound: the 'Status' chooser in the 'Filter opportunities' search
+        group, and the per-card 'Watch <title>' checkbox, with refusals logged
+        for the reader's own cards and for signed-out visitors
+        (tests/adapters/new/index.ts filterByStatus/toggleWatch; bindings.yaml
+        opportunity-list)."
+      by: agent:reviewer
+      at: 2026-10-02T09:48:29.945Z
   - ref: bind-adapter-new-39#3
     text: "tests/adapters/new: keep the cancel_opportunity, add_addendum, add_note,
       reporting_views, reporting_watchers and reporting_proposals bindings and
@@ -1817,3 +1840,40 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-10-02T09:35:03.931Z
+    closed:
+      outcome: met
+      why: the Code With Us cancel_opportunity, add_addendum, add_note and
+        reporting_views/watchers/proposals bindings and refusedReader are
+        unchanged from bind-adapter-new-39 in tests/adapters/new/index.ts.
+      by: agent:reviewer
+      at: 2026-10-02T09:48:29.959Z
+  - ref: bind-adapter-new-40#4
+    text: "tests/adapters/new: walk /opportunities/sprint-with-us/create and
+      /opportunities/team-with-us/create signed in as the administrator and as a
+      public sector employee. This proposal reports that both open and that it
+      saved a draft from each. Bind the members of opportunity-swu-create and
+      opportunity-twu-create, or replace each unbound reason, which now says the
+      current build answers those routes with 'Page not found', with what the
+      create screen actually does not offer."
+    from: bind-adapter-new-40
+    family: bind-adapter-new
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-10-02T09:48:29.883Z
+  - ref: bind-adapter-new-40#5
+    text: "tests/adapters/new: rebind opportunity-list.filter_by_program,
+      filter_remote_only and search to the controls the list renders on the
+      current build. This proposal reports an 'All programs / Program' button, a
+      'Remote work accepted only' checkbox and a search box of the searchbox
+      role, where the code still looks for a 'Filter Opportunities' combobox, a
+      'Remote OK' checkbox and a 'Search by Title or Location' textbox.
+      Alternatively, mark each unbound with a reason naming what the list does
+      not offer. Also update the stale opportunity-list comment in
+      bindings.yaml."
+    from: bind-adapter-new-40
+    family: bind-adapter-new
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-10-02T09:48:29.883Z
