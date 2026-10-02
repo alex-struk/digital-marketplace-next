@@ -1897,3 +1897,17 @@ conditions:
         current controls
       by: agent:reviewer
       at: 2026-10-02T10:00:33.591Z
+  - ref: derive-tests-opportunities-stale-16#1
+    text: "tests/acceptance/opportunities/R-1.36.spec.ts, the test '— its author is
+      told separately that the cancellation was actioned': the clause 'that the
+      cancellation was actioned' is not asserted. The author's message is
+      matched only by visible addressing and the opportunity's title. Also
+      require that its subject or body mentions the cancellation, the same check
+      the watcher-and-proponent test makes, so that a message to the author
+      naming the opportunity for some other reason cannot satisfy it."
+    from: derive-tests-opportunities-stale-16
+    family: derive-tests-opportunities-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-10-02T10:52:26.611Z
