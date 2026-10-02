@@ -7140,6 +7140,159 @@ export default function create(
       refusedText(await askCounter("refused_when_not_permitted"), (status) => status === 401 || status === 403),
   };
 
+  // ------------------------------------------------ an opportunity's history and status, by request
+
+  // GET /api/opportunities/:program/:id carries "history" (newest first, each entry
+  // { createdAt, createdBy: { id, name } | null, status, event, note, attachments: [{ id,
+  // name, ... }] }) to the administrator and the opportunity's author; signed out (and to
+  // other readers) the same answer comes without the "history" key. The update operation
+  // is PUT with { tag, value }: Code With Us offers edit, submitForReview, publish, cancel,
+  // addAddendum and addNote; Sprint With Us adds startCodeChallenge, startTeamScenario and
+  // the evaluation tags; Team With Us offers startChallenge and no addNote at all (its
+  // service answers 400 naming the tags it allows). Walked as the administrator on a draft
+  // made for the purpose: addNote { note, attachments: [fileId] } answers 200 with a
+  // NOTE_ADDED entry carrying the file; an empty note 400 ["note: Enter the note."]; 1,001
+  // characters 400 ["note: Enter a note of up to 1,000 characters."]; an unreadable file 400
+  // ["attachments: You may attach only files you are permitted to read."]. publish then
+  // cancel answer 200; publish or submitForReview after that 400 ["An opportunity that is
+  // cancelled cannot be made published."]; the seeded awarded Code With Us opportunity asked
+  // to publish 400 ["An opportunity that is awarded cannot be made published."]; the seeded
+  // awarded Sprint With Us one asked to submit, publish or start a stage 400 ["That action
+  // is not yet available on this opportunity."]. Signed out, addNote answers 401 ["Only an
+  // administrator or the opportunity's author may add a note."] and publish 401 ["Only an
+  // administrator may publish an opportunity."]. An identifier nothing is held under
+  // answers 404 ["No opportunity is held at that address."] to everyone.
+  function opportunityAt(pageId: string, params: { program: string; opportunityId: string } | undefined): string {
+    const id = seededId(params?.opportunityId ?? "", "opportunities");
+    const seeded = Object.values(seedGroups.opportunities ?? {}).find((each) => String(each.id) === id) as
+      | (SeedRecord & { program?: unknown })
+      | undefined;
+    const program = String(params?.program ?? "") || (typeof seeded?.program === "string" ? seeded.program : "");
+    if (!id) unbound(`${pageId}.open`, "no opportunity was named");
+    if (!program) unbound(`${pageId}.open`, `no programme was named for opportunity ${id}`);
+    return `${baseURL}/api/opportunities/${encodeURIComponent(program)}/${encodeURIComponent(id)}`;
+  }
+
+  // The opportunity as the signed-in person reads it now; an identifier nothing is held
+  // under is a record this target does not have, so the place was never reached.
+  async function opportunityNow(pageId: string, member: string, target: string): Promise<Record<string, unknown> | null> {
+    if (!target) unbound(`${pageId}.${member}`, "no opportunity has been opened");
+    const read = await peek(target);
+    if (read.status === 404) {
+      unbound(`${pageId}.${member}`, `GET ${target.slice(baseURL.length)} answered 404: this target holds no opportunity there`);
+    }
+    if (read.status === 0) unbound(`${pageId}.${member}`, `GET ${target.slice(baseURL.length)} could not be made`);
+    return read.status === 200 ? record(read.json) : null;
+  }
+
+  const historyAsked = requests("opportunity-history-request");
+  let historyOpened = "";
+  let noteAsked = false;
+  const opportunityHistoryRequest: S.OpportunityHistoryRequestPage = {
+    open: async (params) => {
+      historyOpened = opportunityAt("opportunity-history-request", params);
+      noteAsked = false;
+      await historyAsked.send("open", "GET", historyOpened);
+    },
+    async addNoteByRequest(input) {
+      const member = "add_note_by_request";
+      const where = `opportunity-history-request.${member}`;
+      if (!historyOpened) unbound(where, "no opportunity has been opened");
+      const text = typeof input === "string" ? input : field(input, "note", "text", "body", "content", "message");
+      const files = given(input, ["attachments", "files", "fileIds", "file_ids", "storedFiles", "attachment", "file", "fileId"]);
+      const attachments = (Array.isArray(files) ? files : files === undefined || files === null || files === "" ? [] : [files])
+        .map((each) => fileIdFor(each && typeof each === "object" ? textOf(record(each).id) : textOf(each)))
+        .filter(Boolean);
+      noteAsked = true;
+      await historyAsked.send(member, "PUT", historyOpened, { tag: "addNote", value: { note: text, attachments } });
+    },
+    historyShown: async () => {
+      const held = await opportunityNow("opportunity-history-request", "history_shown", historyOpened);
+      return String(!!held && Array.isArray(held.history));
+    },
+    historyEntries: async () => {
+      const held = await opportunityNow("opportunity-history-request", "history_entries", historyOpened);
+      const entries = held && Array.isArray(held.history) ? held.history : [];
+      return entries
+        .map((each) => {
+          const entry = record(each);
+          const by = record(entry.createdBy);
+          const files = (Array.isArray(entry.attachments) ? entry.attachments : [])
+            .map((file) => `${textOf(record(file).name)} (${textOf(record(file).id)})`)
+            .join(", ");
+          return [
+            textOf(entry.event) || textOf(entry.status),
+            textOf(entry.note),
+            textOf(by.name),
+            textOf(entry.createdAt),
+            files,
+          ].join(" | ");
+        })
+        .join("\n");
+    },
+    requestAccepted: async () => {
+      if (!noteAsked) unbound("opportunity-history-request.request_accepted", "no note has been asked for on this page");
+      return acceptedText(historyAsked.last("request_accepted"));
+    },
+    refusalMessages: async () => {
+      if (!noteAsked) unbound("opportunity-history-request.refusal_messages", "no note has been asked for on this page");
+      return messagesOf(historyAsked.last("refusal_messages"));
+    },
+    refusalStatus: async () => {
+      if (!noteAsked) unbound("opportunity-history-request.refusal_status", "no note has been asked for on this page");
+      return refusalStatusOf(historyAsked.last("refusal_status"));
+    },
+  };
+
+  // Each status is reached by its own named operation; there is no "set status".
+  const STATUS_OPERATION: Record<string, string> = {
+    UNDER_REVIEW: "submitForReview",
+    PUBLISHED: "publish",
+    CANCELED: "cancel",
+    CANCELLED: "cancel",
+    EVAL_CC: "startCodeChallenge",
+    EVAL_SCENARIO: "startTeamScenario",
+    EVAL_C: "startChallenge",
+  };
+  const statusAsked = requests("opportunity-status-request");
+  let statusOpened = "";
+  let statusRequested = false;
+  const opportunityStatusRequest: S.OpportunityStatusRequestPage = {
+    open: async (params) => {
+      statusOpened = opportunityAt("opportunity-status-request", params);
+      statusRequested = false;
+      await statusAsked.send("open", "GET", statusOpened);
+    },
+    async requestStatusChange(input) {
+      const member = "request_status_change";
+      const where = `opportunity-status-request.${member}`;
+      if (!statusOpened) unbound(where, "no opportunity has been opened");
+      const status = (typeof input === "string" ? input : field(input, "status", "to", "target")).trim().toUpperCase();
+      if (!status) unbound(where, `the input names no status (${JSON.stringify(input)})`);
+      const tag = STATUS_OPERATION[status];
+      if (!tag) unbound(where, `the service offers no operation that leads to ${status}`);
+      statusRequested = true;
+      await statusAsked.send(member, "PUT", statusOpened, { tag, value: "" });
+    },
+    requestAccepted: async () => {
+      if (!statusRequested) unbound("opportunity-status-request.request_accepted", "no status change has been asked for");
+      return acceptedText(statusAsked.last("request_accepted"));
+    },
+    refusalStatus: async () => {
+      if (!statusRequested) unbound("opportunity-status-request.refusal_status", "no status change has been asked for");
+      return refusalStatusOf(statusAsked.last("refusal_status"));
+    },
+    refusalMessages: async () => {
+      if (!statusRequested) unbound("opportunity-status-request.refusal_messages", "no status change has been asked for");
+      return messagesOf(statusAsked.last("refusal_messages"));
+    },
+    storedStatus: async () => {
+      const held = await opportunityNow("opportunity-status-request", "stored_status", statusOpened);
+      if (!held) unbound("opportunity-status-request.stored_status", "the signed-in person may not read this opportunity");
+      return textOf(held.status);
+    },
+  };
+
   const surface: S.Surface = {
     signIn,
     signOut,
@@ -7235,7 +7388,7 @@ export default function create(
       ...absent<S.ProposalCwuCreatePage>(
       "proposal-cwu-create",
       "/opportunities/code-with-us/:opportunityId/proposals/create",
-      `${behindSession("/opportunities/code-with-us/:opportunityId/proposals/create")}; looked for once more signed in as a vendor through the identity provider: the seeded published Code With Us opportunity's public page (proposal deadline June 1, 2030) shows its details, skills, key dates and addenda, and its only control is a "Watch this opportunity" tick box, with no link or button to start a proposal; the vendor's header offers only Dashboard, My profile and Sign out, the dashboard shows only a greeting, the profile's tabs (Profile, Capabilities, Organizations, Notifications, Legal, where the Code With Us terms are a link to read with nothing to accept) start nothing, and /opportunities/code-with-us/:opportunityId/proposals/create, .../proposals, .../proposals/new, .../apply, /opportunities/:opportunityId/proposals/create, /proposals, /proposals/create?opportunityId=<id> and /proposals/code-with-us/create?opportunityId=<id> all answer "Page not found" for that opportunity; rechecked on the current build signed in as the seeded vendor through the identity provider: the form's route still answers "Page not found" for that opportunity, its public page still offers only the "Watch this opportunity" tick box, the /opportunities list (now with a "New opportunity emails" panel) offers each opportunity only a title link and a Watch tick box, and the open Sprint With Us opportunity "with a submitted proposal" answers "Page not found" too`,
+      `${behindSession("/opportunities/code-with-us/:opportunityId/proposals/create")}; looked for once more signed in as a vendor through the identity provider: the seeded published Code With Us opportunity's public page (proposal deadline June 1, 2030) shows its details, skills, key dates and addenda, and its only control is a "Watch this opportunity" tick box, with no link or button to start a proposal; the vendor's header offers only Dashboard, My profile and Sign out, the dashboard shows only a greeting, the profile's tabs (Profile, Capabilities, Organizations, Notifications, Legal, where the Code With Us terms are a link to read with nothing to accept) start nothing, and /opportunities/code-with-us/:opportunityId/proposals/create, .../proposals, .../proposals/new, .../apply, /opportunities/:opportunityId/proposals/create, /proposals, /proposals/create?opportunityId=<id> and /proposals/code-with-us/create?opportunityId=<id> all answer "Page not found" for that opportunity; rechecked on the current build signed in as the seeded vendor through the identity provider: the form's route still answers "Page not found" for that opportunity, its public page still offers only the "Watch this opportunity" tick box, the /opportunities list (now with a "New opportunity emails" panel) offers each opportunity only a title link and a Watch tick box, and the open Sprint With Us opportunity "with a submitted proposal" answers "Page not found" too; looked for again on the build this contract was bound against, signed in as the seeded vendor (test-vendor-1) through the identity provider: /opportunities/code-with-us/<seeded published id>/proposals/create still answers "Page not found / The page you are looking for does not exist.", and that opportunity's public page carries no button and no link in its main content, only the one "Watch this opportunity" tick box, under a header of Dashboard, My profile and Sign out`,
       [
         "choose_proponent_individual",
         "choose_proponent_organization",
@@ -7977,6 +8130,8 @@ export default function create(
     userAccountSelfRequest,
     userAccountRequest,
     opportunityCounters,
+    opportunityHistoryRequest,
+    opportunityStatusRequest,
   };
 
   return surface;
