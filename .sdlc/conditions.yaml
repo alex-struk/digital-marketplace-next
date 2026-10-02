@@ -1977,3 +1977,16 @@ conditions:
         are absent from the history of seed.opportunities.cwuWithPrivateNote
       by: agent:reviewer
       at: 2026-10-02T18:21:07.711Z
+  - ref: bind-adapter-new-48#1
+    text: 'tests/adapters/new/index.ts noteControlsIn / noteControlOffered (cwu and
+      swu): when the History region named /^history$/ is not present on the page
+      after toSection succeeds, or its history table never becomes visible,
+      return unbound with the URL and acting persona instead of "false"; return
+      "false" only after the region has been confirmed present, so an absence is
+      reported only from a section actually reached.'
+    from: bind-adapter-new-48
+    family: bind-adapter-new
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-10-02T18:39:35.158Z
