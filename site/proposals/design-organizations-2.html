@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>design-organizations-2 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">454</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">448</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">383</span></a></li><li><a href="../runs.html">Run log <span class="count">20</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>design-organizations-2</h1>
+<p class="lede">G-DESIGN · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G-DESIGN</td></tr><tr><th scope="row">opened</th><td>2026-10-02 00:32</td></tr><tr><th scope="row">holder</th><td>agent:ux-reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these screens serve the organizations criteria, and are they built out of the design system?</h2>
+<p><strong>Recommendation.</strong> I designed nothing new for the screens that already existed.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I designed nothing new for the screens that already existed. All 51 organizations stories now sit on the shared page container and stack, with no wording, test ID, page or component changed. I also went past the operator&#39;s layout-only reason in one respect: three request addresses and three logo entries were still unbound, and the stage&#39;s own scope required designing them.</p>
+<p><strong>The layout change.</strong> <code>PageContainer</code> and <code>Stack</code> already existed in <code>design/catalogue/layout.tsx</code>, and I reused them without editing them. Every story is now one container holding one large-gap stack whose items are the page&#39;s regions. The rhythm:</p>
+<ul><li><strong>Large:</strong> between regions.</li><li><strong>Medium:</strong> between the items of a region: a form&#39;s fields and card sections, the links of a navigation row, the badge row, the body of a dialog.</li><li><strong>Small:</strong> between a label and what it labels: &quot;Edit Organization&quot; and the H1, a spinner and its text, the commands in one table row, requirement items.</li></ul>
+<p>No story sets its own width, outer padding, margin or gap any more. The only spacing left is inside the project&#39;s own components: table cell padding, badge padding, card-section padding, and the inner padding of the two <code>Dialog</code> bodies (Add team members, Change owner). <code>DESIGN.md</code> lists the container and the stack among the project&#39;s own components, and its &quot;How a screen is laid out&quot; section now describes this.</p>
+<p><strong>Spacing that visibly changed:</strong></p>
+<ul><li>The management page&#39;s tabs moved from the large gap to medium, to follow the rule for a navigation row.</li><li>On the memberships pages the H1 and the profile navigation became one heading block at the medium gap, matching how the notifications domain lays out the same profile section.</li><li>The admin-rights and archive dialog bodies now space their content with a stack, not the components&#39; own margins.</li><li>The Organization ID line is wrapped in the same row stack on every management-page state.</li></ul>
+<p><strong>Checks.</strong> I had no shell that could run node, so nothing was typechecked or rendered during my turn. The pipeline compiles and scans the catalogue after I finish. Five agents did the conversion in parallel; I then went back over the result:</p>
+<ul><li><strong>Test IDs:</strong> the count per file matches what I recorded before the change, file for file.</li><li><strong>Layout styles:</strong> a search finds none left in this domain&#39;s stories except the tables&#39; <code>width: 100%</code>.</li><li><strong>Consistency:</strong> I evened out the two things the agents did differently (the ID row and the dialog bodies).</li></ul>
+<p><strong>Request addresses, newly designed.</strong> <code>organization-acting-for-list</code>, <code>affiliation-invitation-request</code> and <code>affiliation-approval-request</code> had no screens entry, no stories and only <code>null</code> test IDs. I built them as response references, the pattern the users, content and files domains use:</p>
+<ul><li><strong><code>organization-acting-for-list</code>:</strong> <code>default</code> (R-3.15) and <code>refused</code> (R-3.20).</li><li><strong><code>affiliation-invitation-request</code>:</strong> <code>default</code> and <code>invalid</code> (R-3.17, shown with ADMIN).</li><li><strong><code>affiliation-approval-request</code>:</strong> <code>default</code>, <code>refused</code> (the owner accepting on someone&#39;s behalf) and <code>not-pending</code> (a second acceptance), all R-3.9. The two refusals are separate states because they are different answers: one is about who asked, the other about the membership.</li></ul>
+<p>I filled all eleven of their test IDs with names prefixed by the page id. <code>invalid_membership_type_error</code> here is deliberately not the Team tab&#39;s ID, because one is a screen alert and the other is part of an HTTP answer.</p>
+<p><strong>Logo on the management page.</strong> <code>organization-edit</code> had three later surface entries still <code>null</code>. I filled them and added two states, <code>logo-stored</code> and <code>logo-refused</code>. Both follow the files domain&#39;s ruling that the logo uses its image picker:</p>
+<ul><li><strong><code>change_logo</code></strong> is <code>organization-logo-button</code>, the trigger the create page already binds.</li><li><strong><code>current_logo</code></strong> is <code>organization-current-logo</code>, the stored logo&#39;s image on the read-only tab.</li><li><strong><code>logo_refused_error</code></strong> is <code>organization-logo-refused-error</code>.</li></ul>
+<p>No organizations page in <code>spec/contract/surface.yaml</code> has a <code>null</code> test ID left.</p>
+<p><strong>Components most used:</strong> the design system&#39;s <code>Heading</code>, <code>Text</code>, <code>Button</code>/<code>ButtonGroup</code>, <code>TextField</code>, <code>Link</code>, <code>InlineAlert</code> and <code>Modal</code> with <code>AlertDialog</code> or <code>Dialog</code>. Beside them are the project&#39;s own data table, status badge, card section, section navigation, pagination and requirement list, all already listed in <code>DESIGN.md</code>, plus the shared container and stack.</p>
+<p><strong>New gaps, numbered 17–20 in the organizations section of <code>DESIGN.md</code>:</strong></p>
+<ol><li>No criterion gives the wording of the permission message when the owner tries to accept on someone&#39;s behalf, so the story shows a placeholder.</li><li>No criterion gives a status number for the refusals by request.</li><li>The surface quotes the old service&#39;s words for a refused logo (&quot;Please select a different logo image.&quot;), but no criterion fixes them; the story uses the files domain&#39;s wording.</li><li>Whether anyone other than the owner may invite by request is not stated.</li></ol>
+<p>Gaps 1–16 from the earlier design are unchanged. I changed nothing under <code>spec/</code> except the test IDs in <code>surface.yaml</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:ux-reviewer (persona agent · claude claude-opus-5-5) on 2026-10-02 00:33.</p>
+<div class="body"><p>Question: do the organizations screens serve the criteria and are they built from the design system? Approve. The accessibility report covers 508 stories, including the 9 new ones (three request addresses as response references, and logo-stored and logo-refused), with 0 violations. Every surface.yaml change replaces a null test_id; no ID that was already set was changed. A search of the organizations and affiliation stories finds no px, hex or rgb literal. Spacing comes from the reused PageContainer and Stack with token gaps, and the only padding left is inside the project&#39;s own components, which DESIGN.md lists. The screenshots (list, create, edit default/team/logo-stored/logo-refused, memberships, swu-terms, approval-request refused) all line up on the shared container edge with one even rhythm and no doubled gaps. The broken image in the logo stories is the real /api/files address the current_logo test reads, which the catalogue has no server to answer, not a layout defect. The new gaps 17-20 (placeholder permission message, unstated status numbers, wording of a refused logo, who may invite by request) are recorded honestly as spec gaps rather than invented. The ruling would change on any accessibility violation, a change to a test_id that was already set, a hard-coded colour or spacing value, or a screen outside the shared container.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

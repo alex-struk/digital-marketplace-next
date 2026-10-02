@@ -822,7 +822,11 @@ management page (`/organizations/:orgId/edit`, with five tabs), the two program-
 vendor's own organizations, which is a section of their profile reached two ways: by account
 identifier (`organization-user-memberships`) and as the signed-in person
 (`organization-user-memberships-self`). The two memberships pages render the same design and differ
-only in their addresses. Every state named in `design/screens.yaml` has a story at
+only in their addresses. Three more addresses answer with data rather than a page: the
+organizations one may act for (`organization-acting-for-list`), an invitation made by request
+(`affiliation-invitation-request`) and a membership accepted by request
+(`affiliation-approval-request`). Each is a response reference, as in the users, content and files
+domains. Every state named in `design/screens.yaml` has a story at
 `design/catalogue/<page>.<state>.stories.tsx`, and the story is what a build copies.
 
 One decision shapes most of the domain: **a control is offered only to the people the service
@@ -863,9 +867,20 @@ words in the Membership column rather than from a control's appearance.
 ### This project's own components (not design-system components)
 
 These are built from standard HTML and styled only with tokens. None of them is a design-system
-component, and none may be presented as one. The first four are the users and opportunities
-domains' own components, reused unchanged.
+component, and none may be presented as one. The page container and the stack are the content
+domain's, in `design/catalogue/layout.tsx`; the next four are the users and opportunities domains'
+own components, reused unchanged.
 
+- **Page container** (`PageContainer`, `design/catalogue/layout.tsx`). Reused unchanged: the one
+  column every screen sits in, its content at most 1100 pixels wide and centred so its left edge
+  meets the banner's logo, with `--layout-padding-medium` either side outside those 1100 pixels and
+  `--layout-padding-large` above and below. The design system ships no page grid or container.
+  Every story of this domain is wrapped in it.
+- **Stack** (`Stack`, `design/catalogue/layout.tsx`). Reused unchanged: a flex column, or with
+  `direction="row"` a row that always wraps, spaced only by its `gap` (`--layout-margin-small`,
+  `-medium` or `-large`). It removes the margins of the design system's `Text` and `Heading` from
+  its items, so a gap is never the token plus a component's margin, and as a `ul` it drops markers
+  and indent. The design system has no stack or spacing primitive.
 - **Status badge.** A `<span>` with a `--surface-color-border-medium` border and a
   `--layout-border-radius-circular` radius, always carrying its meaning in words. Here it shows
   Owner, Administrator, Member and Pending in team and membership tables, the "Sprint With Us
@@ -880,7 +895,8 @@ domains' own components, reused unchanged.
   pages carry the users domain's `<nav aria-label="Profile sections">` with Organizations current.
 - **Card section.** A `<section aria-labelledby>` with a `--surface-color-border-default` border and
   a `--layout-border-radius-medium` radius. Used to group the create form's three parts and to set
-  off the terms text.
+  off the terms text. Its border and inner padding (`--layout-padding-large`) are its own; its
+  contents are laid out by a stack inside it.
 - **Pagination.** New in this domain. A `<nav aria-label="Pages of organizations">` holding a list:
   "Page N of M" as text, a `Link` per page number (`aria-label="Page N"`, `aria-current="page"` on
   the current one), and "Previous page" / "Next page" `Link`s where there is such a page. Links,
@@ -893,14 +909,45 @@ domains' own components, reused unchanged.
   screen reader announces as "list, three items".
 
 The tokens used are the ones the two earlier domains list, and no others:
-`--layout-margin-{none,small,medium,large}`, `--layout-padding-{none,small,large}`,
-`--layout-border-width-small`, `--layout-border-radius-{medium,circular}` and
-`--surface-color-border-{default,medium}`. No colour, size or radius value is written anywhere.
+`--layout-margin-{none,small,medium,large}`, `--layout-padding-{none,small,medium,large}`,
+`--layout-border-width-small`, `--layout-border-radius-{medium,circular}`,
+`--surface-color-border-{default,medium}`, and `--typography-font-weights-bold` (the terms of a
+response reference's description list). No colour, size or radius value is written anywhere; the
+one number in the layout, the container's 1100 pixels, lives in `layout.tsx` and nowhere else. A
+stored logo is kept inside its column with `max-width: 100%`, the files domain's image rule; that
+is a containment, not spacing (files domain, gap 11).
 
 ### How a screen is laid out
 
-The users domain's layout: a single-column grid with `--layout-margin-large` between regions and
-`--layout-padding-large` around the page. Action rows flex-wrap. The regions come in this order:
+Every story of this domain is built from `layout.tsx`, the same way as the content, files and
+notifications domains': one `PageContainer`, and inside it one `Stack gap="large"` whose items are
+the screen's regions. No story sets a width, an outer padding, a margin or a gap of its own. The
+only spacing a story writes is inside the project's own components: a data table's cell padding,
+a status badge's inline padding, and a card section's inner padding. The rhythm:
+
+- **`large`** between the regions of a page: the heading block, the ID and badge row, the
+  management page's tabs, a page alert, each tab's `<section>`, the table and the pagination.
+- **`medium`** between the items of a region: a section's H2 and what follows it, a form's fields
+  and card sections and its submit row, the links of a navigation row, the badges and ID in the row
+  under the H1, the items of a dialog's body, and the vendor's Create organization and My
+  organizations. On the memberships pages the H1 and the profile section navigation are one heading
+  block at this gap, as the profile's other sections are in the notifications domain.
+- **`small`** between a label and what it labels: "Edit Organization" (or the organization's name
+  on a terms page) and the H1 under it; a spinner and its text; the commands in one table row; the
+  items of a requirement list.
+
+Rows (navigation, toolbars, badge rows, a table row's commands) are `Stack direction="row"`, which
+always wraps, so nothing is pushed off a 320-pixel screen or at 400% zoom; the data tables scroll
+inside their own focusable region instead. A navigation list is a `Stack as="ul"`, so it keeps its
+list semantics without markers or indent. A bulleted list whose markers are content (team
+capabilities) stays a plain `<ul>`. Dialogs are portalled by `Modal` and laid out by the design
+system; the `Modal` sits inside the page container but outside the stack. An `AlertDialog`'s body
+is one `Stack gap="medium"`. The two `Dialog`s (Add team members, Change owner) keep the inner
+padding their body always had: a `div` with `--layout-padding-large` holding one
+`Stack gap="medium"`, as a card section does. If the installed `Dialog` pads its own content, that
+`div` goes and the stack sits directly in the dialog. A page wrapper that
+carries a test ID (`not-found-page`) is the outer stack, since the container takes no attributes.
+The regions come in this order:
 
 - **Organization list.** The H1; the vendor's "Create organization" and "My organizations"; the
   table; the pagination.
@@ -1102,6 +1149,33 @@ field (`organization-legal-name-field`, `organization-website-field`,
 approved area shown as text); `organization-cancel-service-areas-button`;
 `organization-swu-terms-accepted-on` (the acceptance date on the qualification tab).
 
+**The logo on the management page.** `change_logo` is `organization-logo-button`, the trigger the
+create page already binds, because it is the same control. `current_logo` is
+`organization-current-logo`, the stored logo's `img` on the read-only Organization tab, whose `src`
+is the address the test reads. With no logo, no such element is rendered and "No logo has been
+added." is shown, which the adapter reads as empty. `logo_refused_error` is
+`organization-logo-refused-error`, the wrapper of the refusal's alert inside the form's logo picker.
+
+**The three request addresses.** As in the users, content and files domains, **the adapter reads
+these as names for parts of the request and the HTTP answer**, not as elements in a browser.
+
+- `organization-acting-for-list`: `organizations_offered` is
+  `organization-acting-for-list-organizations`, and `refused_when_not_permitted` is
+  `organization-acting-for-list-refused`.
+- `affiliation-invitation-request`: `invite_with_membership_type` is
+  `affiliation-invitation-request-invite`, `invitation_created` is
+  `affiliation-invitation-request-created`, `membership_identifier` is
+  `affiliation-invitation-request-membership-id`, and `invalid_membership_type_error` is
+  `affiliation-invitation-request-invalid-membership-type`. That last one is deliberately not the
+  Team tab's `organization-invalid-membership-type-error`: one is a screen's alert, the other a part
+  of an HTTP answer.
+- `affiliation-approval-request`: `accept_membership_by_request` is
+  `affiliation-approval-request-accept`, `request_accepted` is
+  `affiliation-approval-request-accepted`, `membership_status` is
+  `affiliation-approval-request-membership-status`, `refusal_messages` is
+  `affiliation-approval-request-refusal-messages` (an ordered list, empty or absent when the
+  request was accepted), and `refusal_status` is `affiliation-approval-request-refusal-status`.
+
 ### Per-screen notes
 
 **organization-list** — `default` (a vendor, owning one listed organization and administering
@@ -1126,7 +1200,27 @@ qualified), `swu-qualified` (all met, the badge showing, the acceptance date, R-
 two kept, one cleared, a third ticked). And `changelog` (R-3.33's two entries, "Admin Rights Removed"
 above "Admin Rights Given"), `not-found`, `loading`. A fully qualified Team With Us tab is the
 `swu-qualified` story's pattern applied to the Team With Us requirements; it has no story of its own
-because no criterion turns on it.
+because no criterion turns on it. The logo: `logo-stored` (the read-only Organization tab after a
+logo was saved, the logo shown at its stored size, R-8.13, R-8.28) and `logo-refused` (the form
+still open after Save, the stored logo kept, the refusal in the logo picker with focus moved to
+it, R-8.30, R-8.21). The logo picker in the form is the files domain's image picker
+(`file-image-picker`) with "Logo" in place of "Profile picture"; in `editing` and `invalid`, where
+no logo is stored, it is the shorter "No logo has been added." and the trigger, as before.
+
+**organization-acting-for-list** — `default` (R-3.15's vendor: the organization they own and the one
+they administer, not the one they are an ordinary member of nor their archived one) and `refused`
+(anyone who is not a signed-in vendor, R-3.20, answered as not permitted and never as an empty
+list).
+
+**affiliation-invitation-request** — `default` (the owner names a member; a pending membership is
+created and its identifier returned, R-3.7) and `invalid` (any type other than member or owner,
+shown with ADMIN, which the interface description lists but R-3.17 refuses; nothing is created).
+
+**affiliation-approval-request** — `default` (the invited person accepts; the status is ACTIVE),
+`refused` (the owner tries to accept on the invited person's behalf) and `not-pending` (a second
+acceptance of a membership already active, with the service's message "Membership is not
+pending."), all R-3.9. The two refusals are separate states because they are different answers: one
+is about who asked, the other about the membership.
 
 **organization-swu-terms / organization-twu-terms** — `default` (Accept offered), `accepted` (the
 date, no Accept), `administrator` (no Accept).
@@ -1203,6 +1297,21 @@ something, the story says it is the design's own wording or a placeholder.
 16. **Failures of immediate changes.** No criterion says what a person sees when withdrawing
     rights, approving an invitation or saving service areas fails, or when a create or save fails
     for a reason other than validation.
+17. **The permission message on an acceptance by request.** R-3.9 says the owner's attempt to
+    accept on another's behalf is refused, and the surface says `refusal_messages` carries "its
+    permission message", but neither gives the words. The `refused` story shows a placeholder. Only
+    "Membership is not pending." is worded, and that by the surface's comment, not a criterion.
+18. **Status numbers of the refusals by request.** R-3.20, R-3.17 and R-3.9 say "refused", "refused
+    as an invalid membership type" and "refused as not pending", with no status number. The stories
+    use the users domain's words ("Refused: not permitted", "Refused: invalid request"). Which
+    number each is remains the build's to state, as in the users domain's gap 11.
+19. **The wording of a refused logo.** The surface quotes the old service's "Please select a
+    different logo image."; no criterion words the message. The story uses the files domain's
+    wording for a refused picture, with "logo" in place of "profile picture". If a test compares
+    the message's words, the spec needs to say which.
+20. **Who else may invite by request.** R-3.17 has the owner inviting. Whether an organization
+    administrator or a service administrator invites by request with the same answers is not
+    stated beyond R-3.7, so the stories name the owner only.
 
 ---
 
