@@ -609,8 +609,14 @@ export default function create(
   const slaLink = (): Locator =>
     seen(page.getByRole("link", { name: /service level agreement/i }));
 
+  // Where following the link last landed, so the answer is read from that page itself.
+  let slaFollowedTo: string | null = null;
+
   const contentServiceLevelAgreementLink: S.ContentServiceLevelAgreementLinkPage = {
-    open: () => go("/learn-more/code-with-us"),
+    open: async () => {
+      slaFollowedTo = null;
+      await go("/learn-more/code-with-us");
+    },
     followServiceLevelAgreementLink: async () => {
       await ready();
       const href = (await slaLink().count()) ? await slaLink().first().getAttribute("href") : null;
@@ -620,6 +626,7 @@ export default function create(
         );
       }
       await visit(href);
+      slaFollowedTo = page.url();
     },
     serviceLevelAgreementLink: async () => {
       await ready();
@@ -629,10 +636,12 @@ export default function create(
       await ready();
       return ((await slaLink().count()) ? await slaLink().first().getAttribute("href") : null) ?? "";
     },
-    // Nothing is followed, and so nothing is answered, where the page offers no such link
-    // (the program explainers carry none on this target).
+    // Once the link has been followed, the answer is the page it led to, which carries no
+    // such link of its own. Otherwise nothing is followed, and so nothing is answered, where
+    // the page offers no such link (the program explainers carry none on this target).
     answerAtLinkTarget: async () => {
       await ready();
+      if (slaFollowedTo && page.url() === slaFollowedTo) return mainText();
       if (!(await slaLink().count())) return "";
       const href = await slaLink().first().getAttribute("href");
       if (!href) return "";
@@ -3310,7 +3319,12 @@ export default function create(
   // Location" box, and the opportunities as cards under "Open Opportunities <count>" and a
   // folded "Closed Opportunities". Each card is a link: title, program, status badge,
   // "Closes <date> at <time>" (or "Closed …"), summary, value, location.
-  const OPPORTUNITY_GROUPS = [/^unpublished opportunities\b/i, /^open opportunities\b/i, /^closed opportunities\b/i];
+  // The list heads its groups "Unpublished", "Open" and "Closed", each a line of its own.
+  const OPPORTUNITY_GROUPS = [
+    /^unpublished(?: opportunities)?$/i,
+    /^open(?: opportunities)?$/i,
+    /^closed(?: opportunities)?$/i,
+  ];
 
   async function opportunityGroup(header: RegExp): Promise<string> {
     const rows = async (): Promise<string[] | null> => {

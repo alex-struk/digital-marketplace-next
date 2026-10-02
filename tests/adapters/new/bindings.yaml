@@ -1268,12 +1268,13 @@ pages:
       copyright_link: bound
       present_when_signed_out: bound
 
-  # Opened /learn-more/code-with-us (and the Sprint With Us and Team With Us explainers and
-  # the program cards on /opportunities): no link names a service level agreement. With none,
-  # the link, its address and the answer at it read empty.
+  # /learn-more/code-with-us carries a "service level agreement" link to
+  # /content/service-level-agreement. Following it lands on that page, and the answer is read
+  # from the page it led to (which carries no such link of its own). Where a page offers no
+  # such link, the link, its address and the answer at it read empty.
   content-service-level-agreement-link:
     actions:
-      follow_service_level_agreement_link: "unbound: opened /learn-more/code-with-us signed out, and the other two explainers and the program cards on /opportunities; none carries a link naming a service level agreement (its links are 'here', 'Read the Guide' and 'Browse Opportunities'), so there is nothing to follow"
+      follow_service_level_agreement_link: bound
     observations:
       service_level_agreement_link: bound
       link_target_address: bound
