@@ -1,0 +1,15 @@
+gate: G3
+verdict: escalated
+by: runner:verify
+held_by: runner
+escalate_to: tech-lead
+rationale: "Slice 8 has failed verify 3 times. The failures below may not be the
+  application's: a test, the adapter, the criterion or the sandbox can each be
+  what is wrong (spec 7.1), and another build would not find out which."
+conditions:
+  - 'R-1.11 (passed when slice 7 was approved), in the case "one that does not
+    say whether remote work is acceptable is refused": Error:
+    expect(received).not.toContain(expected) // indexOf — Received
+    string:        "Accepting proposals, nearest proposal deadline first. — at
+    tests/acceptance/opportunities/R-1.11.spec.ts:54'
+at: 2026-10-02T07:32:33.123Z
