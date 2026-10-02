@@ -1,0 +1,15 @@
+gate: G1
+verdict: approve
+by: agent:product-owner
+held_by: agent
+rationale: |2-
+  Question: does this contract change give the tests a way to reach R-7.29's clause about the two evaluation-instructions screens? Ruling: approve. Reason: the two new configurations reuse the existing SDLC_ORACLE_ABSENT_PAGE switch, which 017-absent-service-page.sql already implements by deleting whichever page's slug is in sdlc.absent_page. The slugs they name (sprint-with-us-evaluation-instructions, team-with-us-evaluation-instructions) are seeded with those exact slugs in tests/seed/manifest.yaml (content.servicePage*EvaluationInstructions), and each is embedded by the matching screen. users.staffOne is an evaluator on the panels of both opportunities.closedSprintWithUs and opportunities.closedTeamWithUs, so the stated persona can open both screens. Both screens and their instructions_body field exist in surface.yaml, which already records that the body stays empty when the page can't be read. There is one configuration per program because the variable names a single page, which is correct. The only change outside the contract is a comment fix in the seed file. Neither configuration has yet been seen to remove its page, because the sandbox would not start the oracle with the variable set. That is an honest gap, stated in the proposal, and calibration closes it by starting an oracle copy for each select. What would change the ruling: if calibration shows /api/content/<slug> still returning 200 under either select, the configuration fails to put its precondition in place and must come back to contract.
+conditions: []
+cost: 0.30627699999999997
+turns: 5
+session: "7d1b0a4c-2c4c-47c2-808c-575bdd9e045d"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-02T23:54:56.187Z

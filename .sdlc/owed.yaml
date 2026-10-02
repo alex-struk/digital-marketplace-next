@@ -5061,7 +5061,7 @@ owed:
     id: R-7.29
     version: 1
     domain: content
-    stage: contract
+    stage: derive-tests
     why: a seed state in which the embedded page
       (/content/sprint-with-us-opportunity-scope or
       /content/team-with-us-terms-and-conditions) is absent. R-7.25 means no
@@ -5112,3 +5112,20 @@ owed:
         proposal: derive-tests-content-11
         gate: G3
         at: 2026-10-02T23:48:04.986Z
+      - from: contract
+        to: derive-tests
+        why: added configurations evaluation_instructions_absent_swu (select
+          SDLC_ORACLE_ABSENT_PAGE=sprint-with-us-evaluation-instructions, tag
+          @evaluation_instructions_absent_swu) and
+          evaluation_instructions_absent_twu (select
+          SDLC_ORACLE_ABSENT_PAGE=team-with-us-evaluation-instructions, tag
+          @evaluation_instructions_absent_twu) in
+          spec/contract/observables.yaml. Each removes that program's
+          instructions page through tests/seed/017-absent-service-page.sql, so
+          instructions_body on evaluation-instructions-swu /
+          evaluation-instructions-twu can be observed empty for the seeded
+          closed opportunities, opened as users.staffOne.
+        by: contract-v35
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-10-02T23:54:57.140Z

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>contract-v35 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">518</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">512</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">427</span></a></li><li><a href="../runs.html">Run log <span class="count">20</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>contract-v35</h1>
+<p class="lede">G1 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G1</td></tr><tr><th scope="row">opened</th><td>2026-10-02 23:54</td></tr><tr><th scope="row">holder</th><td>agent:product-owner</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Is this the contract the tests will act through?</h2>
+<p><strong>Recommendation.</strong> I added the two configurations the owed test was missing.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I added the two configurations the owed test was missing. The oracle starts, the migration runs and the seed loads under the default. I could not start it with either new configuration switched on, because the sandbox would not run a command that sets an environment variable.</p>
+<p><strong>What was owed.</strong> The criterion is R-7.29: when a screen embeds a page and that page is missing, that part of the screen stays empty and the rest still works. The test writer could not reach the clause about the two evaluation-instructions screens, one for Sprint With Us and one for Team With Us. It needed a way to start the oracle with one of those instructions pages removed, plus a tag for its tests.</p>
+<p><strong>What I found already in place.</strong> An earlier contract run built a general switch for this. The variable <code>SDLC_ORACLE_ABSENT_PAGE</code> names one page. The Compose override hands that name to the database as the setting <code>sdlc.absent_page</code>, with an empty default. The seed file <code>tests/seed/017-absent-service-page.sql</code> then deletes the named page after the rest of the seed has restored it. Only one configuration used the switch, <code>service_page_absent</code>, and it names the Sprint With Us scope page. Nothing named either instructions page.</p>
+<p>I checked the old application&#39;s code. Both instructions tabs read their page and show an empty body if the read fails, so the criterion holds for both programs. Both pages are seeded under the expected names (<code>sprint-with-us-evaluation-instructions</code> and <code>team-with-us-evaluation-instructions</code>), so the existing delete applies to them unchanged.</p>
+<p><strong>What I added.</strong> Two entries under <code>configurations:</code> in <code>spec/contract/observables.yaml</code>:</p>
+<ul><li><code>evaluation_instructions_absent_swu</code>: select <code>SDLC_ORACLE_ABSENT_PAGE=sprint-with-us-evaluation-instructions</code>, tag <code>@evaluation_instructions_absent_swu</code>.</li><li><code>evaluation_instructions_absent_twu</code>: select <code>SDLC_ORACLE_ABSENT_PAGE=team-with-us-evaluation-instructions</code>, tag <code>@evaluation_instructions_absent_twu</code>.</li></ul>
+<p>There is one per program because the variable names a single page and each screen embeds a different one. Each entry says what a test can observe:</p>
+<ul><li>The page&#39;s address under <code>/api/content/</code> answers not found.</li><li>The instructions screen, opened for the seeded closed opportunity (<code>opportunities.closedSprintWithUs</code> or <code>opportunities.closedTeamWithUs</code>) by a panel member (<code>users.staffOne</code>, signed in as <code>public-sector-staff</code>), shows an empty <code>instructions_body</code> while the rest of the screen still loads. I confirmed in the manifest that <code>users.staffOne</code> is an evaluator on both panels.</li></ul>
+<p>Each configuration runs on its own oracle copy, and its tests are left out of the default run. I also updated the comment in <code>017-absent-service-page.sql</code> to name all three configurations.</p>
+<p><strong>What I did not change.</strong> No pages, personas, API description, other seed files or the Compose override were touched: the override already reads the variable with the default fallback the runner requires.</p>
+<p><strong>Oracle run.</strong> <code>oracle up</code> with the default configuration started all four copies. The migration ran (78 migrations in one batch on a fresh database). The application served seeded records:</p>
+<ul><li>The seeded Sprint With Us opportunity (<code>00000000-0000-4000-8000-000000000701</code>) from <code>/api/opportunities/sprint-with-us</code>.</li><li>The Sprint With Us instructions page from <code>/api/content/sprint-with-us-evaluation-instructions</code>, with status 200, which is correct because the page should be present under the default.</li></ul>
+<p>I then ran <code>oracle down</code> and nothing is left running. I made no changes to the override.</p>
+<p>Neither new configuration has been seen to remove its page. To run the oracle with a variable set, the command has to set it or read <code>$SDLC_BIN</code>, and the sandbox blocks both forms without an approval nobody here can give. The existing seed and database setting do this work for <code>service_page_absent</code>, but I did not watch them do it in this run either. The calibration run, which starts a copy with each <code>select</code>, will be the first to see an instructions page actually gone.</p>
+<p>re-address missing-test/R-7.29 to derive-tests: added configurations evaluation_instructions_absent_swu (select SDLC_ORACLE_ABSENT_PAGE=sprint-with-us-evaluation-instructions, tag @evaluation_instructions_absent_swu) and evaluation_instructions_absent_twu (select SDLC_ORACLE_ABSENT_PAGE=team-with-us-evaluation-instructions, tag @evaluation_instructions_absent_twu) in spec/contract/observables.yaml. Each removes that program&#39;s instructions page through tests/seed/017-absent-service-page.sql, so instructions_body on evaluation-instructions-swu / evaluation-instructions-twu can be observed empty for the seeded closed opportunities, opened as users.staffOne.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:product-owner (persona agent · claude claude-opus-5-5) on 2026-10-02 23:54.</p>
+<div class="body"><p>Question: does this contract change give the tests a way to reach R-7.29&#39;s clause about the two evaluation-instructions screens? Ruling: approve. Reason: the two new configurations reuse the existing SDLC_ORACLE_ABSENT_PAGE switch, which 017-absent-service-page.sql already implements by deleting whichever page&#39;s slug is in sdlc.absent_page. The slugs they name (sprint-with-us-evaluation-instructions, team-with-us-evaluation-instructions) are seeded with those exact slugs in tests/seed/manifest.yaml (content.servicePage*EvaluationInstructions), and each is embedded by the matching screen. users.staffOne is an evaluator on the panels of both opportunities.closedSprintWithUs and opportunities.closedTeamWithUs, so the stated persona can open both screens. Both screens and their instructions_body field exist in surface.yaml, which already records that the body stays empty when the page can&#39;t be read. There is one configuration per program because the variable names a single page, which is correct. The only change outside the contract is a comment fix in the seed file. Neither configuration has yet been seen to remove its page, because the sandbox would not start the oracle with the variable set. That is an honest gap, stated in the proposal, and calibration closes it by starting an oracle copy for each select. What would change the ruling: if calibration shows /api/content/&lt;slug&gt; still returning 200 under either select, the configuration fails to put its precondition in place and must come back to contract.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
