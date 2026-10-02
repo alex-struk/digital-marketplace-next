@@ -165,13 +165,19 @@ reader's attention.
   fail silently. A G3 ruling on the build of Slice 7 found each unbound there, because its test
   walks a screen Slice 7 does not serve. All of that is still built in Slice 7; only where each is
   answered for moves. R-1.8 and R-1.48 go through `/opportunities/sprint-with-us/create` and the
-  Sprint With Us view, so they sit in Slice 10, which builds both. R-1.19 goes through the same
-  screens and its third example ("an opportunity finally reaches cancelled") uses the cancel
-  action, which only Slice 9 builds; Slice 10 therefore depends on Slice 9 as well as Slice 7.
-  The added dependency changes nothing in build order — Slice 10 already followed Slice 9 — and it
-  is preferred to moving R-1.19 later, because the state values of every program belong with the
-  first slice in which every program's opportunities exist. What it does change is that Slice 10
-  can no longer be built or shown before cancellation lands. R-6.15's test checks two notices: the
+  Sprint With Us view, so they sit in Slice 10, which builds both. R-1.19 was first placed in
+  Slice 10 as well, but a G3 ruling on the build of Slice 10 found its example "an opportunity
+  moves on to a program-specific evaluation stage" unreachable there: a lapsed Sprint With Us
+  opportunity only leaves Published when the deadline hook runs, and that hook is delivered in
+  Slice 16. R-1.19 therefore sits in Slice 16, whose closure (Slices 15 back through 7) holds the
+  Sprint With Us and Team With Us screens, the cancel action of Slice 9 that its third example
+  ("an opportunity finally reaches cancelled") uses, and the hook itself. Bringing the hook
+  forward into Slice 10 was rejected: its other duties (proposals to review, anonymous proponent
+  names, notices to the author or panel) need proposals, which do not exist until Slices 14 and
+  15, so the hook would arrive half-built. The state values are still built and enforced in the
+  store from Slice 7, so for nine slices that rule is in force but answered for by no slice.
+  Slice 10 keeps its dependency on Slice 9: it no longer needs the cancel action, but its closure
+  through Slice 9 also carries the opportunity list (Slice 8) that R-1.39 needs. R-6.15's test checks two notices: the
   first, to the panel, is reachable once panels exist in Slice 10, but the second, to the
   opportunity's owner, is reached by walking Team With Us individual evaluation (Slice 17) and the
   chair's consensus submission (Slice 18). It therefore sits in Slice 18, whose closure (Slices

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>plan-18 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">509</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">503</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">421</span></a></li><li><a href="../runs.html">Run log <span class="count">20</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>plan-18</h1>
+<p class="lede">G2 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G2</td></tr><tr><th scope="row">opened</th><td>2026-10-02 22:40</td></tr><tr><th scope="row">holder</th><td>agent:architect</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Is this the right cut of the work, and does each slice stand on its own?</h2>
+<p><strong>Recommendation.</strong> I took up the one condition sent to this stage (build-slice-10-2) and moved R-1.19 out of Slice 10 into Slice 16, the slice that delivers the deadline hook.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I took up the one condition sent to this stage (build-slice-10-2) and moved R-1.19 out of Slice 10 into Slice 16, the slice that delivers the deadline hook.</p>
+<p><strong>The finding.</strong> The ruling on the Slice 10 build found that R-1.19 can&#39;t be shown working in Slice 10. One of its cases has a lapsed Sprint With Us opportunity move on to its evaluation stage. That only happens when the hook in front of <code>/api</code> and <code>/status</code> closes it, and the plan builds that hook in Slice 16. So once scheduled transitions had run, the seeded closed opportunity still read Published.</p>
+<p><strong>Why I moved the criterion and not the hook.</strong> The ruling offered both options. Bringing the hook forward into Slice 10 would have delivered it half-built. Its other jobs are listing proposals to review, giving proponents anonymous names and notifying the author or the evaluation panel. All three need proposals, which don&#39;t exist until Slices 14 and 15. Slice 16 depends on Slice 15, so everything R-1.19&#39;s test goes through is built by then:</p>
+<ul><li>the Sprint With Us and Team With Us screens (Slice 10);</li><li>the cancel action its &quot;finally reaches cancelled&quot; example uses (Slice 9);</li><li>the hook itself.</li></ul>
+<p><strong>What changed in the files.</strong></p>
+<ul><li><strong><code>plan/tasks.md</code>:</strong> R-1.19 is gone from Slice 10&#39;s criteria and its delivers line. It now appears in Slice 16&#39;s criteria, and Slice 16&#39;s delivers line explains why it is answered for there.</li><li><strong><code>plan/plan.md</code>:</strong> I rewrote the R-1.19 passage in &quot;Criteria that sit awkwardly where they are&quot;. It records the ruling, the move and why bringing the hook forward was rejected. It also states a known gap: the store has enforced the state values since Slice 7, so for nine slices that rule is in force with no slice answering for it.</li><li><strong>Slice 10&#39;s dependency on Slice 9 stays.</strong> It was first added for the cancel action, which Slice 10 no longer needs. But Slice 9 is also how Slice 10 reaches the opportunity list (Slice 8), which R-1.39 needs. Nothing changes in build order.</li></ul>
+<p>Nothing else was touched: the other slices, the Constitution check and every decision record are as they were. I wrote no new decision record, because this is a placement change and the plan text already explains it.</p>
+<p><strong>Checking.</strong> I couldn&#39;t run the coverage script (<code>plan/check-coverage.mjs</code>) because running commands needed approval this session didn&#39;t have. I searched the criteria lines by hand instead, and R-1.19 now appears in exactly one slice, Slice 16. The move adds no criterion and drops none, so the 248 placements should be unchanged, but the script hasn&#39;t confirmed it.</p>
+<p><strong>Assumption.</strong> I took the ruling&#39;s phrase &quot;when scheduled transitions run&quot; to mean the existing on-request deadline hook (decision record 0005), not a separate scheduler. No new platform choice is implied.</p>
+<p>No conditions were addressed to a person, and I&#39;m deferring no requests.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:architect (persona agent · claude claude-opus-5-5) on 2026-10-02 22:41.</p>
+<div class="body"><p>The question is whether moving R-1.19 (state values of every program) from Slice 10 to Slice 16 is the right cut, with each slice standing on its own. Approved: R-1.19 now sits on exactly one slice&#39;s criteria line (plan/tasks.md:86, Slice 16). Slice 16&#39;s closure (Slices 15 back through 7) holds everything its test goes through: the Sprint With Us and Team With Us screens (Slice 10), the cancel action (Slice 9) and the deadline hook that moves a lapsed opportunity out of Published, which the G3 ruling on build-slice-10-2 found Slice 10 could not reach. Rejecting the alternative of pulling the hook into Slice 10 is sound, since the hook&#39;s other duties need proposals that only exist from Slices 14 and 15. The plan states the known gap (state values enforced from Slice 7 but answered for by no slice until 16). Slice 10&#39;s remaining dependency on Slice 9 is justified by R-1.39&#39;s need for the opportunity list. Tier is STANDARD, with no schema change, no new dependency and no stack departure, so nothing escalates. One cosmetic staleness: Slice 7&#39;s delivers line (plan/tasks.md:42) still lists the answering slices as &#39;9, 10, 14, 15 and 18&#39; without 16; it is a narrative pointer, not a criterion assignment, so it does not change the ruling. The proposal did not run the coverage script, and this ruling could not run it either because it needed approval. A run showing R-1.19 placed other than once, or the 248-placement total changed, would turn this into a return.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
