@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does the bind-adapter-new-46 adapter bind every surface action and observation on new, and nothing else? Approved. The 11 bound members match the contract's declaration of opportunity-history-request and opportunity-status-request in spec/contract/surface.yaml exactly. Every binding is navigation, a request, or a fresh read-back. The status-to-operation map (UNDER_REVIEW→submitForReview, PUBLISHED→publish, CANCELED→cancel, EVAL_CC/EVAL_SCENARIO/EVAL_C→the start operations) copies the contract's own table and decides no outcome, and any other status is reported unbound rather than guessed. The diff touches only tests/adapters/new/, so nothing under tests/acceptance changed and no protected path is touched. The author could not compile, but the runner's own typecheck on e657d3deb passed with no diagnostics under adapters/new/, so that gap is closed by independent evidence. The receipt says plainly what was not exercised: no test has driven these pages yet, and none exists for R-1.20 or R-1.33. The proposal-cwu-create unbound reason is real: the route answers Page not found and the vendor's public page offers only a Watch tick box. R-1.35/R-1.36 already carry an open request to plan about this. The 404s on seed.opportunities.cwuWithPrivateNote and cwuCancelled are a gap in the new target's data, which this stage cannot fix and which will surface accurately through verify as unbound with that reason. That is why the adapter reports a 404 record as unbound rather than empty. This proposal does not settle build-slice-9-3#6, which is build's job, so it stays open. The ruling would change if the adapter decided an outcome, touched tests/acceptance, or carried an unbound reason the target contradicts.
+conditions: []
+cost: 0.4718506
+turns: 8
+session: "39d07899-c76e-4ba1-bd4f-bdd98ac38be9"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-02T16:32:53.238Z
