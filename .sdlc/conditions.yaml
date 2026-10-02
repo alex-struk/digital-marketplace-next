@@ -1990,3 +1990,13 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-10-02T18:39:35.158Z
+    closed:
+      outcome: met
+      why: tests/adapters/new/index.ts noteControlsIn now calls unbound (with
+        page.url() and actingId()) when no region named History is on the page
+        after toSection succeeds, and again when that region's table never
+        becomes visible within 5s; it returns "false" only after both are
+        confirmed. Both the CWU noteControlOffered and the shared SWU/TWU
+        noteControlOffered pass their own location into it.
+      by: agent:reviewer
+      at: 2026-10-02T18:42:00.759Z
