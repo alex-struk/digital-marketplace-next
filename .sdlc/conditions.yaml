@@ -1920,3 +1920,17 @@ conditions:
         watcher-and-proponent test makes.
       by: agent:reviewer
       at: 2026-10-02T10:53:31.998Z
+  - ref: build-slice-9-3#6
+    text: Remove the private-note form, NoteForm, from the History tab of
+      app/frontend/src/screens/opportunity-cwu-edit.tsx (line 334) and
+      app/frontend/src/screens/opportunity-other-manage.tsx (line 206), along
+      with the addNote action they wire up, because R-1.33 v2 says no screen
+      offers a way to add a note. Keep the service's addNote and the history's
+      display of notes and their files, and update app/README.md, which
+      describes adding a note on the History tab.
+    from: build-slice-9-3
+    family: build-slice-9
+    gate: G3
+    stage: build
+    by: agent:tech-lead
+    at: 2026-10-02T14:24:25.730Z
