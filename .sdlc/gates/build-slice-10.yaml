@@ -1,0 +1,50 @@
+gate: G3
+verdict: return
+by: runner:verify
+held_by: runner
+rationale: Slice 10 does not yet do what 11 of its criteria say. Each condition
+  is the criterion and what the running application did.
+conditions:
+  - 'R-1.8, in the case "Sprint With Us": Error:
+    expect(received).toMatch(expected) — Received string:  "" — at
+    tests/acceptance/opportunities/R-1.8.spec.ts:174'
+  - 'R-1.16, in the case "A Sprint With Us opportunity must have an
+    implementation phase": Error: expect(received).toMatch(expected) — Received
+    string:  "" — at tests/acceptance/opportunities/R-1.16.spec.ts:89'
+  - 'R-1.17, in the case "a Team With Us minimum score that is not lower than
+    the maximum is refused on submission for review, naming the minimum score":
+    Error: unbound: opportunity-twu-create.add_resource — no "Resources" section
+    on http://localhost:4300/opportunities/team-with-us/create; it offers button
+    "Decrease", button "Increase", button "Select an item", button "Decrease",
+    button "Increase", button "Remove resource 1", button "Add a resource",
+    button "Decrease", button "Increase", butto… — at
+    tests/acceptance/opportunities/R-1.17.spec.ts:106'
+  - 'R-1.19, in the case "an opportunity moves on to a program-specific
+    evaluation stage": Error: expect(received).toMatch(expected) — Received
+    string:  "" — at tests/acceptance/opportunities/R-1.19.spec.ts:67'
+  - 'R-1.43, in the case "Sprint With Us at the consensus stage": Error:
+    expect(received).toBeTruthy() — Received: "" — at
+    tests/acceptance/opportunities/R-1.43.spec.ts:54'
+  - 'R-1.48, in the case "Sprint With Us: created as a draft by a public sector
+    employee who is not an administrator": Error:
+    expect(received).toContain(expected) // indexOf — Received string:    "" —
+    at tests/acceptance/opportunities/R-1.48.spec.ts:194'
+  - 'R-1.53, in the case "Sprint With Us: an administrator deletes a draft":
+    Error: expect(received).toContain(expected) // indexOf — Received
+    string:    "" — at tests/acceptance/opportunities/R-1.53.spec.ts:150'
+  - 'R-1.55, in the case "Sprint With Us: fewer than two members": Error:
+    expect(received).toBeTruthy() — Received: "" — at
+    tests/acceptance/opportunities/R-1.55.spec.ts:131'
+  - 'R-5.1, in the case "a panel of one person is rejected with the rule named,
+    and the opportunity keeps the panel it had": Error:
+    expect(received).toBeTruthy() — Received: "" — at
+    tests/acceptance/evaluation/R-5.1.spec.ts:94'
+  - "R-5.17, in the case \"a third person added to a published opportunity's
+    panel is notified, and the two already on it are not\": Error:
+    expect(received).toBeTruthy() — Received: \"\" — at
+    tests/acceptance/evaluation/R-5.17.spec.ts:217"
+  - "R-5.18, in the case \"The screen that lists and manages the panel opens for
+    an administrator or the opportunity's owner\": Error:
+    expect(received).toBeTruthy() — Received: \"\" — at
+    tests/acceptance/evaluation/R-5.18.spec.ts:79"
+at: 2026-10-02T19:48:05.192Z
