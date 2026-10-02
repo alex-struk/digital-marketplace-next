@@ -1,0 +1,19 @@
+gate: G3
+verdict: return
+by: runner:verify
+held_by: runner
+rationale: Slice 9 does not yet do what 1 of its criteria say. This build breaks
+  1 criterion that passed when an earlier slice was approved. Each condition is
+  the criterion and what the running application did.
+conditions:
+  - 'R-6.17, in the case "A deactivated account receives no notification of any
+    kind, including notices about opportunities it was watching, while the watch
+    itself is retained so that reactivating the account restores it. — t…":
+    Error: the deactivated watcher is among the recipients, visible or
+    blind-copied — Expected: false — Received: true — at
+    tests/acceptance/notifications/R-6.17.spec.ts:113'
+  - 'R-4.9 (passed when slice 3 was approved), in the case "a person may
+    deactivate their own account, which ends their session at once": Error:
+    expect(received).toBeTruthy() — Received: "" — at
+    tests/acceptance/users/R-4.9.spec.ts:25'
+at: 2026-10-02T13:22:06.291Z
