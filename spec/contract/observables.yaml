@@ -253,6 +253,60 @@ configurations:
         page it names; this configuration names the scope page because that is the page
         R-7.29's clause is about.
 
+  # The same switch pointed at the pages an evaluation panel reads as its instructions
+  # (R-7.29's note: the same silent-empty handling covers them). One configuration per
+  # program, because the variable names one page and each instructions screen embeds a
+  # different one. Both screens read their page and, when the read fails, show an empty
+  # body and go on (src/front-end/typescript/lib/pages/opportunity/sprint-with-us/edit/tab/
+  # instructions.tsx and its team-with-us twin).
+  evaluation_instructions_absent_swu:
+    for: [R-7.29]
+    select: SDLC_ORACLE_ABSENT_PAGE=sprint-with-us-evaluation-instructions
+    default: every page the service needs is present
+    sets: >-
+      the database setting sdlc.absent_page, read by tests/seed/017-absent-service-page.sql,
+      exactly as service_page_absent does, naming the Sprint With Us evaluation
+      instructions page (tests/seed/manifest.yaml,
+      content.servicePageSprintWithUsEvaluationInstructions). The application is started
+      exactly as under the default.
+    observable:
+      in_force: >-
+        GET {base_url}/api/content/sprint-with-us-evaluation-instructions is answered as
+        not found
+      screen: >-
+        evaluation-instructions-swu, opened for opportunities.closedSprintWithUs by a member
+        of its panel (users.staffOne, signed in as public-sector-staff): instructions_body is
+        empty and the rest of the opportunity's editing screen still loads
+    tag: "@evaluation_instructions_absent_swu"
+    notes:
+      - Started for this clause of R-7.29 alone. Every Sprint With Us opportunity's
+        instructions tab reads the same page, so on this instance all of them are empty.
+      - A test carries the tag above, runs only against an instance started with this
+        select, does not try to detect which instance it is on, and is left out of the
+        default run, where the instructions body is not empty.
+
+  evaluation_instructions_absent_twu:
+    for: [R-7.29]
+    select: SDLC_ORACLE_ABSENT_PAGE=team-with-us-evaluation-instructions
+    default: every page the service needs is present
+    sets: >-
+      the database setting sdlc.absent_page, read by tests/seed/017-absent-service-page.sql,
+      exactly as service_page_absent does, naming the Team With Us evaluation instructions
+      page (tests/seed/manifest.yaml, content.servicePageTeamWithUsEvaluationInstructions).
+      The application is started exactly as under the default.
+    observable:
+      in_force: >-
+        GET {base_url}/api/content/team-with-us-evaluation-instructions is answered as not
+        found
+      screen: >-
+        evaluation-instructions-twu, opened for opportunities.closedTeamWithUs by a member
+        of its panel (users.staffOne, signed in as public-sector-staff): instructions_body is
+        empty and the rest of the opportunity's editing screen still loads
+    tag: "@evaluation_instructions_absent_twu"
+    notes:
+      - Started for this clause of R-7.29 alone, on its own instance, for the same reasons
+        as evaluation_instructions_absent_swu.
+
 files:
   # A stored file is reached at its own address, whatever page put it there. The
   # application decides on each request whether the requester may read it.
