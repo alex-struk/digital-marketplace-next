@@ -816,6 +816,11 @@ redo:
       recipients, visible or blind-copied, when that opportunity is changed or
       given an addendum, and that an active watcher is.
     verb: test-overreaches
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on notifications
+      by: runner:derive-tests
+      at: 2026-10-02T10:55:52.559Z
   - id: R-1.35
     version: 1
     why: to confirm its starting condition, the test requires the proposing vendor
