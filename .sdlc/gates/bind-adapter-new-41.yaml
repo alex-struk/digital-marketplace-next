@@ -1,0 +1,17 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does this adapter bind every surface action and observation on new, and nothing else? Approved. The branch touches nothing under tests/acceptance or app/, and the runner's typecheck on c42a21a0f passed with no diagnostics under adapters/new. The two instructions left owed by bind-adapter-new-40 are carried out in the diff: every member of opportunity-swu-create and opportunity-twu-create is bound through a shared programForm helper that fills the form and presses the action, logging a refusal where an action is not offered to the signed-in person; and opportunity-list's filter_by_program, filter_by_status, filter_remote_only and search now target the 'Program'/'Status' button-and-listbox choosers, the 'Remote work accepted only' checkbox and the 'Search by title or location' searchbox inside the 'Filter opportunities' search group, with the stale comment rewritten. The new code is navigation, locators and input-to-label mapping only; refusals are logged for the test to judge, and throws are reserved for an action that could not be performed (disabled control, checkbox that did not change). The remaining unbound reasons on the Sprint With Us and Team With Us management screens and public pages each name what the screen does not offer. The proposal page's 'Fix turn' section says these conditions were left untouched; the diff shows otherwise, and the ruling is on the diff. A calibration showing the new locators do not match the rendered list filters or create forms would change this.
+conditions:
+  - "condition-met bind-adapter-new-40#4: opportunity-swu-create and opportunity-twu-create are bound in full (tests/adapters/new/bindings.yaml, opportunity-twu-create at line 279 and opportunity-swu-create above it), implemented by programForm in tests/adapters/new/index.ts and wired as opportunitySwuCreate/opportunityTwuCreate in place of the former absent(...) entries"
+  - "condition-met bind-adapter-new-40#5: opportunity-list filter_by_program, filter_by_status, filter_remote_only and search now use listFilters()/listChoice() against the 'Program' and 'Status' choosers, the 'Remote work accepted only' checkbox and the 'Search by title or location' searchbox in tests/adapters/new/index.ts, and the opportunity-list comment in bindings.yaml is rewritten to the current controls"
+cost: 0.6727666
+turns: 4
+session: "d046feaf-288b-44ae-9df3-2b6fcac7be6b"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-02T10:00:33.541Z

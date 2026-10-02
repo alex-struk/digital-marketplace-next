@@ -25,12 +25,12 @@
 // /users/:userId and the list of accounts at /users to the administrator, the content
 // management screens (/content, /content/create, /content/:slug/edit) to the administrator,
 // and /sign-up/complete to a vendor still to complete a profile. To the administrator and
-// public sector staff it also serves the program chooser (/opportunities/create), the Code
-// With Us form (/opportunities/code-with-us/create) and a Code With Us opportunity's
-// management screen (/opportunities/code-with-us/:opportunityId/edit, its ?tab= sections and
+// public sector staff it also serves the program chooser (/opportunities/create), the three
+// programs' forms (/opportunities/{code,sprint,team}-with-us/create) and each program's
+// management screen (/opportunities/<program>/:opportunityId/edit, its ?tab= sections and
 // form, attachments included); a Code With Us opportunity's public page opens for anybody.
-// Every other screen that needs a session — Sprint With Us and Team With Us, proposals,
-// organizations, evaluation, a Code With Us report —
+// Every other screen that needs a session — a Sprint With Us or Team With Us opportunity's
+// public page, proposals, organizations, evaluation, a report —
 // answers "Page not found" (so does /users, to anyone but the administrator), and
 // /admin/email-notification-reference is not a screen at all (the service answers it 404
 // "Cannot GET", to the administrator too). Those screens' open() reports "unbound:
@@ -291,12 +291,12 @@ export default function create(
 
   const camel = (name: string): string => name.replace(/_([a-z0-9])/g, (_match, c: string) => c.toUpperCase());
 
-  // What walking the target signed in found: the dashboard, one's own account screens, and
-  // to public sector staff and the administrator the program chooser, the Code With Us form
-  // and a Code With Us opportunity's management screen; everything else answers "Page not
-  // found".
+  // What walking the target signed in found: the dashboard, one's own account screens, the
+  // opportunity list, and to public sector staff and the administrator the program chooser,
+  // the Code With Us form and the three programs' management screens; the proposal,
+  // organization, evaluation and report screens answer "Page not found".
   const NOBODY_SIGNS_IN =
-    'walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor\'s screens — the seeded organization owner for the organization screens — with the seeded records\' identifiers), the running build serves a signed-in person /dashboard (to the administrator "Create an opportunity" over "All opportunities", each Code With Us opportunity linked to its management screen; to public sector staff the same over "My opportunities"), the account screens under /users, to the administrator the content-management screens under /content, and to the administrator and public sector staff only /opportunities/create, /opportunities/code-with-us/create and /opportunities/code-with-us/:opportunityId/edit; every other opportunity, proposal, organization and evaluation screen — every Sprint With Us and Team With Us screen (tried with the seeded closed, awarded and at-consensus opportunities of both), the Code With Us proposal screens (tried as a vendor with the seeded published Code With Us opportunity, whose page offers no way to start one), /opportunities/code-with-us/:opportunityId/complete, /opportunities and /organizations included — answers "Page not found"';
+    'walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor\'s screens — the seeded organization owner for the organization screens — with the seeded records\' identifiers), the running build serves a signed-in person /dashboard (to the administrator "Create an opportunity" over "All opportunities"; to public sector staff the same over "My opportunities"; to a vendor only "Dashboard" and "You are signed in as <name>."), /opportunities, the account screens under /users (whose Organizations tab says organizations "will be listed here once organizations can be registered"), to the administrator the content-management screens under /content, and to the administrator and public sector staff /opportunities/create, the three programs\' forms /opportunities/{code,sprint,team}-with-us/create and the management screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit; the proposal, organization and evaluation screens — the Code With Us proposal screens (tried as a vendor with the seeded published Code With Us opportunity, whose page offers no way to start one), /proposals, /opportunities/code-with-us/:opportunityId/complete, /organizations and /organizations/:orgId/edit included — answer "Page not found"';
 
   // What each such address answered a signed-out visitor when it was last opened: /dashboard
   // and /sign-up/complete send them to /sign-in?redirectOnSuccess=…, and everything else
@@ -3314,11 +3314,13 @@ export default function create(
 
   // ------------------------------------------------ the public pages that were not here before
 
-  // The opportunity list, read signed out: a "Filter Opportunities" chooser of program
-  // (Code With Us, Sprint With Us, Team With Us), a "Remote OK" box, a "Search by Title or
-  // Location" box, and the opportunities as cards under "Open Opportunities <count>" and a
-  // folded "Closed Opportunities". Each card is a link: title, program, status badge,
-  // "Closes <date> at <time>" (or "Closed …"), summary, value, location.
+  // The opportunity list, signed in and signed out alike: a "Filter opportunities" search
+  // group holding a "Program" chooser (a button reading the choice, "All programs Program",
+  // that opens a "Program" list of All programs, Code With Us, Sprint With Us and Team With
+  // Us), a "Status" chooser of the same kind, a "Remote work accepted only" box and a "Search
+  // by title or location" search box; the list narrows as each is changed ("Showing N
+  // opportunities. The list changes as you choose."). Each card is a link: title, program,
+  // status badge, "Closes <date> at <time>" (or "Closed …"), summary, value, location.
   // The list heads its groups "Unpublished", "Open" and "Closed", each a line of its own.
   const OPPORTUNITY_GROUPS = [
     /^unpublished(?: opportunities)?$/i,
@@ -3375,6 +3377,31 @@ export default function create(
     await settle();
   }
 
+  // The list's "Filter opportunities" search group.
+  const listFilters = (): Locator => seen(page.getByRole("search", { name: /filter opportunities/i })).first();
+
+  // One of the group's choosers: a button named for its choice and its label ("All programs
+  // Program", "All statuses Status") opening a list named for the label. The wanted choice
+  // is matched without regard to case; the list narrows as soon as it is chosen.
+  async function listChoice(where: string, button: RegExp, list: RegExp, wanted: string): Promise<void> {
+    await ready();
+    const chooser = seen(listFilters().getByRole("button", { name: button })).first();
+    if (!(await chooser.count())) {
+      unbound(where, `no chooser named ${button} among the filters on ${page.url()}; it offers ${await offered()}`);
+    }
+    await chooser.click();
+    const options = seen(page.getByRole("listbox", { name: list }).getByRole("option"));
+    await options.first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+    const names = (await options.allInnerTexts()).map((one) => one.trim());
+    const at = names.findIndex((one) => one.toLowerCase() === wanted.toLowerCase());
+    if (at < 0) {
+      await page.keyboard.press("Escape").catch(() => undefined);
+      unbound(where, `the chooser named ${button} on ${page.url()} offers no "${wanted}" (it offers: ${names.join(", ") || "nothing"})`);
+    }
+    await options.nth(at).click();
+    await settle();
+  }
+
   const opportunityList: S.OpportunityListPage = {
     open: () => go("/opportunities"),
     filterByProgram: async (input) => {
@@ -3382,36 +3409,28 @@ export default function create(
       const named = field(input, "program", "value", "name") || textOf(input);
       if (!named) unbound(where, `the input names no program (${JSON.stringify(input)})`);
       const value = PROGRAM_WORDS.find(([pattern]) => pattern.test(named))?.[1] ?? named;
-      await ready();
-      const box = seen(page.getByRole("combobox", { name: /filter opportunities/i })).first();
-      if (!(await box.count())) unbound(where, `no "Filter Opportunities" chooser on ${page.url()}`);
-      await pickFrom(where, box, value);
+      await listChoice(where, /\bprogram$/i, /^program$/i, value);
     },
-    // Signed out, the only chooser is the program one; a status chooser beside it is used
-    // where one is offered.
+    // The "Filter opportunities" search group carries, signed in and signed out alike, a
+    // "Status" chooser: a button reading the choice ("All statuses Status") that opens a
+    // "Status" list of "All statuses", "Draft", "Under review", "Published", "Evaluation" and
+    // "Awarded". Choosing one narrows the list at once ("Showing N opportunities.").
     filterByStatus: async (input) => {
       const where = "opportunity-list.filter_by_status";
       const named = field(input, "status", "value") || textOf(input);
       if (!named) unbound(where, `the input names no status (${JSON.stringify(input)})`);
-      await ready();
-      const boxes = seen(page.getByRole("combobox"));
-      for (let i = 0; i < (await boxes.count()); i++) {
-        // The program chooser is known by its accessible name, however it is given.
-        const described = await boxes.nth(i).ariaSnapshot().catch(() => "");
-        if (/filter opportunities/i.test(described)) continue;
-        await pickFrom(where, boxes.nth(i), named);
-        return;
-      }
-      unbound(
-        where,
-        `opened ${page.url()} signed out: it offers the "Filter Opportunities" program chooser, "Remote OK" and "Search by Title or Location", and no status chooser; ${NOBODY_SIGNS_IN}, so no other reader's list could be looked at`,
-      );
+      // A state named as the service stores it ("UNDER_REVIEW", "EVAL_QUESTIONS_CONSENSUS")
+      // is matched to the words the chooser uses.
+      let wanted = named.replace(/[_-]+/g, " ").trim().toLowerCase();
+      if (/^eval/.test(wanted)) wanted = "evaluation";
+      if (/^(all|any)$/.test(wanted)) wanted = "all statuses";
+      await listChoice(where, /\bstatus$/i, /^status$/i, wanted);
     },
     filterRemoteOnly: async (input) => {
       const where = "opportunity-list.filter_remote_only";
       await ready();
-      const box = seen(page.getByRole("checkbox", { name: /^remote ok$/i })).first();
-      if (!(await box.count())) unbound(where, `no "Remote OK" box on ${page.url()}`);
+      const box = seen(listFilters().getByRole("checkbox", { name: /^remote work accepted only$/i })).first();
+      if (!(await box.count())) unbound(where, `no "Remote work accepted only" box among the filters on ${page.url()}; it offers ${await offered()}`);
       const stated = given(input, ["remote", "remoteOk", "remoteOnly", "checked", "on"]);
       await box.setChecked(stated === undefined || stated === null ? true : saysYes(stated));
       await settle();
@@ -3421,20 +3440,68 @@ export default function create(
       const words = field(input, "query", "search", "term", "text", "title", "location") || textOf(input);
       if (!words) unbound(where, `the input names nothing to search for (${JSON.stringify(input)})`);
       await ready();
-      const box = seen(page.getByRole("textbox", { name: /search by title or location/i })).first();
-      if (!(await box.count())) unbound(where, `no "Search by Title or Location" box on ${page.url()}`);
+      const box = seen(listFilters().getByRole("searchbox", { name: /^search by title or location$/i })).first();
+      if (!(await box.count())) unbound(where, `no "Search by title or location" box among the filters on ${page.url()}; it offers ${await offered()}`);
       await box.fill(words);
       await settle();
     },
-    toggleWatch: async () => {
+    // Signed in, each card carries a "Watch <title>" box ("Tick Watch on an opportunity to be
+    // emailed whenever it changes. You cannot watch one you created."), saved as soon as it is
+    // ticked; a card of the reader's own opportunity carries none, and a signed-out visitor's
+    // list none at all. The input names the card by its title or identifier (the first card
+    // offering the box when it names none) and may say which way the box should end up. A
+    // card shown without the box is the list refusing this reader, logged so the test's own
+    // follow-up reading decides.
+    toggleWatch: async (input) => {
       const where = "opportunity-list.toggle_watch";
       await ready();
-      const control = await findControl(page, /^(watch|watching|unwatch)$/i);
-      if (!control) {
-        unbound(where, `opened ${page.url()} signed out; no card carries a watch control — watching is offered only to a signed-in person, and ${NOBODY_SIGNS_IN}`);
+      await seen(page.getByRole("main").getByText(/^showing \d+ opportunit/i))
+        .first()
+        .waitFor({ state: "visible", timeout: 10000 })
+        .catch(() => undefined);
+      const id = field(input, "opportunityId", "id");
+      const title = field(input, "title", "opportunity", "name") || (typeof input === "string" ? input : "");
+      const cards = seen(page.getByRole("main").getByRole("article"));
+      const watchBox = (card: Locator): Locator => card.getByRole("checkbox", { name: /^\s*watch\b/i }).first();
+      let card: Locator | null = null;
+      for (let i = 0; i < (await cards.count()); i++) {
+        const one = cards.nth(i);
+        const href = (await one.getByRole("link").first().getAttribute("href").catch(() => null)) ?? "";
+        const heading = (await one.getByRole("heading").first().innerText().catch(() => "")).trim();
+        const matches = id
+          ? href.replace(/[?#].*$/, "").endsWith(`/${id}`)
+          : title
+            ? heading.toLowerCase() === title.trim().toLowerCase()
+            : (await watchBox(one).count()) > 0;
+        if (matches) {
+          card = one;
+          break;
+        }
       }
-      await control.click();
+      if (!card) {
+        if (!id && !title) {
+          noteRefusal(`${where} — no card on ${page.url()} offers ${actingId()} a "Watch" box`);
+          return;
+        }
+        unbound(where, `no card for ${id || `"${title}"`} among the ${await cards.count()} the list on ${page.url()} shows`);
+      }
+      const box = watchBox(card);
+      if (!(await box.count())) {
+        noteRefusal(`${where} — the card for ${id || `"${title}"`} on ${page.url()} offers ${actingId()} no "Watch" box`);
+        return;
+      }
+      if (await isDisabled(box)) throw new Error(`${where} — the "Watch" box for ${id || `"${title}"`} is disabled on ${page.url()}`);
+      const was = await box.isChecked();
+      const wanted = boxWanted(input, ["watch", "watching", "watched", "subscribed"]);
+      if (wanted !== undefined && wanted === was) return;
+      await box.click();
       await settle();
+      for (let tries = 0; tries < 20 && (await box.isChecked().catch(() => was)) === was; tries++) {
+        await page.waitForTimeout(250);
+      }
+      if ((await box.isChecked().catch(() => was)) === was) {
+        throw new Error(`${where} — ticking the "Watch" box for ${id || `"${title}"`} on ${page.url()} left it ${was ? "ticked" : "unticked"}`);
+      }
     },
     unpublishedGroup: () => opportunityGroup(OPPORTUNITY_GROUPS[0]),
     openGroup: () => opportunityGroup(OPPORTUNITY_GROUPS[1]),
@@ -4108,6 +4175,339 @@ export default function create(
       await addAttachmentFile(cwuNew.where("add_attachment"), input);
     },
     fieldError: () => cwuNew.messages("field_error"),
+  };
+
+  // ---------------------------------------------------------------- the Sprint With Us and Team With Us forms
+  //
+  // Walked signed in as the administrator and as a public sector employee, both open as one
+  // long form of regions: "Overview" (Title, Teaser, Location, "Is remote work acceptable?"
+  // Yes/No, "Remote work description"), the budget ("Total maximum budget" for Sprint With
+  // Us with "Skills (required)"; "Maximum budget" for Team With Us), "Description", "Key
+  // dates" (Proposal deadline and Assignment date; Team With Us adds "Start date" and
+  // "Completion date (optional)"), then "Phases" (Sprint With Us: an "Implementation phase"
+  // group with its own Start and Completion dates, and "Add an inception phase" / "Add a
+  // prototype phase") or "Resources" (Team With Us: "Resource 1" with a "Service area"
+  // chooser and "Target allocation (% of full time)", and "Add a resource"), then "Team
+  // questions" / "Resource questions" ("Question 1" with Question, Guideline for evaluators,
+  // Maximum score, Minimum score and Response word limit, and "Add a team question" / "Add a
+  // resource question"), "Scoring weights" (percentages, with a "Total: N%" status),
+  // "Evaluation panel" ("Panel member 1" with a "Public sector employee" chooser and
+  // "Evaluator" and "Chair" boxes, and "Add a panel member") and a disabled "Add
+  // attachment". Under them the "Opportunity actions" group offers the administrator "Save
+  // draft" and "Publish" (which asks "Publish this opportunity?" with "Publish opportunity")
+  // and a public sector employee "Save draft" and "Submit for review". An accepted save
+  // lands on the new opportunity's management screen; a refused one stays on the form with
+  // an alert ("The opportunity was not saved") and the field marked invalid with its reason.
+  const PROGRAM_FIELDS: Record<string, RegExp> = {
+    ...CWU_FIELDS,
+    maxBudget: /^\s*(total\s+)?maximum budget\b/i,
+    totalMaxBudget: /^\s*(total\s+)?maximum budget\b/i,
+    budget: /^\s*(total\s+)?maximum budget\b/i,
+    startDate: /^\s*start date\b/i,
+    completionDate: /^\s*completion date\b/i,
+  };
+  const QUESTION_FIELDS: [string, RegExp, string[]][] = [
+    ["question", /^\s*question\b/i, ["question", "text", "prompt"]],
+    ["guideline", /^\s*guideline\b/i, ["guideline", "guidelines", "guidance"]],
+    ["maximum_score", /^\s*maximum score\b/i, ["maximumScore", "maxScore", "score"]],
+    ["minimum_score", /^\s*minimum score\b/i, ["minimumScore", "minScore"]],
+    ["response_word_limit", /^\s*response word limit\b/i, ["responseWordLimit", "wordLimit", "words"]],
+  ];
+  const WEIGHT_FIELDS: [RegExp, string[]][] = [
+    [/^\s*(team|resource) questions \(%\)/i, ["questions", "teamQuestions", "resourceQuestions", "questionsWeight", "teamQuestionsWeight", "resourceQuestionsWeight"]],
+    [/^\s*code challenge \(%\)/i, ["codeChallenge", "codeChallengeWeight"]],
+    [/^\s*team scenario \(%\)/i, ["teamScenario", "scenario", "teamScenarioWeight"]],
+    [/^\s*challenge \(%\)/i, ["challenge", "challengeWeight"]],
+    [/^\s*price \(%\)/i, ["price", "priceWeight"]],
+  ];
+  const PHASE_KEYS = ["phases", "phase", "inception", "prototype", "implementation"];
+  const QUESTION_KEYS = ["questions", "teamQuestions", "resourceQuestions", "evaluationQuestions"];
+  const RESOURCE_KEYS = ["resources", "resource"];
+  const PANEL_KEYS = ["panel", "evaluationPanel", "panelMembers", "evaluators"];
+  const WEIGHT_KEYS = ["weights", "scoringWeights", ...WEIGHT_FIELDS.flatMap(([, keys]) => keys)];
+
+  // A person as the panel's chooser names them: the seeded account's name, or failing that
+  // the name the service holds for that account.
+  async function personName(value: unknown): Promise<string> {
+    const named = givenText(value, ["name"]);
+    if (named) return named;
+    const person = personOf(value);
+    if (person) {
+      const users = seedGroups.users ?? {};
+      const found = Object.values(users).find((each) => (person.id && each.id === person.id) || (person.email && each.email === person.email));
+      const seeded = found && typeof (found as Record<string, unknown>).name === "string" ? String((found as Record<string, unknown>).name) : "";
+      if (seeded) return seeded;
+      if (person.id) {
+        const answer = await page.request.get(`${baseURL}/api/users/${person.id}`).catch(() => null);
+        const body = answer && answer.ok() ? ((await answer.json().catch(() => ({}))) as Record<string, unknown>) : {};
+        if (typeof body.name === "string" && body.name) return body.name;
+      }
+    }
+    return typeof value === "string" ? value : "";
+  }
+
+  function programForm(pageId: string, route: string, kind: "sprint" | "team") {
+    const screen = signedInScreen(pageId, route);
+    const where = screen.where;
+    const questionsRegion = (): Locator =>
+      seen(page.getByRole("region", { name: kind === "sprint" ? /^team questions$/i : /^resource questions$/i })).first();
+    const addQuestionName = kind === "sprint" ? /^\s*add a team question\s*$/i : /^\s*add a resource question\s*$/i;
+
+    // A chooser drawn as a button that opens a list of options ("Service area", "Public
+    // sector employee", "Skills").
+    async function choose(member: string, scope: Locator, button: RegExp, value: string): Promise<void> {
+      const opener = seen(scope.getByRole("button", { name: button })).first();
+      if (!(await opener.count())) unbound(where(member), `no chooser named ${button} on ${page.url()}; it offers ${await offered()}`);
+      await opener.click();
+      const list = seen(page.getByRole("listbox")).last();
+      await list.waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+      const option = list.getByRole("option", { name: new RegExp(`^\\s*${escapeRx(value)}\\s*$`, "i") });
+      if (!(await option.count())) {
+        const names = (await list.getByRole("option").allInnerTexts().catch(() => [] as string[])).map((one) => one.trim()).filter(Boolean);
+        await page.keyboard.press("Escape").catch(() => undefined);
+        unbound(where(member), `the chooser named ${button} on ${page.url()} offers no "${value}"; it offers ${names.join(", ") || "nothing"}`);
+      }
+      await option.first().click();
+      await settle();
+    }
+
+    async function fillBox(member: string, scope: Locator, label: RegExp, key: string, value: unknown): Promise<void> {
+      const box = seen(scope.getByRole("textbox", { name: label })).first();
+      if (!(await box.count())) unbound(where(member), `no field labelled ${label} on ${page.url()} takes "${key}"`);
+      await enter(where(member), key, box, value);
+    }
+
+    // The last question group of the list, or the one at a place in it (the first is 1).
+    function questionGroup(at?: number): Locator {
+      const groups = seen(questionsRegion().getByRole("group", { name: /^question \d+$/i }));
+      return at ? seen(questionsRegion().getByRole("group", { name: new RegExp(`^question ${at}$`, "i") })).first() : groups.last();
+    }
+
+    async function fillQuestion(member: string, group: Locator, input: unknown): Promise<void> {
+      if (typeof input === "string") {
+        await fillBox(member, group, QUESTION_FIELDS[0][1], "question", input);
+        return;
+      }
+      for (const [name, label, keys] of QUESTION_FIELDS) {
+        const value = given(input, [name, ...keys]);
+        if (value !== undefined && value !== null) await fillBox(member, group, label, name, value);
+      }
+    }
+
+    async function addQuestion(member: string, input: unknown): Promise<void> {
+      await screen.on(member);
+      await press(where(member), addQuestionName, questionsRegion());
+      await fillQuestion(member, questionGroup(), input);
+    }
+
+    async function addPhase(member: string, input: unknown): Promise<void> {
+      await screen.on(member);
+      const named = (typeof input === "string" ? input : givenText(input, ["phase", "kind", "type", "name"])).toLowerCase();
+      const region = seen(page.getByRole("region", { name: /^phases$/i })).first();
+      if (!(await region.count())) unbound(where(member), `no "Phases" section on ${page.url()}; it offers ${await offered()}`);
+      let phase = /inception/.test(named) ? "inception" : /implementation/.test(named) ? "implementation" : /prototype/.test(named) ? "prototype" : "";
+      if (!phase) {
+        // Named no phase: the first the form still offers to add, the prototype before the
+        // inception phase (an inception phase is taken only with a prototype phase).
+        for (const one of ["prototype", "inception"]) {
+          if (await seen(region.getByRole("button", { name: new RegExp(`^\\s*add an? ${one} phase\\s*$`, "i") })).count()) {
+            phase = one;
+            break;
+          }
+        }
+        if (!phase) unbound(where(member), `the "Phases" section on ${page.url()} offers no phase to add (it offers ${(await region.getByRole("button").allInnerTexts()).join(", ")})`);
+      }
+      // The implementation phase is always there; the others are added.
+      if (phase !== "implementation" && !(await seen(region.getByRole("group", { name: new RegExp(`^${phase} phase$`, "i") })).count())) {
+        await press(where(member), new RegExp(`^\\s*add an? ${phase} phase\\s*$`, "i"), region);
+      }
+      const group = seen(region.getByRole("group", { name: new RegExp(`^${phase} phase$`, "i") })).first();
+      const start = given(input, ["startDate", "start"]);
+      const end = given(input, ["completionDate", "endDate", "completion", "end"]);
+      if (start !== undefined && start !== null) await fillBox(member, group, /^\s*start date\b/i, "startDate", start);
+      if (end !== undefined && end !== null) await fillBox(member, group, /^\s*completion date\b/i, "completionDate", end);
+    }
+
+    async function addResource(member: string, input: unknown): Promise<void> {
+      await screen.on(member);
+      const region = seen(page.getByRole("region", { name: /^resources$/i })).first();
+      if (!(await region.count())) unbound(where(member), `no "Resources" section on ${page.url()}; it offers ${await offered()}`);
+      await press(where(member), /^\s*add a resource\s*$/i, region);
+      const group = seen(region.getByRole("group", { name: /^resource \d+$/i })).last();
+      const area = typeof input === "string" ? input : givenText(input, ["serviceArea", "area", "role"]);
+      if (area) {
+        // "FULL_STACK_DEVELOPER" is offered as "Full Stack Developer".
+        const words = /^[A-Z_]+$/.test(area) ? area.toLowerCase().replace(/_/g, " ") : area;
+        await choose(member, group, /service area/i, words);
+      }
+      const allocation = given(input, ["targetAllocation", "allocation", "percentage"]);
+      if (allocation !== undefined && allocation !== null) await fillBox(member, group, /target allocation/i, "targetAllocation", allocation);
+    }
+
+    // The panel given is the panel kept: each member chosen in turn ("Panel member N"), with
+    // its Evaluator and Chair boxes set when the input says, and any member past them removed.
+    async function setPanel(member: string, input: unknown): Promise<void> {
+      await screen.on(member);
+      const region = seen(page.getByRole("region", { name: /^evaluation panel$/i })).first();
+      if (!(await region.count())) unbound(where(member), `no "Evaluation panel" section on ${page.url()}; it offers ${await offered()}`);
+      const members = [Array.isArray(input) ? input : given(input, ["members", ...PANEL_KEYS]) ?? input].flat().filter((one) => one !== undefined && one !== null);
+      if (!members.length) unbound(where(member), `the input names nobody for the panel (${JSON.stringify(input)})`);
+      const groups = () => seen(region.getByRole("group", { name: /^panel member \d+$/i }));
+      for (let i = 0; i < members.length; i++) {
+        if ((await groups().count()) <= i) await press(where(member), /^\s*add a panel member\s*$/i, region);
+        const group = seen(region.getByRole("group", { name: new RegExp(`^panel member ${i + 1}$`, "i") })).first();
+        const one = members[i];
+        const name = await personName(given(one, ["user", "person", "member", "evaluator"]) ?? one);
+        if (!name) unbound(where(member), `panel member ${i + 1} of the input names nobody the chooser could offer (${JSON.stringify(one)})`);
+        const opener = seen(group.getByRole("button", { name: /public sector employee/i })).first();
+        if (((await opener.innerText().catch(() => "")).trim().toLowerCase()) !== name.toLowerCase()) {
+          await choose(member, group, /public sector employee/i, name);
+        }
+        for (const [box, keys] of [[/^\s*evaluator\s*$/i, ["evaluator", "isEvaluator"]], [/^\s*chair\s*$/i, ["chair", "isChair"]]] as [RegExp, string[]][]) {
+          const said = given(one, keys);
+          if (said === undefined || said === null) continue;
+          const tick = seen(group.getByRole("checkbox", { name: box })).first();
+          if (!(await tick.count())) unbound(where(member), `panel member ${i + 1} on ${page.url()} offers no box named ${box}`);
+          if ((await tick.isChecked()) !== saysYes(said)) await tick.click();
+        }
+      }
+      for (let n = await groups().count(); n > members.length; n--) {
+        await press(where(member), new RegExp(`^\\s*remove panel member ${n}\\s*$`, "i"), region);
+      }
+    }
+
+    async function fillWeights(member: string, input: unknown): Promise<void> {
+      const weights = { ...record(input), ...record(given(input, ["weights", "scoringWeights"])) };
+      const region = seen(page.getByRole("region", { name: /^scoring weights$/i })).first();
+      for (const [label, keys] of WEIGHT_FIELDS) {
+        const value = given(weights, keys);
+        if (value === undefined || value === null) continue;
+        await fillBox(member, region, label, keys[0], value);
+      }
+    }
+
+    // Every value the test gave, entered before anything is pressed.
+    async function fillForm(member: string, input: unknown): Promise<void> {
+      const remote = given(input, CWU_REMOTE);
+      if (remote !== undefined && remote !== null) await chooseRemote(where(member), remote);
+      const skills = given(input, CWU_SKILLS);
+      if (skills !== undefined && skills !== null) await chooseSkills(where(member), skills);
+      await fillFrom(where(member), input, PROGRAM_FIELDS, [...CWU_REMOTE, ...CWU_SKILLS, ...PHASE_KEYS, ...QUESTION_KEYS, ...RESOURCE_KEYS, ...PANEL_KEYS, ...WEIGHT_KEYS]);
+      for (const [key, value] of Object.entries(record(input))) {
+        if (squash(key) === "phases") for (const one of [value].flat()) await addPhase(member, one);
+        else if (["inception", "prototype", "implementation"].includes(squash(key))) await addPhase(member, { ...record(value), phase: key });
+      }
+      const resources = given(input, RESOURCE_KEYS);
+      if (resources !== undefined && resources !== null) for (const one of [resources].flat()) await addResource(member, one);
+      const questions = given(input, QUESTION_KEYS);
+      if (questions !== undefined && questions !== null) {
+        // The first question is already on the form, blank; it takes the first one given.
+        const list = [questions].flat();
+        for (let i = 0; i < list.length; i++) {
+          if (i === 0 && (await questionGroup(1).count())) await fillQuestion(member, questionGroup(1), list[0]);
+          else await addQuestion(member, list[i]);
+        }
+      }
+      await fillWeights(member, input);
+      const panel = given(input, PANEL_KEYS);
+      if (panel !== undefined && panel !== null) await setPanel(member, panel);
+    }
+
+    // The form's own actions. The form is offered to the administrator and public sector
+    // staff; anybody else is answered "Page not found", and a person is offered only the
+    // actions they may take (the administrator no "Submit for review", a public sector
+    // employee no "Publish"). Either is the refusal itself, logged rather than thrown, so the
+    // test's own follow-up reading decides.
+    async function submit(member: string, input: unknown, name: RegExp): Promise<void> {
+      await ready();
+      const why = await whyNotHere();
+      if (why && !actingMay(/^create opportunity$/i)) {
+        noteRefusal(`${where(member)} — ${route} answered ${actingId()} with ${why.replace(/\n+/g, " ")} at ${page.url()}; only a person who may create an opportunity is offered the form`);
+        return;
+      }
+      await screen.on(member);
+      const actions = seen(page.getByRole("group", { name: /^opportunity actions$/i })).first();
+      if (!(await actions.count())) unbound(where(member), `no "Opportunity actions" on ${page.url()}; it offers ${await offered()}`);
+      const control = seen(actions.getByRole("button", { name })).first();
+      if (!(await control.count())) {
+        const there = (await actions.getByRole("button").allInnerTexts()).map((one) => `"${one.trim()}"`).join(", ");
+        noteRefusal(`${where(member)} — no control named ${name} among the actions ${actingId()} is offered on ${page.url()} (${there})`);
+        return;
+      }
+      await fillForm(member, input);
+      if (await isDisabled(control)) throw new Error(`${where(member)} — the control named ${name} is disabled on ${page.url()}`);
+      await control.click();
+      await settle();
+      await confirmIfAsked(where(member), /^\s*(publish|submit|save)( opportunity| for review| draft)?\s*$/i);
+      const deadline = Date.now() + 10000;
+      while (Date.now() < deadline) {
+        if (/\/edit$/.test(new URL(page.url()).pathname)) break;
+        if (await seen(page.getByRole("alert")).count()) break;
+        await page.waitForTimeout(250);
+      }
+      await ready();
+    }
+
+    return {
+      open: () => screen.open(),
+      saveDraft: (input?: unknown) => submit("save_draft", input, /^\s*save draft\s*$/i),
+      submitForReview: (input?: unknown) => submit("submit_for_review", input, /^\s*submit for review\s*$/i),
+      publish: (input?: unknown) => submit("publish", input, /^\s*publish\s*$/i),
+      addQuestion,
+      addPhase,
+      addResource,
+      setPanel,
+      fieldError: () => screen.messages("field_error"),
+      // The weights are shown as a "Total: N%" status; only a message the form raises about
+      // them is an error. A total other than 100% raised none when saved or put forward.
+      scoreWeightError: () => screen.messages("score_weight_error", /weight|total|100\s*%/i),
+      // The fields one question offers, in the criteria's words, one per line, for the
+      // question at a given place (the first by default); empty when there is none there.
+      evaluationQuestionFields: async (place?: unknown): Promise<string> => {
+        const member = "evaluation_question_fields";
+        await screen.on(member);
+        if (!(await questionsRegion().count())) {
+          unbound(where(member), `no "${kind === "sprint" ? "Team" : "Resource"} questions" section on ${page.url()}; it offers ${await offered()}`);
+        }
+        const at = Number(typeof place === "object" ? given(place, ["position", "index", "place", "question"]) : place) || 1;
+        const group = questionGroup(at);
+        if (!(await group.count())) return "";
+        const names = await group.getByRole("textbox").evaluateAll((boxes) =>
+          boxes.map((box) => ((box as HTMLInputElement).labels?.[0]?.innerText ?? box.getAttribute("aria-label") ?? "").trim()),
+        );
+        return names
+          .map((label) => QUESTION_FIELDS.find(([, pattern]) => pattern.test(label))?.[0] ?? label.replace(/\(.*?\)/g, "").trim().toLowerCase().replace(/\W+/g, "_"))
+          .join("\n");
+      },
+    };
+  }
+
+  const swuForm = programForm("opportunity-swu-create", "/opportunities/sprint-with-us/create", "sprint");
+  const opportunitySwuCreate: S.OpportunitySwuCreatePage = {
+    open: swuForm.open,
+    saveDraft: swuForm.saveDraft,
+    submitForReview: swuForm.submitForReview,
+    publish: swuForm.publish,
+    addPhase: (input) => swuForm.addPhase("add_phase", input),
+    addTeamQuestion: (input) => swuForm.addQuestion("add_team_question", input),
+    setEvaluationPanel: (input) => swuForm.setPanel("set_evaluation_panel", input),
+    fieldError: swuForm.fieldError,
+    scoreWeightError: swuForm.scoreWeightError,
+    evaluationQuestionFields: swuForm.evaluationQuestionFields,
+  };
+
+  const twuForm = programForm("opportunity-twu-create", "/opportunities/team-with-us/create", "team");
+  const opportunityTwuCreate: S.OpportunityTwuCreatePage = {
+    open: twuForm.open,
+    saveDraft: twuForm.saveDraft,
+    submitForReview: twuForm.submitForReview,
+    publish: twuForm.publish,
+    addResource: (input) => twuForm.addResource("add_resource", input),
+    addResourceQuestion: (input) => twuForm.addQuestion("add_resource_question", input),
+    setEvaluationPanel: (input) => twuForm.setPanel("set_evaluation_panel", input),
+    fieldError: twuForm.fieldError,
+    scoreWeightError: twuForm.scoreWeightError,
+    evaluationQuestionFields: twuForm.evaluationQuestionFields,
   };
 
   // ---------------------------------------------------------------- an organization's own screen
@@ -5404,7 +5804,10 @@ export default function create(
     }
     const control = seen(page.getByRole("tab", { name }).or(page.getByRole("button", { name })).or(page.getByRole("link", { name })));
     if (!(await control.count())) {
-      unbound(where, `signed in, /dashboard at ${page.url()} reads only "${(await mainText()).replace(/\n+/g, " / ")}" and offers no control named ${name}`);
+      unbound(
+        where,
+        `signed in as ${actingId()}, /dashboard at ${page.url()} reads only "${(await mainText()).replace(/\n+/g, " / ")}" and offers no control named ${name}; looked again signed in as the organization-owner vendor, who wrote a seeded proposal: the dashboard is that heading and sentence alone, the header offers only Dashboard, My profile and Sign out, /proposals and /organizations answer "Page not found", the seeded published Code With Us opportunity's page offers no way to start a proposal, and the profile's Organizations tab says organizations "will be listed here once organizations can be registered"`,
+      );
     }
     await control.first().click();
     await settle();
@@ -5660,7 +6063,9 @@ export default function create(
   // review" (its own author on the staff), and "Delete", with no "Edit" because its
   // ?tab=opportunity form is already editable; another staff member's draft answers a
   // public sector employee "Page not found"; a
-  // published opportunity only "Edit"; an awarded one nothing. "Edit" goes to
+  // published opportunity "Edit" and, to the administrator, "Cancel opportunity"; an awarded
+  // one nothing. A published, lapsed or awarded one also has an Addenda section, which a
+  // draft does not. "Edit" goes to
   // ?tab=opportunity, the form itself, with "Save changes" and "Cancel". Publishing and deleting ask first ("Publish opportunity",
   // "Delete opportunity").
   const CWU_EDIT = "opportunity-cwu-edit";
@@ -5687,7 +6092,20 @@ export default function create(
     }
     return true;
   }
+  // The management screen answers "Page not found" to anybody who may not manage this
+  // opportunity: a vendor, or a staff member on somebody else's. For such a reader that
+  // refusal is the answer (they are shown none of it), so a reading made by them is nothing
+  // and the refusal is logged. Only the administrator, who may manage any opportunity, being
+  // refused means the screen could not be reached, and that stays unbound.
+  async function refusedReader(member: string): Promise<boolean> {
+    await ready();
+    const why = await refusalShown();
+    if (!why || !actingAs || actingMay(/any opportunity$/i)) return false;
+    noteRefusal(`${cwuManage.where(member)} — the management screen answered ${actingId()} with ${why.replace(/\n+/g, " ")} at ${page.url()}`);
+    return true;
+  }
   async function sectionText(member: string, tab: string): Promise<string> {
+    if (await refusedReader(member)) return "";
     if (!(await toSection(member, tab))) return "";
     const region = seen(page.getByRole("main").getByRole("region", { name: new RegExp(`^${tab}$`, "i") }));
     return (await region.count()) ? lined(await region.first().innerText()).join("\n") : "";
@@ -5813,24 +6231,21 @@ export default function create(
     if (!(await definitionOf(term))) await toSection(member, "Summary");
     return definitionOf(term);
   }
-  // Views, watchers and proposals: a draft's summary says "Views, watchers and proposals are
-  // counted once the opportunity is published." and a published one shows no count at all.
-  // Looked for again on the running build: the Summary section of a published, lapsed,
-  // in-processing or awarded opportunity carries only Proposal deadline, Reward, Published,
-  // Created by and Last changed by, to the administrator and to the owning public sector
-  // employee alike, and still none after the administrator ticked "Watch this opportunity"
-  // on its page and came back; the sections offered are Summary, Opportunity, Addenda and
-  // History, none of them a report; and the opportunity the screen loads from
-  // /api/opportunities/code-with-us/:id carries no view, watcher or proposal count to show.
-  const REPORTING_LOOKED =
-    "looked again as the administrator and as the owning public sector employee on the seeded published, lapsed-with-three-proposals, in-processing and awarded Code With Us opportunities (and on the published one after the administrator ticked \"Watch this opportunity\" on its page): the Summary carries only Proposal deadline, Reward, Published, Created by and Last changed by, the only sections are Summary, Opportunity, Addenda and History, and the opportunity the screen loads from /api/opportunities/code-with-us/:id carries no view, watcher or proposal count; looked once more as the administrator: ?tab=reporting and ?tab=proposals on the manage screen fall back to the same Summary, the public opportunity page, /dashboard and /opportunities show no count either, and /opportunities/code-with-us/:id/complete answers Page not found on the seeded lapsed, final-stage and in-processing ones. The application does count (GET /api/counters answers opportunity.code-with-us.<id>.views and .watchers with numbers), but no screen shows those numbers, and reading the API here would report a count the page never displays; looked a third time as the administrator after opening the seeded published opportunity's public page, so its views counter read 1: the Summary still showed no count, and the Sprint With Us manage Summary of its seeded published opportunity carries none either. The view count is read through the opportunity-counters page instead";
+  // Views, watchers and proposals: a published, lapsed or awarded opportunity's Summary
+  // section carries a "Reporting" region of terms, "Views", "Watchers" and "Proposals
+  // submitted", each over its number ("0" when there are none), to the administrator and to
+  // the owning staff member. A draft's summary says instead "Views, watchers and proposals
+  // are counted once the opportunity is published.", which is read as nothing.
+  const REPORTING_SEEN =
+    "seen as the administrator on the seeded published, lapsed-with-three-proposals and awarded Code With Us opportunities, whose Summary carries a \"Reporting\" region listing Views, Watchers and Proposals submitted";
   async function reportingCount(member: string, term: RegExp): Promise<string> {
+    if (await refusedReader(member)) return "";
     const shown = await summaryTerm(member, term);
     if (shown) return shown;
     if ((await textLines()).some((line) => /counted once the opportunity is published/i.test(line))) return "";
     return unbound(
       cwuManage.where(member),
-      `the summary on ${page.url()} shows no ${term} count (it shows ${(await textLines()).filter((line) => !/^(summary|opportunity|addenda|history)$/i.test(line)).slice(0, 14).join(" / ")}); ${REPORTING_LOOKED}`,
+      `the Summary on ${page.url()} shows no ${term} count under "Reporting" (it shows ${(await textLines()).filter((line) => !/^(summary|opportunity|addenda|history)$/i.test(line)).slice(0, 14).join(" / ")}); ${REPORTING_SEEN}`,
     );
   }
   const opportunityCwuEdit: S.OpportunityCwuEditPage = {
@@ -5895,38 +6310,105 @@ export default function create(
       await saveCwuDetails("publish", input);
       await manageAction("publish", /^\s*publish\s*$/i, /^\s*publish( opportunity)?\s*$/i);
     },
-    cancelOpportunity: () => manageAction("cancel_opportunity", /^\s*cancel( opportunity)?\s*$/i, /^\s*cancel opportunity\s*$/i),
-    deleteOpportunity: () => manageAction("delete_opportunity", /^\s*delete( opportunity)?\s*$/i, /^\s*delete( opportunity)?\s*$/i),
-    addAddendum: async (input) => {
-      const where = cwuManage.where("add_addendum");
-      if (!(await toSection("add_addendum", "Addenda"))) {
-        unbound(where, `the management screen at ${page.url()} offers no "Addenda" section (a draft has none); ${CWU_MANAGE_WALKED}`);
+    // "Cancel opportunity" is offered to the administrator on a published opportunity (seen on
+    // the seeded published and lapsed-with-three-proposals ones), and asks first: a dialog
+    // "Cancel this opportunity?" with an optional "Note (optional)" box, "Keep opportunity"
+    // and its own "Cancel opportunity". A draft offers "Edit", "Publish" and "Delete" instead,
+    // an awarded one nothing, and a public sector employee is not offered it; that absence is
+    // the refusal, logged so the test's own follow-up reading decides.
+    cancelOpportunity: async (input) => {
+      const member = "cancel_opportunity";
+      const where = cwuManage.where(member);
+      if (await refusedReader(member)) return;
+      await cwuManage.on(member);
+      if (!(await actionsGroup().count())) await toSection(member, "Summary");
+      const group = actionsGroup();
+      await seen(group.getByRole("button")).first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+      const control = seen(group.getByRole("button", { name: /^\s*cancel opportunity\s*$/i })).first();
+      if (!(await control.count())) {
+        const status = (await textLines()).find((line) => /^status:/i.test(line)) ?? "no status shown";
+        const there = (await group.count()) ? (await group.getByRole("button").allInnerTexts()).map((one) => `"${one.trim()}"`).join(", ") : "nothing";
+        noteRefusal(`${where} — no "Cancel opportunity" among the opportunity's actions for ${actingId()} on ${page.url()} (${status}; the actions offered are ${there || "nothing"})`);
+        return;
       }
-      const add = await findControl(page.getByRole("main"), /^\s*add( an)? addend(um|a)\s*$/i);
-      if (!add) {
-        unbound(where, `the Addenda section on ${page.url()} offers no control to add an addendum, only "${(await sectionText("add_addendum", "Addenda")).replace(/\n/g, " / ")}"; ${CWU_MANAGE_WALKED}`);
-      }
-      await add.click();
+      if (await isDisabled(control)) throw new Error(`${where} — "Cancel opportunity" is disabled on ${page.url()}`);
+      await control.click();
       await settle();
-      const words = givenText(input, ["addendum", "text", "description", "body", "content"]) || textOf(input);
-      const box = seen(page.getByRole("textbox")).last();
-      if (words && (await box.count())) await box.fill(words);
-      await press(where, /^\s*(add|publish|save|submit)( addendum)?\s*$/i);
-      await confirmIfAsked(where, /^\s*(add|publish|save|submit)( addendum)?\s*$/i);
+      await dialog().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+      if (!(await dialog().count())) throw new Error(`${where} — "Cancel opportunity" on ${page.url()} asked nothing to confirm`);
+      const note = givenText(input, ["note", "reason", "text", "comment"]) || (typeof input === "string" ? input : "");
+      if (note) {
+        const box = seen(dialog().getByRole("textbox", { name: /note/i })).first();
+        if (!(await box.count())) unbound(where, `the "Cancel this opportunity?" dialog on ${page.url()} offers no "Note" box for the note given`);
+        await box.fill(note);
+      }
+      await press(where, /^\s*cancel opportunity\s*$/i, dialog());
+      await ready();
     },
-    addNote: async (input) => {
-      const where = cwuManage.where("add_note");
-      if (!(await toSection("add_note", "History"))) unbound(where, `the management screen at ${page.url()} offers no "History" section`);
-      const add = await findControl(page.getByRole("main"), /^\s*add( a)? note\s*$/i);
-      if (!add) {
-        unbound(where, `the History section on ${page.url()} is a table of entries ("Date", "Entry", "By", "Note") with no control to add a note; ${CWU_MANAGE_WALKED}`);
+    deleteOpportunity: () => manageAction("delete_opportunity", /^\s*delete( opportunity)?\s*$/i, /^\s*delete( opportunity)?\s*$/i),
+    // The Addenda section (?tab=addenda) of a published, lapsed or awarded opportunity lists
+    // the addenda ("No addenda have been added." when none) over a "New addendum (required)"
+    // box and an "Add addendum" button that sends it. A draft has no Addenda section at all
+    // (its sections are Summary, Opportunity and History), and the management screen answers
+    // anybody who may not manage the opportunity "Page not found"; either absence is the
+    // refusal, logged so the test's own follow-up reading decides.
+    addAddendum: async (input) => {
+      const member = "add_addendum";
+      const where = cwuManage.where(member);
+      if (await refusedReader(member)) return;
+      await cwuManage.on(member);
+      if (!(await toSection(member, "Addenda"))) {
+        const status = (await textLines()).find((line) => /^status:/i.test(line)) ?? "no status shown";
+        const sections = (await seen(page.getByRole("navigation", { name: /opportunity sections/i }).getByRole("link")).allInnerTexts()).map((one) => `"${one.trim()}"`).join(", ");
+        noteRefusal(`${where} — the management screen at ${page.url()} offers ${actingId()} no "Addenda" section (${status}; its sections are ${sections || "none"})`);
+        return;
       }
-      await add.click();
-      await settle();
-      const words = givenText(input, ["note", "text", "body", "content"]) || textOf(input);
-      const box = seen(page.getByRole("textbox")).last();
-      if (words && (await box.count())) await box.fill(words);
-      await press(where, /^\s*(add|save|submit)( note)?\s*$/i);
+      const region = seen(page.getByRole("main").getByRole("region", { name: /^addenda$/i })).first();
+      const box = seen(region.getByRole("textbox", { name: /addendum/i })).first();
+      const words = givenText(input, ["addendum", "text", "description", "body", "content"]) || textOf(input);
+      if (!(await box.count())) {
+        unbound(where, `the Addenda section on ${page.url()} offers ${actingId()} no "New addendum" box, only "${lined(await region.innerText()).join(" / ")}"; seen as the administrator on the seeded published and lapsed-with-three-proposals Code With Us opportunities, where it does`);
+      }
+      if (words) await box.fill(words);
+      await press(where, /^\s*add addendum\s*$/i, region);
+      await confirmIfAsked(where, /^\s*(add|publish|save|submit)( addendum)?\s*$/i);
+      await ready();
+    },
+    // The History section (?tab=history) ends with "Add a private note": a "Note (required)"
+    // box, "Add attachment" (a file chooser, any type up to 10 MB) and "Add note", which sends
+    // it. Seen as the administrator on the seeded published opportunity. Anybody who may not
+    // manage the opportunity is answered "Page not found", and that refusal is logged.
+    addNote: async (input) => {
+      const member = "add_note";
+      const where = cwuManage.where(member);
+      if (await refusedReader(member)) return;
+      if (!(await toSection(member, "History"))) unbound(where, `the management screen at ${page.url()} offers no "History" section`);
+      const region = seen(page.getByRole("main").getByRole("region", { name: /^history$/i })).first();
+      const box = seen(region.getByRole("textbox", { name: /^\s*note\b/i })).first();
+      if (!(await box.count())) {
+        unbound(where, `the History section on ${page.url()} offers ${actingId()} no "Note" box; seen as the administrator on the seeded published Code With Us opportunity, where "Add a private note" offers one`);
+      }
+      const name = field(input, "file", "fileName", "file_name", "attachment");
+      // A file's "content" is the file's, not the note's.
+      const words = givenText(input, name ? ["note", "text", "body"] : ["note", "text", "body", "content"]) || (typeof input === "string" ? input : "");
+      if (words) await box.fill(words);
+      if (name) {
+        const content = given(input, ["content", "contents"]);
+        const bytes = Number(field(input, "bytes", "size", "sizeBytes"));
+        const path = uploadFile({
+          name,
+          ...(typeof content === "string" || content instanceof Uint8Array ? { content } : {}),
+          ...(Number.isFinite(bytes) && bytes > 0 ? { bytes } : {}),
+        });
+        const chooser = page.waitForEvent("filechooser", { timeout: 10000 }).catch(() => null);
+        await press(where, /^\s*add attachment\s*$/i, region);
+        const offered = await chooser;
+        if (!offered) throw new Error(`${where} — "Add attachment" on ${page.url()} opened no file chooser`);
+        await offered.setFiles(path);
+        await settle();
+      }
+      await press(where, /^\s*add note\s*$/i, region);
+      await ready();
     },
     opportunityIdentifier: async () => {
       await cwuManage.on("opportunity_identifier");
@@ -5947,11 +6429,305 @@ export default function create(
     },
     reportingViews: () => reportingCount("reporting_views", /^views$/i),
     reportingWatchers: () => reportingCount("reporting_watchers", /^watchers$/i),
-    reportingProposals: () => reportingCount("reporting_proposals", /^proposals$/i),
+    reportingProposals: () => reportingCount("reporting_proposals", /^proposals( submitted)?$/i),
     proposalDeadline: () => cwuFormDate("proposal_deadline", /proposal\s*deadline/i),
     assignmentDate: () => cwuFormDate("assignment_date", /assignment\s*date/i),
     startDate: () => cwuFormDate("start_date", /^\s*start\s*date/i),
     completionDate: () => cwuFormDate("completion_date", /completion\s*date/i),
+  };
+
+  // ---------------------------------------------------------------- managing a Sprint With Us or Team With Us opportunity
+  //
+  // /opportunities/{sprint,team}-with-us/:opportunityId/edit draws the same frame as the Code
+  // With Us screen — "Manage a … opportunity" over the title, "Status: <state>", "Opportunity
+  // ID: <id>", an "Opportunity actions" group and the sections as links under "Opportunity
+  // sections" — but offers much less. Its sections are Summary, Addenda (not on a draft) and
+  // History; ?tab=opportunity and any other section name fall back to the Summary. The
+  // Summary is terms: Program, Proposal deadline ("September 2, 2026 at 4:00 p.m. Pacific
+  // time"), Assignment date, the budget, Created by and Last changed by, a "Reporting" region
+  // once published, and the line "The rest of this opportunity — what makes it a … opportunity,
+  // and putting it forward for review or publication — cannot be managed here yet." The only
+  // action is "Cancel opportunity", offered to the administrator in every state from published
+  // to processing (its dialog is the Code With Us one); a draft and an awarded one offer none,
+  // and a public sector employee is offered none on their own. The Addenda and History
+  // sections are the Code With Us ones, the Sprint With Us History carrying "Add a private
+  // note" (not on a draft); the Team With Us History carries no note form. A panel evaluator,
+  // and staff on somebody else's, are answered "Page not found".
+  const programWalked = (program: string, states: string, slug: string): string =>
+    `walked as the administrator on the seeded ${program} opportunities ${states} and on a draft just saved from /opportunities/${slug}/create, as the owning public sector employee on seeded ones, and as a panel evaluator (answered "Page not found"): the screen offers only the sections Summary, Addenda (not on a draft) and History, only the action "Cancel opportunity" (to the administrator, from published to processing; none on a draft, an awarded one or to staff), and says "The rest of this opportunity — what makes it a ${program} opportunity, and putting it forward for review or publication — cannot be managed here yet."; ?tab=opportunity and other section names fall back to the Summary`;
+  const MONTHS = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"];
+  function programManage(pageId: string, route: string, walked: string) {
+    const screen = signedInScreen(pageId, route);
+    const where = screen.where;
+    const sectionLinks = (): Locator => seen(page.getByRole("navigation", { name: /opportunity sections/i }).getByRole("link"));
+    const quoted = (names: string[]): string => names.map((one) => `"${one.trim()}"`).join(", ");
+    async function context(): Promise<string> {
+      await ready();
+      const why = await whyNotHere();
+      if (why) return `${route} answered ${actingId()} with ${why.replace(/\n+/g, " ")} at ${page.url()}`;
+      const status = (await textLines()).find((line) => /^status:/i.test(line)) ?? "no status shown";
+      const group = actionsGroup();
+      const actions = (await group.count()) ? quoted(await group.getByRole("button").allInnerTexts()) : "";
+      return `on ${page.url()} as ${actingId()} (${status}) the actions offered are ${actions || "none"} and the sections ${quoted(await sectionLinks().allInnerTexts()) || "none"}`;
+    }
+    // What the screen, walked on this build, does not offer: a reason naming it, with what
+    // the screen in front of the reader offers instead.
+    async function notOffered(member: string, what: string): Promise<never> {
+      return unbound(where(member), `the screen offers no ${what}; ${walked}; ${await context()}`);
+    }
+    // As on the Code With Us screen: a reader other than the administrator who is shown the
+    // screen's refusal is shown none of it, so their reading is nothing and the refusal logged.
+    async function refused(member: string): Promise<boolean> {
+      await ready();
+      const why = await refusalShown();
+      if (!why || !actingAs || actingMay(/any opportunity$/i)) return false;
+      noteRefusal(`${where(member)} — the management screen answered ${actingId()} with ${why.replace(/\n+/g, " ")} at ${page.url()}`);
+      return true;
+    }
+    async function toSection(member: string, tab: string): Promise<boolean> {
+      await screen.on(member);
+      const link = sectionLinks().filter({ hasText: new RegExp(`^\\s*${tab}\\s*$`, "i") });
+      if (!(await link.count())) return false;
+      const href = (await link.first().getAttribute("href")) ?? "";
+      if (!new URL(page.url()).search.includes(`tab=${tab.toLowerCase()}`)) {
+        if (href) await visit(href);
+        else await link.first().click();
+        await ready();
+      }
+      return true;
+    }
+    function sectionRegion(tab: string): Locator {
+      return seen(page.getByRole("main").getByRole("region", { name: new RegExp(`^${tab}$`, "i") })).first();
+    }
+    // A section the screen has in this state reads as its text, one it does not as nothing.
+    async function sectionText(member: string, tab: string): Promise<string> {
+      if (await refused(member)) return "";
+      if (!(await toSection(member, tab))) return "";
+      const region = sectionRegion(tab);
+      return (await region.count()) ? lined(await region.innerText()).join("\n") : "";
+    }
+    // A section the screen has in no state: read where it appears, unbound where it does not.
+    async function absentSection(member: string, tab: string, what: string): Promise<string> {
+      if (await refused(member)) return "";
+      if (await toSection(member, tab)) return sectionText(member, tab);
+      return notOffered(member, what);
+    }
+    async function summaryTerm(member: string, term: RegExp): Promise<string> {
+      if (await refused(member)) return "";
+      await screen.on(member);
+      if (!(await definitionOf(term))) await toSection(member, "Summary");
+      return definitionOf(term);
+    }
+    // The Summary's dates, as the calendar day they fall on ("September 2, 2026 at 4:00 p.m.
+    // Pacific time" is 2026-09-02); "Not entered" is none.
+    async function summaryDate(member: string, term: RegExp): Promise<string> {
+      const shown = await summaryTerm(member, term);
+      const found = /([A-Za-z]+)\s+(\d{1,2}),\s*(\d{4})/.exec(shown);
+      const month = found ? MONTHS.indexOf(found[1].toLowerCase()) : -1;
+      if (!found || month < 0) return "";
+      return `${found[3]}-${String(month + 1).padStart(2, "0")}-${found[2].padStart(2, "0")}`;
+    }
+    const actionsShown = async (member: string): Promise<Locator> => {
+      if (!(await actionsGroup().count())) await toSection(member, "Summary");
+      const group = actionsGroup();
+      await seen(group.getByRole("button")).first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+      return group;
+    };
+    return {
+      open: (params: { opportunityId: string }) => screen.open(params as unknown as Record<string, string>),
+      notOffered,
+      sectionText,
+      absentSection,
+      summaryTerm,
+      summaryDate,
+      // "Cancel opportunity" asks first: "Cancel this opportunity?" with an optional "Note
+      // (optional)" box, "Keep opportunity" and its own "Cancel opportunity". Where it is not
+      // offered (a draft, an awarded one, a public sector employee) that absence is the
+      // refusal, logged so the test's own follow-up reading decides.
+      cancelOpportunity: async (input?: unknown): Promise<void> => {
+        const member = "cancel_opportunity";
+        if (await refused(member)) return;
+        await screen.on(member);
+        const group = await actionsShown(member);
+        const control = seen(group.getByRole("button", { name: /^\s*cancel opportunity\s*$/i })).first();
+        if (!(await control.count())) {
+          noteRefusal(`${where(member)} — no "Cancel opportunity" ${await context()}`);
+          return;
+        }
+        if (await isDisabled(control)) throw new Error(`${where(member)} — "Cancel opportunity" is disabled on ${page.url()}`);
+        await control.click();
+        await settle();
+        await dialog().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+        if (!(await dialog().count())) throw new Error(`${where(member)} — "Cancel opportunity" on ${page.url()} asked nothing to confirm`);
+        const note = givenText(input, ["note", "reason", "text", "comment"]) || (typeof input === "string" ? input : "");
+        if (note) {
+          const box = seen(dialog().getByRole("textbox", { name: /note/i })).first();
+          if (!(await box.count())) unbound(where(member), `the "Cancel this opportunity?" dialog on ${page.url()} offers no "Note" box for the note given`);
+          await box.fill(note);
+        }
+        await press(where(member), /^\s*cancel opportunity\s*$/i, dialog());
+        await ready();
+      },
+      // The Addenda section: the addenda ("No addenda have been added.") over a "New addendum
+      // (required)" box and "Add addendum". A draft has no Addenda section; that absence is the
+      // refusal, logged.
+      addAddendum: async (input?: unknown): Promise<void> => {
+        const member = "add_addendum";
+        if (await refused(member)) return;
+        if (!(await toSection(member, "Addenda"))) {
+          noteRefusal(`${where(member)} — no "Addenda" section ${await context()}`);
+          return;
+        }
+        const region = sectionRegion("Addenda");
+        const box = seen(region.getByRole("textbox", { name: /addendum/i })).first();
+        if (!(await box.count())) {
+          unbound(where(member), `the Addenda section on ${page.url()} offers ${actingId()} no "New addendum" box, only "${lined(await region.innerText()).join(" / ")}"; seen as the administrator on the seeded published and closed opportunities, where it does`);
+        }
+        const words = givenText(input, ["addendum", "text", "description", "body", "content"]) || textOf(input);
+        if (words) await box.fill(words);
+        await press(where(member), /^\s*add addendum\s*$/i, region);
+        await confirmIfAsked(where(member), /^\s*(add|publish|save|submit)( addendum)?\s*$/i);
+        await ready();
+      },
+      // "Add a private note" at the end of the History section: "Note (required)", "Add
+      // attachment" (a file chooser) and "Add note". A draft's History carries no such form;
+      // that absence is the refusal, logged.
+      addNote: async (input?: unknown): Promise<void> => {
+        const member = "add_note";
+        if (await refused(member)) return;
+        if (!(await toSection(member, "History"))) return notOffered(member, '"History" section');
+        const region = sectionRegion("History");
+        const box = seen(region.getByRole("textbox", { name: /^\s*note\b/i })).first();
+        if (!(await box.count())) {
+          noteRefusal(`${where(member)} — the History section offers no "Add a private note" ${await context()}`);
+          return;
+        }
+        const name = field(input, "file", "fileName", "file_name", "attachment");
+        const words = givenText(input, name ? ["note", "text", "body"] : ["note", "text", "body", "content"]) || (typeof input === "string" ? input : "");
+        if (words) await box.fill(words);
+        if (name) {
+          const content = given(input, ["content", "contents"]);
+          const bytes = Number(field(input, "bytes", "size", "sizeBytes"));
+          const path = uploadFile({
+            name,
+            ...(typeof content === "string" || content instanceof Uint8Array ? { content } : {}),
+            ...(Number.isFinite(bytes) && bytes > 0 ? { bytes } : {}),
+          });
+          const chooser = page.waitForEvent("filechooser", { timeout: 10000 }).catch(() => null);
+          await press(where(member), /^\s*add attachment\s*$/i, region);
+          const offeredChooser = await chooser;
+          if (!offeredChooser) throw new Error(`${where(member)} — "Add attachment" on ${page.url()} opened no file chooser`);
+          await offeredChooser.setFiles(path);
+          await settle();
+        }
+        await press(where(member), /^\s*add note\s*$/i, region);
+        await ready();
+      },
+      opportunityIdentifier: async (): Promise<string> => {
+        if (await refused("opportunity_identifier")) return "";
+        await screen.on("opportunity_identifier");
+        return shownIdentifier();
+      },
+      // The changes of state offered from the state the opportunity is in, in the criteria's
+      // words ("Cancel opportunity" is "cancel"); none on a draft, an awarded one or to staff.
+      offeredStateChanges: async (): Promise<string> => {
+        const member = "offered_state_changes";
+        if (await refused(member)) return "";
+        await screen.on(member);
+        const group = await actionsShown(member);
+        if (!(await group.count())) return "";
+        return (await seen(group.getByRole("button")).allInnerTexts())
+          .map((one) => one.trim().toLowerCase().replace(/\s+opportunity$/, ""))
+          .filter(Boolean)
+          .join("\n");
+      },
+    };
+  }
+
+  const SWU_EDIT = "opportunity-swu-edit";
+  const SWU_MANAGE_ROUTE = "/opportunities/sprint-with-us/:opportunityId/edit";
+  const swuManage = programManage(
+    SWU_EDIT,
+    SWU_MANAGE_ROUTE,
+    programWalked(
+      "Sprint With Us",
+      "published (open and lapsed, 00000000-0000-4000-8000-000000000701 among them), at individual evaluation, at consensus, at the code challenge, at the team scenario, in processing and awarded",
+      "sprint-with-us",
+    ),
+  );
+  const opportunitySwuEdit: S.OpportunitySwuEditPage = {
+    open: swuManage.open,
+    editDetails: () => swuManage.notOffered("edit_details", '"Edit" and no "Opportunity" section holding the form'),
+    submitForReview: () => swuManage.notOffered("submit_for_review", '"Submit for review"'),
+    publish: () => swuManage.notOffered("publish", '"Publish"'),
+    cancelOpportunity: swuManage.cancelOpportunity,
+    deleteOpportunity: () => swuManage.notOffered("delete_opportunity", '"Delete", not even on a draft'),
+    addAddendum: swuManage.addAddendum,
+    addNote: swuManage.addNote,
+    editEvaluationPanel: () => swuManage.notOffered("edit_evaluation_panel", '"Evaluation panel" section or control to change the panel'),
+    finalizeQuestionConsensuses: () => swuManage.notOffered("finalize_question_consensuses", '"Consensus" section and no control to finalize the question consensuses, not even at consensus'),
+    startTeamScenario: () => swuManage.notOffered("start_team_scenario", "section or control to start the team scenario, not even at the code challenge"),
+    opportunityIdentifier: swuManage.opportunityIdentifier,
+    createdByName: () => swuManage.summaryTerm("created_by_name", /^created by$/i),
+    lastChangedByName: () => swuManage.summaryTerm("last_changed_by_name", /^last changed by$/i),
+    summaryTab: () => swuManage.sectionText("summary_tab", "Summary"),
+    opportunityTab: () => swuManage.absentSection("opportunity_tab", "Opportunity", '"Opportunity" section'),
+    addendaTab: () => swuManage.sectionText("addenda_tab", "Addenda"),
+    historyTab: () => swuManage.sectionText("history_tab", "History"),
+    proposalsTab: () => swuManage.absentSection("proposals_tab", "Proposals", '"Proposals" section (the Summary counts "Proposals submitted" only)'),
+    teamQuestionsTab: () => swuManage.absentSection("team_questions_tab", "Team questions", '"Team questions" section'),
+    codeChallengeTab: () => swuManage.absentSection("code_challenge_tab", "Code challenge", '"Code challenge" section'),
+    teamScenarioTab: () => swuManage.absentSection("team_scenario_tab", "Team scenario", '"Team scenario" section'),
+    evaluationPanelTab: () => swuManage.absentSection("evaluation_panel_tab", "Evaluation panel", '"Evaluation panel" section'),
+    consensusTab: () => swuManage.absentSection("consensus_tab", "Consensus", '"Consensus" section'),
+    instructionsTab: () => swuManage.absentSection("instructions_tab", "Instructions", '"Instructions" section (a panel evaluator is answered "Page not found")'),
+    evaluationTab: () => swuManage.absentSection("evaluation_tab", "Evaluation", '"Evaluation" section (a panel evaluator is answered "Page not found")'),
+    proposalDeadline: () => swuManage.summaryDate("proposal_deadline", /^proposal deadline$/i),
+    assignmentDate: () => swuManage.summaryDate("assignment_date", /^assignment date$/i),
+    evaluationQuestionFields: () => swuManage.notOffered("evaluation_question_fields", '"Team questions" section and no form to edit them in'),
+  };
+
+  const TWU_EDIT = "opportunity-twu-edit";
+  const TWU_MANAGE_ROUTE = "/opportunities/team-with-us/:opportunityId/edit";
+  const twuManage = programManage(
+    TWU_EDIT,
+    TWU_MANAGE_ROUTE,
+    programWalked(
+      "Team With Us",
+      "published and lapsed (00000000-0000-4000-8000-000000000801), at individual evaluation, at consensus and at the challenge",
+      "team-with-us",
+    ),
+  );
+  const opportunityTwuEdit: S.OpportunityTwuEditPage = {
+    open: twuManage.open,
+    editDetails: () => twuManage.notOffered("edit_details", '"Edit" and no "Opportunity" section holding the form'),
+    submitForReview: () => twuManage.notOffered("submit_for_review", '"Submit for review"'),
+    publish: () => twuManage.notOffered("publish", '"Publish"'),
+    cancelOpportunity: twuManage.cancelOpportunity,
+    deleteOpportunity: () => twuManage.notOffered("delete_opportunity", '"Delete", not even on a draft'),
+    addAddendum: twuManage.addAddendum,
+    editEvaluationPanel: () => twuManage.notOffered("edit_evaluation_panel", '"Evaluation panel" section or control to change the panel'),
+    finalizeQuestionConsensuses: () => twuManage.notOffered("finalize_question_consensuses", '"Consensus" section and no control to finalize the question consensuses, not even at consensus'),
+    opportunityIdentifier: twuManage.opportunityIdentifier,
+    createdByName: () => twuManage.summaryTerm("created_by_name", /^created by$/i),
+    lastChangedByName: () => twuManage.summaryTerm("last_changed_by_name", /^last changed by$/i),
+    summaryTab: () => twuManage.sectionText("summary_tab", "Summary"),
+    opportunityTab: () => twuManage.absentSection("opportunity_tab", "Opportunity", '"Opportunity" section'),
+    addendaTab: () => twuManage.sectionText("addenda_tab", "Addenda"),
+    historyTab: () => twuManage.sectionText("history_tab", "History"),
+    proposalsTab: () => twuManage.absentSection("proposals_tab", "Proposals", '"Proposals" section (the Summary counts "Proposals submitted" only)'),
+    resourceQuestionsTab: () => twuManage.absentSection("resource_questions_tab", "Resource questions", '"Resource questions" section'),
+    challengeTab: () => twuManage.absentSection("challenge_tab", "Challenge", '"Challenge" section'),
+    evaluationPanelTab: () => twuManage.absentSection("evaluation_panel_tab", "Evaluation panel", '"Evaluation panel" section'),
+    consensusTab: () => twuManage.absentSection("consensus_tab", "Consensus", '"Consensus" section'),
+    instructionsTab: () => twuManage.absentSection("instructions_tab", "Instructions", '"Instructions" section (a panel evaluator is answered "Page not found")'),
+    evaluationTab: () => twuManage.absentSection("evaluation_tab", "Evaluation", '"Evaluation" section (a panel evaluator is answered "Page not found")'),
+    offeredStateChanges: twuManage.offeredStateChanges,
+    proposalDeadline: () => twuManage.summaryDate("proposal_deadline", /^proposal deadline$/i),
+    assignmentDate: () => twuManage.summaryDate("assignment_date", /^assignment date$/i),
+    startDate: () => twuManage.notOffered("start_date", 'start date: its Summary carries only Program, Proposal deadline, Assignment date, Maximum budget, Created by and Last changed by, and there is no "Opportunity" section holding the form'),
+    completionDate: () => twuManage.notOffered("completion_date", 'completion date: its Summary carries only Program, Proposal deadline, Assignment date, Maximum budget, Created by and Last changed by, and there is no "Opportunity" section holding the form'),
+    evaluationQuestionFields: () => twuManage.notOffered("evaluation_question_fields", '"Resource questions" section and no form to edit them in'),
   };
 
   // ---------------------------------------------------------------- new-opportunity emails on the list
@@ -6389,22 +7165,7 @@ export default function create(
       ["full_report"],
     ),
 
-    opportunitySwuCreate: absent<S.OpportunitySwuCreatePage>(
-      "opportunity-swu-create",
-      "/opportunities/sprint-with-us/create",
-      `${behindSession("/opportunities/sprint-with-us/create")}; looked for again as the administrator and as a public sector employee: /opportunities/create offers "Create a Sprint With Us opportunity", and following that link lands on "Page not found" too; rechecked once more signed in as the administrator and as a public sector employee: following the link in the page still lands on "Page not found", as do /opportunities/sprint-with-us, the seeded at-consensus Sprint With Us opportunity's view and edit screens, and the guessed spellings /opportunities/swu/create and /sprint-with-us/create, and the Code With Us create form offers no program chooser that would reach a Sprint With Us form; walked again on this build signed in as the administrator: the dashboard's "Create an opportunity" leads to /opportunities/create, whose "Create a Sprint With Us opportunity" link lands on "Page not found" at /opportunities/sprint-with-us/create, as it does for a public sector employee, and the administrator's "All opportunities" table lists Code With Us opportunities only; looked for once more signed in as the administrator, both by following the chooser's link from the dashboard and by address: still "Page not found", as are /opportunities, /opportunities/sprint-with-us and /organizations, and the administrator's header offers only Dashboard, Users, Content, My profile and Sign out`,
-      [
-        "save_draft",
-        "submit_for_review",
-        "publish",
-        "add_phase",
-        "add_team_question",
-        "set_evaluation_panel",
-        "field_error",
-        "score_weight_error",
-        "evaluation_question_fields",
-      ],
-    ),
+    opportunitySwuCreate,
 
     opportunitySwuView: opportunityView<S.OpportunitySwuViewPage>(
       SWU_VIEW,
@@ -6423,47 +7184,7 @@ export default function create(
       },
     ),
 
-    opportunitySwuEdit: {
-      ...unboundMembers(
-        "opportunity-swu-edit",
-        behindSignIn(
-          "the Sprint With Us management screen, with its evaluator-only tabs and its ?tab=opportunity form",
-          'shows the "Not Found" screen (tried with the seeded closed Sprint With Us opportunity)',
-        ),
-        ["instructions_tab", "evaluation_tab", "proposal_deadline", "assignment_date"],
-      ),
-      ...absent<S.OpportunitySwuEditPage>(
-      "opportunity-swu-edit",
-      "/opportunities/sprint-with-us/:opportunityId/edit",
-      behindSession("/opportunities/sprint-with-us/:opportunityId/edit"),
-      [
-        "edit_details",
-        "submit_for_review",
-        "publish",
-        "cancel_opportunity",
-        "delete_opportunity",
-        "add_addendum",
-        "add_note",
-        "edit_evaluation_panel",
-        "finalize_question_consensuses",
-        "start_team_scenario",
-        "opportunity_identifier",
-        "created_by_name",
-        "last_changed_by_name",
-        "summary_tab",
-        "opportunity_tab",
-        "addenda_tab",
-        "history_tab",
-        "proposals_tab",
-        "team_questions_tab",
-        "code_challenge_tab",
-        "team_scenario_tab",
-        "evaluation_panel_tab",
-        "consensus_tab",
-        "evaluation_question_fields",
-      ],
-    ),
-    } as S.OpportunitySwuEditPage,
+    opportunitySwuEdit,
 
     opportunitySwuComplete: absent<S.OpportunitySwuCompletePage>(
       "opportunity-swu-complete",
@@ -6472,22 +7193,7 @@ export default function create(
       ["full_report"],
     ),
 
-    opportunityTwuCreate: absent<S.OpportunityTwuCreatePage>(
-      "opportunity-twu-create",
-      "/opportunities/team-with-us/create",
-      `${behindSession("/opportunities/team-with-us/create")}; looked for again as the administrator and as a public sector employee: /opportunities/create offers "Create a Team With Us opportunity", and following that link lands on "Page not found" too; rechecked once more signed in as the administrator and as a public sector employee: following the link in the page still lands on "Page not found", as do /opportunities/team-with-us and the guessed spellings /opportunities/twu/create and /team-with-us/create, and the Code With Us create form offers no program chooser that would reach a Team With Us form; walked again on this build signed in as the administrator: the dashboard's "Create an opportunity" leads to /opportunities/create, whose "Create a Team With Us opportunity" link lands on "Page not found" at /opportunities/team-with-us/create, as it does for a public sector employee, and the administrator's "All opportunities" table lists Code With Us opportunities only; looked for once more signed in as the administrator, both by following the chooser's link from the dashboard and by address: still "Page not found", as are /opportunities, /opportunities/team-with-us and /organizations, and the administrator's header offers only Dashboard, Users, Content, My profile and Sign out`,
-      [
-        "save_draft",
-        "submit_for_review",
-        "publish",
-        "add_resource",
-        "add_resource_question",
-        "set_evaluation_panel",
-        "field_error",
-        "score_weight_error",
-        "evaluation_question_fields",
-      ],
-    ),
+    opportunityTwuCreate,
 
     opportunityTwuView: opportunityView<S.OpportunityTwuViewPage>(
       TWU_VIEW,
@@ -6509,52 +7215,7 @@ export default function create(
       },
     ),
 
-    opportunityTwuEdit: {
-      ...unboundMembers(
-        "opportunity-twu-edit",
-        behindSignIn(
-          "the Team With Us management screen, with its evaluator-only tabs, its offered changes of state and its ?tab=opportunity form",
-          'shows the "Not Found" screen (tried with the seeded closed Team With Us opportunity)',
-        ),
-        [
-          "instructions_tab",
-          "evaluation_tab",
-          "offered_state_changes",
-          "proposal_deadline",
-          "assignment_date",
-          "start_date",
-          "completion_date",
-        ],
-      ),
-      ...absent<S.OpportunityTwuEditPage>(
-      "opportunity-twu-edit",
-      "/opportunities/team-with-us/:opportunityId/edit",
-      behindSession("/opportunities/team-with-us/:opportunityId/edit"),
-      [
-        "edit_details",
-        "submit_for_review",
-        "publish",
-        "cancel_opportunity",
-        "delete_opportunity",
-        "add_addendum",
-        "edit_evaluation_panel",
-        "finalize_question_consensuses",
-        "opportunity_identifier",
-        "created_by_name",
-        "last_changed_by_name",
-        "summary_tab",
-        "opportunity_tab",
-        "addenda_tab",
-        "history_tab",
-        "proposals_tab",
-        "resource_questions_tab",
-        "challenge_tab",
-        "evaluation_panel_tab",
-        "consensus_tab",
-        "evaluation_question_fields",
-      ],
-    ),
-    } as S.OpportunityTwuEditPage,
+    opportunityTwuEdit,
 
     opportunityTwuComplete: absent<S.OpportunityTwuCompletePage>(
       "opportunity-twu-complete",
