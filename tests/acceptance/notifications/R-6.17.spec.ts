@@ -12,10 +12,15 @@ import type { Persona, Surface } from "../../fixtures";
 // account is then evidence of what the service decided.
 //
 // The when is the watched opportunity being changed or given an addendum; each is its own test.
-// The catcher is emptied just before the change, so everything it holds afterwards follows from
-// the change, and the deactivated account must appear on none of it — neither as a visible
-// recipient nor as a blind copy (a notice to a group is addressed to the service's own address
-// with everyone else blind-copied, spec/contract/observables.yaml, email.notes).
+//
+// Only messages about the opportunity are judged: a message is about it when its subject or
+// either of its bodies names the opportunity's title. Deactivating (and reactivating) an account
+// sends that account a notice of its own, which can reach the catcher after the screen has
+// answered and so after any clearing of the catcher; it does not name the opportunity, so it is
+// never counted here, whenever it lands. Among the messages about the opportunity, the
+// deactivated account must appear on none — neither as a visible recipient nor as a blind copy
+// (a notice to a group is addressed to the service's own address with everyone else
+// blind-copied, spec/contract/observables.yaml, email.notes).
 //
 // The watch being retained is observed the way a watch shows itself to its holder: once the
 // account is reactivated, the next change to the opportunity reaches it again, although nobody
@@ -28,7 +33,8 @@ const statement =
 const serviceAddress = "donotreply@example.test";
 
 const settle = { timeout: 30000 };
-const opportunityId = seed.opportunities.publishedCodeWithUs.id;
+const opportunity = seed.opportunities.publishedCodeWithUs;
+const opportunityId = opportunity.id;
 const deactivated = seed.users.vendorOne;
 const activeWatcher = seed.users.proponentTwo;
 
@@ -55,17 +61,26 @@ function identifiersIn(listing: string): string[] {
     .filter(Boolean);
 }
 
-// Every recipient, visible or blind-copied, of every message caught since the catcher was emptied.
-async function everyRecipient(surface: Surface, mail: Mail): Promise<string> {
+// Every recipient, visible or blind-copied, of every caught message that is about the opportunity.
+async function recipientsOfNoticesAboutTheOpportunity(surface: Surface, mail: Mail): Promise<string> {
   const ids = new Set<string>();
   await surface.caughtMessageList.open();
   for (const id of identifiersIn(await readOrEmpty(() => surface.caughtMessageList.messageIdentifiers()))) ids.add(id);
   for (const address of [serviceAddress, deactivated.email, activeWatcher.email]) {
     for (const { ID } of await mail.messagesTo(address)) ids.add(ID);
   }
+  const title = opportunity.title.toLowerCase();
   const recipients: string[] = [];
   for (const messageId of ids) {
     await surface.caughtMessage.open({ messageId });
+    const said = [
+      await readOrEmpty(() => surface.caughtMessage.subject()),
+      await readOrEmpty(() => surface.caughtMessage.plainTextBody()),
+      await readOrEmpty(() => surface.caughtMessage.htmlBody()),
+    ]
+      .join(" ")
+      .toLowerCase();
+    if (!said.includes(title)) continue;
     recipients.push(await readOrEmpty(() => surface.caughtMessage.visibleRecipients()));
     recipients.push(await readOrEmpty(() => surface.caughtMessage.copiedRecipients()));
   }
@@ -102,14 +117,15 @@ async function changeOpportunity(surface: Surface, how: "edit" | "addendum", not
 
 async function expectOnlyActiveWatcherReached(surface: Surface, mail: Mail): Promise<void> {
   await expect
-    .poll(async () => (await everyRecipient(surface, mail)).includes(activeWatcher.email.toLowerCase()), {
-      ...settle,
-      message: "the active watcher is notified of the change",
-    })
+    .poll(
+      async () =>
+        (await recipientsOfNoticesAboutTheOpportunity(surface, mail)).includes(activeWatcher.email.toLowerCase()),
+      { ...settle, message: "the active watcher is notified of the change" },
+    )
     .toBe(true);
   expect(
-    (await everyRecipient(surface, mail)).includes(deactivated.email.toLowerCase()),
-    "the deactivated watcher is among the recipients, visible or blind-copied",
+    (await recipientsOfNoticesAboutTheOpportunity(surface, mail)).includes(deactivated.email.toLowerCase()),
+    "the deactivated watcher is among the recipients, visible or blind-copied, of a notice about the opportunity",
   ).toBe(false);
 }
 
@@ -149,9 +165,10 @@ test(`${statement} — reactivating the account restores the watch`, async ({ su
   await changeOpportunity(surface, "addendum", "after the watcher was reactivated");
 
   await expect
-    .poll(async () => (await everyRecipient(surface, mail)).includes(deactivated.email.toLowerCase()), {
-      ...settle,
-      message: "the reactivated watcher is notified again without having asked to watch",
-    })
+    .poll(
+      async () =>
+        (await recipientsOfNoticesAboutTheOpportunity(surface, mail)).includes(deactivated.email.toLowerCase()),
+      { ...settle, message: "the reactivated watcher is notified of the opportunity again without having asked to watch" },
+    )
     .toBe(true);
 });

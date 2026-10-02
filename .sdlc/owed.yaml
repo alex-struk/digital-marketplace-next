@@ -4925,3 +4925,18 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-10-02T14:33:43.226Z
+  - kind: missing-test
+    item: R-6.17
+    id: R-6.17
+    version: 1
+    domain: notifications
+    stage: contract
+    why: name at least one other kind of notification an active vendor account
+      receives, and a surface action that triggers it without the organization
+      screens, so that its absence for a deactivated account can be asserted
+    clause: a deactivated account receives no notification of any kind beyond
+      notices about an opportunity it was watching
+    from: derive-tests-notifications-stale-11
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-02T14:37:30.928Z
