@@ -76,6 +76,8 @@
 - 02:20:30 run verify: regenerated 4 files in .sdlc, site, tests
 - 02:20:35 drive: step 6: `sdlc run bind-adapter --target new` — 6 bindings the adapter reports unbound for target new owed by bind-adapter; the application it binds against is on proposal/build-slice-9 alone, so sdlc sandbox up --target new --from proposal/build-slice-9 first
 - 02:20:36 run bind-adapter: pre-checks failed
+- 02:35:09 drive: step 8: `sdlc run bind-adapter --target new --revise` — bind-adapter-new-39 was returned at G3 by agent:reviewer
+- 02:35:09 run bind-adapter: pre-checks failed
 
 # Run record 2026-10-01
 
