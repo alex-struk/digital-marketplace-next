@@ -1,0 +1,18 @@
+gate: G1
+verdict: approve
+by: agent:product-owner
+held_by: agent
+rationale: |2-
+  The question is whether the contract the tests act through already supplies what missing-test/R-1.33 asks for: a seeded Code With Us or Sprint With Us opportunity whose history holds a private note carrying a file, observable by the author or an administrator and withheld from a vendor. It does, and this run correctly changed nothing. On main, contract-v30 added tests/seed/016-opportunity-note-and-cancellation.sql with the handles opportunities.cwuWithPrivateNote and stored_files.opportunityNoteAttachment (manifest.yaml lines 1153 and 1396, the attachment tied to the note). It added the opportunity-history-request page, which exposes history_shown and history_entries, and it removed add_note from both opportunity edit pages. The stage reports reading the seeded opportunity on the oracle: the administrator and the staff author saw the NOTE_ADDED entry and its file, and a signed-in vendor got no history. That is exactly what the condition needs a test to be able to observe. The build-slice-9-4 review asked for this work because it was reading the 2026-09-29 not-testable reason for R-1.33, which is out of date. That reason should be rewritten when derive-tests writes the test. missing-test/R-1.33 now belongs to derive-tests, not contract. The withdrawal belongs to a later ruling once that test runs; it is not expressible in this condition grammar. R-1.33 is already confirmed and accepted, and nothing here touches its wording or confidence, so it is recorded with contract only. The service returning history to a request with no session is a gap between the old target and the criterion. It belongs to calibration, as a defect-in-old candidate, and does not count against this contract. The ruling would change if a test written against these handles could not observe the note as author or administrator, or saw it as a vendor. That would mean the seed or the page is not doing what the contract claims.
+reprompt: |2-
+  The first reply ruled approve. 1 condition line(s) did not match the ratification grammar: "re-address missing-test/R-1.33 to derive-tests: supplied on main by seed tests/seed/016-opportunity-note-and-cancellation.sql (handles opportunities.cwuWithPrivateNote and stored_files.opportunityNoteAttachment), read through page opportunity-history-request (history_shown, history_entries), with add_note removed from both edit pages; the 2026-09-29 not-testable reason for R-1.33 is stale and is to be replaced when the test is written". Asked again in the ratification grammar.
+conditions:
+  - "contract R-1.33"
+cost: 0.5408268
+turns: 6
+session: "ddcb826f-ffb9-45dc-a76d-bfec1a224606"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-02T18:16:47.605Z
