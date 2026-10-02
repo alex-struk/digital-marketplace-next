@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-8-7 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">465</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">459</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">390</span></a></li><li><a href="../runs.html">Run log <span class="count">20</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-8-7</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-02 05:11</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 8 (Anyone can find opportunities and follow the ones they care about) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> I made no changes to the application in this revision.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I made no changes to the application in this revision. The ruling found nothing wrong in it: the three failing rows were traced to the acceptance suite&#39;s adapter, which goes to bind-adapter. The build was returned only so its next verify runs against the corrected adapter. I checked each of the six conditions still owed against the application as it stands, and each is either already met in code or is the adapter&#39;s to fix.</p>
+<p><strong>Already met in the application:</strong></p>
+<ul><li><strong><code>build-slice-8-3#2</code> (R-1.5, a repeat watch should come back as &quot;conflict&quot;, not &quot;errors&quot;):</strong> met. The second watch is refused with <code>{ &quot;conflict&quot;: [&quot;This user is already subscribed to this opportunity.&quot;] }</code> with status 400. This follows the reasons <code>surface.yaml</code> names for watch requests: &quot;opportunity&quot; for watching your own, &quot;notFound&quot; for one you cannot see, and &quot;permissions&quot; (401) when not signed in. The rule is in <code>app/backend/src/rules/opportunity-list.ts:156</code> and reaches the route through <code>NamedRefusal</code> in <code>app/backend/src/common/refusals.ts</code>. Decision record 0037 explains why only these watch routes leave the usual <code>{ &quot;errors&quot;: [...] }</code> shape.</li><li><strong><code>build-slice-8-3#5</code> (R-1.23, published dates in Pacific time):</strong> met. <code>readDate</code> in <code>app/frontend/src/lib/dates.ts</code> reads the day in <code>America/Vancouver</code>, using the same <code>pacificClockOf</code> rule that already sets deadlines. Something published at 7:26 p.m. Pacific on October 1 therefore shows October 1. Dates shown to the minute are still in UTC, because the ruling named only the day. Decision record 0037 says what would change that.</li><li><strong><code>build-slice-8-3#6</code> (one page layout):</strong> met. The catalogue&#39;s <code>PageContainer</code> and <code>Stack</code> are defined once, in <code>app/frontend/src/app/page-layout.tsx</code>. The root layout puts every screen inside the container. I searched the screens again for widths and outer padding of their own and found none. The only remaining spacing is inside tables, cards, capability rows and the dialog body, which the catalogue also draws, and every <code>data-testid</code> is where it was.</li></ul>
+<p><strong>The adapter&#39;s to fix, not the application&#39;s:</strong></p>
+<ul><li><strong><code>build-slice-8-3#1</code> and <code>#3</code> (R-1.3 and R-1.38, the list&#39;s text read as empty):</strong> the adapter looks for group headings like &quot;Open opportunities&quot;. The application, like the catalogue&#39;s stories, heads the groups &quot;Unpublished&quot;, &quot;Open&quot; and &quot;Closed&quot;. The ruling filed this to bind-adapter.</li><li><strong><code>build-slice-8-3#4</code> (R-7.18, a content link&#39;s address must answer with a page):</strong> <code>/content/service-level-agreement</code> does answer with the page. The adapter looks for the link again on the page the link already led to, so it reads nothing. This is also filed to bind-adapter.</li></ul>
+<p>I left both adapter fixes alone because they are another stage&#39;s work.</p>
+<p><strong>What I checked:</strong> I installed dependencies and ran <code>npm --prefix app run check</code>. Typechecks passed and so did all 715 unit tests (16 + 422 + 277). One error line in the output is a deliberate mail-failure test. I then removed the <code>node_modules</code> folders the install and test run created, so they do not travel with the proposal. I did not start the compose stack, since the ruling had already checked the running application of build 8-6.</p>
+<p>Every slice 8 criterion is built as before: R-1.2, R-1.3, R-1.5, R-1.6, R-1.38, R-4.22, R-6.20, R-6.21 and R-6.27. Decision records 0034 and 0037 describe how each is reached. As those records already note, the next slice will still find two things missing:</p>
+<ul><li><strong>Slice 9:</strong> telling watchers about addenda and cancellations, and the manage page&#39;s figures for views, watchers and proposals.</li><li><strong>Slice 10:</strong> the public and manage pages for Sprint With Us and Team With Us. Until then, the list&#39;s links to them land on the not-found screen.</li></ul></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by runner:verify (the runner, automatically) on 2026-10-02 05:51.</p>
+<div class="body"><p>This build breaks 1 criterion that passed when an earlier slice was approved. Each condition is the criterion and what the running application did.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>R-1.11 (passed when slice 7 was approved): Error: expect(received).not.toContain(expected) // indexOf — Received string:        &quot;Accepting proposals, nearest proposal deadline first. — at tests/acceptance/opportunities/R-1.11.spec.ts:54</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
