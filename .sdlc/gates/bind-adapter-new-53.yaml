@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does this adapter bind every surface action and observation on new, and nothing else? Approve. The diff touches only tests/adapters/new and the pipeline's own records; nothing under tests/acceptance changed, and the runner's typecheck on this revision passed with no diagnostics under adapters/new. The changes are navigation and reading only: savedForm opens the Opportunity section, reloads so the boxes hold saved values, and serialises the form's labels with their values (ticked choices marked), optionally narrowed to one named sub-section; it decides nothing about pass or fail, and returning empty where the form has no such sub-section is an accurate observation rather than a hidden missing surface. teamQuestionsTab and resourceQuestionsTab move from unbound to bound on that reader, which is justified because the questions do appear in the saved Opportunity form; opportunityTab reads the saved form rather than the edit form's labels; maxBudget reads the 'Maximum budget' term with the old label as fallback. These answer the three revision requests build-slice-10-3 addressed to bind-adapter. R-5.16 stays unbound with a real reason (the individual-evaluation route answers 'Page not found'), and its consensus clause is already with plan. The build-owed instructions build-slice-10-3#1 and #2 are not settled here and stay open. What would change this: a verify run showing these readers return something other than the saved values, or a test that relies on reading unsaved input, which the reload in savedForm discards.
+conditions: []
+cost: 0.3220024
+turns: 1
+session: "5f1888e3-2ca1-4404-92ae-21047de0e346"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-02T23:08:03.981Z

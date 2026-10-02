@@ -6893,6 +6893,62 @@ export default function create(
       const region = sectionRegion(tab);
       return (await region.count()) ? lined(await region.innerText()).join("\n") : "";
     }
+    // The Opportunity section as saved. On this build it is always the program's form (a
+    // published opportunity's too, with "Save changes" under it), so its text alone is only
+    // the labels ("Opportunity / Overview / Title(required) / …"). The screen is opened afresh
+    // so the boxes hold what was saved rather than anything typed and left, and each box's
+    // value is read in its place, under its label; a ticked choice is marked "[x]". `part`
+    // narrows it to one of the form's own sections ("Team questions", "Resource questions",
+    // "Description"), read as nothing where the form has no such section.
+    async function savedForm(member: string, part?: RegExp): Promise<string> {
+      if (await refused(member)) return "";
+      if (!(await toSection(member, "Opportunity"))) return notOffered(member, '"Opportunity" section');
+      await page.reload({ waitUntil: "domcontentloaded" });
+      await ready();
+      if (await refused(member)) return "";
+      let region = sectionRegion("Opportunity");
+      await region.waitFor({ state: "visible", timeout: 10000 }).catch(() => undefined);
+      if (!(await region.count())) return notOffered(member, '"Opportunity" section');
+      if (part) {
+        region = seen(regionNamed(region, part)).first();
+        if (!(await region.count())) return "";
+      }
+      const text = await region.evaluate((root) => {
+        const out: string[] = [];
+        const block = /^(DIV|P|SECTION|FIELDSET|LEGEND|H[1-6]|LI|UL|OL|LABEL|DL|DT|DD|FORM|TABLE|TR)$/;
+        const walk = (node: Node): void => {
+          if (node.nodeType === Node.TEXT_NODE) {
+            out.push(node.textContent ?? "");
+            return;
+          }
+          if (node.nodeType !== Node.ELEMENT_NODE) return;
+          const el = node as HTMLElement;
+          const tag = el.tagName;
+          if (tag === "SCRIPT" || tag === "STYLE" || tag === "BUTTON" || tag === "TEMPLATE") return;
+          if (el.hidden || getComputedStyle(el).display === "none") return;
+          if (tag === "INPUT" && /^(radio|checkbox)$/.test((el as HTMLInputElement).type)) {
+            out.push((el as HTMLInputElement).checked ? "[x] " : "");
+            return;
+          }
+          if (tag === "INPUT" && /^(button|submit|reset|hidden|file|image)$/.test((el as HTMLInputElement).type)) return;
+          if (tag === "INPUT" || tag === "TEXTAREA") {
+            out.push(`\n${(el as HTMLInputElement).value}\n`);
+            return;
+          }
+          if (tag === "SELECT") {
+            if (el.offsetParent) out.push(`\n${Array.from((el as HTMLSelectElement).selectedOptions).map((one) => one.text).join("\n")}\n`);
+            return;
+          }
+          const isBlock = block.test(tag);
+          if (isBlock) out.push("\n");
+          for (const child of Array.from(el.childNodes)) walk(child);
+          if (isBlock) out.push("\n");
+        };
+        walk(root);
+        return out.join("");
+      });
+      return lined(text).join("\n");
+    }
     // A section the screen has in no state: read where it appears, unbound where it does not.
     async function absentSection(member: string, tab: string, what: string): Promise<string> {
       if (await refused(member)) return "";
@@ -6925,6 +6981,7 @@ export default function create(
       notOffered,
       sectionText,
       absentSection,
+      savedForm,
       summaryTerm,
       summaryDate,
       // The Opportunity section, where the program's form is shown (read-only once
@@ -7092,11 +7149,14 @@ export default function create(
     createdByName: () => swuManage.summaryTerm("created_by_name", /^created by$/i),
     lastChangedByName: () => swuManage.summaryTerm("last_changed_by_name", /^last changed by$/i),
     summaryTab: () => swuManage.sectionText("summary_tab", "Summary"),
-    opportunityTab: () => swuManage.absentSection("opportunity_tab", "Opportunity", '"Opportunity" section'),
+    // The Opportunity section's form as saved, each box's value under its label.
+    opportunityTab: () => swuManage.savedForm("opportunity_tab"),
     addendaTab: () => swuManage.sectionText("addenda_tab", "Addenda"),
     historyTab: () => swuManage.sectionText("history_tab", "History"),
     proposalsTab: () => swuManage.absentSection("proposals_tab", "Proposals", '"Proposals" section (the Summary counts "Proposals submitted" only)'),
-    teamQuestionsTab: () => swuManage.absentSection("team_questions_tab", "Team questions", '"Team questions" section'),
+    // No section of its own: the saved team questions are the "Team questions" of the
+    // Opportunity section's form.
+    teamQuestionsTab: () => swuManage.savedForm("team_questions_tab", /^team questions$/i),
     codeChallengeTab: () => swuManage.absentSection("code_challenge_tab", "Code challenge", '"Code challenge" section'),
     teamScenarioTab: () => swuManage.absentSection("team_scenario_tab", "Team scenario", '"Team scenario" section'),
     evaluationPanelTab: () => swuManage.absentSection("evaluation_panel_tab", "Evaluation panel", '"Evaluation panel" section'),
@@ -7138,11 +7198,14 @@ export default function create(
     createdByName: () => twuManage.summaryTerm("created_by_name", /^created by$/i),
     lastChangedByName: () => twuManage.summaryTerm("last_changed_by_name", /^last changed by$/i),
     summaryTab: () => twuManage.sectionText("summary_tab", "Summary"),
-    opportunityTab: () => twuManage.absentSection("opportunity_tab", "Opportunity", '"Opportunity" section'),
+    // The Opportunity section's form as saved, each box's value under its label.
+    opportunityTab: () => twuManage.savedForm("opportunity_tab"),
     addendaTab: () => twuManage.sectionText("addenda_tab", "Addenda"),
     historyTab: () => twuManage.sectionText("history_tab", "History"),
     proposalsTab: () => twuManage.absentSection("proposals_tab", "Proposals", '"Proposals" section (the Summary counts "Proposals submitted" only)'),
-    resourceQuestionsTab: () => twuManage.absentSection("resource_questions_tab", "Resource questions", '"Resource questions" section'),
+    // No section of its own: the saved resource questions are the "Resource questions" of
+    // the Opportunity section's form.
+    resourceQuestionsTab: () => twuManage.savedForm("resource_questions_tab", /^resource questions$/i),
     challengeTab: () => twuManage.absentSection("challenge_tab", "Challenge", '"Challenge" section'),
     evaluationPanelTab: () => twuManage.absentSection("evaluation_panel_tab", "Evaluation panel", '"Evaluation panel" section'),
     consensusTab: () => twuManage.absentSection("consensus_tab", "Consensus", '"Consensus" section'),
@@ -7783,9 +7846,13 @@ export default function create(
       "/opportunities/team-with-us/:opportunityId",
       "team-with-us",
       {
-        // "$300,000" over "Maximum Contract Value"; the resources sought under "Service Areas"
-        // with their allocation, down to "Required Skills".
-        maxBudget: () => figureAbove(`${TWU_VIEW}.max_budget`, /^maximum contract value$/i),
+        // "$300,000" given under the "Maximum budget" term; an older layout drew it over
+        // "Maximum Contract Value". The resources sought under "Service Areas" with their
+        // allocation, down to "Required Skills".
+        maxBudget: async () => {
+          await opportunityLines(`${TWU_VIEW}.max_budget`);
+          return (await definitionOf(/^maximum budget$/i)) || figureAbove(`${TWU_VIEW}.max_budget`, /^maximum contract value$/i);
+        },
         resources: () => detailsSection(`${TWU_VIEW}.resources`, /^service areas$/i, /^required skills$/i),
         assignmentDate: () => figureAbove(`${TWU_VIEW}.assignment_date`, /^contract award date$/i),
         startDate: () => figureAbove(`${TWU_VIEW}.start_date`, /^contract start date$/i),
