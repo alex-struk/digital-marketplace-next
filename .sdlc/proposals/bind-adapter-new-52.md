@@ -32,3 +32,23 @@ I've fixed all 13 conditions in `tests/adapters/new/index.ts`. Nothing else in t
 The existing unbound reason stands unchanged.
 
 Every route these conditions touch resolved on the target except that evaluation screen, which is a real absence rather than a wrong route. No condition is deferred, and nothing outside `tests/adapters/new/` was written.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether bind-adapter-new-52 still binds the new target's pages without asserting anything, and whether it carries out the 13 binding fixes the build-slice-10-2 ruling asked of bind-adapter. It does. The diff touches only tests/adapters/new/index.ts, nothing under tests/acceptance changed, and the runner's typecheck on revision 6adb2d7de passed with no diagnostics. Every change only finds things on the page or translates what it sees. status() reads the value under the page's 'Status' term, keeping the old program-name reading only as a fallback. The panel setter ticks the Chair box of the member named by a chair given beside the members, and throws unbound: when that chair is none of the members. Both identifier readers return empty on a program's create form, so a refused create follows the test's 'nothing was created' path. addPanelMember throws refused: when the chooser does not offer the person. That last change comes closest to deciding an outcome, but it translates a page observation into the convention the test already uses (R-5.1's refused() reads any throw that is not unbound: as a refusal), and the earlier ruling asked for exactly this. The remaining unbound reason for enter_question_score is real: the route answers 'Page not found' and the opportunity's management screen offers no way to open a proponent's evaluation. This ruling would change if a verify run showed a 'Status' read or a chair tick still failing on these pages, or if pick() turned out to return false when the chooser was not found rather than not offering the person, which would report a binding fault as a refusal. Condition #14 is addressed to plan and stays open.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `6adb2d7de7d6dd050d4548fc3a7589cc25619405`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
