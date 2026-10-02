@@ -58,3 +58,14 @@ No organizations page in `spec/contract/surface.yaml` has a `null` test ID left.
 20. Whether anyone other than the owner may invite by request is not stated.
 
 Gaps 1–16 from the earlier design are unchanged. I changed nothing under `spec/` except the test IDs in `surface.yaml`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:ux-reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: do the organizations screens serve the criteria and are they built from the design system? Approve. The accessibility report covers 508 stories, including the 9 new ones (three request addresses as response references, and logo-stored and logo-refused), with 0 violations. Every surface.yaml change replaces a null test_id; no ID that was already set was changed. A search of the organizations and affiliation stories finds no px, hex or rgb literal. Spacing comes from the reused PageContainer and Stack with token gaps, and the only padding left is inside the project's own components, which DESIGN.md lists. The screenshots (list, create, edit default/team/logo-stored/logo-refused, memberships, swu-terms, approval-request refused) all line up on the shared container edge with one even rhythm and no doubled gaps. The broken image in the logo stories is the real /api/files address the current_logo test reads, which the catalogue has no server to answer, not a layout defect. The new gaps 17-20 (placeholder permission message, unstated status numbers, wording of a refused logo, who may invite by request) are recorded honestly as spec gaps rather than invented. The ruling would change on any accessibility violation, a change to a test_id that was already set, a hard-coded colour or spacing value, or a screen outside the shared container.
+
+**Conditions:**
+none
