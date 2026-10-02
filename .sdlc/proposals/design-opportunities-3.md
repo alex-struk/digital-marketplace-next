@@ -69,3 +69,14 @@ Both failed checks are fixed: `opportunity-watch-request` and `opportunity-count
 - **Counters.** The `default` story shows an administrator reading the view count. The number shown is illustrative, and the story says a missing counter reads as 0. The `refused` story shows a vendor or a request with no session refused as not permitted. Its two test IDs are `opportunity-counters-view-count` and `opportunity-counters-refused`.
 
 Every test ID appears in at least one story. In the opportunities section of `DESIGN.md` I added per-screen notes and the test-ID bindings, plus gap 27: R-1.5 gives no wording for the duplicate-watch refusal and no response status for any refusal. Because of that, the `refused` story shows the own-opportunity case and labels the status "Refused (the criteria do not state the status)" instead of making one up. I changed no other page, state, test ID or wording.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:ux-reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: do the opportunities screens serve their criteria, and are they built from the design system? Ruling: approve. The pipeline's scan (design/report.json) shows typecheck and build passing and no accessibility violations in any story. All 101 opportunities, home and scheduled-transition stories import PageContainer and Stack from design/catalogue/layout.tsx. A search of these stories found no hard-coded colour, no pixel value and no stray gap or margin. The only spacing they still set is a fieldset's margin to the --layout-margin-none token, the token padding and borders inside the project's own card, card-section and fieldset components, and the tables' relative 100% width, which was left as it was. I looked at the screenshots of home.default, opportunity-cwu-view.default, opportunity-list.default, opportunity-swu-edit.editing and opportunity-watch-request.refused. In each, the content sits in the shared container with its left edge on one line, and the spacing follows the large/medium/small rhythm without doubled margins. In the list, the filter row lines up on its bottom edge and the cards share one gap. The surface diff only fills in test IDs that were null for opportunity-watch-request and opportunity-counters, and no filled ID is changed. The four new response-reference stories follow the organizations domain's affiliation-approval-request pattern. They quote R-1.5's own refusal wording, and where R-1.5 states no response status the refused story labels the status as unstated rather than making one up, which is recorded as gap 27. Gap 26 records the observations still null in the surface as work for a later design run, which is acceptable because a screen or state missing from the catalogue is allowed. This ruling would change to a return if a later scan reports any accessibility violation, or if a story is found that sets its own width, padding or gap outside layout.tsx.
+
+**Conditions:**
+none
