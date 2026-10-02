@@ -5193,6 +5193,11 @@ rebind:
     app_tree: 7636177085ac8122e8aa18c80f4b872fd84e93f1
     by: runner:verify
     at: 2026-10-01T13:15:46.765Z
+    closed: &a30
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-02T02:26:27.405Z
   - id: R-1.6
     target: new
     why: 'unbound: opportunity-cwu-edit.reporting_views — the summary on
@@ -5217,3 +5222,4 @@ rebind:
     app_tree: 7636177085ac8122e8aa18c80f4b872fd84e93f1
     by: runner:verify
     at: 2026-10-01T13:15:46.765Z
+    closed: *a30
