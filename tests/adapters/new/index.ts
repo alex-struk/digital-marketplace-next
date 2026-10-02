@@ -4606,9 +4606,26 @@ export default function create(
       }
     }
 
+    // A question still blank: its Question and Guideline boxes both empty.
+    async function isBlankQuestion(group: Locator): Promise<boolean> {
+      if (!(await group.count())) return false;
+      for (const [, label] of QUESTION_FIELDS.slice(0, 2)) {
+        const box = seen(group.getByRole("textbox", { name: label })).first();
+        if (!(await box.count())) return false;
+        if ((await box.inputValue().catch(() => "x")).trim()) return false;
+      }
+      return true;
+    }
+
+    // The form opens with "Question 1" already there, blank: while it is still the only
+    // question and still blank it takes the one given; otherwise "Add a team question" /
+    // "Add a resource question" makes room for it. (Only the opening row is reused, so a
+    // question given with no text still counts as one more question.)
     async function addQuestion(member: string, input: unknown): Promise<void> {
       await screen.on(member);
-      await press(where(member), addQuestionName, questionsRegion());
+      const groups = seen(questionsRegion().getByRole("group", { name: /^question \d+$/i }));
+      const reuse = (await groups.count()) === 1 && (await isBlankQuestion(questionGroup(1)));
+      if (!reuse) await press(where(member), addQuestionName, questionsRegion());
       await fillQuestion(member, questionGroup(), input);
     }
 
