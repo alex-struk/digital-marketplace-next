@@ -99,6 +99,11 @@
 - 03:48:17 drive: step 15 recovery: taking the new target's sandbox down (sdlc sandbox down --target new --from proposal/build-slice-9)
 - 03:48:33 drive: step 16: `sdlc rule bind-adapter-new-43 --by agent:reviewer` — bind-adapter-new-43 is open at G3, held by agent:reviewer
 - 03:49:08 rule bind-adapter-new-43 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 03:52:31 drive: step 19: `sdlc run derive-tests --domain opportunities --revise` — derive-tests-opportunities-stale-16 was returned at G3 by agent:reviewer
+- 03:52:57 run derive-tests: ok, cost 0.1955116, turns 6, on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 03:52:58 propose derive-tests-opportunities-13 at G3
+- 03:53:01 drive: step 20: `sdlc rule derive-tests-opportunities-13 --by agent:reviewer` — derive-tests-opportunities-13 is open at G3, held by agent:reviewer
+- 03:53:31 rule derive-tests-opportunities-13 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-10-01
 

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-opportunities-stale-16 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">475</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">469</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">394</span></a></li><li><a href="../runs.html">Run log <span class="count">20</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-opportunities-stale-16</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-02 10:51</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the opportunities criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I rewrote both tests.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I rewrote both tests. Neither one now reads a vendor&#39;s own proposal listing, which is what the ruling objected to. I couldn&#39;t run a type check or the tests: the permission layer refused the <code>tsc</code> command. I checked the files by hand against the generated surface, seed and personas, so they are unrun.</p>
+<p><strong>Where the ruling&#39;s problem was.</strong> Both earlier versions set up the starting condition and then checked it by having the vendor open their own dashboard and find the submitted proposal under &quot;My Proposals&quot;. The criterion never asks for that. The new versions create the starting condition and check nothing about it:</p>
+<ul><li>the signed-in vendor (<code>persona.vendor</code>, seed user <code>vendorOne</code>) submits a proposal through <code>surface.proposalCwuCreate</code> against <code>seed.opportunities.publishedCodeWithUs</code>;</li><li>the competing vendor (<code>proponentTwo</code>) watches the opportunity through <code>surface.opportunityWatchRequest.watchByRequest</code>. That action never switches a watch off, unlike the old <code>toggleWatch</code>.</li></ul>
+<p>The old tests also counted watchers on the administrator&#39;s reporting tab and checked the opportunity&#39;s status. I removed both checks, because neither is part of the criterion. The harness now resets the target to the seed before every test, so the seeded published opportunity starts with no proposals and no watchers. That made the old guards for a proposal already being there unnecessary.</p>
+<p><strong>R-1.35</strong> has two tests, one for each way the criterion can be triggered: an administrator edits the opportunity, or adds an addendum. Each test empties the mail catcher, makes the change, and then reads every caught message addressed to one of the three people or to the service&#39;s own sending address. A person counts as notified when a message names them as a recipient, either in To or in the blind copies. The test waits until all three are reached, then asserts each was reached exactly once, since the criterion says &quot;each notified once&quot;. The old test did not assert &quot;once&quot;.</p>
+<p>The criterion&#39;s note says nobody is notified while the opportunity is a draft or cancelled. That is a note, not the outcome being tested, so I added no test for it.</p>
+<p><strong>R-1.36</strong> has two tests, one for each part of the outcome:</p>
+<ul><li><strong>Watcher and proponent:</strong> each must be a recipient (To or blind copy) of a message that names the opportunity&#39;s title and mentions cancellation.</li><li><strong>Author:</strong> must receive a message addressed to them in To that names the opportunity&#39;s title.</li></ul>
+<p>Both criteria got test files, and nothing went into <code>not-testable.yaml</code>. I needed no action or observation that the contract lacks. I changed only these two files under <code>tests/acceptance/opportunities/</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-02 10:52.</p>
+<div class="body"><p>Do the opportunities tests follow from R-1.35 and R-1.36 and from nothing else? Returned. The rewrite removes what the last ruling objected to: neither test reads the vendor&#39;s own proposal listing, the reported watcher count or the opportunity&#39;s status. Each now only sets up the given (a submitted proposal and a watch request against the seeded published opportunity) and asserts the then. R-1.35 is sound. Editing and adding an addendum each have a test, and each asserts that the watcher, the proponent and the author are reached exactly once, which is what &#39;each notified once&#39; says. The statement&#39;s draft/cancelled restriction only limits which opportunities the rule covers and states no outcome of its own. Nothing leaks how the application is built: the service sending address comes from the contract&#39;s email notes. R-1.36&#39;s watcher-and-proponent test asserts both halves of &#39;told it has been cancelled&#39;: the opportunity&#39;s title and a mention of cancellation. The author test asserts only a message visibly addressed to the author that names the title. It never asserts the clause &#39;that the cancellation was actioned&#39;, so any later message naming the opportunity would satisfy it, for example a delayed notice about the proposal submitted during setup. The writer could assert this exactly as the sibling test does, so under the brief it is a return, not an approval note. The runner&#39;s typecheck passed. Approval would follow once the author test also requires the message to be about the cancellation.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>tests/acceptance/opportunities/R-1.36.spec.ts, the test &#39;— its author is told separately that the cancellation was actioned&#39;: the clause &#39;that the cancellation was actioned&#39; is not asserted. The author&#39;s message is matched only by visible addressing and the opportunity&#39;s title. Also require that its subject or body mentions the cancellation, the same check the watcher-and-proponent test makes, so that a message to the author naming the opportunity for some other reason cannot satisfy it.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

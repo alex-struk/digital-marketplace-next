@@ -824,6 +824,14 @@ redo:
       has submitted proposals. It does not ask that a vendor can list or view
       their own proposals.
     verb: test-overreaches
+    closed: &a17
+      outcome: met
+      why: derived again by derive-tests-opportunities-stale-16, in the line of work
+        approved as derive-tests-opportunities-13
+      by: derive-tests-opportunities-13
+      at: 2026-10-02T10:53:33.016Z
+      gate: G3
+      approved_by: agent:reviewer
   - id: R-1.36
     version: 1
     why: to confirm its starting condition, the test requires the proposing vendor
@@ -832,3 +840,4 @@ redo:
       has submitted proposals. It does not ask that a vendor can list or view
       their own proposals.
     verb: test-overreaches
+    closed: *a17

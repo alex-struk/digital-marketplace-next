@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-opportunities-13 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">475</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">469</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">394</span></a></li><li><a href="../runs.html">Run log <span class="count">20</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-opportunities-13</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-02 10:52</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do the revised opportunities tests now follow from their criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I made the one change the ruling asked for.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I made the one change the ruling asked for. In <code>tests/acceptance/opportunities/R-1.36.spec.ts</code>, the author test (&quot;— its author is told separately that the cancellation was actioned&quot;) now passes only if a message is visibly addressed to the author, names the opportunity&#39;s title, and mentions the cancellation in its subject or body. That is the same &quot;cancel&quot; check the watcher-and-proponent test already uses. A message to the author that names the opportunity for some other reason, such as a late notice about the proposal submitted during setup, no longer satisfies it. I also changed the comment at the top of the file so it describes this check for the author&#39;s message.</p>
+<p>Nothing else changed. The header lines stay as they were: the &quot;derived&quot; date was already today&#39;s date, so it needed no rewrite. The R-1.35 file, the watcher-and-proponent test and <code>tests/acceptance/not-testable.yaml</code> are untouched, and no criterion needed a new not-testable entry.</p>
+<p>I could not run the typecheck: running the compiler needed an approval this unattended session cannot get. The change adds one more condition of the same form as the one beside it, using the same field and string, so I don&#39;t expect it to break the typecheck. Even so, the runner&#39;s typecheck is the first real check of it.</p>
+<p>No surface action or observation was missing for this change.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-02 10:53.</p>
+<div class="body"><p>The question is whether the revised opportunities tests now follow from R-1.35 and R-1.36 and from nothing else. Approved. The last ruling, derive-tests-opportunities-stale-16, returned this for one reason: the R-1.36 author test never asserted the clause &#39;that the cancellation was actioned&#39;. The fix is in the diff. In tests/acceptance/opportunities/R-1.36.spec.ts, noticeFound in the test &#39;— its author is told separately that the cancellation was actioned&#39; now passes only on a message that is visibly addressed to the author, names the opportunity&#39;s title, and mentions the cancellation in its subject or body. It uses the shared readMessage and the same &#39;cancel&#39; check as the watcher-and-proponent test, so a message to the author that names the opportunity for some other reason, such as a late notice about the proposal submitted during setup, no longer satisfies it. Everything else on the branch is what the earlier ruling already judged sound. The R-1.35 edit and addendum tests each assert that the watcher, the proponent and the author are reached exactly once, which is what the criterion says. The R-1.36 watcher-and-proponent test asserts the title and the cancellation. Neither file reads the proposal listing, the watcher count or the opportunity&#39;s status. The service&#39;s sending address comes from the contract&#39;s email notes, not from the application. No criterion clause is left unasserted, and the tests need no not-testable entries. The writer said they could not run the typecheck. The runner ran it on this revision and it passed with no diagnostics. A failing typecheck, or a test that asserts something its criterion does not say, would change this ruling.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met derive-tests-opportunities-stale-16#1: tests/acceptance/opportunities/R-1.36.spec.ts, noticeFound in the test &#39;— its author is told separately that the cancellation was actioned&#39;, now requires message.about to include &#39;cancel&#39; alongside visible addressing to the author and the opportunity&#39;s title, the same check the watcher-and-proponent test makes.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
