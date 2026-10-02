@@ -28,3 +28,23 @@ I've finished R-6.17, the one criterion in scope. It is now covered entirely by 
 **Why that seeded account.** `vendorDeactivated` has asked for these notices and is already deactivated in the seed, so the test never deactivates anyone. That means the account's own deactivation notice can't get mixed into the result. I left the other three tests and the file's header lines as they were, and added a comment explaining the new test.
 
 **Gaps.** For this criterion I needed no action or observation the surface lacks, so the contract has nothing more to add. I changed nothing outside `tests/acceptance/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: do the R-6.17 tests follow from the criterion and nothing else? Approve. The added test covers the clause the earlier ruling left owed (no notification of any kind beyond watch notices) using one other kind of notification, which is what that ruling asked for. The subject text, the trigger (an administrator publishing seed.opportunities.draftOfOtherStaff through opportunity-cwu-edit.publish) and the recipient rule are all taken from email.received_by_an_active_vendor in spec/contract/observables.yaml. The seed has users.vendorDeactivated with the setting on and already deactivated, so no deactivation notice can get mixed in, and the active control users.vendorOne proves the announcement was sent and the catcher is reachable. The test checks both visible and blind-copied recipients, and no route, selector, status code or table name appears. The runner's typecheck passed and the diff touches only tests/acceptance. The three existing tests are unchanged. missing-test/R-6.17 stays open until this test runs, which a ruling cannot settle. build-slice-9-3#6 is unrelated to this proposal and stays open. What would change the ruling: a first run in which the announcement never reaches vendorOne, which would mean the test cannot show the deactivated account was excluded.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `ea53bbf9be919869e9509e3aab35078935cd2906`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/notifications/`, which this proposal answers for.
+
+    No diagnostics.
