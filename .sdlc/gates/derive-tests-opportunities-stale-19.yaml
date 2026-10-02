@@ -1,0 +1,16 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: do the R-1.33 tests follow from the criterion and from nothing else? Ruling: return. The added-note cases (author on published SWU and CWU, administrator on cancelled CWU, 1,000-character note with a freshly stored file, read back from the history) and the visibility cases (administrator and author shown; vendor and signed-out reader withheld) each follow from the criterion's text, and NOTE_ADDED is the entry kind the contract's history-request page itself names, not an implementation leak. The not-testable clause entry for 'no screen of the application offers a way to add one' is real: it names the missing observation on both edit screens. But 'visible only to the author and administrators' is never asserted against the reader the word 'only' most directly excludes: a public sector staff member who is not the author. Only a vendor and a signed-out reader are checked, so a target that showed private notes to all government staff passes every case. No clause entry records that gap. The writer omitted it because persona.publicSectorStaffOther cannot sign in on the oracle's session route. But the persona is defined and signs in on sandbox-idp targets, and an oracle sign-in limit is settled at calibration (oracle-cannot), not by leaving the clause unasserted. A clause the writer could assert and did not is a return. A revision that adds that case (or records the clause with a real reason) and is otherwise unchanged would be approved.
+conditions:
+  - "Add a case to tests/acceptance/opportunities/R-1.33.spec.ts that signs in as persona.publicSectorStaffOther (a public sector staff member who is not the author of seed.opportunities.cwuWithPrivateNote) and expects the seeded private note's text, its file's name and its file's identifier to be withheld from the history, in the same way as the vendor and signed-out cases. The criterion says the note is visible only to the author and administrators, and a non-author staff reader is the case 'only' most directly excludes. That the oracle cannot sign this persona in is settled at calibration, not by omitting the assertion. If you judge the clause genuinely cannot be asserted through the surface, instead add a not-testable.yaml entry for R-1.33 with clause 'visible only to the author and administrators' (as it applies to non-author staff), naming what the surface lacks."
+cost: 0.414837
+turns: 5
+session: "e46890e4-f59d-411e-8c78-1ff037c14c44"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-02T18:19:50.221Z
