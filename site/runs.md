@@ -120,6 +120,9 @@
 - 04:50:13 oracle down old
 - 05:33:04 verify slice 9: returned — R-6.17 fail. Next: sdlc run build --slice 9 --revise
 - 05:33:08 run verify: regenerated 4 files in .sdlc, site, tests
+- 05:39:42 drive: step 26: `sdlc run verify --slice 9` — build-slice-9-2 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
+- 06:22:21 verify slice 9: returned — R-6.17, R-4.9 (slice 3) fail. Next: sdlc run build --slice 9 --revise
+- 06:22:23 run verify: regenerated 491 files in .sdlc, site, tests
 
 # Run record 2026-10-01
 

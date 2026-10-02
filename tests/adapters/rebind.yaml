@@ -5468,3 +5468,85 @@ rebind:
     by: runner:verify
     at: 2026-10-02T10:41:30.266Z
     closed: *a32
+  - id: R-1.35
+    target: new
+    why: "unbound: proposal-cwu-create.open —
+      /opportunities/code-with-us/:opportunityId/proposals/create is offered
+      only to a signed-in person, and walked signed in (as the administrator, as
+      a public sector employee, and as a vendor for a vendor's screens — the
+      seeded organization owner for the organization screens — with the seeded
+      records' identifiers), the running build serves a signed-in person
+      /dashboard (to the administrator \"Create an opportunity\" over \"All
+      opportunities\"; to public sector staff the same over \"My
+      opportunities\"; to a vendor only \"Dashboard\" and \"You are signed in as
+      <name>.\"), /opportunities, the account screens under /users (whose
+      Organizations tab says organizations \"will be listed here once
+      organizations can be registered\"), to the administrator the
+      content-management screens under /content, and to the administrator and
+      public sector staff /opportunities/create, the three programs' forms
+      /opportunities/{code,sprint,team}-with-us/create and the management
+      screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit; the
+      proposal, organization and evaluation screens — the Code With Us proposal
+      screens (tried as a vendor with the seeded published Code With Us
+      opportunity, whose page offers no way to start one), /proposals,
+      /opportunities/code-with-us/:opportunityId/complete, /organizations and
+      /organizations/:orgId/edit included — answer \"Page not found\"; opened
+      signed out (with the seeded record's identifier where it takes one) it
+      shows the \"Page not found\" screen; looked for once more signed in as a
+      vendor: the seeded published Code With Us opportunity's public page
+      (proposal deadline June 1, 2030) shows its details, key dates and addenda
+      but no link or button at all, the vendor's header offers only Dashboard,
+      My profile and Sign out, the dashboard shows only a greeting, and
+      /opportunities/code-with-us/:opportunityId/proposals/create,
+      /proposals/code-with-us/create?opportunityId=<id> and
+      /opportunities/:opportunityId all answer \"Page not found\" for that
+      opportunity (it shows \"Page not found\" at
+      http://localhost:4300/opportunities/code-with-us/00000000-0000-4000-8000-\
+      000000000601/proposals/create)"
+    found: unbound
+    adapter: cb66d79dc21ff03c2548c6d20a99bad4d76ce90b
+    slice: 9
+    app_tree: 3b37b24edcea6691dd8159f99704ac604136fe97
+    by: runner:verify
+    at: 2026-10-02T13:22:19.573Z
+  - id: R-1.36
+    target: new
+    why: "unbound: proposal-cwu-create.open —
+      /opportunities/code-with-us/:opportunityId/proposals/create is offered
+      only to a signed-in person, and walked signed in (as the administrator, as
+      a public sector employee, and as a vendor for a vendor's screens — the
+      seeded organization owner for the organization screens — with the seeded
+      records' identifiers), the running build serves a signed-in person
+      /dashboard (to the administrator \"Create an opportunity\" over \"All
+      opportunities\"; to public sector staff the same over \"My
+      opportunities\"; to a vendor only \"Dashboard\" and \"You are signed in as
+      <name>.\"), /opportunities, the account screens under /users (whose
+      Organizations tab says organizations \"will be listed here once
+      organizations can be registered\"), to the administrator the
+      content-management screens under /content, and to the administrator and
+      public sector staff /opportunities/create, the three programs' forms
+      /opportunities/{code,sprint,team}-with-us/create and the management
+      screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit; the
+      proposal, organization and evaluation screens — the Code With Us proposal
+      screens (tried as a vendor with the seeded published Code With Us
+      opportunity, whose page offers no way to start one), /proposals,
+      /opportunities/code-with-us/:opportunityId/complete, /organizations and
+      /organizations/:orgId/edit included — answer \"Page not found\"; opened
+      signed out (with the seeded record's identifier where it takes one) it
+      shows the \"Page not found\" screen; looked for once more signed in as a
+      vendor: the seeded published Code With Us opportunity's public page
+      (proposal deadline June 1, 2030) shows its details, key dates and addenda
+      but no link or button at all, the vendor's header offers only Dashboard,
+      My profile and Sign out, the dashboard shows only a greeting, and
+      /opportunities/code-with-us/:opportunityId/proposals/create,
+      /proposals/code-with-us/create?opportunityId=<id> and
+      /opportunities/:opportunityId all answer \"Page not found\" for that
+      opportunity (it shows \"Page not found\" at
+      http://localhost:4300/opportunities/code-with-us/00000000-0000-4000-8000-\
+      000000000601/proposals/create)"
+    found: unbound
+    adapter: cb66d79dc21ff03c2548c6d20a99bad4d76ce90b
+    slice: 9
+    app_tree: 3b37b24edcea6691dd8159f99704ac604136fe97
+    by: runner:verify
+    at: 2026-10-02T13:22:19.573Z
