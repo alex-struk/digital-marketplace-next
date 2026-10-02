@@ -39,6 +39,10 @@
 #    from sets SDLC_ORACLE_DISABLE_NOTIFICATIONS=1, which selects the configuration one
 #    criterion (R-6.1) is about. Every other criterion runs against the default.
 #
+#  - One service page left out. The database is started with a setting naming a page the
+#    seed removes; it names none unless SDLC_ORACLE_ABSENT_PAGE is set, which selects the
+#    configuration one criterion (R-7.29) is about. See the db service below.
+#
 #  - The base file's second database, test-db, is put behind a profile so it does not
 #    start. It belongs to the old repository's own test tooling, is not the oracle's
 #    database, and would otherwise take a port for nothing.
@@ -135,6 +139,15 @@ services:
   db:
     ports: !override
       - "${SDLC_DB_PORT}:5432"
+    # The base file's own command, plus one setting the seed reads: sdlc.absent_page, the
+    # address of one page the service needs that tests/seed/017-absent-service-page.sql
+    # takes out after the rest of the seed has put it back. Empty unless the environment
+    # the oracle is started from sets SDLC_ORACLE_ABSENT_PAGE, which selects the
+    # configuration one criterion (R-7.29) is about; under the default the setting names
+    # no page and the seed removes nothing. It is the database's setting, not the
+    # application's, so the application runs exactly as it does everywhere else and only
+    # finds that one page missing.
+    command: ["postgres", "-c", "log_statement=all", "-c", "sdlc.absent_page=${SDLC_ORACLE_ABSENT_PAGE:-}"]
 
   # Belongs to the old repository's own test tooling, not to the oracle.
   test-db:

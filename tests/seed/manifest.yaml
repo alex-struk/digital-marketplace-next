@@ -27,6 +27,7 @@ files:
   - 014-proposal-team-candidates.sql
   - 015-profile-completion.sql
   - 016-opportunity-note-and-cancellation.sql
+  - 017-absent-service-page.sql
 
 # Before every test the harness empties every table except the migration bookkeeping and
 # applies these files again. 000-installation.sql puts back what the application's
@@ -586,7 +587,11 @@ content:
   servicePageMarkdownGuide: { id: markdown-guide, slug: markdown-guide, fixed: true }
   servicePagePrivacy: { id: privacy, slug: privacy, fixed: true }
   servicePageSprintWithUsOpportunityGuide: { id: sprint-with-us-opportunity-guide, slug: sprint-with-us-opportunity-guide, fixed: true }
-  servicePageSprintWithUsOpportunityScope: { id: sprint-with-us-opportunity-scope, slug: sprint-with-us-opportunity-scope, fixed: true, embedded_by: [opportunity-swu-view] }
+  # Absent on an instance started in the configuration service_page_absent
+  # (spec/contract/observables.yaml), where 017-absent-service-page.sql removes it; present
+  # everywhere else. Any Sprint With Us opportunity under opportunities (closedSprintWithUs,
+  # for one) embeds it.
+  servicePageSprintWithUsOpportunityScope: { id: sprint-with-us-opportunity-scope, slug: sprint-with-us-opportunity-scope, fixed: true, embedded_by: [opportunity-swu-view], absent_in: [service_page_absent] }
   servicePageSprintWithUsProposalEvaluation: { id: sprint-with-us-proposal-evaluation, slug: sprint-with-us-proposal-evaluation, fixed: true }
   servicePageSprintWithUsProposalGuide: { id: sprint-with-us-proposal-guide, slug: sprint-with-us-proposal-guide, fixed: true }
   servicePageSprintWithUsTerms: { id: sprint-with-us-terms-and-conditions, slug: sprint-with-us-terms-and-conditions, fixed: true, embedded_by: [organization-swu-terms] }
