@@ -213,6 +213,7 @@ export interface OpportunityCwuEditPage {
   assignmentDate(): Promise<string>;
   startDate(): Promise<string>;
   completionDate(): Promise<string>;
+  noteControlOffered(): Promise<string>;
 }
 
 export interface OpportunityCwuCompletePage {
@@ -282,6 +283,7 @@ export interface OpportunitySwuEditPage {
   proposalDeadline(): Promise<string>;
   assignmentDate(): Promise<string>;
   evaluationQuestionFields(): Promise<string>;
+  noteControlOffered(): Promise<string>;
 }
 
 export interface OpportunitySwuCompletePage {

@@ -4996,7 +4996,7 @@ owed:
     id: R-1.33
     version: 2
     domain: opportunities
-    stage: contract
+    stage: derive-tests
     why: a seeded Code With Us or Sprint With Us opportunity whose history holds a
       private note carrying a file, so a test can observe it as author or
       administrator and see it withheld from a vendor.
@@ -5034,3 +5034,15 @@ owed:
           offered.
         by: agent:reviewer
         at: 2026-10-02T18:21:07.788Z
+      - from: contract
+        to: derive-tests
+        why: added observation `note_control_offered` on `opportunity-cwu-edit` and
+          `opportunity-swu-edit`, read on the History tab as the administrator
+          or as the author (`public-sector-staff`, author of
+          `seed.opportunities.cwuWithPrivateNote` and
+          `seed.opportunities.swuOpenWithSubmittedProposal`); true when any
+          add-a-note control is offered.
+        by: contract-v33
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-10-02T18:28:08.850Z
