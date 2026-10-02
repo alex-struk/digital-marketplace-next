@@ -260,6 +260,10 @@
 - 11:33:42 propose bind-adapter-old-62 at G3
 - 11:33:47 drive: step 22: `sdlc rule bind-adapter-old-62 --by agent:reviewer` — bind-adapter-old-62 is open at G3, held by agent:reviewer
 - 11:34:29 rule bind-adapter-old-62 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 11:34:38 drive: step 23: `sdlc run bind-adapter --target new` — 2 contract members the adapter does not name for target new owed by bind-adapter
+- 11:34:40 run bind-adapter: pre-checks failed
+- 11:34:40 drive: step 23 recovery: the oracle is up, and the new target's sandbox publishes on this machine's ports beside it; taking the oracle down first (sdlc oracle down)
+- 11:35:27 oracle down old
 
 # Run record 2026-10-01
 
