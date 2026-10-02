@@ -1,7 +1,7 @@
 import { Header, Link } from "@bcgov/design-system-react-components";
 import { mayManagePages } from "@rules/content";
 import { useSession } from "../auth/session";
-import { row } from "./layout";
+import { Stack } from "./page-layout";
 
 /**
  * The banner every screen carries.
@@ -25,18 +25,18 @@ export function SiteHeader() {
         ]}
       >
         {session.status === "signed-in" ? (
-          <nav aria-label="Account" style={row}>
+          <Stack as="nav" aria-label="Account" direction="row" align="center" gap="medium">
             <Link href="/dashboard">Dashboard</Link>
             {session.account.type === "ADMIN" ? <Link href="/users">Users</Link> : null}
             {mayManagePages(session.account) ? <Link href="/content">Content</Link> : null}
             <Link href="/users/me">My profile</Link>
             <Link href="/sign-out">Sign out</Link>
-          </nav>
+          </Stack>
         ) : session.status === "starting" ? null : (
-          <nav aria-label="Account" style={row}>
+          <Stack as="nav" aria-label="Account" direction="row" align="center" gap="medium">
             <Link href="/sign-in">Sign in</Link>
             <Link href="/sign-up">Sign up</Link>
-          </nav>
+          </Stack>
         )}
       </Header>
     </div>

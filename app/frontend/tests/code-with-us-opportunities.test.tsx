@@ -165,14 +165,40 @@ describe("the dashboard's opportunities (R-1.3, R-1.9)", () => {
     expect(screen.getByTestId("dashboard-create-opportunity")).toBeTruthy();
   });
 
-  it("lists every opportunity to an administrator, with who created it", async () => {
+  it("lists every opportunity in every program to an administrator, with who created it", async () => {
     const all = [...listing.slice(0, 2), { ...listing[2]!, createdBy: others, updatedBy: others }];
-    serve(() => json(200, all));
+    const sprint = {
+      id: "00000000-0000-4000-8000-000000000804",
+      program: "sprint-with-us",
+      createdAt: "2026-09-01T17:00:00.000Z",
+      updatedAt: "2026-09-01T17:00:00.000Z",
+      createdBy: others,
+      status: "EVAL_CC",
+      title: "A sprint",
+      location: "Kamloops",
+      remoteOk: false,
+      proposalDeadline: "2026-08-01",
+      totalMaxBudget: 500000,
+      subscribed: false,
+    };
+    serve((_method, path) =>
+      path === "/api/opportunities/code-with-us"
+        ? json(200, all)
+        : path === "/api/opportunities/sprint-with-us"
+          ? json(200, [sprint])
+          : json(200, []),
+    );
     resetSessionForTests({ status: "signed-in", account: administrator }, fakeIdentity());
     renderAt("/dashboard");
     const table = await screen.findByTestId("dashboard-opportunities-table");
-    expect(within(table).getAllByTestId("dashboard-opportunity-row")).toHaveLength(3);
-    expect(within(table).getByText("Jordan Placeholder")).toBeTruthy();
+    const rows = within(table).getAllByTestId("dashboard-opportunity-row");
+    expect(rows).toHaveLength(4);
+    expect(within(table).getAllByText("Jordan Placeholder")).toHaveLength(2);
+    const sprintRow = rows.find((row) => within(row).queryByText("A sprint"))!;
+    expect(within(sprintRow).getByText("Sprint With Us")).toBeTruthy();
+    expect(within(sprintRow).getByTestId("dashboard-opportunity-link").getAttribute("href")).toBe(
+      "/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000804/edit",
+    );
   });
 
   it("says so when a member of staff has created nothing yet", async () => {
@@ -197,6 +223,24 @@ describe("choosing a program (R-1.7, R-1.8)", () => {
     ]);
     expect(screen.getByTestId("program-choose-code-with-us").getAttribute("href")).toBe("/opportunities/code-with-us/create");
     expect(screen.getByText(/cannot be changed once the opportunity is created/)).toBeTruthy();
+  });
+
+  it("links every program card and every create form to the service level agreement (R-7.18)", async () => {
+    serve(() => json(200, []));
+    const expected: [string, number][] = [
+      ["/opportunities/create", 3],
+      ["/opportunities/code-with-us/create", 1],
+      ["/opportunities/sprint-with-us/create", 1],
+      ["/opportunities/team-with-us/create", 1],
+    ];
+    for (const [address, count] of expected) {
+      resetSessionForTests({ status: "signed-in", account: staff }, fakeIdentity());
+      const view = renderAt(address);
+      const links = await screen.findAllByTestId("service-level-agreement-link");
+      expect(links).toHaveLength(count);
+      for (const link of links) expect(link.getAttribute("href")).toBe("/content/service-level-agreement");
+      view.unmount();
+    }
   });
 
   for (const [who, session] of [
@@ -260,8 +304,8 @@ describe("creating a Code With Us opportunity", () => {
     for (const label of ["Title", "Location", "Reward", "Skills", "Description", "Proposal deadline"]) {
       expect(named.some((line) => line.startsWith(`${label}:`))).toBe(true);
     }
-    // Remote work is answered from the start: No, until Yes is chosen (R-1.11).
-    expect(named.some((line) => line.startsWith("Remote work:"))).toBe(false);
+    // The remote work question starts unanswered, and an unanswered one is refused (R-1.11).
+    expect(named).toContain("Remote work: say whether remote work is acceptable.");
     expect(requests.filter((request) => request.method === "POST")).toEqual([]);
   });
 
@@ -284,7 +328,20 @@ describe("creating a Code With Us opportunity", () => {
     expect(requests.filter((request) => request.method === "POST")).toEqual([]);
   });
 
-  it("asks whether remote work is acceptable as the stories' Yes / No choice, starting on No (R-1.11)", async () => {
+  it("saves a draft whose remote work question is unanswered, sending no answer (R-1.9, R-1.11)", async () => {
+    serve((method) => (method === "POST" ? json(201, opportunity()) : json(200, opportunity())));
+    resetSessionForTests({ status: "signed-in", account: staff }, fakeIdentity());
+    const { router } = renderAt("/opportunities/code-with-us/create");
+    await screen.findByTestId("opportunity-save-draft");
+    fireEvent.click(screen.getByTestId("opportunity-save-draft"));
+
+    await waitFor(() => expect(router.state.location.pathname).toBe(`/opportunities/code-with-us/${ID}/edit`));
+    const body = requests.find((request) => request.method === "POST")?.body as Record<string, unknown>;
+    expect(body.status).toBe("DRAFT");
+    expect("remoteOk" in body).toBe(false);
+  });
+
+  it("asks whether remote work is acceptable as the stories' Yes / No choice, with neither chosen at first (R-1.11)", async () => {
     serve((method) => (method === "POST" ? json(201, opportunity()) : json(200, opportunity())));
     resetSessionForTests({ status: "signed-in", account: staff }, fakeIdentity());
     const { router } = renderAt("/opportunities/code-with-us/create");
@@ -292,6 +349,9 @@ describe("creating a Code With Us opportunity", () => {
     const group = screen.getByRole("radiogroup", { name: /^Is remote work acceptable\?/ });
     const no = within(group).getByRole("radio", { name: "No" }) as HTMLInputElement;
     const yes = within(group).getByRole("radio", { name: "Yes" }) as HTMLInputElement;
+    expect(no.checked).toBe(false);
+    expect(yes.checked).toBe(false);
+    fireEvent.click(no);
     expect(no.checked).toBe(true);
     fireEvent.click(yes);
     expect(yes.checked).toBe(true);

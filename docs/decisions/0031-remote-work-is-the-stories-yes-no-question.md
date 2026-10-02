@@ -1,6 +1,7 @@
 # 0031 · Remote work is the stories' Yes / No question, starting on No
 
-- Status: accepted for the build (slice 7, second revision); replaces the first part of 0030
+- Status: superseded by 0042 for where the question starts (it now starts unanswered); the rest
+  stands. Replaces the first part of 0030
 - Date: 2026-10-01
 
 ## Decision

@@ -50,6 +50,8 @@ export interface CwuOpportunity {
   readonly attachments: readonly Attachment[];
   /** Absent unless the reader is the author or an administrator (R-1.30). */
   readonly history?: readonly HistoryEntry[];
+  /** Whether the reader watches it (R-1.5). */
+  readonly subscribed: boolean;
 }
 
 const STATES: readonly string[] = ["DRAFT", "UNDER_REVIEW", "PUBLISHED", "EVALUATION", "PROCESSING", "AWARDED", "CANCELED"];
@@ -109,10 +111,11 @@ export function readCwuOpportunity(value: unknown): CwuOpportunity | null {
       ? record.attachments.map(readAttachment).filter((file): file is Attachment => file !== null)
       : [],
     ...("history" in record ? { history: readHistory(record.history) } : {}),
+    subscribed: record.subscribed === true,
   };
 }
 
-function reasonsIn(body: unknown): string[] {
+export function reasonsIn(body: unknown): string[] {
   const errors = (body as { errors?: unknown } | null)?.errors;
   return Array.isArray(errors) ? errors.filter((reason): reason is string => typeof reason === "string") : [];
 }
@@ -171,7 +174,8 @@ function saveAnswerFor(ok: boolean, data: unknown, error: unknown): SaveAnswer {
 export interface CwuSubmission {
   readonly title: string;
   readonly teaser: string;
-  readonly remoteOk: boolean | null;
+  /** Left out while the form's question is unanswered. */
+  readonly remoteOk?: boolean;
   readonly remoteDesc: string;
   readonly location: string;
   readonly reward: number | null;

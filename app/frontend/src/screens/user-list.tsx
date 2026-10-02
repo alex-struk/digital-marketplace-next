@@ -19,7 +19,7 @@ import {
   nameMatchesSearch,
 } from "@rules/users";
 import { Account, downloadContactList, fetchAccounts } from "../api/accounts";
-import { page, stack } from "../app/layout";
+import { Stack } from "../app/page-layout";
 import { Loading } from "../app/loading";
 import { NotFound } from "../app/not-found";
 import { RequireSignIn } from "../app/require-sign-in";
@@ -38,14 +38,6 @@ export function UserListScreen() {
     </RequireSignIn>
   );
 }
-
-const toolbar = {
-  display: "flex",
-  flexWrap: "wrap",
-  alignItems: "end",
-  justifyContent: "space-between",
-  gap: "var(--layout-margin-medium)",
-} as const;
 
 const cell = {
   textAlign: "start",
@@ -83,13 +75,13 @@ function UserList() {
 
   if (answer === "refused") return <NotFound />;
   return (
-    <div style={page}>
+    <Stack gap="large">
       <Heading level={1}>Digital Marketplace Users</Heading>
       {answer === "loading" ? (
         <Loading label="Loading users…" />
       ) : (
         <>
-          <div style={toolbar}>
+          <Stack direction="row" gap="medium" align="end" justify="space-between">
             <TextField
               type="search"
               label="Search by name"
@@ -100,7 +92,7 @@ function UserList() {
             <Button variant="secondary" onPress={() => setExporting(true)} data-testid="contact-list-open-export">
               Export contact list
             </Button>
-          </div>
+          </Stack>
           <div role="region" aria-labelledby="user-list-caption" tabIndex={0} style={{ overflowX: "auto" }}>
             <table style={{ borderCollapse: "collapse", width: "100%" }}>
               <caption id="user-list-caption" style={{ textAlign: "start" }}>
@@ -158,11 +150,12 @@ function UserList() {
           <ExportContactList isOpen={exporting} onClose={() => setExporting(false)} />
         </>
       )}
-    </div>
+    </Stack>
   );
 }
 
-const dialogBody = { display: "grid", gap: "var(--layout-margin-large)", padding: "var(--layout-padding-large)" } as const;
+// The dialog's inner padding is its own; its content is laid out by the stack.
+const dialogBody = { padding: "var(--layout-padding-large)" } as const;
 
 /**
  * The contact-list export (R-4.32). Export is unavailable until at least one account type and
@@ -197,65 +190,67 @@ function ExportContactList({ isOpen, onClose }: { isOpen: boolean; onClose: () =
     <Modal isOpen={isOpen} isDismissable onOpenChange={(open) => (open ? undefined : close())}>
       <Dialog isCloseable data-testid="contact-list-modal">
         <div style={dialogBody}>
-          <Heading level={2} slot="title">
-            Export contact list
-          </Heading>
-          <Text elementType="p">The file lists active accounts only.</Text>
-          <CheckboxGroup
-            label="Account types"
-            description="Administrators are included with public sector employees."
-            isRequired
-            value={kinds}
-            onChange={setKinds}
-          >
-            <Checkbox value="GOV" data-testid="contact-list-user-type">
-              Public sector employees
-            </Checkbox>
-            <Checkbox value="VENDOR" data-testid="contact-list-user-type">
-              Vendors
-            </Checkbox>
-          </CheckboxGroup>
-          <CheckboxGroup label="Fields" isRequired value={fields} onChange={setFields}>
-            <Checkbox value="firstName" data-testid="contact-list-field">
-              First name
-            </Checkbox>
-            <Checkbox value="lastName" data-testid="contact-list-field">
-              Last name
-            </Checkbox>
-            <Checkbox value="email" data-testid="contact-list-field">
-              Email address
-            </Checkbox>
-            <Checkbox value="organizationName" data-testid="contact-list-field">
-              Organization name
-            </Checkbox>
-          </CheckboxGroup>
-          {failed ? (
-            <InlineAlert
-              variant="danger"
-              role="alert"
-              title="The contact list could not be exported"
-              description="Nothing was saved. Please try again."
-            />
-          ) : null}
-          {ready ? null : (
-            <Text id="contact-list-export-hint" elementType="p" size="small" color="secondary">
-              Choose at least one account type and one field to export.
-            </Text>
-          )}
-          <ButtonGroup alignment="end" ariaLabel="Export actions">
-            <Button variant="secondary" isDisabled={working} onPress={close} data-testid="contact-list-cancel-button">
-              Cancel
-            </Button>
-            <Button
-              variant="primary"
-              isDisabled={!ready || working}
-              aria-describedby={ready ? undefined : "contact-list-export-hint"}
-              onPress={() => void exportList()}
-              data-testid="contact-list-export-button"
+          <Stack gap="medium">
+            <Heading level={2} slot="title">
+              Export contact list
+            </Heading>
+            <Text elementType="p">The file lists active accounts only.</Text>
+            <CheckboxGroup
+              label="Account types"
+              description="Administrators are included with public sector employees."
+              isRequired
+              value={kinds}
+              onChange={setKinds}
             >
-              Export
-            </Button>
-          </ButtonGroup>
+              <Checkbox value="GOV" data-testid="contact-list-user-type">
+                Public sector employees
+              </Checkbox>
+              <Checkbox value="VENDOR" data-testid="contact-list-user-type">
+                Vendors
+              </Checkbox>
+            </CheckboxGroup>
+            <CheckboxGroup label="Fields" isRequired value={fields} onChange={setFields}>
+              <Checkbox value="firstName" data-testid="contact-list-field">
+                First name
+              </Checkbox>
+              <Checkbox value="lastName" data-testid="contact-list-field">
+                Last name
+              </Checkbox>
+              <Checkbox value="email" data-testid="contact-list-field">
+                Email address
+              </Checkbox>
+              <Checkbox value="organizationName" data-testid="contact-list-field">
+                Organization name
+              </Checkbox>
+            </CheckboxGroup>
+            {failed ? (
+              <InlineAlert
+                variant="danger"
+                role="alert"
+                title="The contact list could not be exported"
+                description="Nothing was saved. Please try again."
+              />
+            ) : null}
+            {ready ? null : (
+              <Text id="contact-list-export-hint" elementType="p" size="small" color="secondary">
+                Choose at least one account type and one field to export.
+              </Text>
+            )}
+            <ButtonGroup alignment="end" ariaLabel="Export actions">
+              <Button variant="secondary" isDisabled={working} onPress={close} data-testid="contact-list-cancel-button">
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                isDisabled={!ready || working}
+                aria-describedby={ready ? undefined : "contact-list-export-hint"}
+                onPress={() => void exportList()}
+                data-testid="contact-list-export-button"
+              >
+                Export
+              </Button>
+            </ButtonGroup>
+          </Stack>
         </div>
       </Dialog>
     </Modal>

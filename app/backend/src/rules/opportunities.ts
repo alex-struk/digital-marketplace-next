@@ -302,6 +302,12 @@ function offsetMinutes(instant: Date, timeZone: string): number {
 }
 
 /** The calendar day an instant falls on in Pacific time. */
+/** The calendar day and the time of day an instant falls at in Pacific time, as every screen shows a moment. */
+export function pacificClockOf(instant: Date): { year: number; month: number; day: number; hour: number; minute: number } {
+  const p = partsIn(instant, OPPORTUNITY_TIME_ZONE);
+  return { year: p.year!, month: p.month!, day: p.day!, hour: p.hour! % 24, minute: p.minute! };
+}
+
 export function pacificDayOf(instant: Date): CalendarDay {
   const p = partsIn(instant, OPPORTUNITY_TIME_ZONE);
   return `${String(p.year).padStart(4, "0")}-${String(p.month).padStart(2, "0")}-${String(p.day).padStart(2, "0")}`;
