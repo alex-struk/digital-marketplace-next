@@ -18,10 +18,13 @@ import { NoticeScreen } from "./screens/notice";
 import { DashboardScreen } from "./screens/dashboard";
 import { UserListScreen } from "./screens/user-list";
 import { UserProfileScreen } from "./screens/user-profile";
+import { OpportunityListScreen } from "./screens/opportunity-list";
 import { OpportunityProgramSelectScreen } from "./screens/opportunity-program-select";
 import { OpportunityCwuCreateScreen } from "./screens/opportunity-cwu-create";
 import { OpportunityCwuViewScreen } from "./screens/opportunity-cwu-view";
 import { OpportunityCwuEditScreen } from "./screens/opportunity-cwu-edit";
+import { OpportunityOtherCreateScreen } from "./screens/opportunity-other-create";
+import { OpportunityOtherManageScreen } from "./screens/opportunity-other-manage";
 
 /**
  * The addresses in `spec/contract/surface.yaml`, and nothing else. Every other address is the
@@ -128,6 +131,12 @@ const userListRoute = createRoute({
 
 // Opportunities. The fixed addresses — choosing a program, creating in one — are matched before
 // an opportunity's own address is.
+const opportunityListRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities",
+  component: OpportunityListScreen,
+});
+
 const opportunityProgramSelectRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/opportunities/create",
@@ -158,6 +167,42 @@ const opportunityCwuEditRoute = createRoute({
   },
 });
 
+// Sprint With Us and Team With Us, as far as slice 8 builds them: a draft is created, and lands on
+// its manage page (decision record 0035). Their public pages are slice 10's.
+const opportunitySwuCreateRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/sprint-with-us/create",
+  component: function OpportunitySwuCreateRoute() {
+    return <OpportunityOtherCreateScreen program="sprint-with-us" />;
+  },
+});
+
+const opportunityTwuCreateRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/team-with-us/create",
+  component: function OpportunityTwuCreateRoute() {
+    return <OpportunityOtherCreateScreen program="team-with-us" />;
+  },
+});
+
+const opportunitySwuManageRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/sprint-with-us/$opportunityId/edit",
+  component: function OpportunitySwuManageRoute() {
+    const { opportunityId } = opportunitySwuManageRoute.useParams();
+    return <OpportunityOtherManageScreen key={opportunityId} program="sprint-with-us" opportunityId={opportunityId} />;
+  },
+});
+
+const opportunityTwuManageRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/team-with-us/$opportunityId/edit",
+  component: function OpportunityTwuManageRoute() {
+    const { opportunityId } = opportunityTwuManageRoute.useParams();
+    return <OpportunityOtherManageScreen key={opportunityId} program="team-with-us" opportunityId={opportunityId} />;
+  },
+});
+
 // "me" and an identifier share one route: the screen reads "me" as whoever is signed in.
 const userProfileRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -183,10 +228,15 @@ export const routeTree = rootRoute.addChildren([
   dashboardRoute,
   userListRoute,
   userProfileRoute,
+  opportunityListRoute,
   opportunityProgramSelectRoute,
   opportunityCwuCreateRoute,
   opportunityCwuViewRoute,
   opportunityCwuEditRoute,
+  opportunitySwuCreateRoute,
+  opportunityTwuCreateRoute,
+  opportunitySwuManageRoute,
+  opportunityTwuManageRoute,
 ]);
 
 export const router = createRouter({

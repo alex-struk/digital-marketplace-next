@@ -10,7 +10,8 @@ import {
 } from "@rules/files";
 import { downloadFile } from "../api/files";
 import { Attachment, AttachmentUpload, uploadAttachment } from "../api/opportunities";
-import { panel, plainList, row, tight } from "./layout";
+import { card } from "./layout";
+import { Stack } from "./page-layout";
 import { TitledAlert } from "./titled-alert";
 
 /**
@@ -231,9 +232,9 @@ export type AttachmentsState = ReturnType<typeof useAttachments>;
 
 const hiddenInput = { display: "none" } as const;
 
+// An attachment row: a border and the inner padding that keeps content off it. Spacing inside it
+// is the stack's.
 const item = {
-  display: "grid",
-  gap: "var(--layout-margin-small)",
   padding: "var(--layout-padding-small)",
   border: "var(--layout-border-width-small) solid var(--surface-color-border-medium)",
   borderRadius: "var(--layout-border-radius-medium)",
@@ -261,78 +262,83 @@ export function AttachmentControl({ state, headingLevel }: { state: AttachmentsS
   const { kept, fresh } = state;
   const empty = kept.length === 0 && fresh.length === 0;
   return (
-    <section aria-labelledby="form-attachments" style={panel}>
-      <Heading level={headingLevel} id="form-attachments">
-        Attachments
-      </Heading>
-      <Text elementType="p">
-        Attach any documents proponents need. Anyone who can read this opportunity can read its attachments. Removing an
-        attachment stops it being readable through this opportunity once you save.
-      </Text>
-      {empty ? (
-        <Text elementType="p">No attachments have been added.</Text>
-      ) : (
-        <ul style={plainList} data-testid="attachment-list">
-          {kept.map((attachment) => (
-            <li key={attachment.id} style={item} data-testid="attachment-existing-row">
-              <TextField
-                label="Attachment name"
-                value={attachment.name}
-                isReadOnly
-                description="Already stored, so its name cannot be changed."
-                data-testid="attachment-existing-name"
-              />
-              <div style={row}>
-                <DownloadLink attachment={attachment} />
-                <Button
-                  variant="secondary"
-                  size="small"
-                  aria-label={`Remove ${attachment.name}`}
-                  data-testid="attachment-remove-button"
-                  onPress={() => state.removeKept(attachment.id)}
-                >
-                  Remove
-                </Button>
-              </div>
-            </li>
-          ))}
-          {fresh.map((attachment) => (
-            <NewAttachmentRow key={attachment.key} attachment={attachment} state={state} />
-          ))}
-        </ul>
-      )}
-      <div id="attachment-size-limit" data-testid="attachment-size-limit">
-        <Text elementType="p" size="small" color="secondary">
-          {SIZE_RULE}
+    <section aria-labelledby="form-attachments" style={card}>
+      <Stack gap="medium">
+        <Heading level={headingLevel} id="form-attachments">
+          Attachments
+        </Heading>
+        <Text elementType="p">
+          Attach any documents proponents need. Anyone who can read this opportunity can read its attachments. Removing an
+          attachment stops it being readable through this opportunity once you save.
         </Text>
-      </div>
-      {/* The control's own file input, opened by the button. React Aria's FileTrigger is not used:
-          the design system bundles its own copy of React Aria, so FileTrigger's press handler
-          never reached its Button (as in the image picker and the body editor). */}
-      <input
-        ref={input}
-        type="file"
-        multiple
-        tabIndex={-1}
-        aria-hidden="true"
-        style={hiddenInput}
-        onChange={(event) => {
-          const files = Array.from(event.currentTarget.files ?? []);
-          // Cleared so that choosing the same file again is still noticed.
-          event.currentTarget.value = "";
-          if (files.length > 0) state.add(files);
-        }}
-      />
-      <div>
-        <Button
-          variant="secondary"
-          aria-describedby="attachment-size-limit"
-          data-testid="attachment-add-button"
-          onPress={() => input.current?.click()}
-        >
-          Add attachment
-        </Button>
-      </div>
+        {empty ? (
+          <Text elementType="p">No attachments have been added.</Text>
+        ) : (
+          <Stack as="ul" gap="medium" data-testid="attachment-list">
+            {kept.map((attachment) => (
+              <li key={attachment.id} style={item} data-testid="attachment-existing-row">
+                <Stack gap="small">
+                  <TextField
+                    label="Attachment name"
+                    value={attachment.name}
+                    isReadOnly
+                    description="Already stored, so its name cannot be changed."
+                    data-testid="attachment-existing-name"
+                  />
+                  <Stack direction="row" align="center" gap="medium">
+                    <DownloadLink attachment={attachment} />
+                    <Button
+                      variant="secondary"
+                      size="small"
+                      aria-label={`Remove ${attachment.name}`}
+                      data-testid="attachment-remove-button"
+                      onPress={() => state.removeKept(attachment.id)}
+                    >
+                      Remove
+                    </Button>
+                  </Stack>
+                </Stack>
+              </li>
+            ))}
+            {fresh.map((attachment) => (
+              <NewAttachmentRow key={attachment.key} attachment={attachment} state={state} />
+            ))}
+          </Stack>
+        )}
+        <div id="attachment-size-limit" data-testid="attachment-size-limit">
+          <Text elementType="p" size="small" color="secondary">
+            {SIZE_RULE}
+          </Text>
+        </div>
+        {/* The control's own file input, opened by the button. React Aria's FileTrigger is not used:
+            the design system bundles its own copy of React Aria, so FileTrigger's press handler
+            never reached its Button (as in the image picker and the body editor). It is never
+            displayed, so it takes no place in the stack. */}
+        <input
+          ref={input}
+          type="file"
+          multiple
+          tabIndex={-1}
+          aria-hidden="true"
+          style={hiddenInput}
+          onChange={(event) => {
+            const files = Array.from(event.currentTarget.files ?? []);
+            // Cleared so that choosing the same file again is still noticed.
+            event.currentTarget.value = "";
+            if (files.length > 0) state.add(files);
+          }}
+        />
+        <div>
+          <Button
+            variant="secondary"
+            aria-describedby="attachment-size-limit"
+            data-testid="attachment-add-button"
+            onPress={() => input.current?.click()}
+          >
+            Add attachment
+          </Button>
+        </div>
+      </Stack>
     </section>
   );
 }
@@ -343,54 +349,56 @@ function NewAttachmentRow({ attachment, state }: { attachment: NewAttachment; st
   const tooLarge = file.size > FILE_SIZE_LIMIT_BYTES;
   return (
     <li style={item} data-testid="attachment-new-row">
-      <div role="status">
-        <Text elementType="p">{`New: ${file.name}, ${readableSize(file.size)}.${progress(attachment, state.attachesAtOnce)}`}</Text>
-      </div>
-      {attachment.stored && !attachment.refusal ? (
-        <div>
-          <DownloadLink attachment={attachment.stored} />
+      <Stack gap="small">
+        <div role="status">
+          <Text elementType="p">{`New: ${file.name}, ${readableSize(file.size)}.${progress(attachment, state.attachesAtOnce)}`}</Text>
         </div>
-      ) : null}
-      {attachment.refusal ? (
-        <div data-testid="attachment-size-error">
-          <TitledAlert
-            variant="danger"
-            role="alert"
-            title={tooLarge ? `${file.name} is too large to attach` : `${file.name} could not be attached`}
-          >
-            <Text elementType="p">{attachment.refusal}</Text>
-          </TitledAlert>
-        </div>
-      ) : (
-        <div style={tight}>
-          <TextField
-            label={`Name for ${file.name} (optional)`}
-            value={attachment.typedName}
-            onChange={(value) => state.rename(attachment.key, value)}
-            description={describeRename(file.name)}
-            isInvalid={attachment.nameError !== null}
-            errorMessage={attachment.nameError ?? undefined}
-            aria-describedby={resultId}
-            data-testid="attachment-name-field"
-          />
-          <div id={resultId} data-testid="attachment-resulting-name">
-            <Text elementType="p" size="small" color="secondary">
-              {`Will be saved as: ${attachmentName(file.name, attachment.typedName)}`}
-            </Text>
+        {attachment.stored && !attachment.refusal ? (
+          <div>
+            <DownloadLink attachment={attachment.stored} />
           </div>
+        ) : null}
+        {attachment.refusal ? (
+          <div data-testid="attachment-size-error">
+            <TitledAlert
+              variant="danger"
+              role="alert"
+              title={tooLarge ? `${file.name} is too large to attach` : `${file.name} could not be attached`}
+            >
+              <Text elementType="p">{attachment.refusal}</Text>
+            </TitledAlert>
+          </div>
+        ) : (
+          <>
+            <TextField
+              label={`Name for ${file.name} (optional)`}
+              value={attachment.typedName}
+              onChange={(value) => state.rename(attachment.key, value)}
+              description={describeRename(file.name)}
+              isInvalid={attachment.nameError !== null}
+              errorMessage={attachment.nameError ?? undefined}
+              aria-describedby={resultId}
+              data-testid="attachment-name-field"
+            />
+            <div id={resultId} data-testid="attachment-resulting-name">
+              <Text elementType="p" size="small" color="secondary">
+                {`Will be saved as: ${attachmentName(file.name, attachment.typedName)}`}
+              </Text>
+            </div>
+          </>
+        )}
+        <div>
+          <Button
+            variant="secondary"
+            size="small"
+            aria-label={`Remove ${file.name}`}
+            data-testid="attachment-remove-button"
+            onPress={() => state.removeNew(attachment.key)}
+          >
+            Remove
+          </Button>
         </div>
-      )}
-      <div>
-        <Button
-          variant="secondary"
-          size="small"
-          aria-label={`Remove ${file.name}`}
-          data-testid="attachment-remove-button"
-          onPress={() => state.removeNew(attachment.key)}
-        >
-          Remove
-        </Button>
-      </div>
+      </Stack>
     </li>
   );
 }
@@ -423,20 +431,22 @@ export function AttachmentList({
   heading?: boolean;
 }) {
   if (attachments.length === 0) return null;
+  const list = (
+    <Stack as="ul" gap="small" aria-labelledby={heading ? "view-attachments" : "form-attachments"} data-testid="attachment-list">
+      {attachments.map((attachment) => (
+        <li key={attachment.id} data-testid="attachment-existing-row">
+          <DownloadLink attachment={attachment} />
+        </li>
+      ))}
+    </Stack>
+  );
+  if (!heading) return list;
   return (
-    <>
-      {heading ? (
-        <Heading level={3} id="view-attachments">
-          Attachments
-        </Heading>
-      ) : null}
-      <ul style={plainList} aria-labelledby={heading ? "view-attachments" : "form-attachments"} data-testid="attachment-list">
-        {attachments.map((attachment) => (
-          <li key={attachment.id} data-testid="attachment-existing-row">
-            <DownloadLink attachment={attachment} />
-          </li>
-        ))}
-      </ul>
-    </>
+    <Stack gap="small">
+      <Heading level={3} id="view-attachments">
+        Attachments
+      </Heading>
+      {list}
+    </Stack>
   );
 }

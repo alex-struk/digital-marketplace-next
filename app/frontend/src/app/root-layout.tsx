@@ -5,7 +5,11 @@ import { needsProfileCompletion } from "@rules/users";
 import { leaveRefusedSignIn, useSession } from "../auth/session";
 import { SiteHeader } from "./site-header";
 import { SiteFooter } from "./site-footer";
+import { PageContainer } from "./page-layout";
 import { useGoTo } from "./go-to";
+import { LOADING_SHOWN_AFTER_MS } from "./loading";
+
+const HEADING_LOOK_EVERY_MS = 50;
 
 /**
  * A vendor who has not finished signing up is sent to finish it from every screen but the few
@@ -57,21 +61,32 @@ export function RootLayout() {
       return;
     }
     // After the new screen has been put on the page, not while it is being put there: a
-    // heading focused mid-change is replaced a moment later and the focus goes with it.
-    const afterTheScreenIsThere = setTimeout(() => {
+    // heading focused mid-change is replaced a moment later and the focus goes with it. A
+    // screen drawn once what it shows has arrived has no heading until then (decision record
+    // 0039), so the heading is looked for until it is there, for as long as that screen would
+    // take to say it is loading.
+    let waited = 0;
+    let timer = setTimeout(function focusTheHeading() {
       const heading = document.querySelector<HTMLElement>("main h1");
-      if (!heading) return;
+      if (!heading) {
+        waited += HEADING_LOOK_EVERY_MS;
+        if (waited <= LOADING_SHOWN_AFTER_MS) timer = setTimeout(focusTheHeading, HEADING_LOOK_EVERY_MS);
+        return;
+      }
       heading.tabIndex = -1;
       heading.focus();
     }, 0);
-    return () => clearTimeout(afterTheScreenIsThere);
+    return () => clearTimeout(timer);
   }, [address]);
 
   return (
     <>
       <SiteHeader />
       <main id="main">
-        <Outlet />
+        {/* The one column every screen sits in, the width of the banner (design/catalogue/layout.tsx). */}
+        <PageContainer>
+          <Outlet />
+        </PageContainer>
       </main>
       <SiteFooter />
     </>

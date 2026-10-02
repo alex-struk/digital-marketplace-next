@@ -1,25 +1,46 @@
+import { useEffect, useState } from "react";
 import { Heading, Link, Text } from "@bcgov/design-system-react-components";
-import { page, row, stack } from "../app/layout";
+import { AwardedFigures, fetchAwardedFigures } from "../api/watching";
+import { term } from "../app/layout";
+import { Loading } from "../app/loading";
+import { Stack } from "../app/page-layout";
 import { useScreenTitle } from "../app/screen-title";
 
 /**
  * The home page, as a visitor who has not signed in sees it.
  *
- * This is the shell: the service's own account of itself, the way in, and the way to each of
- * the three programs. The figures for what has been awarded through the service are the
- * opportunities domain's and arrive with the slice that counts them.
+ * The service's own account of itself, the way in to the opportunity list (Browse opportunities,
+ * `/opportunities`), sign-in and sign-up, what has been awarded through it, and the way to each of
+ * the three programs. Everything but the awarded figures is drawn at once; the figures come from
+ * the service (`/api/metrics`).
  */
+type Figures = { readonly kind: "loading" } | { readonly kind: "read"; readonly figures: AwardedFigures | null };
+
+const figure = { font: "var(--typography-regular-display)" } as const;
+
 export function HomeScreen() {
   useScreenTitle("Digital Marketplace");
+  const [figures, setFigures] = useState<Figures>({ kind: "loading" });
+
+  useEffect(() => {
+    let current = true;
+    void fetchAwardedFigures().then((read) => {
+      if (current) setFigures({ kind: "read", figures: read });
+    });
+    return () => {
+      current = false;
+    };
+  }, []);
+
   return (
-    <div style={page} data-testid="home-page">
+    <Stack gap="large" data-testid="home-page">
       <Heading level={1}>Digital Marketplace</Heading>
       <Text elementType="p" size="large">
         The Digital Marketplace is where the BC Public Service posts procurement
         opportunities for digital work, and where vendors propose to do that work,
         through three programs: Code With Us, Sprint With Us and Team With Us.
       </Text>
-      <div style={row}>
+      <Stack direction="row" align="center" gap="medium">
         <Link
           href="/opportunities"
           isButton
@@ -44,8 +65,33 @@ export function HomeScreen() {
         >
           Sign up
         </Link>
-      </div>
-      <section aria-labelledby="home-programs-heading" style={stack}>
+      </Stack>
+      <Stack as="section" gap="medium" aria-labelledby="home-awards-heading">
+        <Heading level={2} id="home-awards-heading">
+          Awarded through the Digital Marketplace
+        </Heading>
+        {figures.kind === "loading" ? (
+          <Loading label="Loading figures…" />
+        ) : figures.figures === null ? (
+          <Text elementType="p">The figures could not be loaded. Reload the page to try again.</Text>
+        ) : (
+          <Stack as="dl" direction="row" gap="medium">
+            <Stack gap="small">
+              <dt style={term}>Opportunities awarded</dt>
+              <dd style={figure} data-testid="home-awarded-count">
+                {figures.figures.count.toLocaleString("en-CA")}
+              </dd>
+            </Stack>
+            <Stack gap="small">
+              <dt style={term}>Total value awarded</dt>
+              <dd style={figure} data-testid="home-awarded-value">
+                {`$${figures.figures.value.toLocaleString("en-CA")}`}
+              </dd>
+            </Stack>
+          </Stack>
+        )}
+      </Stack>
+      <Stack as="section" gap="medium" aria-labelledby="home-programs-heading">
         <Heading level={2} id="home-programs-heading">
           The three programs
         </Heading>
@@ -62,7 +108,7 @@ export function HomeScreen() {
             <Link href="/learn-more/team-with-us">Learn about Team With Us</Link>
           </li>
         </ul>
-      </section>
-    </div>
+      </Stack>
+    </Stack>
   );
 }

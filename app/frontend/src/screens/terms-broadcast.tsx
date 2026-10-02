@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AlertDialog, Button, Heading, InlineAlert, Modal, Text } from "@bcgov/design-system-react-components";
 import { announceUpdatedTerms } from "../api/notifications";
-import { stack } from "../app/layout";
+import { Stack } from "../app/page-layout";
 
 type Outcome = "notified" | "failed" | null;
 
@@ -26,7 +26,7 @@ export function TermsBroadcast() {
   }
 
   return (
-    <section aria-labelledby="notify-vendors-heading" style={stack}>
+    <Stack as="section" gap="medium" aria-labelledby="notify-vendors-heading">
       <Heading level={2} id="notify-vendors-heading">
         Notify vendors of updated terms
       </Heading>
@@ -104,6 +104,6 @@ export function TermsBroadcast() {
           <Text elementType="p">Withdrawn acceptances cannot be restored. Each vendor has to accept the new terms themselves.</Text>
         </AlertDialog>
       </Modal>
-    </section>
+    </Stack>
   );
 }

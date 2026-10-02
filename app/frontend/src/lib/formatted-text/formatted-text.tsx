@@ -1,5 +1,6 @@
 import { Fragment, ReactNode, createElement } from "react";
 import { Link } from "@bcgov/design-system-react-components";
+import { Stack } from "../../app/page-layout";
 import { Block, Inline, parseFormattedText } from "./parse";
 
 /**
@@ -11,11 +12,6 @@ import { Block, Inline, parseFormattedText } from "./parse";
  * shown as the text it is and never executed (R-7.17). Nothing here writes HTML from a
  * string, so there is no path by which a body could become markup.
  */
-
-const stack = {
-  display: "grid",
-  gap: "var(--layout-margin-medium)",
-} as const;
 
 const codeBlock = {
   overflowX: "auto",
@@ -99,8 +95,8 @@ export interface FormattedTextProps {
 export function FormattedText({ markup, testId }: FormattedTextProps) {
   const blocks = parseFormattedText(markup);
   return (
-    <div style={stack} data-testid={testId}>
+    <Stack gap="medium" data-testid={testId}>
       {blocks.map((block, position) => renderBlock(block, `block-${position}`))}
-    </div>
+    </Stack>
   );
 }

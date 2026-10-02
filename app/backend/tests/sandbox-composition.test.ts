@@ -96,6 +96,10 @@ describe("the realm the sandbox identity provider imports", () => {
       "duplicateEmailsAllowed",
       "resetPasswordAllowed",
       "editUsernameAllowed",
+      // How long a sign-in lasts (app/compose/idp/README.md; decision record 0039).
+      "accessTokenLifespan",
+      "ssoSessionIdleTimeout",
+      "ssoSessionMaxLifespan",
       "clients",
       "users",
       "roles",

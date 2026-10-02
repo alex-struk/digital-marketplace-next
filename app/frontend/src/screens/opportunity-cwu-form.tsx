@@ -33,7 +33,8 @@ import {
 import type { Account } from "../api/accounts";
 import { CwuOpportunity, CwuSubmission, SaveAnswer } from "../api/opportunities";
 import { AttachmentControl, AttachmentList, SIZE_RULE, useAttachments } from "../app/attachments";
-import { panel, stack } from "../app/layout";
+import { card } from "../app/layout";
+import { Stack } from "../app/page-layout";
 import { TitledAlert } from "../app/titled-alert";
 
 /**
@@ -88,8 +89,8 @@ const FIELD_ORDER: readonly CwuField[] = [
 export interface CwuFormValues {
   readonly title: string;
   readonly teaser: string;
-  /** Whether remote work is acceptable: no, until Yes is chosen. */
-  readonly remote: boolean;
+  /** Whether remote work is acceptable: null until Yes or No is chosen (decision record 0042). */
+  readonly remote: boolean | null;
   readonly remoteDesc: string;
   readonly location: string;
   /** NaN while nothing is entered, as the number field holds it. */
@@ -105,7 +106,7 @@ export interface CwuFormValues {
 export const BLANK_FORM: CwuFormValues = {
   title: "",
   teaser: "",
-  remote: false,
+  remote: null,
   remoteDesc: "",
   location: "",
   reward: Number.NaN,
@@ -140,7 +141,8 @@ export function submissionOf(values: CwuFormValues, attachments: readonly string
   return {
     title: values.title,
     teaser: values.teaser,
-    remoteOk: values.remote,
+    // No answer is sent while the question is unanswered.
+    ...(values.remote === null ? {} : { remoteOk: values.remote }),
     remoteDesc: values.remoteDesc,
     location: values.location,
     reward: Number.isNaN(values.reward) ? null : values.reward,
@@ -160,6 +162,7 @@ export function inputOf(values: CwuFormValues): CwuInput {
   const day = (value: string) => (value === "" ? null : value);
   return {
     ...submission,
+    remoteOk: values.remote,
     proposalDeadline: day(submission.proposalDeadline),
     assignmentDate: day(submission.assignmentDate),
     startDate: day(submission.startDate),
@@ -287,8 +290,10 @@ export function CwuOpportunityForm({
   const ordered = [...problems].sort((a, b) => FIELD_ORDER.indexOf(a.field) - FIELD_ORDER.indexOf(b.field));
   const H = headingLevel;
 
+  // The summary, the refusal and the form are items of the stack the form is placed in: the page's
+  // on the create page, the Opportunity tab's section on the manage page.
   return (
-    <div style={stack}>
+    <>
       {ordered.length > 0 ? (
         <div tabIndex={-1} ref={summaryRef}>
           <TitledAlert
@@ -319,232 +324,252 @@ export function CwuOpportunityForm({
       ) : null}
       <Form
         validationBehavior="aria"
-        style={stack}
         onSubmit={(event) => {
           event.preventDefault();
           attempt(primary);
         }}
       >
-        <section aria-labelledby="form-overview" style={panel}>
-          <Heading level={H} id="form-overview">
-            Overview
-          </Heading>
-          <TextField
-            id={FIELD_IDS.title}
-            label="Title"
-            isRequired
-            description={`Up to ${TITLE_MAX} characters.`}
-            value={values.title}
-            isReadOnly={readOnly}
-            onChange={(value) => change("title", value)}
-            isInvalid={invalid("title")}
-            errorMessage={problemFor("title")}
-            data-testid="opportunity-title-field"
-          />
-          <TextArea
-            id={FIELD_IDS.teaser}
-            label="Teaser (optional)"
-            description={`A sentence or two shown in the opportunity list. Up to ${TEASER_MAX} characters.`}
-            value={values.teaser}
-            isReadOnly={readOnly}
-            onChange={(value) => change("teaser", value)}
-            isInvalid={invalid("teaser")}
-            errorMessage={problemFor("teaser")}
-            data-testid="opportunity-teaser-field"
-          />
-          <TextField
-            id={FIELD_IDS.location}
-            label="Location"
-            isRequired
-            value={values.location}
-            isReadOnly={readOnly}
-            onChange={(value) => change("location", value)}
-            isInvalid={invalid("location")}
-            errorMessage={problemFor("location")}
-            data-testid="opportunity-location-field"
-          />
-          {/* The stories' Yes / No question. It starts on No, so it is always answered (R-1.11;
-              decision record 0031). */}
-          <RadioGroup
-            id={FIELD_IDS.remoteOk}
-            label="Is remote work acceptable?"
-            isRequired
-            value={values.remote ? "yes" : "no"}
-            isReadOnly={readOnly}
-            onChange={(value) => change("remote", value === "yes")}
-            isInvalid={invalid("remoteOk")}
-            errorMessage={problemFor("remoteOk")}
-            data-testid="opportunity-remote-field"
-          >
-            <Radio value="yes">Yes</Radio>
-            <Radio value="no">No</Radio>
-          </RadioGroup>
-          <TextArea
-            id={FIELD_IDS.remoteDesc}
-            label="Remote work description"
-            isRequired={values.remote}
-            description={`Say what remote work involves. Required when remote work is acceptable. Up to ${REMOTE_DESC_MAX} characters.`}
-            value={values.remoteDesc}
-            isReadOnly={readOnly}
-            onChange={(value) => change("remoteDesc", value)}
-            isInvalid={invalid("remoteDesc")}
-            errorMessage={problemFor("remoteDesc")}
-            data-testid="opportunity-remote-description-field"
-          />
-        </section>
-        <section aria-labelledby="form-reward" style={panel}>
-          <Heading level={H} id="form-reward">
-            Reward and skills
-          </Heading>
-          <NumberField
-            id={FIELD_IDS.reward}
-            label="Reward"
-            isRequired
-            description={`Between $1 and $${CWU_REWARD_MAX.toLocaleString("en-CA")}.`}
-            formatOptions={currency}
-            value={values.reward}
-            isReadOnly={readOnly}
-            onChange={(value) => change("reward", value)}
-            isInvalid={invalid("reward")}
-            errorMessage={problemFor("reward")}
-            data-testid="opportunity-reward-field"
-          />
-          <Select
-            id={FIELD_IDS.skills}
-            label="Skills"
-            selectionMode="multiple"
-            isRequired
-            description="Choose at least one skill."
-            items={skillItems(values.skills)}
-            value={values.skills}
-            isDisabled={readOnly}
-            onChange={(keys) => change("skills", (keys as readonly (string | number)[]).map(String))}
-            isInvalid={invalid("skills")}
-            errorMessage={problemFor("skills")}
-            data-testid="opportunity-skills-field"
-          />
-        </section>
-        <section aria-labelledby="form-description" style={panel}>
-          <Heading level={H} id="form-description">
-            Description
-          </Heading>
-          <TextArea
-            id={FIELD_IDS.description}
-            label="Description"
-            isRequired
-            description={`Formatted text, up to ${DESCRIPTION_MAX.toLocaleString("en-CA")} characters.`}
-            value={values.description}
-            isReadOnly={readOnly}
-            onChange={(value) => change("description", value)}
-            isInvalid={invalid("description")}
-            errorMessage={problemFor("description")}
-            data-testid="opportunity-description-field"
-          />
-        </section>
-        <section aria-labelledby="form-dates" style={panel}>
-          <Heading level={H} id="form-dates">
-            Key dates
-          </Heading>
-          <Text elementType="p">Each date must fall on or after the one before it.</Text>
-          <DayField
-            field="proposalDeadline"
-            label="Proposal deadline"
-            isRequired
-            description={
-              earliestDeadline < today
-                ? "Proposals close at 4:00 p.m. Pacific time on this day. It cannot be before the deadline it already has."
-                : "Proposals close at 4:00 p.m. Pacific time on this day. It cannot be before today."
-            }
-            values={values}
-            change={change}
-            problemFor={problemFor}
-            testId="opportunity-deadline-field"
-            readOnly={readOnly}
-          />
-          <DayField
-            field="assignmentDate"
-            label="Assignment date"
-            isRequired
-            description="On or after the proposal deadline."
-            values={values}
-            change={change}
-            problemFor={problemFor}
-            testId="opportunity-assignment-date-field"
-            readOnly={readOnly}
-          />
-          <DayField
-            field="startDate"
-            label="Start date"
-            isRequired
-            description="On or after the assignment date."
-            values={values}
-            change={change}
-            problemFor={problemFor}
-            testId="opportunity-start-date-field"
-            readOnly={readOnly}
-          />
-          <DayField
-            field="completionDate"
-            label="Completion date (optional)"
-            description="On or after the start date."
-            values={values}
-            change={change}
-            problemFor={problemFor}
-            testId="opportunity-completion-date-field"
-            readOnly={readOnly}
-          />
-        </section>
-        {readOnly ? (
-          <section aria-labelledby="form-attachments" style={panel}>
-            <Heading level={H} id="form-attachments">
-              Attachments
-            </Heading>
-            {initialAttachments.length > 0 ? (
-              <AttachmentList attachments={initialAttachments} heading={false} />
-            ) : (
-              <Text elementType="p">No attachments have been added.</Text>
-            )}
-            {/* The limit is said wherever attachments are, though only an administrator may add
-                one here (R-8.17, R-1.56). */}
-            <div id="attachment-size-limit" data-testid="attachment-size-limit">
-              <Text elementType="p" size="small" color="secondary">
-                {`${SIZE_RULE} At this stage only an administrator can add one.`}
-              </Text>
-            </div>
+        <Stack gap="medium">
+          <section aria-labelledby="form-overview" style={card}>
+            <Stack gap="medium">
+              <Heading level={H} id="form-overview">
+                Overview
+              </Heading>
+              <TextField
+                id={FIELD_IDS.title}
+                label="Title"
+                isRequired
+                description={`Up to ${TITLE_MAX} characters.`}
+                value={values.title}
+                isReadOnly={readOnly}
+                onChange={(value) => change("title", value)}
+                isInvalid={invalid("title")}
+                errorMessage={problemFor("title")}
+                data-testid="opportunity-title-field"
+              />
+              <TextArea
+                id={FIELD_IDS.teaser}
+                label="Teaser (optional)"
+                description={`A sentence or two shown in the opportunity list. Up to ${TEASER_MAX} characters.`}
+                value={values.teaser}
+                isReadOnly={readOnly}
+                onChange={(value) => change("teaser", value)}
+                isInvalid={invalid("teaser")}
+                errorMessage={problemFor("teaser")}
+                data-testid="opportunity-teaser-field"
+              />
+              <TextField
+                id={FIELD_IDS.location}
+                label="Location"
+                isRequired
+                value={values.location}
+                isReadOnly={readOnly}
+                onChange={(value) => change("location", value)}
+                isInvalid={invalid("location")}
+                errorMessage={problemFor("location")}
+                data-testid="opportunity-location-field"
+              />
+              {/* The stories' Yes / No question. It starts with neither chosen, and an opportunity
+                  put forward without an answer is refused (R-1.11; decision record 0042). */}
+              <RadioGroup
+                id={FIELD_IDS.remoteOk}
+                label="Is remote work acceptable?"
+                isRequired
+                value={values.remote === null ? null : values.remote ? "yes" : "no"}
+                isReadOnly={readOnly}
+                onChange={(value) => change("remote", value === "yes")}
+                isInvalid={invalid("remoteOk")}
+                errorMessage={problemFor("remoteOk")}
+                data-testid="opportunity-remote-field"
+              >
+                <Radio value="yes">Yes</Radio>
+                <Radio value="no">No</Radio>
+              </RadioGroup>
+              <TextArea
+                id={FIELD_IDS.remoteDesc}
+                label="Remote work description"
+                isRequired={values.remote === true}
+                description={`Say what remote work involves. Required when remote work is acceptable. Up to ${REMOTE_DESC_MAX} characters.`}
+                value={values.remoteDesc}
+                isReadOnly={readOnly}
+                onChange={(value) => change("remoteDesc", value)}
+                isInvalid={invalid("remoteDesc")}
+                errorMessage={problemFor("remoteDesc")}
+                data-testid="opportunity-remote-description-field"
+              />
+            </Stack>
           </section>
-        ) : (
-          <AttachmentControl state={attachments} headingLevel={H} />
-        )}
-        {readOnly ? null : consequence}
-        {readOnly ? null : (
-        <ButtonGroup ariaLabel={purpose === "edit" ? "Form actions" : "Opportunity actions"}>
-          {purpose === "create" ? (
-            <>
-              <Button variant="secondary" isDisabled={sending} onPress={() => attempt("draft")} data-testid="opportunity-save-draft">
-                Save draft
-              </Button>
-              {administrator ? (
-                <Button variant="primary" isDisabled={sending} onPress={() => attempt("publish")} data-testid="opportunity-publish">
-                  Publish
-                </Button>
-              ) : (
-                <Button type="submit" variant="primary" isDisabled={sending} data-testid="opportunity-submit-for-review">
-                  Submit for review
-                </Button>
-              )}
-            </>
+          <section aria-labelledby="form-reward" style={card}>
+            <Stack gap="medium">
+              <Heading level={H} id="form-reward">
+                Reward and skills
+              </Heading>
+              <NumberField
+                id={FIELD_IDS.reward}
+                label="Reward"
+                isRequired
+                description={`Between $1 and $${CWU_REWARD_MAX.toLocaleString("en-CA")}.`}
+                formatOptions={currency}
+                value={values.reward}
+                isReadOnly={readOnly}
+                onChange={(value) => change("reward", value)}
+                isInvalid={invalid("reward")}
+                errorMessage={problemFor("reward")}
+                data-testid="opportunity-reward-field"
+              />
+              {/* The service level agreement, beside what the opportunity pays, as on the program's
+                  learn-more screen (R-7.18; design/DESIGN.md, "Service level agreement link"). */}
+              <Text elementType="p">
+                What the service commits to, and what it asks of you, is set out in the{" "}
+                <Link href="/content/service-level-agreement" data-testid="service-level-agreement-link">
+                  service level agreement
+                </Link>
+                .
+              </Text>
+              <Select
+                id={FIELD_IDS.skills}
+                label="Skills"
+                selectionMode="multiple"
+                isRequired
+                description="Choose at least one skill."
+                items={skillItems(values.skills)}
+                value={values.skills}
+                isDisabled={readOnly}
+                onChange={(keys) => change("skills", (keys as readonly (string | number)[]).map(String))}
+                isInvalid={invalid("skills")}
+                errorMessage={problemFor("skills")}
+                data-testid="opportunity-skills-field"
+              />
+            </Stack>
+          </section>
+          <section aria-labelledby="form-description" style={card}>
+            <Stack gap="medium">
+              <Heading level={H} id="form-description">
+                Description
+              </Heading>
+              <TextArea
+                id={FIELD_IDS.description}
+                label="Description"
+                isRequired
+                description={`Formatted text, up to ${DESCRIPTION_MAX.toLocaleString("en-CA")} characters.`}
+                value={values.description}
+                isReadOnly={readOnly}
+                onChange={(value) => change("description", value)}
+                isInvalid={invalid("description")}
+                errorMessage={problemFor("description")}
+                data-testid="opportunity-description-field"
+              />
+            </Stack>
+          </section>
+          <section aria-labelledby="form-dates" style={card}>
+            <Stack gap="medium">
+              <Heading level={H} id="form-dates">
+                Key dates
+              </Heading>
+              <Text elementType="p">Each date must fall on or after the one before it.</Text>
+              <DayField
+                field="proposalDeadline"
+                label="Proposal deadline"
+                isRequired
+                description={
+                  earliestDeadline < today
+                    ? "Proposals close at 4:00 p.m. Pacific time on this day. It cannot be before the deadline it already has."
+                    : "Proposals close at 4:00 p.m. Pacific time on this day. It cannot be before today."
+                }
+                values={values}
+                change={change}
+                problemFor={problemFor}
+                testId="opportunity-deadline-field"
+                readOnly={readOnly}
+              />
+              <DayField
+                field="assignmentDate"
+                label="Assignment date"
+                isRequired
+                description="On or after the proposal deadline."
+                values={values}
+                change={change}
+                problemFor={problemFor}
+                testId="opportunity-assignment-date-field"
+                readOnly={readOnly}
+              />
+              <DayField
+                field="startDate"
+                label="Start date"
+                isRequired
+                description="On or after the assignment date."
+                values={values}
+                change={change}
+                problemFor={problemFor}
+                testId="opportunity-start-date-field"
+                readOnly={readOnly}
+              />
+              <DayField
+                field="completionDate"
+                label="Completion date (optional)"
+                description="On or after the start date."
+                values={values}
+                change={change}
+                problemFor={problemFor}
+                testId="opportunity-completion-date-field"
+                readOnly={readOnly}
+              />
+            </Stack>
+          </section>
+          {readOnly ? (
+            <section aria-labelledby="form-attachments" style={card}>
+              <Stack gap="medium">
+                <Heading level={H} id="form-attachments">
+                  Attachments
+                </Heading>
+                {initialAttachments.length > 0 ? (
+                  <AttachmentList attachments={initialAttachments} heading={false} />
+                ) : (
+                  <Text elementType="p">No attachments have been added.</Text>
+                )}
+                {/* The limit is said wherever attachments are, though only an administrator may add
+                    one here (R-8.17, R-1.56). */}
+                <div id="attachment-size-limit" data-testid="attachment-size-limit">
+                  <Text elementType="p" size="small" color="secondary">
+                    {`${SIZE_RULE} At this stage only an administrator can add one.`}
+                  </Text>
+                </div>
+              </Stack>
+            </section>
           ) : (
-            <>
-              <Button type="submit" variant="primary" isDisabled={sending} data-testid="opportunity-save-changes">
-                Save changes
-              </Button>
-              <Button variant="secondary" isDisabled={sending} onPress={onCancel} data-testid="opportunity-cancel-edit">
-                Cancel
-              </Button>
-            </>
+            <AttachmentControl state={attachments} headingLevel={H} />
           )}
-        </ButtonGroup>
-        )}
+          {readOnly ? null : consequence}
+          {readOnly ? null : (
+            <ButtonGroup ariaLabel={purpose === "edit" ? "Form actions" : "Opportunity actions"}>
+              {purpose === "create" ? (
+                <>
+                  <Button variant="secondary" isDisabled={sending} onPress={() => attempt("draft")} data-testid="opportunity-save-draft">
+                    Save draft
+                  </Button>
+                  {administrator ? (
+                    <Button variant="primary" isDisabled={sending} onPress={() => attempt("publish")} data-testid="opportunity-publish">
+                      Publish
+                    </Button>
+                  ) : (
+                    <Button type="submit" variant="primary" isDisabled={sending} data-testid="opportunity-submit-for-review">
+                      Submit for review
+                    </Button>
+                  )}
+                </>
+              ) : (
+                <>
+                  <Button type="submit" variant="primary" isDisabled={sending} data-testid="opportunity-save-changes">
+                    Save changes
+                  </Button>
+                  <Button variant="secondary" isDisabled={sending} onPress={onCancel} data-testid="opportunity-cancel-edit">
+                    Cancel
+                  </Button>
+                </>
+              )}
+            </ButtonGroup>
+          )}
+        </Stack>
       </Form>
       <PublishDialog
         isOpen={confirming}
@@ -552,7 +577,7 @@ export function CwuOpportunityForm({
         onCancel={() => setConfirming(false)}
         onConfirm={() => void send("publish")}
       />
-    </div>
+    </>
   );
 }
 

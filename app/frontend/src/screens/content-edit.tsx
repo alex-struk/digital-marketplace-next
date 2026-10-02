@@ -13,9 +13,10 @@ import {
 import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { Author, ManagedPage, fetchManagedPage, publishChanges, removePage } from "../api/content";
 import { AdministratorsOnly } from "../app/administrators-only";
-import { definition, facts, page as pageLayout, stack, term } from "../app/layout";
+import { term } from "../app/layout";
 import { Loading } from "../app/loading";
 import { NotFound } from "../app/not-found";
+import { Stack } from "../app/page-layout";
 import { useScreenTitle } from "../app/screen-title";
 import { TitledAlert } from "../app/titled-alert";
 import { readMoment } from "../lib/dates";
@@ -76,29 +77,29 @@ function ContentEdit({ slug }: { slug: string }) {
   if (page === "missing") return <NotFound />;
   if (page === "loading") {
     return (
-      <div style={pageLayout}>
+      <Stack gap="large">
         <Heading level={1}>Manage a page</Heading>
         <Loading label="Loading page…" />
-      </div>
+      </Stack>
     );
   }
 
   const heading = (
-    <div style={stack}>
+    <Stack gap="small">
       <Text elementType="p" size="small" color="secondary">
         Manage a page
       </Text>
       <Heading level={1}>{page.title}</Heading>
-    </div>
+    </Stack>
   );
   const warning = page.fixed ? <NeededPageWarning slug={page.slug} /> : null;
 
   if (editing) {
     return (
-      <div style={pageLayout}>
+      <Stack gap="large">
         {heading}
         {warning}
-        <section aria-labelledby="content-edit-heading" style={stack}>
+        <Stack as="section" gap="medium" aria-labelledby="content-edit-heading">
           <Heading level={2} id="content-edit-heading">
             Edit the page
           </Heading>
@@ -131,8 +132,8 @@ function ContentEdit({ slug }: { slug: string }) {
               }
             }}
           />
-        </section>
-      </div>
+        </Stack>
+      </Stack>
     );
   }
 
@@ -224,45 +225,65 @@ function ManagingView({
     setRefusal(answer.kind === "refused" ? answer.reasons.join(" ") : "The service could not remove it. Try again.");
   }
 
+  const published =
+    notice?.kind === "created" ? (
+      <PublishedPageNotice slug={page.slug} />
+    ) : notice?.kind === "changes-published" ? (
+      <ChangesPublishedNotice slug={page.slug} />
+    ) : null;
+  const factList = (
+    <Stack as="dl" direction="row" gap="medium">
+      <div>
+        <dt style={term}>Public address</dt>
+        <dd>
+          <Link href={`/content/${page.slug}`} data-testid="content-page-address">
+            {`/content/${page.slug}`}
+          </Link>
+        </dd>
+      </div>
+      <div>
+        <dt style={term}>Published</dt>
+        <dd>
+          <DateFact iso={page.createdAt} testId="content-published-date" />
+        </dd>
+      </div>
+      <div>
+        <dt style={term}>Published by</dt>
+        <dd>
+          <AuthorName author={page.createdBy} testId="content-published-by" />
+        </dd>
+      </div>
+      <div>
+        <dt style={term}>Last updated</dt>
+        <dd>
+          <DateFact iso={page.updatedAt} testId="content-updated-date" />
+        </dd>
+      </div>
+      <div>
+        <dt style={term}>Last updated by</dt>
+        <dd>
+          <AuthorName author={page.updatedBy} testId="content-updated-by" />
+        </dd>
+      </div>
+    </Stack>
+  );
+
   return (
-    <div style={pageLayout}>
-      {heading}
-      {notice?.kind === "created" ? <PublishedPageNotice slug={page.slug} /> : null}
-      {notice?.kind === "changes-published" ? <ChangesPublishedNotice slug={page.slug} /> : null}
-      <dl style={facts}>
-        <div>
-          <dt style={term}>Public address</dt>
-          <dd style={definition}>
-            <Link href={`/content/${page.slug}`} data-testid="content-page-address">
-              {`/content/${page.slug}`}
-            </Link>
-          </dd>
-        </div>
-        <div>
-          <dt style={term}>Published</dt>
-          <dd style={definition}>
-            <DateFact iso={page.createdAt} testId="content-published-date" />
-          </dd>
-        </div>
-        <div>
-          <dt style={term}>Published by</dt>
-          <dd style={definition}>
-            <AuthorName author={page.createdBy} testId="content-published-by" />
-          </dd>
-        </div>
-        <div>
-          <dt style={term}>Last updated</dt>
-          <dd style={definition}>
-            <DateFact iso={page.updatedAt} testId="content-updated-date" />
-          </dd>
-        </div>
-        <div>
-          <dt style={term}>Last updated by</dt>
-          <dd style={definition}>
-            <AuthorName author={page.updatedBy} testId="content-updated-by" />
-          </dd>
-        </div>
-      </dl>
+    <Stack gap="large">
+      {/* With a notice, the notice sits between the title and the facts; without one, the facts
+          belong to the title (content-edit created / changes-published and default / fixed). */}
+      {published ? (
+        <>
+          {heading}
+          {published}
+          {factList}
+        </>
+      ) : (
+        <Stack gap="medium">
+          {heading}
+          {factList}
+        </Stack>
+      )}
       {refusal ? (
         <TitledAlert variant="danger" role="alert" title="The page was not removed">
           <Text elementType="p">{refusal}</Text>
@@ -279,14 +300,14 @@ function ManagingView({
           </Button>
         )}
       </ButtonGroup>
-      <section aria-labelledby="content-current-heading" style={stack}>
+      <Stack as="section" gap="medium" aria-labelledby="content-current-heading">
         <Heading level={2} id="content-current-heading">
           Current wording
         </Heading>
         <TextField label="Title" isReadOnly value={page.title} data-testid="content-title-field" />
         <TextField label="Address" isReadOnly value={page.slug} data-testid="content-slug-field" />
         <TextArea label="Body" isReadOnly value={page.body} data-testid="content-body-field" />
-      </section>
+      </Stack>
       {carriesTermsAnnouncement(page.slug) ? <TermsBroadcast /> : null}
       <Modal isOpen={asking} isDismissable onOpenChange={(open) => (removing ? undefined : setAsking(open))}>
         <AlertDialog
@@ -320,6 +341,6 @@ function ManagingView({
           </Text>
         </AlertDialog>
       </Modal>
-    </div>
+    </Stack>
   );
 }

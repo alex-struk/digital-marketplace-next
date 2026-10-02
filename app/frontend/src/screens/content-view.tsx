@@ -9,7 +9,8 @@ import { FormattedText } from "../lib/formatted-text/formatted-text";
 import { readDate } from "../lib/dates";
 import { NotFound } from "../app/not-found";
 import { useScreenTitle } from "../app/screen-title";
-import { definition, facts, page as pageLayout, stack, statusRow, term } from "../app/layout";
+import { term } from "../app/layout";
+import { Stack } from "../app/page-layout";
 
 /**
  * A page of the service's own prose, at its own address.
@@ -41,12 +42,12 @@ export function ContentViewScreen({ address }: { readonly address: string }) {
 
 function LoadingPage() {
   return (
-    <div style={pageLayout}>
-      <div style={statusRow} role="status">
+    <Stack gap="large">
+      <Stack direction="row" align="center" gap="small" role="status">
         <ProgressCircle isIndeterminate aria-label="Loading page" />
         <Text>Loading page…</Text>
-      </div>
-    </div>
+      </Stack>
+    </Stack>
   );
 }
 
@@ -56,19 +57,20 @@ export function PublishedPage({ page }: { readonly page: Page }) {
   const published = readDate(page.createdAt);
   const updated = readDate(page.updatedAt);
   return (
-    <article
-      style={pageLayout}
+    <Stack
+      as="article"
+      gap="large"
       aria-labelledby="content-page-heading"
       data-testid="content-page"
     >
-      <div style={stack}>
+      <Stack gap="medium">
         <Heading level={1} id="content-page-heading">
           <span data-testid="content-page-title">{page.title}</span>
         </Heading>
-        <dl style={facts}>
+        <Stack as="dl" direction="row" gap="medium">
           <div>
             <dt style={term}>Published</dt>
-            <dd style={definition}>
+            <dd>
               <time
                 dateTime={published?.dateTime}
                 data-testid="content-published-date"
@@ -79,7 +81,7 @@ export function PublishedPage({ page }: { readonly page: Page }) {
           </div>
           <div>
             <dt style={term}>Last updated</dt>
-            <dd style={definition}>
+            <dd>
               <time
                 dateTime={updated?.dateTime}
                 data-testid="content-updated-date"
@@ -88,13 +90,13 @@ export function PublishedPage({ page }: { readonly page: Page }) {
               </time>
             </dd>
           </div>
-        </dl>
-      </div>
+        </Stack>
+      </Stack>
       <FormattedText markup={page.body} testId="content-page-body" />
       <Text elementType="p" size="small" color="secondary">
         Address of this page:{" "}
         <span data-testid="content-page-address">{`/content/${page.slug}`}</span>
       </Text>
-    </article>
+    </Stack>
   );
 }

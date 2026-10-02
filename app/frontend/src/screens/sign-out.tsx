@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Heading, InlineAlert, Link, Text } from "@bcgov/design-system-react-components";
-import { page } from "../app/layout";
+import { Stack } from "../app/page-layout";
 import { Loading } from "../app/loading";
 import { useScreenTitle } from "../app/screen-title";
 import { type SignOutOutcome, signOut, useSession } from "../auth/session";
@@ -30,7 +30,7 @@ export function SignOutScreen() {
 
   if (failed) {
     return (
-      <div style={page}>
+      <Stack gap="large">
         <Heading level={1}>Sign Out Failed</Heading>
         <div data-testid="sign-out-failed">
           <InlineAlert
@@ -40,21 +40,21 @@ export function SignOutScreen() {
             description="You may still be signed in. Try signing out again."
           />
         </div>
-      </div>
+      </Stack>
     );
   }
 
   if (!done) {
     return (
-      <div style={page}>
+      <Stack gap="large">
         <Heading level={1}>Signing Out</Heading>
         <Loading label="Signing you out…" />
-      </div>
+      </Stack>
     );
   }
 
   return (
-    <div style={page}>
+    <Stack gap="large">
       <Heading level={1}>Signed Out</Heading>
       <div data-testid="sign-out-success">
         <InlineAlert variant="success" role="status" title="You have successfully signed out" />
@@ -62,6 +62,6 @@ export function SignOutScreen() {
       <Text elementType="p">
         <Link href="/sign-in">Sign in again</Link>
       </Text>
-    </div>
+    </Stack>
   );
 }
