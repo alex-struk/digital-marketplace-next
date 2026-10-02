@@ -1,0 +1,18 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does this adapter bind every surface action and observation on new, and nothing else? Ruling: return. Every new binding only drives or reads the page: cancel_opportunity confirms with the optional note, add_addendum fills the box before pressing Add addendum, add_note attaches through the file chooser, and the three reporting counts read the Reporting region. refusedReader returns empty only for a reader other than the administrator who was shown the screen's refusal, which is what that reader sees, so R-1.30's own assertions decide. tests/acceptance is unchanged and the runner's typecheck passed. But the adapter's own walk found that the Sprint With Us and Team With Us management screens now open for the administrator, and every member of opportunity-swu-edit and opportunity-twu-edit is left unbound with a reason (MANAGE_NOT_YET_BOUND) saying the adapter has not been walked through it. That names no missing surface, and verify would report it as the application lacking one. opportunity-list.filter_by_status and toggle_watch still give a reason (signed-in /opportunities answers 'Page not found') that the proposal itself reports as false on this build. A revision that binds those members, or gives each a reason naming what the current build's screen does not offer, would be approved with the present bindings kept.
+conditions:
+  - "tests/adapters/new: bind the members of opportunity-swu-edit (seen with 00000000-0000-4000-8000-000000000701) and opportunity-twu-edit (seen with 00000000-0000-4000-8000-000000000801) on their management screens /opportunities/{sprint,team}-with-us/:opportunityId/edit, which now open for the administrator. Leave a member unbound only with a reason naming what that screen, walked on the current build, does not offer. 'The adapter has not been walked through it' is not an unbound reason."
+  - "tests/adapters/new: re-walk opportunity-list.filter_by_status and opportunity-list.toggle_watch signed in, now that /opportunities opens to signed-in people. Bind each one, or replace its reason, which still says /opportunities answers 'Page not found' when signed in, with what the signed-in list actually offers."
+  - "tests/adapters/new: keep the cancel_opportunity, add_addendum, add_note, reporting_views, reporting_watchers and reporting_proposals bindings and the refusedReader handling as they are in this proposal."
+cost: 0.7663090000000001
+turns: 4
+session: "4d840d03-7d6b-4940-9f75-485eaa7e1790"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-02T09:35:03.912Z
