@@ -605,3 +605,33 @@ requests:
     at: 2026-10-02T05:05:30.938Z
     taken: 2026-10-02T05:07:52.549Z
     taken_by: bind-adapter-new-38
+  - stage: plan
+    why: slice 9 claims R-1.35 and R-1.36, but their tests arrange the given by
+      submitting a Code With Us proposal through proposal-cwu-create, a screen
+      the slice 9 build serves to nobody (signed-in people are sent to
+      /dashboard), so verify found both unbound. Move R-1.35 and R-1.36 into, or
+      after, the slice that builds the Code With Us proposal screen.
+    from: build-slice-9-3
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-02T14:24:25.110Z
+  - stage: design
+    why: R-1.33 v2 says no screen of the application offers a way to add a private
+      note, yet the opportunity-cwu-edit and opportunity-swu-edit surfaces still
+      declare add_note. Verify found R-1.33 not testable because a test acting
+      through that control would contradict the criterion. Remove add_note from
+      both surfaces.
+    from: build-slice-9-3
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-02T14:24:25.110Z
+  - stage: contract
+    why: R-1.33 can only be checked against a note already on an opportunity's
+      history and who may read it, and verify found no seeded opportunity
+      carrying one. Add a seeded Code With Us opportunity whose history holds a
+      private note with an attached file, so that its visibility to the author
+      and administrators only can be asserted without a screen.
+    from: build-slice-9-3
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-02T14:24:25.110Z
