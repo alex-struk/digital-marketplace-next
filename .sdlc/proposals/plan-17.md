@@ -32,3 +32,14 @@ I took up the one request addressed to this stage, from the G3 ruling on the Sli
 **Left alone.** In the coverage check table, the notifications row's list of slices was already stale (it leaves out Slices 12, 14 and 18, which hold R-6.16, R-6.2 to R-6.5 and R-6.15). It is untouched by this move and outside what the ruling named, so it is worth fixing in a later revision. No conditions were addressed to a person, and nothing asked me to change spec, design, the constitution or the skills.
 
 No assumptions about the stack or platform were added in this revision.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:architect
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether moving R-1.35 and R-1.36 from Slice 9 to Slice 14 is the right cut and leaves each slice standing on its own. I approve. In plan/tasks.md both criteria now appear only on Slice 14's criteria line; Slice 9 names them only in its delivers text, which the coverage check does not read, so each is still placed exactly once. Slice 14 now depends on Slices 8, 9 and 11, and Slice 9 depends only on Slice 8, so the dependency graph has no cycle and build order does not change. Slice 14's closure now holds the addendum tab, the cancel action and the Code With Us proposal create screen, which together are what both tests need to arrange their given. Slice 9 keeps six criteria it can verify by itself. Slice 14 is the earliest slice where a proposer exists to be notified, which justifies placing the criteria there and no later, and plan.md states the cost: the proposer half of both notices is unshown until Slice 14 lands. No schema change, no new dependency, no stack departure, and the tier is STANDARD, so nothing triggers escalation. Neither the proposal nor this ruling could run plan/check-coverage.mjs, because the session's permissions refused it, so placement is confirmed by search only. The ruling would change to return if that script finds R-1.35 or R-1.36 placed twice or not at all, or if Slice 14's dependencies turn out to miss something the R-1.35/R-1.36 tests arrange. build-slice-9-3#6 belongs to build and stays open. The stale notifications row in plan.md's coverage table is minor and not grounds to return.
+
+**Conditions:**
+none
