@@ -26,3 +26,27 @@ I've removed the two actions the contract no longer declares from the "old" adap
 **How far it was checked:** I compared the contract against the bindings file only for the members this run named. The run gave me only these two removals and no new members to add. I relied on that list and did not check the rest of the bindings independently.
 
 The adapter's other bindings were carried over unchanged. Every route was already handled before, and this run did not reveal any page whose route fails to open on the target. Nothing outside `tests/adapters/old/` was touched.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does the old adapter bind every surface action and observation on old, and nothing else? Ruling: approve. The diff only removes the add_note bindings for opportunity-cwu-edit and opportunity-swu-edit (bindings.yaml) and the matching addNote members and their now-unused noteIsNotOffered helper (index.ts). The generated surface.d.ts no longer declares addNote on either page. The only remaining note member, addNoteByRequest on the history-request page, is still bound (bindings.yaml:1442, index.ts:11289), and no stale add_note entry is left. The bindings are still navigation and locators only. Nothing under tests/acceptance or tests/generated changed. The runner's typecheck reports no diagnostics under adapters/old/; the 3 it reports are in adapters/new/, which this proposal does not answer for. That confirms the author's unchecked claim that the adapter still matches the surface. build-slice-9-3#6 is about app/ and is not settled by this proposal, so it stays open. What would change the ruling: a typecheck diagnostic under adapters/old/, or the surface still declaring addNote on either edit page.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `cad89bccaeea404c4ae5a7eddee9d23123e648cb`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 3 diagnostics
