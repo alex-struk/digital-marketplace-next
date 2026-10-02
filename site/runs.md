@@ -277,6 +277,9 @@
 - 11:43:50 propose derive-tests-opportunities-stale-20 at G3
 - 11:43:56 drive: step 28: `sdlc rule derive-tests-opportunities-stale-20 --by agent:reviewer` — derive-tests-opportunities-stale-20 is open at G3, held by agent:reviewer
 - 11:44:45 rule derive-tests-opportunities-stale-20 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 12:15:13 drive: step 30: `sdlc run verify --slice 10` — build-slice-10 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
+- 12:48:17 verify slice 10: returned — R-1.8, R-1.16, R-1.17, R-1.19, R-1.43, R-1.48, R-1.53, R-1.55, R-5.1, R-5.17, R-5.18 fail. Next: sdlc run build --slice 10 --revise
+- 12:48:18 run verify: regenerated 4 files in .sdlc, site, tests
 
 # Run record 2026-10-01
 
