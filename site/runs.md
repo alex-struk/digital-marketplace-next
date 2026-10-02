@@ -193,6 +193,10 @@
 - 09:38:57 propose plan-17 at G2
 - 09:39:01 drive: step 12: `sdlc rule plan-17 --by agent:architect` — plan-17 is open at G2, held by agent:architect
 - 09:39:33 rule plan-17 approve at G2 by agent:architect (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 09:39:41 drive: step 13: `sdlc run verify --slice 9` — 2 unbound rows to check again now that their adapter has changed for slice 9 owed by verify
+- 09:39:41 run verify: pre-checks failed
+- 09:39:41 drive: stopped after 13 steps — step 13 (`sdlc run verify --slice 9`) failed
+- 09:42:06 deviation: next named `nothing: every open item waits on a person`; ran `sdlc run design --domain opportunities --revise`; reason: Operator, ruling under the tech lead's delegation: request/build-slice-9-3#2 names no domain. It asks design to remove add_note from the opportunity-cwu-edit and opportunity-swu-edit surfaces because R-1.33 v2 says no screen offers a way to add a private note; both pages belong to the opportunities domain.
 
 # Run record 2026-10-01
 
