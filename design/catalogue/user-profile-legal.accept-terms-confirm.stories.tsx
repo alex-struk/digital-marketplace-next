@@ -1,17 +1,20 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AlertDialog, Button, Heading, Link, Modal, Text } from "@bcgov/design-system-react-components";
+import { PageContainer, Stack } from "./layout";
 
 // user-profile-legal · accept-terms-confirm — the vendor is asked to agree to the updated terms (R-4.16)
 const meta: Meta = { title: "users/user-profile-legal/accept-terms-confirm" };
 export default meta;
 
-const page = { display: "grid", gap: "var(--layout-margin-large)", padding: "var(--layout-padding-large)" } as const;
-
 export const AcceptTermsConfirm: StoryObj = {
   render: () => (
-    <div style={page}>
-      <Heading level={1}>Policies, Terms &amp; Agreements</Heading>
-      <Button variant="primary" data-testid="legal-accept-updated-terms-button">Review and agree to the updated terms</Button>
+    <PageContainer>
+      <Stack gap="large">
+        <Heading level={1}>Policies, Terms &amp; Agreements</Heading>
+        <div>
+          <Button variant="primary" data-testid="legal-accept-updated-terms-button">Review and agree to the updated terms</Button>
+        </div>
+      </Stack>
       <Modal isOpen isDismissable>
         <AlertDialog
           variant="confirmation"
@@ -30,6 +33,6 @@ export const AcceptTermsConfirm: StoryObj = {
           </Text>
         </AlertDialog>
       </Modal>
-    </div>
+    </PageContainer>
   ),
 };
