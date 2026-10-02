@@ -681,6 +681,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-02T22:35:27.367Z
+    taken: 2026-10-02T22:38:41.998Z
+    taken_by: bind-adapter-new-52
   - stage: bind-adapter
     target: new
     why: "R-1.18: opportunityTwuView.status() has the same fault on
@@ -691,6 +693,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-02T22:35:27.367Z
+    taken: 2026-10-02T22:38:41.998Z
+    taken_by: bind-adapter-new-52
   - stage: bind-adapter
     target: new
     why: "R-1.43: opportunitySwuView.status() read '' on
@@ -702,6 +706,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-02T22:35:27.367Z
+    taken: 2026-10-02T22:38:41.998Z
+    taken_by: bind-adapter-new-52
   - stage: bind-adapter
     target: new
     why: "R-1.48: opportunitySwuView.status() read '' on the created opportunity's
@@ -715,6 +721,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-02T22:35:27.367Z
+    taken: 2026-10-02T22:38:41.998Z
+    taken_by: bind-adapter-new-52
   - stage: bind-adapter
     target: new
     why: "R-1.53: opportunitySwuView.status() read '' on
@@ -724,6 +732,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-02T22:35:27.367Z
+    taken: 2026-10-02T22:38:41.998Z
+    taken_by: bind-adapter-new-52
   - stage: bind-adapter
     target: new
     why: "R-1.13: opportunityTwuCreate.setEvaluationPanel({members, chair}) never
@@ -736,6 +746,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-02T22:35:27.367Z
+    taken: 2026-10-02T22:38:41.998Z
+    taken_by: bind-adapter-new-52
   - stage: bind-adapter
     target: new
     why: "R-1.16: after a publish the form refused,
@@ -749,6 +761,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-02T22:35:27.367Z
+    taken: 2026-10-02T22:38:41.998Z
+    taken_by: bind-adapter-new-52
   - stage: bind-adapter
     target: new
     why: "R-1.17: the publish was refused because setEvaluationPanel ticked no chair
@@ -761,6 +775,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-02T22:35:27.367Z
+    taken: 2026-10-02T22:38:41.998Z
+    taken_by: bind-adapter-new-52
   - stage: bind-adapter
     target: new
     why: "R-5.17: setEvaluationPanel({members: [first, second], chair: second})
@@ -773,6 +789,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-02T22:35:27.367Z
+    taken: 2026-10-02T22:38:41.998Z
+    taken_by: bind-adapter-new-52
   - stage: bind-adapter
     target: new
     why: "R-5.16: evaluationPanelSwu was opened at
@@ -787,6 +805,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-02T22:35:27.367Z
+    taken: 2026-10-02T22:38:41.998Z
+    taken_by: bind-adapter-new-52
   - stage: bind-adapter
     target: new
     why: "R-1.55: on /opportunities/sprint-with-us/<id>/edit?tab=evaluationPanel the
@@ -800,6 +820,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-02T22:35:27.367Z
+    taken: 2026-10-02T22:38:41.998Z
+    taken_by: bind-adapter-new-52
   - stage: bind-adapter
     target: new
     why: "R-5.1: same fault as R-1.55. evaluationPanelSwu.addPanelMember({member:
@@ -811,6 +833,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-02T22:35:27.367Z
+    taken: 2026-10-02T22:38:41.998Z
+    taken_by: bind-adapter-new-52
   - stage: bind-adapter
     target: new
     why: "R-1.19: opportunitySwuView.status() read '' on
@@ -821,6 +845,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-02T22:35:27.367Z
+    taken: 2026-10-02T22:38:41.998Z
+    taken_by: bind-adapter-new-52
   - stage: plan
     why: slice 10 claims R-1.19, whose case 'an opportunity moves on to a
       program-specific evaluation stage' needs a lapsed Sprint With Us
