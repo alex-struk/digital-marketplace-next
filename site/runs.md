@@ -89,6 +89,8 @@
 - 03:00:39 drive: step 12: `sdlc run verify --slice 9` — 6 unbound rows to check again now that their adapter has changed for slice 9 owed by verify
 - 03:41:30 verify slice 9: 4 of the 8 criteria this slice claims could not be exercised at all — R-1.20, R-1.35, R-1.36, R-6.17.
 - 03:41:31 run verify: regenerated 4 files in .sdlc, site, tests
+- 03:41:36 drive: step 13: `sdlc run bind-adapter --target new` — 3 bindings the adapter reports unbound for target new owed by bind-adapter; the application it binds against is on proposal/build-slice-9 alone, so sdlc sandbox up --target new --from proposal/build-slice-9 first
+- 03:41:36 run bind-adapter: pre-checks failed
 
 # Run record 2026-10-01
 
