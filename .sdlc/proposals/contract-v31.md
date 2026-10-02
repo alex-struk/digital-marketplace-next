@@ -28,3 +28,14 @@ The ruling also said to keep `add_attachment` on those pages, but neither page e
 **Oracle.** `node $SDLC_BIN oracle up` was refused before it ran: the permission layer rejected the variable expansion, both quoted and unquoted. Printing the variable's value needed approval, which this unattended session can't get. So I can't say whether the application started this run. The Compose override, the seed and the manifest are unchanged from the approved version, and this change touches only the contract surface, not anything the oracle loads. Because nothing started, I did not run `oracle down`, and no container was left running.
 
 The one request in this revision was taken up; nothing is deferred.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:product-owner
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether the contract surface, with add_note removed from opportunity-cwu-edit and opportunity-swu-edit, is the one the acceptance tests should act through. I approve it. R-1.33 v2 (confirmed, accepted) says the service accepts a private note but no screen of the application offers a way to add one. A test acting through an add_note action on those pages would contradict that statement, so removing the action brings the contract in line with the criterion. I checked spec/contract/surface.yaml on the branch. Both edit pages keep their other actions (edit, submit, publish, cancel, delete, add addendum) and their observations. opportunity-history-request still has add_note_by_request, which is now the only way the contract offers to add a note, and that is what the design ruling asked to keep. The ruling also asked to keep add_attachment on those pages, but neither page has it, and declining to invent one was right, because the ruling asked only for a removal. tests/generated/surface.d.ts was regenerated to match. The bind-adapter bindings and app/frontend/src/api/contract.d.ts still mention add_note; they belong to later stages and need regenerating against this surface. The oracle (the old application run as the reference) was not started this run because of a permission refusal. That does not count against the proposal: the change touches only the contract surface, and none of the files the oracle loads (Compose override, seed, manifest) changed. The design revision request is settled by this change. build-slice-9-3#6 is not settled: it asks build to remove the NoteForm from the app screens, so it stays open for build. The open missing-test item for R-1.33 belongs to ratify and is not addressed here. R-1.33 itself is left exactly as recovered. What would change this ruling: evidence that some screen of the old application does render an add-note control, which would make R-1.33 v2 wrong rather than this contract, or finding that removing add_note left a page the tests still need to reach with no way in.
+
+**Conditions:**
+- contract R-1.33
