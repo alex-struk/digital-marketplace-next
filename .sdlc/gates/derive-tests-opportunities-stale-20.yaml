@@ -1,0 +1,17 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The question is whether the four new R-1.33 tests follow from the criterion and nothing else. They do. The criterion's last clause says no screen of the application offers a way to add a private note. Each new test requires `noteControlOffered()` to read exactly `false` on the History tab of the Code With Us and Sprint With Us edit screens. It asks the two readers who can see that tab, the administrator and the opportunity's author, so a hidden tab can't fake the answer. Before that, each test confirms the history is shown, so a tab that never appeared cannot pass as 'no control'. Every assertion comes from what the criterion says. The tests reach the application only through contract surface names (`opportunity-cwu-edit`, `opportunity-swu-edit`, `note_control_offered`, `opportunity-history-request`), with no selector, route, table or status code. The earlier tests already assert the remaining clauses: notes with files are accepted from the author and an administrator at more than one point in the opportunity's life, they appear in the history, and they are hidden from a staff member who is not the author, a vendor, and someone not signed in. With the last clause now asserted, removing the R-1.33 entry from `tests/acceptance/not-testable.yaml` is correct. The runner's typecheck on this revision passed with no diagnostics. `missing-test/R-1.33` is not settled by this ruling and I attach nothing for it: a test asserting its clause now exists, so a test is still owed and should not be withdrawn, and the first run of that test at the current version closes it. Changes that would reverse this ruling: a run showing the adapter cannot bind `noteControlOffered`, which would put the criterion back on the binding stage, or evidence that the `uploadFile({ name, content })` shape the earlier tests use is not what the harness accepts.
+reprompt: |2-
+  You ruled approve. "missing-test/R-1.33" is a missing test, and a missing test is closed only by a test that runs: a result row for its criterion at the current version that passed or failed. No ruling can say it was met. Where no test is owed after all, withdraw it with `condition-withdrawn <ref>: <why it is no longer asked for>` and say why.
+conditions: []
+cost: 0.5855182
+turns: 3
+session: "280f42b8-2b1b-42a3-b3a5-a262bccb95fd"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-02T18:44:45.177Z

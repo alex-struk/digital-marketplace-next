@@ -4996,12 +4996,10 @@ owed:
     id: R-1.33
     version: 2
     domain: opportunities
-    stage: derive-tests
+    stage: calibrate
     why: a seeded Code With Us or Sprint With Us opportunity whose history holds a
       private note carrying a file, so a test can observe it as author or
       administrator and see it withheld from a vendor.
-    clause: the note and its attachments appear in the opportunity's history, which
-      only the author and administrators can see
     from: build-slice-9-4
     gate: G3
     by: agent:reviewer
@@ -5046,3 +5044,15 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-10-02T18:28:08.850Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v2 exists and has not run
+        by: runner
+        at: 2026-10-02T18:44:45.236Z
+    asserted:
+      - clause: the note and its attachments appear in the opportunity's history, which
+          only the author and administrators can see
+        by: derive-tests-opportunities-stale-20
+        gate: G3
+        at: 2026-10-02T18:44:45.236Z
+    target: old

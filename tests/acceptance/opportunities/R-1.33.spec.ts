@@ -20,9 +20,12 @@ import type { Persona, Surface } from "../../fixtures";
 // being final, the furthest point an opportunity reaches. Each note carries a file the test
 // stored itself, so the attachment seen afterwards can only be the one just added.
 //
-// The final clause — that no screen offers a way to add a note — is recorded beside this file
-// in tests/acceptance/not-testable.yaml: nothing on the edit screens reports whether such a
-// control is there.
+// The final clause — that no screen offers a way to add a note — is read through
+// note_control_offered on opportunity-cwu-edit and opportunity-swu-edit, the History tab of
+// the screens where such a control would sit. That tab is shown only to an administrator and
+// to the opportunity's author, so both are asked, on a Code With Us and a Sprint With Us
+// opportunity, and the history is first confirmed to be there (it holds the seeded note), so
+// "no control" cannot be a tab that failed to show at all.
 
 const STATEMENT =
   "The service accepts a private note, with files, on a Code With Us or Sprint With Us opportunity's history from an administrator or the opportunity's author at any point in the opportunity's life, visible only to the author and administrators, but no screen of the application offers a way to add one.";
@@ -147,4 +150,33 @@ test.describe(STATEMENT, () => {
   test(`${STATEMENT} — a reader who is not signed in is not shown a private note or its file`, async ({ surface }) => {
     await expectSeededNoteWithheld(surface);
   });
+
+  const readers: { name: string; who: Persona }[] = [
+    { name: "an administrator", who: persona.administrator },
+    { name: "the opportunity's author", who: persona.publicSectorStaff },
+  ];
+
+  for (const r of readers) {
+    test(`${STATEMENT} — no screen offers ${r.name} a way to add a note on a Code With Us opportunity's History tab`, async ({ surface }) => {
+      await surface.signIn(r.who);
+      await expectSeededNoteShown(surface);
+
+      const edit = surface.opportunityCwuEdit;
+      await edit.open({ opportunityId: noted.id });
+      const offered = await edit.noteControlOffered();
+      expect((offered ?? "").trim().toLowerCase(), "the History tab should report that no note control is offered").toBe("false");
+    });
+
+    test(`${STATEMENT} — no screen offers ${r.name} a way to add a note on a Sprint With Us opportunity's History tab`, async ({ surface }) => {
+      await surface.signIn(r.who);
+      const swu = seed.opportunities.swuOpenWithSubmittedProposal;
+      const { shown } = await readHistory(surface, swu.program, swu.id);
+      expect(shown, "the history should be shown to this reader").toBe(true);
+
+      const edit = surface.opportunitySwuEdit;
+      await edit.open({ opportunityId: swu.id });
+      const offered = await edit.noteControlOffered();
+      expect((offered ?? "").trim().toLowerCase(), "the History tab should report that no note control is offered").toBe("false");
+    });
+  }
 });
