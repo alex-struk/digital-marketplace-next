@@ -16,7 +16,8 @@ export const seed = {
     "012-files.sql",
     "013-content-pages.sql",
     "014-proposal-team-candidates.sql",
-    "015-profile-completion.sql"
+    "015-profile-completion.sql",
+    "016-opportunity-note-and-cancellation.sql"
   ],
   "users": {
     "administratorOne": {
@@ -1446,6 +1447,41 @@ export const seed = {
         "R-2.28"
       ],
       "note": "The Team With Us counterpart of opportunities.swuCodeChallengeWithScenarioScreenedIn. Still at the questions consensus. The first proponent is already carried into the challenge and not scored; the second is still at the questions. A challenge score for the first, sent through proposal-evaluation-request as the administrator, is a score for a stage the opportunity has not reached and is answered with the service's stage message. The same score for the second is answered with the general permission message, because that proposal has not itself reached the challenge. On proposal-twu-view neither proposal's challenge tab offers score_challenge. The old application's screens no longer produce this combination (finalising the consensus moves the opportunity to the challenge in the same step as it carries proponents in), so it is seeded directly; the schema holds it and the service's stage check refuses it."
+    },
+    "cwuWithPrivateNote": {
+      "id": "00000000-0000-4000-a039-000000000001",
+      "version_id": "00000000-0000-4000-a039-000000000002",
+      "program": "code-with-us",
+      "title": "Seeded Code With Us opportunity with a private note",
+      "seeded_status": "PUBLISHED",
+      "owner": "users.staffOne",
+      "proposal_deadline": "2030-06-01T23:59:00Z",
+      "private_note": {
+        "id": "00000000-0000-4000-a039-000000001003",
+        "event": "NOTE_ADDED",
+        "text": "Seeded private note: placeholder text for the history visibility check.",
+        "created_by": "users.staffOne",
+        "attachments": [
+          "stored_files.opportunityNoteAttachment"
+        ]
+      },
+      "for": [
+        "R-1.33"
+      ],
+      "note": "Its history holds, newest first, the note above, PUBLISHED (by users.administratorOne) and DRAFT. Read through opportunity-history-request, the old service answers that history, note and attachment included, to an administrator, to the author, and also to a request with no session; a signed-in vendor is answered with the opportunity and no history (see that page's comment). The opportunity is published with a deadline in 2030, so every reader is answered and none is refused outright. Under session-route, persona.staff signs in as users.staffOne, the author; a member of staff who is not the author is reachable only as users.staffTwo under sandbox-idp."
+    },
+    "cwuCancelled": {
+      "id": "00000000-0000-4000-a040-000000000001",
+      "version_id": "00000000-0000-4000-a040-000000000002",
+      "program": "code-with-us",
+      "title": "Seeded cancelled Code With Us opportunity",
+      "seeded_status": "CANCELED",
+      "owner": "users.staffOne",
+      "cancelled_by": "users.administratorOne",
+      "for": [
+        "R-1.20"
+      ],
+      "note": "Published and then cancelled by the administrator. Cancelled is final, so a request through opportunity-status-request to move it anywhere — back to PUBLISHED, say — is the request R-1.20 says is refused, and stored_status should still read CANCELED afterwards."
     }
   },
   "resources": {
@@ -2232,6 +2268,16 @@ export const seed = {
       "for": [
         "R-8.9"
       ]
+    },
+    "opportunityNoteAttachment": {
+      "id": "00000000-0000-4000-8000-000000000903",
+      "name": "opportunity-note-attachment.txt",
+      "uploaded_by": "users.staffOne",
+      "attached_to": "opportunities.cwuWithPrivateNote.private_note",
+      "contents": "A file attached to a seeded private note on an opportunity.",
+      "for": [
+        "R-1.33"
+      ]
     }
   },
   "not_seeded": [
@@ -2244,8 +2290,8 @@ export const seed = {
       "why": "A proposal's shape depends on the opportunity it answers, and a vendor can make one through the pages against the published Code With Us opportunity or an opportunity the test publishes. Tests build these."
     },
     {
-      "what": "stored files other than the two above",
-      "why": "A test that needs a file it uploaded uploads it (file-upload), and reads its identifier off the answer. The two seeded files are the ones no test could arrange: one whose uploader a second person then names, and one attached to a proposal whose opportunity has already closed."
+      "what": "stored files other than the three above",
+      "why": "A test that needs a file it uploaded uploads it (file-upload), and reads its identifier off the answer. The three seeded files are the ones no test could arrange: one whose uploader a second person then names, one attached to a proposal whose opportunity has already closed, and one attached to a note on an opportunity's history, which no screen can add."
     },
     {
       "what": "score-entry events in any proposal's history",

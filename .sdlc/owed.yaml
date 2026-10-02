@@ -4908,7 +4908,7 @@ owed:
     id: R-1.20
     version: 1
     domain: opportunities
-    stage: contract
+    stage: derive-tests
     why: a requests-section page, for example opportunity-status-request, opened
       with { program, opportunityId }, with an action that sends the service's
       update operation for that opportunity asking for a named target status
@@ -4925,12 +4925,22 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-10-02T14:33:43.226Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: added page opportunity-status-request (request_status_change taking {
+          status }; request_accepted, refusal_status, refusal_messages,
+          stored_status) and seed.opportunities.cwuCancelled
+        by: contract-v30
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-10-02T16:16:38.411Z
   - kind: missing-test
     item: R-6.17
     id: R-6.17
     version: 1
     domain: notifications
-    stage: contract
+    stage: derive-tests
     why: name at least one other kind of notification an active vendor account
       receives, and a surface action that triggers it without the organization
       screens, so that its absence for a deactivated account can be asserted
@@ -4940,3 +4950,16 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-10-02T14:37:30.928Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: added email.received_by_an_active_vendor in observables.yaml — the
+          new-opportunity announcement, sent by opportunity-cwu-edit.publish (on
+          seed.opportunities.draftOfOtherStaff) or
+          opportunity-cwu-create.publish as persona.administrator, with
+          users.vendorOne as the active recipient and users.vendorDeactivated as
+          the seeded deactivated account
+        by: contract-v30
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-10-02T16:16:38.411Z

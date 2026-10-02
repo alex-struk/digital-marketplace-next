@@ -114,6 +114,8 @@ export interface Surface {
   userAccountSelfRequest: UserAccountSelfRequestPage;
   userAccountRequest: UserAccountRequestPage;
   opportunityCounters: OpportunityCountersPage;
+  opportunityHistoryRequest: OpportunityHistoryRequestPage;
+  opportunityStatusRequest: OpportunityStatusRequestPage;
 }
 
 export interface HomePage {
@@ -1551,4 +1553,23 @@ export interface OpportunityCountersPage {
   open(params: { program: string; opportunityId: string }): Promise<void>;
   viewCount(): Promise<string>;
   refusedWhenNotPermitted(): Promise<string>;
+}
+
+export interface OpportunityHistoryRequestPage {
+  open(params: { program: string; opportunityId: string }): Promise<void>;
+  addNoteByRequest(input?: unknown): Promise<void>;
+  historyShown(): Promise<string>;
+  historyEntries(): Promise<string>;
+  requestAccepted(): Promise<string>;
+  refusalMessages(): Promise<string>;
+  refusalStatus(): Promise<string>;
+}
+
+export interface OpportunityStatusRequestPage {
+  open(params: { program: string; opportunityId: string }): Promise<void>;
+  requestStatusChange(input?: unknown): Promise<void>;
+  requestAccepted(): Promise<string>;
+  refusalStatus(): Promise<string>;
+  refusalMessages(): Promise<string>;
+  storedStatus(): Promise<string>;
 }
