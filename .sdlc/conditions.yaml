@@ -1781,3 +1781,39 @@ conditions:
         app/frontend/tests/code-with-us-opportunities.test.tsx."
       by: agent:reviewer
       at: 2026-10-02T08:14:50.784Z
+  - ref: bind-adapter-new-39#1
+    text: "tests/adapters/new: bind the members of opportunity-swu-edit (seen with
+      00000000-0000-4000-8000-000000000701) and opportunity-twu-edit (seen with
+      00000000-0000-4000-8000-000000000801) on their management screens
+      /opportunities/{sprint,team}-with-us/:opportunityId/edit, which now open
+      for the administrator. Leave a member unbound only with a reason naming
+      what that screen, walked on the current build, does not offer. 'The
+      adapter has not been walked through it' is not an unbound reason."
+    from: bind-adapter-new-39
+    family: bind-adapter-new
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-10-02T09:35:03.931Z
+  - ref: bind-adapter-new-39#2
+    text: "tests/adapters/new: re-walk opportunity-list.filter_by_status and
+      opportunity-list.toggle_watch signed in, now that /opportunities opens to
+      signed-in people. Bind each one, or replace its reason, which still says
+      /opportunities answers 'Page not found' when signed in, with what the
+      signed-in list actually offers."
+    from: bind-adapter-new-39
+    family: bind-adapter-new
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-10-02T09:35:03.931Z
+  - ref: bind-adapter-new-39#3
+    text: "tests/adapters/new: keep the cancel_opportunity, add_addendum, add_note,
+      reporting_views, reporting_watchers and reporting_proposals bindings and
+      the refusedReader handling as they are in this proposal."
+    from: bind-adapter-new-39
+    family: bind-adapter-new
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-10-02T09:35:03.931Z
