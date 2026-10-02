@@ -36,3 +36,14 @@ Nothing else was touched: the other slices, the Constitution check and every dec
 **Assumption.** I took the ruling's phrase "when scheduled transitions run" to mean the existing on-request deadline hook (decision record 0005), not a separate scheduler. No new platform choice is implied.
 
 No conditions were addressed to a person, and I'm deferring no requests.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:architect
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether moving R-1.19 (state values of every program) from Slice 10 to Slice 16 is the right cut, with each slice standing on its own. Approved: R-1.19 now sits on exactly one slice's criteria line (plan/tasks.md:86, Slice 16). Slice 16's closure (Slices 15 back through 7) holds everything its test goes through: the Sprint With Us and Team With Us screens (Slice 10), the cancel action (Slice 9) and the deadline hook that moves a lapsed opportunity out of Published, which the G3 ruling on build-slice-10-2 found Slice 10 could not reach. Rejecting the alternative of pulling the hook into Slice 10 is sound, since the hook's other duties need proposals that only exist from Slices 14 and 15. The plan states the known gap (state values enforced from Slice 7 but answered for by no slice until 16). Slice 10's remaining dependency on Slice 9 is justified by R-1.39's need for the opportunity list. Tier is STANDARD, with no schema change, no new dependency and no stack departure, so nothing escalates. One cosmetic staleness: Slice 7's delivers line (plan/tasks.md:42) still lists the answering slices as '9, 10, 14, 15 and 18' without 16; it is a narrative pointer, not a criterion assignment, so it does not change the ruling. The proposal did not run the coverage script, and this ruling could not run it either because it needed approval. A run showing R-1.19 placed other than once, or the 248-placement total changed, would turn this into a return.
+
+**Conditions:**
+none
