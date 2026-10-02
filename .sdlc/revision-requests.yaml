@@ -862,3 +862,48 @@ requests:
     at: 2026-10-02T22:35:27.367Z
     taken: 2026-10-02T22:40:52.965Z
     taken_by: plan-18
+  - stage: bind-adapter
+    target: new
+    why: opportunityTwuView.maxBudget reads the figure under /^maximum contract
+      value$/i, the old application's label. The new view shows it under
+      'Maximum budget' (data-testid opportunity-max-budget), so R-1.13's 'Team
+      With Us maximum budget has no upper limit' case read an empty string from
+      a published opportunity.
+    from: build-slice-10-3
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-02T23:02:41.091Z
+  - stage: bind-adapter
+    target: new
+    why: opportunitySwuEdit.teamQuestionsTab and
+      opportunityTwuEdit.resourceQuestionsTab are bound as absentSection, but
+      the new manage page shows the saved questions on its Opportunity tab.
+      R-1.17's two 'a draft may be saved holding a question outside these
+      limits' cases got an empty string after the draft was saved.
+    from: build-slice-10-3
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-02T23:02:41.091Z
+  - stage: bind-adapter
+    target: new
+    why: in R-1.56's 'an administrator changes the details of a published
+      opportunity' case, for both Sprint With Us and Team With Us, the
+      description is read while the page is still showing the edit form
+      ('Opportunity / Overview / Title(required)...'), not the saved
+      opportunity. Read the description from the view (or the manage page after
+      saving) once the edit is saved.
+    from: build-slice-10-3
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-02T23:02:41.091Z
+  - stage: plan
+    why: R-5.16's second clause (the panel change is refused once the opportunity
+      has moved to consensus) can only be reached through
+      evaluation-individual-create-swu, which no slice up to 10 builds, so the
+      test came back unbound. Either move R-5.16's consensus clause to the slice
+      that delivers individual question evaluation, or name a seeded opportunity
+      already at consensus as the starting state for slice 10.
+    from: build-slice-10-3
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-02T23:02:41.091Z
