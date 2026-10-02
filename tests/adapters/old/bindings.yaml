@@ -80,7 +80,6 @@ pages:
       cancel_opportunity: bound
       delete_opportunity: bound
       add_addendum: bound
-      add_note: "unbound: signed in as the administrator and looked on the seeded published and processing Code With Us opportunities (and earlier as the owner, and on a draft): the History tab is a table (Entry Type | Note | Created) with nothing in its top bar, the Opportunity tab's Actions menu offers only Edit and Cancel, the Addenda tab only Add Addendum, and no screen offers a way to add a note; looked again as the administrator on the seeded published and processing ones: the History tab's top bar is empty and its table has no control. The service's update request takes an addNote change, but no screen sends one"
     observations:
       opportunity_identifier: bound
       created_by_name: bound
@@ -144,7 +143,6 @@ pages:
       cancel_opportunity: bound
       delete_opportunity: bound
       add_addendum: bound
-      add_note: "unbound: signed in as the administrator and looked on the seeded open and processing Sprint With Us opportunities (and earlier on one built for the purpose): the History tab is a table (Entry Type | Note | Created) with nothing in its top bar, the Opportunity tab's Actions menu offers only Edit and Cancel, and no screen offers a way to add a note; looked again as the administrator on a freshly published Sprint With Us opportunity: the History tab's top bar is empty and its table has no control. The service's update request takes an addNote change, but no screen sends one"
       edit_evaluation_panel: bound
       finalize_question_consensuses: bound
       start_team_scenario: bound
