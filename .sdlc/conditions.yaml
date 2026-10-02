@@ -2044,3 +2044,29 @@ conditions:
         driven by twuManage.act with PROGRAM_CONFIRM
       by: agent:reviewer
       at: 2026-10-02T20:12:20.927Z
+  - ref: build-slice-10-3#1
+    text: "R-1.17: let an opportunity hold up to 101 evaluation questions (positions
+      0 to 100). The add-question button disables only at 101, the service
+      accepts 101 and refuses a 102nd naming the questions field, and a draft
+      follows the same cap. LIST_MAX = 100 is shared with resources and the
+      panel, so give questions their own limit rather than raising the shared
+      one."
+    from: build-slice-10-3
+    family: build-slice-10
+    gate: G3
+    stage: build
+    by: agent:tech-lead
+    at: 2026-10-02T23:02:41.322Z
+  - ref: build-slice-10-3#2
+    text: "R-1.53: the case 'Sprint With Us: an administrator deletes a draft' timed
+      out waiting for the title to leave the administrator's list, while the
+      under-review and Team With Us cases passed. Check that the manage page
+      offers delete to an administrator on a Sprint With Us draft and that
+      deleting it takes it out of the list. Fix it if it is the application's,
+      and say in the proposal if it is not."
+    from: build-slice-10-3
+    family: build-slice-10
+    gate: G3
+    stage: build
+    by: agent:tech-lead
+    at: 2026-10-02T23:02:41.322Z
