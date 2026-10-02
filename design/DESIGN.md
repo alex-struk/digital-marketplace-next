@@ -76,9 +76,19 @@ All from `@bcgov/design-system-react-components`, unless the entry says otherwis
 | `ProgressCircle` | Indeterminate loading, always inside a `role="status"` container, next to visible text. |
 | `FileTrigger` (from `react-aria-components`) | Opens the profile-picture chooser behind a `Button`. The picker's own states belong to the files domain (`file-image-picker`). |
 
-Three things are **project-specific adaptations**, not design-system components, and must not be
+These are **the project's own components**, not design-system components, and must not be
 presented as official:
 
+- **Page container** (`PageContainer`, `design/catalogue/layout.tsx`). Reused unchanged from the
+  content domain. It is the one column every screen of this domain sits in: the content at most
+  1100 pixels wide and centred, with `--layout-padding-medium` on either side outside those 1100
+  pixels, so the content's left edge lines up with the banner's logo. The design system has no page
+  container or grid, which is why it is the project's own.
+- **Stack** (`Stack`, `design/catalogue/layout.tsx`). Reused unchanged from the content domain. It
+  is the only way items on these screens are spaced: a flex column (or, with `direction="row"`, a
+  wrapping row) whose gap is `--layout-margin-small`, `-medium` or `-large`. It removes the margins
+  of the design system's `Text` and `Heading` from its items, so a gap is never the token plus a
+  component's margin. The design system has no stack or spacing primitive.
 - **Profile section navigation.** No released tabs component was used. Each section has its own
   route (`?tab=…`), so the sections are a `<nav aria-label="Profile sections">` holding a list of
   `Link`s, with `aria-current="page"` on the section being shown. Only the sections that belong to
@@ -90,20 +100,42 @@ presented as official:
   focusable `role="region"` labelled by the caption, which scrolls horizontally at narrow widths.
   This is the one legitimate two-dimensional reflow exception on these screens.
 
-Layout uses only tokens: `--layout-margin-{none,small,medium,large}` for gaps,
-`--layout-padding-{none,small,large}` for padding, `--layout-border-width-small`,
-`--layout-border-radius-{medium,circular}`, and `--surface-color-border-{default,medium}`. No colour,
-size or radius value is written anywhere in the catalogue.
+Layout uses only tokens: `--layout-margin-{none,small,medium,large}` for gaps (through the stack
+only), `--layout-padding-{small,medium,large}` for padding, `--layout-border-width-small`,
+`--layout-border-radius-{medium,circular}`, `--surface-color-border-{default,medium}`, and
+`--typography-font-weights-bold` for the terms of a response reference. No colour, size or radius
+value is written anywhere in this domain's stories; the one literal size, the container's 1100
+pixels, is written only in `layout.tsx`.
 
 ### How a screen is laid out
 
-A single-column grid, with `--layout-margin-large` between regions and `--layout-margin-medium`
-inside a section. The regions come in this order: the H1; the profile section navigation, where
-there is one; any page-level alert or error summary; then the content sections, each a
-`<section aria-labelledby>` with its own H2. Action rows wrap (`flex-wrap`) instead of overflowing.
-Cards on the sign-in and sign-up screens stack vertically at every width, so there is no breakpoint
-to maintain. The layout must reflow at 320 CSS pixels and 400% zoom with nothing lost. The user
-table is the only thing allowed to scroll horizontally.
+Every screen of this domain is built from `layout.tsx` and nothing else: one `PageContainer`, and
+inside it one `Stack gap="large"` whose items are the screen's regions. No story sets a width, an
+outer padding, a margin or a gap of its own. The regions come in this order: the H1; the profile
+section navigation, where there is one; any page-level alert or error summary; then the content
+sections, each a `Stack as="section" gap="medium"` labelled by its own H2. The rhythm is fixed:
+
+- **`large`** between the regions of a page: the H1, the section navigation, an alert, the key
+  facts (account type, status, account ID), a form, each section, each sign-in card.
+- **`medium`** between the items of a region: the fields of a form, a section's H2 and what follows
+  it, the lines of the key facts, the links of the section navigation, the capability rows, the
+  contents of a sign-in card, the contents of the export dialog, and the facts of a response
+  reference.
+- **`small`** between a label and what it labels: the profile-picture label, its "no picture" line
+  and its trigger; the terms links and the agreement box; the Administrator box and its hint or
+  refusal; a capability's box, its description toggle and the description; the spinner and the
+  words of a loading row; a `dt` and its `dd`; and the "Response reference" line over its H1.
+
+A form is a design-system `Form` holding one `Stack gap="medium"`. Rows (the section navigation,
+the user list's search and export row, the notice's two links, a loading row) are
+`Stack direction="row"`, which always wraps, so nothing is pushed off a 320-pixel screen or at 400%
+zoom. A button that is a stack item sits in a plain `div`, so it keeps its own width rather than
+stretching across the column. A card (sign-in, sign-up), a capability row and the export dialog's
+body keep their own border, rule or inner padding, and lay their content out with a stack inside.
+Dialogs are portalled by `Modal`, so they sit inside the container but outside its stack. The cards
+on the sign-in and sign-up screens stack vertically at every width, so there is no breakpoint to
+maintain. The user table is the only thing allowed to scroll horizontally, inside its own focusable
+region.
 
 ### Forms and validation
 

@@ -1,21 +1,22 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AlertDialog, Button, Heading, Modal, Text, TextField } from "@bcgov/design-system-react-components";
+import { PageContainer, Stack } from "./layout";
 
 // user-profile-self · deactivate-confirm — a person asked to confirm deactivating their own account (R-4.9, R-4.5)
 const meta: Meta = { title: "users/user-profile-self/deactivate-confirm" };
 export default meta;
 
-const page = { display: "grid", gap: "var(--layout-margin-large)", padding: "var(--layout-padding-large)" } as const;
-
 export const DeactivateConfirm: StoryObj = {
   render: () => (
-    <div style={page}>
-      <Heading level={1}>User Profile</Heading>
-      <Text elementType="p">Account type: <span data-testid="profile-account-type">Vendor</span></Text>
-      <TextField label="Name" value="Test Vendor One" isReadOnly data-testid="name-field" />
-      <div>
-        <Button variant="secondary" danger data-testid="profile-deactivate-button">Deactivate account</Button>
-      </div>
+    <PageContainer>
+      <Stack gap="large">
+        <Heading level={1}>User Profile</Heading>
+        <Text elementType="p">Account type: <span data-testid="profile-account-type">Vendor</span></Text>
+        <TextField label="Name" value="Test Vendor One" isReadOnly data-testid="name-field" />
+        <div>
+          <Button variant="secondary" danger data-testid="profile-deactivate-button">Deactivate account</Button>
+        </div>
+      </Stack>
       <Modal isOpen isDismissable>
         <AlertDialog
           variant="destructive"
@@ -33,6 +34,6 @@ export const DeactivateConfirm: StoryObj = {
           </Text>
         </AlertDialog>
       </Modal>
-    </div>
+    </PageContainer>
   ),
 };
