@@ -1,30 +1,14 @@
 gate: G3
-verdict: escalated
-by: runner:verify
-held_by: runner
-escalate_to: tech-lead
-rationale: "Slice 8 has failed verify 3 times. The failures below may not be the
-  application's: a test, the adapter, the criterion or the sandbox can each be
-  what is wrong (spec 7.1), and another build would not find out which."
+verdict: return
+by: tech-lead
+held_by: human
+note: "Ruled by the operator agent under Alex's standing delegation (2026-09-30) for application rulings. Returned rather than approved: four of slice 8's criteria fail, and verify's regression check (pipeline decision 0087) found two criteria earlier slices passed that this build no longer passes. R-1.39 needs the Sprint With Us create screen, which the plan gives to slice 10, so it goes to the plan. The revision also brings every built screen onto the catalogue's new layout (pipeline decision 0086), which every story now uses."
 conditions:
-  - 'R-1.3: Error: expect(received).toContain(expected) // indexOf — Received
-    string:    "" — at tests/acceptance/opportunities/R-1.3.spec.ts:71'
-  - 'R-1.5: Error: expect(received).toBe(expected) // Object.is equality —
-    Expected: "conflict" — Received: "errors" — at
-    tests/acceptance/opportunities/R-1.5.spec.ts:44'
-  - 'R-1.38: Error: expect(received).toContain(expected) // indexOf — Received
-    string:    "" — at tests/acceptance/opportunities/R-1.38.spec.ts:54'
-  - "R-1.39: Error: unbound: opportunity-swu-create.save_draft —
-    /opportunities/sprint-with-us/create is offered only to a signed-in person,
-    and walked signed in (as the administrator, as a public sector employee, and
-    as a vendor for a vendor's screens — the seeded organization owner for the
-    organization screens — with the seeded records' identifiers), the… — at
-    tests/acceptance/opportunities/R-1.39.spec.ts:95"
-  - 'R-7.18 (passed when slice 1 was approved): Error: the address the link
-    leads to answers with a page — Received: "" — at
-    tests/acceptance/content/R-7.18.spec.ts:41'
-  - 'R-1.23 (passed when slice 7 was approved): Error:
-    expect(received).toContain(expected) // indexOf — Received
-    string:    "October 2, 2026" — at
-    tests/acceptance/opportunities/R-1.23.spec.ts:48'
-at: 2026-10-02T02:26:15.112Z
+  - "R-1.3: the list's text the test reads is empty — expected it to contain the opportunity, received \"\" (R-1.3's acceptance test, line 71)"
+  - "R-1.5: expected the response kind \"conflict\", received \"errors\" (R-1.5's acceptance test, line 44)"
+  - "R-1.38: the list's text the test reads is empty — expected it to contain the opportunity, received \"\" (R-1.38's acceptance test, line 54)"
+  - "R-7.18 (passed when slice 1 was approved, fails on this build): the address a content link leads to must answer with a page; received \"\" (R-7.18's acceptance test, line 41)"
+  - "R-1.23 (passed when slice 7 was approved, fails on this build in the evening): the published date is shown as the UTC date (\"October 2, 2026\" at 7:26 p.m. Pacific on October 1). Show it in Pacific time, as every other date and deadline in the application is (R-1.23's acceptance test, line 48)"
+  - "Lay out every screen the application already has the way the catalogue now does: the page container and the stack defined in the catalogue's layout.tsx, defined once in the application and used by every screen, with each screen's own width, outer padding and gaps removed. Every story in the catalogue was redone to this layout; match the story for each page and state. Keep every data-testid where it is."
+  - "addressed-to plan: slice 8 claims R-1.39, whose test saves a Sprint With Us opportunity draft on the Sprint With Us create screen (opportunity-swu-create.save_draft). The plan gives that screen to slice 10, so nothing slice 8 builds demonstrates R-1.39; it belongs with slice 10."
+at: 2026-10-02T02:27:44.194Z
