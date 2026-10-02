@@ -11212,6 +11212,172 @@ export default function create(
     },
   };
 
+  // An opportunity read and changed through the service's own update operation, PUT
+  // /api/opportunities/<program>/<id> with { tag, value }. Checked here on
+  // seed.opportunities.cwuWithPrivateNote: GET answered the administrator, and a request with
+  // no session, the opportunity with "history" (newest first, each { type: { tag, value },
+  // note, createdBy: { name }, createdAt, attachments: [{ name, id }] }); a signed-in vendor
+  // was answered the opportunity with no "history" key at all. { tag: "addNote", value: {
+  // note, attachments: [ids] } } with a 1,001-character note was refused 400 { opportunity:
+  // { tag: "addNote", value: { note: ["Status Note must be between 0 and 1000 characters
+  // long."] } } }, with an unknown attachment 400 { ... attachments: [["Invalid identifier
+  // provided."]] }, and from a vendor 401 { permissions: ["You do not have permission to
+  // perform this action."] }. publish asked of the awarded and cancelled seeds was refused
+  // 401 with that same permission message; a tag the program does not offer (start the code
+  // challenge, asked of Code With Us) 400 { opportunity: { tag: "parseFailure" } }.
+  type OpportunityAt = { program: string; id: string };
+
+  function opportunityAt(where: string, params?: { program?: string; opportunityId?: string }): OpportunityAt {
+    const id = seededId(params?.opportunityId ?? "", "opportunities");
+    if (!id) nothing(`${where} — no opportunity was named`);
+    const fromSeed = Object.values(seed.opportunities as unknown as Record<string, { id?: unknown; program?: unknown }>).find(
+      (each) => each && String(each.id) === id,
+    )?.program;
+    const program = String(params?.program ?? "") || (typeof fromSeed === "string" ? fromSeed : "");
+    if (!program) nothing(`${where} — no programme was named for opportunity ${id}`);
+    return { program, id };
+  }
+
+  const opportunityAddress = (at: OpportunityAt): string =>
+    `${baseURL}/api/opportunities/${encodeURIComponent(at.program)}/${encodeURIComponent(at.id)}`;
+
+  // The opportunity as the service holds it now, read on the side so the answer to the
+  // latest change stays the one the refusal readers read.
+  // A reader the service refuses the opportunity to (401, 403, 404) has reached it and been
+  // shown nothing, which reads as an empty record; any other failure is not having got there.
+  async function opportunityNow(where: string, at: OpportunityAt | null): Promise<Record<string, unknown>> {
+    if (!at) nothing(`${where} — no opportunity was opened`);
+    const got = await accountAnswer(where, opportunityAddress(at));
+    if ([401, 403, 404].includes(got.status)) return {};
+    if (got.status !== 200 || !got.json || typeof got.json !== "object" || Array.isArray(got.json)) {
+      nothing(`${where} — ${opportunityAddress(at)} answered ${got.status}`);
+    }
+    return got.json as Record<string, unknown>;
+  }
+
+  // A refusal's messages, in the order the service gives them; one that names only a tag
+  // (the service could not read the request as any change it offers) reads as that tag.
+  function refusalTexts(what: string): string {
+    const entries = lastRefusal(what);
+    if (!entries) return "";
+    const texts = entries.map((entry) => entry.message).filter(Boolean);
+    if (texts.length) return texts.join("\n");
+    const tags: string[] = [];
+    const walk = (value: unknown): void => {
+      if (Array.isArray(value)) value.forEach(walk);
+      else if (value && typeof value === "object") {
+        for (const [key, inner] of Object.entries(value as Record<string, unknown>)) {
+          if (key === "tag" && typeof inner === "string" && !("value" in (value as Record<string, unknown>))) tags.push(inner);
+          else walk(inner);
+        }
+      }
+    };
+    try {
+      walk(JSON.parse(answer(what).body));
+    } catch {
+      // nothing more to read
+    }
+    return tags.join("\n");
+  }
+
+  function refusalCode(what: string): string {
+    const got = answer(what);
+    return got.status >= 400 ? String(got.status) : "";
+  }
+
+  const HISTORY_REQUEST = "opportunity-history-request";
+  let historyAt: OpportunityAt | null = null;
+
+  const opportunityHistoryRequest: PageOf<"opportunityHistoryRequest"> = {
+    open: async (params?: { program?: string; opportunityId?: string }) => {
+      historyAt = opportunityAt(`${HISTORY_REQUEST}.open`, params);
+      lastAnswer = null;
+      await opportunityNow(`${HISTORY_REQUEST}.open`, historyAt);
+    },
+    addNoteByRequest: async (input?: unknown) => {
+      const where = `${HISTORY_REQUEST}.add_note_by_request`;
+      if (!historyAt) nothing(`${where} — no opportunity was opened`);
+      const note = given(input, ["note", "text", "body", "message"]);
+      if (note === undefined && typeof input !== "string") {
+        nothing(`${where} — the input names no note text (${JSON.stringify(input)})`);
+      }
+      const files = given(input, ["attachments", "files", "fileIds", "storedFiles", "attachment", "file"]);
+      const list = files === undefined || files === null ? [] : Array.isArray(files) ? files : [files];
+      const attachments = list.map((each) =>
+        each && typeof each === "object" ? String((each as Record<string, unknown>).id ?? "") : fileIdFor(String(each)),
+      );
+      await send(where, "PUT", opportunityAddress(historyAt), {
+        tag: "addNote",
+        value: { note: String(typeof input === "string" ? input : note ?? ""), attachments },
+      });
+    },
+    historyShown: async () =>
+      String("history" in (await opportunityNow(`${HISTORY_REQUEST}.history_shown`, historyAt))),
+    historyEntries: async () => {
+      const found = (await opportunityNow(`${HISTORY_REQUEST}.history_entries`, historyAt)).history;
+      if (!Array.isArray(found)) return "";
+      return found
+        .map((entry: Record<string, unknown>) => {
+          const type = (entry.type ?? {}) as Record<string, unknown>;
+          const by = (entry.createdBy ?? {}) as Record<string, unknown>;
+          const files = Array.isArray(entry.attachments)
+            ? (entry.attachments as Record<string, unknown>[]).map((file) => `${String(file.name ?? "")} (${String(file.id ?? "")})`)
+            : [];
+          return [
+            String(type.value ?? ""),
+            String(entry.note ?? ""),
+            String(by.name ?? ""),
+            String(entry.createdAt ?? ""),
+            files.join(", "),
+          ].join(" | ");
+        })
+        .join("\n");
+    },
+    requestAccepted: async () => accepted(`${HISTORY_REQUEST}.request_accepted`),
+    refusalMessages: async () => refusalTexts(`${HISTORY_REQUEST}.refusal_messages`),
+    refusalStatus: async () => refusalCode(`${HISTORY_REQUEST}.refusal_status`),
+  };
+
+  // The service has no "set status" operation; each status is reached by its own tag.
+  const STATUS_TAGS: Record<string, string> = {
+    UNDER_REVIEW: "submitForReview",
+    PUBLISHED: "publish",
+    CANCELED: "cancel",
+    CANCELLED: "cancel",
+    EVAL_CC: "startCodeChallenge",
+    EVAL_SCENARIO: "startTeamScenario",
+    EVAL_C: "startChallenge",
+  };
+
+  const STATUS_REQUEST = "opportunity-status-request";
+  let statusAt: OpportunityAt | null = null;
+
+  const opportunityStatusRequest: PageOf<"opportunityStatusRequest"> = {
+    open: async (params?: { program?: string; opportunityId?: string }) => {
+      statusAt = opportunityAt(`${STATUS_REQUEST}.open`, params);
+      lastAnswer = null;
+      await opportunityNow(`${STATUS_REQUEST}.open`, statusAt);
+    },
+    requestStatusChange: async (input?: unknown) => {
+      const where = `${STATUS_REQUEST}.request_status_change`;
+      if (!statusAt) nothing(`${where} — no opportunity was opened`);
+      const status = String(typeof input === "string" ? input : given(input, ["status", "to"]) ?? "")
+        .trim()
+        .toUpperCase();
+      const tag = STATUS_TAGS[status];
+      if (!tag) nothing(`${where} — the service has no operation that leads to status "${status}"`);
+      // A cancellation carries its reason; the other changes carry an (optional) note.
+      const note = given(input, ["note", "reason"]);
+      const value = note !== undefined ? String(note) : tag === "cancel" ? "Cancelled by request." : "";
+      await send(where, "PUT", opportunityAddress(statusAt), { tag, value });
+    },
+    requestAccepted: async () => accepted(`${STATUS_REQUEST}.request_accepted`),
+    refusalStatus: async () => refusalCode(`${STATUS_REQUEST}.refusal_status`),
+    refusalMessages: async () => refusalTexts(`${STATUS_REQUEST}.refusal_messages`),
+    storedStatus: async () =>
+      String((await opportunityNow(`${STATUS_REQUEST}.stored_status`, statusAt)).status ?? ""),
+  };
+
   // Bound first and returned after, so a page only the newer surface declares is not refused
   // as an unknown property when this compiles against an older one.
   const surface = {
@@ -11327,6 +11493,8 @@ export default function create(
     userAccountSelfRequest,
     userAccountRequest,
     opportunityCounters,
+    opportunityHistoryRequest,
+    opportunityStatusRequest,
   };
   return surface;
 }
