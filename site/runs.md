@@ -114,6 +114,12 @@
 - 04:48:35 oracle up old in configuration notifications_disabled: local port 3103
 - 04:49:14 oracle down old in configuration notifications_disabled
 - 04:49:17 run calibrate: ok, cost 0, turns 0
+- 04:49:22 drive: step 24: `sdlc run verify --slice 9` — 3 unbound rows to check again now that their adapter has changed for slice 9 owed by verify
+- 04:49:23 verify slice 9: the sandbox did not start, so nothing was verified.
+- 04:49:23 drive: step 24 recovery: the sandbox could not start on a port this machine already holds, and the oracle is up; taking it down (sdlc oracle down), then running the step once more
+- 04:50:13 oracle down old
+- 05:33:04 verify slice 9: returned — R-6.17 fail. Next: sdlc run build --slice 9 --revise
+- 05:33:08 run verify: regenerated 4 files in .sdlc, site, tests
 
 # Run record 2026-10-01
 

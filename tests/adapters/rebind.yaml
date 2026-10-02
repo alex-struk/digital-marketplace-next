@@ -5423,6 +5423,11 @@ rebind:
     app_tree: 552ceac571aff139ba67f427de383d3eb7ef2480
     by: runner:verify
     at: 2026-10-02T10:41:30.266Z
+    closed: &a32
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-02T12:33:00.735Z
   - id: R-1.35
     target: new
     why: "unbound: proposal-vendor-dashboard.show_my_proposals — signed in as
@@ -5442,6 +5447,7 @@ rebind:
     app_tree: 552ceac571aff139ba67f427de383d3eb7ef2480
     by: runner:verify
     at: 2026-10-02T10:41:30.266Z
+    closed: *a32
   - id: R-1.36
     target: new
     why: "unbound: proposal-vendor-dashboard.show_my_proposals — signed in as
@@ -5461,3 +5467,4 @@ rebind:
     app_tree: 552ceac571aff139ba67f427de383d3eb7ef2480
     by: runner:verify
     at: 2026-10-02T10:41:30.266Z
+    closed: *a32
