@@ -120,6 +120,33 @@ email:
     - new Code With Us opportunity announcement
     - new Sprint With Us opportunity announcement
     - new Team With Us opportunity announcement
+  # A kind of notification an active vendor receives that is not about an opportunity it is
+  # watching, and how to make the service send it without the organization screens — so
+  # that its absence for a deactivated account can be asserted (R-6.17).
+  received_by_an_active_vendor:
+    - kind: new opportunity announcement
+      subject_contains: "A New Code With Us Opportunity Has Been Posted"
+      reaches: >-
+        every account that has asked for new-opportunity notices and is not deactivated,
+        blind-copied in batches (see governed_by_notification_setting and batch_size)
+      trigger: >-
+        persona.administrator publishes a Code With Us opportunity —
+        opportunity-cwu-edit.publish on seed.opportunities.draftOfOtherStaff, or
+        opportunity-cwu-create.publish on one the test builds
+      active_recipient: users.vendorOne (notices on, active)
+      deactivated_account: >-
+        users.vendorDeactivated — notices on and already deactivated in the seed, so
+        it is exactly the account the clause is about without a test deactivating anyone;
+        it appears in seed-notices-do-not-receive for that reason
+      notes:
+        - The announcement is the one message whose recipients are chosen by the
+          notification setting rather than by a relation to the opportunity, so it is the
+          plainest "any other kind" a vendor receives. Read the blind-copy list of every
+          message carrying the subject to see who a batch reached.
+        - Deactivating an account through the screens sends that account a notice of its
+          deactivation at the moment it happens. That notice is the account being told it
+          has been deactivated, not a notification received while deactivated; a test
+          that deactivates someone itself should judge only messages sent afterwards.
   batch_size: 50
   notes:
     - A message is addressed to one person and every other recipient is a blind copy, so

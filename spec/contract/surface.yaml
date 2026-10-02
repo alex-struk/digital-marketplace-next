@@ -2479,3 +2479,95 @@ pages:
       # the service leaves it out of its answer; that reads as 0.
       view_count: { test_id: opportunity-counters-view-count }
       refused_when_not_permitted: { test_id: opportunity-counters-refused }
+
+  # An opportunity's history as the service answers a request to read the opportunity, as
+  # whoever is signed in (or nobody). :program is code-with-us or sprint-with-us;
+  # :opportunityId a seed.opportunities handle or an opportunity_identifier read where the
+  # opportunity landed. opportunity-cwu-edit and opportunity-swu-edit show the history on
+  # their History tab but offer no way to add a note, so a note is reached here or through
+  # the seed.
+  #
+  # The service means to include the history only for an administrator or the
+  # opportunity's author; a signed-in reader who is neither is answered with the
+  # opportunity and no history at all. The old service also answers the history, notes and
+  # attachments included, to a request with no session: it strips the author from the
+  # record for such a reader before comparing the author with the (absent) signed-in
+  # person, and the two empty values compare equal (src/back-end/lib/db/opportunity/
+  # code-with-us.ts, processForRole and readOneCWUOpportunity). That was read off the
+  # running oracle, so a signed-out reading of this page is where R-1.33 separates the old
+  # target from the criterion.
+  #
+  # Starting point for R-1.33: seed.opportunities.cwuWithPrivateNote, published, whose
+  # history already holds a note by its author with
+  # seed.stored_files.opportunityNoteAttachment attached. Read it as persona.administrator
+  # and as the author (persona.staff under session-route) for the note; as a vendor and
+  # signed out for its absence.
+  - id: opportunity-history-request
+    domain: opportunities
+    route: /api/opportunities/:program/:opportunityId
+    title: "An opportunity's history, by request"
+    actions:
+      # Input: the note's text and a list of stored file identifiers to attach (from
+      # file-upload.stored_file_identifier or seed.stored_files). Sends the service's
+      # update operation asking to add a note, as the signed-in person. Accepted from an
+      # administrator or the opportunity's author in any status; the text may be up to
+      # 1,000 characters.
+      add_note_by_request: { test_id: null }
+    observations:
+      # Whether the answer carries a history at all. False for a reader the service does
+      # not show it to; the answer is otherwise the opportunity as usual.
+      history_shown: { test_id: null }
+      # The history, newest first, one entry per row: its kind (a status, or an event —
+      # NOTE_ADDED for a note), its text, who made it (by name) and when, and the names
+      # and identifiers of the files attached to it. Empty when history_shown is false.
+      history_entries: { test_id: null }
+      # Whether the service accepted add_note_by_request, and the refusal when it did not.
+      request_accepted: { test_id: null }
+      refusal_messages: { test_id: null }
+      refusal_status: { test_id: null }
+
+  # A request to move an opportunity to a named status, sent to the service's update
+  # operation as whoever is signed in, so that a change no screen offers — out of an
+  # awarded or cancelled opportunity, or from a draft straight to an evaluation stage — can
+  # be asked for. :program is code-with-us, sprint-with-us or team-with-us; :opportunityId
+  # a seed.opportunities handle or an opportunity_identifier read where the opportunity
+  # landed.
+  #
+  # The service has no "set status" operation: each change is its own named operation,
+  # and the request sends the one that leads to the status asked for —
+  #   UNDER_REVIEW: submit for review (every program)
+  #   PUBLISHED: publish (every program)
+  #   CANCELED: cancel (every program)
+  #   EVAL_CC: start the code challenge (sprint-with-us)
+  #   EVAL_SCENARIO: start the team scenario (sprint-with-us)
+  #   EVAL_C: start the challenge (team-with-us)
+  # Each operation checks the change against the program's permitted path and refuses one
+  # off it with the service's general permission message. Code With Us offers no
+  # operation that leads to an evaluation stage at all (its opportunity moves to
+  # EVALUATION only when its deadline passes), so "draft straight to an evaluation stage"
+  # is asked of Sprint With Us or Team With Us.
+  #
+  # Starting points for R-1.20: seed.opportunities.cwuAwarded and
+  # seed.opportunities.swuAwarded asked to go back to PUBLISHED; seed.opportunities
+  # .cwuCancelled asked to go to PUBLISHED; a draft the test creates
+  # (opportunity-swu-create or opportunity-twu-create, then opportunity_identifier) asked
+  # to go to EVAL_CC or EVAL_C. Made as persona.administrator, who may make every change on
+  # the permitted path, so that a refusal is about the path and not about who asked.
+  - id: opportunity-status-request
+    domain: opportunities
+    route: /api/opportunities/:program/:opportunityId
+    title: "An opportunity status change, by request"
+    actions:
+      # Input: { status } — one of the statuses above.
+      request_status_change: { test_id: null }
+    observations:
+      # Whether the service accepted the request (a successful answer carrying the
+      # opportunity).
+      request_accepted: { test_id: null }
+      # The status code of a refused request; empty when accepted.
+      refusal_status: { test_id: null }
+      # The refusal's messages, in the order the service gives them. Empty when accepted.
+      refusal_messages: { test_id: null }
+      # The opportunity's status as the service holds it, read afresh after the request
+      # (as the signed-in person) rather than taken from the request's answer.
+      stored_status: { test_id: null }
