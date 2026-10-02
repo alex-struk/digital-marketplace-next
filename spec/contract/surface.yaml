@@ -2250,11 +2250,11 @@ pages:
     actions:
       # Input: the stored file's identifier. Saves the record as it stands with that file
       # added to its attachments.
-      attach_stored_file: { test_id: null }
+      attach_stored_file: { test_id: file-attach-request }
     observations:
-      attachment_accepted: { test_id: null }
-      attachment_refused: { test_id: null }
-      attached_file_identifiers: { test_id: null }
+      attachment_accepted: { test_id: file-attach-accepted }
+      attachment_refused: { test_id: file-attach-refused }
+      attached_file_identifiers: { test_id: file-attach-identifiers }
 
   # A Code With Us proposal made and submitted in one request, as the signed-in vendor,
   # with its proponent given exactly as stated. The screen's organization choice lists only

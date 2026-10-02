@@ -236,6 +236,8 @@ screens:
     states: [default, empty, chosen, rejected]
   - page: file-embedded-image
     states: [default, uploading, inserted, failed, published]
+  - page: file-attach-by-identifier
+    states: [default, refused]
 
   # proposals domain — see design/DESIGN.md, "Domain: proposals"
   - page: proposal-cwu-create

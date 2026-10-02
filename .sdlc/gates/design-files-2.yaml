@@ -1,0 +1,15 @@
+gate: G-DESIGN
+verdict: approve
+by: agent:ux-reviewer
+held_by: agent
+rationale: |2-
+  Do these screens serve the files criteria, and are they built from the design system? Yes. All 30 files-domain stories import layout.tsx and sit in one PageContainer holding one Stack gap="large". They follow the content domain's rhythm (large between regions, medium between items, small between a label and what it labels), and no story sets its own width, outer padding, margin or gap. A search of the stories finds no hard-coded pixel or hex value. The only non-token values are max-width, height:auto and align-self on images, which keep a picture inside its column. The one change to the shared Stack adds as="ul"/"ol", which removes markers and indent through --layout-padding-none. Nothing that already existed changes, and DESIGN.md names it as the project's own. design/report.json shows 495 stories, 0 violations and 0 failures, including both new file-attach-by-identifier states. The surface.yaml diff only fills four test IDs that were null for the new page (file-attach-request, -accepted, -refused, -identifiers) and changes none that was already filled in. The new page's two states match R-8.22's two outcomes, accepted and refused. What R-8.22 leaves open (the kind of refusal, whether the rest of the save is kept, an identifier no file carries, no screen to attach by identifier) is recorded as files gaps 14 and 15 rather than invented. In the screenshots I looked at (attachment control default and public view, attach-by-identifier refused, embedded image default and published, image picker default), the content lines up on the same left edge inside the 1100-pixel column that matches the design-system header, and the spacing is even with no doubled gaps. The card and attachment rows add only their own inner padding. The profile and embedded images show as broken with alt text because the catalogue does not serve /api/files. That is not a layout or token defect. What would change this ruling: an accessibility violation in the next scan, a change to a test ID that was already filled in, or a story setting its own width, padding or gap outside the stack.
+conditions: []
+cost: 0.5870148
+turns: 8
+session: "daa0efa0-41ce-475e-94c6-b196fc8461e0"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-02T00:08:44.474Z
