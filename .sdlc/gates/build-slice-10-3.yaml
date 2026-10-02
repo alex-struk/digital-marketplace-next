@@ -1,0 +1,21 @@
+gate: G3
+verdict: return
+by: agent:tech-lead
+held_by: agent
+rationale: |2-
+  Question: does slice 10 do what its criteria say, given that verify could not tell which failures are the application's? Ruling: return. Most of the remaining failures are the adapter's or the plan's, as the build says, but one is the application's own. R-1.17 makes a question's position run from 0 to 100, so 101 questions are valid. The form disables 'Add a team question' at 100 (opportunity-other-form.tsx:806, LIST_MAX = 100 in rules/other-program-drafts.ts:56), and the service shares that cap, so the tests 'an opportunity holding 101 questions, the last at position 100, is accepted' and 'a question whose position would fall beyond 100 is refused' fail on the application, not the adapter. That defeats the build's account that nothing points at the application. The remaining failures are filed with their stages. The adapter reads the Team With Us budget from the old app's label 'maximum contract value' where the new view says 'Maximum budget' (R-1.13). It treats the manage page's questions section as absent (R-1.17 draft cases). It reads R-1.56's description from the edit form's text. R-5.16's consensus clause can only be reached through the individual-evaluation screen a later slice builds, which is a plan sequencing question. R-1.53 fails only for an administrator deleting a Sprint With Us draft while the neighbouring cases pass, so the build is asked to settle whether that one is the application's. R-7.29's not-testable reason is sound (R-7.25 forbids removing the page it needs), and I do not ask for it to be asserted first. What would change this ruling: a build that accepts 101 questions and refuses a 102nd, and a fresh verify in which every remaining failure is attributable to the adapter or the plan.
+conditions:
+  - "R-1.17: let an opportunity hold up to 101 evaluation questions (positions 0 to 100). The add-question button disables only at 101, the service accepts 101 and refuses a 102nd naming the questions field, and a draft follows the same cap. LIST_MAX = 100 is shared with resources and the panel, so give questions their own limit rather than raising the shared one."
+  - "R-1.53: the case 'Sprint With Us: an administrator deletes a draft' timed out waiting for the title to leave the administrator's list, while the under-review and Team With Us cases passed. Check that the manage page offers delete to an administrator on a Sprint With Us draft and that deleting it takes it out of the list. Fix it if it is the application's, and say in the proposal if it is not."
+  - "addressed-to bind-adapter: opportunityTwuView.maxBudget reads the figure under /^maximum contract value$/i, the old application's label. The new view shows it under 'Maximum budget' (data-testid opportunity-max-budget), so R-1.13's 'Team With Us maximum budget has no upper limit' case read an empty string from a published opportunity."
+  - "addressed-to bind-adapter: opportunitySwuEdit.teamQuestionsTab and opportunityTwuEdit.resourceQuestionsTab are bound as absentSection, but the new manage page shows the saved questions on its Opportunity tab. R-1.17's two 'a draft may be saved holding a question outside these limits' cases got an empty string after the draft was saved."
+  - "addressed-to bind-adapter: in R-1.56's 'an administrator changes the details of a published opportunity' case, for both Sprint With Us and Team With Us, the description is read while the page is still showing the edit form ('Opportunity / Overview / Title(required)...'), not the saved opportunity. Read the description from the view (or the manage page after saving) once the edit is saved."
+  - "addressed-to plan: R-5.16's second clause (the panel change is refused once the opportunity has moved to consensus) can only be reached through evaluation-individual-create-swu, which no slice up to 10 builds, so the test came back unbound. Either move R-5.16's consensus clause to the slice that delivers individual question evaluation, or name a seeded opportunity already at consensus as the starting state for slice 10."
+cost: 1.0953226
+turns: 11
+session: "a68a63e3-6194-45f0-82da-7aed0560cb18"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-02T23:02:41.072Z
