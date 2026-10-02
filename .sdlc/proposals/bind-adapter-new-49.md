@@ -30,3 +30,23 @@ Only once both are confirmed does it count text boxes, buttons and attach/upload
 **Bindings file.** `tests/adapters/new/bindings.yaml` already listed `note_control_offered: bound` under both `opportunity-cwu-edit` and `opportunity-swu-edit`, so I left it unchanged. The binding is still bound; it is just stricter about when it may answer absence.
 
 **What I could not check.** I could not run the TypeScript typecheck: the sandbox needed an approval for it that nobody was there to give. I re-read the edit by hand: `unbound` is typed `never`, and the locator calls are the same ones used elsewhere in the file. The change is small, but it has not been compiled. I also did not re-walk the target. The earlier walk recorded each History section as the region with its table and nothing else, as the owning staff member and as the administrator on the seeded opportunities, so the stricter check should still return `"false"` there. That is inferred from that walk, not re-observed in this run. No page's route failed to resolve; this revision touched no other member, and I changed no file outside `tests/adapters/new/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does this adapter bind note_control_offered on opportunity-cwu-edit and opportunity-swu-edit (and through the shared factory opportunity-twu-edit) as navigation and observation only, settling the owed instruction bind-adapter-new-48#1? Ruling: approve. noteControlsIn now takes the member's location, waits for the region named History and calls unbound with the page URL and acting persona when it is absent, then waits for that region's table and calls unbound the same way when the table never becomes visible. Only after both are confirmed does it count text boxes, buttons and attach/upload controls to answer true or false, so an answer of absence now comes only from a section actually reached. The CWU caller and the shared SWU/TWU caller both route through it. The bindings are locators, waits and a count, with no assertion or pass/fail logic. Nothing under tests/acceptance changed, and no path outside tests/adapters/new/ was touched. The authoring agent could not compile, but the runner-owned typecheck on revision 35ef3fe6d passed with no diagnostics under adapters/new/. The separately owed missing-test on R-1.33 belongs to derive-tests and is left open. What would change this: a re-walk showing the History region or its table unreachable for the owning staff member or the administrator on the seeded opportunities, or any edit outside tests/adapters/new/.
+
+**Conditions:**
+- condition-met bind-adapter-new-48#1: tests/adapters/new/index.ts noteControlsIn now calls unbound (with page.url() and actingId()) when no region named History is on the page after toSection succeeds, and again when that region's table never becomes visible within 5s; it returns "false" only after both are confirmed. Both the CWU noteControlOffered and the shared SWU/TWU noteControlOffered pass their own location into it.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `35ef3fe6d12eb82b78f1cb03f28b98f5dcf1c9ae`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
