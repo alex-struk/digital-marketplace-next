@@ -191,6 +191,14 @@ pages:
       assignment_date: { test_id: null }
       start_date: { test_id: null }
       completion_date: { test_id: null }
+      # Read on the History tab (?tab=history): true when the tab offers any control for
+      # adding a note to the opportunity's history (a text entry for a note, a control to
+      # attach files to one, or a button to save one), false when it lists the history and
+      # offers nothing to add to it. The tab is shown only to an administrator and to the
+      # opportunity's author, so read it as one of those; seed.opportunities
+      # .cwuWithPrivateNote has users.staffOne (persona public-sector-staff) as its author.
+      # Adding a note by request, without a screen, is on opportunity-history-request.
+      note_control_offered: { test_id: null }
 
   - id: opportunity-cwu-complete
     domain: opportunities
@@ -301,6 +309,11 @@ pages:
       assignment_date: { test_id: null }
       # As on opportunity-swu-create, read on the team questions tab while editing.
       evaluation_question_fields: { test_id: null }
+      # As on opportunity-cwu-edit, read on the History tab (?tab=history) as an
+      # administrator or the opportunity's author; seed.opportunities
+      # .swuOpenWithSubmittedProposal has users.staffOne (persona public-sector-staff) as
+      # its author.
+      note_control_offered: { test_id: null }
 
   - id: opportunity-swu-complete
     domain: opportunities
