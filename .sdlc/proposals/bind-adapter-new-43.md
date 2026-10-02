@@ -29,3 +29,23 @@ Three conditions in the ruling go to the stage that writes the tests, and I left
 - The R-1.35 and R-1.36 tests should stop confirming their starting condition through the vendor's "My Proposals" listing.
 
 Once those tests are regenerated without those two members, they no longer depend on anything this adapter reports as unbound. I didn't write anywhere outside `tests/adapters/new/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does the bind-adapter-new-43 adapter bind every surface action and observation on `new`, and nothing else? Ruling: approve. The adapter stays an adapter. The diff only adds evidence to the existing unbound reasons for proposal-vendor-dashboard.show_my_proposals and organization-edit.add_team_members in tests/adapters/new/bindings.yaml, and to the matching unbound message in tests/adapters/new/index.ts. It adds no locator, assertion or business logic, nothing under tests/acceptance changed, and the runner's typecheck on this revision passed with no diagnostics under adapters/new/. The reasons are real and name what the surface lacks. On this build /dashboard is a heading and one sentence with no control at all, even for the vendor who wrote a seeded proposal. Every organization route, including /organizations/:orgId/edit?tab=team and /organizations/create, answers 'Page not found', and the profile's Organizations tab says organizations cannot yet be registered. The previous ruling (bind-adapter-new-42) found no adapter fault. It returned only because the R-6.17, R-1.35 and R-1.36 tests reach past their criteria, and it filed test-overreaches requests for all three with derive-tests. Those tests still call the two unbound members and have not been regenerated since, so the requests are open where they belong. Returning this proposal again would send bind-adapter work it cannot do, because the fix is a test rewrite, not a binding. The three criteria stay unverified until regenerated tests bind and pass, and this approval asserts nothing about them. What would change the ruling: an unbound reason that the build contradicts (an organization or proposal screen that does render), or any binding that decides a pass or a fail.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `19d37064b9210d85cb742cf85eb41f52ad1a54a2`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
