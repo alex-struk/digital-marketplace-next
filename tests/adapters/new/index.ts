@@ -5806,7 +5806,7 @@ export default function create(
     if (!(await control.count())) {
       unbound(
         where,
-        `signed in as ${actingId()}, /dashboard at ${page.url()} reads only "${(await mainText()).replace(/\n+/g, " / ")}" and offers no control named ${name}; looked again signed in as the organization-owner vendor, who wrote a seeded proposal: the dashboard is that heading and sentence alone, the header offers only Dashboard, My profile and Sign out, /proposals and /organizations answer "Page not found", the seeded published Code With Us opportunity's page offers no way to start a proposal, and the profile's Organizations tab says organizations "will be listed here once organizations can be registered"`,
+        `signed in as ${actingId()}, /dashboard at ${page.url()} reads only "${(await mainText()).replace(/\n+/g, " / ")}" and offers no control named ${name}; looked again signed in as the organization-owner vendor, who wrote a seeded proposal: the dashboard is that heading and sentence alone, the header offers only Dashboard, My profile and Sign out, /proposals and /organizations answer "Page not found", the seeded published Code With Us opportunity's page offers no way to start a proposal, and the profile's Organizations tab says organizations "will be listed here once organizations can be registered"; looked once more as that vendor: /dashboard?tab=myProposals shows the same heading and sentence, the seeded awarded Code With Us opportunity's page (whose winning proposal this vendor wrote) offers no proposal link, and that proposal's own screen /opportunities/code-with-us/:opportunityId/proposals/:proposalId answers "Page not found"`,
       );
     }
     await control.first().click();

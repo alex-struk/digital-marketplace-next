@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does the bind-adapter-new-43 adapter bind every surface action and observation on `new`, and nothing else? Ruling: approve. The adapter stays an adapter. The diff only adds evidence to the existing unbound reasons for proposal-vendor-dashboard.show_my_proposals and organization-edit.add_team_members in tests/adapters/new/bindings.yaml, and to the matching unbound message in tests/adapters/new/index.ts. It adds no locator, assertion or business logic, nothing under tests/acceptance changed, and the runner's typecheck on this revision passed with no diagnostics under adapters/new/. The reasons are real and name what the surface lacks. On this build /dashboard is a heading and one sentence with no control at all, even for the vendor who wrote a seeded proposal. Every organization route, including /organizations/:orgId/edit?tab=team and /organizations/create, answers 'Page not found', and the profile's Organizations tab says organizations cannot yet be registered. The previous ruling (bind-adapter-new-42) found no adapter fault. It returned only because the R-6.17, R-1.35 and R-1.36 tests reach past their criteria, and it filed test-overreaches requests for all three with derive-tests. Those tests still call the two unbound members and have not been regenerated since, so the requests are open where they belong. Returning this proposal again would send bind-adapter work it cannot do, because the fix is a test rewrite, not a binding. The three criteria stay unverified until regenerated tests bind and pass, and this approval asserts nothing about them. What would change the ruling: an unbound reason that the build contradicts (an organization or proposal screen that does render), or any binding that decides a pass or a fail.
+conditions: []
+cost: 0.3314916
+turns: 3
+session: "b3bc97c0-cac0-4c67-9b5f-d8d83f128c2b"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-02T10:49:08.071Z

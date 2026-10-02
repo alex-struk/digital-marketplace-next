@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-43 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">473</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">467</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">393</span></a></li><li><a href="../runs.html">Run log <span class="count">20</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-43</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-02 10:48</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I checked the three blocked criteria (R-6.17, R-1.35, R-1.36) again on the running target, and they still can&#39;t be bound.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I checked the three blocked criteria (R-6.17, R-1.35, R-1.36) again on the running target, and they still can&#39;t be bound. Both members they depend on stay <code>unbound</code>. The only change in this revision is one sentence added to each of their two reasons in <code>tests/adapters/new/bindings.yaml</code>, recording this latest look. I didn&#39;t change <code>index.ts</code>: the messages it throws at run time already match what the build shows. I didn&#39;t re-validate the YAML; the added text contains no quote characters, so it shouldn&#39;t break anything.</p>
+<p>The ruling found no fault in the adapter. It returned the proposal because the tests rely on two members the criteria don&#39;t mention. Its condition for this stage is that the adapter&#39;s unbound reasons still hold against the build. I signed in as the organization-owner vendor through the identity provider&#39;s own form, using the variable name in the password field as instructed.</p>
+<ul><li><strong><code>proposal-vendor-dashboard.show_my_proposals</code></strong> (needed by R-1.35 and R-1.36): <code>/dashboard</code> still shows only the heading &quot;Dashboard&quot; and &quot;You are signed in as Blake Placeholder.&quot; There is no tab, link or button on it. This vendor wrote a seeded proposal, so if a &quot;My Proposals&quot; control existed anywhere, it would appear for them. Earlier looks, already in the reasons, cover <code>/dashboard?tab=myProposals</code>, <code>/proposals</code>, the seeded Code With Us opportunity pages and the proposal&#39;s own screen. All of those either answered &quot;Page not found&quot; or offered nothing.</li><li><strong><code>organization-edit.add_team_members</code></strong> (needed by R-6.17): <code>/organizations/:orgId/edit?tab=team</code> for the seeded qualified organization answers &quot;Page not found&quot;, and so does <code>/organizations/create</code>. Earlier looks, as both the administrator and the owner, cover <code>/organizations</code>, both seeded organizations&#39; edit screens and the profile&#39;s Organizations tab. That tab says organizations will be listed once they can be registered, and <code>/api/ownedOrganizations</code> returns 404.</li></ul>
+<p>No other route resolved differently from the previous binding. The organization and proposal routes still answer &quot;Page not found&quot; on this build, and the vendor dashboard still offers no controls.</p>
+<p>Three conditions in the ruling go to the stage that writes the tests, and I left them alone as instructed:</p>
+<ul><li>R-6.17&#39;s test should check that a deactivated account watching a published opportunity is left off its notices, both visible and blind-copied recipients, instead of sending an organization team invitation.</li><li>The R-1.35 and R-1.36 tests should stop confirming their starting condition through the vendor&#39;s &quot;My Proposals&quot; listing.</li></ul>
+<p>Once those tests are regenerated without those two members, they no longer depend on anything this adapter reports as unbound. I didn&#39;t write anywhere outside <code>tests/adapters/new/</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-02 10:49.</p>
+<div class="body"><p>Question: does the bind-adapter-new-43 adapter bind every surface action and observation on <code>new</code>, and nothing else? Ruling: approve. The adapter stays an adapter. The diff only adds evidence to the existing unbound reasons for proposal-vendor-dashboard.show_my_proposals and organization-edit.add_team_members in tests/adapters/new/bindings.yaml, and to the matching unbound message in tests/adapters/new/index.ts. It adds no locator, assertion or business logic, nothing under tests/acceptance changed, and the runner&#39;s typecheck on this revision passed with no diagnostics under adapters/new/. The reasons are real and name what the surface lacks. On this build /dashboard is a heading and one sentence with no control at all, even for the vendor who wrote a seeded proposal. Every organization route, including /organizations/:orgId/edit?tab=team and /organizations/create, answers &#39;Page not found&#39;, and the profile&#39;s Organizations tab says organizations cannot yet be registered. The previous ruling (bind-adapter-new-42) found no adapter fault. It returned only because the R-6.17, R-1.35 and R-1.36 tests reach past their criteria, and it filed test-overreaches requests for all three with derive-tests. Those tests still call the two unbound members and have not been regenerated since, so the requests are open where they belong. Returning this proposal again would send bind-adapter work it cannot do, because the fix is a test rewrite, not a binding. The three criteria stay unverified until regenerated tests bind and pass, and this approval asserts nothing about them. What would change the ruling: an unbound reason that the build contradicts (an organization or proposal screen that does render), or any binding that decides a pass or a fail.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
