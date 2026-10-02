@@ -24,14 +24,14 @@
       "serviceAccountsEnabled": false,
       "fullScopeAllowed": true,
       "redirectUris": [
-        "http://localhost:4300/*"
+        "__APP_ORIGIN__/*"
       ],
       "webOrigins": [
-        "http://localhost:4300"
+        "__APP_ORIGIN__"
       ],
       "attributes": {
         "pkce.code.challenge.method": "S256",
-        "post.logout.redirect.uris": "http://localhost:4300/*"
+        "post.logout.redirect.uris": "__APP_ORIGIN__/*"
       },
       "protocolMappers": [
         {

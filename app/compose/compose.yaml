@@ -11,7 +11,18 @@
 #   SDLC_SANDBOX_PASSWORD=... docker compose -f app/compose/compose.yaml up seed
 #
 # The application answers on http://localhost:4300 (the frontend listens on 3000 inside its
-# container; only the host port is fixed).
+# container; only the host port is published).
+#
+# Every published host port, and every address that names one, is read from a variable whose
+# default is today's address, so several copies can run side by side, each as its own compose
+# project (decision record 0045). With none of them set, nothing differs:
+#
+#   SDLC_APP_PORT   the application                 (default 4300)
+#   SDLC_IDP_PORT   the identity provider           (default 8080)
+#   SDLC_MAIL_PORT  the mail catcher's front        (default 8025)
+#
+#   SDLC_APP_PORT=4301 SDLC_IDP_PORT=8081 SDLC_MAIL_PORT=8026 SDLC_SANDBOX_PASSWORD=... \
+#     docker compose -p digital-marketplace-2 -f app/compose/compose.yaml up --build
 
 name: digital-marketplace
 
@@ -25,10 +36,13 @@ services:
     build:
       context: ../..
       dockerfile: app/frontend/Dockerfile
+      args:
+        # The app is built knowing where the browser reaches the identity provider.
+        VITE_OIDC_URL: http://localhost:${SDLC_IDP_PORT:-8080}
     environment:
       BACKEND_ORIGIN: backend:3001
     ports:
-      - "4300:3000"
+      - "${SDLC_APP_PORT:-4300}:3000"
     depends_on:
       backend:
         condition: service_started
@@ -45,7 +59,7 @@ services:
       # Tokens are checked against the realm as the browser reaches it, which is what they
       # name as their issuer; the keys are fetched from inside this network (decision record
       # 0004).
-      OIDC_ISSUER: http://localhost:8080/realms/digital-marketplace
+      OIDC_ISSUER: http://localhost:${SDLC_IDP_PORT:-8080}/realms/digital-marketplace
       OIDC_JWKS_URL: http://idp:8080/realms/digital-marketplace/protocol/openid-connect/certs
       OIDC_CLIENT_ID: digital-marketplace-app
       # The service completes sign-in itself, exchanging the code over this network (decision
@@ -61,7 +75,7 @@ services:
       SMTP_PORT: "1025"
       MAILER_FROM: "Digital Marketplace <donotreply@example.test>"
       SHOW_TEST_INDICATOR: "1"
-      SERVICE_ORIGIN: http://localhost:4300
+      SERVICE_ORIGIN: http://localhost:${SDLC_APP_PORT:-4300}
       # Whom the messages about an administrator's deactivation or reactivation of an account
       # tell the person to write to (R-4.20, R-4.30). Invented, like the sender.
       CONTACT_EMAIL: digitalmarketplace@example.test
@@ -139,12 +153,14 @@ services:
       - "5432"
     restart: unless-stopped
 
-  # Renders the realm with the password the environment holds, into a volume. The password
-  # reaches no file in this repository. See app/compose/idp/README.md.
+  # Renders the realm with the password the environment holds, and with the address the
+  # application answers on as the client's redirect and post-logout origin, into a volume.
+  # The password reaches no file in this repository. See app/compose/idp/README.md.
   idp-realm:
     image: node:22-alpine
     environment:
       SDLC_SANDBOX_PASSWORD: ${SDLC_SANDBOX_PASSWORD:-}
+      APP_ORIGIN: http://localhost:${SDLC_APP_PORT:-4300}
     volumes:
       - ./idp/realm-template.json:/template/realm.json:ro
       - ./idp/render-realm.mjs:/render-realm.mjs:ro
@@ -162,18 +178,18 @@ services:
       # Every token names the realm as the browser reaches it, including the ones the service
       # asks for over the compose network, so the browser can renew them and the service
       # accepts them (decision record 0015).
-      KC_HOSTNAME: http://localhost:8080
+      KC_HOSTNAME: http://localhost:${SDLC_IDP_PORT:-8080}
     volumes:
       - idp-import:/opt/keycloak/data/import:ro
     ports:
-      - "8080:8080"
+      - "${SDLC_IDP_PORT:-8080}:8080"
     depends_on:
       idp-realm:
         condition: service_completed_successfully
     restart: unless-stopped
 
   # Every message the service sends arrives here and goes no further. Read it at
-  # http://localhost:8025, through mail-front. Its fault injection is on, so a test can make it
+  # http://localhost:8025 (SDLC_MAIL_PORT), through mail-front. Its fault injection is on, so a test can make it
   # refuse delivery the way an unreachable mail server would (R-6.2; spec/contract/
   # observables.yaml, email.delivery_fault).
   mail:
@@ -204,14 +220,14 @@ services:
         condition: service_started
     restart: unless-stopped
 
-  # What answers on http://localhost:8025: the catcher's interface and API at the root,
-  # unchanged, and the delay proxy's control API under /hold.
+  # What answers on http://localhost:8025 (SDLC_MAIL_PORT): the catcher's interface and API at
+  # the root, unchanged, and the delay proxy's control API under /hold.
   mail-front:
     image: caddy:2-alpine
     volumes:
       - ./mail/Caddyfile:/etc/caddy/Caddyfile:ro
     ports:
-      - "8025:8025"
+      - "${SDLC_MAIL_PORT:-8025}:8025"
     depends_on:
       mail:
         condition: service_started

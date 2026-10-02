@@ -12,6 +12,10 @@ COPY app/tsconfig.base.json ./
 # The validation and permission rules both sides call.
 COPY app/backend/src/rules backend/src/rules
 COPY app/frontend frontend
+# Where the browser reaches the identity provider, read by Vite at build time. The compose file
+# passes the one its copy publishes (decision record 0045); the default is the sandbox's own.
+ARG VITE_OIDC_URL=http://localhost:8080
+ENV VITE_OIDC_URL=${VITE_OIDC_URL}
 RUN npm run build --workspace frontend
 
 FROM caddy:2-alpine AS runtime
