@@ -1,0 +1,16 @@
+gate: G3
+verdict: return
+by: runner:verify
+held_by: runner
+rationale: Slice 8 does not yet do what 2 of its criteria say. This build breaks
+  1 criterion that passed when an earlier slice was approved. Each condition is
+  the criterion and what the running application did.
+conditions:
+  - 'R-1.3: Error: expect(received).toContain(expected) // indexOf — Received
+    string:    "" — at tests/acceptance/opportunities/R-1.3.spec.ts:71'
+  - 'R-1.38: Error: expect(received).toContain(expected) // indexOf — Received
+    string:    "" — at tests/acceptance/opportunities/R-1.38.spec.ts:54'
+  - 'R-7.18 (passed when slice 1 was approved): Error: the address the link
+    leads to answers with a page — Received: "" — at
+    tests/acceptance/content/R-7.18.spec.ts:41'
+at: 2026-10-02T03:26:18.845Z
