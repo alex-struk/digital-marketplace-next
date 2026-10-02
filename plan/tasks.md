@@ -43,7 +43,7 @@ the openshift-ts stack profile with the two departures recorded in `docs/decisio
 - depends on: Slice 3
 
 ### Slice 8 · Anyone can find opportunities and follow the ones they care about
-- criteria: R-1.2, R-1.3, R-1.5, R-1.6, R-1.38, R-1.39, R-4.22, R-6.20, R-6.21, R-6.27
+- criteria: R-1.2, R-1.3, R-1.5, R-1.6, R-1.38, R-4.22, R-6.20, R-6.21, R-6.27
 - delivers: the opportunity list at `/opportunities` grouped into unpublished, open and closed with filters and search, visibility by role on list and view, view counting, watching and unwatching, the new-opportunity notice control on the list at every width, shown against the announcement Slice 7's publishing sends — a new account is not sent it until it asks — the staff and administrator dashboard, and the home page's browse entry
 - depends on: Slice 7
 
@@ -53,7 +53,7 @@ the openshift-ts stack profile with the two departures recorded in `docs/decisio
 - depends on: Slice 8
 
 ### Slice 10 · Staff can create Sprint With Us and Team With Us opportunities with an evaluation panel
-- criteria: R-1.8, R-1.9, R-1.13, R-1.15, R-1.16, R-1.17, R-1.18, R-1.19, R-1.43, R-1.48, R-1.53, R-1.55, R-1.56, R-5.1, R-5.9, R-5.16, R-5.17, R-5.18, R-5.37, R-7.17, R-7.29
+- criteria: R-1.8, R-1.9, R-1.13, R-1.15, R-1.16, R-1.17, R-1.18, R-1.19, R-1.39, R-1.43, R-1.48, R-1.53, R-1.55, R-1.56, R-5.1, R-5.9, R-5.16, R-5.17, R-5.18, R-5.37, R-7.17, R-7.29
 - delivers: the Sprint With Us and Team With Us create forms, manage pages and public views — budgets, phases, capabilities, resources and service areas, evaluation questions, evaluation weights — the evaluation panel tab with its membership, chair and role rules and the window in which it may change, notices to newly added panel members, the embedded scope content that stays empty rather than breaking the view when its page is missing, and the first screen that embeds another page's body, where that body is shown as formatted text with markup never executed and renders identically to the same page at its own address (R-7.17, whose renderer slice 1 built); and, answered for here because their tests go through the Sprint With Us create screen and view, the program fixed at creation (R-1.8), the state values of every program (R-1.19, whose test also drives an opportunity to cancelled with the cancel action Slice 9 builds) the administrator-only create-as-published rule in all three programs (R-1.48), a draft saved with incomplete content and its missing dates defaulted (R-1.9), deletion only of drafts and opportunities under review (R-1.53) and the administrator-only edit once published (R-1.56), all built in Slice 7
 - depends on: Slice 7, Slice 9
 

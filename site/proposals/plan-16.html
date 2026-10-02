@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>plan-16 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">459</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">453</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">389</span></a></li><li><a href="../runs.html">Run log <span class="count">20</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>plan-16</h1>
+<p class="lede">G2 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G2</td></tr><tr><th scope="row">opened</th><td>2026-10-02 02:28</td></tr><tr><th scope="row">holder</th><td>agent:architect</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Is this the right cut of the work, and does each slice stand on its own?</h2>
+<p><strong>Recommendation.</strong> I took up the one condition sent to this stage: build-slice-8-3, ruled at G3 by the tech lead.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I took up the one condition sent to this stage: build-slice-8-3, ruled at G3 by the tech lead. I moved R-1.39 from Slice 8 to Slice 10. Nothing else in the slice list changed.</p>
+<p><strong>Why it moved.</strong> R-1.39 says the opportunity list can be narrowed by program, by state, to remote-friendly opportunities, and by free text. But its test saves a Sprint With Us draft on <code>/opportunities/sprint-with-us/create</code>, and only Slice 10 serves that screen. Slice 10 already depends on Slices 9, 8 and 7, so it has both the create screen and the list. No dependency changes. The plan still has 21 slices and all 248 accepted criteria are placed. Slice 8 still builds every list filter; only the slice that answers for the criterion moved, so Slice 8&#39;s &quot;delivers&quot; line is unchanged.</p>
+<p><strong>What I changed:</strong></p>
+<ul><li><strong><code>plan/tasks.md</code>:</strong> R-1.39 is off Slice 8&#39;s criteria line and on Slice 10&#39;s.</li><li><strong>&quot;Criteria that sit awkwardly&quot; in <code>plan/plan.md</code>:</strong> a new entry for R-1.39. It is the most uneasy placement in the plan, because the criterion&#39;s wording and its test are about different things. A rule about filtering the list is now answered for by the Sprint With Us creation slice, only because its test creates a draft to look for.</li><li><strong>&quot;For ruling&quot; in <code>plan/plan.md</code>:</strong> a new item 11 asks for that mismatch to be settled. Either the test is changed to filter the list using a Code With Us opportunity, and R-1.39 goes back to Slice 8 with nothing else moving, or the spec gives the draft step its own criterion. Neither is this stage&#39;s to do: the test belongs to the acceptance suite&#39;s owner, and new criteria are the spec&#39;s to write.</li><li><strong>Coverage note in <code>plan/plan.md</code>:</strong> it records the move. The per-domain counts don&#39;t change; the opportunities row still lists both slices.</li></ul>
+<p><strong>Not verified by script.</strong> I couldn&#39;t run <code>plan/check-coverage.mjs</code> because the command needed an approval this session couldn&#39;t get. By hand, I searched <code>plan/tasks.md</code> and R-1.39 now appears on exactly one criteria line, Slice 10&#39;s. Whoever next has a shell should run <code>node plan/check-coverage.mjs .</code> from the workspace root.</p>
+<p><strong>Constitution rules.</strong> The two this change touches are P5 (spec as source of truth) and P7 (test integrity). Under P7, a criterion goes in the slice whose screens can actually reach its test; when that conflicts with the criterion&#39;s wording, the plan records the conflict for ruling instead of quietly re-cutting a slice around the test.</p>
+<p><strong>Other notes.</strong> I wrote no new decision record, because this is a placement correction rather than a design choice. I made no new assumptions about the stack or the platform. No conditions were addressed to a person, so I left none for anyone. I deferred nothing, and touched nothing under spec, design, constitution.md or <code>.claude/skills</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:architect (persona agent · claude claude-opus-5-5) on 2026-10-02 02:29.</p>
+<div class="body"><p>Question: is moving R-1.39 from Slice 8 to Slice 10 the right cut, and does each slice still stand on its own? Ruling: approve. R-1.39&#39;s acceptance test (by-program case, lines 94-95) saves a Sprint With Us draft through opportunitySwuCreate, a screen only Slice 10 serves; Slice 10&#39;s closure (Slices 9, 8, 7) holds both that screen and the opportunity list, so placing the criterion there lets its test run without changing any dependency. R-1.39 now appears on exactly one criteria line in plan/tasks.md, so no criterion is left unassigned and none is double-placed. There is no schema change, no new dependency and no stack departure, and the tier is STANDARD, so nothing calls for escalation. One flaw in the plan&#39;s prose does not affect the cut: &#39;Criteria that sit awkwardly&#39; and &#39;For ruling&#39; item 11 say the criterion&#39;s text and its test disagree, and offer re-pointing the test at Code With Us opportunities alone as a way back to Slice 8. That is not a real disagreement. A program filter cannot be shown working without opportunities of at least two programs, so a Code With Us-only test would drop the program clause&#39;s only assertion. Whoever rules on item 11 should discard that option; the alternative, a Team With Us draft, also needs Slice 10. What would change this ruling: a revision that actually moved R-1.39 back to Slice 8 on the strength of that option, or a coverage run showing R-1.39 unplaced or placed twice.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

@@ -200,6 +200,17 @@ reader's attention.
   change. The fit is uneasy in the same way: a rule about all three programs is answered for by the
   Sprint With Us slice, and a rule about attaching to opportunities and proposals by the proposal
   slice, because that is where their tests first can run.
+- **R-1.39 (Slice 10)** says the opportunity list can be narrowed by program, by state, to
+  remote-friendly opportunities, and by free text. That is the list Slice 8 builds, and Slice 8
+  still builds every one of those filters. A G3 ruling on the build of Slice 8 found it unbound
+  there, because its test saves a Sprint With Us opportunity draft on
+  `/opportunities/sprint-with-us/create` — a screen only Slice 10 serves. It therefore sits in
+  Slice 10, whose closure (Slices 9, 8, 7) holds both that screen and the list; no slice's
+  dependencies change. This is the most uneasy placement in the plan: the criterion's text and its
+  test disagree about what it is about, and a filter rule is answered for by the Sprint With Us
+  creation slice only because its test creates a draft to find. Either the test needs re-pointing
+  at the list or the criterion needs a second ID for the draft it relies on; it is listed under
+  "For ruling" below.
 - **R-8.19 and R-8.25** were placed in Slice 7, which builds the opportunity attachment control
   and the file store's read-through-what-it-hangs-on rule. A G3 ruling on the build of Slice 7
   found every Code With Us case of both tests passing there and the rest unbound, because R-8.19's
@@ -437,6 +448,11 @@ cheap to reverse now and expensive to reverse later.
     plan places the whole of it in Slice 10, where both can be read. If the spec would rather split
     it, a second criterion covering the rendering clause alone belongs to Slice 1, which builds the
     renderer; nothing else in the slice list moves.
+11. **R-1.39's test and its text.** The criterion is about narrowing the opportunity list; its test
+    saves a Sprint With Us draft on `/opportunities/sprint-with-us/create`. The plan follows the
+    G3 ruling and places it in Slice 10, where the test can run, while Slice 8 builds the filters.
+    If the test is re-pointed at the list using a Code With Us opportunity, R-1.39 returns to
+    Slice 8 and nothing else moves.
 
 ## Coverage check
 
@@ -451,7 +467,8 @@ place, the placements were checked by hand against the index, domain by domain. 
 two IDs and no others: R-7.12 from Slice 1 to Slice 5, and R-7.17 from Slice 1 to Slice 10. Both
 stay in the content domain, and both land in slices the table below already lists, so every count in
 it is unchanged. A later revision moved R-8.19 and R-8.25 from Slice 7 to Slice 15; the files row
-now lists Slice 15, and no count changes.
+now lists Slice 15, and no count changes. The latest revision moved R-1.39 from Slice 8 to Slice
+10; Slice 8 still answers for other opportunities criteria, so the opportunities row is unchanged.
 
 | Domain | Accepted, not superseded | Placed | Slices |
 | --- | --- | --- | --- |
