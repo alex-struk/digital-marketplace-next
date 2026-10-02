@@ -5875,3 +5875,50 @@ rebind:
     app_tree: b69a691292ac7f565cb7d8fb00bfe0fab5dcd963
     by: runner:verify
     at: 2026-10-02T22:31:49.340Z
+    closed:
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-02T23:01:07.837Z
+  - id: R-5.16
+    target: new
+    why: "unbound: evaluation-individual-create-swu.enter_question_score —
+      /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-q\
+      uestions/evaluations/create is offered only to a signed-in person, and
+      walked signed in (as the administrator, as a public sector employee, and
+      as a vendor for a vendor's screens — the seeded organization owner for the
+      organization screens — with the seeded records' identifiers), the running
+      build serves a signed-in person /dashboard (to the administrator \"Create
+      an opportunity\" over \"All opportunities\"; to public sector staff the
+      same over \"My opportunities\"; to a vendor only \"Dashboard\" and \"You
+      are signed in as <name>.\"), /opportunities, the account screens under
+      /users (whose Organizations tab says organizations \"will be listed here
+      once organizations can be registered\"), to the administrator the
+      content-management screens under /content, and to the administrator and
+      public sector staff /opportunities/create, the three programs' forms
+      /opportunities/{code,sprint,team}-with-us/create and the management
+      screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit
+      (whose \"Opportunity sections\" on the seeded closed and at-consensus
+      Sprint With Us and Team With Us opportunities are Summary, Opportunity,
+      Addenda, History and Evaluation panel — ?tab=evaluation, ?tab=consensus
+      and ?tab=instructions open it on Summary, with no evaluation, consensus or
+      instructions section); the proposal, organization and evaluation screens —
+      the Code With Us proposal screens (tried as a vendor with the seeded
+      published Code With Us opportunity, whose page offers no way to start
+      one), /proposals, /opportunities/code-with-us/:opportunityId/complete,
+      /organizations and /organizations/:orgId/edit included — answer \"Page not
+      found\"; opened signed out (with the seeded record's identifier where it
+      takes one) it shows the \"Page not found\" screen; signed in as the public
+      sector employee who sits on the seeded panels, with the seeded Sprint With
+      Us opportunity at \"Questions: individual evaluation\"
+      (opportunities.swuEvaluationAlreadyBegun) and its seeded proposal, this
+      address and the proposal's own page answer \"Page not found\", and that
+      opportunity's management screen offers only Summary, Opportunity, Addenda,
+      History and Evaluation panel — nothing that opens a proponent's
+      evaluation"
+    found: unbound
+    adapter: 6ef5e98e2a9147b3db1c72a98870c8b621304127
+    slice: 10
+    app_tree: b69a691292ac7f565cb7d8fb00bfe0fab5dcd963
+    by: runner:verify
+    at: 2026-10-02T23:01:07.837Z
