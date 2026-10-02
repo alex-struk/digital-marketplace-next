@@ -1934,3 +1934,15 @@ conditions:
     stage: build
     by: agent:tech-lead
     at: 2026-10-02T14:24:25.730Z
+    closed:
+      outcome: met
+      why: NoteForm and the client's addNote action are removed from
+        app/frontend/src/screens/opportunity-cwu-edit.tsx,
+        opportunity-other-manage.tsx, opportunity-running.tsx and
+        app/frontend/src/api/opportunities.ts (a search of app/frontend/src
+        finds addNote only in the generated contract.d.ts); the service's
+        addNote and the History tab's display of notes and their files are kept;
+        app/README.md and docs/decisions/0043 describe the History tab as
+        showing notes with no screen adding one.
+      by: agent:reviewer
+      at: 2026-10-02T18:08:15.755Z

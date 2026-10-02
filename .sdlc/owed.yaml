@@ -4941,6 +4941,12 @@ owed:
         by: runner
         at: 2026-10-02T16:35:35.140Z
     target: old
+    closed:
+      outcome: withdrawn
+      why: tests/acceptance/opportunities/R-1.20.spec.ts ran at v1 against application
+        tree f1cc08d and passed in every case (tests/results/new/slice-9.json).
+      by: agent:reviewer
+      at: 2026-10-02T18:08:15.774Z
   - kind: missing-test
     item: R-6.17
     id: R-6.17
@@ -4979,3 +4985,9 @@ owed:
         gate: G3
         at: 2026-10-02T16:37:36.128Z
     target: old
+    closed:
+      outcome: withdrawn
+      why: tests/acceptance/notifications/R-6.17.spec.ts ran at v1 against application
+        tree f1cc08d and passed in every case (tests/results/new/slice-9.json).
+      by: agent:reviewer
+      at: 2026-10-02T18:08:15.918Z
