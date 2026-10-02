@@ -1709,3 +1709,21 @@ conditions:
     stage: build
     by: tech-lead
     at: 2026-10-02T02:27:44.457Z
+  - ref: build-slice-8-9#1
+    text: "R-1.11, in the case \"one that does not say whether remote work is
+      acceptable is refused\": the Code With Us create and edit form starts 'Is
+      remote work acceptable?' on No (the application's own decision record
+      0031, and the form value remote: false), so a form whose question was
+      never answered publishes as on-site and is not refused. The catalogue's
+      opportunity-cwu-create story starts that question with neither Yes nor No
+      chosen. Start it unanswered as the story does: hold no answer (null) until
+      Yes or No is chosen, send none in that case, and let publication be
+      refused with the existing 'Say whether remote work is acceptable.'
+      message. A saved draft may still have no answer. Revise or supersede
+      decision record 0031 to say so."
+    from: build-slice-8-9
+    family: build-slice-8
+    gate: G3
+    stage: build
+    by: tech-lead
+    at: 2026-10-02T07:33:14.731Z
