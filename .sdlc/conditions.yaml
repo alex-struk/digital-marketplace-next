@@ -2090,3 +2090,29 @@ conditions:
         manage page's Delete for an administrator.
       by: agent:tech-lead
       at: 2026-10-02T23:31:11.255Z
+  - ref: derive-tests-content-stale-7#1
+    text: "tests/acceptance/content/R-7.29.spec.ts: read
+      surface.opportunitySwuView.scopeSection() directly rather than through
+      readOrEmpty, so an error thrown by the adapter (including an 'unbound:'
+      error) fails or reports the test instead of becoming an empty string that
+      passes the toBe(\"\") check. readOrEmpty may stay on the five presence
+      checks, which need a non-empty value to pass."
+    from: derive-tests-content-stale-7
+    family: derive-tests-content-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-10-02T23:46:09.033Z
+  - ref: derive-tests-content-stale-7#2
+    text: "tests/acceptance/not-testable.yaml: add an R-7.29 entry with a clause
+      naming 'with nothing said about why' as it applies to the Sprint With Us
+      opportunity screen outside its scope section. Its reason should say that
+      the surface offers no observation for an explanatory message elsewhere on
+      opportunitySwuView. Its owner should be contract, and its missing field
+      should say what observation would let a test assert it."
+    from: derive-tests-content-stale-7
+    family: derive-tests-content-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-10-02T23:46:09.033Z
