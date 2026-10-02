@@ -873,6 +873,8 @@ requests:
     gate: G3
     by: agent:tech-lead
     at: 2026-10-02T23:02:41.091Z
+    taken: 2026-10-02T23:07:05.783Z
+    taken_by: bind-adapter-new-53
   - stage: bind-adapter
     target: new
     why: opportunitySwuEdit.teamQuestionsTab and
@@ -884,6 +886,8 @@ requests:
     gate: G3
     by: agent:tech-lead
     at: 2026-10-02T23:02:41.091Z
+    taken: 2026-10-02T23:07:05.783Z
+    taken_by: bind-adapter-new-53
   - stage: bind-adapter
     target: new
     why: in R-1.56's 'an administrator changes the details of a published
@@ -896,6 +900,8 @@ requests:
     gate: G3
     by: agent:tech-lead
     at: 2026-10-02T23:02:41.091Z
+    taken: 2026-10-02T23:07:05.783Z
+    taken_by: bind-adapter-new-53
   - stage: plan
     why: R-5.16's second clause (the panel change is refused once the opportunity
       has moved to consensus) can only be reached through
