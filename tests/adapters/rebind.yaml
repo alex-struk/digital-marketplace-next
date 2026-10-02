@@ -5603,6 +5603,11 @@ rebind:
     app_tree: 75bbae26b161060f8499ed72f4b6ed2a7ecea662
     by: runner:verify
     at: 2026-10-02T14:22:00.785Z
+    closed: &a34
+      outcome: withdrawn
+      why: slice 9 no longer claims it
+      by: runner:verify
+      at: 2026-10-02T18:07:24.865Z
   - id: R-1.36
     target: new
     why: "unbound: proposal-cwu-create.open —
@@ -5650,3 +5655,4 @@ rebind:
     app_tree: 75bbae26b161060f8499ed72f4b6ed2a7ecea662
     by: runner:verify
     at: 2026-10-02T14:22:00.785Z
+    closed: *a34
