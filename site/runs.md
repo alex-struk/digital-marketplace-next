@@ -304,6 +304,14 @@
 - 15:15:39 drive: step 1: `sdlc run verify --slice 10` — build-slice-10-2 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
 - 15:31:50 verify slice 10: R-1.8, R-1.13, R-1.16, R-1.17, R-1.18, R-1.19, R-1.43, R-1.48, R-1.53, R-1.55, R-5.1, R-5.17 fail. R-1.8, R-1.16, R-1.17, R-1.18, R-1.19, R-1.43, R-1.48, R-1.53, R-5.17 stopped on a read that came back with nothing, which can be the adapter's as easily as the application's, so build-slice-10-2 is left open for agent:reviewer to send each failure to the build or to bind-adapter.
 - 15:31:52 run verify: regenerated 4 files in .sdlc, site, tests
+- 15:35:35 drive: step 3: `sdlc run bind-adapter --target new --revise` — 13 revision requests for target new owed by bind-adapter; requests request/build-slice-10-2#1, request/build-slice-10-2#2, request/build-slice-10-2#3, request/build-slice-10-2#4, request/build-slice-10-2#5, request/build-slice-10-2#6, request/build-slice-10-2#7, request/build-slice-10-2#8, request/build-slice-10-2#9, request/build-slice-10-2#10, request/build-slice-10-2#11, request/build-slice-10-2#12, request/build-slice-10-2#13
+- 15:35:36 run bind-adapter: pre-checks failed
+- 15:35:36 drive: step 3 recovery: the new target's sandbox was not up; starting it from proposal/build-slice-10-2 (sdlc sandbox up --target new --from proposal/build-slice-10-2), running the step once more, and taking it down after (sdlc sandbox down --target new --from proposal/build-slice-10-2)
+- 15:38:41 run bind-adapter: ok, cost 1.5293004000000001, turns 46, on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 15:38:41 propose bind-adapter-new-52 at G3
+- 15:38:42 drive: step 3 recovery: taking the new target's sandbox down (sdlc sandbox down --target new --from proposal/build-slice-10-2)
+- 15:38:58 drive: step 4: `sdlc rule bind-adapter-new-52 --by agent:reviewer` — bind-adapter-new-52 is open at G3, held by agent:reviewer
+- 15:39:46 rule bind-adapter-new-52 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-10-01
 

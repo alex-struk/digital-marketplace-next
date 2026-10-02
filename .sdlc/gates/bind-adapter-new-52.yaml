@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The question is whether bind-adapter-new-52 still binds the new target's pages without asserting anything, and whether it carries out the 13 binding fixes the build-slice-10-2 ruling asked of bind-adapter. It does. The diff touches only tests/adapters/new/index.ts, nothing under tests/acceptance changed, and the runner's typecheck on revision 6adb2d7de passed with no diagnostics. Every change only finds things on the page or translates what it sees. status() reads the value under the page's 'Status' term, keeping the old program-name reading only as a fallback. The panel setter ticks the Chair box of the member named by a chair given beside the members, and throws unbound: when that chair is none of the members. Both identifier readers return empty on a program's create form, so a refused create follows the test's 'nothing was created' path. addPanelMember throws refused: when the chooser does not offer the person. That last change comes closest to deciding an outcome, but it translates a page observation into the convention the test already uses (R-5.1's refused() reads any throw that is not unbound: as a refusal), and the earlier ruling asked for exactly this. The remaining unbound reason for enter_question_score is real: the route answers 'Page not found' and the opportunity's management screen offers no way to open a proponent's evaluation. This ruling would change if a verify run showed a 'Status' read or a chair tick still failing on these pages, or if pick() turned out to return false when the chooser was not found rather than not offering the person, which would report a binding fault as a refusal. Condition #14 is addressed to plan and stays open.
+conditions: []
+cost: 0.37231280000000005
+turns: 3
+session: "db08f59d-ab11-4435-b4d4-0a8bef4dc58b"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-02T22:39:46.170Z
