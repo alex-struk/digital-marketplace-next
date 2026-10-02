@@ -264,6 +264,14 @@
 - 11:34:40 run bind-adapter: pre-checks failed
 - 11:34:40 drive: step 23 recovery: the oracle is up, and the new target's sandbox publishes on this machine's ports beside it; taking the oracle down first (sdlc oracle down)
 - 11:35:27 oracle down old
+- 11:39:42 drive: step 25: `sdlc run bind-adapter --target new --revise` — bind-adapter-new-48 was returned at G3 by agent:reviewer
+- 11:39:43 run bind-adapter: pre-checks failed
+- 11:39:43 drive: step 25 recovery: the new target's sandbox was not up; starting it from proposal/build-slice-9-4 (sdlc sandbox up --target new --from proposal/build-slice-9-4), running the step once more, and taking it down after (sdlc sandbox down --target new --from proposal/build-slice-9-4)
+- 11:41:09 run bind-adapter: ok, cost 0.41281640000000003, turns 14, on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 11:41:09 propose bind-adapter-new-49 at G3
+- 11:41:09 drive: step 25 recovery: taking the new target's sandbox down (sdlc sandbox down --target new --from proposal/build-slice-9-4)
+- 11:41:28 drive: step 26: `sdlc rule bind-adapter-new-49 --by agent:reviewer` — bind-adapter-new-49 is open at G3, held by agent:reviewer
+- 11:42:00 rule bind-adapter-new-49 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-10-01
 

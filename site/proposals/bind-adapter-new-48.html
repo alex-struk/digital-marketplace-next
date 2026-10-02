@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-48 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">502</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">496</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">416</span></a></li><li><a href="../runs.html">Run log <span class="count">20</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-48</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-02 18:38</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I bound both missing observations.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I bound both missing observations. Each reads <code>&quot;false&quot;</code> on this target, because neither History tab offers any way to add a note. One caveat: I couldn&#39;t type-check the changes. The type checker needed a permission this session doesn&#39;t have, so I checked the edits only by reading them. A type check is the first thing to run.</p>
+<p><strong>What&#39;s in place.</strong> Both <code>opportunity-cwu-edit.note_control_offered</code> and <code>opportunity-swu-edit.note_control_offered</code> are now in <code>tests/adapters/new/index.ts</code> and listed as <code>bound</code> in <code>bindings.yaml</code>. Each one opens the management screen&#39;s History section and returns <code>&quot;true&quot;</code> if anything there could add a note: a text box, any button, or a control labelled for attaching or uploading a file. Otherwise it returns <code>&quot;false&quot;</code>.</p>
+<p><strong>What the target showed.</strong> I signed in through the sandbox identity provider:</p>
+<ul><li><strong>As the opportunity&#39;s author</strong>, I opened the History tab (<code>?tab=history</code>) of the seeded Code With Us opportunity with a private note and of the seeded open Sprint With Us opportunity with a submitted proposal.</li><li><strong>As the administrator</strong>, I opened that same Sprint With Us History tab.</li></ul>
+<p>Every one showed only a table headed &quot;Every change of state and every event, newest first&quot;, with Date, Entry, By and Note columns. The seeded private note was listed with its attachment link, but there was no text box, no file chooser and no save button. Since I reached the place the contract describes and it really offers nothing, the answer is <code>&quot;false&quot;</code>, not <code>unbound</code>.</p>
+<p><strong>How the edge cases behave:</strong></p>
+<ul><li><strong>A refused reader</strong> (someone the screen answers with &quot;Page not found&quot;) gets <code>&quot;false&quot;</code> and the refusal is logged. That person is offered no control, and this matches how the other readers in the adapter treat refusals.</li><li><strong>A screen with no History section</strong> throws <code>unbound</code>, naming the sections the screen does offer.</li></ul>
+<p><strong>Changed existing code.</strong> An older comment in the adapter said the Sprint With Us History tab carries an &quot;Add a private note&quot; form. I saw no such form as either the author or the administrator, so I rewrote the comment to match. The Team With Us screen shares the same internal helper and so picks up the new reader. Its page doesn&#39;t use it, and that page&#39;s bindings are unchanged.</p>
+<p>Every route I visited resolved. I changed nothing outside <code>tests/adapters/new/</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-02 18:39.</p>
+<div class="body"><p>Question: does this adapter bind <code>note_control_offered</code> on <code>opportunity-cwu-edit</code> and <code>opportunity-swu-edit</code> as the contract declares it, and nothing more? Mostly yes. Both members are navigation plus locator counts, with no assertion and no business logic. Nothing under <code>tests/acceptance</code> changed, and the runner&#39;s typecheck of <code>tests/adapters/new</code> passed with no diagnostics. The proposal also reports reaching the History tab as the author and as the administrator on the seeded opportunities that <code>not-testable.yaml</code> names for R-1.33. The ruling is a return because of how the shared helper <code>noteControlsIn</code> behaves in <code>tests/adapters/new/index.ts</code>. Once <code>toSection</code> finds a History link in the section navigation, the helper looks for the region named History and counts the controls inside it. If no such region is on the page, the count is zero and the helper returns <code>&quot;false&quot;</code>. If the table never appears, the 5-second wait&#39;s error is caught and the same thing happens. So this observation answers &#39;no control offered&#39; even when the adapter never located the section it was asked about. R-1.33&#39;s last clause is a claim that something is absent, and the test still owed for it will expect <code>&quot;false&quot;</code>. A binding that falls back to <code>&quot;false&quot;</code> on a miss would let that test pass without checking anything, for example if the region&#39;s accessible name changes or a note form is rendered on the History tab outside that region. An answer of absence has to come from having reached the section. What would change the ruling: <code>noteControlsIn</code> (or each caller) reports <code>unbound</code>, naming the URL and acting persona, when the History region is not on the page after navigation, and returns <code>&quot;false&quot;</code> only after confirming the region (and its history table) is present. Everything else in the proposal can stand as it is.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>tests/adapters/new/index.ts noteControlsIn / noteControlOffered (cwu and swu): when the History region named /^history$/ is not present on the page after toSection succeeds, or its history table never becomes visible, return unbound with the URL and acting persona instead of &quot;false&quot;; return &quot;false&quot; only after the region has been confirmed present, so an absence is reported only from a section actually reached.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

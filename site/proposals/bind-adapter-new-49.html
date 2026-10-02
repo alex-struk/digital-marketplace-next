@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-49 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">502</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">496</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">416</span></a></li><li><a href="../runs.html">Run log <span class="count">20</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-49</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-02 18:41</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I made the one change the ruling asked for.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I made the one change the ruling asked for. In <code>tests/adapters/new/index.ts</code>, the shared helper <code>noteControlsIn</code> no longer answers <code>&quot;false&quot;</code> when it misses the History section.</p>
+<p><strong>What changed.</strong> Before, once the &quot;History&quot; link in the section navigation had been followed, the helper counted note controls inside the region named History. If that region was missing, or its table never appeared within the 5-second wait, the count was zero and the helper returned <code>&quot;false&quot;</code> (&quot;no control offered&quot;) without ever having found the section. Now the helper takes the member&#39;s location (for example <code>opportunity-cwu-edit.note_control_offered</code>) and does two checks:</p>
+<ul><li>It waits for the region named History. If no such region is on the page, it throws <code>unbound:</code> with the page URL and the acting persona&#39;s id.</li><li>It then waits for that region&#39;s history table. If the table never becomes visible, it also throws <code>unbound:</code> with the URL and persona.</li></ul>
+<p>Only once both are confirmed does it count text boxes, buttons and attach/upload controls inside the region, returning <code>&quot;true&quot;</code> or <code>&quot;false&quot;</code>. So an answer of absence now always comes from a section the adapter actually reached.</p>
+<p><strong>Where it applies.</strong> The Code With Us caller (<code>opportunity-cwu-edit</code>) and the shared Sprint/Team With Us caller now pass in their own location. That shared caller serves <code>opportunity-swu-edit</code> and, through the same factory, <code>opportunity-twu-edit</code>. The paths before the helper are unchanged:</p>
+<ul><li>A non-administrator whom the management screen refuses with &quot;Page not found&quot; still reads <code>&quot;false&quot;</code>, and the refusal is logged.</li><li>A screen with no History link at all is still reported unbound.</li></ul>
+<p><strong>Bindings file.</strong> <code>tests/adapters/new/bindings.yaml</code> already listed <code>note_control_offered: bound</code> under both <code>opportunity-cwu-edit</code> and <code>opportunity-swu-edit</code>, so I left it unchanged. The binding is still bound; it is just stricter about when it may answer absence.</p>
+<p><strong>What I could not check.</strong> I could not run the TypeScript typecheck: the sandbox needed an approval for it that nobody was there to give. I re-read the edit by hand: <code>unbound</code> is typed <code>never</code>, and the locator calls are the same ones used elsewhere in the file. The change is small, but it has not been compiled. I also did not re-walk the target. The earlier walk recorded each History section as the region with its table and nothing else, as the owning staff member and as the administrator on the seeded opportunities, so the stricter check should still return <code>&quot;false&quot;</code> there. That is inferred from that walk, not re-observed in this run. No page&#39;s route failed to resolve; this revision touched no other member, and I changed no file outside <code>tests/adapters/new/</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-02 18:42.</p>
+<div class="body"><p>Question: does this adapter bind note_control_offered on opportunity-cwu-edit and opportunity-swu-edit (and through the shared factory opportunity-twu-edit) as navigation and observation only, settling the owed instruction bind-adapter-new-48#1? Ruling: approve. noteControlsIn now takes the member&#39;s location, waits for the region named History and calls unbound with the page URL and acting persona when it is absent, then waits for that region&#39;s table and calls unbound the same way when the table never becomes visible. Only after both are confirmed does it count text boxes, buttons and attach/upload controls to answer true or false, so an answer of absence now comes only from a section actually reached. The CWU caller and the shared SWU/TWU caller both route through it. The bindings are locators, waits and a count, with no assertion or pass/fail logic. Nothing under tests/acceptance changed, and no path outside tests/adapters/new/ was touched. The authoring agent could not compile, but the runner-owned typecheck on revision 35ef3fe6d passed with no diagnostics under adapters/new/. The separately owed missing-test on R-1.33 belongs to derive-tests and is left open. What would change this: a re-walk showing the History region or its table unreachable for the owning staff member or the administrator on the seeded opportunities, or any edit outside tests/adapters/new/.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met bind-adapter-new-48#1: tests/adapters/new/index.ts noteControlsIn now calls unbound (with page.url() and actingId()) when no region named History is on the page after toSection succeeds, and again when that region&#39;s table never becomes visible within 5s; it returns &quot;false&quot; only after both are confirmed. Both the CWU noteControlOffered and the shared SWU/TWU noteControlOffered pass their own location into it.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,16 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does this adapter bind note_control_offered on opportunity-cwu-edit and opportunity-swu-edit (and through the shared factory opportunity-twu-edit) as navigation and observation only, settling the owed instruction bind-adapter-new-48#1? Ruling: approve. noteControlsIn now takes the member's location, waits for the region named History and calls unbound with the page URL and acting persona when it is absent, then waits for that region's table and calls unbound the same way when the table never becomes visible. Only after both are confirmed does it count text boxes, buttons and attach/upload controls to answer true or false, so an answer of absence now comes only from a section actually reached. The CWU caller and the shared SWU/TWU caller both route through it. The bindings are locators, waits and a count, with no assertion or pass/fail logic. Nothing under tests/acceptance changed, and no path outside tests/adapters/new/ was touched. The authoring agent could not compile, but the runner-owned typecheck on revision 35ef3fe6d passed with no diagnostics under adapters/new/. The separately owed missing-test on R-1.33 belongs to derive-tests and is left open. What would change this: a re-walk showing the History region or its table unreachable for the owning staff member or the administrator on the seeded opportunities, or any edit outside tests/adapters/new/.
+conditions:
+  - "condition-met bind-adapter-new-48#1: tests/adapters/new/index.ts noteControlsIn now calls unbound (with page.url() and actingId()) when no region named History is on the page after toSection succeeds, and again when that region's table never becomes visible within 5s; it returns \"false\" only after both are confirmed. Both the CWU noteControlOffered and the shared SWU/TWU noteControlOffered pass their own location into it."
+cost: 0.2774184
+turns: 1
+session: "53eafb7d-360d-4c40-8c8e-201f7a4b94c1"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-02T18:42:00.726Z

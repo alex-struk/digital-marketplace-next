@@ -6110,6 +6110,31 @@ export default function create(
     const region = seen(page.getByRole("main").getByRole("region", { name: new RegExp(`^${tab}$`, "i") }));
     return (await region.count()) ? lined(await region.first().innerText()).join("\n") : "";
   }
+  // Whether a management screen's History section offers anything for adding a note: a text
+  // box, a file chooser or a button inside the section ("true"), or only the table of what
+  // happened, "Every change of state and every event, newest first" ("false"). Seen as the
+  // owning public sector employee on the seeded Code With Us opportunity with a private note
+  // and on the seeded open Sprint With Us opportunity with a submitted proposal, and as the
+  // administrator on the latter: each History section is that table alone, nothing to add.
+  // An answer of absence comes only from a section actually reached: when the region named
+  // History is not on the page, or its table of what happened never shows, the section was
+  // not found and the reading is unbound, naming the address and the reader.
+  async function noteControlsIn(where: string, region: Locator): Promise<string> {
+    await region.waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+    if (!(await region.count())) {
+      unbound(where, `the "History" link was followed but no region named "History" is on ${page.url()} as ${actingId()}`);
+    }
+    const table = seen(region.getByRole("table")).first();
+    const shown = await table.waitFor({ state: "visible", timeout: 5000 }).then(() => true, () => false);
+    if (!shown) {
+      unbound(where, `the "History" region on ${page.url()} as ${actingId()} never showed its table of what happened`);
+    }
+    const offered =
+      (await seen(region.getByRole("textbox")).count()) +
+      (await seen(region.getByRole("button")).count()) +
+      (await region.getByLabel(/attach|upload|choose file/i).count());
+    return offered ? "true" : "false";
+  }
   // The Opportunity section is the form itself, and a form's text never carries what is in
   // its boxes: "Title(required)", "Location(required)", "Description (required)" and the rest
   // are labels whose values live in the fields. So the section is read as its text followed
@@ -6398,6 +6423,15 @@ export default function create(
     assignmentDate: () => cwuFormDate("assignment_date", /assignment\s*date/i),
     startDate: () => cwuFormDate("start_date", /^\s*start\s*date/i),
     completionDate: () => cwuFormDate("completion_date", /completion\s*date/i),
+    // A reader the screen refuses is offered nothing, the refusal logged.
+    noteControlOffered: async () => {
+      const member = "note_control_offered";
+      if (await refusedReader(member)) return "false";
+      if (!(await toSection(member, "History"))) {
+        return unbound(cwuManage.where(member), `the management screen at ${page.url()} offers ${actingId()} no "History" section; it offers ${await offered()}`);
+      }
+      return noteControlsIn(cwuManage.where(member), seen(page.getByRole("main").getByRole("region", { name: /^history$/i })).first());
+    },
   };
 
   // ---------------------------------------------------------------- managing a Sprint With Us or Team With Us opportunity
@@ -6414,8 +6448,8 @@ export default function create(
   // action is "Cancel opportunity", offered to the administrator in every state from published
   // to processing (its dialog is the Code With Us one); a draft and an awarded one offer none,
   // and a public sector employee is offered none on their own. The Addenda and History
-  // sections are the Code With Us ones, the Sprint With Us History carrying "Add a private
-  // note" (not on a draft); the Team With Us History carries no note form. A panel evaluator,
+  // sections are the Code With Us ones, each History the table of what happened
+  // alone, with no form for adding a note (seen as the administrator and the owning staff). A panel evaluator,
   // and staff on somebody else's, are answered "Page not found".
   const programWalked = (program: string, states: string, slug: string): string =>
     `walked as the administrator on the seeded ${program} opportunities ${states} and on a draft just saved from /opportunities/${slug}/create, as the owning public sector employee on seeded ones, and as a panel evaluator (answered "Page not found"): the screen offers only the sections Summary, Addenda (not on a draft) and History, only the action "Cancel opportunity" (to the administrator, from published to processing; none on a draft, an awarded one or to staff), and says "The rest of this opportunity — what makes it a ${program} opportunity, and putting it forward for review or publication — cannot be managed here yet."; ?tab=opportunity and other section names fall back to the Summary`;
@@ -6504,6 +6538,12 @@ export default function create(
       absentSection,
       summaryTerm,
       summaryDate,
+      noteControlOffered: async (): Promise<string> => {
+        const member = "note_control_offered";
+        if (await refused(member)) return "false";
+        if (!(await toSection(member, "History"))) return notOffered(member, '"History" section');
+        return noteControlsIn(where(member), sectionRegion("History"));
+      },
       // "Cancel opportunity" asks first: "Cancel this opportunity?" with an optional "Note
       // (optional)" box, "Keep opportunity" and its own "Cancel opportunity". Where it is not
       // offered (a draft, an awarded one, a public sector employee) that absence is the
@@ -6614,6 +6654,7 @@ export default function create(
     proposalDeadline: () => swuManage.summaryDate("proposal_deadline", /^proposal deadline$/i),
     assignmentDate: () => swuManage.summaryDate("assignment_date", /^assignment date$/i),
     evaluationQuestionFields: () => swuManage.notOffered("evaluation_question_fields", '"Team questions" section and no form to edit them in'),
+    noteControlOffered: swuManage.noteControlOffered,
   };
 
   const TWU_EDIT = "opportunity-twu-edit";
