@@ -5223,3 +5223,160 @@ rebind:
     by: runner:verify
     at: 2026-10-01T13:15:46.765Z
     closed: *a30
+  - id: R-6.17
+    target: new
+    why: "unbound: organization-edit.add_team_members — /organizations/:orgId/edit
+      did not open as a screen at
+      http://localhost:4300/organizations/00000000-0000-4000-8000-000000000304/\
+      edit: Page not found The page you are looking for does not exist.; the
+      screen is offered only to a signed-in person who may have it; walked
+      signed in (as the administrator, as a public sector employee, and as a
+      vendor for a vendor's screens — the seeded organization owner for the
+      organization screens — with the seeded records' identifiers), the running
+      build serves a signed-in person /dashboard (to the administrator \"Create
+      an opportunity\" over \"All opportunities\", each Code With Us opportunity
+      linked to its management screen; to public sector staff the same over \"My
+      opportunities\"), the account screens under /users, to the administrator
+      the content-management screens under /content, and to the administrator
+      and public sector staff only /opportunities/create,
+      /opportunities/code-with-us/create and
+      /opportunities/code-with-us/:opportunityId/edit; every other opportunity,
+      proposal, organization and evaluation screen — every Sprint With Us and
+      Team With Us screen (tried with the seeded closed, awarded and
+      at-consensus opportunities of both), the Code With Us proposal screens
+      (tried as a vendor with the seeded published Code With Us opportunity,
+      whose page offers no way to start one),
+      /opportunities/code-with-us/:opportunityId/complete, /opportunities and
+      /organizations included — answers \"Page not found\", and /users/:userId
+      opens for the signed-in person's own identifier and, to the administrator,
+      for another account's"
+    found: unbound
+    adapter: 0eedbe4640a39449617ddb9b8790dfac4f09ab6a
+    slice: 9
+    app_tree: 552ceac571aff139ba67f427de383d3eb7ef2480
+    by: runner:verify
+    at: 2026-10-02T09:20:27.492Z
+  - id: R-1.28
+    target: new
+    why: "unbound: opportunity-cwu-edit.cancel_opportunity — no control named
+      /^\\s*cancel( opportunity)?\\s*$/i among the opportunity's actions on
+      http://localhost:4300/opportunities/code-with-us/a95ebbf3-bc22-4007-9e78-\
+      ba10c3338901/edit?tab=summary (Status: Published; the actions offered are
+      nothing); walked as the administrator and as a public sector employee on
+      the seeded draft, published, awarded and with-three-proposals Code With Us
+      opportunities and on ones just saved and published; unbound:
+      opportunity-cwu-edit.cancel_opportunity — no control named /^\\s*cancel(
+      opportunity)?\\s*$/i among the opportunity's actions on
+      http://localhost:4300/opportunities/code-with-us/d65d66fd-7548-4577-9c9e-\
+      1e84b2bf8d39/edit (Status: Draft; the actions offered are \"Edit\",
+      \"Publish\", \"Delete\"); walked as the administrator and as a public
+      sector employee on the seeded draft, published, awarded and
+      with-three-proposals Code With Us opportunities and on ones just saved and
+      published"
+    found: unbound
+    adapter: 0eedbe4640a39449617ddb9b8790dfac4f09ab6a
+    slice: 9
+    app_tree: 552ceac571aff139ba67f427de383d3eb7ef2480
+    by: runner:verify
+    at: 2026-10-02T09:20:27.492Z
+  - id: R-1.30
+    target: new
+    why: "unbound: opportunity-cwu-edit.reporting_proposals — the summary on
+      http://localhost:4300/opportunities/code-with-us/00000000-0000-4000-8000-\
+      000000000601/edit?tab=summary shows no /^proposals$/i count (it shows
+      Manage a Code With Us opportunity / Seeded published Code With Us
+      opportunity / Status: Published / Opportunity ID:
+      00000000-0000-4000-8000-000000000601 / Proposal deadline / June 1, 2030 at
+      4:00 p.m. Pacific time / Reward / $5,000 / Published / January 5, 2026 /
+      Created by / Casey Placeholder / Last changed by / Casey Placeholder);
+      looked again as the administrator and as the owning public sector employee
+      on the seeded published, lapsed-with-three-proposals, in-processing and
+      awarded Code With Us opportunities (and on the published one after the
+      administrator ticked \"Watch this opportunity\" on its page): the Summary
+      carries only Proposal deadline, Reward, Published, Created by and Last
+      changed by, the only sections are Summary, Opportunity, Addenda and
+      History, and the opportunity the screen loads from
+      /api/opportunities/code-with-us/:id carries no view, watcher or proposal
+      count; looked once more as the administrator: ?tab=reporting and
+      ?tab=proposals on the manage screen fall back to the same Summary, the
+      public opportunity page, /dashboard and /opportunities show no count
+      either, and /opportunities/code-with-us/:id/complete answers Page not
+      found on the seeded lapsed, final-stage and in-processing ones. The
+      application does count (GET /api/counters answers
+      opportunity.code-with-us.<id>.views and .watchers with numbers), but no
+      screen shows those numbers, and reading the API here would report a count
+      the page never displays; looked a third time as the administrator after
+      opening the seeded published opportunity's public page, so its views
+      counter read 1: the Summary still showed no count, and the Sprint With Us
+      manage Summary of its seeded published opportunity carries none either.
+      The view count is read through the opportunity-counters page instead;
+      unbound: opportunity-cwu-edit.history_tab —
+      /opportunities/code-with-us/:opportunityId/edit did not open as a screen
+      at
+      http://localhost:4300/opportunities/code-with-us/00000000-0000-4000-8000-\
+      000000000601/edit: Page not found The page you are looking for does not
+      exist.; the screen is offered only to a signed-in person who may have it;
+      walked signed in (as the administrator, as a public sector employee, and
+      as a vendor for a vendor's screens — the seeded organization owner for the
+      organization screens — with the seeded records' identifiers), the running
+      build serves a signed-in person /dashboard (to the administrator \"Create
+      an opportunity\" over \"All opportunities\", each Code With Us opportunity
+      linked to its management screen; to public sector staff the same over \"My
+      opportunities\"), the account screens under /users, to the administrator
+      the content-management screens under /content, and to the administrator
+      and public sector staff only /opportunities/create,
+      /opportunities/code-with-us/create and
+      /opportunities/code-with-us/:opportunityId/edit; every other opportunity,
+      proposal, organization and evaluation screen — every Sprint With Us and
+      Team With Us screen (tried with the seeded closed, awarded and
+      at-consensus opportunities of both), the Code With Us proposal screens
+      (tried as a vendor with the seeded published Code With Us opportunity,
+      whose page offers no way to start one),
+      /opportunities/code-with-us/:opportunityId/complete, /opportunities and
+      /organizations included — answers \"Page not found\", and /users/:userId
+      opens for the signed-in person's own identifier and, to the administrator,
+      for another account's"
+    found: unbound
+    adapter: 0eedbe4640a39449617ddb9b8790dfac4f09ab6a
+    slice: 9
+    app_tree: 552ceac571aff139ba67f427de383d3eb7ef2480
+    by: runner:verify
+    at: 2026-10-02T09:20:27.492Z
+  - id: R-1.32
+    target: new
+    why: 'unbound: opportunity-cwu-edit.add_addendum — the management screen at
+      http://localhost:4300/opportunities/code-with-us/cc192075-4b3e-4c06-8777-12a00067679b/edit
+      offers no "Addenda" section (a draft has none); walked as the
+      administrator and as a public sector employee on the seeded draft,
+      published, awarded and with-three-proposals Code With Us opportunities and
+      on ones just saved and published'
+    found: unbound
+    adapter: 0eedbe4640a39449617ddb9b8790dfac4f09ab6a
+    slice: 9
+    app_tree: 552ceac571aff139ba67f427de383d3eb7ef2480
+    by: runner:verify
+    at: 2026-10-02T09:20:27.492Z
+  - id: R-1.35
+    target: new
+    why: 'unbound: proposal-vendor-dashboard.show_my_proposals — signed in,
+      /dashboard at http://localhost:4300/dashboard reads only "Dashboard / You
+      are signed in as Alex Placeholder." and offers no control named /my
+      proposals/i'
+    found: unbound
+    adapter: 0eedbe4640a39449617ddb9b8790dfac4f09ab6a
+    slice: 9
+    app_tree: 552ceac571aff139ba67f427de383d3eb7ef2480
+    by: runner:verify
+    at: 2026-10-02T09:20:27.492Z
+  - id: R-1.36
+    target: new
+    why: 'unbound: proposal-vendor-dashboard.show_my_proposals — signed in,
+      /dashboard at http://localhost:4300/dashboard reads only "Dashboard / You
+      are signed in as Alex Placeholder." and offers no control named /my
+      proposals/i'
+    found: unbound
+    adapter: 0eedbe4640a39449617ddb9b8790dfac4f09ab6a
+    slice: 9
+    app_tree: 552ceac571aff139ba67f427de383d3eb7ef2480
+    by: runner:verify
+    at: 2026-10-02T09:20:27.492Z
