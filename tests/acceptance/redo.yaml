@@ -803,3 +803,32 @@ redo:
       one rather than only a change.
     verb: test-overreaches
     closed: *a16
+  - id: R-6.17
+    version: 1
+    why: the test sends an organization team-membership invitation (adding the
+      deactivated account's email as a team member of an organization) as its
+      example of a notification. The criterion never mentions organizations or
+      team invitations. The notice it does name, about an opportunity the
+      deactivated account was watching, is left unasserted on the grounds that
+      blind-copied recipients cannot be read, but the caught-message surface
+      does expose blind-copied recipients. The test should check that a
+      deactivated account which watches a published opportunity is not among the
+      recipients, visible or blind-copied, when that opportunity is changed or
+      given an addendum, and that an active watcher is.
+    verb: test-overreaches
+  - id: R-1.35
+    version: 1
+    why: to confirm its starting condition, the test requires the proposing vendor
+      to see their submitted proposal in a 'My Proposals' listing on their own
+      dashboard. The criterion's starting condition is only that the opportunity
+      has submitted proposals. It does not ask that a vendor can list or view
+      their own proposals.
+    verb: test-overreaches
+  - id: R-1.36
+    version: 1
+    why: to confirm its starting condition, the test requires the proposing vendor
+      to see their submitted proposal in a 'My Proposals' listing on their own
+      dashboard. The criterion's starting condition is only that the opportunity
+      has submitted proposals. It does not ask that a vendor can list or view
+      their own proposals.
+    verb: test-overreaches
