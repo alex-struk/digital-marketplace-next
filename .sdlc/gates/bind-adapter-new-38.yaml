@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does the new-target adapter bind every surface action and observation, and nothing else? Approved. The revision takes up both requests from build-slice-8-6 and changes nothing outside tests/adapters/new; tests/acceptance is untouched. The opportunity group readers now match the bare 'Unpublished', 'Open' and 'Closed' headings the catalogue stories and application use, and a heading must be the whole line. Card status badges in the application read 'Draft', 'Published', 'Under review', 'Awarded' and similar, never a bare 'Open' or 'Closed', so no card can be read as a group boundary. answer_at_link_target now reads the main text of the page that follow_service_level_agreement_link landed on, and open() resets that. It is still a reader, with no assertion and no business logic. Rebinding follow_service_level_agreement_link from unbound to bound matches the live link on /learn-more/code-with-us, so that unbound reason no longer holds. The runner's typecheck on this revision passed with no diagnostics under adapters/new. The build-slice-8-3 instructions stay open, because no current verify result shows R-1.3, R-1.38 or R-7.18 now passing. A verify run showing those criteria still unbound or failing in these readers would change this ruling.
+conditions: []
+cost: 0.617186
+turns: 7
+session: "a6979ad3-dd1e-4ee3-8fcb-c1af65b6c67e"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-02T05:09:27.463Z

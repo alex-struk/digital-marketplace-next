@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-38 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">463</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">457</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">390</span></a></li><li><a href="../runs.html">Run log <span class="count">20</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-38</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-02 05:07</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I took up both conditions in <code>tests/adapters/new/</code>; I couldn&#39;t run the typechecker because both attempts needed an approval nobody was here to give.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I took up both conditions in <code>tests/adapters/new/</code>; I couldn&#39;t run the typechecker because both attempts needed an approval nobody was here to give.</p>
+<p><strong>Condition 1: opportunity list group readers.</strong> I opened <code>/opportunities</code> on the target signed out. The groups are headed &quot;Open&quot; and &quot;Closed&quot;, each on a line of its own, and each word appears only once on the page, so no card status gets mistaken for a heading. I changed the heading patterns the three group readers share to match the bare &quot;Unpublished&quot;, &quot;Open&quot; and &quot;Closed&quot;. They still accept the older &quot;… opportunities&quot; form, and a heading must make up the whole line, so a card title that merely starts with one of those words can&#39;t be taken for a group. The opportunity status reader uses the same patterns, so it now starts at the right place too. I did not see the &quot;Unpublished&quot; heading myself: it only shows to staff and I did not sign in this run. That part relies on the condition&#39;s report of the staff story.</p>
+<p><strong>Condition 2: reading the answer at the service level agreement link.</strong> I confirmed that <code>/learn-more/code-with-us</code> has a &quot;service level agreement&quot; link to <code>/content/service-level-agreement</code>. That page carries no such link, and its main area shows the title, the published and last-updated dates, the body and the page&#39;s address. The adapter now remembers where following the link landed. If the answer reader is called on that page, it returns the main text of the page it is on instead of looking for the link again. Otherwise it behaves as before: it follows the link if there is one and reads empty if there isn&#39;t. Opening the page clears the remembered landing spot.</p>
+<p><strong>Also changed for consistency:</strong> in <code>bindings.yaml</code>, <code>follow_service_level_agreement_link</code> was still listed as unbound, with a reason saying no page carries such a link. The live page now has the link, and condition 2 assumes this step navigates. I changed it to <code>bound</code> and rewrote the comment above it, since leaving it would contradict condition 2. The adapter code for that action did not need to change.</p>
+<p>Nothing else in the adapter or the bindings file was touched, and I wrote nothing outside <code>tests/adapters/new/</code>. Every route I opened resolved.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-02 05:09.</p>
+<div class="body"><p>Question: does the new-target adapter bind every surface action and observation, and nothing else? Approved. The revision takes up both requests from build-slice-8-6 and changes nothing outside tests/adapters/new; tests/acceptance is untouched. The opportunity group readers now match the bare &#39;Unpublished&#39;, &#39;Open&#39; and &#39;Closed&#39; headings the catalogue stories and application use, and a heading must be the whole line. Card status badges in the application read &#39;Draft&#39;, &#39;Published&#39;, &#39;Under review&#39;, &#39;Awarded&#39; and similar, never a bare &#39;Open&#39; or &#39;Closed&#39;, so no card can be read as a group boundary. answer_at_link_target now reads the main text of the page that follow_service_level_agreement_link landed on, and open() resets that. It is still a reader, with no assertion and no business logic. Rebinding follow_service_level_agreement_link from unbound to bound matches the live link on /learn-more/code-with-us, so that unbound reason no longer holds. The runner&#39;s typecheck on this revision passed with no diagnostics under adapters/new. The build-slice-8-3 instructions stay open, because no current verify result shows R-1.3, R-1.38 or R-7.18 now passing. A verify run showing those criteria still unbound or failing in these readers would change this ruling.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
