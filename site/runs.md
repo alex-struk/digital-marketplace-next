@@ -109,6 +109,11 @@
 - 03:55:52 propose derive-tests-notifications-stale-10 at G3
 - 03:55:56 drive: step 22: `sdlc rule derive-tests-notifications-stale-10 --by agent:reviewer` — derive-tests-notifications-stale-10 is open at G3, held by agent:reviewer
 - 03:57:12 rule derive-tests-notifications-stale-10 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 03:57:19 drive: step 23: `sdlc run calibrate --target old` — 8 approved proposals changed what calibration measures on old since its suite last ran (design-content-3, design-files-2, design-organizations-2, design-opportunities-3, design-evaluation-2, design-proposals-2, derive-tests-opportunities-13, derive-tests-notifications-stale-10); policy.next.calibrate_after is 8
+- 04:00:09 oracle up old: http://localhost:4300 (local port 4300)
+- 04:48:35 oracle up old in configuration notifications_disabled: local port 3103
+- 04:49:14 oracle down old in configuration notifications_disabled
+- 04:49:17 run calibrate: ok, cost 0, turns 0
 
 # Run record 2026-10-01
 
