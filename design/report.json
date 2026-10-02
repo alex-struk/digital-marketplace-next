@@ -1,7 +1,7 @@
 {
-  "generated": "2026-10-02T00:05:02.216Z",
+  "generated": "2026-10-02T00:18:13.107Z",
   "axe": "4.13.0",
-  "catalogue": "ba5d3cadcdeb710b2e6193eb1860dc9dbca3f4edb77427ce0ab1a2f08a36a586",
+  "catalogue": "a9d2016ff92078d430390b4b3f628b81ec028c0477270a57ffa11449fedce50e",
   "ok": true,
   "messages": [],
   "compile": [
@@ -17,6 +17,18 @@
     }
   ],
   "stories": [
+    {
+      "id": "notifications-caught-message-list-default--default",
+      "title": "notifications/caught-message-list/default",
+      "file": "./catalogue/caught-message-list.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "notifications-caught-message-default--default",
+      "title": "notifications/caught-message/default",
+      "file": "./catalogue/caught-message.default.stories.tsx",
+      "violations": []
+    },
     {
       "id": "content-content-create-default--default",
       "title": "content/content-create/default",
@@ -975,6 +987,18 @@
       "id": "opportunities-home-page-loading--loading",
       "title": "opportunities/home-page/loading",
       "file": "./catalogue/home.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "notifications-mail-delivery-delay-default--default",
+      "title": "notifications/mail-delivery-delay/default",
+      "file": "./catalogue/mail-delivery-delay.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "notifications-mail-delivery-fault-default--default",
+      "title": "notifications/mail-delivery-fault/default",
+      "file": "./catalogue/mail-delivery-fault.default.stories.tsx",
       "violations": []
     },
     {
@@ -2989,7 +3013,7 @@
     }
   ],
   "totals": {
-    "stories": 495,
+    "stories": 499,
     "violations": 0,
     "failed": 0
   }

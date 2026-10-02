@@ -192,6 +192,14 @@ screens:
     states: [default, notify-confirm, notified, notify-failed]
   - page: notification-email-reference
     states: [default, loading, not-found]
+  - page: caught-message
+    states: [default]
+  - page: caught-message-list
+    states: [default]
+  - page: mail-delivery-fault
+    states: [default]
+  - page: mail-delivery-delay
+    states: [default]
 
   # content domain — see design/DESIGN.md, "Domain: content"
   - page: content-footer

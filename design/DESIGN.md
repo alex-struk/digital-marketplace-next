@@ -1225,6 +1225,15 @@ small. It covers four places, and three of them are parts of pages other domains
 - **notification-email-reference.** This is the one page the domain owns outright: the
   administrator's preview of every email.
 
+The surface gives this domain four more entries, `caught-message`, `caught-message-list`,
+`mail-delivery-fault` and `mail-delivery-delay`. Each carries `origin: mail-catcher`: they are
+addresses of the test harness's mail catcher and its fault and delay controls, not of the
+application. No screen of the service renders them. Because the catalogue's check asks every
+surface entry for a screen, each has one `default` entry in `design/screens.yaml` and a story that
+is a response reference, like the files domain's service addresses: the request and the parts of
+the catcher's answer the surface reads, laid out with the page container and the stack. Their
+`test_id`s stay `null` (gap 14).
+
 Every state named in `design/screens.yaml` has a story at
 `design/catalogue/<page>.<state>.stories.tsx`, and the story is what a build copies. Where a story
 shows another domain's part of the page, that part is trimmed or shown as a placeholder frame, and
@@ -1259,10 +1268,26 @@ the opportunities domain already ruled out for Watch.
 
 These are built from standard HTML and styled only with tokens. None is a design-system component.
 
+- **Page container** (`PageContainer`, `design/catalogue/layout.tsx`). Reused from the content
+  domain, unchanged in what it does: the one column every screen sits in, its content at most 1100
+  pixels wide and centred so its left edge meets the banner's logo, with `--layout-padding-medium`
+  either side outside those 1100 pixels and `--layout-padding-large` above and below. The design
+  system ships no page grid or container, so it is the project's own. Every story of this domain
+  is wrapped in it.
+- **Stack** (`Stack`, `design/catalogue/layout.tsx`). Reused from the content domain: a flex column,
+  or with `direction="row"` a row that always wraps, spaced only by its `gap`
+  (`--layout-margin-small`, `-medium` or `-large`). It strips the margins of the design system's
+  `Text` and `Heading` (and of `dt`/`dd`) from its items, so a gap is never the token plus a
+  component's margin, and it takes no `style` or `className`. The design system has no stack or
+  spacing primitive. This domain added one value to it, `align="end"`, for the opportunities
+  domain's filter row reproduced around the opt-in: the two `Select`s and the search field carry a
+  label above them and the checkbox does not, and the row's controls line up on their bottom edge
+  as they did before. The change is additive and alters no other domain's story.
 - **Card section.** This is the earlier domains' `<section aria-labelledby>` with a
   `--surface-color-border-default` border and a `--layout-border-radius-medium` radius, reused. It
   holds the opt-in control on the list, and the placeholder frame for the content domain's part of
-  the terms page.
+  the terms page. Its border and inner padding (`--layout-padding-large`) are its own; its content
+  is laid out by a stack inside it.
 - **Key facts list.** This is the opportunities domain's `<dl>`, reused. Each sample message's
   Subject and "Who receives it and why" is a `dt` in `--typography-font-weights-bold` followed by
   its `dd`.
@@ -1273,14 +1298,41 @@ These are built from standard HTML and styled only with tokens. None is a design
   title is set in bold text, not as a heading, so the page's outline stays page → event → message.
   The emails' own formatting belongs to the sending machinery. A build renders the message's body
   markup into this frame. It does not use an `iframe`, because an unlabelled or untitled frame
-  would break the outline and the scan.
+  would break the outline and the scan. Its border and inner padding are its own; the message's
+  lines are laid out by a stack inside it.
 
 No token beyond those the earlier domains list is used:
-`--layout-margin-{none,small,medium,large}`, `--layout-padding-{none,small,large}`,
+`--layout-margin-{none,small,medium,large}`, `--layout-padding-{none,small,medium,large}`,
 `--layout-border-width-small`, `--layout-border-radius-{medium,circular}`,
 `--surface-color-border-{default,medium}`, and `--typography-font-weights-bold`.
 
 ### How each screen is laid out
+
+Every story of this domain is built from `layout.tsx` and nothing else, the same way as the content
+and files domains': one `PageContainer`, and inside it one `Stack gap="large"` whose items are the
+screen's regions. No story sets a width, an outer padding, a margin or a gap of its own; the only
+spacing a story writes is the inner padding of a bordered frame (a card section, the placeholder
+frame, the email preview frame), the rule above each sample message, and the status badge's own
+inline padding. The rhythm:
+
+- **`large`** between the regions of a page: the H1 or heading block, an alert, the filter form,
+  the opt-in card, each `<section>`, each sign-in card, the reference page's contents `nav` and
+  each event section.
+- **`medium`** between the items of a region: a section's H2 and what follows it, the paragraphs
+  and button of the terms broadcast, the settings page's sentences, checkbox and status region,
+  the profile section links in a row, the filter controls in a row, the opt-in card's heading,
+  sentence, button and status region in a row, the cards of a group, and the lines of an email
+  preview.
+- **`small`** between a label and what it labels: "Manage a page" and the H1 under it; the lines
+  of an opportunity card; the reference page's contents links; Subject and "Who receives it and
+  why" in the key facts; and the spinner and text of a loading row.
+
+Rows (the profile section links, the filter row, the opt-in card's contents, a loading row) are
+`Stack direction="row"`, which always wraps, so nothing is pushed off a 320-pixel screen or at
+400% zoom and the opt-in is never hidden by width (R-6.27). Dialogs are portalled by `Modal` and
+laid out by the design system, so the `Modal` sits inside the page container but outside the
+stack. A page wrapper that carries a test ID (`email-reference-page`, `not-found-page`) is now the
+outer stack, inside the container, since the container itself takes no attributes.
 
 - **Unsubscribe landing.** This is the users domain's notifications section, unchanged: the H1
   "Notifications", the profile section navigation, the sentence naming the address, the checkbox,
@@ -1492,6 +1544,12 @@ words that no criterion gives, the story or this list says so.
     marker. The samples show none.
 13. **Loading states are the design's own.** No criterion describes a delay on the landing or the
     reference page. They exist because both depend on data that arrives after the page.
+14. **Four surface entries with no markup to bind.** `caught-message`, `caught-message-list`,
+    `mail-delivery-fault` and `mail-delivery-delay` are served by the mail catcher, not by the
+    application (`origin: mail-catcher`). Their actions and observations are read from the
+    catcher's answers, not from markup the service renders. Each has a response-reference story so
+    that it has a screen, but those stories carry no test IDs and the fields are left `null`. The contract stage should say whether a
+    `test_id` belongs on an entry with that origin at all, or mark those fields as not applicable.
 
 ---
 
