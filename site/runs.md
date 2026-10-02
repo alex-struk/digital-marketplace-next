@@ -134,6 +134,14 @@
 - 06:39:12 drive: step 30: `sdlc run verify --slice 9` — build-slice-9-3 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
 - 07:22:07 verify slice 9: 1 criteria still fail after 3 builds; escalated to tech-lead.
 - 07:22:11 run verify: regenerated 493 files in .sdlc, site, tests
+- 07:24:41 drive: step 32: `sdlc run bind-adapter --target new` — 2 bindings the adapter reports unbound for target new owed by bind-adapter; the application it binds against is on proposal/build-slice-9-3 alone, so sdlc sandbox up --target new --from proposal/build-slice-9-3 first
+- 07:24:41 run bind-adapter: pre-checks failed
+- 07:24:41 drive: step 32 recovery: the new target's sandbox was not up; starting it from proposal/build-slice-9-3 (sdlc sandbox up --target new --from proposal/build-slice-9-3), running the step once more, and taking it down after (sdlc sandbox down --target new --from proposal/build-slice-9-3)
+- 07:27:45 run bind-adapter: ok, cost 0.9303394000000003, turns 32, on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 07:27:45 propose bind-adapter-new-45 at G3
+- 07:27:45 drive: step 32 recovery: taking the new target's sandbox down (sdlc sandbox down --target new --from proposal/build-slice-9-3)
+- 07:28:11 drive: step 33: `sdlc rule bind-adapter-new-45 --by agent:reviewer` — bind-adapter-new-45 is open at G3, held by agent:reviewer
+- 07:29:04 rule bind-adapter-new-45 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-10-01
 
