@@ -646,3 +646,17 @@ requests:
     at: 2026-10-02T14:24:25.110Z
     taken: 2026-10-02T16:15:47.686Z
     taken_by: contract-v30
+  - stage: contract
+    why: remove the add_note action from the opportunity-cwu-edit and
+      opportunity-swu-edit pages in spec/contract/surface.yaml. R-1.33 v2 says
+      the service accepts a private note but no screen of the application offers
+      a way to add one, and verify found R-1.33 untestable because a test acting
+      through add_note (bound to history-add-note-button, which no story renders
+      now that the History-tab note form is gone) contradicts the criterion.
+      Keep add_attachment on those pages and keep the
+      opportunity-history-request page's add_note_by_request, which is how a
+      note is added.
+    from: design-opportunities-4
+    gate: G-DESIGN
+    by: agent:ux-reviewer
+    at: 2026-10-02T16:54:27.612Z
