@@ -40,3 +40,23 @@ Every member is still unbound, and nothing else in the adapter or the bindings f
 **Routes that did not resolve.** `/opportunities/code-with-us/:opportunityId/proposals/create` does not resolve on this target. Neither does the open Sprint With Us opportunity's public page. The earlier finding still stands that the other proposal, organization and evaluation screens answer "Page not found" too.
 
 Nothing asked me to change any file outside `tests/adapters/new/`, and I did not. No password or environment value was written anywhere.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether this bind-adapter proposal for target new binds every surface action and observation it can and nothing else. It does: the only change adds a recheck to the reasons on the 13 proposal-cwu-create members, in tests/adapters/new/index.ts and tests/adapters/new/bindings.yaml. Every member stays unbound, there is no locator, assertion or logic, nothing under tests/acceptance changed, and the runner's type check passed for adapters/new. The unbound reasons are real. The seeded vendor, signed in through the identity provider, is answered 'Page not found' at the form's route and at every alternative route tried. The opportunity's public page and the /opportunities list offer only Watch controls, and even the Sprint With Us opportunity that has a submitted proposal answers 'Page not found'. This build serves no proposal screen, so the gap is in the application, not the adapter, and the test does not demand more than its criterion. R-1.35 and R-1.36 stay unverified, and that is already asked of plan in request/build-slice-9-3#1, so it is not repeated here. build-slice-9-3#6 is a build instruction this proposal does not touch, so it stays open. What would change the ruling: a reason that misdescribes what the build serves (for example, a proposal screen that is in fact reachable), or any edit outside tests/adapters/new.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `5a5de55de77e20cef066d31641b50fb3e1999ec9`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
