@@ -4991,3 +4991,18 @@ owed:
         tree f1cc08d and passed in every case (tests/results/new/slice-9.json).
       by: agent:reviewer
       at: 2026-10-02T18:08:15.918Z
+  - kind: missing-test
+    item: R-1.33
+    id: R-1.33
+    version: 2
+    domain: opportunities
+    stage: contract
+    why: a seeded Code With Us or Sprint With Us opportunity whose history holds a
+      private note carrying a file, so a test can observe it as author or
+      administrator and see it withheld from a vendor.
+    clause: the note and its attachments appear in the opportunity's history, which
+      only the author and administrators can see
+    from: build-slice-9-4
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-02T18:08:17.505Z

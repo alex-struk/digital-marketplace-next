@@ -30,6 +30,7 @@ import {
   NO_OPPORTUNITY_THERE,
   ONLY_ADMINISTRATORS_PUBLISH,
   OPPORTUNITY_INCOMPLETE,
+  OpportunityEvent,
   OpportunityViewer,
   completeCwuContent,
   cwuProblems,
@@ -58,13 +59,11 @@ import {
   CwuOpportunityStore,
   StoredCwuOpportunity,
 } from "./cwu-opportunity";
+import { ATTACHMENT_ACCESS, AttachmentAccess } from "./attachment-access";
+import { OpportunityRunningService, RunningAnswer, RunningSubject } from "./opportunity-running.service";
 
-/** Whether a person may read a stored file, for an opportunity that would carry it (R-8.22). */
-export interface AttachmentAccess {
-  mayRead(fileId: string, reader: OpportunityViewer | null): Promise<boolean>;
-}
-
-export const ATTACHMENT_ACCESS = Symbol("AttachmentAccess");
+export { ATTACHMENT_ACCESS } from "./attachment-access";
+export type { AttachmentAccess } from "./attachment-access";
 
 /** What time it is; a test can stand in for it. */
 export const CLOCK = Symbol("Clock");
@@ -106,6 +105,7 @@ export class CwuOpportunitiesService {
     @Inject(MAIL_SETTINGS) private readonly mail: Pick<MailSettings, "serviceOrigin" | "batchSize">,
     @Inject(CLOCK) private readonly clock: Clock,
     @Optional() private readonly watching?: WatchingService,
+    @Optional() private readonly running?: OpportunityRunningService,
   ) {}
 
   /** Every opportunity the person may read (R-1.2, R-1.3), with whether they watch each (R-1.5). */
@@ -144,12 +144,17 @@ export class CwuOpportunitiesService {
     return this.answer(created, viewer);
   }
 
-  /** One tagged change: an edit, a submission for review, or publication. */
+  /**
+   * One tagged change: an edit, a submission for review, publication, cancellation, an addendum
+   * or a private note.
+   */
   async change(viewer: OpportunityViewer | null, id: string, change: TaggedChange): Promise<CwuOpportunityAnswer> {
     const current = await this.readable(viewer, id);
     switch (change?.tag) {
       case "edit":
         await this.edit(viewer, current, change.value);
+        // A change to an opportunity under way tells its watchers, proponents and author (R-1.35).
+        await this.running?.announceEdit(subjectOf(current));
         break;
       case "submitForReview":
         await this.submitForReview(viewer, current);
@@ -157,10 +162,24 @@ export class CwuOpportunitiesService {
       case "publish":
         await this.publish(viewer, current);
         break;
+      case "cancel":
+        await this.mustRun().cancel(viewer, subjectOf(current), change.value);
+        break;
+      case "addAddendum":
+        await this.mustRun().addAddendum(viewer, subjectOf(current), change.value);
+        break;
+      case "addNote":
+        await this.mustRun().addNote(viewer, subjectOf(current), change.value);
+        break;
       default:
         throw new BadRequestException([ACTION_NOT_AVAILABLE]);
     }
     return this.answer(await this.mustFind(id), viewer);
+  }
+
+  private mustRun(): OpportunityRunningService {
+    if (!this.running) throw new BadRequestException([ACTION_NOT_AVAILABLE]);
+    return this.running;
   }
 
   /** Deletes a draft, or an opportunity under review, for those permitted (R-1.53). */
@@ -171,8 +190,13 @@ export class CwuOpportunitiesService {
     return answerFor(current, viewer);
   }
 
+  /** One opportunity, with its addenda, and its history and reporting figures as R-1.30 allows. */
   private async answer(opportunity: StoredCwuOpportunity, viewer: OpportunityViewer | null): Promise<CwuOpportunityAnswer> {
-    return answerFor(opportunity, viewer, (await this.watchedBy(viewer)).has(opportunity.id));
+    const [watched, running] = await Promise.all([
+      this.watchedBy(viewer),
+      this.running ? this.running.answerFor(viewer, subjectOf(opportunity)) : Promise.resolve(undefined),
+    ]);
+    return answerFor(opportunity, viewer, watched.has(opportunity.id), running);
   }
 
   private async watchedBy(viewer: OpportunityViewer | null): Promise<ReadonlySet<string>> {
@@ -307,6 +331,10 @@ function standingOf(opportunity: StoredCwuOpportunity) {
   return { status: opportunity.status, createdBy: opportunity.createdBy?.id ?? null };
 }
 
+function subjectOf(opportunity: StoredCwuOpportunity): RunningSubject {
+  return { program: "code-with-us", id: opportunity.id, title: opportunity.content.title, ...standingOf(opportunity) };
+}
+
 function briefOf(opportunity: StoredCwuOpportunity): OpportunityInBrief {
   return {
     id: opportunity.id,
@@ -331,12 +359,15 @@ export function mergedInput(content: CwuContent, value: unknown): CwuInput {
 /**
  * An opportunity as the person asking is answered with it. Who created and last changed it is
  * named only to an administrator and to those people (R-1.29); the history only to the author and
- * administrators (R-1.30).
+ * administrators (R-1.30). What running it has gathered — addenda, the history with the files its
+ * notes carry, the reporting figures — comes in `running`, already cut to what the person may see;
+ * without it, as in a list, the addenda are left out and the history is the stored one.
  */
 export function answerFor(
   opportunity: StoredCwuOpportunity,
   viewer: OpportunityViewer | null,
   subscribed = false,
+  running?: RunningAnswer,
 ): CwuOpportunityAnswer {
   const { content } = opportunity;
   const authorship = maySeeAuthorship(viewer, {
@@ -368,18 +399,28 @@ export function answerFor(
     acceptanceCriteria: content.acceptanceCriteria,
     evaluationCriteria: content.evaluationCriteria,
     attachments: opportunity.attachments,
-    addenda: [],
+    addenda: running?.addenda ?? [],
     subscribed,
     ...(manages
       ? {
-          history: opportunity.history.map((entry) => ({
-            createdAt: entry.createdAt.toISOString(),
-            createdBy: entry.createdBy,
-            status: entry.status,
-            event: entry.event,
-            note: entry.note,
-          })),
+          history: running?.history
+            ? running.history.map((entry) => ({
+                createdAt: entry.createdAt,
+                createdBy: entry.createdBy,
+                status: entry.status as CwuStatus | null,
+                event: entry.event as OpportunityEvent | null,
+                note: entry.note,
+                attachments: entry.attachments,
+              }))
+            : opportunity.history.map((entry) => ({
+                createdAt: entry.createdAt.toISOString(),
+                createdBy: entry.createdBy,
+                status: entry.status,
+                event: entry.event,
+                note: entry.note,
+              })),
         }
       : {}),
+    ...(running?.reporting ? { reporting: running.reporting } : {}),
   };
 }

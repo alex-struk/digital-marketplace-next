@@ -638,6 +638,205 @@ describe("managing a Code With Us opportunity", () => {
   });
 });
 
+describe("running a Code With Us opportunity after publication", () => {
+  const addendum = {
+    id: "00000000-0000-4000-8000-000000000a01",
+    createdAt: "2026-09-20T17:00:00.000Z",
+    createdBy: { id: staff.id, name: "Casey Placeholder" },
+    description: "The kick-off meeting will be held by video.",
+  };
+
+  it("offers an administrator Edit and Cancel opportunity on a published one, and cancels it with a note after confirming (R-1.28)", async () => {
+    const published = opportunity({ status: "PUBLISHED" });
+    serve((method) => (method === "PUT" ? json(200, { ...published, status: "CANCELED" }) : json(200, published)));
+    resetSessionForTests({ status: "signed-in", account: administrator }, fakeIdentity());
+    renderAt(`/opportunities/code-with-us/${ID}/edit`);
+    fireEvent.click(await screen.findByTestId("opportunity-cancel-button"));
+    expect(screen.getByTestId("opportunity-edit-button")).toBeTruthy();
+    expect(screen.queryByTestId("opportunity-delete-button")).toBeNull();
+    const dialog = await screen.findByTestId("opportunity-cancel-dialog");
+    expect(dialog.textContent).toContain("its author will be told separately");
+    type("opportunity-cancel-note-field", "Funding withdrawn.");
+    fireEvent.click(screen.getByTestId("opportunity-cancel-confirm"));
+
+    await waitFor(() => expect(screen.getByTestId("opportunity-status").textContent).toBe("Cancelled"));
+    expect(requests.find((request) => request.method === "PUT")?.body).toEqual({ tag: "cancel", value: "Funding withdrawn." });
+    // Nothing more can be done to a cancelled opportunity's state.
+    expect(screen.queryByTestId("opportunity-cancel-button")).toBeNull();
+    expect(screen.queryByTestId("opportunity-edit-button")).toBeNull();
+  });
+
+  it("keeps the opportunity when the administrator thinks better of it", async () => {
+    serve(() => json(200, opportunity({ status: "PUBLISHED" })));
+    resetSessionForTests({ status: "signed-in", account: administrator }, fakeIdentity());
+    renderAt(`/opportunities/code-with-us/${ID}/edit`);
+    fireEvent.click(await screen.findByTestId("opportunity-cancel-button"));
+    fireEvent.click(await screen.findByTestId("opportunity-dialog-cancel"));
+    await waitFor(() => expect(screen.queryByTestId("opportunity-cancel-dialog")).toBeNull());
+    expect(requests.filter((request) => request.method === "PUT")).toEqual([]);
+  });
+
+  it("offers Cancel opportunity to nobody but an administrator, and not on a draft or under review (R-1.28)", async () => {
+    for (const [who, status] of [
+      [staff, "PUBLISHED"],
+      [administrator, "DRAFT"],
+      [administrator, "UNDER_REVIEW"],
+    ] as const) {
+      serve(() => json(200, opportunity({ status })));
+      resetSessionForTests({ status: "signed-in", account: who }, fakeIdentity());
+      const { unmount } = renderAt(`/opportunities/code-with-us/${ID}/edit`);
+      await screen.findByTestId("opportunity-identifier");
+      expect(screen.queryByTestId("opportunity-cancel-button")).toBeNull();
+      unmount();
+      resetSessionForTests();
+    }
+  });
+
+  it("shows the reporting figures to the author once it is published (R-1.30)", async () => {
+    serve(() => json(200, opportunity({ status: "PUBLISHED", reporting: { numViews: 342, numWatchers: 12, numProposals: 5 } })));
+    resetSessionForTests({ status: "signed-in", account: staff }, fakeIdentity());
+    renderAt(`/opportunities/code-with-us/${ID}/edit`);
+    expect((await screen.findByTestId("reporting-views")).textContent).toBe("342");
+    expect(screen.getByTestId("reporting-watchers").textContent).toBe("12");
+    expect(screen.getByTestId("reporting-proposals").textContent).toBe("5");
+  });
+
+  it("lists the addenda on the Addenda tab and adds one from the author, saying who will be emailed (R-1.32, R-1.35)", async () => {
+    const published = opportunity({ status: "PUBLISHED", addenda: [addendum] });
+    serve((method, _path, body) =>
+      method === "PUT"
+        ? json(200, {
+            ...published,
+            addenda: [addendum, { ...addendum, id: "a2", description: (body as { value: string }).value }],
+          })
+        : json(200, published),
+    );
+    resetSessionForTests({ status: "signed-in", account: staff }, fakeIdentity());
+    renderAt(`/opportunities/code-with-us/${ID}/edit?tab=addenda`);
+    expect(await screen.findByRole("heading", { name: "Addendum of September 20, 2026" })).toBeTruthy();
+    expect(screen.getByText("Added by Casey Placeholder")).toBeTruthy();
+    expect(screen.getByText(/cannot be changed or removed once it is added. Everyone watching/)).toBeTruthy();
+
+    type("addendum-text-field", "Questions close a week early.");
+    fireEvent.click(screen.getByTestId("addendum-add-button"));
+    await screen.findByText("Questions close a week early.");
+    expect(requests.find((request) => request.method === "PUT")?.body).toEqual({ tag: "addAddendum", value: "Questions close a week early." });
+    expect(field("addendum-text-field").value).toBe("");
+  });
+
+  it("refuses an empty addendum or one over 5,000 characters on the form, sending nothing (R-1.32)", async () => {
+    serve(() => json(200, opportunity({ status: "PUBLISHED" })));
+    resetSessionForTests({ status: "signed-in", account: staff }, fakeIdentity());
+    renderAt(`/opportunities/code-with-us/${ID}/edit?tab=addenda`);
+    fireEvent.click(await screen.findByTestId("addendum-add-button"));
+    await waitFor(() => expect(screen.getByTestId("addendum-text-field").textContent).toContain("Enter the addendum."));
+    type("addendum-text-field", "x".repeat(5001));
+    fireEvent.click(screen.getByTestId("addendum-add-button"));
+    await waitFor(() => expect(screen.getByTestId("addendum-text-field").textContent).toContain("5,000"));
+    expect(requests.filter((request) => request.method === "PUT")).toEqual([]);
+  });
+
+  it("shows the addenda on the public page, without who added them", async () => {
+    const { createdBy: _c, updatedBy: _u, history: _h, ...asAVendorReadsIt } = opportunity({ status: "PUBLISHED", addenda: [addendum] });
+    serve(() => json(200, asAVendorReadsIt));
+    resetSessionForTests({ status: "signed-in", account: vendor }, fakeIdentity());
+    renderAt(`/opportunities/code-with-us/${ID}`);
+    const section = await screen.findByTestId("opportunity-addenda");
+    await waitFor(() => expect(section.textContent).toContain("The kick-off meeting will be held by video."));
+    expect(section.textContent).toContain("Addendum of September 20, 2026");
+    expect(section.textContent).not.toContain("Casey Placeholder");
+  });
+
+  it("shows a private note and its file on the History tab, and offers no way to add one (R-1.33)", async () => {
+    const stored = { id: "00000000-0000-4000-8000-000000000990", name: "budget-approval.pdf" };
+    const published = opportunity({ status: "PUBLISHED" });
+    serve(() =>
+      json(200, {
+        ...published,
+        history: [
+          { createdAt: "2026-09-30T18:00:00.000Z", createdBy: { id: staff.id, name: "Casey Placeholder" }, status: null, event: "NOTE_ADDED", note: "Confirmed the budget.", attachments: [stored] },
+          ...published.history,
+        ],
+      }),
+    );
+    resetSessionForTests({ status: "signed-in", account: staff }, fakeIdentity());
+    renderAt(`/opportunities/code-with-us/${ID}/edit?tab=history`);
+
+    const table = await screen.findByRole("table");
+    await waitFor(() => expect(within(table).getAllByRole("row")[1]?.textContent).toContain("Attachment: budget-approval.pdf"));
+    expect(within(table).getAllByRole("row")[1]?.children[1]?.textContent).toBe("Note");
+    expect(within(table).getAllByRole("row")[1]?.textContent).toContain("Confirmed the budget.");
+    expect(screen.queryByTestId("history-add-note-button")).toBeNull();
+    expect(screen.queryByTestId("note-text-field")).toBeNull();
+    expect(screen.queryByText("Add a private note")).toBeNull();
+  });
+});
+
+describe("running a Sprint With Us or Team With Us opportunity before slice 10 (decision record 0043)", () => {
+  const SPRINT = "00000000-0000-4000-8000-000000000711";
+  const sprint = (overrides: Record<string, unknown> = {}) => ({
+    id: SPRINT,
+    program: "sprint-with-us",
+    createdAt: "2026-09-30T17:00:00.000Z",
+    updatedAt: "2026-09-30T17:00:00.000Z",
+    createdBy: { id: staff.id, name: "Casey Placeholder" },
+    updatedBy: { id: staff.id, name: "Casey Placeholder" },
+    status: "EVAL_QUESTIONS_INDIVIDUAL",
+    publishedAt: "2026-08-01T17:00:00.000Z",
+    title: "Seeded closed Sprint With Us opportunity",
+    teaser: "",
+    location: "Victoria",
+    remoteOk: false,
+    remoteDesc: "",
+    description: "",
+    proposalDeadline: "2026-09-01",
+    assignmentDate: "2026-09-15",
+    totalMaxBudget: 500000,
+    subscribed: false,
+    addenda: [],
+    history: [],
+    reporting: { numViews: 4, numWatchers: 1, numProposals: 3 },
+    ...overrides,
+  });
+
+  it("lets an administrator cancel one at an evaluation stage, and shows its figures and tabs", async () => {
+    serve((method) => (method === "PUT" ? json(200, sprint({ status: "CANCELED" })) : json(200, sprint())));
+    resetSessionForTests({ status: "signed-in", account: administrator }, fakeIdentity());
+    renderAt(`/opportunities/sprint-with-us/${SPRINT}/edit`);
+    expect((await screen.findByTestId("reporting-proposals")).textContent).toBe("3");
+    expect(screen.getByTestId("opportunity-tab-addenda")).toBeTruthy();
+    expect(screen.getByTestId("opportunity-tab-history")).toBeTruthy();
+    fireEvent.click(screen.getByTestId("opportunity-cancel-button"));
+    fireEvent.click(await screen.findByTestId("opportunity-cancel-confirm"));
+    await waitFor(() => expect(screen.getByTestId("opportunity-status").textContent).toBe("Cancelled"));
+    expect(requests.find((request) => request.method === "PUT")).toMatchObject({
+      address: `/api/opportunities/sprint-with-us/${SPRINT}`,
+      body: { tag: "cancel", value: "" },
+    });
+  });
+
+  it("offers the author an addendum, and no private note on either program's history (R-1.33)", async () => {
+    serve(() => json(200, sprint()));
+    resetSessionForTests({ status: "signed-in", account: staff }, fakeIdentity());
+    const first = renderAt(`/opportunities/sprint-with-us/${SPRINT}/edit?tab=addenda`);
+    await screen.findByTestId("addendum-add-button");
+    expect(screen.queryByTestId("opportunity-cancel-button")).toBeNull();
+    first.unmount();
+
+    resetSessionForTests({ status: "signed-in", account: staff }, fakeIdentity());
+    const second = renderAt(`/opportunities/sprint-with-us/${SPRINT}/edit?tab=history`);
+    await screen.findByRole("table");
+    expect(screen.queryByTestId("history-add-note-button")).toBeNull();
+    second.unmount();
+
+    serve(() => json(200, { ...sprint({ program: "team-with-us", maxBudget: 300000 }), totalMaxBudget: undefined }));
+    resetSessionForTests({ status: "signed-in", account: staff }, fakeIdentity());
+    renderAt(`/opportunities/team-with-us/${SPRINT}/edit?tab=history`);
+    await screen.findByRole("table");
+    expect(screen.queryByTestId("history-add-note-button")).toBeNull();
+  });
+});
+
 describe("what a machine can check of WCAG 2.1 AA on these screens (P1)", () => {
   async function problemsIn(container: HTMLElement): Promise<string[]> {
     const results = await axe.run(container, {
@@ -664,6 +863,21 @@ describe("what a machine can check of WCAG 2.1 AA on these screens (P1)", () => 
       expect(await problemsIn(container)).toEqual([]);
     }, 30_000);
   }
+
+  it("has nothing to answer for on a published opportunity's Summary and Addenda tabs", async () => {
+    const addendum = { id: "a1", createdAt: "2026-09-20T17:00:00.000Z", createdBy: { id: staff.id, name: "Casey Placeholder" }, description: "By video." };
+    serve(() => json(200, opportunity({ status: "PUBLISHED", addenda: [addendum], reporting: { numViews: 1, numWatchers: 2, numProposals: 3 } })));
+    for (const [tab, ready] of [
+      ["summary", "reporting-views"],
+      ["addenda", "addendum-add-button"],
+    ] as const) {
+      resetSessionForTests({ status: "signed-in", account: staff }, fakeIdentity());
+      const { container, unmount } = renderAt(`/opportunities/code-with-us/${ID}/edit?tab=${tab}`);
+      await screen.findByTestId(ready);
+      expect(await problemsIn(container)).toEqual([]);
+      unmount();
+    }
+  }, 30_000);
 
   it("has nothing to answer for on the dashboard's table", async () => {
     serve(() => json(200, [opportunity()]));

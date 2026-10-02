@@ -114,10 +114,27 @@ A signed-in person watches an opportunity they did not create from its card or i
 (`/api/subscribers/<program>`), and turns the new-opportunity emails on or off from the control at
 the top of the list, which saves at once. Opening a Code With Us opportunity's page counts a view
 (`PUT /api/counters/opportunity.code-with-us.<id>.views`); counts are read at
-`GET /api/counters?counters=<name>`. The home page's awarded figures come from `/api/metrics`.
+`GET /api/counters?counters=<name>`, by public sector staff and administrators only (decision
+record 0043). The home page's awarded figures come from `/api/metrics`.
 Decision record 0034 has the answers; a refused watch is filed under the reason the contract
 names — `conflict` for a second watch, `opportunity` for one's own, `notFound`, `permissions` —
 rather than under `errors` (decision record 0037).
+
+## Running an opportunity after publication
+
+On the manage page an administrator cancels a published opportunity, or one at an evaluation stage
+or in processing, with an optional note; the author or an administrator adds an addendum on the
+Addenda tab once it is no longer a draft; the History tab shows every entry, private notes and
+their files included, to them alone, but no screen offers a way to add a note (R-1.33); the Summary
+tab reports views, watchers and submitted proposals to them once it is published. The service
+takes these as `cancel`, `addAddendum` and `addNote` on `PUT /api/opportunities/<program>/<id>` in
+all three programs (the client sends only the first two), and answers with `addenda`,
+`history` and `reporting` as R-1.30 allows. An addendum or an administrator's edit emails the
+watchers, proponents and author once each, a cancellation emails the watchers and proponents and
+the author separately, and no message goes to a deactivated account. The logic is
+`backend/src/opportunities/opportunity-running.service.ts`, the rules
+`backend/src/rules/opportunities.ts`, the screens' pieces `frontend/src/screens/opportunity-running.tsx`
+(decision record 0043).
 
 ## Screens and dates
 

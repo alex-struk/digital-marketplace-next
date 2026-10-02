@@ -6,7 +6,8 @@
 // whole kept schema, because signing in reads and writes `users` and every other table
 // refers to it; slice 3 pulled again after adding the three file read-access tables; slice 7
 // pulled again after adding the Code With Us attachments and the opportunity state checks;
-// slice 8 pulled again after adding the three programs' watcher tables and the view counters.
+// slice 8 pulled again after adding the three programs' watcher tables and the view counters;
+// slice 9 pulled again after adding the three programs' addenda and the note attachments.
 // The names below are Prisma's, not this project's. Nothing here is edited by hand except this
 // comment, which a pull replaces and which is put back afterwards.
 
@@ -60,6 +61,7 @@ model cwuOpportunities {
   createdAt                 DateTime                    @db.Timestamptz(6)
   createdBy                 String?                     @db.Uuid
   users                     users?                      @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuopportunities_createdby_foreign")
+  cwuOpportunityAddenda     cwuOpportunityAddenda[]
   cwuOpportunityStatuses    cwuOpportunityStatuses[]
   cwuOpportunitySubscribers cwuOpportunitySubscribers[]
   cwuOpportunityVersions    cwuOpportunityVersions[]
@@ -67,15 +69,16 @@ model cwuOpportunities {
 }
 
 model cwuOpportunityStatuses {
-  id               String           @id @db.Uuid
-  createdAt        DateTime         @db.Timestamptz(6)
-  createdBy        String?          @db.Uuid
-  opportunity      String           @db.Uuid
-  status           String?
-  event            String?
-  note             String?
-  users            users?           @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuopportunitystatuses_createdby_foreign")
-  cwuOpportunities cwuOpportunities @relation(fields: [opportunity], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cwuopportunitystatuses_opportunity_foreign")
+  id                            String                          @id @db.Uuid
+  createdAt                     DateTime                        @db.Timestamptz(6)
+  createdBy                     String?                         @db.Uuid
+  opportunity                   String                          @db.Uuid
+  status                        String?
+  event                         String?
+  note                          String?
+  cwuOpportunityNoteAttachments cwuOpportunityNoteAttachments[]
+  users                         users?                          @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuopportunitystatuses_createdby_foreign")
+  cwuOpportunities              cwuOpportunities                @relation(fields: [opportunity], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cwuopportunitystatuses_opportunity_foreign")
 }
 
 model cwuOpportunityVersions {
@@ -110,20 +113,22 @@ model fileBlobs {
 }
 
 model files {
-  id                                 String                      @id @db.Uuid
-  createdAt                          DateTime                    @db.Timestamptz(6)
-  createdBy                          String?                     @db.Uuid
+  id                                 String                          @id @db.Uuid
+  createdAt                          DateTime                        @db.Timestamptz(6)
+  createdBy                          String?                         @db.Uuid
   name                               String
   fileBlob                           String
   cwuOpportunityAttachments          cwuOpportunityAttachments[]
+  cwuOpportunityNoteAttachments      cwuOpportunityNoteAttachments[]
   filePermissionsPublic              filePermissionsPublic?
   filePermissionsUser                filePermissionsUser[]
   filePermissionsUserType            filePermissionsUserType[]
-  users_files_createdByTousers       users?                      @relation("files_createdByTousers", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "files_createdby_foreign")
-  fileBlobs                          fileBlobs                   @relation(fields: [fileBlob], references: [hash], onDelete: NoAction, onUpdate: NoAction, map: "files_fileblob_foreign")
+  users_files_createdByTousers       users?                          @relation("files_createdByTousers", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "files_createdby_foreign")
+  fileBlobs                          fileBlobs                       @relation(fields: [fileBlob], references: [hash], onDelete: NoAction, onUpdate: NoAction, map: "files_fileblob_foreign")
   organizations                      organizations[]
+  swuOpportunityNoteAttachments      swuOpportunityNoteAttachments[]
   twuProposalAttachments             twuProposalAttachments[]
-  users_users_avatarImageFileTofiles users[]                     @relation("users_avatarImageFileTofiles")
+  users_users_avatarImageFileTofiles users[]                         @relation("users_avatarImageFileTofiles")
 }
 
 model knex_migrations {
@@ -203,6 +208,7 @@ model swuOpportunities {
   createdAt                 DateTime                    @db.Timestamptz(6)
   createdBy                 String?                     @db.Uuid
   users                     users?                      @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "swuopportunities_createdby_foreign")
+  swuOpportunityAddenda     swuOpportunityAddenda[]
   swuOpportunityStatuses    swuOpportunityStatuses[]
   swuOpportunitySubscribers swuOpportunitySubscribers[]
   swuOpportunityVersions    swuOpportunityVersions[]
@@ -224,15 +230,16 @@ model swuOpportunityPhases {
 }
 
 model swuOpportunityStatuses {
-  id               String           @id @db.Uuid
-  createdAt        DateTime         @db.Timestamptz(6)
-  createdBy        String?          @db.Uuid
-  opportunity      String           @db.Uuid
-  status           String?
-  event            String?
-  note             String?
-  users            users?           @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "swuopportunitystatuses_createdby_foreign")
-  swuOpportunities swuOpportunities @relation(fields: [opportunity], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "swuopportunitystatuses_opportunity_foreign")
+  id                            String                          @id @db.Uuid
+  createdAt                     DateTime                        @db.Timestamptz(6)
+  createdBy                     String?                         @db.Uuid
+  opportunity                   String                          @db.Uuid
+  status                        String?
+  event                         String?
+  note                          String?
+  swuOpportunityNoteAttachments swuOpportunityNoteAttachments[]
+  users                         users?                          @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "swuopportunitystatuses_createdby_foreign")
+  swuOpportunities              swuOpportunities                @relation(fields: [opportunity], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "swuopportunitystatuses_opportunity_foreign")
 }
 
 model swuOpportunityVersions {
@@ -387,6 +394,7 @@ model twuOpportunities {
   createdAt                 DateTime                    @db.Timestamptz(6)
   createdBy                 String?                     @db.Uuid
   users                     users?                      @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "twuopportunities_createdby_foreign")
+  twuOpportunityAddenda     twuOpportunityAddenda[]
   twuOpportunityStatuses    twuOpportunityStatuses[]
   twuOpportunitySubscribers twuOpportunitySubscribers[]
   twuOpportunityVersions    twuOpportunityVersions[]
@@ -551,6 +559,7 @@ model users {
   content                                                content[]
   contentVersions                                        contentVersions[]
   cwuOpportunities                                       cwuOpportunities[]
+  cwuOpportunityAddenda                                  cwuOpportunityAddenda[]
   cwuOpportunityStatuses                                 cwuOpportunityStatuses[]
   cwuOpportunitySubscribers                              cwuOpportunitySubscribers[]
   cwuOpportunityVersions                                 cwuOpportunityVersions[]
@@ -565,6 +574,7 @@ model users {
   sessions                                               sessions[]
   swuEvaluationPanelMembers                              swuEvaluationPanelMembers[]
   swuOpportunities                                       swuOpportunities[]
+  swuOpportunityAddenda                                  swuOpportunityAddenda[]
   swuOpportunityPhases                                   swuOpportunityPhases[]
   swuOpportunityStatuses                                 swuOpportunityStatuses[]
   swuOpportunitySubscribers                              swuOpportunitySubscribers[]
@@ -581,6 +591,7 @@ model users {
   swuTeamQuestions                                       swuTeamQuestions[]
   twuEvaluationPanelMembers                              twuEvaluationPanelMembers[]
   twuOpportunities                                       twuOpportunities[]
+  twuOpportunityAddenda                                  twuOpportunityAddenda[]
   twuOpportunityStatuses                                 twuOpportunityStatuses[]
   twuOpportunitySubscribers                              twuOpportunitySubscribers[]
   twuOpportunityVersions                                 twuOpportunityVersions[]
@@ -833,4 +844,52 @@ model twuOpportunitySubscribers {
 model viewCounters {
   name  String @id @db.VarChar(255)
   count Int    @default(0)
+}
+
+model cwuOpportunityAddenda {
+  id               String           @id @db.Uuid
+  opportunity      String           @db.Uuid
+  description      String
+  createdAt        DateTime         @db.Timestamptz(6)
+  createdBy        String?          @db.Uuid
+  users            users?           @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuopportunityaddenda_createdby_foreign")
+  cwuOpportunities cwuOpportunities @relation(fields: [opportunity], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cwuopportunityaddenda_opportunity_foreign")
+}
+
+model cwuOpportunityNoteAttachments {
+  event                  String                 @db.Uuid
+  file                   String                 @db.Uuid
+  cwuOpportunityStatuses cwuOpportunityStatuses @relation(fields: [event], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cwuopportunitynoteattachments_event_foreign")
+  files                  files                  @relation(fields: [file], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuopportunitynoteattachments_file_foreign")
+
+  @@id([event, file])
+}
+
+model swuOpportunityAddenda {
+  id               String           @id @db.Uuid
+  opportunity      String           @db.Uuid
+  description      String
+  createdAt        DateTime         @db.Timestamptz(6)
+  createdBy        String?          @db.Uuid
+  users            users?           @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "swuopportunityaddenda_createdby_foreign")
+  swuOpportunities swuOpportunities @relation(fields: [opportunity], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "swuopportunityaddenda_opportunity_foreign")
+}
+
+model swuOpportunityNoteAttachments {
+  event                  String                 @db.Uuid
+  file                   String                 @db.Uuid
+  swuOpportunityStatuses swuOpportunityStatuses @relation(fields: [event], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "swuopportunitynoteattachments_event_foreign")
+  files                  files                  @relation(fields: [file], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "swuopportunitynoteattachments_file_foreign")
+
+  @@id([event, file])
+}
+
+model twuOpportunityAddenda {
+  id               String           @id @db.Uuid
+  opportunity      String           @db.Uuid
+  description      String
+  createdAt        DateTime         @db.Timestamptz(6)
+  createdBy        String?          @db.Uuid
+  users            users?           @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "twuopportunityaddenda_createdby_foreign")
+  twuOpportunities twuOpportunities @relation(fields: [opportunity], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "twuopportunityaddenda_opportunity_foreign")
 }

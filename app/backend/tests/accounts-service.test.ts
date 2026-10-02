@@ -114,7 +114,9 @@ let service: AccountsService;
 beforeEach(() => {
   store = new AccountsInMemory();
   sent = [];
-  const mailer = { send: vi.fn((envelope: Envelope) => sent.push(envelope)) } as unknown as Mailer;
+  const mailer = {
+    send: vi.fn((envelope: Envelope) => sent.push(envelope)),
+  } as unknown as Mailer;
   service = new AccountsService(store, mailer, {
     serviceOrigin: "http://localhost:4300",
     contactEmail: "digitalmarketplace@example.test",

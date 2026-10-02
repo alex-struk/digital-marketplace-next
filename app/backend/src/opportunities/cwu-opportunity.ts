@@ -1,4 +1,5 @@
 import { FileRecord } from "../files/file";
+import type { ReportingFigures } from "./opportunity-records";
 import { CwuContent, CwuStatus, OpportunityEvent } from "../rules/opportunities";
 
 /** A person named against an opportunity: who created it, who last changed it. */
@@ -97,15 +98,25 @@ export interface CwuOpportunityAnswer {
   readonly acceptanceCriteria: string;
   readonly evaluationCriteria: string;
   readonly attachments: readonly FileRecord[];
-  readonly addenda: readonly never[];
+  /** Every addendum, oldest first, to anyone who may read it (R-1.32). */
+  readonly addenda: readonly {
+    readonly id: string;
+    readonly createdAt: string;
+    readonly createdBy: Person | null;
+    readonly description: string;
+  }[];
   /** Whether the person asking watches it; false for a visitor (R-1.5). */
   readonly subscribed: boolean;
-  /** Present only for the author and administrators (R-1.30). */
+  /** Present only for the author and administrators (R-1.30); newest first. */
   readonly history?: readonly {
     readonly createdAt: string;
     readonly createdBy: Person | null;
     readonly status: CwuStatus | null;
     readonly event: OpportunityEvent | null;
     readonly note: string | null;
+    /** The files a note carries (R-1.33). */
+    readonly attachments?: readonly FileRecord[];
   }[];
+  /** Present only for the author and administrators, once it has been published (R-1.30). */
+  readonly reporting?: ReportingFigures;
 }

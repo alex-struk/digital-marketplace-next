@@ -1,0 +1,20 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Does slice 9 do what its criteria say? Approve. The verify result for this proposal is current (application tree f1cc08d) and reads pass-unasserted. R-1.20, R-1.28, R-1.30, R-1.32 and R-6.17 were run against the application and passed. The code matches them: cancellation is an administrator's alone and is checked against the program's path; addenda are 1 to 5,000 characters, are never removable and are announced unless the opportunity is a draft or cancelled; history and reporting figures go only to the author and administrators, and the figures only after publication; counters are read only by public sector staff and administrators; and the mailer drops addresses held only by deactivated accounts at the moment of sending, except the deactivation notices. Unit and end-to-end tests cover these seams. The owed instruction build-slice-9-3#6 is carried out: no NoteForm or addNote remains in app/frontend/src outside the generated contract types, and the README and decision record 0043 say the History tab shows notes but no screen adds one. R-1.33 v2 is accepted unasserted because its not-testable reason is real. The surface still declares add_note, which the criterion says does not exist, and no seeded opportunity has a private note with a file in its history, so there is nothing to observe. The backend end-to-end tests exercise the service path and who can read it, and the missing pieces are recorded below as owed by design and contract. The owed tests for R-1.20 and R-6.17 were recorded as 'a test for v1 exists and has not run'. Both have now run at v1 on this tree and passed, so they are withdrawn. This ruling would change if a current verify result showed any of the five claimed criteria failing, or if a note-adding control reappeared on a screen.
+conditions:
+  - "condition-met build-slice-9-3#6: NoteForm and the client's addNote action are removed from app/frontend/src/screens/opportunity-cwu-edit.tsx, opportunity-other-manage.tsx, opportunity-running.tsx and app/frontend/src/api/opportunities.ts (a search of app/frontend/src finds addNote only in the generated contract.d.ts); the service's addNote and the History tab's display of notes and their files are kept; app/README.md and docs/decisions/0043 describe the History tab as showing notes with no screen adding one."
+  - "condition-withdrawn missing-test/R-1.20: tests/acceptance/opportunities/R-1.20.spec.ts ran at v1 against application tree f1cc08d and passed in every case (tests/results/new/slice-9.json)."
+  - "condition-withdrawn missing-test/R-6.17: tests/acceptance/notifications/R-6.17.spec.ts ran at v1 against application tree f1cc08d and passed in every case (tests/results/new/slice-9.json)."
+  - "missing-test R-1.33: the note and its attachments appear in the opportunity's history, which only the author and administrators can see — owed by contract: a seeded Code With Us or Sprint With Us opportunity whose history holds a private note carrying a file, so a test can observe it as author or administrator and see it withheld from a vendor."
+  - "missing-test R-1.33: no screen of the application offers a way to add a private note — owed by design: the surface still declares add_note on opportunity-cwu-edit and opportunity-swu-edit, which contradicts the criterion and has to be removed before this clause can be asserted."
+cost: 0.8091298
+turns: 4
+session: "de7b8d5b-1570-4ead-80a8-5ea48511f114"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-02T18:08:15.657Z

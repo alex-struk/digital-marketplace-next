@@ -242,6 +242,87 @@ export function maySeeAuthorship(
   return isAdministrator(viewer) || viewer.id === people.createdBy || viewer.id === people.updatedBy;
 }
 
+/**
+ * Only an administrator cancels an opportunity (R-1.28). Whether the opportunity is in a state it
+ * may be cancelled from — published, an evaluation stage or processing — is the program's path's
+ * question (R-1.20), asked separately so each refusal says what it is about.
+ */
+export function mayCancelOpportunity(viewer: OpportunityViewer | null): boolean {
+  return isAdministrator(viewer);
+}
+
+/**
+ * An addendum is added by an administrator or by the member of staff who created the
+ * opportunity, to any opportunity that is no longer a draft (R-1.32).
+ */
+export function mayAddAddendum(viewer: OpportunityViewer | null, opportunity: OpportunityStanding): boolean {
+  return opportunity.status !== "DRAFT" && mayManageOpportunity(viewer, opportunity);
+}
+
+/**
+ * A private note goes on the history of a Code With Us or Sprint With Us opportunity, from an
+ * administrator or its author, at any point in its life (R-1.33). Team With Us has no notes.
+ */
+export function mayAddNote(program: Program, viewer: OpportunityViewer | null, opportunity: OpportunityStanding): boolean {
+  return program !== "team-with-us" && mayManageOpportunity(viewer, opportunity);
+}
+
+/**
+ * Whether changing an opportunity, or adding an addendum to it, tells its watchers, proponents and
+ * author: unless it is a draft or has been cancelled (R-1.35).
+ */
+export function changeIsAnnounced(status: OpportunityStatus): boolean {
+  return status !== "DRAFT" && status !== "CANCELED";
+}
+
+/**
+ * The reporting figures — views, watchers, proposals submitted — are shown to the author and
+ * administrators, and to them only once the opportunity has been published (R-1.30 and its note).
+ */
+export function maySeeReporting(viewer: OpportunityViewer | null, opportunity: OpportunityStanding): boolean {
+  return !isUnpublished(opportunity.status) && mayManageOpportunity(viewer, opportunity);
+}
+
+/**
+ * The counts behind those figures are read by name only by public sector staff and
+ * administrators; a vendor or a visitor is refused (R-1.30; surface: opportunity-counters).
+ */
+export function mayReadCounters(viewer: OpportunityViewer | null): boolean {
+  return isStaff(viewer);
+}
+
+export const NOT_PERMITTED_TO_READ_COUNTERS = "Only public sector employees may read an opportunity's counts.";
+
+export const ADDENDUM_MAX = 5_000;
+export const NOTE_MAX = 1_000;
+
+/** What is wrong with an addendum's text, or null: 1 to 5,000 characters (R-1.32). */
+export function addendumProblem(text: unknown): string | null {
+  if (typeof text !== "string" || text.trim() === "") return "Enter the addendum.";
+  if (text.length > ADDENDUM_MAX) return `Enter an addendum of up to ${ADDENDUM_MAX.toLocaleString("en-CA")} characters.`;
+  return null;
+}
+
+/** What is wrong with a private note's text, or null: 1 to 1,000 characters (R-1.33). */
+export function noteProblem(text: unknown): string | null {
+  if (typeof text !== "string" || text.trim() === "") return "Enter the note.";
+  if (text.length > NOTE_MAX) return `Enter a note of up to ${NOTE_MAX.toLocaleString("en-CA")} characters.`;
+  return null;
+}
+
+/** What is wrong with a cancellation's note, or null: it may be left out, and is up to 1,000 characters (R-1.28). */
+export function cancellationNoteProblem(text: unknown): string | null {
+  if (text === undefined || text === null) return null;
+  if (typeof text !== "string") return "Enter the note as words.";
+  if (text.length > NOTE_MAX) return `Enter a note of up to ${NOTE_MAX.toLocaleString("en-CA")} characters.`;
+  return null;
+}
+
+export const ONLY_ADMINISTRATORS_CANCEL = "Only an administrator may cancel an opportunity.";
+export const NOT_PERMITTED_TO_ADD_ADDENDUM =
+  "Only an administrator or the opportunity's author may add an addendum, and not to a draft.";
+export const NOT_PERMITTED_TO_ADD_NOTE = "Only an administrator or the opportunity's author may add a note.";
+
 export const NOT_PERMITTED_TO_CREATE = "Only public sector employees may create opportunities.";
 export const ONLY_ADMINISTRATORS_PUBLISH = "Only an administrator may publish an opportunity.";
 export const NOT_PERMITTED_TO_EDIT = "You are not permitted to change this opportunity.";
@@ -301,13 +382,13 @@ function offsetMinutes(instant: Date, timeZone: string): number {
   return Math.round((asUtc - instant.getTime()) / 60_000);
 }
 
-/** The calendar day an instant falls on in Pacific time. */
 /** The calendar day and the time of day an instant falls at in Pacific time, as every screen shows a moment. */
 export function pacificClockOf(instant: Date): { year: number; month: number; day: number; hour: number; minute: number } {
   const p = partsIn(instant, OPPORTUNITY_TIME_ZONE);
   return { year: p.year!, month: p.month!, day: p.day!, hour: p.hour! % 24, minute: p.minute! };
 }
 
+/** The calendar day an instant falls on in Pacific time. */
 export function pacificDayOf(instant: Date): CalendarDay {
   const p = partsIn(instant, OPPORTUNITY_TIME_ZONE);
   return `${String(p.year).padStart(4, "0")}-${String(p.month).padStart(2, "0")}-${String(p.day).padStart(2, "0")}`;

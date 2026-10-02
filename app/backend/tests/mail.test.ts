@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { MailLog, Mailer, MailTransport, OutgoingMail } from "../src/mail/mailer";
+import { MailLog, Mailer, MailTransport, OutgoingMail, RecipientStanding } from "../src/mail/mailer";
 import { Envelope, Message } from "../src/mail/message";
 import { renderHtml, renderText, render } from "../src/mail/render";
 import { mailSettingsFrom, parseSender, MailSettings } from "../src/mail/settings";
@@ -234,5 +234,52 @@ describe("the welcome message (R-4.2)", () => {
 
     expect(await mailer.deliver(welcome({ email: null }, "http://localhost:4300"))).toBe("no-recipient");
     expect(transport.sent).toEqual([]);
+  });
+});
+
+describe("an address held only by a deactivated account (R-6.17)", () => {
+  const deactivated: RecipientStanding = {
+    deactivatedOnly: async (addresses) =>
+      new Set(addresses.map((address) => address.toLowerCase()).filter((address) => address.startsWith("gone"))),
+  };
+
+  function guardedMailer(standing: RecipientStanding = deactivated) {
+    const transport = new RecordingTransport();
+    const log = vi.fn<MailLog>();
+    return { mailer: new Mailer(settings, transport, log, standing), transport, log };
+  }
+
+  it("is taken out of a batch as the message goes, and the rest still receive it", async () => {
+    const { mailer, transport } = guardedMailer();
+
+    await mailer.deliver(envelope([], ["vendor.one@example.test", "Gone.Watcher@example.test", "proponent.two@example.test"]));
+
+    expect(transport.sent).toHaveLength(1);
+    expect(transport.sent[0]?.bcc).toEqual(["vendor.one@example.test", "proponent.two@example.test"]);
+  });
+
+  it("is sent nothing when it was the only recipient", async () => {
+    const { mailer, transport } = guardedMailer();
+
+    expect(await mailer.deliver(envelope(["gone.watcher@example.test"]))).toBe("no-recipient");
+    expect(transport.sent).toEqual([]);
+  });
+
+  it("still receives the notice that its account has been deactivated (R-4.9, R-4.30)", async () => {
+    const { mailer, transport } = guardedMailer();
+    for (const kind of ["deactivated-own-account", "deactivated-by-administrator"]) {
+      await mailer.deliver({ to: ["gone.watcher@example.test"], message: { ...message, kind } });
+    }
+
+    expect(transport.sent.map((mail) => mail.to)).toEqual([["gone.watcher@example.test"], ["gone.watcher@example.test"]]);
+  });
+
+  it("is never guessed at: when the accounts cannot be read the message is not sent, and only the log knows", async () => {
+    const failing: RecipientStanding = { deactivatedOnly: async () => Promise.reject(new Error("down")) };
+    const { mailer, transport, log } = guardedMailer(failing);
+
+    expect(await mailer.deliver(envelope(["vendor.one@example.test"]))).toBe("not-delivered");
+    expect(transport.sent).toEqual([]);
+    expect(log).toHaveBeenCalledWith(expect.objectContaining({ event: "mail-not-delivered" }));
   });
 });

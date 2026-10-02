@@ -1,7 +1,17 @@
 import type { OtherProgram, SwuPhase } from "@rules/other-program-drafts";
 import { ListedOpportunity, readListedOpportunity } from "./opportunity-list";
 import { api } from "./client";
-import { reasonsIn } from "./opportunities";
+import {
+  Addendum,
+  HistoryEntry,
+  Reporting,
+  RunningAction,
+  readAddenda,
+  readHistory,
+  readReporting,
+  reasonsIn,
+  runningBody,
+} from "./opportunities";
 
 /**
  * A Sprint With Us or Team With Us opportunity until slice 10: created from what its interim
@@ -12,6 +22,12 @@ import { reasonsIn } from "./opportunities";
 export interface OtherProgramOpportunity extends ListedOpportunity {
   readonly updatedBy?: { readonly id: string; readonly name: string } | null;
   readonly assignmentDate: string;
+  /** Every addendum, oldest first (R-1.32). */
+  readonly addenda: readonly Addendum[];
+  /** The author and administrators only (R-1.30). */
+  readonly history?: readonly HistoryEntry[];
+  /** The author and administrators only, once it has been published (R-1.30). */
+  readonly reporting?: Reporting;
 }
 
 /** A phase's dates as entered; Sprint With Us. */
@@ -82,7 +98,33 @@ export function readOtherProgramOpportunity(program: OtherProgram, value: unknow
       ? { updatedBy: updatedBy && typeof updatedBy.id === "string" && typeof updatedBy.name === "string" ? { id: updatedBy.id, name: updatedBy.name } : null }
       : {}),
     assignmentDate: typeof record.assignmentDate === "string" ? record.assignmentDate : "",
+    addenda: readAddenda(record.addenda),
+    ...("history" in record ? { history: readHistory(record.history) } : {}),
+    ...(readReporting(record.reporting) ? { reporting: readReporting(record.reporting)! } : {}),
   };
+}
+
+/** Cancelling, an addendum or, for Sprint With Us, a private note (decision record 0043). */
+export async function runOtherProgramOpportunity(
+  program: OtherProgram,
+  id: string,
+  action: RunningAction,
+): Promise<OtherProgramSaveAnswer> {
+  try {
+    const request = { params: { path: { id } }, body: runningBody(action) as never };
+    const { data, error, response } =
+      program === "sprint-with-us"
+        ? await api.PUT("/api/opportunities/sprint-with-us/{id}", request)
+        : await api.PUT("/api/opportunities/team-with-us/{id}", request);
+    if (response.ok) {
+      const opportunity = readOtherProgramOpportunity(program, data);
+      return opportunity ? { kind: "saved", opportunity } : { kind: "failed" };
+    }
+    const reasons = reasonsIn(error);
+    return reasons.length > 0 ? { kind: "refused", reasons } : { kind: "failed" };
+  } catch {
+    return { kind: "failed" };
+  }
 }
 
 /**

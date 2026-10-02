@@ -1,5 +1,7 @@
 import { Global, Logger, Module } from "@nestjs/common";
 import { MAIL_SETTINGS, MAIL_TRANSPORT, MailLog, Mailer, MailTransport } from "./mailer";
+import { PrismaService } from "../prisma/prisma.service";
+import { PrismaRecipientStanding } from "./prisma-recipient-standing";
 import { MailSettings, mailSettingsFrom } from "./settings";
 import { SmtpTransport } from "./smtp.transport";
 
@@ -27,9 +29,9 @@ const mailLog: MailLog = (entry) => {
     },
     {
       provide: Mailer,
-      inject: [MAIL_SETTINGS, MAIL_TRANSPORT],
-      useFactory: (settings: MailSettings, transport: MailTransport) =>
-        new Mailer(settings, transport, mailLog),
+      inject: [MAIL_SETTINGS, MAIL_TRANSPORT, PrismaService],
+      useFactory: (settings: MailSettings, transport: MailTransport, prisma: PrismaService) =>
+        new Mailer(settings, transport, mailLog, new PrismaRecipientStanding(prisma)),
     },
   ],
   exports: [MAIL_SETTINGS, Mailer],

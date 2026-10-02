@@ -8,6 +8,9 @@ import { OPPORTUNITY_VIEWERS, CwuOpportunitiesController } from "./cwu-opportuni
 import { ATTACHMENT_ACCESS, CLOCK, CwuOpportunitiesService } from "./cwu-opportunities.service";
 import { CWU_OPPORTUNITY_STORE } from "./cwu-opportunity";
 import { MetricsService } from "./metrics.service";
+import { OPPORTUNITY_RECORDS_STORE } from "./opportunity-records";
+import { OpportunityRunningService } from "./opportunity-running.service";
+import { PrismaOpportunityRecordsStore } from "./prisma-opportunity-records.store";
 import { OTHER_PROGRAMS_STORE } from "./other-programs";
 import { MetricsController, OtherProgramListsController } from "./other-programs.controller";
 import { OtherProgramsService } from "./other-programs.service";
@@ -23,7 +26,9 @@ import { UnbuiltProgramCreationController } from "./unbuilt-program-creation.con
     CwuOpportunitiesService,
     OtherProgramsService,
     MetricsService,
+    OpportunityRunningService,
     { provide: CWU_OPPORTUNITY_STORE, useClass: PrismaCwuOpportunityStore },
+    { provide: OPPORTUNITY_RECORDS_STORE, useClass: PrismaOpportunityRecordsStore },
     { provide: OTHER_PROGRAMS_STORE, useClass: PrismaOtherProgramsStore },
     // A file may be attached only by someone who may read it (R-8.22).
     { provide: ATTACHMENT_ACCESS, useExisting: FilesService },

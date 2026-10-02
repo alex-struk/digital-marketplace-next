@@ -1,5 +1,10 @@
-import { BadRequestException, Inject, Injectable } from "@nestjs/common";
-import { OpportunityViewer, mayReadOpportunity } from "../rules/opportunities";
+import { BadRequestException, Inject, Injectable, UnauthorizedException } from "@nestjs/common";
+import {
+  NOT_PERMITTED_TO_READ_COUNTERS,
+  OpportunityViewer,
+  mayReadCounters,
+  mayReadOpportunity,
+} from "../rules/opportunities";
 import { CounterAddress, counterName, readCounterName } from "../rules/opportunity-list";
 import { WATCH_STORE, WatchStore } from "../watching/watching";
 import { COUNTER_STORE, CounterStore, Counts } from "./counters";
@@ -13,8 +18,9 @@ export const NOTHING_TO_COUNT = "counters: No opportunity you may read is held a
  * The counts behind an opportunity's reporting figures (observables: counters): how often its
  * public page has been opened (R-1.6), and how many people watch it (R-1.5).
  *
- * Opening the public page adds a view, for anyone, signed in or not. The counts are figures, not
- * records of who did what, and are read by anyone who asks by name.
+ * Opening the public page adds a view, for anyone, signed in or not. The counts are read by name
+ * only by public sector staff and administrators; a vendor or a visitor is refused (R-1.30,
+ * decision record 0043, which replaces decision record 0034's reading by anyone).
  */
 @Injectable()
 export class CountersService {
@@ -23,7 +29,8 @@ export class CountersService {
     @Inject(WATCH_STORE) private readonly watches: WatchStore,
   ) {}
 
-  async read(names: readonly string[]): Promise<Counts> {
+  async read(viewer: OpportunityViewer | null, names: readonly string[]): Promise<Counts> {
+    if (!mayReadCounters(viewer)) throw new UnauthorizedException(NOT_PERMITTED_TO_READ_COUNTERS);
     const addressed = names.map((name) => [name, readCounterName(name)] as const);
     const unknown = addressed.find(([, address]) => address === null);
     if (unknown) throw new BadRequestException([NOT_A_COUNTER(unknown[0])]);
