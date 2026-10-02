@@ -48,3 +48,14 @@ That adds 12 stories and 12 entries in `design/screens.yaml`.
 The earlier gaps 1 to 17 still stand. I changed nothing under `spec/` other than the surface's test IDs, nothing in `constitution.md`, and nothing other domains wrote in `DESIGN.md` or `screens.yaml`.
 
 **Components leaned on most:** the design system's `Heading`, `Text`, `Link`, `Button`/`ButtonGroup`, `Form` with `NumberField`/`TextArea`/`Select`/`Checkbox`, `InlineAlert`, `Modal` with `AlertDialog`, and `ProgressCircle`. The project's own pieces are all listed in `DESIGN.md`. All but one are reused from earlier domains: the container, stack, status badge, data table, tabs, fieldset group and key facts list. The one this domain added earlier is the response block.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:ux-reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: do the evaluation domain's screens serve the criteria, and are they built from the design system? Ruling: approve. Every one of the 97 existing stories now sits in the shared PageContainer with one large/medium/small Stack rhythm taken from layout.tsx. The screenshots checked (consensus create default, panel default, dashboard default, consensus list default, individual request refused) show content aligned with the banner column, even token spacing with no doubled margins, and design-system Heading/Text/Link/Button/Form fields/InlineAlert throughout. A search of the evaluation stories finds no raw colour, pixel value or hand-rolled grid/flex. design/report.json lists zero accessibility violations for every story. The surface.yaml diff only replaces null test_ids: the 37 request-address IDs, plus four refused_when_not_permitted bound to the not-found-page their existing not-found stories already render, which R-5.11 and R-5.21 support. No filled test_id was changed. The 12 new request-reference stories cover the states R-5.3, R-5.9, R-5.23, R-5.26, R-5.29 and R-5.37 describe, and the gaps where the spec is silent (18 to 20) are recorded in DESIGN.md rather than invented. Tier is STANDARD, so there is no escalation. Would change on: any accessibility violation in the next scan, a change to an already-filled test_id, or a story found outside the shared container.
+
+**Conditions:**
+none
