@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: do the opportunities tests follow from their criteria and nothing else? This run's only criterion is R-1.20 (v1): a state change outside the program's permitted path is refused and the state is unchanged. The proposal deletes the earlier R-1.20 test, which the prior ruling returned as test-overreaches because it depended on the edit screen still offering Publish or Submit for review after cancelling, and records R-1.20 as blocked in tests/acceptance/not-testable.yaml with owner contract. The reason is real. The generated surface's requests section covers watching, affiliations, user lists, content, evaluations, proposals and user accounts, and none of those pages asks for an opportunity's status to change. The only state-change actions are the controls on the three edit screens, and a screen satisfies the criterion just as well by not offering the control, so a test built on those controls would test the screen rather than the criterion. The missing field names what the surface lacks: a request page that sends the service's update operation for a named target status, observations of the service's answer and the stored status afterwards, and a seeded cancelled opportunity. The checks already show the criterion's missing test as owed by contract, so it stays unverified until that page exists and a test written against it binds and passes. No test asserts anything the criterion does not say, because no test remains. The proposal touches no protected path and no path outside the derive-tests stage's own. The tier is STANDARD and no residual risk is marked unaccepted. I could not parse the YAML by machine; by eye the entry matches the structure of the entries before it. This proposal does not settle build-slice-9-3#6, so it stays open. The ruling would change if the surface already offered a request that changes an opportunity's status, in which case the writer could assert the criterion and this would be a return; or if the blocked entry's missing field named something the contract stage could not supply.
+conditions: []
+cost: 0.39898480000000003
+turns: 6
+session: "2e553bae-4904-4fd0-9da4-aa83707aa896"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-02T14:33:43.068Z

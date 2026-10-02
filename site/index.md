@@ -6,7 +6,7 @@ Profile: rebuild
 
 | Domain | proposed | accepted | implemented | verified | monitored | obsolete | open questions | total | tests | new | old |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| opportunities | 0 | 56 | 0 | 0 | 0 | 1 | 1 | 57 | 48/50 (n/t 2) |  | 39 pass · 9 fail · 0 unbound · 0 stale |
+| opportunities | 0 | 56 | 0 | 0 | 0 | 1 | 1 | 57 | 47/50 (n/t 3) |  | 39 pass · 9 fail · 0 unbound · 0 stale |
 | proposals | 0 | 38 | 0 | 0 | 0 | 2 | 1 | 40 | 36/36 |  | 33 pass · 3 fail · 0 unbound · 0 stale |
 | organizations | 0 | 35 | 0 | 0 | 0 | 0 | 0 | 35 | 31/31 |  | 25 pass · 6 fail · 0 unbound · 0 stale |
 | users | 0 | 32 | 0 | 0 | 0 | 4 | 1 | 36 | 29/30 (n/t 1) |  | 21 pass · 3 fail · 5 unbound · 0 stale |
@@ -372,6 +372,7 @@ Profile: rebuild
 - [derive-tests-opportunities-stale-14](proposals/derive-tests-opportunities-stale-14.md)
 - [derive-tests-opportunities-stale-15](proposals/derive-tests-opportunities-stale-15.md)
 - [derive-tests-opportunities-stale-16](proposals/derive-tests-opportunities-stale-16.md)
+- [derive-tests-opportunities-stale-17](proposals/derive-tests-opportunities-stale-17.md)
 - [derive-tests-opportunities-stale-2](proposals/derive-tests-opportunities-stale-2.md)
 - [derive-tests-opportunities-stale-3](proposals/derive-tests-opportunities-stale-3.md)
 - [derive-tests-opportunities-stale-4](proposals/derive-tests-opportunities-stale-4.md)
@@ -510,10 +511,10 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $851.655788
-- Rulings cost: $445.672806
-- Total cost: $1297.328594
-- Agent-held rulings: 428
+- Journal cost: $852.218456
+- Rulings cost: $446.071791
+- Total cost: $1298.290247
+- Agent-held rulings: 429
 - Runner rulings (automatic, no seat held): 28
 - Human rulings: 24
 - Rulings whose seat this page does not recognise: 0

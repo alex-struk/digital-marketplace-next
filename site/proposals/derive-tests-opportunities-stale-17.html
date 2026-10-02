@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-opportunities-stale-17 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">481</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">475</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">399</span></a></li><li><a href="../runs.html">Run log <span class="count">20</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-opportunities-stale-17</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-02 14:31</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the opportunities criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I wrote no test for R-1.20 (v1), the only criterion in this run.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I wrote no test for R-1.20 (v1), the only criterion in this run. I deleted its old test and recorded it as <strong>blocked</strong> in <code>tests/acceptance/not-testable.yaml</code>, with <code>contract</code> as the owner. Nothing else changed.</p>
+<p><strong>Why there is no test.</strong> The criterion says that a request to change an opportunity&#39;s state outside its program&#39;s permitted path is refused, and the state stays the same. Examples are a draft going straight to an evaluation stage, or any change to an opportunity that is already awarded or cancelled. The ruling found that the old tests depended on the edit screen still offering Publish or Submit for review after cancelling. It asked for a test that sends the request directly, for example through the service, and then checks the state.</p>
+<p>I read every page in the generated surface, including the section of requests that no screen makes. The only ways the surface can ask for a state change are the controls on the three edit pages (<code>opportunityCwuEdit</code>, <code>opportunitySwuEdit</code>, <code>opportunityTwuEdit</code>): <code>submitForReview</code>, <code>publish</code>, <code>cancelOpportunity</code>, <code>startTeamScenario</code> and similar. Using any of them on an awarded or cancelled opportunity is exactly what the ruling rejected. A screen can meet the criterion simply by not offering the control, so such a test would be checking the screen, not the criterion.</p>
+<p>The service&#39;s own update operation, <code>updateCodeWithUsOpportunity</code> in <code>openapi.yaml</code> (with Sprint With Us and Team With Us versions alongside), is the request the ruling has in mind. But no surface page reaches it, the way <code>opportunityWatchRequest</code> reaches the service for watching. The Team With Us edit page&#39;s <code>offeredStateChanges</code> observation reads the screen, so it has the same problem. Rewriting the test would have meant repeating the ruled-against approach in another form, so I recorded the entry instead.</p>
+<p><strong>What the contract would need to add</strong> (also written in the entry&#39;s <code>missing</code> field):</p>
+<ul><li><strong>A request page:</strong> something like <code>opportunity-status-request</code>, opened with <code>{ program, opportunityId }</code>. It needs an action such as <code>request_status_change({ status })</code> that sends the service&#39;s update operation as the signed-in person.</li><li><strong>Observations on that page:</strong> <code>request_accepted</code>, <code>refusal_status</code> and <code>stored_status</code>, so a test can see the refusal and read the status afterwards.</li><li><strong>A seeded cancelled opportunity:</strong> the seed already has awarded ones (<code>seed.opportunities.cwuAwarded</code>, <code>seed.opportunities.swuAwarded</code>) and a draft (<code>draftOfOtherStaff</code>), but no cancelled one. Adding one would let the cancelled case be tested without cancelling through the screen first.</li></ul>
+<p>With that page in place, the test would be short: sign in as the administrator, ask an awarded opportunity to go back to published (or a new draft to jump to an evaluation stage), and check that the request is refused and the status hasn&#39;t changed.</p>
+<p><strong>Not checked:</strong> I couldn&#39;t parse the edited YAML to confirm it is valid, because the command that would have checked it needed an approval nobody was here to give. The entry follows the indentation and quoting of the entries above it. I touched no paths outside this stage&#39;s own.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-02 14:33.</p>
+<div class="body"><p>Question: do the opportunities tests follow from their criteria and nothing else? This run&#39;s only criterion is R-1.20 (v1): a state change outside the program&#39;s permitted path is refused and the state is unchanged. The proposal deletes the earlier R-1.20 test, which the prior ruling returned as test-overreaches because it depended on the edit screen still offering Publish or Submit for review after cancelling, and records R-1.20 as blocked in tests/acceptance/not-testable.yaml with owner contract. The reason is real. The generated surface&#39;s requests section covers watching, affiliations, user lists, content, evaluations, proposals and user accounts, and none of those pages asks for an opportunity&#39;s status to change. The only state-change actions are the controls on the three edit screens, and a screen satisfies the criterion just as well by not offering the control, so a test built on those controls would test the screen rather than the criterion. The missing field names what the surface lacks: a request page that sends the service&#39;s update operation for a named target status, observations of the service&#39;s answer and the stored status afterwards, and a seeded cancelled opportunity. The checks already show the criterion&#39;s missing test as owed by contract, so it stays unverified until that page exists and a test written against it binds and passes. No test asserts anything the criterion does not say, because no test remains. The proposal touches no protected path and no path outside the derive-tests stage&#39;s own. The tier is STANDARD and no residual risk is marked unaccepted. I could not parse the YAML by machine; by eye the entry matches the structure of the entries before it. This proposal does not settle build-slice-9-3#6, so it stays open. The ruling would change if the surface already offered a request that changes an opportunity&#39;s status, in which case the writer could assert the criterion and this would be a return; or if the blocked entry&#39;s missing field named something the contract stage could not supply.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

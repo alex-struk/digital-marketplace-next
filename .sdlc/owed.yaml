@@ -4903,3 +4903,25 @@ owed:
       file_sha: 9b7d07591ed3ed99a90e31a9a48ebc15c6bfaf5b
       by: runner
       at: 2026-10-01T15:09:55.435Z
+  - kind: missing-test
+    item: R-1.20
+    id: R-1.20
+    version: 1
+    domain: opportunities
+    stage: contract
+    why: a requests-section page, for example opportunity-status-request, opened
+      with { program, opportunityId }, with an action that sends the service's
+      update operation for that opportunity asking for a named target status
+      (for example request_status_change taking { status }), made as the
+      signed-in person; and observations reading the service's answer —
+      request_accepted, refusal_status — and the opportunity's status as stored
+      afterwards (stored_status), so a test can ask
+      seed.opportunities.cwuAwarded or seed.opportunities.swuAwarded to go back
+      to published, or a fresh draft to go straight to an evaluation stage, and
+      see the request refused and the status unchanged. A seeded cancelled
+      opportunity in the manifest's opportunities group would let the cancelled
+      half be asked without first cancelling one through the screen.
+    from: derive-tests-opportunities-stale-17
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-02T14:33:43.226Z

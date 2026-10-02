@@ -23,7 +23,7 @@
 | R-1.17 | acceptance/opportunities/R-1.17.spec.ts |  | fail (ruled: defect-in-old) |
 | R-1.18 | acceptance/opportunities/R-1.18.spec.ts |  | pass |
 | R-1.19 | acceptance/opportunities/R-1.19.spec.ts |  | pass |
-| R-1.20 | acceptance/opportunities/R-1.20.spec.ts |  | pass |
+| R-1.20 | not testable: blocked: the criterion is about the service refusing a requested change of state that its program does not permit — draft straight to an evaluation stage, or any change out of an awarded or cancelled opportunity — and leaving the state as it was. The only ways the surface requests a change of state are the controls on opportunity-cwu-edit, opportunity-swu-edit and opportunity-twu-edit (submit_for_review, publish, cancel_opportunity, start_team_scenario and the like). A screen meets the criterion just as well by not offering a control for a change that is not permitted, so a test that needs one of those controls on an awarded or cancelled opportunity tests the screen, not the criterion. The service's own update operation (updateCodeWithUsOpportunity and its Sprint With Us and Team With Us counterparts in openapi.yaml) would let a test make the request whatever the screen offers, but no page in the surface's requests section addresses it, the way opportunity-watch-request addresses watching. |  | pass |
 | R-1.21 | acceptance/opportunities/R-1.21.spec.ts |  | fail (ruled: defect-in-old) |
 | R-1.22 | acceptance/opportunities/R-1.22.spec.ts |  | pass |
 | R-1.23 | acceptance/opportunities/R-1.23.spec.ts |  | pass |
