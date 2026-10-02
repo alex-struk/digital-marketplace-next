@@ -3857,15 +3857,8 @@ export default function create(
     return offered.join("\n");
   }
 
-  const noteIsNotOffered = (where: string) => async (): Promise<void> => {
-    throw new Error(
-      `unbound: ${where}.add_note — signed in as the administrator and looked on the seeded published, open and processing opportunities of both programmes: the History tab is a table (Entry Type | Note | Created) with nothing in its top bar, the Opportunity tab's Actions menu offers only "Edit" and "Cancel", the Addenda tab only "Add Addendum", and no screen offers a way to add a note. Looked again as the administrator on the seeded published Code With Us opportunity, the seeded one in processing and a freshly published Sprint With Us one: the History tab's top bar is empty and its table has no control. The service's update request does take an "addNote" change, but nothing on any screen sends one, so there is no control for this action to press`,
-    );
-  };
-
   const opportunityCwuEdit: S.OpportunityCwuEditPage = {
     ...opportunityEdit("opportunity-cwu-edit", "/opportunities/code-with-us/:opportunityId/edit"),
-    addNote: noteIsNotOffered("opportunity-cwu-edit"),
     reportingViews: () => reportFigure(["Total Views", "Views"]),
     reportingWatchers: () => reportFigure(["Watching", "Watchers"]),
     reportingProposals: () => reportFigure(["Proposals"]),
@@ -3893,7 +3886,6 @@ export default function create(
 
   const opportunitySwuEdit: S.OpportunitySwuEditPage = {
     ...opportunityEdit("opportunity-swu-edit", "/opportunities/sprint-with-us/:opportunityId/edit"),
-    addNote: noteIsNotOffered("opportunity-swu-edit"),
     editEvaluationPanel: async () => {
       await openTab("opportunity-swu-edit.edit_evaluation_panel", ["Evaluation Panel"]);
       await press("opportunity-swu-edit.edit_evaluation_panel", ["Edit"], navBar());

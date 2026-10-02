@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-old-61 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">490</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">484</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">408</span></a></li><li><a href="../runs.html">Run log <span class="count">20</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-old-61</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-02 17:00</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on old, and nothing else?</h2>
+<p><strong>Recommendation.</strong> Nothing else was changed, and I did not reopen the target, because nothing new needed binding.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I&#39;ve removed the two actions the contract no longer declares from the &quot;old&quot; adapter. Nothing else was changed, and I did not reopen the target, because nothing new needed binding. I could not run a type-check, because the workspace has no installed packages, and I also could not run my own check that every name in the contract appears exactly once in the bindings file. So whether the adapter still matches <code>tests/generated/surface.d.ts</code> was confirmed only by searching the files.</p>
+<p><strong>What was removed:</strong></p>
+<ul><li><strong><code>add_note</code> on <code>opportunity-cwu-edit</code> and <code>opportunity-swu-edit</code>:</strong> both entries are gone from <code>tests/adapters/old/bindings.yaml</code>. Both had been recorded as unbound: an administrator looking through the History, Opportunity and Addenda tabs found no control for adding a note.</li><li><strong>The matching code in <code>index.ts</code>:</strong> the two <code>addNote</code> members on the Code With Us and Sprint With Us edit pages are gone, along with the helper that threw for them, which nothing else used. The generated surface no longer declares an <code>addNote</code> member on either page.</li></ul>
+<p><strong>What stays:</strong> <code>add_note_by_request</code> on the history-request page is still declared by the contract and is still bound, so it was left alone. The leftover &quot;addNote&quot; text in <code>index.ts</code> belongs to that binding: a short comment and the name of the change it sends in its request.</p>
+<p><strong>How far it was checked:</strong> I compared the contract against the bindings file only for the members this run named. The run gave me only these two removals and no new members to add. I relied on that list and did not check the rest of the bindings independently.</p>
+<p>The adapter&#39;s other bindings were carried over unchanged. Every route was already handled before, and this run did not reveal any page whose route fails to open on the target. Nothing outside <code>tests/adapters/old/</code> was touched.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-02 17:01.</p>
+<div class="body"><p>Question: does the old adapter bind every surface action and observation on old, and nothing else? Ruling: approve. The diff only removes the add_note bindings for opportunity-cwu-edit and opportunity-swu-edit (bindings.yaml) and the matching addNote members and their now-unused noteIsNotOffered helper (index.ts). The generated surface.d.ts no longer declares addNote on either page. The only remaining note member, addNoteByRequest on the history-request page, is still bound (bindings.yaml:1442, index.ts:11289), and no stale add_note entry is left. The bindings are still navigation and locators only. Nothing under tests/acceptance or tests/generated changed. The runner&#39;s typecheck reports no diagnostics under adapters/old/; the 3 it reports are in adapters/new/, which this proposal does not answer for. That confirms the author&#39;s unchecked claim that the adapter still matches the surface. build-slice-9-3#6 is about app/ and is not settled by this proposal, so it stays open. What would change the ruling: a typecheck diagnostic under adapters/old/, or the surface still declaring addNote on either edit page.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
