@@ -2013,6 +2013,15 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-10-02T20:08:32.365Z
+    closed:
+      outcome: met
+      why: tests/adapters/new/index.ts evaluationPanelPage pick() calls noteRefusal
+        with the chooser's offered names and the seeded account type, chooses
+        nobody and returns false; addPanelMember skips to the next person on
+        false, and unbound is kept only in nameOf for input that resolves to no
+        person
+      by: agent:reviewer
+      at: 2026-10-02T20:12:20.906Z
   - ref: bind-adapter-new-50#2
     text: "tests/adapters/new/bindings.yaml opportunity-twu-edit.publish: walk a
       Team With Us draft as the administrator and confirm the 'Publish' control
@@ -2026,3 +2035,12 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-10-02T20:08:32.365Z
+    closed:
+      outcome: met
+      why: a Team With Us draft walked as the administrator offers 'Publish', which
+        opens 'Publish this opportunity?' with 'Publish opportunity'; recorded
+        in the opportunity-twu-edit page comment in
+        tests/adapters/new/bindings.yaml, where publish stays bound and is
+        driven by twuManage.act with PROGRAM_CONFIRM
+      by: agent:reviewer
+      at: 2026-10-02T20:12:20.927Z
