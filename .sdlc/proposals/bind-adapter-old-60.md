@@ -39,3 +39,27 @@ I could not typecheck. Running `tsc` on the test project needed an approval this
 **I changed a seeded record by mistake.** One probe sent the note as a bare string instead of an object, and the old service accepted it. That added an empty note, made by the administrator, to the top of the history of the seeded opportunity with a private note. Its history now holds four entries instead of the three the seed manifest describes. There is no request that removes a note, so it is still there. If the seed isn't reloaded before calibration, a test that expects the seeded note to be the newest entry will see this extra one first. All my other probes either changed nothing or were refused.
 
 I made no changes outside `tests/adapters/old/`, and nothing asked me to.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does the old adapter bind every action and observation on opportunity-history-request and opportunity-status-request, and nothing else? Approved. All 11 members in spec/contract/surface.yaml are bound in tests/adapters/old/index.ts and named in bindings.yaml with surface.yaml's spelling, and none is unbound. The runner's own typecheck of the proposal revision reports no diagnostics under adapters/old/; the one failure is in adapters/new/, which this proposal does not answer for. Every helper the new code calls (seededId, nothing, accountAnswer, send, given, fileIdFor, lastRefusal, answer, accepted) is defined in the file. The bindings send requests and read answers and decide nothing: STATUS_TAGS is the status-to-operation table that surface.yaml itself gives; treating a 401/403/404 read as 'shown nothing' is what history_shown is defined to report for a reader the service will not show it to; history kinds pass the service's own value through, and that value is NOTE_ADDED, the word the contract names; a refusal with no message text reads as the service's own tag. Nothing under tests/acceptance or any protected path changed. One outside effect is not a fault in the code: a test request added a blank administrator note to the seed opportunity cwuWithPrivateNote on the running oracle, and the seed must be reloaded before calibration or a test expecting the seeded note to be newest will see the extra entry first. No acceptance test calls these pages yet; R-1.20 stays on its existing missing-test entry, owed by derive-tests. build-slice-9-3#6 is work for build on the application and this proposal does not settle it, so it stays open. What would change this ruling: typecheck errors under adapters/old/, or a calibration showing a binding reads something other than what its observation names.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `3dcb9382ff8633ed37a3957de313e22d4bab464a`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 1 diagnostic
