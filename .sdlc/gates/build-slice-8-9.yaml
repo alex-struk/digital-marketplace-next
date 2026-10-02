@@ -1,0 +1,8 @@
+gate: G3
+verdict: return
+by: tech-lead
+held_by: human
+note: "Ruled by the operator agent under Alex's standing delegation (2026-09-30) for application rulings. Every criterion slice 8 claims passes, and 82 of the 83 criteria earlier slices passed still pass. The one that does not is R-1.11, in the case where the form never answers whether remote work is acceptable. Its cause is in the Code With Us form, not the test: the form starts that question on No, so an unanswered form is published as on-site. Returned to the builder with the cause named; a person's return also resets the verify count."
+conditions:
+  - "R-1.11, in the case \"one that does not say whether remote work is acceptable is refused\": the Code With Us create and edit form starts 'Is remote work acceptable?' on No (the application's own decision record 0031, and the form value remote: false), so a form whose question was never answered publishes as on-site and is not refused. The catalogue's opportunity-cwu-create story starts that question with neither Yes nor No chosen. Start it unanswered as the story does: hold no answer (null) until Yes or No is chosen, send none in that case, and let publication be refused with the existing 'Say whether remote work is acceptable.' message. A saved draft may still have no answer. Revise or supersede decision record 0031 to say so."
+at: 2026-10-02T07:33:14.682Z
