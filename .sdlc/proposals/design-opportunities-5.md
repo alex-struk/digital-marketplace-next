@@ -42,3 +42,14 @@ Gap 29 was already gone from `design/DESIGN.md`, so it needed no edit. The DESIG
 **Left for contract:** the ruling asked contract to keep `add_attachment` on both pages, but neither page in my copy has that action. Adding an action is not something the design gate may do, so I left the pages without it; contract should check whether they should have it.
 
 **Left for build:** `build-slice-9-3#6` is still open with build, as the ruling says. No condition was addressed to a person, so I left none for anyone.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:ux-reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether these opportunities screens serve their criteria and are built from the design system. I approve. The History tabs of opportunity-cwu-edit and opportunity-swu-edit no longer carry the private-note form, which matches R-1.33 v2 (the service accepts a note, but no screen offers a way to add one). The screenshots show the history table with existing notes and no form, field, attachment trigger or Add note button, and no story renders history-add-note-button or note-text-field. DESIGN.md says the same in its component table, dialog notes, per-screen notes and gaps 17 and 28. The branch's surface.yaml has no add_note action, and the diff against main deletes none, so it matches the contract stage's removal that the last ruling made its approval depend on. The five new request-reference stories (opportunity-history-request default/withheld/refused, opportunity-status-request default/refused) use only design-system Heading and Text inside the shared PageContainer and Stack, styled with tokens, and in the screenshots they line up with the banner and are evenly spaced. Every surface test_id the diff touches was null before, so no filled ID was changed. The report shows 535 stories with 0 accessibility violations. build-slice-9-3#6 (removing NoteForm from the app) belongs to build and is not settled here, so it stays open. Whether the manage pages should carry add_attachment is the contract stage's question. The ruling would change on a hand-built component the design system provides, any accessibility violation, or add_note returning to the surface.
+
+**Conditions:**
+none
