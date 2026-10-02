@@ -2000,3 +2000,29 @@ conditions:
         noteControlOffered pass their own location into it.
       by: agent:reviewer
       at: 2026-10-02T18:42:00.759Z
+  - ref: bind-adapter-new-50#1
+    text: "tests/adapters/new/index.ts evaluationPanelPage pick(): when the chooser
+      does not offer the named person (a vendor or any account it does not
+      list), log it with noteRefusal naming the chooser's offered names and
+      return, instead of throwing an Error, so the test's own reading of
+      non_public_sector_member_error, panel_member_row or the save decides; keep
+      unbound only for input that names no resolvable person"
+    from: bind-adapter-new-50
+    family: bind-adapter-new
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-10-02T20:08:32.365Z
+  - ref: bind-adapter-new-50#2
+    text: "tests/adapters/new/bindings.yaml opportunity-twu-edit.publish: walk a
+      Team With Us draft as the administrator and confirm the 'Publish' control
+      and its confirmation ('Publish this opportunity?' / 'Publish opportunity')
+      are offered; keep it bound and record what was seen in the page comment if
+      so, otherwise mark it unbound with the reason observed and have index.ts
+      report it unbound rather than through act()'s noteRefusal"
+    from: bind-adapter-new-50
+    family: bind-adapter-new
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-10-02T20:08:32.365Z
