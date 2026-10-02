@@ -27,3 +27,24 @@ I've made both changes the ruling asked for, and nothing else. The runner's type
 - **`enter_question_score` (also cited under R-5.16):** still unbound. Signed in as the administrator, I opened `/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/evaluations/create` with the seeded opportunity whose evaluation has already begun and its untouched proposal. It answers "Page not found". That opportunity's management screen offers only Summary, Opportunity, Addenda, History and Evaluation panel, and `?tab=evaluation` falls back to the Summary.
 
 The routes that don't resolve are unchanged from the accepted version: the proposal, organization and evaluation screens, `/proposals` and `/organizations` all answer "Page not found" on this build. I wrote no secret or environment value into any file or into this entry.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does the new adapter bind every surface action and observation it can, and nothing else? Approve. The runner's own typecheck passed on this revision (exit 0, no diagnostics under adapters/new/), and nothing under tests/acceptance or any protected path changed. Both instructions owed from bind-adapter-new-50 are carried out. evaluationPanelPage pick() now logs a refusal through noteRefusal, naming the chooser's offered names and the person's account type, and returns false instead of throwing. add_panel_member then moves on to the next person, so non_public_sector_member_error, panel_member_row or the save decides the result. Unbound is still raised only when the input names nobody nameOf can resolve. opportunity-twu-edit.publish was walked on a Team With Us draft as the administrator, and the 'Publish this opportunity?' / 'Publish opportunity' dialog it saw is recorded in the bindings.yaml page comment. The newly bound members (edit_details, submit_for_review, publish, delete_opportunity, edit_evaluation_panel, opportunity_tab, evaluation_panel_tab, start_date, completion_date, evaluation_question_fields, and the evaluation-panel-swu/twu pages) are navigation, form entry and text reads. A control that is not offered is logged as a refusal rather than turned into a verdict. rows() only puts what the screen shows into the locked table's wording, and the throw on a disabled control matches an established pattern in the file. The remaining unbound reasons name a section or route the running build does not offer, which is a real reason. An assertion inside the adapter, or any change to the acceptance tests, would change this ruling.
+
+**Conditions:**
+- condition-met bind-adapter-new-50#1: tests/adapters/new/index.ts evaluationPanelPage pick() calls noteRefusal with the chooser's offered names and the seeded account type, chooses nobody and returns false; addPanelMember skips to the next person on false, and unbound is kept only in nameOf for input that resolves to no person
+- condition-met bind-adapter-new-50#2: a Team With Us draft walked as the administrator offers 'Publish', which opens 'Publish this opportunity?' with 'Publish opportunity'; recorded in the opportunity-twu-edit page comment in tests/adapters/new/bindings.yaml, where publish stays bound and is driven by twuManage.act with PROGRAM_CONFIRM
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `989bfdd40e8876a0ffbcee6044935ef1521e54cb`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
