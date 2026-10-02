@@ -1966,3 +1966,14 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-10-02T18:19:50.241Z
+    closed:
+      outcome: met
+      why: tests/acceptance/opportunities/R-1.33.spec.ts adds the case 'a public
+        sector staff member who is not the opportunity's author is not shown a
+        private note or its file', which signs in as
+        persona.publicSectorStaffOther and uses expectSeededNoteWithheld to
+        assert that the seeded note's text,
+        seed.stored_files.opportunityNoteAttachment's name and its identifier
+        are absent from the history of seed.opportunities.cwuWithPrivateNote
+      by: agent:reviewer
+      at: 2026-10-02T18:21:07.711Z
