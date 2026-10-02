@@ -47,3 +47,14 @@ To make the renderer testable outside its container, it now takes two optional o
 - Whoever runs the side-by-side copies has to pass a different port set and project name to each one.
 
 Nothing outside `app/` and `docs/decisions/` was touched.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether slice 1 (a visitor can read the service's own pages) does what its criteria say. Approved: the verify result is current for this proposal (tree f04d3de) and passes all six claimed criteria (R-7.1, R-7.2, R-7.3, R-7.4, R-7.18, R-7.19), with none unasserted. The diff leaves every slice behaviour unchanged. It makes the sandbox's three published host ports (SDLC_APP_PORT, SDLC_IDP_PORT, SDLC_MAIL_PORT) configurable, and every address that names one (SERVICE_ORIGIN, OIDC_ISSUER, KC_HOSTNAME, the realm's redirect, web and post-logout origins, and the frontend's VITE_OIDC_URL build argument, which identity-client.ts does read) follows its variable and defaults to today's value. Container-side ports are unchanged. It touches only app/ and docs/decisions, carries no secret (the tests use a dummy password), records the change in decision record 0045, and extends sandbox-composition.test.ts to interpolate compose both with defaults and for a second copy on 4301/8081/8026 and to run the real realm renderer, which covers the new seams. The receipt states plainly that no container was built or started. That is an operational gap, not one against this slice's criteria. Minor: the reworded mail comment at compose.yaml:192 is longer than the lines around it. What would change this ruling: evidence that the sandbox, started with no variables set, no longer comes up on 4300/8080/8025, or that the realm renders differently from before.
+
+**Conditions:**
+none
