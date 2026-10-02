@@ -5056,3 +5056,19 @@ owed:
         gate: G3
         at: 2026-10-02T18:44:45.236Z
     target: old
+  - kind: missing-test
+    item: R-7.29
+    id: R-7.29
+    version: 1
+    domain: content
+    stage: contract
+    why: a seed state in which the embedded page
+      (/content/sprint-with-us-opportunity-scope or
+      /content/team-with-us-terms-and-conditions) is absent. R-7.25 means no
+      path through the screens or the API removes it.
+    clause: an opportunity whose screen embeds the scope page's body, with that page
+      removed, shown in full with the scope section empty
+    from: build-slice-10-4
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-02T23:31:11.521Z
