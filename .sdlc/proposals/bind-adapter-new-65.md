@@ -42,3 +42,23 @@ In `bindings.yaml` I marked these members bound: the five requirement readers, `
 One thing outside these conditions: `view_swu_terms` and `view_twu_terms` are still listed as unbound with the old "not available yet" reason, even though each qualification tab now links to its terms page. I left them as they were because no condition names them. They should be revisited in a later round.
 
 Every page route in the surface that I opened in this run resolved on the target.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+The question is whether bind-adapter-new-65 binds what the four build-slice-13 revision requests asked for on the new target, and nothing else. It does. The Sprint With Us and Team With Us requirement readers now return the whole item from the list named for each requirement set ('Met …' / 'Not met …'), so met and unmet no longer read the same (R-3.25, R-3.26). serviceAreaCheckbox reads the 'Approved service areas' list for the owner and opens then cancels the editor for the administrator. saveServiceAreas ticks exactly the named areas, clears all others and presses 'Save service areas', which matches the replace-entirely behaviour R-3.28 describes. Both terms pages replace the 'Page not found' stub with real bindings for termsBody, acceptedOnNotice, acceptTerms and cancel (R-3.27). Every addition is navigation, locators or form-driving; nothing decides pass or fail. Nothing under tests/acceptance changed. The runner's type check on this revision passed with no diagnostics under adapters/new. Three bindings.yaml entries still carry a stale unbound reason ('This section is not available yet.') that the agent's own walk contradicts: view_swu_terms, view_twu_terms and not_qualified_notice. No test calls the first two, and notQualifiedNotice already has a live implementation in index.ts, so none of them blocks these criteria from being exercised. The ruling would change if verify showed one of the new bindings reading the wrong element, or if a test came to depend on one of the stale entries.
+
+**Conditions:**
+- Note for a later bind-adapter round: organization-edit's view_swu_terms, view_twu_terms and not_qualified_notice still carry the stale 'This section is not available yet.' unbound reason in tests/adapters/new/bindings.yaml, which the agent's own walk of the qualification tabs contradicts
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `de5501ce18172ae07af3b9d48f1885b8bac6b08b`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
