@@ -4960,6 +4960,38 @@ export default function create(
     evaluationQuestionFields: twuForm.evaluationQuestionFields,
   };
 
+  // ---------------------------------------------------------------- an organization's terms
+  //
+  // Walked as the seeded organization's owner and as the service administrator: the screen
+  // draws the organization's legal name over the heading "Sprint With Us Terms & Conditions" /
+  // "Team With Us Terms & Conditions", then the region "Terms and conditions" holding the terms
+  // body. Unaccepted, the owner is offered "Accept terms and conditions" and "Cancel" (accepting
+  // returns to the matching qualification section), and anyone else reads "<legal name> has not
+  // accepted these terms. …" over "Back to the organization". Once accepted it shows the
+  // paragraph "<legal name> accepted these terms on <date>" and only "Back to the organization".
+  function orgTermsScreen(pageId: string, route: string) {
+    const screen = signedInScreen(pageId, route);
+    return {
+      open: (params: Record<string, string>) => screen.open(params),
+      acceptTerms: async (): Promise<void> => {
+        await screen.press("accept_terms", /^\s*accept terms and conditions\s*$/i);
+        await confirmIfAsked(screen.where("accept_terms"), /accept/i);
+      },
+      cancel: () => screen.press("cancel", /^\s*cancel\s*$/i),
+      termsBody: async (): Promise<string> => {
+        await screen.on("terms_body");
+        const region = seen(regionNamed(page.getByRole("main"), /^\s*terms and conditions\s*$/i)).first();
+        return (await region.count()) ? (await region.innerText()).trim() : "";
+      },
+      // Empty while the terms are unaccepted.
+      acceptedOnNotice: async (): Promise<string> => {
+        await screen.on("accepted_on_notice");
+        const said = (await paragraphs(page.getByRole("main"))).map((one) => one.replace(/\s+/g, " ").trim());
+        return said.filter((one) => /\baccepted these terms on\b/i.test(one)).join("\n");
+      },
+    };
+  }
+
   // ---------------------------------------------------------------- an organization's own screen
 
   const orgEdit = signedInScreen("organization-edit", "/organizations/:orgId/edit");
@@ -5048,6 +5080,37 @@ export default function create(
   async function orgTabLines(member: string, name: RegExp, pattern: RegExp): Promise<string> {
     await orgTabOpen(member, name);
     return linesMatching(pattern);
+  }
+  // A requirement's whole list item, status included ("Met …" / "Not met …"); a section that
+  // opened without the list, or without that requirement, reads as nothing.
+  async function requirementItem(member: string, tab: RegExp, list: RegExp, pattern: RegExp): Promise<string> {
+    await orgTabOpen(member, tab);
+    const items = seen(page.getByRole("main").getByRole("list", { name: list }).getByRole("listitem"));
+    const said = (await items.allInnerTexts()).map((one) => one.replace(/\s+/g, " ").trim());
+    return said.filter((one) => pattern.test(one)).join("\n");
+  }
+  async function boxName(box: Locator): Promise<string> {
+    return box.evaluate((element) => {
+      const input = element as HTMLInputElement;
+      return (element.getAttribute("aria-label") || (input.labels?.[0]?.innerText ?? "")).trim();
+    });
+  }
+  // The service area boxes of the Team With Us qualification section, opening the editor with
+  // "Edit service areas" when it is closed; null when the section offers neither.
+  async function serviceAreaBoxes(member: string): Promise<Locator | null> {
+    const inMain = (): Locator => seen(page.getByRole("main").getByRole("checkbox"));
+    if (!(await inMain().count())) {
+      await orgTabOpen(member, ORG_TAB.twu);
+      const edit = seen(page.getByRole("main").getByRole("button", { name: /^\s*edit service areas\s*$/i })).first();
+      if (!(await edit.count())) return null;
+      if (await isDisabled(edit)) throw new Error(`${orgEdit.where(member)} — "Edit service areas" is disabled on ${page.url()}`);
+      await edit.click();
+      await settle();
+      await inMain().first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+    }
+    const group = seen(page.getByRole("group", { name: /service areas/i }).getByRole("checkbox"));
+    if (await group.count()) return group;
+    return (await inMain().count()) ? inMain() : null;
   }
   // The form "Edit organization" opens: "Edit organization" over the logo group and the fields,
   // closed by "Save changes" and "Cancel". A form already open is left as it is, so what an
@@ -5334,18 +5397,30 @@ export default function create(
       await orgTabOpen("edit_service_areas", ORG_TAB.twu);
       await press(orgEdit.where("edit_service_areas"), /edit( service areas)?/i);
     },
+    // Pressed by the service administrator: "Edit service areas" under "Approved service
+    // areas" on the Team With Us qualification section turns the list into the group "Service
+    // areas this organization is approved for", one box per area, over "Save service areas"
+    // and "Cancel"; saving replaces the approvals with exactly the areas ticked, so every box
+    // is set — the named ones ticked, all others cleared — before saving.
     saveServiceAreas: async (input) => {
       const where = orgEdit.where("save_service_areas");
       await orgEdit.on("save_service_areas");
-      // The boxes belong to the Team With Us qualification section.
-      if (!(await seen(page.getByRole("main").getByRole("checkbox")).count())) await orgTabOpen("save_service_areas", ORG_TAB.twu);
-      const areas = [given(input, ["serviceAreas", "areas", "serviceArea"]) ?? []].flat().map(textOf).filter(Boolean);
-      for (const area of areas) {
-        const box = seen(page.getByRole("checkbox", { name: labelFor(area) }));
-        if (!(await box.count())) unbound(where, `no service area box named "${area}" on ${page.url()}; it offers ${await offered()}`);
-        await box.first().setChecked(true);
+      const boxes = await serviceAreaBoxes("save_service_areas");
+      if (!boxes) {
+        unbound(where, `the Team With Us qualification section of ${page.url()} offers no "Edit service areas" and no service area boxes; it offers ${await offered()}`);
       }
-      await press(where, /^\s*save( changes| service areas)?\s*$/i);
+      const areas = [given(input, ["serviceAreas", "areas", "serviceArea"]) ?? []].flat().map(textOf).filter(Boolean);
+      const names: string[] = [];
+      for (let i = 0; i < (await boxes.count()); i++) names.push(await boxName(boxes.nth(i)));
+      for (const area of areas) {
+        if (!names.some((name) => labelFor(area).test(name))) {
+          unbound(where, `no service area box named "${area}" on ${page.url()}; it offers ${names.join(", ") || "none"}`);
+        }
+      }
+      for (let i = 0; i < names.length; i++) {
+        await boxes.nth(i).setChecked(areas.some((area) => labelFor(area).test(names[i])));
+      }
+      await press(where, /^\s*save service areas\s*$/i);
       await confirmIfAsked(where, /^\s*save/i);
     },
     viewSwuTerms: async () => {
@@ -5428,21 +5503,46 @@ export default function create(
       if (!(await region.count())) return "";
       return (await seen(region.getByRole("listitem")).allInnerTexts()).map((one) => one.trim()).filter(Boolean).join("\n");
     },
-    swuRequirementTwoMembers: () => orgTabLines("swu_requirement_two_members", ORG_TAB.swu, /\b(two|2)\b.*member/i),
-    swuRequirementAllCapabilities: () => orgTabLines("swu_requirement_all_capabilities", ORG_TAB.swu, /capabilit/i),
-    swuRequirementTermsAccepted: () => orgTabLines("swu_requirement_terms_accepted", ORG_TAB.swu, /terms/i),
-    twuRequirementServiceArea: () => orgTabLines("twu_requirement_service_area", ORG_TAB.twu, /service area/i),
-    twuRequirementTermsAccepted: () => orgTabLines("twu_requirement_terms_accepted", ORG_TAB.twu, /terms/i),
+    // Each requirement is one item of the list "Sprint With Us requirements" / "Team With Us
+    // requirements", read whole: "Met <requirement>" or "Not met <requirement>".
+    swuRequirementTwoMembers: () =>
+      requirementItem("swu_requirement_two_members", ORG_TAB.swu, /sprint with us requirements/i, /\b(two|2)\b.*member/i),
+    swuRequirementAllCapabilities: () =>
+      requirementItem("swu_requirement_all_capabilities", ORG_TAB.swu, /sprint with us requirements/i, /capabilit/i),
+    swuRequirementTermsAccepted: () =>
+      requirementItem("swu_requirement_terms_accepted", ORG_TAB.swu, /sprint with us requirements/i, /terms/i),
+    twuRequirementServiceArea: () =>
+      requirementItem("twu_requirement_service_area", ORG_TAB.twu, /team with us requirements/i, /service area/i),
+    twuRequirementTermsAccepted: () =>
+      requirementItem("twu_requirement_terms_accepted", ORG_TAB.twu, /team with us requirements/i, /terms/i),
+    // With the editor open (the service administrator's "Edit service areas"), one line per
+    // box, "<area>: checked" or "<area>: unchecked". With it closed the section lists only the
+    // approved areas under "Approved service areas", each read as "<area>: checked"; where the
+    // editor is offered it is opened to read the other areas too, then cancelled.
     serviceAreaCheckbox: async () => {
-      await orgTabOpen("service_area_checkbox", ORG_TAB.twu);
-      const boxes = seen(page.getByRole("checkbox"));
+      await orgEdit.on("service_area_checkbox");
+      const editing = (await seen(page.getByRole("main").getByRole("checkbox")).count()) > 0;
+      if (!editing) await orgTabOpen("service_area_checkbox", ORG_TAB.twu);
+      const edit = seen(page.getByRole("main").getByRole("button", { name: /^\s*edit service areas\s*$/i })).first();
+      if (!editing && !(await edit.count())) {
+        const section = seen(regionNamed(page.getByRole("main"), /^\s*approved service areas\s*$/i)).last();
+        if (!(await section.count())) return "";
+        const items = (await seen(section.getByRole("listitem")).allInnerTexts()).map((one) => one.trim()).filter(Boolean);
+        return items.map((one) => `${one}: checked`).join("\n");
+      }
+      const boxes = await serviceAreaBoxes("service_area_checkbox");
+      if (!boxes) return "";
       const out: string[] = [];
       for (let i = 0; i < (await boxes.count()); i++) {
-        const name = await boxes.nth(i).evaluate((element) => {
-          const input = element as HTMLInputElement;
-          return (element.getAttribute("aria-label") || (input.labels?.[0]?.innerText ?? "")).trim();
-        });
-        out.push(`${name}: ${(await boxes.nth(i).isChecked()) ? "checked" : "unchecked"}`);
+        out.push(`${await boxName(boxes.nth(i))}: ${(await boxes.nth(i).isChecked()) ? "checked" : "unchecked"}`);
+      }
+      if (!editing) {
+        const actions = page.getByRole("group", { name: /service area actions/i });
+        const cancel = seen(actions.getByRole("button", { name: /^\s*cancel\s*$/i })).first();
+        if (await cancel.count()) {
+          await cancel.click();
+          await settle();
+        }
       }
       return out.join("\n");
     },
@@ -9079,19 +9179,15 @@ export default function create(
 
     organizationEdit,
 
-    organizationSwuTerms: absent<S.OrganizationSwuTermsPage>(
+    organizationSwuTerms: orgTermsScreen(
       "organization-swu-terms",
       "/organizations/:orgId/sprint-with-us-terms-and-conditions",
-      behindSession("/organizations/:orgId/sprint-with-us-terms-and-conditions"),
-      ["accept_terms", "cancel", "terms_body", "accepted_on_notice"],
-    ),
+    ) as S.OrganizationSwuTermsPage,
 
-    organizationTwuTerms: absent<S.OrganizationTwuTermsPage>(
+    organizationTwuTerms: orgTermsScreen(
       "organization-twu-terms",
       "/organizations/:orgId/team-with-us-terms-and-conditions",
-      behindSession("/organizations/:orgId/team-with-us-terms-and-conditions"),
-      ["accept_terms", "cancel", "terms_body", "accepted_on_notice"],
-    ),
+    ) as S.OrganizationTwuTermsPage,
 
     organizationUserMemberships: membershipScreen(
       "organization-user-memberships",

@@ -670,7 +670,8 @@ pages:
   # email address", "Cancel" and "Send invitations". Changelog draws the table Date | Change |
   # Member | Made by, or "No administrator rights have been given or withdrawn, and ownership
   # has not been transferred." Sprint With Us qualification and Team With Us qualification
-  # still say only "This section is not available yet." (re-walked for ...301 and ...304). A
+  # now draw their requirement lists, the approved service areas and the terms (re-walked for
+  # ...301 as its owner and as the service administrator). A
   # member who does not own the organization is answered "Page not found".
   organization-edit:
     actions:
@@ -684,8 +685,12 @@ pages:
       toggle_member_admin_status: bound
       accept_org_admin_terms: bound
       change_owner: bound
-      edit_service_areas: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and for ...304 and followed 'Team With Us qualification' under 'Organization sections'; the region draws its heading and only 'This section is not available yet.' — no service areas and no edit control. At run time the adapter opens that section and reports this while it still says so"
-      save_service_areas: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and for ...304 and followed 'Team With Us qualification' under 'Organization sections'; the region draws its heading and only 'This section is not available yet.' — no service area boxes and no save control. At run time the adapter opens that section and reports this while it still says so"
+      # Re-walked as the service administrator on ...301?tab=twu-qualification: "Edit service
+      # areas" under "Approved service areas" opens the group "Service areas this organization
+      # is approved for" (one box per area) over "Save service areas" and "Cancel". The owner
+      # sees the approved list only.
+      edit_service_areas: bound
+      save_service_areas: bound
       view_swu_terms: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and followed 'Sprint With Us qualification' under 'Organization sections'; the region draws its heading and only 'This section is not available yet.' — no terms link — and /organizations/<id>/sprint-with-us-terms-and-conditions itself answers 'Page not found' to the owner. At run time the adapter opens that section and reports this while it still says so"
       view_twu_terms: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and followed 'Team With Us qualification' under 'Organization sections'; the region draws its heading and only 'This section is not available yet.' — no terms link — and /organizations/<id>/team-with-us-terms-and-conditions itself answers 'Page not found' to the owner. At run time the adapter opens that section and reports this while it still says so"
       change_logo: bound
@@ -702,12 +707,15 @@ pages:
       pending_badge: bound
       team_member_row: bound
       team_capabilities: bound
-      swu_requirement_two_members: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and for the unqualified ...304 and followed 'Sprint With Us qualification' under 'Organization sections'; the region draws its heading and only 'This section is not available yet.' — no requirements listed. At run time the adapter opens that section and reports this while it still says so"
-      swu_requirement_all_capabilities: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and for the unqualified ...304 and followed 'Sprint With Us qualification' under 'Organization sections'; the region draws its heading and only 'This section is not available yet.' — no requirements listed. At run time the adapter opens that section and reports this while it still says so"
-      swu_requirement_terms_accepted: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and for the unqualified ...304 and followed 'Sprint With Us qualification' under 'Organization sections'; the region draws its heading and only 'This section is not available yet.' — no requirements listed. At run time the adapter opens that section and reports this while it still says so"
-      twu_requirement_service_area: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and for the unqualified ...304 and followed 'Team With Us qualification' under 'Organization sections'; the region draws its heading and only 'This section is not available yet.' — no requirements listed. At run time the adapter opens that section and reports this while it still says so"
-      twu_requirement_terms_accepted: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and for the unqualified ...304 and followed 'Team With Us qualification' under 'Organization sections'; the region draws its heading and only 'This section is not available yet.' — no requirements listed. At run time the adapter opens that section and reports this while it still says so"
-      service_area_checkbox: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and for ...304 and followed 'Team With Us qualification' under 'Organization sections'; the region draws its heading and only 'This section is not available yet.' — no service area boxes. At run time the adapter opens that section and reports this while it still says so"
+      # Each requirement is a whole item ("Met …" / "Not met …") of the list "Sprint With Us
+      # requirements" or "Team With Us requirements" on its qualification section.
+      swu_requirement_two_members: bound
+      swu_requirement_all_capabilities: bound
+      swu_requirement_terms_accepted: bound
+      twu_requirement_service_area: bound
+      twu_requirement_terms_accepted: bound
+      # The boxes once "Edit service areas" is open, otherwise the "Approved service areas" list.
+      service_area_checkbox: bound
       not_qualified_notice: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the unqualified ...304 (and the qualified ...301): the header simply carries no qualification badge for ...304, and its 'Sprint With Us qualification' and 'Team With Us qualification' sections draw their headings and only 'This section is not available yet.' — no notice anywhere on the screen. At run time the adapter opens the Sprint With Us section and reports this while it still says so"
       changelog_entry: bound
       field_error: bound
@@ -715,21 +723,27 @@ pages:
       current_logo: bound
       logo_refused_error: bound
 
+  # Re-walked on this build as the seeded organization owner (...301, accepted) and as the
+  # service administrator (...302, unaccepted): the legal name over "Sprint With Us Terms &
+  # Conditions" / "Team With Us Terms & Conditions", the region "Terms and conditions" holding
+  # the body; unaccepted, the owner is offered "Accept terms and conditions" and "Cancel";
+  # accepted, the paragraph "<legal name> accepted these terms on <date>" and only "Back to the
+  # organization".
   organization-swu-terms:
     actions:
-      accept_terms: "unbound: signed in through the identity provider as the seeded organization owner, /organizations/:orgId/sprint-with-us-terms-and-conditions for the seeded qualified organization (...301) answers 'Page not found', as it does to an organization member; the organization's own screen links to no terms (its 'Sprint With Us qualification' section says only 'This section is not available yet.'), while /organizations, /organizations/create and the owner's /organizations/:orgId/edit do open"
-      cancel: "unbound: signed in through the identity provider as the seeded organization owner, /organizations/:orgId/sprint-with-us-terms-and-conditions for the seeded qualified organization (...301) answers 'Page not found', as it does to an organization member; the organization's own screen links to no terms (its 'Sprint With Us qualification' section says only 'This section is not available yet.'), while /organizations, /organizations/create and the owner's /organizations/:orgId/edit do open"
+      accept_terms: bound
+      cancel: bound
     observations:
-      terms_body: "unbound: signed in through the identity provider as the seeded organization owner, /organizations/:orgId/sprint-with-us-terms-and-conditions for the seeded qualified organization (...301) answers 'Page not found', as it does to an organization member; the organization's own screen links to no terms (its 'Sprint With Us qualification' section says only 'This section is not available yet.'), while /organizations, /organizations/create and the owner's /organizations/:orgId/edit do open"
-      accepted_on_notice: "unbound: signed in through the identity provider as the seeded organization owner, /organizations/:orgId/sprint-with-us-terms-and-conditions for the seeded qualified organization (...301) answers 'Page not found', as it does to an organization member; the organization's own screen links to no terms (its 'Sprint With Us qualification' section says only 'This section is not available yet.'), while /organizations, /organizations/create and the owner's /organizations/:orgId/edit do open"
+      terms_body: bound
+      accepted_on_notice: bound
 
   organization-twu-terms:
     actions:
-      accept_terms: "unbound: signed in through the identity provider as the seeded organization owner, /organizations/:orgId/team-with-us-terms-and-conditions for the seeded qualified organization (...301) answers 'Page not found', as it does to an organization member; the organization's own screen links to no terms (its 'Team With Us qualification' section says only 'This section is not available yet.'), while /organizations, /organizations/create and the owner's /organizations/:orgId/edit do open"
-      cancel: "unbound: signed in through the identity provider as the seeded organization owner, /organizations/:orgId/team-with-us-terms-and-conditions for the seeded qualified organization (...301) answers 'Page not found', as it does to an organization member; the organization's own screen links to no terms (its 'Team With Us qualification' section says only 'This section is not available yet.'), while /organizations, /organizations/create and the owner's /organizations/:orgId/edit do open"
+      accept_terms: bound
+      cancel: bound
     observations:
-      terms_body: "unbound: signed in through the identity provider as the seeded organization owner, /organizations/:orgId/team-with-us-terms-and-conditions for the seeded qualified organization (...301) answers 'Page not found', as it does to an organization member; the organization's own screen links to no terms (its 'Team With Us qualification' section says only 'This section is not available yet.'), while /organizations, /organizations/create and the owner's /organizations/:orgId/edit do open"
-      accepted_on_notice: "unbound: signed in through the identity provider as the seeded organization owner, /organizations/:orgId/team-with-us-terms-and-conditions for the seeded qualified organization (...301) answers 'Page not found', as it does to an organization member; the organization's own screen links to no terms (its 'Team With Us qualification' section says only 'This section is not available yet.'), while /organizations, /organizations/create and the owner's /organizations/:orgId/edit do open"
+      terms_body: bound
+      accepted_on_notice: bound
 
   # Walked signed in through the identity provider as the seeded organization owner, an
   # organization member and the invited vendor, each at its own /users/<id>?tab=organizations
