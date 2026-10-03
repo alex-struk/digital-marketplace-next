@@ -131,6 +131,7 @@ pages:
       total_max_budget: bound
       phases: bound
       scope_section: bound
+      page_messages: bound
       addenda: bound
       successful_proponent: bound
       successful_proponent_contact_details: bound

@@ -3715,6 +3715,59 @@ export default function create(
     // The scope page is embedded under the "Scope & Contract" tab.
     scopeSection: () => embeddedSection("opportunity-swu-view.scope_section", "Scope & Contract"),
     assignmentDate: () => viewDate(["Assignment Date"]),
+    // The page raises its notices as alerts above the header ("This opportunity was awarded
+    // to Northern Pines Digital Ltd.." on the seeded awarded one); the seeded closed one,
+    // read as vendor 1 with and without its "Scope & Contract" tab open, shows none. The
+    // observation is the messages shown outside the screen's own sections, so an alert drawn
+    // inside one of them is left out: the tabbed region (the tab list "Details | Scope &
+    // Contract | Attachments | Addenda" and the body under it, which scope_section and
+    // addenda read), the "Budget" block and the "Phases of Work" block. Each region is the
+    // widest part of the page around its tab list or heading that still leaves out the
+    // opportunity's title, which on both seeded pages is the whole block and nothing of the
+    // header or the award notice above it. Every other alert is read wherever it is drawn,
+    // one per line in page order, so a notice a failed read raises late — after the
+    // sections, or after the footer — is caught too.
+    pageMessages: async () => {
+      await ready();
+      if (await notFoundShown()) {
+        nothing(`opportunity-swu-view.page_messages — the opportunity answers "Not Found" on ${page.url()}`);
+      }
+      const title = seen(page.getByRole("heading", { level: 2 })).first();
+      if (!(await currentHeading()) || !(await title.count())) {
+        nothing(`opportunity-swu-view.page_messages — the opportunity page did not open at ${page.url()}`);
+      }
+      const titleHandle = await title.elementHandle();
+      const tabList = seen(page.getByRole("list")).filter({
+        has: page.getByRole("listitem").filter({ hasText: /^\s*Scope & Contract\s*$/ }),
+      });
+      const sectionHeadings = seen(
+        page.getByRole("heading", { name: /^\s*(Budget|Phases of Work|Phases|Attachments|Addenda)\s*$/ }),
+      );
+      const anchors = [...(await tabList.elementHandles()), ...(await sectionHeadings.elementHandles())];
+      const alerts = seen(page.getByRole("alert"));
+      const count = await alerts.count();
+      const found: string[] = [];
+      for (let i = 0; i < count; i++) {
+        const alert = alerts.nth(i);
+        const inSection = await alert
+          .evaluate(
+            (element, [heading, marks]) =>
+              (marks as Element[]).some((mark) => {
+                let region: Element = mark;
+                while (region.parentElement && !region.parentElement.contains(heading as Element)) {
+                  region = region.parentElement;
+                }
+                return region.contains(element);
+              }),
+            [titleHandle, anchors] as const,
+          )
+          .catch(() => false);
+        if (inSection) continue;
+        const words = (await alert.innerText().catch(() => "")).trim();
+        if (words && !found.includes(words)) found.push(words);
+      }
+      return found.flatMap((words) => words.split("\n").map((line) => line.trim())).filter(Boolean).join("\n");
+    },
   };
 
   const opportunityTwuView: Open<S.OpportunityTwuViewPage> = {
