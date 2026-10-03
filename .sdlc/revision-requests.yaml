@@ -1045,3 +1045,19 @@ requests:
     at: 2026-10-03T14:41:15.878Z
     taken: 2026-10-03T14:45:38.154Z
     taken_by: bind-adapter-new-59
+  - stage: bind-adapter
+    target: new
+    why: "in the new target's organization-request bindings
+      (tests/adapters/new/index.ts, the accepted spellings for each organization
+      profile field), accept the input key 'addressLineTwo' as streetAddress2,
+      the second address line. The derived tests send it in every organization
+      registration and profile-change input, and the old target's binding
+      already maps it to the second street-address box. Shown by verify on
+      build-slice-11-4: register_by_request (R-3.2) and
+      change_profile_by_request (R-3.18) both threw 'the input key
+      \"addressLineTwo\" names no field of an organization's profile' before
+      sending anything, so neither test reached the service."
+    from: build-slice-11-4
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-03T15:34:45.754Z
