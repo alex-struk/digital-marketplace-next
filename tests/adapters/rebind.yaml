@@ -6620,3 +6620,8 @@ rebind:
     app_tree: d2c3fc533737d0b7203c709fc687f7965a90a853
     by: runner:verify
     at: 2026-10-03T18:57:35.106Z
+    closed:
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-03T19:11:00.832Z
