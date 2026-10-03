@@ -1,0 +1,17 @@
+gate: G3
+verdict: return
+by: agent:tech-lead
+held_by: agent
+rationale: |2-
+  Question: does slice 12 do what its criteria say? Ruling: return, with the remaining work addressed to bind-adapter rather than build. The owed R-3.10 condition is carried out: R-3.10 now passes in verify, and the proposal adds the held-re-fetch unit tests and stops drawing the confirmation dialog once it closes. The one failure left, R-3.11, is not the application's. The failure outline at .sdlc/evidence/slice-12/R-3.11.txt shows the team region already holding the alert 'That change could not be made — This is the sole owner for the organization, and cannot be removed.', with the owner's row still listed as Owner, which is what R-3.11 requires. The adapter's organizationEdit.fieldError (tests/adapters/new/index.ts:5444) reads the team region's alerts at once, with no wait for the DELETE answer to render, so it can read "" before the refusal is drawn. R-3.11 has gone fail (verify run 2), pass (run 3), fail (run 4) without the removal path changing, which is a race and not a defect, so another build would not settle it. The verify account's suspicion that the adapter is at fault is what decided this. What would change the ruling: a fieldError that waits for the refusal, then a verify run in which all 19 claimed criteria pass. If R-3.11 still fails once the adapter waits, the fault returns to build.
+conditions:
+  - "condition-met build-slice-12-3#1: OrganizationsSection.confirm in app/frontend/src/screens/user-profile.tsx now applies the confirmed answer to the list through membershipsAfter in the same render as the status. The confirmation dialog is drawn only while a question is asked. app/frontend/tests/team.test.tsx holds the re-fetch pending for leave and for decline and checks the organization is already gone when the status appears. R-3.10 passes in tests/results/new/slice-12.json."
+  - "addressed-to bind-adapter: organizationEdit.fieldError in tests/adapters/new/index.ts (around line 5444) reads the Team members region's role=alert elements immediately after removeTeamMember. removeTeamMember (orgInRow, then confirmIfAsked) does not wait for the DELETE /api/affiliations/<id> answer, and the refusal alert is drawn only once that answer arrives. In verify of slice 12 (proposal build-slice-12-4) R-3.11 read \"\" at line 12, yet the failure outline .sdlc/evidence/slice-12/R-3.11.txt taken moments later shows alert 'That change could not be made' with 'This is the sole owner for the organization, and cannot be removed.' inside region 'Team members'. R-3.11 has failed, passed and failed across three verify runs with the application's removal path unchanged. Make removeTeamMember wait for the membership request to settle, or make fieldError wait for an alert to appear in the team region within the normal timeout, before reading, so a refusal drawn after the response is read rather than missed."
+cost: 1.0430943999999998
+turns: 14
+session: "c43c880b-e31e-45f6-a4d3-677b1168701e"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-03T18:13:48.757Z
