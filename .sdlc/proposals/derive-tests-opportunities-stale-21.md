@@ -29,3 +29,23 @@ I rewrote the test for one criterion, R-1.33 (v2), at `tests/acceptance/opportun
 **One part of the criterion stays unchecked.** Its "with files" clause is checked only with a single attachment per note, because the given/when/then it states names "attachments" without a count. I judged that enough and wrote no partial entry for it.
 
 Every page, action and observation the criterion needs already exists in the surface. I found nothing to ask the contract stage for.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether the rewritten R-1.33 test answers the redo and still asserts only what R-1.33 says. It does. The one substantive change stores each note's attachment through uploadFileStatingItsReadAccess with an empty readAccess. That is the contract surface's upload that states who may read the file, already used by the files suite. The empty list follows R-8.19, under which an opportunity attachment records no read access of its own and the opportunity governs who may read it. This fixes the cause of the earlier failure: an upload that did not state read access was refused, so the note was never added. The runner's typecheck passed on this revision. Every other part of the test is unchanged, and each part follows from a clause of R-1.33: a 1,000-character note with a file is added by the author on published Sprint With Us and Code With Us opportunities and by an administrator on a cancelled Code With Us one. The seeded private note is visible to an administrator and the author and withheld from another staff member, a vendor and a signed-out reader, with the signed-out check unchanged as the redo required. The absence of an add-note control is read on both edit pages for both permitted personas, after first confirming the history is shown. NOTE_ADDED is the event name in the contract surface and seed, not an implementation leak. A single attachment per note is a fair reading of 'with files', since the criterion's given/when/then names no count. The ruling would change on a failing or unbound verify of the new upload binding, or if the contract required a non-empty read-access statement for opportunity attachments.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `8fc6ff8dac4f713d30a0b607fa4c34bc9d1a8b64`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/opportunities/`, which this proposal answers for.
+
+    No diagnostics.
