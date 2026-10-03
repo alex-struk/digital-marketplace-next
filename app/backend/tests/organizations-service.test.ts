@@ -2,15 +2,10 @@ import { BadRequestException, NotFoundException, UnauthorizedException } from "@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Envelope } from "../src/mail/message";
 import { Mailer } from "../src/mail/mailer";
-import {
-  Member,
-  NewOrganization,
-  OrganizationChange,
-  OrganizationStore,
-  StoredOrganization,
-} from "../src/organizations/organization";
+import { Member, StoredOrganization } from "../src/organizations/organization";
 import { OrganizationsService, Requester } from "../src/organizations/organizations.service";
 import { CAPABILITIES } from "../src/rules/users";
+import { OrganizationsInMemory, person } from "./organizations-in-memory";
 import { refusalFor } from "../src/common/refusals";
 
 /** A permission refusal of registering, changing or archiving, as the boundary answers it. */
@@ -30,79 +25,6 @@ it("answers a permission refusal at 401 under permissions, and a validation refu
     .catch((error: unknown) => error);
   expect(refusalFor(invalid)).toEqual({ status: 400, body: { errors: expect.any(Array) } });
 });
-
-/** Organizations kept in memory, as the kept tables hold them. */
-class OrganizationsInMemory implements OrganizationStore {
-  readonly rows: StoredOrganization[] = [];
-  private next = 1;
-
-  async listActive() {
-    return this.rows.filter((row) => row.active);
-  }
-
-  async find(id: string) {
-    return this.rows.find((row) => row.id === id) ?? null;
-  }
-
-  async affiliatedWith(userId: string) {
-    return this.rows.filter((row) => row.members.some((member) => member.userId === userId));
-  }
-
-  async create(organization: NewOrganization): Promise<StoredOrganization> {
-    const { ownerId, ...fields } = organization;
-    const id = `00000000-0000-4000-8000-${String(this.next++).padStart(12, "0")}`;
-    const row: StoredOrganization = {
-      ...fields,
-      id,
-      createdAt: "2026-10-01T00:00:00.000Z",
-      updatedAt: "2026-10-01T00:00:00.000Z",
-      active: true,
-      deactivatedOn: null,
-      deactivatedBy: null,
-      acceptedSWUTerms: null,
-      acceptedTWUTerms: null,
-      members: [person(ownerId, "OWNER")],
-      serviceAreas: [],
-    };
-    this.rows.push(row);
-    return row;
-  }
-
-  async update(id: string, change: OrganizationChange): Promise<StoredOrganization> {
-    const index = this.rows.findIndex((row) => row.id === id);
-    const current = this.rows[index] as StoredOrganization;
-    const { deactivatedOn, ...rest } = change;
-    const next: StoredOrganization = {
-      ...current,
-      ...rest,
-      ...(deactivatedOn ? { deactivatedOn: deactivatedOn.toISOString() } : {}),
-    };
-    this.rows[index] = next;
-    return next;
-  }
-}
-
-const people: Record<string, { name: string; email: string; capabilities: string[] }> = {
-  owner: { name: "Owner Person", email: "owner@example.test", capabilities: CAPABILITIES.slice(0, 5).map((c) => c.name) },
-  orgAdmin: { name: "Org Admin", email: "org.admin@example.test", capabilities: CAPABILITIES.slice(5).map((c) => c.name) },
-  member: { name: "Plain Member", email: "member@example.test", capabilities: [] },
-  invited: { name: "Invited Person", email: "invited@example.test", capabilities: [] },
-};
-
-function person(userId: string, membershipType: Member["membershipType"], membershipStatus: Member["membershipStatus"] = "ACTIVE"): Member {
-  const known = people[userId] ?? { name: userId, email: `${userId}@example.test`, capabilities: [] };
-  return {
-    affiliationId: `affiliation-${userId}-${membershipType}`,
-    userId,
-    name: known.name,
-    email: known.email,
-    type: "VENDOR",
-    capabilities: known.capabilities,
-    membershipType,
-    membershipStatus,
-    createdAt: "2026-10-01T00:00:00.000Z",
-  };
-}
 
 const profile = {
   legalName: "Northwind Digital Co-operative",

@@ -316,6 +316,104 @@ describe("changing the profile (R-3.18, R-3.19)", () => {
   });
 });
 
+describe("the team (R-3.7–R-3.14, R-3.17, R-3.30, R-3.33)", () => {
+  const OWNER_MEMBERSHIP = "00000000-0000-4000-8000-000000000401";
+  const MEMBER_MEMBERSHIP = "00000000-0000-4000-8000-000000000403";
+  const PENDING_MEMBERSHIP = "00000000-0000-4000-8000-000000000407"; // test-vendor-9 at Salt Marsh
+  const CANDIDATE_PENDING = "00000000-0000-4000-8000-000000000413";
+  const invited = () => vendorToken("test-vendor-9");
+  const invite = async (token: string, userEmail: string, membershipType = "MEMBER", organization = QUALIFIED) =>
+    ask("POST", "/api/affiliations", token, { organization, userEmail, membershipType });
+
+  it("lists the standing team to the owner, its administrator and a service administrator, and refuses a member and an outsider", async () => {
+    for (const token of [await tokens.owner(), await tokens.orgAdmin(), await tokens.admin()]) {
+      const team = await ask("GET", `/api/affiliations?organization=${QUALIFIED}`, token);
+      expect(team.status).toBe(200);
+      expect(team.body.map((row: { user: { name: string }; membershipStatus: string }) => [row.user.name, row.membershipStatus])).toEqual([
+        ["Blake Placeholder", "ACTIVE"],
+        ["Charlie Placeholder", "ACTIVE"],
+        ["Dana Placeholder", "ACTIVE"],
+        ["Quinn Placeholder", "PENDING"],
+      ]);
+    }
+    for (const token of [await tokens.member(), await tokens.vendorOne()]) {
+      const refused = await ask("GET", `/api/affiliations?organization=${QUALIFIED}`, token);
+      expect(refused.status).toBe(401);
+      expect(refused.body).toEqual({ permissions: [expect.any(String)] });
+    }
+  });
+
+  it("invites a registered vendor as a pending member, and refuses a repeat, staff, an invalid type and an unknown address", async () => {
+    const owner = await tokens.owner();
+    const created = await invite(owner, "vendor.invited@example.test");
+    expect(created.status).toBe(201);
+    expect(created.body).toMatchObject({ membershipType: "MEMBER", membershipStatus: "PENDING", organization: { id: QUALIFIED } });
+    expect((await invite(owner, "VENDOR.INVITED@example.test")).body).toEqual({
+      userEmail: ["This person is already a member of the organization."],
+    });
+    expect((await invite(owner, "staff.one@example.test")).body).toEqual({ userEmail: ["Only people with a vendor account can be invited."] });
+    const wrongType = await invite(owner, "vendor.one@example.test", "ADMIN");
+    expect(wrongType.status).toBe(400);
+    expect(wrongType.body).toEqual({ membershipType: [expect.stringContaining("Invalid membership type")] });
+    expect((await invite(owner, "vendor.one@example.test", "BOSS")).status).toBe(400);
+    const unknown = await invite(owner, "newperson@example.test");
+    expect(unknown.status).toBe(400);
+    expect(unknown.body).toEqual({ inviteeNotRegistered: [expect.stringContaining("not registered")] });
+    expect((await invite(await tokens.member(), "vendor.one@example.test")).status).toBe(401);
+    expect((await ask("GET", `/api/organizations/${QUALIFIED}`, owner)).body.numTeamMembers).toBe(3);
+  });
+
+  it("refuses the owner accepting on the invited person's behalf, accepts the person's own, and then refuses it as not pending", async () => {
+    const onBehalf = await ask("PUT", `/api/affiliations/${PENDING_MEMBERSHIP}`, await tokens.owner(), { tag: "approve" });
+    expect(onBehalf.status).toBe(401);
+    const accepted = await ask("PUT", `/api/affiliations/${PENDING_MEMBERSHIP}`, await invited(), { tag: "approve" });
+    expect(accepted.status).toBe(200);
+    expect(accepted.body.membershipStatus).toBe("ACTIVE");
+    const again = await ask("PUT", `/api/affiliations/${PENDING_MEMBERSHIP}`, await invited(), { tag: "approve" });
+    expect(again).toEqual({ status: 400, body: { errors: ["Membership is not pending."] } });
+    expect((await ask("GET", `/api/organizations/${PENDING_INVITATION}`, await tokens.owner())).body.numTeamMembers).toBe(2);
+  });
+
+  it("gives a member administrator rights, refuses changing one's own and the owner's, and keeps the changelog", async () => {
+    const granted = await ask("PUT", `/api/affiliations/${MEMBER_MEMBERSHIP}`, await tokens.owner(), { tag: "updateAdminStatus", value: true });
+    expect(granted.body.membershipType).toBe("ADMIN");
+    expect((await ask("PUT", `/api/affiliations/${OWNER_MEMBERSHIP}`, await tokens.orgAdmin(), { tag: "updateAdminStatus", value: true })).status).toBe(400);
+    const own = await ask("PUT", `/api/affiliations/00000000-0000-4000-8000-000000000402`, await tokens.orgAdmin(), {
+      tag: "updateAdminStatus",
+      value: false,
+    });
+    expect(own).toEqual({ status: 400, body: { errors: ["You cannot change your own administrator rights."] } });
+    const record = await ask("GET", `/api/organizations/${QUALIFIED}`, await tokens.owner());
+    expect(record.body.changelog).toEqual([
+      {
+        id: expect.any(String),
+        event: "ADMIN_STATUS_GRANTED",
+        createdAt: expect.any(String),
+        member: { id: "00000000-0000-4000-8000-000000000204", name: "Dana Placeholder" },
+        createdBy: { id: "00000000-0000-4000-8000-000000000202", name: "Blake Placeholder" },
+      },
+    ]);
+  });
+
+  it("refuses removing the sole owner and transferring ownership but by an administrator to an active member", async () => {
+    expect(await ask("DELETE", `/api/affiliations/${OWNER_MEMBERSHIP}`, await tokens.admin())).toEqual({
+      status: 400,
+      body: { errors: ["This is the sole owner for the organization, and cannot be removed."] },
+    });
+    expect((await ask("PUT", `/api/affiliations/${MEMBER_MEMBERSHIP}`, await tokens.owner(), { tag: "changeOwner" })).status).toBe(401);
+    expect((await ask("PUT", `/api/affiliations/${CANDIDATE_PENDING}`, await tokens.admin(), { tag: "changeOwner" })).status).toBe(400);
+  });
+
+  it("lets a member leave, so they are off the team and the organization off their list", async () => {
+    const left = await ask("DELETE", `/api/affiliations/${MEMBER_MEMBERSHIP}`, await tokens.member());
+    expect(left.status).toBe(200);
+    expect(left.body.membershipStatus).toBe("INACTIVE");
+    const team = await ask("GET", `/api/affiliations?organization=${QUALIFIED}`, await tokens.owner());
+    expect(team.body.map((row: { user: { name: string } }) => row.user.name)).not.toContain("Dana Placeholder");
+    expect((await ask("GET", "/api/affiliations", await tokens.member())).body).toEqual([]);
+  });
+});
+
 describe("archiving (R-3.6, R-3.18, R-3.24)", () => {
   it("is refused to the organization's administrator who is not its owner, a member, staff and a visitor, under permissions", async () => {
     for (const token of [await tokens.orgAdmin(), await tokens.member(), await tokens.staff(), undefined]) {

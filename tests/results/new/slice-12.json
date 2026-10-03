@@ -1,0 +1,486 @@
+{
+  "slice": 12,
+  "proposal": "build-slice-12-5",
+  "app_tree": "e442f07680b60ff8537e1739739767da0096cb63",
+  "at": "2026-10-03T18:41:51.540Z",
+  "verdict": "pass",
+  "adapter": "24e167fa269cc6ea498062940a3a87ebe4c711bb",
+  "rechecked": [
+    "R-7.1",
+    "R-7.2",
+    "R-7.3",
+    "R-7.4",
+    "R-7.18",
+    "R-7.19",
+    "R-4.1",
+    "R-4.2",
+    "R-4.3",
+    "R-4.17",
+    "R-4.24",
+    "R-8.1",
+    "R-8.2",
+    "R-8.5",
+    "R-8.6",
+    "R-8.7",
+    "R-8.10",
+    "R-8.11",
+    "R-8.12",
+    "R-8.18",
+    "R-8.23",
+    "R-8.24",
+    "R-6.7",
+    "R-4.5",
+    "R-4.6",
+    "R-4.8",
+    "R-4.9",
+    "R-4.18",
+    "R-4.25",
+    "R-4.26",
+    "R-4.27",
+    "R-4.28",
+    "R-4.29",
+    "R-4.34",
+    "R-4.4",
+    "R-4.12",
+    "R-4.14",
+    "R-4.19",
+    "R-4.20",
+    "R-4.21",
+    "R-4.30",
+    "R-4.31",
+    "R-4.32",
+    "R-7.5",
+    "R-7.6",
+    "R-7.7",
+    "R-7.8",
+    "R-7.9",
+    "R-7.10",
+    "R-7.12",
+    "R-7.16",
+    "R-7.20",
+    "R-7.21",
+    "R-7.22",
+    "R-7.23",
+    "R-7.24",
+    "R-7.25",
+    "R-7.26",
+    "R-7.27",
+    "R-7.28",
+    "R-8.29",
+    "R-7.13",
+    "R-6.18",
+    "R-6.23",
+    "R-6.24",
+    "R-6.28",
+    "R-4.16",
+    "R-4.33",
+    "R-8.17",
+    "R-8.27",
+    "R-6.8",
+    "R-1.4",
+    "R-1.7",
+    "R-1.10",
+    "R-1.11",
+    "R-1.12",
+    "R-1.14",
+    "R-1.21",
+    "R-1.22",
+    "R-1.23",
+    "R-1.29",
+    "R-1.34",
+    "R-1.37",
+    "R-6.20",
+    "R-6.21",
+    "R-6.27",
+    "R-1.2",
+    "R-1.3",
+    "R-1.5",
+    "R-1.6",
+    "R-1.38",
+    "R-4.22",
+    "R-6.17",
+    "R-1.20",
+    "R-1.28",
+    "R-1.30",
+    "R-1.32",
+    "R-7.17",
+    "R-5.1",
+    "R-5.9",
+    "R-5.17",
+    "R-5.18",
+    "R-5.37",
+    "R-1.8",
+    "R-1.9",
+    "R-1.13",
+    "R-1.15",
+    "R-1.16",
+    "R-1.17",
+    "R-1.18",
+    "R-1.39",
+    "R-1.43",
+    "R-1.48",
+    "R-1.53",
+    "R-1.55",
+    "R-1.56",
+    "R-8.13",
+    "R-8.21",
+    "R-8.28",
+    "R-8.30",
+    "R-3.1",
+    "R-3.2",
+    "R-3.3",
+    "R-3.18",
+    "R-3.19",
+    "R-3.20",
+    "R-3.21",
+    "R-3.22",
+    "R-3.24"
+  ],
+  "rows": [
+    {
+      "id": "R-6.16",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.16.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "A message that the notification preference does not govern must not offer to unsubscribe; it links to the reader's notification settings without implying that any choice there will stop messages of that kind.",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "0aa1d7f85e8d3531de53c0a07fd883712d6a8629",
+      "adapter": "24e167fa269cc6ea498062940a3a87ebe4c711bb"
+    },
+    {
+      "id": "R-3.6",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.6.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "when the owner archives an active organization it is gone from the public organization list",
+          "status": "passed"
+        },
+        {
+          "title": "when the owner archives an active organization it is gone from the other member's affiliated organizations",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "0e2f0aaef12312fb0fdfd0c38efeef565a3b6604",
+      "adapter": "24e167fa269cc6ea498062940a3a87ebe4c711bb"
+    },
+    {
+      "id": "R-3.7",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.7.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "an organization's owner may invite people to the team by email address, and each invitation is created as a pending membership that does not count towards the team until accepted",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "010297e8cd9d9d8eb9b12daca663e806f8cecbf3",
+      "adapter": "24e167fa269cc6ea498062940a3a87ebe4c711bb"
+    },
+    {
+      "id": "R-3.8",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.8.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a person cannot be invited twice to the same organization: the repeat invitation is refused as the person already being a member of the organization",
+          "status": "passed"
+        },
+        {
+          "title": "a person may only be invited to an organization if they hold an active vendor account: the invitation to public sector staff is refused because only vendors may be invited",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "6ec185ed8a8ea4ce0301b8ce7b4845dbfed304f9",
+      "adapter": "24e167fa269cc6ea498062940a3a87ebe4c711bb"
+    },
+    {
+      "id": "R-3.9",
+      "version": 2,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.9.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the organization's owner cannot accept a pending invitation on the invited person's behalf",
+          "status": "passed"
+        },
+        {
+          "title": "a pending invitation becomes an active membership when the invited person accepts it",
+          "status": "passed"
+        },
+        {
+          "title": "an invitation that is not pending cannot be accepted",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "bda0b8d0c3b7db4d1c1a6993db4182465c965dd2",
+      "adapter": "24e167fa269cc6ea498062940a3a87ebe4c711bb"
+    },
+    {
+      "id": "R-3.10",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.10.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "when an active member chooses to leave, the membership becomes inactive and the person stops counting towards the organization's team",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "ff150b7076aae24d1ede8959ba75963f902a4498",
+      "adapter": "24e167fa269cc6ea498062940a3a87ebe4c711bb"
+    },
+    {
+      "id": "R-3.11",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.11.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "when an administrator tries to end the sole owner's membership the request is refused and the membership remains",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "8b448c934200179da324667358fa1ecf1e65ee53",
+      "adapter": "24e167fa269cc6ea498062940a3a87ebe4c711bb"
+    },
+    {
+      "id": "R-3.12",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.12.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "an organization's owner may grant administrator rights over the organization to an active member",
+          "status": "passed"
+        },
+        {
+          "title": "nobody may change their own administrator rights over the organization",
+          "status": "passed"
+        },
+        {
+          "title": "the owner's own membership cannot be changed by granting or withdrawing administrator rights",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "722f3c3cc0fcd60b90b20bff641b4ce59a3f2e06",
+      "adapter": "24e167fa269cc6ea498062940a3a87ebe4c711bb"
+    },
+    {
+      "id": "R-3.13",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.13.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a service administrator may transfer ownership of an organization to a member whose membership is already active",
+          "status": "passed"
+        },
+        {
+          "title": "once ownership is transferred the previous owner becomes an ordinary member",
+          "status": "passed"
+        },
+        {
+          "title": "ownership of an organization cannot be transferred to a member whose invitation is still pending",
+          "status": "passed"
+        },
+        {
+          "title": "only a service administrator may transfer ownership of an organization, not the organization's own owner",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "fedc0cf2e4864c08573357ab19a435c56178fab4",
+      "adapter": "24e167fa269cc6ea498062940a3a87ebe4c711bb"
+    },
+    {
+      "id": "R-3.14",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.14.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the ordinary member asking for the organization's team list is refused",
+          "status": "passed"
+        },
+        {
+          "title": "a vendor unconnected to the organization asking for its team list is refused",
+          "status": "passed"
+        },
+        {
+          "title": "the owner receives the organization's team list",
+          "status": "passed"
+        },
+        {
+          "title": "a service administrator receives the organization's team list",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "e915305bf3947226b87cc0930081d8118cc4f733",
+      "adapter": "24e167fa269cc6ea498062940a3a87ebe4c711bb"
+    },
+    {
+      "id": "R-3.15",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.15.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the organizations a vendor may act on behalf of are those they own and those they administer, excluding any that have been archived",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "b7ac74e85592fe2486900e9149a86b1843be7c38",
+      "adapter": "24e167fa269cc6ea498062940a3a87ebe4c711bb"
+    },
+    {
+      "id": "R-3.17",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.17.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "an invitation may name the invited person as an ordinary member",
+          "status": "passed"
+        },
+        {
+          "title": "an invitation may name the invited person as an owner",
+          "status": "passed"
+        },
+        {
+          "title": "an invitation naming any other membership type is rejected as an invalid membership type",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "50536cbda313ac1bc6a8c80ee86b4d727637535b",
+      "adapter": "24e167fa269cc6ea498062940a3a87ebe4c711bb"
+    },
+    {
+      "id": "R-3.23",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.23.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the organization appears under the registering vendor's owned organizations with them recorded as its owner, and it is active from the moment it is registered",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "e19a99e437c08977c66136d08311ef23e215e95e",
+      "adapter": "24e167fa269cc6ea498062940a3a87ebe4c711bb"
+    },
+    {
+      "id": "R-3.30",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.30.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "inviting an email address that no registered account uses creates no pending membership, sends that address an invitation to register, and warns the inviter",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "e518b480632e736ecf0cb36dabe267ca1daeaca7",
+      "adapter": "24e167fa269cc6ea498062940a3a87ebe4c711bb"
+    },
+    {
+      "id": "R-3.31",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.31.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "when a person accepts an invitation, the organization's owner is told they have joined and the new member is told they may now be put forward on the organization's proposals",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "0badd53bb35cc4e44edb60408fc189df90a8192d",
+      "adapter": "24e167fa269cc6ea498062940a3a87ebe4c711bb"
+    },
+    {
+      "id": "R-3.32",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.32.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "when an invited person declines an invitation rather than accepting it, the pending membership is gone from the team list and the organization's owner is told the request was rejected",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "2e74c18dbea6e12cb7c8cf7542c65a9930dcc101",
+      "adapter": "24e167fa269cc6ea498062940a3a87ebe4c711bb"
+    },
+    {
+      "id": "R-3.33",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.33.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "after administrator rights are granted to a member and then withdrawn, the changelog shows \"Admin Rights Removed\" above \"Admin Rights Given\"",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "572db664b9eea7d1368f4fce84b567fe9c1caec0",
+      "adapter": "24e167fa269cc6ea498062940a3a87ebe4c711bb"
+    },
+    {
+      "id": "R-3.34",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.34.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a capability held only by an invited person who has not yet accepted is shown as one the team does not have, and becomes shown as held once the invitation is accepted",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "e1ea72fbd658b277665d2c785c4d6be1b7d8b059",
+      "adapter": "24e167fa269cc6ea498062940a3a87ebe4c711bb"
+    },
+    {
+      "id": "R-3.35",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.35.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the accept choice offered in an invitation email opens the invited person's own organizations page with the accept confirmation ready",
+          "status": "passed"
+        },
+        {
+          "title": "the decline choice offered in an invitation email opens the invited person's own organizations page with the decline confirmation ready",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "d9b681418cfff400563097378376682b4ed42b6a",
+      "adapter": "24e167fa269cc6ea498062940a3a87ebe4c711bb"
+    }
+  ]
+}

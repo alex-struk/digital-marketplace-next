@@ -19,6 +19,7 @@ import { Stack } from "../app/page-layout";
 import { useScreenTitle } from "../app/screen-title";
 import { TitledAlert } from "../app/titled-alert";
 import { FIELD_TEST_IDS, OrganizationForm, valuesOf } from "./organization-form";
+import { ChangelogTab, TeamTab } from "./organization-team";
 
 /**
  * An organization's management page, at `/organizations/:orgId/edit` (organization-edit).
@@ -27,8 +28,8 @@ import { FIELD_TEST_IDS, OrganizationForm, valuesOf } from "./organization-form"
  * else, and anyone at an archived or unknown organization, is shown the missing page (R-3.3).
  * The Organization tab shows the profile read-only, and offers Edit and Archive to the owner and
  * a service administrator alone; an organization administrator who is not the owner sees the
- * profile with neither control (R-3.18). The other tabs arrive with the team and qualification
- * (slices 12 and 13).
+ * profile with neither control (R-3.18). The Team members and Changelog tabs are in
+ * `organization-team.tsx` (slice 12); the qualification tabs arrive with slice 13.
  */
 
 type Tab = "organization" | "team" | "swu-qualification" | "twu-qualification" | "changelog";
@@ -158,6 +159,10 @@ function ManageOrganization({
       </nav>
       {tab === "organization" ? (
         <OrganizationTab viewer={viewer} organization={organization} onChanged={onChanged} />
+      ) : tab === "team" ? (
+        <TeamTab viewer={viewer} organization={organization} onChanged={onChanged} />
+      ) : tab === "changelog" ? (
+        <ChangelogTab organization={organization} />
       ) : (
         <Stack as="section" aria-labelledby="tab-heading" gap="medium">
           <Heading level={2} id="tab-heading">
