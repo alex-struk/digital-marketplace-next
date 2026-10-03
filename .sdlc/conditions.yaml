@@ -2559,3 +2559,14 @@ conditions:
     stage: build
     by: agent:tech-lead
     at: 2026-10-03T18:03:28.721Z
+    closed:
+      outcome: met
+      why: OrganizationsSection.confirm in app/frontend/src/screens/user-profile.tsx
+        now applies the confirmed answer to the list through membershipsAfter in
+        the same render as the status. The confirmation dialog is drawn only
+        while a question is asked. app/frontend/tests/team.test.tsx holds the
+        re-fetch pending for leave and for decline and checks the organization
+        is already gone when the status appears. R-3.10 passes in
+        tests/results/new/slice-12.json.
+      by: agent:tech-lead
+      at: 2026-10-03T18:13:49.107Z
