@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does the old adapter bind every surface action and observation on old, and nothing else? Approve. The diff adds one page, affiliation-removal-request, matching spec/contract/surface.yaml:2105-2117: one action (end_membership_by_request) and three observations (request_accepted, refusal_messages, refusal_status). bindings.yaml lists all four as bound, spelled the way the surface spells them. The bindings stay an adapter. The action resolves the membership from the input or from open() and sends DELETE /api/affiliations/:id as whoever is signed in, which is what the surface comment asks for. It throws unbound only when no membership was named. The observations only read the last answer: whether it was accepted, the refusal's messages in the service's order, and the status code when it is 400 or higher. None of them asserts anything or contains business logic. They use the same helpers and shape as the affiliation-approval-request page next to them (tests/adapters/old/index.ts:10314), which was already accepted. The author's note that a type-check could not be run is answered by the runner's own type-check: it exited 2, but every diagnostic is under adapters/new/ and none is under adapters/old/, so this page compiles. Nothing under tests/acceptance or outside tests/adapters/old changed, and no protected path is touched. The receipt is honest that the accepted path was not exercised. Sending a removal that succeeds would permanently end a seeded membership on the shared target, which is a sound reason not to try. The refused path was checked live: it returned 400 with the sole-owner message the contract names, word for word. The tier is STANDARD and no residual risk is marked unaccepted. The two owed conditions build-slice-12#1 and #2 belong to build and are not settled by this adapter change, so they stay open. The untaken bind-adapter revision requests from build-slice-12 concern organizationEdit and organizationUserMembershipsSelf, not this page, so they wait for a --revise run. What would change this ruling: a diagnostic under adapters/old/, an observation that judges the outcome rather than reporting it, or a change outside tests/adapters/old.
+conditions: []
+cost: 0.55662
+turns: 5
+session: "909ffc86-7eb8-4c22-be96-35db36ed1bf0"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-03T17:07:23.355Z
