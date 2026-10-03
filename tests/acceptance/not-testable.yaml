@@ -174,3 +174,47 @@ criteria:
       failing that, a ruling that withdraws the clause as a property of the
       service's storage accepted without a test
     owner: ratify
+  - id: R-3.2
+    version: 1
+    clause: a request from anyone else is refused
+    reason: "blocked: the refusal of a request from a signed-in member of public
+      sector staff cannot be read. Organization-create names only field_error
+      and submit_disabled_until_valid, so nothing reports that the screen, or
+      the registration behind it, was refused as not permitted; the application
+      refuses by not offering the screen to staff at all, so filling the form in
+      is not a request the criterion asks for, and no request-level page sends a
+      registration as the signed-in person. The refusal of a signed-in vendor
+      who has not accepted the current terms and conditions
+      (persona.vendorWithTermsReset) cannot be read either: organization-create
+      offers no observation that reports a registration refused for want of
+      accepted terms, and the only other reading — the vendor's own owned
+      organizations on organization-user-memberships staying without the new
+      organization — cannot tell a refusal apart from a form that was never
+      offered or never sent. The vendor half is asserted by R-3.2.spec.ts."
+    missing: an observation on organization-create, such as
+      refused_when_not_permitted, that reports the screen or the registration
+      refused to a signed-in member of public sector staff (on the old
+      application, its not-found page) and to a signed-in vendor who has not
+      accepted the current terms (persona.vendorWithTermsReset) — or an
+      organization-create request page that sends a registration as the
+      signed-in person and reports its refusal
+    owner: contract
+  - id: R-3.18
+    version: 1
+    clause: the service continues to refuse a profile change or an archive request
+      from anyone other than the owner or a service administrator
+    reason: "blocked: an organization administrator who is not the owner is offered
+      no Edit and no Archive control, so the only way the surface sends a
+      profile change or an archive — organization-edit's edit_organization,
+      save_changes and archive_organization — is one the criterion requires to
+      be absent for that person. No request-level page sends either request to
+      the service directly and reports its refusal, as content-request or
+      affiliation-approval-request do in other domains. The read-only half is
+      asserted by R-3.18.spec.ts."
+    missing: an organization request page opened with orgId, whose actions send a
+      profile change and an archive as the signed-in person (for example
+      change_profile_by_request and archive_by_request) and whose observations
+      report request_accepted and refusal_status, so a test can send each as
+      persona.organizationAdmin against seed.organizations.qualified and read
+      the refusal
+    owner: contract

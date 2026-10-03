@@ -5183,3 +5183,35 @@ owed:
       file_sha: a4d4e99831d0708fa756e819fadee27f8b49609e
       by: runner
       at: 2026-10-03T01:06:55.621Z
+  - kind: missing-test
+    item: R-3.2
+    id: R-3.2
+    version: 1
+    domain: organizations
+    stage: contract
+    why: an observation on organization-create, such as refused_when_not_permitted,
+      that reports the screen or the registration refused to a signed-in member
+      of public sector staff (on the old application, its not-found page) and to
+      a signed-in vendor who has not accepted the current terms
+      (persona.vendorWithTermsReset) — or an organization-create request page
+      that sends a registration as the signed-in person and reports its refusal
+    from: derive-tests-organizations-9
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-03T14:51:04.823Z
+  - kind: missing-test
+    item: R-3.18
+    id: R-3.18
+    version: 1
+    domain: organizations
+    stage: contract
+    why: an organization request page opened with orgId, whose actions send a
+      profile change and an archive as the signed-in person (for example
+      change_profile_by_request and archive_by_request) and whose observations
+      report request_accepted and refusal_status, so a test can send each as
+      persona.organizationAdmin against seed.organizations.qualified and read
+      the refusal
+    from: derive-tests-organizations-9
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-03T14:51:04.823Z

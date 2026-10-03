@@ -897,6 +897,14 @@ redo:
       control. The test demands driving controls the criterion requires to be
       absent, rather than showing the service's refusal some way the UI allows.
     verb: test-overreaches
+    closed: &a18
+      outcome: met
+      why: derived again by derive-tests-organizations-stale-10, in the line of work
+        approved as derive-tests-organizations-9
+      by: derive-tests-organizations-9
+      at: 2026-10-03T14:51:06.094Z
+      gate: G3
+      approved_by: agent:reviewer
   - id: R-3.2
     version: 1
     why: the public-sector-staff test demands that staff open the registration form
@@ -905,3 +913,4 @@ redo:
       'Page not found'), and the test cannot bind because it insists the form be
       filled in.
     verb: test-overreaches
+    closed: *a18

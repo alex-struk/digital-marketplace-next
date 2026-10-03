@@ -127,10 +127,6 @@ rulings:
     version: 2
     verb: test-wrong
     gate: calibrate-old-4
-  - id: R-3.18
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-6
   - id: R-4.19
     version: 1
     verb: product-question
