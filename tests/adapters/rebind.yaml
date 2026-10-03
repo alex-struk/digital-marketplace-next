@@ -5941,3 +5941,232 @@ rebind:
       why: tests/adapters/old has changed since this was found
       by: runner:calibrate
       at: 2026-10-03T02:10:15.287Z
+  - id: R-3.2
+    target: new
+    why: "unbound: organization-create.create_organization — /organizations/create
+      is offered only to a signed-in person, and walked signed in (as the
+      administrator, as a public sector employee, and as a vendor for a vendor's
+      screens — the seeded organization owner for the organization screens —
+      with the seeded records' identifiers), the running build serves a
+      signed-in person /dashboard (to the administrator \"Create an
+      opportunity\" over \"All opportunities\"; to public sector staff the same
+      over \"My opportunities\"; to a vendor only \"Dashboard\" and \"You are
+      signed in as <name>.\"), /opportunities, the account screens under /users
+      (whose Organizations tab says organizations \"will be listed here once
+      organizations can be registered\"), to the administrator the
+      content-management screens under /content, and to the administrator and
+      public sector staff /opportunities/create, the three programs' forms
+      /opportunities/{code,sprint,team}-with-us/create and the management
+      screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit
+      (whose \"Opportunity sections\" on the seeded closed and at-consensus
+      Sprint With Us and Team With Us opportunities are Summary, Opportunity,
+      Addenda, History and Evaluation panel — ?tab=evaluation, ?tab=consensus
+      and ?tab=instructions open it on Summary, with no evaluation, consensus or
+      instructions section); the proposal, organization and evaluation screens —
+      the Code With Us proposal screens (tried as a vendor with the seeded
+      published Code With Us opportunity, whose page offers no way to start
+      one), /proposals, /opportunities/code-with-us/:opportunityId/complete,
+      /organizations and /organizations/:orgId/edit included — answer \"Page not
+      found\"; opened signed out (with the seeded record's identifier where it
+      takes one) it shows the \"Page not found\" screen; unbound:
+      organization-create.open — /organizations/create is offered only to a
+      signed-in person, and walked signed in (as the administrator, as a public
+      sector employee, and as a vendor for a vendor's screens — the seeded
+      organization owner for the organization screens — with the seeded records'
+      identifiers), the running build serves a signed-in person /dashboard (to
+      the administrator \"Create an opportunity\" over \"All opportunities\"; to
+      public sector staff the same over \"My opportunities\"; to a vendor only
+      \"Dashboard\" and \"You are signed in as <name>.\"), /opportunities, the
+      account screens under /users (whose Organizations tab says organizations
+      \"will be listed here once organizations can be registered\"), to the
+      administrator the content-management screens under /content, and to the
+      administrator and public sector staff /opportunities/create, the three
+      programs' forms /opportunities/{code,sprint,team}-with-us/create and the
+      management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (whose
+      \"Opportunity sections\" on the seeded closed and at-consensus Sprint With
+      Us and Team With Us opportunities are Summary, Opportunity, Addenda,
+      History and Evaluation panel — ?tab=evaluation, ?tab=consensus and
+      ?tab=instructions open it on Summary, with no evaluation, consensus or
+      instructions section); the proposal, organization and evaluation screens —
+      the Code With Us proposal screens (tried as a vendor with the seeded
+      published Code With Us opportunity, whose page offers no way to start
+      one), /proposals, /opportunities/code-with-us/:opportunityId/complete,
+      /organizations and /organizations/:orgId/edit included — answer \"Page not
+      found\"; opened signed out (with the seeded record's identifier where it
+      takes one) it shows the \"Page not found\" screen (it shows \"Page not
+      found\" at http://localhost:4500/organizations/create)"
+    found: unbound
+    adapter: a2193e6ab02e14e95a28b51a01689a7a92fe730c
+    slice: 11
+    app_tree: e2563f92a45a37854cfa0727c4c20b8cdabe44d0
+    by: runner:verify
+    at: 2026-10-03T04:39:39.160Z
+  - id: R-3.6
+    target: new
+    why: "unbound: organization-create.create_organization — /organizations/create
+      is offered only to a signed-in person, and walked signed in (as the
+      administrator, as a public sector employee, and as a vendor for a vendor's
+      screens — the seeded organization owner for the organization screens —
+      with the seeded records' identifiers), the running build serves a
+      signed-in person /dashboard (to the administrator \"Create an
+      opportunity\" over \"All opportunities\"; to public sector staff the same
+      over \"My opportunities\"; to a vendor only \"Dashboard\" and \"You are
+      signed in as <name>.\"), /opportunities, the account screens under /users
+      (whose Organizations tab says organizations \"will be listed here once
+      organizations can be registered\"), to the administrator the
+      content-management screens under /content, and to the administrator and
+      public sector staff /opportunities/create, the three programs' forms
+      /opportunities/{code,sprint,team}-with-us/create and the management
+      screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit
+      (whose \"Opportunity sections\" on the seeded closed and at-consensus
+      Sprint With Us and Team With Us opportunities are Summary, Opportunity,
+      Addenda, History and Evaluation panel — ?tab=evaluation, ?tab=consensus
+      and ?tab=instructions open it on Summary, with no evaluation, consensus or
+      instructions section); the proposal, organization and evaluation screens —
+      the Code With Us proposal screens (tried as a vendor with the seeded
+      published Code With Us opportunity, whose page offers no way to start
+      one), /proposals, /opportunities/code-with-us/:opportunityId/complete,
+      /organizations and /organizations/:orgId/edit included — answer \"Page not
+      found\"; opened signed out (with the seeded record's identifier where it
+      takes one) it shows the \"Page not found\" screen"
+    found: unbound
+    adapter: a2193e6ab02e14e95a28b51a01689a7a92fe730c
+    slice: 11
+    app_tree: e2563f92a45a37854cfa0727c4c20b8cdabe44d0
+    by: runner:verify
+    at: 2026-10-03T04:39:39.160Z
+  - id: R-3.15
+    target: new
+    why: "unbound: organization-create.create_organization — /organizations/create
+      is offered only to a signed-in person, and walked signed in (as the
+      administrator, as a public sector employee, and as a vendor for a vendor's
+      screens — the seeded organization owner for the organization screens —
+      with the seeded records' identifiers), the running build serves a
+      signed-in person /dashboard (to the administrator \"Create an
+      opportunity\" over \"All opportunities\"; to public sector staff the same
+      over \"My opportunities\"; to a vendor only \"Dashboard\" and \"You are
+      signed in as <name>.\"), /opportunities, the account screens under /users
+      (whose Organizations tab says organizations \"will be listed here once
+      organizations can be registered\"), to the administrator the
+      content-management screens under /content, and to the administrator and
+      public sector staff /opportunities/create, the three programs' forms
+      /opportunities/{code,sprint,team}-with-us/create and the management
+      screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit
+      (whose \"Opportunity sections\" on the seeded closed and at-consensus
+      Sprint With Us and Team With Us opportunities are Summary, Opportunity,
+      Addenda, History and Evaluation panel — ?tab=evaluation, ?tab=consensus
+      and ?tab=instructions open it on Summary, with no evaluation, consensus or
+      instructions section); the proposal, organization and evaluation screens —
+      the Code With Us proposal screens (tried as a vendor with the seeded
+      published Code With Us opportunity, whose page offers no way to start
+      one), /proposals, /opportunities/code-with-us/:opportunityId/complete,
+      /organizations and /organizations/:orgId/edit included — answer \"Page not
+      found\"; opened signed out (with the seeded record's identifier where it
+      takes one) it shows the \"Page not found\" screen"
+    found: unbound
+    adapter: a2193e6ab02e14e95a28b51a01689a7a92fe730c
+    slice: 11
+    app_tree: e2563f92a45a37854cfa0727c4c20b8cdabe44d0
+    by: runner:verify
+    at: 2026-10-03T04:39:39.160Z
+  - id: R-3.19
+    target: new
+    why: 'unbound: organization-edit.edit_organization — no tab named
+      /^\s*organization\s*$/i on
+      http://localhost:4300/organizations/00000000-0000-4000-8000-000000000301/edit;
+      it offers button "Edit organization", button "Archive organization", link
+      "Skip to main content", link "Dashboard", link "My profile", link "Sign
+      out", link "Organization", link "Team members", link "Sprint With Us
+      qualification", link "Team With Us qualification", link "Changelog", link
+      "Call, email or text us", link "find a service centre", link "About", link
+      "Disclaimer", link "Privacy", link "Accessibility", link "Copyright",
+      textbox "Legal name", textbox "Website", textbox "Street address", textbox
+      "Address line 2", textbox "City", textbox "Province or state", textbox
+      "Postal code or ZIP code", textbox "Country", textbox "Contact name",
+      textbox "Contact title", textbox "Contact email address", textbox "Contact
+      phone number"'
+    found: unbound
+    adapter: a2193e6ab02e14e95a28b51a01689a7a92fe730c
+    slice: 11
+    app_tree: e2563f92a45a37854cfa0727c4c20b8cdabe44d0
+    by: runner:verify
+    at: 2026-10-03T04:39:39.160Z
+  - id: R-3.22
+    target: new
+    why: "unbound: organization-user-memberships.owned_organizations_table — walked
+      signed in as a vendor (the seeded organization owner among them), the
+      \"Organizations\" link under \"Profile sections\" on the profile goes to
+      /users/:userId?tab=organizations, which draws \"My Organizations\" and
+      only the line \"The organizations you own or belong to will be listed here
+      once organizations can be registered on the Digital Marketplace.\" — no
+      table, badge, invitation or control, though the seed gives that vendor
+      organizations; a public sector account's profile offers no
+      \"Organizations\" link at all, the administrator is shown another
+      account's profile without that section, and /organizations answers \"Page
+      not found\"; unbound: organization-create.create_organization —
+      /organizations/create is offered only to a signed-in person, and walked
+      signed in (as the administrator, as a public sector employee, and as a
+      vendor for a vendor's screens — the seeded organization owner for the
+      organization screens — with the seeded records' identifiers), the running
+      build serves a signed-in person /dashboard (to the administrator \"Create
+      an opportunity\" over \"All opportunities\"; to public sector staff the
+      same over \"My opportunities\"; to a vendor only \"Dashboard\" and \"You
+      are signed in as <name>.\"), /opportunities, the account screens under
+      /users (whose Organizations tab says organizations \"will be listed here
+      once organizations can be registered\"), to the administrator the
+      content-management screens under /content, and to the administrator and
+      public sector staff /opportunities/create, the three programs' forms
+      /opportunities/{code,sprint,team}-with-us/create and the management
+      screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit
+      (whose \"Opportunity sections\" on the seeded closed and at-consensus
+      Sprint With Us and Team With Us opportunities are Summary, Opportunity,
+      Addenda, History and Evaluation panel — ?tab=evaluation, ?tab=consensus
+      and ?tab=instructions open it on Summary, with no evaluation, consensus or
+      instructions section); the proposal, organization and evaluation screens —
+      the Code With Us proposal screens (tried as a vendor with the seeded
+      published Code With Us opportunity, whose page offers no way to start
+      one), /proposals, /opportunities/code-with-us/:opportunityId/complete,
+      /organizations and /organizations/:orgId/edit included — answer \"Page not
+      found\"; opened signed out (with the seeded record's identifier where it
+      takes one) it shows the \"Page not found\" screen"
+    found: unbound
+    adapter: a2193e6ab02e14e95a28b51a01689a7a92fe730c
+    slice: 11
+    app_tree: e2563f92a45a37854cfa0727c4c20b8cdabe44d0
+    by: runner:verify
+    at: 2026-10-03T04:39:39.160Z
+  - id: R-3.23
+    target: new
+    why: "unbound: organization-create.create_organization — /organizations/create
+      is offered only to a signed-in person, and walked signed in (as the
+      administrator, as a public sector employee, and as a vendor for a vendor's
+      screens — the seeded organization owner for the organization screens —
+      with the seeded records' identifiers), the running build serves a
+      signed-in person /dashboard (to the administrator \"Create an
+      opportunity\" over \"All opportunities\"; to public sector staff the same
+      over \"My opportunities\"; to a vendor only \"Dashboard\" and \"You are
+      signed in as <name>.\"), /opportunities, the account screens under /users
+      (whose Organizations tab says organizations \"will be listed here once
+      organizations can be registered\"), to the administrator the
+      content-management screens under /content, and to the administrator and
+      public sector staff /opportunities/create, the three programs' forms
+      /opportunities/{code,sprint,team}-with-us/create and the management
+      screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit
+      (whose \"Opportunity sections\" on the seeded closed and at-consensus
+      Sprint With Us and Team With Us opportunities are Summary, Opportunity,
+      Addenda, History and Evaluation panel — ?tab=evaluation, ?tab=consensus
+      and ?tab=instructions open it on Summary, with no evaluation, consensus or
+      instructions section); the proposal, organization and evaluation screens —
+      the Code With Us proposal screens (tried as a vendor with the seeded
+      published Code With Us opportunity, whose page offers no way to start
+      one), /proposals, /opportunities/code-with-us/:opportunityId/complete,
+      /organizations and /organizations/:orgId/edit included — answer \"Page not
+      found\"; opened signed out (with the seeded record's identifier where it
+      takes one) it shows the \"Page not found\" screen"
+    found: unbound
+    adapter: a2193e6ab02e14e95a28b51a01689a7a92fe730c
+    slice: 11
+    app_tree: e2563f92a45a37854cfa0727c4c20b8cdabe44d0
+    by: runner:verify
+    at: 2026-10-03T04:39:39.160Z

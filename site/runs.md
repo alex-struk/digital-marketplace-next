@@ -126,6 +126,12 @@
 - 21:15:00 oracle down old in configuration evaluation_instructions_absent_twu
 - 21:15:00 calibrate old: a full run, forced with --full
 - 21:15:06 run calibrate: ok, cost 0, turns 0
+- 21:33:56 drive: step 2: `sdlc run verify --slice 11` — build-slice-11 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
+- 21:33:57 verify slice 11: the sandbox did not start, so nothing was verified.
+- 21:33:57 drive: step 2 recovery: the sandbox could not start on a port this machine already holds, and the oracle is up; taking it down (sdlc oracle down), then running the step once more
+- 21:34:47 oracle down old
+- 21:39:39 verify slice 11: R-3.1, R-3.3, R-3.18, R-3.21 fail. R-3.1, R-3.3, R-3.18, R-3.21 stopped on a read that came back with nothing, which can be the adapter's as easily as the application's, so build-slice-11 is left open for agent:reviewer to send each failure to the build or to bind-adapter.
+- 21:39:40 run verify: regenerated 4 files in .sdlc, site, tests
 
 # Run record 2026-10-02
 
