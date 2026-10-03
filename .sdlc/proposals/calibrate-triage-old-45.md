@@ -65,3 +65,14 @@ not span more than one line. When the evidence is genuinely unclear, it is a `pr
 a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the
 adapter comes back from the next binding run unchanged and costs a run to find out.
 
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: did this project's own adapter cause R-1.33's failures against old? Ruling: approve, with R-1.33 sorted as a product question. The not-signed-in test never signs anyone in. The fixture gives each test a fresh page, so no session carries over from an earlier test. The adapter's history read (tests/adapters/old/index.ts:11269 accountAnswer and :11477 historyEntries) is a cookie-less GET of /api/opportunities/<program>/<id> that only turns the service's own history array into text. The note and its file it returned came from the service, so nothing points at the binding: the old application serves a private note to a reader who is not signed in. The other row, unbound on signIn.public-sector-staff-other, says the oracle's government session route mints one fixed account. That is a limit of the oracle's session routes rather than a binding fault, and with one condition allowed per criterion, the signed-out failure has to reach the product owner. What would change the ruling: evidence that the adapter's page carried a session into the signed-out test, or that historyEntries read something other than the service's answer to that reader. Either would make it adapter-wrong.
+
+**Conditions:**
+- product-question R-1.33
