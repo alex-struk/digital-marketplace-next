@@ -2420,3 +2420,38 @@ conditions:
         tests/results/new/slice-11.json"
       by: agent:reviewer
       at: 2026-10-03T16:20:06.310Z
+  - ref: build-slice-12#1
+    text: 'R-3.7: Error: expect(received).toContain(expected) // indexOf — Received
+      string:    "Alex Placeholder (you) | Owner | 0 |· — at
+      tests/acceptance/organizations/R-3.7.spec.ts:60 — its last steps: …field |
+      Pending | 0 | Remove" → organizationEdit.teamMemberRow() at
+      /organizations/00000000-0000-4000-8000-000000000302/edit?tab=team read
+      "Alex Placeholder (you) | Owner | 0 | Perpetua Wrenfield | Pending | 0 |
+      Remove" — the page as it failed: .sdlc/evidence/slice-12/R-3.7.png,
+      .sdlc/evidence/slice-12/R-3.7.txt'
+    from: build-slice-12
+    family: build-slice-12
+    gate: G3
+    stage: build
+    by: agent:reviewer
+    at: 2026-10-03T17:00:06.560Z
+  - ref: build-slice-12#2
+    text: 'R-3.30: Error: expect(received).toContain(expected) // indexOf — Received
+      string:    "" — at tests/acceptance/organizations/R-3.30.spec.ts:20 — its
+      last steps: organizationEdit.open({orgId}) at
+      /organizations/00000000-0000-4000-8000-000000000304/edit →
+      organizationEdit.addTeamMembers({emails}) at
+      /organizations/00000000-0000-4000-8000-000000000304/edit?tab=team →
+      organizationEdit.teamMemberRow() at
+      /organizations/00000000-0000-4000-8000-000000000304/edit?tab=team read
+      "Blake Placeholder (you) | Owner | 3 | Indigo Placeholder | Pending | 0 |
+      Remove" → organizationEdit.fieldError() at
+      /organizations/00000000-0000-4000-8000-000000000304/edit?tab=team read ""
+      — the page as it failed: .sdlc/evidence/slice-12/R-3.30.png,
+      .sdlc/evidence/slice-12/R-3.30.txt'
+    from: build-slice-12
+    family: build-slice-12
+    gate: G3
+    stage: build
+    by: agent:reviewer
+    at: 2026-10-03T17:00:06.560Z
