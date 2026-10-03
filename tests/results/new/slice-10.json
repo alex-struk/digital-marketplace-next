@@ -1,0 +1,724 @@
+{
+  "slice": 10,
+  "proposal": "build-slice-10-5",
+  "app_tree": "cc1ab470fa13d36177815389cc08c61db8ba8f4e",
+  "at": "2026-10-03T00:51:31.756Z",
+  "verdict": "environment",
+  "environment": [
+    {
+      "id": "R-7.29",
+      "reason": "its test is written for configuration evaluation_instructions_absent_twu (@evaluation_instructions_absent_twu), which the target reads at start-up, and verify cannot start the new target in a configuration"
+    }
+  ],
+  "adapter": "a2193e6ab02e14e95a28b51a01689a7a92fe730c",
+  "rechecked": [
+    "R-7.1",
+    "R-7.2",
+    "R-7.3",
+    "R-7.4",
+    "R-7.18",
+    "R-7.19",
+    "R-4.1",
+    "R-4.2",
+    "R-4.3",
+    "R-4.17",
+    "R-4.24",
+    "R-8.1",
+    "R-8.2",
+    "R-8.5",
+    "R-8.6",
+    "R-8.7",
+    "R-8.10",
+    "R-8.11",
+    "R-8.12",
+    "R-8.18",
+    "R-8.23",
+    "R-8.24",
+    "R-6.7",
+    "R-4.5",
+    "R-4.6",
+    "R-4.8",
+    "R-4.9",
+    "R-4.18",
+    "R-4.25",
+    "R-4.26",
+    "R-4.27",
+    "R-4.28",
+    "R-4.29",
+    "R-4.34",
+    "R-4.4",
+    "R-4.12",
+    "R-4.14",
+    "R-4.19",
+    "R-4.20",
+    "R-4.21",
+    "R-4.30",
+    "R-4.31",
+    "R-4.32",
+    "R-7.5",
+    "R-7.6",
+    "R-7.7",
+    "R-7.8",
+    "R-7.9",
+    "R-7.10",
+    "R-7.12",
+    "R-7.16",
+    "R-7.20",
+    "R-7.21",
+    "R-7.22",
+    "R-7.23",
+    "R-7.24",
+    "R-7.25",
+    "R-7.26",
+    "R-7.27",
+    "R-7.28",
+    "R-8.29",
+    "R-7.13",
+    "R-6.18",
+    "R-6.23",
+    "R-6.24",
+    "R-6.28",
+    "R-4.16",
+    "R-4.33",
+    "R-8.17",
+    "R-8.27",
+    "R-6.8",
+    "R-1.4",
+    "R-1.7",
+    "R-1.10",
+    "R-1.11",
+    "R-1.12",
+    "R-1.14",
+    "R-1.21",
+    "R-1.22",
+    "R-1.23",
+    "R-1.29",
+    "R-1.34",
+    "R-1.37",
+    "R-6.20",
+    "R-6.21",
+    "R-6.27",
+    "R-1.2",
+    "R-1.3",
+    "R-1.5",
+    "R-1.6",
+    "R-1.38",
+    "R-4.22",
+    "R-6.17",
+    "R-1.20",
+    "R-1.28",
+    "R-1.30",
+    "R-1.32"
+  ],
+  "rows": [
+    {
+      "id": "R-7.17",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.17.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a page's body is rendered as formatted text only; markup embedded in it is never executed",
+          "status": "passed"
+        },
+        {
+          "title": "the same body renders identically on the page's own address and wherever another screen embeds it",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "2689de36626ce6f93749a3624afb2c790c59d6d8",
+      "adapter": "a2193e6ab02e14e95a28b51a01689a7a92fe730c"
+    },
+    {
+      "id": "R-5.1",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.1.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "An opportunity that uses a panel must name at least two panel members, each a public sector employee, each named only once, and at most one of them marked as chair. (a panel of one person is rejected with the rule named, and the opportunity keeps the panel it had)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity that uses a panel must name at least two panel members, each a public sector employee, each named only once, and at most one of them marked as chair. (a panel naming the same person twice is rejected with the rule named, and the opportunity keeps the panel it had)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity that uses a panel must name at least two panel members, each a public sector employee, each named only once, and at most one of them marked as chair. (a panel naming two chairs is rejected)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity that uses a panel must name at least two panel members, each a public sector employee, each named only once, and at most one of them marked as chair. (a panel naming a vendor is rejected with the rule named, and the opportunity keeps the panel it had)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "90c0a508bc20bf74c7e5ad29d795148ae2a78650",
+      "adapter": "a2193e6ab02e14e95a28b51a01689a7a92fe730c"
+    },
+    {
+      "id": "R-5.9",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.9.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "The service must reject an evaluation panel that names no chair, applying the same rule the browser form already applies, so that no opportunity can enter consensus with nobody able to record the agreed score",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "a077dfe2f532a06d5b82d6f4eaa936c1ced60113",
+      "adapter": "a2193e6ab02e14e95a28b51a01689a7a92fe730c"
+    },
+    {
+      "id": "R-5.17",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.17.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "When people are added to an evaluation panel, only the people newly added are notified, and only once the opportunity has left draft (a third person added to a published opportunity's panel is notified, and the two already on it are not)",
+          "status": "passed"
+        },
+        {
+          "title": "When people are added to an evaluation panel, only the people newly added are notified, and only once the opportunity has left draft (the same change made while the opportunity is still a draft notifies nobody)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "96f37c978bfba9dd62cc32ce4ce6224375266783",
+      "adapter": "a2193e6ab02e14e95a28b51a01689a7a92fe730c"
+    },
+    {
+      "id": "R-5.18",
+      "version": 2,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.18.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "The membership of an evaluation panel is returned by the service to an administrator, the opportunity's owner and the people on the panel itself",
+          "status": "passed"
+        },
+        {
+          "title": "The membership of an evaluation panel is returned by the service to nobody else: not to a vendor, nor to a public sector employee who is neither the owner nor on the panel",
+          "status": "passed"
+        },
+        {
+          "title": "The screen that lists and manages the panel opens for an administrator or the opportunity's owner",
+          "status": "passed"
+        },
+        {
+          "title": "The screen that lists and manages the panel answers \"Not Found\" to anyone else who asks for it, a panel member included",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "a4b3e49c192590a8d6d33eceff743f48807ca09f",
+      "adapter": "a2193e6ab02e14e95a28b51a01689a7a92fe730c"
+    },
+    {
+      "id": "R-5.37",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.37.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "A panel member who is neither an evaluator nor the chair must be refused by the service when the panel is submitted, with a field-level message identifying the offending member, rather than being allowed through to a database constraint violation",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "af446ae7f9f0d180d2644b15ee8c188723a3dcbc",
+      "adapter": "a2193e6ab02e14e95a28b51a01689a7a92fe730c"
+    },
+    {
+      "id": "R-1.8",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.8.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "Every opportunity belongs to exactly one of three procurement programs — Code With Us, Sprint With Us or Team With Us — chosen when it is created and never changed afterwards. (Code With Us)",
+          "status": "passed"
+        },
+        {
+          "title": "Every opportunity belongs to exactly one of three procurement programs — Code With Us, Sprint With Us or Team With Us — chosen when it is created and never changed afterwards. (Sprint With Us)",
+          "status": "passed"
+        },
+        {
+          "title": "Every opportunity belongs to exactly one of three procurement programs — Code With Us, Sprint With Us or Team With Us — chosen when it is created and never changed afterwards. (Team With Us)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "3e298917785ffe1f0a02f47ad668d2bfca8e5cf6",
+      "adapter": "a2193e6ab02e14e95a28b51a01689a7a92fe730c"
+    },
+    {
+      "id": "R-1.9",
+      "version": 2,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.9.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "Code With Us: a draft whose dates are missing is accepted, its proposal deadline, assignment date and start date are set to fourteen days from the day of saving, and its completion date is left empty",
+          "status": "passed"
+        },
+        {
+          "title": "Code With Us: a draft whose dates are invalid is accepted, its proposal deadline, assignment date and start date are set to fourteen days from the day of saving, and its completion date is left empty",
+          "status": "passed"
+        },
+        {
+          "title": "Sprint With Us: a draft whose dates are missing is accepted, its proposal deadline, assignment date and start date are set to fourteen days from the day of saving, and its completion date is left empty",
+          "status": "passed"
+        },
+        {
+          "title": "Sprint With Us: a draft whose dates are invalid is accepted, its proposal deadline, assignment date and start date are set to fourteen days from the day of saving, and its completion date is left empty",
+          "status": "passed"
+        },
+        {
+          "title": "Team With Us: a draft whose dates are missing is accepted, its proposal deadline, assignment date and start date are set to fourteen days from the day of saving, and its completion date is left empty",
+          "status": "passed"
+        },
+        {
+          "title": "Team With Us: a draft whose dates are invalid is accepted, its proposal deadline, assignment date and start date are set to fourteen days from the day of saving, and its completion date is left empty",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "f00a1673daf842881af0e4d5c99746c639c9864b",
+      "adapter": "a2193e6ab02e14e95a28b51a01689a7a92fe730c"
+    },
+    {
+      "id": "R-1.13",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.13.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "A Sprint With Us opportunity must state a total maximum budget of at least $1 and at most $5,000,000, while a Team With Us opportunity must state a maximum budget of at least $1 with no upper limit. (a Sprint With Us total maximum budget above $5,000,000 is rejected)",
+          "status": "passed"
+        },
+        {
+          "title": "A Sprint With Us opportunity must state a total maximum budget of at least $1 and at most $5,000,000, while a Team With Us opportunity must state a maximum budget of at least $1 with no upper limit. (a Sprint With Us total maximum budget below $1 is rejected)",
+          "status": "passed"
+        },
+        {
+          "title": "A Sprint With Us opportunity must state a total maximum budget of at least $1 and at most $5,000,000, while a Team With Us opportunity must state a maximum budget of at least $1 with no upper limit. (a Team With Us maximum budget below $1 is rejected)",
+          "status": "passed"
+        },
+        {
+          "title": "A Sprint With Us opportunity must state a total maximum budget of at least $1 and at most $5,000,000, while a Team With Us opportunity must state a maximum budget of at least $1 with no upper limit. (a Team With Us maximum budget has no upper limit)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "522c514e66c61de3901a268beef3612544055bbe",
+      "adapter": "a2193e6ab02e14e95a28b51a01689a7a92fe730c"
+    },
+    {
+      "id": "R-1.15",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.15.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a Sprint With Us opportunity is rejected unless its evaluation weights total exactly one hundred per cent",
+          "status": "passed"
+        },
+        {
+          "title": "a Team With Us opportunity is rejected unless its evaluation weights total exactly one hundred per cent",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "66c28d7572254af0bbcd242fac850a529eaf1446",
+      "adapter": "a2193e6ab02e14e95a28b51a01689a7a92fe730c"
+    },
+    {
+      "id": "R-1.16",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.16.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "A Sprint With Us opportunity must have an implementation phase",
+          "status": "passed"
+        },
+        {
+          "title": "A Sprint With Us opportunity may only have an inception phase if it also has a prototype phase",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "9f3faa97216d5a7139345fe527f80af432f72ca0",
+      "adapter": "a2193e6ab02e14e95a28b51a01689a7a92fe730c"
+    },
+    {
+      "id": "R-1.17",
+      "version": 3,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.17.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position (0 to 100) is set by its place in the opportunity's list of questions and is never entered by the person. These limits are enforced when the opportunity is submitted for review or published, where a question outside them is refused and the offending field is named; saving the opportunity as a draft does not apply them, so a draft may be saved holding a question outside these limits. (an empty question is refused on submission for review, naming the question)",
+          "status": "passed"
+        },
+        {
+          "title": "Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position (0 to 100) is set by its place in the opportunity's list of questions and is never entered by the person. These limits are enforced when the opportunity is submitted for review or published, where a question outside them is refused and the offending field is named; saving the opportunity as a draft does not apply them, so a draft may be saved holding a question outside these limits. (a question over 1,000 characters is refused on submission for review, naming the question)",
+          "status": "passed"
+        },
+        {
+          "title": "Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position (0 to 100) is set by its place in the opportunity's list of questions and is never entered by the person. These limits are enforced when the opportunity is submitted for review or published, where a question outside them is refused and the offending field is named; saving the opportunity as a draft does not apply them, so a draft may be saved holding a question outside these limits. (an empty guideline is refused on submission for review, naming the guideline)",
+          "status": "passed"
+        },
+        {
+          "title": "Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position (0 to 100) is set by its place in the opportunity's list of questions and is never entered by the person. These limits are enforced when the opportunity is submitted for review or published, where a question outside them is refused and the offending field is named; saving the opportunity as a draft does not apply them, so a draft may be saved holding a question outside these limits. (a guideline over 1,000 characters is refused on submission for review, naming the guideline)",
+          "status": "passed"
+        },
+        {
+          "title": "Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position (0 to 100) is set by its place in the opportunity's list of questions and is never entered by the person. These limits are enforced when the opportunity is submitted for review or published, where a question outside them is refused and the offending field is named; saving the opportunity as a draft does not apply them, so a draft may be saved holding a question outside these limits. (a maximum score below 1 is refused on submission for review, naming the score)",
+          "status": "passed"
+        },
+        {
+          "title": "Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position (0 to 100) is set by its place in the opportunity's list of questions and is never entered by the person. These limits are enforced when the opportunity is submitted for review or published, where a question outside them is refused and the offending field is named; saving the opportunity as a draft does not apply them, so a draft may be saved holding a question outside these limits. (a response word limit below 1 is refused on submission for review, naming the word limit)",
+          "status": "passed"
+        },
+        {
+          "title": "Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position (0 to 100) is set by its place in the opportunity's list of questions and is never entered by the person. These limits are enforced when the opportunity is submitted for review or published, where a question outside them is refused and the offending field is named; saving the opportunity as a draft does not apply them, so a draft may be saved holding a question outside these limits. (a response word limit above 3,000 is refused on submission for review, naming the word limit)",
+          "status": "passed"
+        },
+        {
+          "title": "Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position (0 to 100) is set by its place in the opportunity's list of questions and is never entered by the person. These limits are enforced when the opportunity is submitted for review or published, where a question outside them is refused and the offending field is named; saving the opportunity as a draft does not apply them, so a draft may be saved holding a question outside these limits. (a Sprint With Us minimum score that is not lower than the maximum is refused on submission for review, naming the minimum score)",
+          "status": "passed"
+        },
+        {
+          "title": "Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position (0 to 100) is set by its place in the opportunity's list of questions and is never entered by the person. These limits are enforced when the opportunity is submitted for review or published, where a question outside them is refused and the offending field is named; saving the opportunity as a draft does not apply them, so a draft may be saved holding a question outside these limits. (a Team With Us minimum score that is not lower than the maximum is refused on submission for review, naming the minimum score)",
+          "status": "passed"
+        },
+        {
+          "title": "Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position (0 to 100) is set by its place in the opportunity's list of questions and is never entered by the person. These limits are enforced when the opportunity is submitted for review or published, where a question outside them is refused and the offending field is named; saving the opportunity as a draft does not apply them, so a draft may be saved holding a question outside these limits. (a Sprint With Us question with no minimum score is accepted on submission for review, since the minimum score is optional)",
+          "status": "passed"
+        },
+        {
+          "title": "Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position (0 to 100) is set by its place in the opportunity's list of questions and is never entered by the person. These limits are enforced when the opportunity is submitted for review or published, where a question outside them is refused and the offending field is named; saving the opportunity as a draft does not apply them, so a draft may be saved holding a question outside these limits. (a Sprint With Us question outside the limits is refused on publication, naming the offending field)",
+          "status": "passed"
+        },
+        {
+          "title": "Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position (0 to 100) is set by its place in the opportunity's list of questions and is never entered by the person. These limits are enforced when the opportunity is submitted for review or published, where a question outside them is refused and the offending field is named; saving the opportunity as a draft does not apply them, so a draft may be saved holding a question outside these limits. (a Team With Us question outside the limits is refused on publication, naming the offending field)",
+          "status": "passed"
+        },
+        {
+          "title": "Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position (0 to 100) is set by its place in the opportunity's list of questions and is never entered by the person. These limits are enforced when the opportunity is submitted for review or published, where a question outside them is refused and the offending field is named; saving the opportunity as a draft does not apply them, so a draft may be saved holding a question outside these limits. (a question whose position would fall beyond 100 is refused on submission for review)",
+          "status": "passed"
+        },
+        {
+          "title": "Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position (0 to 100) is set by its place in the opportunity's list of questions and is never entered by the person. These limits are enforced when the opportunity is submitted for review or published, where a question outside them is refused and the offending field is named; saving the opportunity as a draft does not apply them, so a draft may be saved holding a question outside these limits. (an opportunity holding 101 questions, the last at position 100, is accepted on submission for review)",
+          "status": "passed"
+        },
+        {
+          "title": "Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position (0 to 100) is set by its place in the opportunity's list of questions and is never entered by the person. These limits are enforced when the opportunity is submitted for review or published, where a question outside them is refused and the offending field is named; saving the opportunity as a draft does not apply them, so a draft may be saved holding a question outside these limits. (a question's position is set by its place in the list)",
+          "status": "passed"
+        },
+        {
+          "title": "Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position (0 to 100) is set by its place in the opportunity's list of questions and is never entered by the person. These limits are enforced when the opportunity is submitted for review or published, where a question outside them is refused and the offending field is named; saving the opportunity as a draft does not apply them, so a draft may be saved holding a question outside these limits. (a Sprint With Us draft may be saved holding a question outside these limits)",
+          "status": "passed"
+        },
+        {
+          "title": "Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position (0 to 100) is set by its place in the opportunity's list of questions and is never entered by the person. These limits are enforced when the opportunity is submitted for review or published, where a question outside them is refused and the offending field is named; saving the opportunity as a draft does not apply them, so a draft may be saved holding a question outside these limits. (a Team With Us draft may be saved holding a question outside these limits)",
+          "status": "passed"
+        },
+        {
+          "title": "Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position (0 to 100) is set by its place in the opportunity's list of questions and is never entered by the person. These limits are enforced when the opportunity is submitted for review or published, where a question outside them is refused and the offending field is named; saving the opportunity as a draft does not apply them, so a draft may be saved holding a question outside these limits. (a Sprint With Us question offers its question, guideline, word limit, maximum and minimum score for entry, and never a position)",
+          "status": "passed"
+        },
+        {
+          "title": "Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position (0 to 100) is set by its place in the opportunity's list of questions and is never entered by the person. These limits are enforced when the opportunity is submitted for review or published, where a question outside them is refused and the offending field is named; saving the opportunity as a draft does not apply them, so a draft may be saved holding a question outside these limits. (a Team With Us question offers its question, guideline, word limit, maximum and minimum score for entry, and never a position)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "77ce5ec31b1d3b023e47f65d4fad5e17c9f743a8",
+      "adapter": "a2193e6ab02e14e95a28b51a01689a7a92fe730c"
+    },
+    {
+      "id": "R-1.18",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.18.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "Each resource on a Team With Us opportunity names one service area and a target allocation between 1 and 100 per cent of full time. (a target allocation below 1 per cent is rejected)",
+          "status": "passed"
+        },
+        {
+          "title": "Each resource on a Team With Us opportunity names one service area and a target allocation between 1 and 100 per cent of full time. (a target allocation above 100 per cent is rejected)",
+          "status": "passed"
+        },
+        {
+          "title": "Each resource on a Team With Us opportunity names one service area and a target allocation between 1 and 100 per cent of full time. (a service area that is not one of the recognised five is rejected)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "135b7d3e46c3df6f3078a3f332836e111d610170",
+      "adapter": "a2193e6ab02e14e95a28b51a01689a7a92fe730c"
+    },
+    {
+      "id": "R-1.39",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.39.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "The opportunity list can be narrowed by program, by state, to remote-friendly opportunities only, and by free text matched against title and location. (by program)",
+          "status": "passed"
+        },
+        {
+          "title": "The opportunity list can be narrowed by program, by state, to remote-friendly opportunities only, and by free text matched against title and location. (by state)",
+          "status": "passed"
+        },
+        {
+          "title": "The opportunity list can be narrowed by program, by state, to remote-friendly opportunities only, and by free text matched against title and location. (to remote-friendly opportunities only)",
+          "status": "passed"
+        },
+        {
+          "title": "The opportunity list can be narrowed by program, by state, to remote-friendly opportunities only, and by free text matched against title and location. (by free text matched against title and location)",
+          "status": "passed"
+        },
+        {
+          "title": "The opportunity list can be narrowed by program, by state, to remote-friendly opportunities only, and by free text matched against title and location. (only opportunities matching every chosen condition remain visible)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "3e8624a257b7d82b1173aff420e84d28022a5bf7",
+      "adapter": "a2193e6ab02e14e95a28b51a01689a7a92fe730c"
+    },
+    {
+      "id": "R-1.43",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.43.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "The evaluation panel of a Sprint With Us or Team With Us opportunity may be changed only while the opportunity is a draft, under review, published, or at the first questions stage. (Sprint With Us at the consensus stage)",
+          "status": "passed"
+        },
+        {
+          "title": "The evaluation panel of a Sprint With Us or Team With Us opportunity may be changed only while the opportunity is a draft, under review, published, or at the first questions stage. (Team With Us at the consensus stage)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "5ecc1e927df31ef56346b4d1c5d80c023152ad7e",
+      "adapter": "a2193e6ab02e14e95a28b51a01689a7a92fe730c"
+    },
+    {
+      "id": "R-1.48",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.48.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "Creating an opportunity with its state set to published is refused unless the requester is an administrator; a public sector employee who is not an administrator may create an opportunity only as a draft or under review, in all three programs. (Code With Us: created as published by a public sector employee who is not an administrator, refused)",
+          "status": "passed"
+        },
+        {
+          "title": "Creating an opportunity with its state set to published is refused unless the requester is an administrator; a public sector employee who is not an administrator may create an opportunity only as a draft or under review, in all three programs. (Code With Us: created as a draft by a public sector employee who is not an administrator)",
+          "status": "passed"
+        },
+        {
+          "title": "Creating an opportunity with its state set to published is refused unless the requester is an administrator; a public sector employee who is not an administrator may create an opportunity only as a draft or under review, in all three programs. (Code With Us: created under review by a public sector employee who is not an administrator)",
+          "status": "passed"
+        },
+        {
+          "title": "Creating an opportunity with its state set to published is refused unless the requester is an administrator; a public sector employee who is not an administrator may create an opportunity only as a draft or under review, in all three programs. (Sprint With Us: created as published by a public sector employee who is not an administrator, refused)",
+          "status": "passed"
+        },
+        {
+          "title": "Creating an opportunity with its state set to published is refused unless the requester is an administrator; a public sector employee who is not an administrator may create an opportunity only as a draft or under review, in all three programs. (Sprint With Us: created as a draft by a public sector employee who is not an administrator)",
+          "status": "passed"
+        },
+        {
+          "title": "Creating an opportunity with its state set to published is refused unless the requester is an administrator; a public sector employee who is not an administrator may create an opportunity only as a draft or under review, in all three programs. (Sprint With Us: created under review by a public sector employee who is not an administrator)",
+          "status": "passed"
+        },
+        {
+          "title": "Creating an opportunity with its state set to published is refused unless the requester is an administrator; a public sector employee who is not an administrator may create an opportunity only as a draft or under review, in all three programs. (Team With Us: created as published by a public sector employee who is not an administrator, refused)",
+          "status": "passed"
+        },
+        {
+          "title": "Creating an opportunity with its state set to published is refused unless the requester is an administrator; a public sector employee who is not an administrator may create an opportunity only as a draft or under review, in all three programs. (Team With Us: created as a draft by a public sector employee who is not an administrator)",
+          "status": "passed"
+        },
+        {
+          "title": "Creating an opportunity with its state set to published is refused unless the requester is an administrator; a public sector employee who is not an administrator may create an opportunity only as a draft or under review, in all three programs. (Team With Us: created under review by a public sector employee who is not an administrator)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "e0649f8e6c8b3a9aaaedcad073b4bd055e07b566",
+      "adapter": "a2193e6ab02e14e95a28b51a01689a7a92fe730c"
+    },
+    {
+      "id": "R-1.53",
+      "version": 2,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.53.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Code With Us: an administrator deletes a draft)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Code With Us: an administrator deletes an opportunity under review)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Code With Us: the public sector employee who created it deletes a draft)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Code With Us: the public sector employee who created it is refused once it is under review, and it remains)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Sprint With Us: an administrator deletes a draft)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Sprint With Us: an administrator deletes an opportunity under review)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Sprint With Us: the public sector employee who created it deletes a draft)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Sprint With Us: the public sector employee who created it is refused once it is under review, and it remains)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Team With Us: an administrator deletes a draft)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Team With Us: an administrator deletes an opportunity under review)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Team With Us: the public sector employee who created it deletes a draft)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Team With Us: the public sector employee who created it is refused once it is under review, and it remains)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Code With Us: a request to delete an opportunity that has been published is refused, and it remains)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Sprint With Us: a request to delete an opportunity that has been published is refused, and it remains)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Team With Us: a request to delete an opportunity that has been published is refused, and it remains)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "8d8823bac435b9a815e5b181069ca47ba9edde6a",
+      "adapter": "a2193e6ab02e14e95a28b51a01689a7a92fe730c"
+    },
+    {
+      "id": "R-1.55",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.55.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, exactly one of whom is the chair; a submission with fewer than two members, the same person twice, no chair, more than one chair, or anyone who is not a public sector employee is rejected and the reason is named. (Sprint With Us: fewer than two members)",
+          "status": "passed"
+        },
+        {
+          "title": "A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, exactly one of whom is the chair; a submission with fewer than two members, the same person twice, no chair, more than one chair, or anyone who is not a public sector employee is rejected and the reason is named. (Sprint With Us: the same person twice)",
+          "status": "passed"
+        },
+        {
+          "title": "A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, exactly one of whom is the chair; a submission with fewer than two members, the same person twice, no chair, more than one chair, or anyone who is not a public sector employee is rejected and the reason is named. (Sprint With Us: no chair)",
+          "status": "passed"
+        },
+        {
+          "title": "A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, exactly one of whom is the chair; a submission with fewer than two members, the same person twice, no chair, more than one chair, or anyone who is not a public sector employee is rejected and the reason is named. (Sprint With Us: more than one chair)",
+          "status": "passed"
+        },
+        {
+          "title": "A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, exactly one of whom is the chair; a submission with fewer than two members, the same person twice, no chair, more than one chair, or anyone who is not a public sector employee is rejected and the reason is named. (Sprint With Us: somebody who is not a public sector employee)",
+          "status": "passed"
+        },
+        {
+          "title": "A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, exactly one of whom is the chair; a submission with fewer than two members, the same person twice, no chair, more than one chair, or anyone who is not a public sector employee is rejected and the reason is named. (Team With Us: fewer than two members)",
+          "status": "passed"
+        },
+        {
+          "title": "A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, exactly one of whom is the chair; a submission with fewer than two members, the same person twice, no chair, more than one chair, or anyone who is not a public sector employee is rejected and the reason is named. (Team With Us: the same person twice)",
+          "status": "passed"
+        },
+        {
+          "title": "A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, exactly one of whom is the chair; a submission with fewer than two members, the same person twice, no chair, more than one chair, or anyone who is not a public sector employee is rejected and the reason is named. (Team With Us: no chair)",
+          "status": "passed"
+        },
+        {
+          "title": "A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, exactly one of whom is the chair; a submission with fewer than two members, the same person twice, no chair, more than one chair, or anyone who is not a public sector employee is rejected and the reason is named. (Team With Us: more than one chair)",
+          "status": "passed"
+        },
+        {
+          "title": "A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, exactly one of whom is the chair; a submission with fewer than two members, the same person twice, no chair, more than one chair, or anyone who is not a public sector employee is rejected and the reason is named. (Team With Us: somebody who is not a public sector employee)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "52cf76ee83d97fd60ffaf017c98ca6f510088b97",
+      "adapter": "a2193e6ab02e14e95a28b51a01689a7a92fe730c"
+    },
+    {
+      "id": "R-1.56",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.56.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "Once an opportunity is published, only an administrator may change its details; a request from the public sector employee who created it is refused, and the same rule governs Code With Us, Sprint With Us and Team With Us alike. (Code With Us: an administrator changes the details of a published opportunity)",
+          "status": "passed"
+        },
+        {
+          "title": "Once an opportunity is published, only an administrator may change its details; a request from the public sector employee who created it is refused, and the same rule governs Code With Us, Sprint With Us and Team With Us alike. (Code With Us: the public sector employee who created a published opportunity is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "Once an opportunity is published, only an administrator may change its details; a request from the public sector employee who created it is refused, and the same rule governs Code With Us, Sprint With Us and Team With Us alike. (Sprint With Us: an administrator changes the details of a published opportunity)",
+          "status": "passed"
+        },
+        {
+          "title": "Once an opportunity is published, only an administrator may change its details; a request from the public sector employee who created it is refused, and the same rule governs Code With Us, Sprint With Us and Team With Us alike. (Sprint With Us: the public sector employee who created a published opportunity is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "Once an opportunity is published, only an administrator may change its details; a request from the public sector employee who created it is refused, and the same rule governs Code With Us, Sprint With Us and Team With Us alike. (Team With Us: an administrator changes the details of a published opportunity)",
+          "status": "passed"
+        },
+        {
+          "title": "Once an opportunity is published, only an administrator may change its details; a request from the public sector employee who created it is refused, and the same rule governs Code With Us, Sprint With Us and Team With Us alike. (Team With Us: the public sector employee who created a published opportunity is refused)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "78217ffaca923ee84a6ffb0ba301f373308035ab",
+      "adapter": "a2193e6ab02e14e95a28b51a01689a7a92fe730c"
+    }
+  ]
+}
