@@ -1,0 +1,18 @@
+gate: G3
+verdict: return
+by: agent:tech-lead
+held_by: agent
+rationale: |2-
+  Should slice 13 pass G3 when R-3.26 and R-3.28 fail? Return. The cause is the new target's adapter, not the application. The tests ask organizationEdit.serviceAreaCheckbox() which areas are approved and check whether an area's words appear in the text. On the old target the function returns only the ticked areas (tests/adapters/old/index.ts:6617). On the new target it returns every checkbox as 'label: checked/unchecked' (tests/adapters/new/index.ts:5536-5537). So every area name is always present: R-3.26 reads an organization with nothing ticked as 'already approved', and R-3.28's 'not DATA_PROFESSIONAL' can never hold while that box is on the page. The tests match what the old target returns, so they do not overreach. This build's checkbox change does not touch that mechanism, because the test pattern accepts any case and any separator. Its decision record 0054 wrongly claims it fixes the failures, and record 0053 now contradicts it. The ruling changes if the adapter reports only ticked areas and the two criteria still fail.
+conditions:
+  - "addressed-to bind-adapter: target new — organizationEdit.serviceAreaCheckbox in tests/adapters/new/index.ts (around lines 5522-5547) must return only the service areas that are approved (ticked boxes in the editor, or the items in the 'Approved service areas' list), the same as the old target's binding (tests/adapters/old/index.ts around line 6617: 'the areas whose boxes are ticked'). It must not return every box with ': checked'/': unchecked' after it. The R-3.26 and R-3.28 tests check whether an area's words appear anywhere in the returned text, so the current output makes every area look approved. In verify of build-slice-13-3, R-3.26 read 'Full stack developer: unchecked Data professional: unchecked ...' and failed 'the organization already stands approved'. R-3.28 read 'Full stack developer: checked Data professional: unchecked Agile coach: checked ...' and failed because DATA_PROFESSIONAL's words appear in the text although it was unticked."
+  - "docs/decisions/0054-service-area-checkboxes-follow-the-catalogue.md: take out the claim that the label and value change fixes the acceptance failures. The adapter's reading caused them, and that has been sent to bind-adapter. Keep the change itself only for the reason that it follows the catalogue page."
+  - "docs/decisions/0053-qualifying-for-sprint-with-us-and-team-with-us.md: make the Service areas paragraph agree with 0054. It still says the screen names each area by the service's own name ('Full Stack Developer') and that the sentence-case names are illustrative."
+cost: 0.6561032
+turns: 6
+session: "6c874f97-3ea0-4981-a4f3-3ce076ea0732"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-03T19:21:38.538Z
