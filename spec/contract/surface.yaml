@@ -262,6 +262,18 @@ pages:
       # an instance started in the configuration service_page_absent
       # (observables.yaml, configurations) is the one where it is missing.
       scope_section: { test_id: null }
+      # The text of every notice, alert, error message or pop-up message the screen shows
+      # anywhere outside its own sections (scope_section, phases, addenda and the rest
+      # above), one message per line, in the order shown; empty when none is shown. The
+      # screen raises its own notices above the opportunity, and only in four cases: the
+      # signed-in vendor has already submitted a proposal to it, it has been awarded, it is
+      # accepting proposals and nobody is signed in, or it is accepting proposals and the
+      # signed-in vendor's organizations do not meet the Sprint With Us qualification. None
+      # of those holds for opportunities.closedSprintWithUs (closed, not awarded) opened by
+      # persona vendor (users.vendorOne, who has no proposal on it), so for that pair this
+      # is empty under the default and any message it returns on an instance started in
+      # service_page_absent is one the missing page caused.
+      page_messages: { test_id: null }
       addenda: { test_id: opportunity-addenda }
       successful_proponent: { test_id: opportunity-successful-proponent }
       # What an awarded opportunity shows about its winner beyond the name: the contact

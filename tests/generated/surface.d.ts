@@ -248,6 +248,7 @@ export interface OpportunitySwuViewPage {
   totalMaxBudget(): Promise<string>;
   phases(): Promise<string>;
   scopeSection(): Promise<string>;
+  pageMessages(): Promise<string>;
   addenda(): Promise<string>;
   successfulProponent(): Promise<string>;
   successfulProponentContactDetails(): Promise<string>;
