@@ -52,6 +52,9 @@
 - 17:23:25 run build: ok, cost 0.220404, turns 6, on claude claude-opus-5-5 (2.1.284 (Claude Code))
 - 17:23:25 propose build-slice-10-5 at G3
 - 18:08:49 rule build-slice-10-5 approve at G3 by tech-lead (human)
+- 18:07:00 propose calibrate-triage-old-43 at G3
+- 18:09:25 drive: step 1: `sdlc rule calibrate-triage-old-43 --by agent:reviewer` — calibrate-triage-old-43 is open at G3, held by agent:reviewer
+- 18:10:00 rule calibrate-triage-old-43 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-10-02
 
