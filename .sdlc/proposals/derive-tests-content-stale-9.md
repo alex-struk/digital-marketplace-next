@@ -28,3 +28,23 @@ The criterion's outcome also says the scope section is empty "with nothing said 
 **Missing from the surface:** nothing that the criterion as stated needs. One thing could be added: the evaluation instruction screens have no messages observation like `page_messages`. The criterion only mentions those screens in a note ("a panel can be shown a blank instruction screen and told nothing"), not in its given/when/then, so I recorded nothing for it. If ratify promotes that note to a stated outcome, the contract would need a `page_messages` on both evaluation instruction screens.
 
 I touched no file outside `tests/acceptance`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: do the R-7.29 tests follow from the criterion and nothing else? Approve. The criterion's outcome is that the opportunity is shown in full and the scope section is empty 'with nothing said about why'. The one new assertion reads opportunitySwuView.pageMessages() on the service_page_absent instance and requires it to be empty, which is exactly that clause. The observation exists in the contract (spec/contract/surface.yaml page_messages, documented as empty under the default so any message under service_page_absent is one the missing page caused) and in tests/generated/surface.d.ts. It leaks no selector, route or status, and the runner's typecheck of acceptance/content passed with no diagnostics. With the clause asserted, every clause of the given/when/then has a test, so removing the R-7.29 entry from not-testable.yaml is correct. The evaluation-instruction tests are unchanged, and the writer rightly added no message assertion there because the criterion names those screens only in a note. No file outside tests/acceptance changed. missing-test/R-7.29 stays open until this test runs, which a ruling cannot settle. This would change to a return if page_messages were shown to cover text inside the screen's sections, or were not empty under the default configuration, because the assertion would then not isolate the missing page.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `63fdbf25345ebbdac7d778b36831976ff2b4f116`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/content/`, which this proposal answers for.
+
+    No diagnostics.
