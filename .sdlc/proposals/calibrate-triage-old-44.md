@@ -95,3 +95,14 @@ not span more than one line. When the evidence is genuinely unclear, it is a `pr
 a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the
 adapter comes back from the next binding run unchanged and costs a run to find out.
 
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: which of R-1.33's failures against the old target did this project's own adapter cause? Ruling: approve, sending R-1.33 to the product owner. None of the evidence shows the adapter did the wrong thing. (1) The three adding cases fail with 'the file to attach should have been stored' because the test calls fileUpload.uploadFile with only a name and content. The adapter sends that upload with no read-access statement, as asked, and the oracle refuses any upload without one: sources/old/src/back-end/lib/resources/file.ts answers invalid(['Invalid metadata provided.']) when metadata is absent. The binding is right as it stands, because R-8.24's test uses the same uploadFile to check that exactly this bare upload is refused. Adding a statement to it would break R-8.24. The fault is in the R-1.33 test's choice of action: it should store its attachment with uploadFileStatingItsReadAccess. That is for the test writer, not the binding. (2) The signed-out reader case fails because the oracle returns the history, private note and file included, to a request with no session. The adapter's own binding notes recorded the same thing (index.ts, above opportunityHistoryRequest: 'GET answered the administrator, and a request with no session, the opportunity with history'), so the adapter read the right thing. The old application genuinely contradicts the criterion's 'visible only to the author and administrators', and whether the criterion or the old behaviour wins is the product owner's call. (3) The other-staff-member case is unbound because the oracle's session routes each mint one fixed account, so no second non-author public sector account can be acted as. No adapter change can reach that persona. With one line allowed per criterion and a real product contradiction in (2), product-question is the right answer. What would change this: evidence that the oracle withholds the history from a sessionless request when called the way the adapter calls it, which would make (2) an adapter fault.
+
+**Conditions:**
+- product-question R-1.33
