@@ -1268,3 +1268,72 @@ requests:
     at: 2026-10-03T18:13:48.777Z
     taken: 2026-10-03T18:15:13.087Z
     taken_by: bind-adapter-new-64
+  - stage: bind-adapter
+    target: new
+    why: "R-3.25: organizationEdit.swuRequirementTwoMembers /
+      swuRequirementAllCapabilities / swuRequirementTermsAccepted read only the
+      text line matching the requirement's wording ('At least two active team
+      members'), so the status beside it is lost and the met and unmet readings
+      are identical. On /organizations/:orgId/edit?tab=swu-qualification each
+      requirement is one list item in the list named 'Sprint With Us
+      requirements', whose full text is 'Met <requirement>' or 'Not met
+      <requirement>' (evidence .sdlc/evidence/slice-13/R-3.25.txt lines 44-47).
+      Read the whole list item, status included."
+    from: build-slice-13
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-03T18:59:01.439Z
+  - stage: bind-adapter
+    target: new
+    why: "R-3.28: organizationEdit.serviceAreaCheckbox read \"\" on
+      /organizations/00000000-0000-4000-8000-000000000301/edit?tab=twu-qualific\
+      ation because it reads only checkboxes, which the Team With Us tab draws
+      only after 'Edit service areas' is pressed. Until then the tab lists the
+      approved areas under the heading 'Approved service areas' as list items
+      named by label ('Full Stack Developer', 'Agile Coach'). Read the approvals
+      from that list, or open the editor before reading the boxes. Also,
+      organizationEdit.saveServiceAreas only ever ticks the named boxes and
+      never unticks the others, so a save of [kept, third] leaves the cleared
+      area ticked. It must leave exactly the named areas ticked before pressing
+      'Save service areas'."
+    from: build-slice-13
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-03T18:59:01.439Z
+  - stage: bind-adapter
+    target: new
+    why: "R-3.26: both tests were left with no result. The first was skipped as
+      'blocked' because its establishApproval reads approvals through
+      organizationEdit.serviceAreaCheckbox, which returns empty on the Team With
+      Us tab for the reason given for R-3.28, so the given could never be built.
+      Re-binding serviceAreaCheckbox and saveServiceAreas as described for
+      R-3.28 unblocks it. organizationEdit.twuRequirementServiceArea /
+      twuRequirementTermsAccepted read with the same line-matching as the Sprint
+      With Us requirements and need the same fix: read the whole list item in
+      the list named 'Team With Us requirements', 'Met …' or 'Not met …'.
+      organizationTwuTerms.acceptedOnNotice needs binding as described for
+      R-3.27."
+    from: build-slice-13
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-03T18:59:01.439Z
+  - stage: bind-adapter
+    target: new
+    why: "R-3.27: organizationSwuTerms.acceptedOnNotice was reported unbound with a
+      reason describing an earlier build where
+      /organizations/:orgId/sprint-with-us-terms-and-conditions answered 'Page
+      not found'. On the current build the page renders for the owner (evidence
+      .sdlc/evidence/slice-13/R-3.27.txt): heading 'Sprint With Us Terms &
+      Conditions', the 'Terms and conditions' region holding the terms body, and
+      'Accept terms and conditions' and 'Cancel'. Once accepted, it shows a
+      paragraph '<legal name> accepted these terms on <date>' and only 'Back to
+      the organization'. Bind acceptedOnNotice to that paragraph (empty while
+      unaccepted), termsBody to the 'Terms and conditions' region and
+      acceptTerms to 'Accept terms and conditions', and the same for
+      organizationTwuTerms at
+      /organizations/:orgId/team-with-us-terms-and-conditions. Accepting returns
+      to the matching qualification tab."
+    from: build-slice-13
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-03T18:59:01.439Z
