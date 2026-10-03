@@ -1246,3 +1246,23 @@ requests:
     at: 2026-10-03T17:00:06.478Z
     taken: 2026-10-03T17:01:19.025Z
     taken_by: contract-v39
+  - stage: bind-adapter
+    target: new
+    why: organizationEdit.fieldError in tests/adapters/new/index.ts (around line
+      5444) reads the Team members region's role=alert elements immediately
+      after removeTeamMember. removeTeamMember (orgInRow, then confirmIfAsked)
+      does not wait for the DELETE /api/affiliations/<id> answer, and the
+      refusal alert is drawn only once that answer arrives. In verify of slice
+      12 (proposal build-slice-12-4) R-3.11 read "" at line 12, yet the failure
+      outline .sdlc/evidence/slice-12/R-3.11.txt taken moments later shows alert
+      'That change could not be made' with 'This is the sole owner for the
+      organization, and cannot be removed.' inside region 'Team members'. R-3.11
+      has failed, passed and failed across three verify runs with the
+      application's removal path unchanged. Make removeTeamMember wait for the
+      membership request to settle, or make fieldError wait for an alert to
+      appear in the team region within the normal timeout, before reading, so a
+      refusal drawn after the response is read rather than missed.
+    from: build-slice-12-4
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-03T18:13:48.777Z
