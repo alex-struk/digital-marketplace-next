@@ -65,3 +65,26 @@ I changed only what the four conditions named, plus a few stale reasons on other
 - To learn how a stored logo is shown, I saved a 1×1 PNG as the logo of seeded organization …304 (Salt Marsh Labs Ltd.). It now has a logo it did not have in the seed.
 
 Every surface page's route resolves except the two organization terms pages, which still answer "Page not found".
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does the revised binding for target 'new' bind every organization surface action and observation the current build offers, give every other member a true reason, and do nothing else? Approved. All four instructions the bind-adapter-new-56 ruling left open are settled. On organization-edit, 21 of 39 members are bound (save_changes, cancel_editing, change_logo, current_logo, logo_refused_error, organization_identifier, both qualified badges, field_error and the five section readers). The other 18 are unbound with reasons that describe the four unfinished sections ('This section is not available yet.') rather than 'Page not found'. Both organization-user-memberships pages are rebuilt on the 'Organizations you own' and 'Organizations you belong to' regions in place of the absent() stubs. Approve, reject and leave are unbound because no row has a control, and the two confirmations are unbound unless a dialog is open; each reason names what the page lacks. orgSection now returns an empty string when the named region is missing, with no fallback to a tab panel or the main text. The shared NOBODY_SIGNS_IN reason describes the current build, and no reason in bindings.yaml or index.ts still says the organization screens answer 'Page not found'. The new members only navigate, locate and read; none decides a pass, and submit_disabled_until_valid only reports the control's state. Nothing under tests/acceptance changed, and the runner's typecheck on this revision passed with no diagnostics under adapters/new. Separately, the authoring session gave seeded organization ...304 a logo on the running target; that is target state, not adapter code, and the seed should be reloaded before verify. This ruling would change if a member marked bound were shown to read something other than what its name says.
+
+**Conditions:**
+- condition-met bind-adapter-new-56#1: organization-edit in tests/adapters/new/bindings.yaml (lines 667-708) binds save_changes, cancel_editing, change_logo, organization_identifier, swu/twu_qualified_badge, field_error, current_logo, logo_refused_error and the section readers; the other 18 members are unbound with reasons describing the unfinished sections, and none still says 'Page not found'
+- condition-met bind-adapter-new-56#2: membershipScreen() in tests/adapters/new/index.ts replaces both absent(...sectionRedrawn...) stubs and binds against the 'Organizations you own' and 'Organizations you belong to' regions; bindings.yaml (lines 734-750 and the -self page) binds 10 of 14 members, and approve/reject/leave and both confirmations are unbound with reasons naming what the page lacks
+- condition-met bind-adapter-new-56#3: orgSection in tests/adapters/new/index.ts returns the region named after the section link or an empty string, with no fallback to a tab panel or mainText()
+- condition-met bind-adapter-new-56#4: NOBODY_SIGNS_IN in tests/adapters/new/index.ts now describes the current build (organization list, create and owner's edit screens served; proposal, evaluation and organization terms screens answer 'Page not found'), and no reason in bindings.yaml or index.ts still says the organization screens answer 'Page not found'
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `02c685495be8861e43a5dd19176d1113aa1e5028`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
