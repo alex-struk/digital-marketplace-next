@@ -1345,3 +1345,23 @@ requests:
     at: 2026-10-03T18:59:01.439Z
     taken: 2026-10-03T19:03:40.202Z
     taken_by: bind-adapter-new-65
+  - stage: bind-adapter
+    target: new
+    why: "target new — organizationEdit.serviceAreaCheckbox in
+      tests/adapters/new/index.ts (around lines 5522-5547) must return only the
+      service areas that are approved (ticked boxes in the editor, or the items
+      in the 'Approved service areas' list), the same as the old target's
+      binding (tests/adapters/old/index.ts around line 6617: 'the areas whose
+      boxes are ticked'). It must not return every box with ': checked'/':
+      unchecked' after it. The R-3.26 and R-3.28 tests check whether an area's
+      words appear anywhere in the returned text, so the current output makes
+      every area look approved. In verify of build-slice-13-3, R-3.26 read 'Full
+      stack developer: unchecked Data professional: unchecked ...' and failed
+      'the organization already stands approved'. R-3.28 read 'Full stack
+      developer: checked Data professional: unchecked Agile coach: checked ...'
+      and failed because DATA_PROFESSIONAL's words appear in the text although
+      it was unticked."
+    from: build-slice-13-3
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-03T19:21:38.556Z
