@@ -1,0 +1,18 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does this adapter bind every surface action and observation on new, and nothing else? It answers the 13 revision requests from build-slice-12 with navigation and locator code only: column-cell reads for the owner and pending badges, the team-capabilities list items, the change-owner listbox, the administrator-statement dialog, the not-found refusal, name-to-persona matching, kind-checked answer dialogs and the unregistered-address alert. It adds the affiliation-removal-request page, which matches its surface type. Nothing under tests/acceptance changed, and the runner's typecheck passed. It is returned because bindings.yaml still holds unbound reasons that the proposal's own walk shows are false on this build: add_team_members, approve_pending_member, invalid_membership_type_error, and the qualification, changelog and invitation-answer entries say the team section reads 'This section is not available yet' or that no accept/decline controls exist. The proposal saw the team table, its row actions and dialogs, and the pending row's Accept/Decline buttons, and says these reasons are out of date. A reason that is not real fails this gate's standard, and the recommendation 'Nothing is deferred' is contradicted by the proposal's own list. The ruling changes to approve once each of those entries is re-walked against the live team section and either bound or given a reason that is true of this build.
+conditions:
+  - "bindings.yaml organization-edit: re-walk add_team_members, approve_pending_member and invalid_membership_type_error against /organizations/<id>/edit?tab=team, which now draws the team table (Name, Membership, Capabilities, Actions), per-row Remove and administrator buttons, and an invitation dialog. Bind each one, or replace its 'This section is not available yet' reason with what the live section actually lacks."
+  - "bindings.yaml: re-walk every other entry whose unbound reason cites the team section being 'not available yet' or the absence of invitation accept/decline controls. This covers the qualification, changelog and invitation-answer entries named in the proposal's 'Not changed, but worth a look' list, on both membership pages. The pending row now offers 'Accept the invitation from <org>' and 'Decline the invitation from <org>'. Bind each entry, or give a reason that is true of this build."
+  - "toggleMemberAdminStatus: when the 'Give <name> administrator rights?' dialog is left open because accept_org_admin_terms has not been taken, close it before the next action on the page that does not concern that dialog, or document in the binding why leaving it open cannot block a later locator."
+cost: 0.49941939999999996
+turns: 2
+session: "881dd7b7-0d2b-4010-b126-3e4029235114"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-03T17:18:34.102Z
