@@ -38,3 +38,23 @@ I've changed the profile-picture picker in `tests/adapters/new/index.ts` so it a
 **Side effect.** To see how a stored logo is drawn, I saved a logo onto the seeded organization "Salt Marsh Labs Ltd." (...304), which had none. I found no way to remove it. If a test expects that organization to have no logo and the seed isn't reloaded before the next run, it will now show one.
 
 No page's route failed to load on this target. I changed nothing outside `tests/adapters/new/` and deferred none of the requests.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does this adapter bind every surface action and observation on new, and nothing else? Approve. The diff touches only tests/adapters/new/index.ts and nothing under tests/acceptance. The change is navigation and locators only: on /organizations/create and /organizations/<id>/edit the file-image-picker opens the Organization section and the 'Edit organization' form, accepts the '(optional)' button suffix, and reads the stored '<legal name> logo' image within main while skipping 'Preview of' images. No assertion or pass/fail logic was added. The profile-picture path is unchanged apart from requiring the group to hold its button and scoping the stored-image read to main. The runner-owned typecheck on revision de8a87297 passed with no diagnostics under adapters/new/, which settles the author's point that it could not compile. The remaining unbound reasons are real and name what the surface lacks: the Team members section of organization ...304 renders only 'This section is not available yet.', so organization-edit.add_team_members and owner_badge cannot be bound for R-3.6, R-3.15 and R-3.23. That gap is already filed against plan. R-3.2's create_organization was already bound, and its unbound record came from another instance where the route did not exist. This proposal carries out the bind-adapter revision request from build-slice-11-3. The build-owed instructions build-slice-11-3#1 and #2 concern app code and are not settled here, so they stay open. The logo the binding run saved onto seeded organization ...304 is a seed-reload concern for the runner, not an adapter defect. What would change this ruling: a verify run showing the logo bindings read the wrong element, or that the profile path no longer finds its button or stored picture after the pickerForm and main scoping.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `de8a87297288c6e0aef915a1a4c00873c7292392`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.

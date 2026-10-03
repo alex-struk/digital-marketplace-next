@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does this adapter bind every surface action and observation on new, and nothing else? Approve. The diff touches only tests/adapters/new/index.ts and nothing under tests/acceptance. The change is navigation and locators only: on /organizations/create and /organizations/<id>/edit the file-image-picker opens the Organization section and the 'Edit organization' form, accepts the '(optional)' button suffix, and reads the stored '<legal name> logo' image within main while skipping 'Preview of' images. No assertion or pass/fail logic was added. The profile-picture path is unchanged apart from requiring the group to hold its button and scoping the stored-image read to main. The runner-owned typecheck on revision de8a87297 passed with no diagnostics under adapters/new/, which settles the author's point that it could not compile. The remaining unbound reasons are real and name what the surface lacks: the Team members section of organization ...304 renders only 'This section is not available yet.', so organization-edit.add_team_members and owner_badge cannot be bound for R-3.6, R-3.15 and R-3.23. That gap is already filed against plan. R-3.2's create_organization was already bound, and its unbound record came from another instance where the route did not exist. This proposal carries out the bind-adapter revision request from build-slice-11-3. The build-owed instructions build-slice-11-3#1 and #2 concern app code and are not settled here, so they stay open. The logo the binding run saved onto seeded organization ...304 is a seed-reload concern for the runner, not an adapter defect. What would change this ruling: a verify run showing the logo bindings read the wrong element, or that the profile path no longer finds its button or stored picture after the pickerForm and main scoping.
+conditions: []
+cost: 0.3296162
+turns: 2
+session: "12a3f181-c3cb-4417-864d-17d0c72e1b8c"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-03T14:46:34.476Z
