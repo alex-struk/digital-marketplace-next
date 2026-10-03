@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-12-4 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">563</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">557</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">462</span></a></li><li><a href="../runs.html">Run log <span class="count">21</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-12-4</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-03 18:06</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.288 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 12 (An organization can build its team) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> I fixed the one failure the ruling returned, R-3.10.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.288 (Claude Code))</p>
+<p>I fixed the one failure the ruling returned, R-3.10. The full <code>npm --prefix app run check</code> now passes: typecheck plus 16 migrations tests, 563 backend tests and 375 frontend tests. I could not run the acceptance suite or open a page here, so whether the other 18 criteria still pass needs a new verify run.</p>
+<p><strong>Cause.</strong> The captured page showed the status &quot;You have left Cormorant Bay Membership Ends Ltd.&quot; while the table still listed that organization with a Leave button. In <code>OrganizationsSection.confirm</code> (<code>app/frontend/src/screens/user-profile.tsx</code>), the code closed the dialog and set that status, and only then fetched the memberships again. So for the length of one request, the page said the person had left while still showing them as a member.</p>
+<p><strong>Fix.</strong> A new exported function, <code>membershipsAfter</code>, applies the confirmed answer to the list already on the page:</p>
+<ul><li><strong>Leave or decline:</strong> the membership is removed.</li><li><strong>Accept:</strong> the membership becomes active.</li></ul>
+<p><code>confirm</code> now updates the list and sets the status in the same render, so neither can appear without the other. The re-fetch still runs afterwards and replaces the list when it succeeds. If it fails, the updated local list stays on the page, where before the whole section was replaced by a &quot;could not be loaded&quot; error.</p>
+<p><strong>The empty &quot;Join ?&quot; dialog.</strong> The failure outline also showed an empty &quot;Join ?&quot; dialog left after closing. The confirmation dialog was always mounted and only switched off with <code>isOpen</code>, so while it closed it fell back to the accept wording with a blank name. It is now drawn only while a question is being asked, so closing removes it completely. Focus handling on close is unchanged.</p>
+<p><strong>Unit tests</strong>, added to <code>app/frontend/tests/team.test.tsx</code>:</p>
+<ul><li><strong>Leave:</strong> confirms leaving with the re-fetch held pending. When &quot;You have left Aurora.&quot; appears, the table no longer contains Aurora or its Leave button, the other row is still there, and no dialog is left in the page. It then releases the re-fetch and checks the result holds. The old code would fail this test, because the held re-fetch kept Aurora listed.</li><li><strong>Decline:</strong> arrives from an invitation message&#39;s decline link with the re-fetch never answering. When the decline is announced, the invitation is already gone from the table, along with its pending badge and the dialog.</li><li><strong><code>membershipsAfter</code>:</strong> a direct test of the leave, decline and accept outcomes.</li></ul>
+<p>I changed nothing outside <code>app/</code>, and the change needed no new decision record. The design departures recorded in decision 0052 for this slice are unchanged. Nothing new is left for the next slice.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by agent:tech-lead (persona agent · claude claude-opus-5-5) on 2026-10-03 18:13.</p>
+<div class="body"><p>Question: does slice 12 do what its criteria say? Ruling: return, with the remaining work addressed to bind-adapter rather than build. The owed R-3.10 condition is carried out: R-3.10 now passes in verify, and the proposal adds the held-re-fetch unit tests and stops drawing the confirmation dialog once it closes. The one failure left, R-3.11, is not the application&#39;s. The failure outline at .sdlc/evidence/slice-12/R-3.11.txt shows the team region already holding the alert &#39;That change could not be made — This is the sole owner for the organization, and cannot be removed.&#39;, with the owner&#39;s row still listed as Owner, which is what R-3.11 requires. The adapter&#39;s organizationEdit.fieldError (tests/adapters/new/index.ts:5444) reads the team region&#39;s alerts at once, with no wait for the DELETE answer to render, so it can read &quot;&quot; before the refusal is drawn. R-3.11 has gone fail (verify run 2), pass (run 3), fail (run 4) without the removal path changing, which is a race and not a defect, so another build would not settle it. The verify account&#39;s suspicion that the adapter is at fault is what decided this. What would change the ruling: a fieldError that waits for the refusal, then a verify run in which all 19 claimed criteria pass. If R-3.11 still fails once the adapter waits, the fault returns to build.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met build-slice-12-3#1: OrganizationsSection.confirm in app/frontend/src/screens/user-profile.tsx now applies the confirmed answer to the list through membershipsAfter in the same render as the status. The confirmation dialog is drawn only while a question is asked. app/frontend/tests/team.test.tsx holds the re-fetch pending for leave and for decline and checks the organization is already gone when the status appears. R-3.10 passes in tests/results/new/slice-12.json.</li><li>addressed-to bind-adapter: organizationEdit.fieldError in tests/adapters/new/index.ts (around line 5444) reads the Team members region&#39;s role=alert elements immediately after removeTeamMember. removeTeamMember (orgInRow, then confirmIfAsked) does not wait for the DELETE /api/affiliations/&lt;id&gt; answer, and the refusal alert is drawn only once that answer arrives. In verify of slice 12 (proposal build-slice-12-4) R-3.11 read &quot;&quot; at line 12, yet the failure outline .sdlc/evidence/slice-12/R-3.11.txt taken moments later shows alert &#39;That change could not be made&#39; with &#39;This is the sole owner for the organization, and cannot be removed.&#39; inside region &#39;Team members&#39;. R-3.11 has failed, passed and failed across three verify runs with the application&#39;s removal path unchanged. Make removeTeamMember wait for the membership request to settle, or make fieldError wait for an alert to appear in the team region within the normal timeout, before reading, so a refusal drawn after the response is read rather than missed.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
