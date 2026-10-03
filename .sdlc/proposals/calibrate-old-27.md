@@ -91,3 +91,14 @@ The ID is the criterion's own id exactly as `spec/criteria-index.json` spells it
 takes no text; the other two require a colon and text on the same line. A condition may not span
 more than one line.
 
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:product-owner
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether each of R-1.33's five failures against the old application is the application's fault, the spec's or the test's. Ruling: approve with test-wrong. Three failures (the author adding a note to a published Sprint With Us opportunity, the author adding one to a published Code With Us opportunity, and an administrator adding one to a cancelled Code With Us opportunity) stop at the test's own setup, before any note is added. The test uploads its attachment without saying who may read the file, and the old service rejects any upload that leaves that out (sources/old/src/back-end/lib/resources/file.ts:138-140, 'Invalid metadata provided.'). There is then no file id to attach, so the criterion is never tested. The failure for a public sector staff member who is not the author is a harness limit: the test harness cannot sign in to the old application as a second non-admin public sector account. The withholding check itself is correct and should stay. The failure for a reader who is not signed in is a real defect in the old application: processForRole (code-with-us.ts:248-256) removes createdBy from the opportunity for anyone not signed in, so the history check at lines 478-481 compares undefined === undefined, which is true, and the full private history, notes and attachment names included, is returned to anonymous readers. The criterion is right there and the test correctly fails. The condition grammar allows one verb per criterion, and three of the five failures never reached the behaviour being tested, so the test is sent back to be written again. What would change the ruling: if the rewritten test's signed-out case still fails the same way, the next ruling is defect-in-old R-1.33, which makes keeping private history away from anonymous readers a requirement the rebuild has to pass. If the files criteria turn out not to require stating who may read an upload, the upload refusal is a gap in the files spec and should be settled there.
+
+**Conditions:**
+- test-wrong R-1.33: the attachment is uploaded without saying who may read the file, which the service requires of every upload, so the upload is refused, no file is stored and the note is never added; the test should upload its attachment the way the files criteria say an upload succeeds, then add the note. Keep the check that a reader who is not signed in is not shown the note or its file exactly as written.
