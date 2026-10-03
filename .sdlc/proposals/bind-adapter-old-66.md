@@ -44,3 +44,27 @@ Every route this page needs worked on the target; none failed to resolve. I chan
 I fixed the compile error: `tests/adapters/old/index.ts` defined `organizationNamed` twice in the same scope. I couldn't rerun the compiler afterwards, because the sandbox would not let me run `tsc` without approval. The fix is checked by search only.
 
 **Journal addition:** The compiler reported "Duplicate function implementation" at lines 4437 and 10512 of `tests/adapters/old/index.ts`. Both were functions named `organizationNamed`. The one at 4437 was already there and returns an organization's legal name for the pages bound earlier. The one at 10512 came in with this run's organization-request binding and returns an organization's identifier, falling back to the organization opened on that page. I renamed the second one to `requestOrganizationId` at `index.ts:10512`. I also updated its only two callers, in `change_profile_by_request` (line 10554) and `archive_by_request` (line 10574). The original function, its callers, and everything else in the adapter and in `bindings.yaml` are unchanged, and the new name appears nowhere else in the file. After the edit, a search finds one definition under each name and every call goes to the function it was meant for.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does this adapter bind every surface action and observation on old, and nothing else? Ruling: approve. The contract's organization-request page (spec/contract/surface.yaml:2633) declares three actions (register_by_request, change_profile_by_request, archive_by_request) and seven observations (request_accepted, refusal_status, refusal_reason, refusal_messages, organization_identifier, stored_active, stored_legal_name); all ten are bound in tests/adapters/old/bindings.yaml and implemented on organizationRequest in tests/adapters/old/index.ts, with none left unbound. The bindings stay navigation and reading: actions only send the request, observations only return the service's answer or the organization read afresh as the signed-in person, and nothing asserts or decides a pass. Filling the unchanged fields from the stored profile before a profile change is request plumbing, and an input key that matches no profile field throws unbound instead of being dropped. Reading a 404 as stored_active false matches how this target hides an archived organization from every reader, and the code comment documents it; it cannot tell archived from never existed, which the contract does not ask the adapter to do. The runner's own typecheck on this revision reports no diagnostics under adapters/old/ (the one diagnostic is under adapters/new/, outside this proposal), so the duplicate organizationNamed fix holds. Nothing under tests/acceptance changed. This proposal does not settle the open build-slice-11-3 conditions or the missing-test entries for R-3.2 and R-3.18; those stay with build and derive-tests respectively. What would change the ruling: a diagnostic under adapters/old/, an observation that returns a verdict instead of a value, or any change under tests/acceptance.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `20dff28e41035b9667566e5b52ec92c58c887ef4`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 1 diagnostic
