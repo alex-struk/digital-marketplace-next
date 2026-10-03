@@ -1,0 +1,41 @@
+gate: G3
+verdict: return
+by: runner:verify
+held_by: runner
+rationale: Slice 13 does not yet do what 2 of its criteria say. Each condition
+  is the criterion and what the running application did.
+conditions:
+  - 'R-3.26, in the case "an organization approved for one service area whose
+    Team With Us terms have not been accepted shows the service-area requirement
+    met, the terms requirement unmet, and is marked as not qualified": Error:
+    the organization already stands approved — Expected: false — Received: true
+    — at tests/acceptance/organizations/R-3.26.spec.ts:84 — its last steps:
+    organizationTwuTerms.acceptedOnNotice() at
+    /organizations/00000000-0000-4000-8000-000000000302/team-with-us-terms-and-conditions
+    read "" → signIn(persona administrator) at /dashboard →
+    organizationEdit.open({orgId}) at
+    /organizations/00000000-0000-4000-8000-000000000302/edit →
+    organizationEdit.serviceAreaCheckbox() at
+    /organizations/00000000-0000-4000-8000-000000000302/edit?tab=twu-qualification
+    read "Full Stack Developer: unchecked Data Professional: unchecked Agile
+    Coach: unchecked DevOps Specialist: unchecked Service Designer: unchecked" —
+    the page as it failed: .sdlc/evidence/slice-13/R-3.26.png,
+    .sdlc/evidence/slice-13/R-3.26.txt'
+  - "R-3.28, in the cases \"saving a selection of service areas replaces the
+    organization's previous approvals entirely\" and \"only an administrator may
+    set which service areas an organization is approved for, not the
+    organization's own owner\": Error: the organization does not stand approved
+    for exactly FULL_STACK_DEVELOPER and AGILE_COACH — Expected: true —
+    Received: false — at tests/acceptance/organizations/R-3.28.spec.ts:51 — its
+    last steps: organizationEdit.saveServiceAreas({serviceAreas}) at
+    /organizations/00000000-0000-4000-8000-000000000301/edit?tab=twu-qualificat\
+    ion → signIn(persona administrator) at /dashboard →
+    organizationEdit.open({orgId}) at
+    /organizations/00000000-0000-4000-8000-000000000301/edit →
+    organizationEdit.serviceAreaCheckbox() at
+    /organizations/00000000-0000-4000-8000-000000000301/edit?tab=twu-qualificat\
+    ion read \"Full Stack Developer: checked Data Professional: unchecked Agile
+    Coach: checked DevOps Specialist: unchecked Service Designer: unchecked\" —
+    the page as it failed: .sdlc/evidence/slice-13/R-3.28.png,
+    .sdlc/evidence/slice-13/R-3.28.txt"
+at: 2026-10-03T19:09:41.216Z
