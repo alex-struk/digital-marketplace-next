@@ -36,7 +36,7 @@
 | R-1.30 | acceptance/opportunities/R-1.30.spec.ts |  | pass (carried from 2026-10-03-2) |
 | R-1.31 | acceptance/opportunities/R-1.31.spec.ts |  | pass (carried from 2026-10-03-2) |
 | R-1.32 | acceptance/opportunities/R-1.32.spec.ts |  | pass (carried from 2026-10-03-2) |
-| R-1.33 | acceptance/opportunities/R-1.33.spec.ts |  | fail |
+| R-1.33 | acceptance/opportunities/R-1.33.spec.ts |  | fail (ruled: test-wrong) |
 | R-1.34 | acceptance/opportunities/R-1.34.spec.ts |  | pass (carried from 2026-10-03-2) |
 | R-1.35 | acceptance/opportunities/R-1.35.spec.ts |  | pass (carried from 2026-10-03-2) |
 | R-1.36 | acceptance/opportunities/R-1.36.spec.ts |  | pass (carried from 2026-10-03-2) |

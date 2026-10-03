@@ -34,7 +34,7 @@
 | D-content-27 | — |  |  |
 | R-7.27 | acceptance/content/R-7.27.spec.ts |  | pass (carried from 2026-10-03-2) |
 | R-7.28 | acceptance/content/R-7.28.spec.ts |  | pass (carried from 2026-10-03-2) |
-| R-7.29 | acceptance/content/R-7.29.spec.ts |  | pass |
+| R-7.29 | acceptance/content/R-7.29.spec.ts |  | pass (carried from 2026-10-03-3) |
 
 ### R-7.1 · v1 · confirmed · accepted
 
