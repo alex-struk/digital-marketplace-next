@@ -1457,3 +1457,16 @@ pages:
       refusal_status: bound
       refusal_messages: bound
       stored_status: bound
+  organization-request:
+    actions:
+      register_by_request: bound
+      change_profile_by_request: bound
+      archive_by_request: bound
+    observations:
+      request_accepted: bound
+      refusal_status: bound
+      refusal_reason: bound
+      refusal_messages: bound
+      organization_identifier: bound
+      stored_active: bound
+      stored_legal_name: bound

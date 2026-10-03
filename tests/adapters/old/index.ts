@@ -10457,6 +10457,152 @@ export default function create(
     },
   };
 
+  // An organization asked of the service directly. Checked here: POST /api/organizations
+  // answered a vendor 201 with the organization (its "id" among it), and an administrator
+  // 401 {"permissions":[...]}; a blank registration 400 with one list per field
+  // ({"legalName":[...],"contactEmail":["Please enter a valid email."],...}). A profile
+  // change is PUT /api/organizations/:id {tag: "updateProfile", value: {...}}: 200 for the
+  // owner or an administrator, 401 {"permissions":[...]} for anybody else (the
+  // organization's own administrator included), and a field's refusal comes back nested,
+  // 400 {"organization":{"tag":"updateProfile","value":{"legalName":[...]}}}. An archive is
+  // DELETE /api/organizations/:id: 200, 401 as above, 404 {"notFound":[...]} for none. Read
+  // back, an archived organization answers 404 ["Organization not found."] to everybody,
+  // the administrator included.
+  const ORG_REQUEST = "organization-request";
+  let requestOrg = "";
+  let registeredOrg = "";
+
+  const ORG_FIELDS: [string, string[]][] = [
+    ["legalName", ["legalName", "legal_name", "name", "organizationName"]],
+    ["websiteUrl", ["websiteUrl", "website", "websiteAddress", "url"]],
+    ["streetAddress1", ["streetAddress1", "streetAddress", "street", "street1", "addressLine1", "address1", "address"]],
+    ["streetAddress2", ["streetAddress2", "street2", "addressLine2", "address2"]],
+    ["city", ["city"]],
+    ["region", ["region", "province", "state"]],
+    ["mailCode", ["mailCode", "postalCode", "postal", "zip", "zipCode"]],
+    ["country", ["country"]],
+    ["contactName", ["contactName"]],
+    ["contactTitle", ["contactTitle", "title"]],
+    ["contactEmail", ["contactEmail", "email", "emailAddress"]],
+    ["contactPhone", ["contactPhone", "phone", "phoneNumber"]],
+  ];
+  const ORG_IDENTIFIER_KEYS = ["orgId", "organizationId", "organization", "org", "id"];
+  const ORG_GROUPS = ["profile", "registration", "fields", "values", "address"];
+
+  // The profile fields the input carries, each sent only when given (a value left out stays
+  // out, so the service answers for it); a key no field answers to is named, not dropped.
+  function organizationFields(where: string, input: unknown): Record<string, unknown> {
+    const sent: Record<string, unknown> = {};
+    if (!input || typeof input !== "object" || Array.isArray(input)) return sent;
+    const known = new Set(
+      [...ORG_FIELDS.flatMap(([, names]) => names), ...ORG_IDENTIFIER_KEYS, ...ORG_GROUPS].map(squash),
+    );
+    for (const key of Object.keys(input as Record<string, unknown>)) {
+      if (!known.has(squash(key))) nothing(`${where} — the input's "${key}" names no field of an organization's profile`);
+    }
+    for (const [name, names] of ORG_FIELDS) {
+      const value = given(input, names, ORG_GROUPS);
+      if (value === undefined) continue;
+      sent[name] =
+        value && typeof value === "object" && !Array.isArray(value) ? givenText(value, names) : value;
+    }
+    return sent;
+  }
+
+  function requestOrganizationId(input: unknown): string {
+    const named = given(input, ORG_IDENTIFIER_KEYS);
+    return seededId(named, "organizations") || requestOrg;
+  }
+
+  // The name each refusal is filed under: "permissions", "notFound", or a field's name,
+  // looked for inside the {tag, value} a profile change's refusal comes wrapped in.
+  function refusalNames(body: unknown): string[] {
+    if (!body || typeof body !== "object" || Array.isArray(body)) return [];
+    const record = body as Record<string, unknown>;
+    if (typeof record.tag === "string" && "value" in record) return refusalNames(record.value);
+    return Object.entries(record).flatMap(([key, value]) => {
+      const inner = value && typeof value === "object" && !Array.isArray(value) ? refusalNames(value) : [];
+      return inner.length ? inner : [key];
+    });
+  }
+
+  async function storedOrganization(where: string): Promise<Record<string, unknown> | null | "gone"> {
+    const id = requestOrg || registeredOrg;
+    if (!id) nothing(`${where} — no organization was opened, named or registered`);
+    const found = await peek(`${baseURL}/api/organizations/${encodeURIComponent(id)}`);
+    if (found.status === 200 && found.json && typeof found.json === "object") {
+      return found.json as Record<string, unknown>;
+    }
+    // This target hides an archived organization from every reader, so not found is how an
+    // inactive one reads; one the signed-in person may not read shows nothing.
+    return found.status === 404 ? "gone" : null;
+  }
+
+  const organizationRequest: PageOf<"organizationRequest"> = {
+    open: async (params?: { orgId?: string }) => {
+      requestOrg = seededId(params?.orgId, "organizations");
+      registeredOrg = "";
+      lastAnswer = null;
+    },
+    async registerByRequest(input?: unknown) {
+      const where = `${ORG_REQUEST}.register_by_request`;
+      const got = await send(where, "POST", `${baseURL}/api/organizations`, organizationFields(where, input));
+      registeredOrg = got.status === 201 ? createdField(where, "id") : "";
+    },
+    async changeProfileByRequest(input?: unknown) {
+      const where = `${ORG_REQUEST}.change_profile_by_request`;
+      const id = requestOrganizationId(input);
+      if (!id) nothing(`${where} — no organization was opened or named`);
+      const changes = organizationFields(where, input);
+      // The rest of the profile as it stands, where the signed-in person may read it, so a
+      // change to one field is not refused for the fields it left alone.
+      const current = await peek(`${baseURL}/api/organizations/${encodeURIComponent(id)}`);
+      const held: Record<string, unknown> = {};
+      if (current.status === 200 && current.json && typeof current.json === "object") {
+        for (const [name] of ORG_FIELDS) {
+          const value = (current.json as Record<string, unknown>)[name];
+          if (value !== null && value !== undefined) held[name] = value;
+        }
+      }
+      await send(where, "PUT", `${baseURL}/api/organizations/${encodeURIComponent(id)}`, {
+        tag: "updateProfile",
+        value: { ...held, ...changes },
+      });
+    },
+    async archiveByRequest(input?: unknown) {
+      const where = `${ORG_REQUEST}.archive_by_request`;
+      const id = requestOrganizationId(input);
+      if (!id) nothing(`${where} — no organization was opened or named`);
+      await send(where, "DELETE", `${baseURL}/api/organizations/${encodeURIComponent(id)}`);
+    },
+    requestAccepted: async () => accepted(`${ORG_REQUEST}.request_accepted`),
+    refusalStatus: async () => {
+      const got = answer(`${ORG_REQUEST}.refusal_status`);
+      return got.status >= 400 ? String(got.status) : "";
+    },
+    refusalReason: async () => {
+      const got = answer(`${ORG_REQUEST}.refusal_reason`);
+      return got.status >= 400 ? refusalNames(parsedAnswer()).join("\n") : "";
+    },
+    refusalMessages: async () =>
+      (lastRefusal(`${ORG_REQUEST}.refusal_messages`) ?? []).map((entry) => entry.message).join("\n"),
+    organizationIdentifier: async () => {
+      const got = answer(`${ORG_REQUEST}.organization_identifier`);
+      return got.status === 201 ? createdField(`${ORG_REQUEST}.organization_identifier`, "id") : "";
+    },
+    storedActive: async () => {
+      const held = await storedOrganization(`${ORG_REQUEST}.stored_active`);
+      if (held === "gone") return "false";
+      if (!held) return "";
+      return typeof held.active === "boolean" ? String(held.active) : "";
+    },
+    storedLegalName: async () => {
+      const held = await storedOrganization(`${ORG_REQUEST}.stored_legal_name`);
+      if (held === "gone" || !held) return "";
+      return held.legalName === undefined || held.legalName === null ? "" : String(held.legalName);
+    },
+  };
+
   // One panel member's own scores for one proponent. The service keeps a sheet under the
   // proposal and the member; the first save creates it (POST, as the score sheet's "Save
   // Draft" does, with {status: "DRAFT", scores: [{order, score, notes}]}) and every later
@@ -11656,6 +11802,7 @@ export default function create(
     opportunityCounters,
     opportunityHistoryRequest,
     opportunityStatusRequest,
+    organizationRequest,
   };
   return surface;
 }
