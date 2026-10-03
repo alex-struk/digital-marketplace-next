@@ -81,6 +81,9 @@
 - 19:14:07 oracle up old in configuration evaluation_instructions_absent_twu: local port 3103
 - 19:14:26 oracle down old in configuration evaluation_instructions_absent_twu
 - 19:14:29 run calibrate: ok, cost 0, turns 0
+- 19:14:31 propose calibrate-old-27 at G1
+- 19:14:34 drive: step 7: `sdlc rule calibrate-old-27 --by agent:product-owner` — calibrate-old-27 is open at G1, held by agent:product-owner
+- 19:15:58 rule calibrate-old-27 approve at G1 by agent:product-owner (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-10-02
 

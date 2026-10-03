@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>calibrate-old-27 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">530</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">524</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">438</span></a></li><li><a href="../runs.html">Run log <span class="count">21</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>calibrate-old-27</h1>
+<p class="lede">G1 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G1</td></tr><tr><th scope="row">opened</th><td>2026-10-03 02:14</td></tr><tr><th scope="row">holder</th><td>agent:product-owner</td></tr></tbody></table></div>
+<div class="body"><h2>1 criterion(s) fail against old: which of them is the application&#39;s fault, which the spec&#39;s, and which the test&#39;s?</h2>
+<p><strong>Recommendation.</strong> Rule on R-1.33 with a calibration condition, so the next calibrate run can apply it.</p>
+<p>1 criterion(s) failed against the <strong>old</strong> target at <a href="http://localhost:4300,">http://localhost:4300,</a> with no ruling yet. The tests are blind: they were written from the criteria alone, by an agent that never saw the application. So a failure means one of exactly three things, and only you can say which: the application is wrong, the criterion is wrong, or the test is wrong.</p>
+<p>Rule on each one below. Until every failure carries a ruling, this question is asked again on every calibration run.</p>
+<h4>R-1.33 · v2</h4>
+<p>The service accepts a private note, with files, on a Code With Us or Sprint With Us opportunity&#39;s history from an administrator or the opportunity&#39;s author at any point in the opportunity&#39;s life, visible only to the author and administrators, but no screen of the application offers a way to add one.</p>
+<ul><li>given: a Code With Us or Sprint With Us opportunity in any state</li><li>when: its author adds a note of up to 1,000 characters with attachments</li><li>then: the note and its attachments appear in the opportunity&#39;s history, which only the author and administrators can see</li><li>test: tests/acceptance/opportunities/R-1.33.spec.ts</li></ul>
+<p><strong>The service accepts a private note, with files, on a Code With Us or Sprint With Us opportunity&#39;s history from an administrator or the opportunity&#39;s author at any point in the opportunity&#39;s life, visible only to the author and administrators, but no screen of the application offers a way to add one. — when its author adds a note with a file to a published Sprint With Us opportunity, the note and its file appear in the opportunity&#39;s history</strong> — failed</p>
+<pre><code>Error: the file to attach should have been stored
+
+[2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>The service accepts a private note, with files, on a Code With Us or Sprint With Us opportunity&#39;s history from an administrator or the opportunity&#39;s author at any point in the opportunity&#39;s life, visible only to the author and administrators, but no screen of the application offers a way to add one. — when its author adds a note with a file to a published Code With Us opportunity, the note and its file appear in the opportunity&#39;s history</strong> — failed</p>
+<pre><code>Error: the file to attach should have been stored
+
+[2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>The service accepts a private note, with files, on a Code With Us or Sprint With Us opportunity&#39;s history from an administrator or the opportunity&#39;s author at any point in the opportunity&#39;s life, visible only to the author and administrators, but no screen of the application offers a way to add one. — when an administrator adds a note with a file to a cancelled Code With Us opportunity, the note and its file appear in the opportunity&#39;s history</strong> — failed</p>
+<pre><code>Error: the file to attach should have been stored
+
+[2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>The service accepts a private note, with files, on a Code With Us or Sprint With Us opportunity&#39;s history from an administrator or the opportunity&#39;s author at any point in the opportunity&#39;s life, visible only to the author and administrators, but no screen of the application offers a way to add one. — a public sector staff member who is not the opportunity&#39;s author is not shown a private note or its file</strong> — failed</p>
+<pre><code>Error: unbound: signIn.public-sector-staff-other — The oracle carries exactly three sign-in routes outside production — /auth/createsessionadmin, /auth/createsessiongov and /auth/createsessionvendor/:n — and the two public sector ones each mint a session for one fixed account. No route, and no parameter on the government route, reaches a second non-administrator public sector account, so this persona can be seeded and observed on the oracle but never acted as.</code></pre>
+<p><strong>The service accepts a private note, with files, on a Code With Us or Sprint With Us opportunity&#39;s history from an administrator or the opportunity&#39;s author at any point in the opportunity&#39;s life, visible only to the author and administrators, but no screen of the application offers a way to add one. — a reader who is not signed in is not shown a private note or its file</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mnot[2m.[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: not [32m&quot;Seeded private note: placeholder text for the history visibility check.&quot;[39m
+Received string:        [31m&quot;NOTE_ADDED | [7mSeeded private note: placeholder text for the history visibility check.[27m | Casey Placeholder | 2026-01-06T18:00:00.000Z | opportunity-note-attachment.txt (00000000-0000-4000-8000-000000000903)[39m
+[31mPUBLISHED |  | Robin Placeholder | 2026-01-05T18:00:00.000Z | [39m
+[31mDRAFT |  | Casey Placeholder | 2026-01-05T17:00:00.000Z |&quot;[39m</code></pre>
+<h3>Calibration conditions</h3>
+<p>One condition per line, and exactly one of these forms:</p>
+<ul><li><code>defect-in-old &lt;ID&gt;</code> — the old application really does fail this and the criterion is right anyway. The test stands as written and the rebuild has to pass it; the criterion keeps a note saying so. No text after the ID.</li><li><code>spec-wrong &lt;ID&gt;: &lt;corrected statement&gt;</code> — the criterion misdescribes what the old application does. The statement is replaced and its version bumped, which marks the test stale so <code>derive-tests --stale</code> writes it again from the corrected criterion.</li><li><code>test-wrong &lt;ID&gt;: &lt;why&gt;</code> — the criterion is right and the test is not. The id goes to <code>tests/acceptance/redo.yaml</code> for <code>derive-tests</code> to redo, still blind, and <code>&lt;why&gt;</code> records what the test got wrong without describing how the application is built.</li></ul>
+<p>The ID is the criterion&#39;s own id exactly as <code>spec/criteria-index.json</code> spells it. <code>defect-in-old</code> takes no text; the other two require a colon and text on the same line. A condition may not span more than one line.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:product-owner (persona agent · claude claude-opus-5-5) on 2026-10-03 02:15.</p>
+<div class="body"><p>The question is whether each of R-1.33&#39;s five failures against the old application is the application&#39;s fault, the spec&#39;s or the test&#39;s. Ruling: approve with test-wrong. Three failures (the author adding a note to a published Sprint With Us opportunity, the author adding one to a published Code With Us opportunity, and an administrator adding one to a cancelled Code With Us opportunity) stop at the test&#39;s own setup, before any note is added. The test uploads its attachment without saying who may read the file, and the old service rejects any upload that leaves that out (sources/old/src/back-end/lib/resources/file.ts:138-140, &#39;Invalid metadata provided.&#39;). There is then no file id to attach, so the criterion is never tested. The failure for a public sector staff member who is not the author is a harness limit: the test harness cannot sign in to the old application as a second non-admin public sector account. The withholding check itself is correct and should stay. The failure for a reader who is not signed in is a real defect in the old application: processForRole (code-with-us.ts:248-256) removes createdBy from the opportunity for anyone not signed in, so the history check at lines 478-481 compares undefined === undefined, which is true, and the full private history, notes and attachment names included, is returned to anonymous readers. The criterion is right there and the test correctly fails. The condition grammar allows one verb per criterion, and three of the five failures never reached the behaviour being tested, so the test is sent back to be written again. What would change the ruling: if the rewritten test&#39;s signed-out case still fails the same way, the next ruling is defect-in-old R-1.33, which makes keeping private history away from anonymous readers a requirement the rebuild has to pass. If the files criteria turn out not to require stating who may read an upload, the upload refusal is a gap in the files spec and should be settled there.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>test-wrong R-1.33: the attachment is uploaded without saying who may read the file, which the service requires of every upload, so the upload is refused, no file is stored and the note is never added; the test should upload its attachment the way the files criteria say an upload succeeds, then add the note. Keep the check that a reader who is not signed in is not shown the note or its file exactly as written.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
