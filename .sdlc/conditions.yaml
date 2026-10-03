@@ -2268,6 +2268,16 @@ conditions:
     stage: build
     by: agent:tech-lead
     at: 2026-10-03T14:41:16.143Z
+    closed:
+      outcome: met
+      why: in app/frontend/src/screens/organization-edit.tsx the Archive section is
+        now inside the Organization tab's section, below the profile; on verify
+        for build-slice-11-4 the R-3.18 tests 'the Edit and Archive controls are
+        offered to a service administrator' and 'an organization administrator
+        who is not the owner sees the profile read-only, with no Edit and no
+        Archive control' both pass.
+      by: agent:tech-lead
+      at: 2026-10-03T15:34:46.034Z
   - ref: build-slice-11-3#2
     text: "R-3.22: in app/frontend/src/screens/organization-form.tsx, stop disabling
       the 'Create organization' (and save) button while a field is invalid. Let
@@ -2281,6 +2291,15 @@ conditions:
     stage: build
     by: agent:tech-lead
     at: 2026-10-03T14:41:16.143Z
+    closed:
+      outcome: met
+      why: in app/frontend/src/screens/organization-form.tsx the submit button is
+        disabled only while a save is in progress; an invalid submission reports
+        each field and sends nothing, and on verify for build-slice-11-4 R-3.22
+        passes both cases, the blank legal name and the contact email
+        'not-an-email'.
+      by: agent:tech-lead
+      at: 2026-10-03T15:34:46.051Z
   - ref: derive-tests-organizations-stale-10#1
     text: "R-3.18: the clause 'the Edit and Archive controls … are offered … to a
       service administrator' is asserted by no test and has no not-testable.yaml
