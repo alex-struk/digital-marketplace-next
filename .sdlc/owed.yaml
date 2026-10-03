@@ -5249,6 +5249,14 @@ owed:
         by: derive-tests-organizations-10
         gate: G3
         at: 2026-10-03T15:20:36.080Z
+    closed:
+      outcome: withdrawn
+      why: a test for R-3.2 v1 exists (tests/acceptance/organizations/R-3.2.spec.ts)
+        and ran in verify for build-slice-11-6, passing every case including
+        registrations refused to public sector staff, a vendor without accepted
+        terms and a visitor
+      by: agent:reviewer
+      at: 2026-10-03T16:20:06.331Z
   - kind: missing-test
     item: R-3.18
     id: R-3.18
@@ -5285,3 +5293,11 @@ owed:
         by: runner
         at: 2026-10-03T15:11:36.835Z
     target: old
+    closed:
+      outcome: withdrawn
+      why: a test for R-3.18 v1 exists (tests/acceptance/organizations/R-3.18.spec.ts)
+        and ran in verify for build-slice-11-6, passing every case including a
+        profile change and an archive request by a non-owner organization
+        administrator being refused
+      by: agent:reviewer
+      at: 2026-10-03T16:20:06.483Z

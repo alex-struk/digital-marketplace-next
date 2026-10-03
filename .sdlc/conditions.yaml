@@ -2407,3 +2407,16 @@ conditions:
     stage: build
     by: agent:tech-lead
     at: 2026-10-03T15:45:47.537Z
+    closed:
+      outcome: met
+      why: "permission refusals for POST /api/organizations and PUT/DELETE
+        /api/organizations/:id now return 401 with { permissions: [...] } via
+        notPermitted()/NamedRefusal in
+        app/backend/src/organizations/organizations.service.ts, validation stays
+        400 under errors, and app/backend/tests/organizations-end-to-end.test.ts
+        asserts the permissions key for staff, administrator, terms-withdrawn
+        vendor and visitor (register) and for org administrator, member, staff
+        and visitor (change, archive); R-3.2 and R-3.18 pass in
+        tests/results/new/slice-11.json"
+      by: agent:reviewer
+      at: 2026-10-03T16:20:06.310Z
