@@ -2163,3 +2163,59 @@ conditions:
         page order, and the comment above it states what is excluded and why.
       by: agent:reviewer
       at: 2026-10-03T00:14:44.329Z
+  - ref: bind-adapter-new-56#1
+    text: "organization-edit in tests/adapters/new/bindings.yaml: save_changes and
+      cancel_editing are recorded unbound because the edit screen 'shows Page
+      not found', but the proposal confirmed that pressing 'Edit organization'
+      shows 'Save changes' and 'Cancel', and index.ts already drives both.
+      Recheck them against the running build and mark them bound, or unbound
+      with a reason describing the current screen. Do the same for every other
+      organization-edit member still carrying the 'Page not found' reason:
+      add_team_members, approve_pending_member, remove_team_member, change_logo,
+      organization_identifier, swu_qualified_badge, twu_qualified_badge,
+      owner_badge and the rest."
+    from: bind-adapter-new-56
+    family: bind-adapter-new
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-10-03T04:49:08.626Z
+  - ref: bind-adapter-new-56#2
+    text: "organization-user-memberships in tests/adapters/new/index.ts and
+      bindings.yaml: the 13 members still routed through
+      absent(...sectionRedrawn...) report at run time that
+      /users/<id>?tab=organizations is a placeholder line. The proposal saw that
+      section rendered with the regions 'Organizations you own' and
+      'Organizations you belong to'. Rebind each member against the running
+      build, starting with affiliated_organizations_table from the
+      'Organizations you belong to' region, or give each an unbound reason that
+      names what the current page lacks. Do the same for
+      organization-user-memberships-self."
+    from: bind-adapter-new-56
+    family: bind-adapter-new
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-10-03T04:49:08.626Z
+  - ref: bind-adapter-new-56#3
+    text: 'tests/adapters/new/index.ts orgSection: when the region named after the
+      section link is not found, it falls back to the first tabpanel and then to
+      mainText(). That can answer a section-specific observation with text that
+      is not that section. Return "" or report unbound naming what the screen
+      offers, instead of falling back to the main text.'
+    from: bind-adapter-new-56
+    family: bind-adapter-new
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-10-03T04:49:08.626Z
+  - ref: bind-adapter-new-56#4
+    text: "tests/adapters/new/index.ts: update the shared 'nobody signs in' reason,
+      which the proposal says still describes an earlier build, so that no
+      unbound report quotes it against the current build."
+    from: bind-adapter-new-56
+    family: bind-adapter-new
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-10-03T04:49:08.626Z
