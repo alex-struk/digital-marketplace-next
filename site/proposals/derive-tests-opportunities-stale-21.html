@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-opportunities-stale-21 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">531</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">525</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">441</span></a></li><li><a href="../runs.html">Run log <span class="count">21</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-opportunities-stale-21</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-03 02:17</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the opportunities criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I rewrote the test for one criterion, R-1.33 (v2), at <code>tests/acceptance/opportunities/R-1.33.spec.ts</code>.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I rewrote the test for one criterion, R-1.33 (v2), at <code>tests/acceptance/opportunities/R-1.33.spec.ts</code>. I did not add or change anything in <code>tests/acceptance/not-testable.yaml</code>. I could not type-check or run the test here: the type-check command needed an approval this session could not give.</p>
+<p><strong>What the ruling found.</strong> The earlier test stored each note&#39;s attachment with the plain file upload, which does not say who may read the file. The service refuses an upload that does not say this, so no file was stored and the note was never added.</p>
+<p><strong>The fix.</strong> The test now stores the attachment through <code>uploadFileStatingItsReadAccess</code>, the same action the files tests use for an upload that succeeds. It sends the file, its name and a statement of who may read it in one request. That statement is an empty list. This matches R-8.19, which says an opportunity&#39;s attachment records no read access of its own, so the opportunity decides who may read it. The test then adds the note through <code>opportunityHistoryRequest.addNoteByRequest</code>, passing the file&#39;s identifier. Last, it reads the opportunity&#39;s history again and checks that it shows <code>NOTE_ADDED</code>, the note&#39;s text, and the file&#39;s name and identifier.</p>
+<p><strong>Everything else is unchanged,</strong> apart from the derivation date in the header and one comment line:</p>
+<ul><li><strong>Adding a note at different points in the opportunity&#39;s life:</strong> the opportunity&#39;s author on a published Sprint With Us opportunity and on a published Code With Us one, and an administrator on a cancelled Code With Us one.</li><li><strong>Who sees the seeded note on <code>seed.opportunities.cwuWithPrivateNote</code>:</strong> an administrator and the author do. Another public sector staff member, a signed-in vendor, and a reader who is not signed in are not shown the note or its file. The signed-out check is exactly as it was written, as the ruling asked.</li><li><strong>The final clause, that no screen offers a way to add a note:</strong> read through <code>noteControlOffered</code> on the Code With Us and Sprint With Us edit pages, for both an administrator and the author.</li></ul>
+<p><strong>One part of the criterion stays unchecked.</strong> Its &quot;with files&quot; clause is checked only with a single attachment per note, because the given/when/then it states names &quot;attachments&quot; without a count. I judged that enough and wrote no partial entry for it.</p>
+<p>Every page, action and observation the criterion needs already exists in the surface. I found nothing to ask the contract stage for.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-03 02:20.</p>
+<div class="body"><p>The question is whether the rewritten R-1.33 test answers the redo and still asserts only what R-1.33 says. It does. The one substantive change stores each note&#39;s attachment through uploadFileStatingItsReadAccess with an empty readAccess. That is the contract surface&#39;s upload that states who may read the file, already used by the files suite. The empty list follows R-8.19, under which an opportunity attachment records no read access of its own and the opportunity governs who may read it. This fixes the cause of the earlier failure: an upload that did not state read access was refused, so the note was never added. The runner&#39;s typecheck passed on this revision. Every other part of the test is unchanged, and each part follows from a clause of R-1.33: a 1,000-character note with a file is added by the author on published Sprint With Us and Code With Us opportunities and by an administrator on a cancelled Code With Us one. The seeded private note is visible to an administrator and the author and withheld from another staff member, a vendor and a signed-out reader, with the signed-out check unchanged as the redo required. The absence of an add-note control is read on both edit pages for both permitted personas, after first confirming the history is shown. NOTE_ADDED is the event name in the contract surface and seed, not an implementation leak. A single attachment per note is a fair reading of &#39;with files&#39;, since the criterion&#39;s given/when/then names no count. The ruling would change on a failing or unbound verify of the new upload binding, or if the contract required a non-empty read-access statement for opportunity attachments.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

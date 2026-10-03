@@ -1,5 +1,5 @@
 // criterion: @R-1.33 v2
-// provenance: blind, spec@76d9da180ae1fba4b970cd40bf8a0a55a680eb3e, derived 2026-10-02
+// provenance: blind, spec@76d9da180ae1fba4b970cd40bf8a0a55a680eb3e, derived 2026-10-03
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Persona, Surface } from "../../fixtures";
 
@@ -18,7 +18,8 @@ import type { Persona, Surface } from "../../fixtures";
 // "At any point in the opportunity's life" is taken at three points: a published Sprint With
 // Us opportunity, a published Code With Us one and a cancelled Code With Us one — cancelled
 // being final, the furthest point an opportunity reaches. Each note carries a file the test
-// stored itself, so the attachment seen afterwards can only be the one just added.
+// stored itself, stating who may read it as every upload must, so the attachment seen
+// afterwards can only be the one just added.
 //
 // The final clause — that no screen offers a way to add a note — is read through
 // note_control_offered on opportunity-cwu-edit and opportunity-swu-edit, the History tab of
@@ -102,7 +103,14 @@ test.describe(STATEMENT, () => {
 
       const fileName = `R-1.33 note attachment ${Date.now()}.txt`;
       await surface.fileUpload.open();
-      await surface.fileUpload.uploadFile({ name: fileName, content: `R-1.33 attachment for ${c.name}` });
+      // Stored the way the files criteria say an upload succeeds: the file, its name and a
+      // statement of who may read it, in one submission. An opportunity's attachment states no
+      // read access of its own (R-8.19), so the opportunity decides who may read it.
+      await surface.fileUpload.uploadFileStatingItsReadAccess({
+        name: fileName,
+        content: `R-1.33 attachment for ${c.name}`,
+        readAccess: [],
+      });
       const fileId = await readOrEmpty(() => surface.fileUpload.storedFileIdentifier());
       expect(fileId, "the file to attach should have been stored").toBeTruthy();
 
