@@ -1,0 +1,17 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Does slice 13 do what R-3.25 to R-3.28 say? Yes. The verify result is a current pass for this proposal (application tree 39e41d8): all four criteria were run against the application and met. The code matches the criteria and goes no further. The service works out each Sprint With Us requirement once, and the tabs only display that answer, so they cannot disagree with the qualified marks (R-3.25, R-3.26). Accepting terms records the moment once and refuses a second attempt with an 'already been accepted' message (R-3.27). Only a service administrator may set service areas, the old approvals are deleted and the new ones written in one transaction, and the owner gets no editing control (R-3.28). Rules, backend end-to-end tests and screen tests cover the new code, and I found no secrets, personal data or credentials. This revision changes two decision records and no code, and it carries out both instructions the previous ruling left owed: 0054 no longer claims the checkbox change fixes the acceptance failures, and 0053's Service areas paragraph now matches 0054 and the code. Two things would change this ruling: a verify result against a later application tree, or a ruling that only the owner, not an administrator, may accept program terms. The backend currently allows an administrator, which 0053 records as a decision.
+conditions:
+  - "condition-met build-slice-13-3#2: docs/decisions/0054-service-area-checkboxes-follow-the-catalogue.md no longer claims the label and value change fixes the R-3.26 and R-3.28 failures. It gives following the catalogue story organization-edit · service-areas-editing as the only reason for the change, and its third paragraph attributes the earlier failures to the new target's adapter, which reported every checkbox with its checked state."
+  - "condition-met build-slice-13-3#3: the Service areas paragraph of docs/decisions/0053-qualifying-for-sprint-with-us-and-team-with-us.md now says the screen names each area in sentence case ('Full stack developer') with kebab-case checkbox values that become the service's keys on save, and points to 0054. This matches SENTENCE_CASE and SERVICE_AREA_CHOICES in app/frontend/src/screens/organization-qualification.tsx and the assertions in app/frontend/tests/qualification.test.tsx."
+cost: 0.5409076
+turns: 1
+session: "c7dc4fa7-ce66-44df-b4d0-a29538be31ef"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-03T19:47:45.054Z

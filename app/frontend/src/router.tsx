@@ -29,6 +29,7 @@ import { OpportunityOtherViewScreen } from "./screens/opportunity-other-view";
 import { OrganizationListScreen } from "./screens/organization-list";
 import { OrganizationCreateScreen } from "./screens/organization-create";
 import { OrganizationEditScreen } from "./screens/organization-edit";
+import { OrganizationTermsScreen } from "./screens/organization-terms";
 
 /**
  * The addresses in `spec/contract/surface.yaml`, and nothing else. Every other address is the
@@ -247,6 +248,24 @@ const organizationEditRoute = createRoute({
   },
 });
 
+const organizationSwuTermsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/organizations/$orgId/sprint-with-us-terms-and-conditions",
+  component: function OrganizationSwuTermsRoute() {
+    const { orgId } = organizationSwuTermsRoute.useParams();
+    return <OrganizationTermsScreen key={orgId} program="sprint-with-us" orgId={orgId} />;
+  },
+});
+
+const organizationTwuTermsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/organizations/$orgId/team-with-us-terms-and-conditions",
+  component: function OrganizationTwuTermsRoute() {
+    const { orgId } = organizationTwuTermsRoute.useParams();
+    return <OrganizationTermsScreen key={orgId} program="team-with-us" orgId={orgId} />;
+  },
+});
+
 // "me" and an identifier share one route: the screen reads "me" as whoever is signed in.
 const userProfileRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -286,6 +305,8 @@ export const routeTree = rootRoute.addChildren([
   organizationListRoute,
   organizationCreateRoute,
   organizationEditRoute,
+  organizationSwuTermsRoute,
+  organizationTwuTermsRoute,
 ]);
 
 export const router = createRouter({

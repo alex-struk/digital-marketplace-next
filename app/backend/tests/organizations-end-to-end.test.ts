@@ -211,6 +211,64 @@ describe("reading an organization in full (R-3.3)", () => {
   });
 });
 
+describe("qualifying for Sprint With Us and Team With Us (R-3.25–R-3.28)", () => {
+  it("answers the seeded qualified organization as meeting every requirement of both programs", async () => {
+    const read = await ask("GET", `/api/organizations/${QUALIFIED}`, await tokens.owner());
+    expect(read.body).toMatchObject({
+      swuQualified: true,
+      twuQualified: true,
+      serviceAreas: ["AGILE_COACH", "FULL_STACK_DEVELOPER"],
+      swuRequirements: { twoMembers: true, allCapabilities: true, termsAccepted: true },
+    });
+  });
+
+  it("lets only an administrator set the service areas, each save replacing the last", async () => {
+    for (const token of [await tokens.vendorOne(), await tokens.staff(), undefined]) {
+      const refused = await ask("PUT", `/api/organizations/${UNQUALIFIED}`, token, {
+        tag: "qualifyServiceAreas",
+        value: ["FULL_STACK_DEVELOPER"],
+      });
+      expect(refused.status).toBe(401);
+      expect(refused.body).toEqual({ permissions: [expect.any(String)] });
+    }
+    const admin = await tokens.admin();
+    const first = await ask("PUT", `/api/organizations/${UNQUALIFIED}`, admin, {
+      tag: "qualifyServiceAreas",
+      value: ["FULL_STACK_DEVELOPER", "DATA_PROFESSIONAL"],
+    });
+    expect(first.status).toBe(200);
+    expect(first.body.serviceAreas).toEqual(["DATA_PROFESSIONAL", "FULL_STACK_DEVELOPER"]);
+    const second = await ask("PUT", `/api/organizations/${UNQUALIFIED}`, admin, {
+      tag: "qualifyServiceAreas",
+      value: ["DATA_PROFESSIONAL", "AGILE_COACH"],
+    });
+    expect(second.body.serviceAreas).toEqual(["AGILE_COACH", "DATA_PROFESSIONAL"]);
+    const invalid = await ask("PUT", `/api/organizations/${UNQUALIFIED}`, admin, { tag: "qualifyServiceAreas", value: ["NOPE"] });
+    expect(invalid.status).toBe(400);
+    expect((await ask("GET", `/api/organizations/${UNQUALIFIED}`, admin)).body.serviceAreas).toEqual(["AGILE_COACH", "DATA_PROFESSIONAL"]);
+  });
+
+  it("records the owner's acceptance of each program's terms once, and refuses a second", async () => {
+    const before = await ask("GET", `/api/organizations/${UNQUALIFIED}`, await tokens.vendorOne());
+    expect(before.body).toMatchObject({ acceptedTWUTerms: null, twuQualified: false, swuQualified: false });
+    expect(
+      (await ask("PUT", `/api/organizations/${UNQUALIFIED}`, await tokens.staff(), { tag: "acceptTWUTerms" })).status,
+    ).toBe(401);
+    const accepted = await ask("PUT", `/api/organizations/${UNQUALIFIED}`, await tokens.vendorOne(), { tag: "acceptTWUTerms" });
+    expect(accepted.status).toBe(200);
+    expect(Number.isNaN(Date.parse(accepted.body.acceptedTWUTerms))).toBe(false);
+    expect(accepted.body.twuQualified).toBe(true);
+    const again = await ask("PUT", `/api/organizations/${UNQUALIFIED}`, await tokens.vendorOne(), { tag: "acceptTWUTerms" });
+    expect(again.status).toBe(400);
+    expect(again.body).toEqual({ errors: [expect.stringContaining("already been accepted")] });
+    const sprint = await ask("PUT", `/api/organizations/${UNQUALIFIED}`, await tokens.vendorOne(), { tag: "acceptSWUTerms" });
+    expect(sprint.body).toMatchObject({ swuQualified: false, swuRequirements: { twoMembers: false, termsAccepted: true } });
+    expect((await ask("GET", `/api/organizations/${UNQUALIFIED}`, await tokens.vendorOne())).body.acceptedTWUTerms).toBe(
+      accepted.body.acceptedTWUTerms,
+    );
+  });
+});
+
 describe("registering, with a logo (R-3.2, R-3.22, R-3.23, R-8.13, R-8.21, R-8.28, R-8.30)", () => {
   it("refuses public sector staff, an administrator, a visitor and a vendor whose terms acceptance has been withdrawn, under permissions", async () => {
     for (const token of [await tokens.staff(), await tokens.admin(), await tokens.termsReset(), undefined]) {

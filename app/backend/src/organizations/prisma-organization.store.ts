@@ -245,4 +245,19 @@ export class PrismaOrganizationStore implements OrganizationStore {
     ]);
     return (await this.find(organizationId)) as StoredOrganization;
   }
+
+  async approveServiceAreas(organizationId: string, serviceAreas: readonly string[]): Promise<StoredOrganization> {
+    const areas = await this.prisma.serviceAreas.findMany({
+      where: { serviceArea: { in: [...serviceAreas] } },
+      select: { id: true },
+    });
+    await this.prisma.$transaction([
+      this.prisma.twuOrganizationServiceAreas.deleteMany({ where: { organization: organizationId } }),
+      this.prisma.twuOrganizationServiceAreas.createMany({
+        data: areas.map((area) => ({ organization: organizationId, serviceArea: area.id })),
+      }),
+      this.prisma.organizations.update({ where: { id: organizationId }, data: { updatedAt: new Date() } }),
+    ]);
+    return (await this.find(organizationId)) as StoredOrganization;
+  }
 }

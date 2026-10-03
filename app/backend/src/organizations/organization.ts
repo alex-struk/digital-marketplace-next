@@ -79,6 +79,8 @@ export interface OrganizationChange extends Partial<OrganizationProfile> {
   readonly active?: boolean;
   readonly deactivatedOn?: Date;
   readonly deactivatedBy?: string;
+  readonly acceptedSWUTerms?: Date;
+  readonly acceptedTWUTerms?: Date;
 }
 
 /**
@@ -107,6 +109,11 @@ export interface OrganizationStore {
    * transfer in the changelog, all at once (R-3.13, R-3.33).
    */
   transferOwnership(organizationId: string, toAffiliationId: string, by: string): Promise<StoredOrganization>;
+  /**
+   * Makes these, by their kept code, the only service areas the organization is approved for,
+   * every earlier approval removed, all at once (R-3.28).
+   */
+  approveServiceAreas(organizationId: string, serviceAreas: readonly string[]): Promise<StoredOrganization>;
 }
 
 export const ORGANIZATION_STORE = Symbol("OrganizationStore");
