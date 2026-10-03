@@ -45,3 +45,14 @@ I then ran `oracle down`, and no project containers remain.
 **Tool limits.** The shell refused to expand `$SDLC_BIN`, so I ran the same CLI by its path, `~/GitHub/agentic-sdlc/bin/sdlc.mjs`, as earlier runs did. I did not start the separate copy in the `service_page_absent` configuration, so whether the screen actually raises a message when the page is missing has not been observed yet. The code suggests it raises none: when the page read fails, the screen simply skips setting the scope content (`view.tsx:202`). Checking that on the real instance is the test's job.
 
 re-address missing-test/R-7.29 to derive-tests: added observation `page_messages` on `opportunity-swu-view` (spec/contract/surface.yaml) — the text of every notice, alert or error message shown outside the screen's sections, empty when none; for `opportunities.closedSprintWithUs` opened by persona `vendor` it is empty by default, so a test tagged `@service_page_absent` can read it as empty alongside `scope_section`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:product-owner
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does adding the page_messages reading to opportunity-swu-view give R-7.29's clause 'with nothing said about why' a reading a test can act through? Ruling: approve. Reason: the old application's getAlerts (view.tsx:849-914) raises notices in exactly the four cases the comment lists: the signed-in vendor already submitted a proposal, the opportunity was awarded, it is open for proposals and nobody is signed in, or it is open for proposals and the vendor is not Sprint With Us qualified. None applies to opportunities.closedSprintWithUs opened by the vendor persona, who has no proposal on it, so an empty reading under default conditions is a sound baseline. When the scope page fails to load, the screen only skips setting the scope content (view.tsx:202), which is consistent with the requirement. The change is purely additive: one surface entry with test_id left null for the design gate, plus the matching generated type. No criterion's wording or confidence changes, so there are no condition lines. What would change the ruling: evidence that the screen raises some other notice for this vendor and opportunity under defaults, or that the four-case list misreads getAlerts.
+
+**Conditions:**
+none
