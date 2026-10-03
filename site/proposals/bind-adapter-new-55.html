@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-55 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">523</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">517</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">431</span></a></li><li><a href="../runs.html">Run log <span class="count">21</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-55</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-03 00:17</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I added the one observation the contract was missing, <code>page_messages</code> on the Sprint With Us opportunity page (<code>opportunity-swu-view</code>).</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I added the one observation the contract was missing, <code>page_messages</code> on the Sprint With Us opportunity page (<code>opportunity-swu-view</code>). It is bound in <code>tests/adapters/new/index.ts</code> and listed as <code>bound</code> in <code>tests/adapters/new/bindings.yaml</code>. I left every other binding as it was. I couldn&#39;t type-check the file because the session wasn&#39;t allowed to run <code>tsc</code>, so the change hasn&#39;t been compiled.</p>
+<p><strong>What I found on the target.</strong> Every Sprint With Us page I opened loaded, so no route failed to resolve. I opened three seeded opportunities while signed out, after their brief &quot;Loading opportunity…&quot; spinner had cleared:</p>
+<ul><li><strong>The closed one</strong> (<code>…000000000701</code>): this is the pairing the contract describes, though the contract has the vendor persona signed in and I was signed out.</li><li><strong>The awarded one</strong> (<code>…a020…</code>).</li><li><strong>An open one that is taking proposals</strong> (<code>…a025…</code>).</li></ul>
+<p>None of the three showed an alert, status message or pop-up anywhere on the page. The contract expects the running app to post a notice when an opportunity is awarded or open to a signed-out visitor, but this build posts none in either case. The page lists its status (&quot;Awarded&quot;, &quot;Published&quot;) and then its sections: Description, Phases, Skills, Key dates, Scope and Addenda. The page loads and has nothing to report, so the correct answer is empty, not <code>unbound</code>.</p>
+<p><strong>How it&#39;s bound.</strong> A new helper, <code>pageNotices</code>, sits next to the other opportunity-page readers:</p>
+<ol><li>It refuses with <code>unbound:</code> if the page shows &quot;Page not found&quot; or sends the browser to sign-in, the same check the other observations on this page use.</li><li>It waits for the loading spinner to go away.</li><li>It collects the text of every visible alert, status message and dialog on the page, finding them by their accessibility role.</li><li>It drops two kinds: anything inside one of the page&#39;s own sections (the Scope, Addenda and other regions under their headings, which the contract counts separately) and the loading message itself.</li><li>It returns one notice per line, in page order, with nested notices counted once.</li></ol>
+<p>On the default seed it returns empty for all three opportunities above. On an instance where the scope service page is missing, any notice the page raises outside its sections will be returned.</p>
+<p><strong>Not checked.</strong></p>
+<ul><li>I did not sign in as the vendor persona to look at the closed opportunity. The contract says nothing should show for that persona on that opportunity, and the existing notes say a signed-in vendor still sees the public page.</li><li>I did not open an instance started with the scope service page missing, so I haven&#39;t seen what this build shows in that case.</li></ul>
+<p>I edited nothing outside <code>tests/adapters/new/</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-03 00:18.</p>
+<div class="body"><p>Question: does the new adapter bind every surface action and observation and nothing else? Ruling: approve. The diff adds one observation, opportunity-swu-view.page_messages, in tests/adapters/new/index.ts and bindings.yaml and touches nothing under tests/acceptance. The new pageNotices helper only navigates and locates: it reuses the not-found/sign-in unbound refusal, waits out the loading progressbar, reads visible alert/status/alertdialog/dialog text by role, leaves out notices inside the page&#39;s sections and the loading status, and returns one notice per line in page order. It asserts nothing and decides no outcome. That matches the contract text at spec/contract/surface.yaml:265-276. Reading empty on the seeded closed, awarded and open Sprint With Us opportunities follows from the page loading and showing nothing, so empty is correct rather than unbound. That the new build does not post the awarded and open-signed-out notices the contract describes is a product fact for calibrate, not an adapter defect. The runner&#39;s typecheck on this revision passed with no diagnostics under adapters/new. What would change this: evidence that the new build renders a notice without an ARIA role, which this role-based binding would miss and read as empty. That would surface at calibration as adapter-wrong. The open R-7.29 missing-test stays owed by derive-tests, which can now be served by this observation.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
