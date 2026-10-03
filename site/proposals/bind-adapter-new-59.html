@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-59 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">539</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">533</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">448</span></a></li><li><a href="../runs.html">Run log <span class="count">21</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-59</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-03 14:45</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> The typecheck needs approval that this unattended session can&#39;t get.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I&#39;ve changed the profile-picture picker in <code>tests/adapters/new/index.ts</code> so it also drives the organization logo, but I couldn&#39;t compile or run the edited code. The typecheck needs approval that this unattended session can&#39;t get. I checked the change by reading it against the helpers it calls, so the first verify run will be the first real test of it.</p>
+<p><strong>What I found.</strong> I signed in as the seeded organization owner and opened <code>/organizations/create</code> and <code>/organizations/&lt;id&gt;/edit</code> for the seeded organization ending ...304.</p>
+<ul><li><strong>The picker:</strong> both screens draw a group called &quot;Logo (optional)&quot;. It holds the JPEG/PNG rule, a note that logos over 500 pixels are shrunk, and a &quot;Choose a logo (optional)&quot; button (it reads &quot;Choose a different logo&quot; once a logo is held or chosen). On the edit screen the group only appears after pressing &quot;Edit organization&quot; in the &quot;Organization&quot; section.</li><li><strong>The button works:</strong> unlike the profile-picture button, this one does open a file chooser.</li><li><strong>Upload, preview and refusal:</strong> a chosen file shows as &quot;Preview of &lt;name&gt;, the new logo&quot;. A refused file (a text file) shows an alert in the group starting &quot;&lt;name&gt; cannot be used as a logo&quot;. With the form closed, the saved logo is an image named &quot;&lt;legal name&gt; logo&quot;.</li><li><strong>Resizing:</strong> an 800×400 PNG I saved came back stored at 500×250, so the width and height reads have something real to measure.</li></ul>
+<p><strong>What I changed.</strong> When the browser is on either organization screen, the picker now uses the logo instead of reporting unbound. It doesn&#39;t jump to <code>/users/me</code>.</p>
+<ul><li><strong>Opening the form:</strong> on the edit screen it switches to the &quot;Organization&quot; section if the logo isn&#39;t showing, and presses &quot;Edit organization&quot; when it needs the form.</li><li><strong>Button match:</strong> the button pattern now accepts the &quot;(optional)&quot; suffix.</li><li><strong>Stored-image reads:</strong> the address, current image, signed-out check, width and height now read the &quot;&lt;legal name&gt; logo&quot; image and skip the preview of a chosen file. The preview and refusal reads already matched the logo screens.</li><li><strong>Profile path:</strong> on any other screen the picker still uses the profile picture, unchanged.</li></ul>
+<p><code>bindings.yaml</code> is unchanged, because every file-image-picker member was already listed as bound.</p>
+<p><strong>The other criteria listed (R-3.2, R-3.6, R-3.15, R-3.23).</strong></p>
+<ul><li><strong>R-3.6, R-3.15, R-3.23:</strong> I opened the &quot;Team members&quot; section of organization ...304 again as its owner. It still shows only its heading and &quot;This section is not available yet.&quot;, with no controls or member rows. So <code>organization-edit.add_team_members</code> and <code>owner_badge</code> stay unbound with the reasons they already had.</li><li><strong>R-3.2:</strong> <code>organization-create.create_organization</code> was already bound. Its unbound message was recorded on a different instance, at localhost:4500, where <code>/organizations/create</code> answered &quot;Page not found&quot;. On this target the page opens normally for the owner, with the logo group, so I changed nothing for it.</li></ul>
+<p><strong>Side effect.</strong> To see how a stored logo is drawn, I saved a logo onto the seeded organization &quot;Salt Marsh Labs Ltd.&quot; (...304), which had none. I found no way to remove it. If a test expects that organization to have no logo and the seed isn&#39;t reloaded before the next run, it will now show one.</p>
+<p>No page&#39;s route failed to load on this target. I changed nothing outside <code>tests/adapters/new/</code> and deferred none of the requests.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-03 14:46.</p>
+<div class="body"><p>Question: does this adapter bind every surface action and observation on new, and nothing else? Approve. The diff touches only tests/adapters/new/index.ts and nothing under tests/acceptance. The change is navigation and locators only: on /organizations/create and /organizations/&lt;id&gt;/edit the file-image-picker opens the Organization section and the &#39;Edit organization&#39; form, accepts the &#39;(optional)&#39; button suffix, and reads the stored &#39;&lt;legal name&gt; logo&#39; image within main while skipping &#39;Preview of&#39; images. No assertion or pass/fail logic was added. The profile-picture path is unchanged apart from requiring the group to hold its button and scoping the stored-image read to main. The runner-owned typecheck on revision de8a87297 passed with no diagnostics under adapters/new/, which settles the author&#39;s point that it could not compile. The remaining unbound reasons are real and name what the surface lacks: the Team members section of organization ...304 renders only &#39;This section is not available yet.&#39;, so organization-edit.add_team_members and owner_badge cannot be bound for R-3.6, R-3.15 and R-3.23. That gap is already filed against plan. R-3.2&#39;s create_organization was already bound, and its unbound record came from another instance where the route did not exist. This proposal carries out the bind-adapter revision request from build-slice-11-3. The build-owed instructions build-slice-11-3#1 and #2 concern app code and are not settled here, so they stay open. The logo the binding run saved onto seeded organization ...304 is a seed-reload concern for the runner, not an adapter defect. What would change this ruling: a verify run showing the logo bindings read the wrong element, or that the profile path no longer finds its button or stored picture after the pickerForm and main scoping.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

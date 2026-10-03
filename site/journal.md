@@ -1,5 +1,33 @@
 # Journal
 
+## 448 · bind-adapter · 2026-10-03
+
+cost $1.4179927999999997 · turns 41 · claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+I've changed the profile-picture picker in `tests/adapters/new/index.ts` so it also drives the organization logo, but I couldn't compile or run the edited code. The typecheck needs approval that this unattended session can't get. I checked the change by reading it against the helpers it calls, so the first verify run will be the first real test of it.
+
+**What I found.** I signed in as the seeded organization owner and opened `/organizations/create` and `/organizations/<id>/edit` for the seeded organization ending ...304.
+- **The picker:** both screens draw a group called "Logo (optional)". It holds the JPEG/PNG rule, a note that logos over 500 pixels are shrunk, and a "Choose a logo (optional)" button (it reads "Choose a different logo" once a logo is held or chosen). On the edit screen the group only appears after pressing "Edit organization" in the "Organization" section.
+- **The button works:** unlike the profile-picture button, this one does open a file chooser.
+- **Upload, preview and refusal:** a chosen file shows as "Preview of <name>, the new logo". A refused file (a text file) shows an alert in the group starting "<name> cannot be used as a logo". With the form closed, the saved logo is an image named "<legal name> logo".
+- **Resizing:** an 800×400 PNG I saved came back stored at 500×250, so the width and height reads have something real to measure.
+
+**What I changed.** When the browser is on either organization screen, the picker now uses the logo instead of reporting unbound. It doesn't jump to `/users/me`.
+- **Opening the form:** on the edit screen it switches to the "Organization" section if the logo isn't showing, and presses "Edit organization" when it needs the form.
+- **Button match:** the button pattern now accepts the "(optional)" suffix.
+- **Stored-image reads:** the address, current image, signed-out check, width and height now read the "<legal name> logo" image and skip the preview of a chosen file. The preview and refusal reads already matched the logo screens.
+- **Profile path:** on any other screen the picker still uses the profile picture, unchanged.
+
+`bindings.yaml` is unchanged, because every file-image-picker member was already listed as bound.
+
+**The other criteria listed (R-3.2, R-3.6, R-3.15, R-3.23).**
+- **R-3.6, R-3.15, R-3.23:** I opened the "Team members" section of organization ...304 again as its owner. It still shows only its heading and "This section is not available yet.", with no controls or member rows. So `organization-edit.add_team_members` and `owner_badge` stay unbound with the reasons they already had.
+- **R-3.2:** `organization-create.create_organization` was already bound. Its unbound message was recorded on a different instance, at localhost:4500, where `/organizations/create` answered "Page not found". On this target the page opens normally for the owner, with the logo group, so I changed nothing for it.
+
+**Side effect.** To see how a stored logo is drawn, I saved a logo onto the seeded organization "Salt Marsh Labs Ltd." (...304), which had none. I found no way to remove it. If a test expects that organization to have no logo and the seed isn't reloaded before the next run, it will now show one.
+
+No page's route failed to load on this target. I changed nothing outside `tests/adapters/new/` and deferred none of the requests.
+
 ## 447 · bind-adapter · 2026-10-03
 
 cost $0.6910034 · turns 29 · claude claude-opus-5-5 (2.1.284 (Claude Code))
