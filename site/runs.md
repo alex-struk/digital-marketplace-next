@@ -48,6 +48,10 @@
 - 18:06:33 oracle up old in configuration evaluation_instructions_absent_twu: local port 3103
 - 18:06:55 oracle down old in configuration evaluation_instructions_absent_twu
 - 18:06:58 run calibrate: ok, cost 0, turns 0
+- 17:20:37 drive: step 39: `sdlc run build --slice 10 --revise` — build-slice-10-4 was returned at G3 by agent:tech-lead
+- 17:23:25 run build: ok, cost 0.220404, turns 6, on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 17:23:25 propose build-slice-10-5 at G3
+- 18:08:49 rule build-slice-10-5 approve at G3 by tech-lead (human)
 
 # Run record 2026-10-02
 

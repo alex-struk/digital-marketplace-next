@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-10-5 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">526</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">520</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">435</span></a></li><li><a href="../runs.html">Run log <span class="count">21</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-10-5</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-03 00:23</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 10 (Staff can create Sprint With Us and Team With Us opportunities with an evaluation panel) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> I made no changes to the application in this revision.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I made no changes to the application in this revision. The ruling found the fault in the browser driver, not in the application, and named nothing under <code>app/</code> to fix.</p>
+<p><strong>Checking the ruling against the code.</strong> I confirmed what the ruling relies on before deciding to leave the application alone.</p>
+<ul><li>The Sprint With Us and Team With Us create forms open with one blank question already on them (<code>app/frontend/src/screens/opportunity-other-form.tsx:165</code>).</li><li>The &quot;Add a team question&quot; / &quot;Add a resource question&quot; button disables once the form holds <code>QUESTIONS_MAX</code> questions (line 807).</li><li><code>QUESTIONS_MAX</code> is 101 (<code>app/backend/src/rules/other-program-drafts.ts:62</code>). The service refuses anything over that limit, naming the questions field (<code>other-program-content.ts:384</code>).</li></ul>
+<p>That matches R-1.17: a question&#39;s position runs from 0 to 100, so 101 questions is the most an opportunity can hold. Someone who fills the first row and adds 100 more reaches exactly 101, and the button correctly stops them at 102. The two failed R-1.17 cases stopped while the test was still adding its first 101 questions, because the driver presses Add for every question and never fills the blank first row. If I loosened the cap or opened the form without a blank row, the application would no longer match the criterion or the design, so I did neither.</p>
+<p><strong>Check.</strong> At first <code>npm --prefix app run check</code> failed because the workspace had no dependencies installed (<code>tsc: not found</code>). After <code>npm ci</code> under <code>app/</code> it passed:</p>
+<ul><li>16 tests in 2 files</li><li>487 tests in 33 files</li><li>314 tests in 19 files</li></ul>
+<p>These include the service tests showing 101 questions accepted and a 102nd refused. One mail-delivery error appears in the log, but it comes from a test that simulates a failed delivery on purpose; nothing failed.</p>
+<p><strong>Not mine to do.</strong> These two conditions in the ruling are addressed to other stages, and I left them alone:</p>
+<ul><li><strong>Browser driver:</strong> filling the form&#39;s existing blank question row before pressing &quot;Add a team question&quot; or &quot;Add a resource question&quot; belongs to whoever binds the driver, the same way it already fills &quot;Resource 1&quot;.</li><li><strong>Seed state for R-7.29:</strong> this criterion needs an opportunity shown in full with its scope section empty because the embedded scope page has been removed. That seed state belongs to the contract stage, because R-7.25 means no path through the screens or the API can remove that page.</li></ul>
+<p>The application already shows an empty scope section, without breaking the view, when the embedded page is missing. That behaviour can only be tested once the contract stage supplies that state.</p>
+<p><strong>What would change this.</strong> If verify still fails the 101-question case once the driver fills the blank row first, the fault is the application&#39;s and the slice should come back to build.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by tech-lead (a person) on 2026-10-03 01:08.</p>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

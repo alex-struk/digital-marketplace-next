@@ -25,6 +25,7 @@ import { OpportunityCwuViewScreen } from "./screens/opportunity-cwu-view";
 import { OpportunityCwuEditScreen } from "./screens/opportunity-cwu-edit";
 import { OpportunityOtherCreateScreen } from "./screens/opportunity-other-create";
 import { OpportunityOtherManageScreen } from "./screens/opportunity-other-manage";
+import { OpportunityOtherViewScreen } from "./screens/opportunity-other-view";
 
 /**
  * The addresses in `spec/contract/surface.yaml`, and nothing else. Every other address is the
@@ -167,8 +168,8 @@ const opportunityCwuEditRoute = createRoute({
   },
 });
 
-// Sprint With Us and Team With Us, as far as slice 8 builds them: a draft is created, and lands on
-// its manage page (decision record 0035). Their public pages are slice 10's.
+// Sprint With Us and Team With Us: created, read by anyone once published, and managed by their
+// author and administrators (decision record 0045).
 const opportunitySwuCreateRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/opportunities/sprint-with-us/create",
@@ -182,6 +183,24 @@ const opportunityTwuCreateRoute = createRoute({
   path: "/opportunities/team-with-us/create",
   component: function OpportunityTwuCreateRoute() {
     return <OpportunityOtherCreateScreen program="team-with-us" />;
+  },
+});
+
+const opportunitySwuViewRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/sprint-with-us/$opportunityId",
+  component: function OpportunitySwuViewRoute() {
+    const { opportunityId } = opportunitySwuViewRoute.useParams();
+    return <OpportunityOtherViewScreen key={opportunityId} program="sprint-with-us" opportunityId={opportunityId} />;
+  },
+});
+
+const opportunityTwuViewRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/team-with-us/$opportunityId",
+  component: function OpportunityTwuViewRoute() {
+    const { opportunityId } = opportunityTwuViewRoute.useParams();
+    return <OpportunityOtherViewScreen key={opportunityId} program="team-with-us" opportunityId={opportunityId} />;
   },
 });
 
@@ -235,6 +254,8 @@ export const routeTree = rootRoute.addChildren([
   opportunityCwuEditRoute,
   opportunitySwuCreateRoute,
   opportunityTwuCreateRoute,
+  opportunitySwuViewRoute,
+  opportunityTwuViewRoute,
   opportunitySwuManageRoute,
   opportunityTwuManageRoute,
 ]);

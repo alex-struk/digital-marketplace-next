@@ -146,7 +146,7 @@ describe("who sees which opportunities (R-1.2, R-1.3)", () => {
   });
 });
 
-describe("drafts in the other two programs, before slice 10 (R-1.3, R-1.39; decision record 0035)", () => {
+describe("the other two programs on the list (R-1.3, R-1.39; decision records 0035, 0045)", () => {
   it("saves a Sprint With Us draft from a title alone and lists it to its author and administrators only", async () => {
     const created = await ask("POST", "/api/opportunities/sprint-with-us", await tokens.staff(), {
       title: "Staff one's sprint draft",
@@ -192,13 +192,16 @@ describe("drafts in the other two programs, before slice 10 (R-1.3, R-1.39; deci
     expect((await ask("POST", "/api/opportunities/team-with-us", await tokens.staff(), { status: "PUBLISHED" })).status).toBe(401);
   });
 
-  it("creates a Sprint With Us opportunity under review with its phases, questions, weights and panel (decision record 0036)", async () => {
-    const created = await ask("POST", "/api/opportunities/sprint-with-us", await tokens.staff(), {
+  it("creates a Sprint With Us opportunity under review with its phases, questions, weights and panel (decision records 0036, 0045)", async () => {
+    const sprint = {
       status: "UNDER_REVIEW",
       title: "Staff one's sprint under review",
+      location: "Victoria",
+      description: "Build it.",
       remoteOk: false,
       totalMaxBudget: 600000,
       mandatorySkills: ["React"],
+      proposalDeadline: "2030-01-15",
       assignmentDate: "2030-02-01",
       implementationPhase: { startDate: "2030-02-15", completionDate: "2030-08-31" },
       teamQuestions: [{ question: "Why you?", guideline: "Fit", score: 5, minimumScore: 3, wordLimit: 300 }],
@@ -206,10 +209,22 @@ describe("drafts in the other two programs, before slice 10 (R-1.3, R-1.39; deci
       codeChallengeWeight: 40,
       scenarioWeight: 15,
       priceWeight: 20,
+    };
+    // A vendor cannot sit on a panel: the whole opportunity is refused, naming them (R-1.55).
+    const refused = await ask("POST", "/api/opportunities/sprint-with-us", await tokens.staff(), {
+      ...sprint,
+      evaluationPanel: [
+        { user: "00000000-0000-4000-8000-000000000102", evaluator: true, chair: true },
+        { user: "00000000-0000-4000-8000-000000000201", evaluator: true, chair: false },
+      ],
+    });
+    expect(refused.status).toBe(400);
+    expect(refused.body.errors).toEqual([expect.stringMatching(/^evaluationPanel: Panel member 2: .+ is not a public sector employee\.$/)]);
+    const created = await ask("POST", "/api/opportunities/sprint-with-us", await tokens.staff(), {
+      ...sprint,
       evaluationPanel: [
         { user: "00000000-0000-4000-8000-000000000102", evaluator: true, chair: true },
         { user: "00000000-0000-4000-8000-000000000101", evaluator: true, chair: false },
-        { user: "00000000-0000-4000-8000-000000000201", evaluator: true, chair: false },
       ],
     });
     expect(created.status).toBe(201);
@@ -225,7 +240,6 @@ describe("drafts in the other two programs, before slice 10 (R-1.3, R-1.39; deci
         { user: { id: "00000000-0000-4000-8000-000000000101" }, chair: false, order: 1 },
       ],
     });
-    // A vendor cannot sit on a panel, so the third is left off.
     expect(created.body.evaluationPanel).toHaveLength(2);
     const staffList = (await ask("GET", "/api/opportunities/sprint-with-us", await tokens.staff())).body;
     expect(staffList.find((opportunity: { id: string }) => opportunity.id === created.body.id)?.status).toBe("UNDER_REVIEW");
@@ -236,14 +250,22 @@ describe("drafts in the other two programs, before slice 10 (R-1.3, R-1.39; deci
     const created = await ask("POST", "/api/opportunities/team-with-us", await tokens.admin(), {
       status: "PUBLISHED",
       title: "A published team",
+      location: "Kamloops",
+      description: "Join the team.",
       remoteOk: "no",
       maxBudget: 300000,
       proposalDeadline: "2030-05-01",
+      assignmentDate: "2030-05-15",
+      startDate: "2030-06-01",
       resources: [{ serviceArea: "DATA_PROFESSIONAL", targetAllocation: 80 }],
       resourceQuestions: [{ question: "How?", guideline: "Detail", score: 10, wordLimit: 500 }],
       questionsWeight: 30,
       challengeWeight: 40,
       priceWeight: 30,
+      evaluationPanel: [
+        { user: "00000000-0000-4000-8000-000000000101", evaluator: true, chair: true },
+        { user: "00000000-0000-4000-8000-000000000103", evaluator: true, chair: false },
+      ],
     });
     expect(created.status).toBe(201);
     expect(created.body).toMatchObject({
@@ -251,9 +273,10 @@ describe("drafts in the other two programs, before slice 10 (R-1.3, R-1.39; deci
       resources: [{ serviceArea: "DATA_PROFESSIONAL", targetAllocation: 80, order: 0 }],
       resourceQuestions: [{ question: "How?", order: 0 }],
       challengeWeight: 40,
-      // Nobody named: the author alone, as chair and evaluator.
-      evaluationPanel: [{ user: { id: "00000000-0000-4000-8000-000000000101" }, chair: true, evaluator: true }],
+      evaluationPanel: [{ user: { id: "00000000-0000-4000-8000-000000000101" }, chair: true, evaluator: true }, { chair: false }],
     });
+    // Nobody but an administrator, the author and the panel is told who is on the panel (R-5.18).
+    expect((await ask("GET", `/api/opportunities/team-with-us/${created.body.id}`, await tokens.vendor())).body.evaluationPanel).toBeUndefined();
     expect(created.body.publishedAt).not.toBeNull();
     expect(ids((await ask("GET", "/api/opportunities/team-with-us", await tokens.vendor())).body)).toContain(created.body.id);
     expect(ids((await ask("GET", "/api/opportunities/team-with-us")).body)).toContain(created.body.id);
@@ -272,14 +295,14 @@ describe("drafts in the other two programs, before slice 10 (R-1.3, R-1.39; deci
         remoteDesc: "",
       });
       expect(refused.status).toBe(400);
-      expect(refused.body).toEqual({ errors: ["remoteDesc: Describe the remote work, because remote work is acceptable."] });
+      expect(refused.body.errors).toContain("remoteDesc: Describe the remote work, because remote work is acceptable.");
     }
     const unstated = await ask("POST", "/api/opportunities/team-with-us", await tokens.admin(), {
       status: "PUBLISHED",
       title: "Remote work not mentioned",
     });
     expect(unstated.status).toBe(400);
-    expect(unstated.body).toEqual({ errors: ["remoteOk: Say whether remote work is acceptable."] });
+    expect(unstated.body.errors).toContain("remoteOk: Say whether remote work is acceptable.");
     expect(ids((await ask("GET", "/api/opportunities/sprint-with-us", await tokens.admin())).body)).toHaveLength(before);
     const draft = await ask("POST", "/api/opportunities/sprint-with-us", await tokens.admin(), {
       title: "Remote work not described yet",

@@ -16,12 +16,12 @@ import { MetricsController, OtherProgramListsController } from "./other-programs
 import { OtherProgramsService } from "./other-programs.service";
 import { PrismaCwuOpportunityStore } from "./prisma-cwu-opportunity.store";
 import { PrismaOtherProgramsStore } from "./prisma-other-programs.store";
-import { UnbuiltProgramCreationController } from "./unbuilt-program-creation.controller";
+import { OtherProgramOpportunitiesController } from "./other-program-opportunities.controller";
 
-/** Opportunities: Code With Us, and the list of the other two programs'. */
+/** Opportunities in all three programs. */
 @Module({
   imports: [UsersModule, FileStoreModule, WatchingModule],
-  controllers: [CwuOpportunitiesController, UnbuiltProgramCreationController, OtherProgramListsController, MetricsController],
+  controllers: [CwuOpportunitiesController, OtherProgramOpportunitiesController, OtherProgramListsController, MetricsController],
   providers: [
     CwuOpportunitiesService,
     OtherProgramsService,

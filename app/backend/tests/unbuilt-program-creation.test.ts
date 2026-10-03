@@ -1,12 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { OpportunityViewer } from "../src/rules/opportunities";
-import { SWU_BUDGET_MAX, creationDecision, draftOf, remoteWorkProblems, weightTotal } from "../src/rules/other-program-drafts";
+import { SWU_BUDGET_MAX, creationDecision, draftOf, weightTotal } from "../src/rules/other-program-drafts";
+import { otherProblems, otherRefusalLine, readOtherInput } from "../src/rules/other-program-content";
 
 const ADMIN: OpportunityViewer = { id: "admin-1", type: "ADMIN" };
 const STAFF: OpportunityViewer = { id: "staff-1", type: "GOV" };
 const VENDOR: OpportunityViewer = { id: "vendor-1", type: "VENDOR" };
 
-describe("creating a Sprint With Us or Team With Us opportunity before slice 10 (R-1.7, R-1.48)", () => {
+describe("creating a Sprint With Us or Team With Us opportunity (R-1.7, R-1.48)", () => {
   it("accepts a draft from public sector staff and administrators, a draft being what is asked for when nothing is", () => {
     expect(creationDecision(STAFF, { status: "DRAFT" })).toBe("DRAFT");
     expect(creationDecision(STAFF, {})).toBe("DRAFT");
@@ -33,34 +34,26 @@ describe("creating a Sprint With Us or Team With Us opportunity before slice 10 
   });
 });
 
-describe("remote work in the other two programs (R-1.11, decision records 0040 and 0041)", () => {
+describe("remote work in the other two programs (R-1.11)", () => {
+  const remoteLines = (body: object) =>
+    otherProblems("team-with-us", readOtherInput("team-with-us", body), "2026-10-01")
+      .map(otherRefusalLine)
+      .filter((line) => line.startsWith("remote"));
   const UNSTATED = "remoteOk: Say whether remote work is acceptable.";
   const DESCRIBE = "remoteDesc: Describe the remote work, because remote work is acceptable.";
   const TOO_LONG = "remoteDesc: Enter a remote work description of up to 500 characters.";
 
-  it("refuses one under review or published that accepts remote work without describing it", () => {
-    expect(remoteWorkProblems("UNDER_REVIEW", { remoteOk: true, remoteDesc: "" })).toEqual([DESCRIBE]);
-    expect(remoteWorkProblems("PUBLISHED", { remoteOk: true })).toEqual([DESCRIBE]);
-    expect(remoteWorkProblems("PUBLISHED", { remoteOk: "yes", remoteDesc: "   " })).toEqual([DESCRIBE]);
+  it("refuses one that accepts remote work without describing it, or does not say", () => {
+    expect(remoteLines({ remoteOk: true, remoteDesc: "" })).toEqual([DESCRIBE]);
+    expect(remoteLines({ remoteOk: "yes", remoteDesc: "   " })).toEqual([DESCRIBE]);
+    expect(remoteLines({ title: "Nothing said about remote work" })).toEqual([UNSTATED]);
+    expect(remoteLines({ remoteOk: "maybe", remoteDesc: "x".repeat(501) })).toEqual([UNSTATED, TOO_LONG]);
   });
 
-  it("refuses one under review or published that does not say whether remote work is acceptable", () => {
-    expect(remoteWorkProblems("PUBLISHED", { title: "Nothing said about remote work" })).toEqual([UNSTATED]);
-    expect(remoteWorkProblems("UNDER_REVIEW", { remoteOk: null, remoteDesc: "" })).toEqual([UNSTATED]);
-    expect(remoteWorkProblems("PUBLISHED", { remoteOk: "maybe", remoteDesc: "x".repeat(501) })).toEqual([UNSTATED, TOO_LONG]);
-  });
-
-  it("refuses a description over 500 characters whether or not remote work is acceptable", () => {
-    expect(remoteWorkProblems("PUBLISHED", { remoteOk: false, remoteDesc: "x".repeat(501) })).toEqual([TOO_LONG]);
-    expect(remoteWorkProblems("UNDER_REVIEW", { remoteOk: true, remoteDesc: "x".repeat(501) })).toEqual([TOO_LONG]);
-  });
-
-  it("accepts remote work described, remote work not acceptable with no description, and any draft", () => {
-    expect(remoteWorkProblems("PUBLISHED", { remoteOk: true, remoteDesc: "x".repeat(500) })).toEqual([]);
-    expect(remoteWorkProblems("PUBLISHED", { remoteOk: false, remoteDesc: "" })).toEqual([]);
-    expect(remoteWorkProblems("UNDER_REVIEW", { remoteOk: "no" })).toEqual([]);
-    expect(remoteWorkProblems("DRAFT", { title: "Nothing said about remote work" })).toEqual([]);
-    expect(remoteWorkProblems("DRAFT", { remoteOk: true, remoteDesc: "x".repeat(501) })).toEqual([]);
+  it("refuses a description over 500 characters whether or not remote work is acceptable, and accepts the rest", () => {
+    expect(remoteLines({ remoteOk: false, remoteDesc: "x".repeat(501) })).toEqual([TOO_LONG]);
+    expect(remoteLines({ remoteOk: true, remoteDesc: "x".repeat(500) })).toEqual([]);
+    expect(remoteLines({ remoteOk: "no" })).toEqual([]);
   });
 });
 

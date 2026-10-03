@@ -61,6 +61,12 @@ const PROFILE_NOT_SAVED = "Your profile could not be saved.";
 /** The refusal of a request to read somebody else's account (R-4.25). */
 export const NOT_PERMITTED_TO_READ_ACCOUNT = "You are not permitted to read that account.";
 
+/** Someone who may sit on an evaluation panel, as staff choosing one are told of them. */
+export interface PanelCandidate {
+  readonly id: string;
+  readonly name: string;
+}
+
 /** The refusal of the list of users, or of the contact list, to anyone but an administrator (R-4.21, R-4.32). */
 export const ADMINISTRATORS_ONLY = "Only an administrator may do that.";
 
@@ -168,6 +174,19 @@ export class AccountsService {
   async list(viewer: Account | null): Promise<Account[]> {
     if (!mayListAccounts(viewer)) throw new UnauthorizedException(ADMINISTRATORS_ONLY);
     return (await this.accounts.list()).sort(compareListedAccounts);
+  }
+
+  /**
+   * Who may be put on an evaluation panel, for public sector staff choosing one: every active
+   * public sector employee and administrator, by name alone (decision record 0045). Nobody's
+   * address or standing is told, so the list of everyone stays an administrator's (R-4.21).
+   */
+  async panelCandidates(viewer: Account | null): Promise<PanelCandidate[] | null> {
+    if (!viewer || (viewer.type !== "GOV" && viewer.type !== "ADMIN") || viewer.status !== "ACTIVE") return null;
+    return (await this.accounts.list())
+      .filter((account) => (account.type === "GOV" || account.type === "ADMIN") && account.status === "ACTIVE")
+      .map((account) => ({ id: account.id, name: account.name }))
+      .sort((a, b) => a.name.localeCompare(b.name, "en-CA") || a.id.localeCompare(b.id));
   }
 
   /**

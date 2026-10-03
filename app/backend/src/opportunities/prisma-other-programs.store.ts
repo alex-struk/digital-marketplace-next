@@ -5,7 +5,7 @@ import { PrismaService } from "../prisma/prisma.service";
 import { OpportunityStatus, isStatusOf, pacificDayOf, recordedInstantOf } from "../rules/opportunities";
 import { CreationState, OtherProgramDraft, PanelMemberDraft, SWU_PHASES, SwuPhase } from "../rules/other-program-drafts";
 import { Person } from "./cwu-opportunity";
-import { OtherProgram, OtherProgramsStore, StoredDetails, StoredSummary } from "./other-programs";
+import { OtherProgram, OtherProgramsStore, PanelAccount, StoredDetails, StoredSummary } from "./other-programs";
 
 const person = { select: { id: true, name: true } } as const;
 
@@ -78,10 +78,10 @@ interface Row {
 }
 
 /**
- * Sprint With Us and Team With Us opportunities, read for the list and created from their interim
- * create screens: the opportunity, its newest version and the changes of state in its history,
- * and, for one opportunity, what its program holds — phases, questions, resources, weights and
- * panel. Changing one after it is created is slice 10's.
+ * Sprint With Us and Team With Us opportunities as the kept schema holds them: the opportunity, a
+ * version for every save of its content or its panel (the newest is current, the earlier ones are
+ * kept, R-1.4, R-5.16), and the changes of state and events in its history; and, for one
+ * opportunity, what its program holds — phases, questions, resources, weights and panel.
  */
 @Injectable()
 export class PrismaOtherProgramsStore implements OtherProgramsStore {
@@ -106,94 +106,151 @@ export class PrismaOtherProgramsStore implements OtherProgramsStore {
 
   async create(program: OtherProgram, content: OtherProgramDraft, status: CreationState, by: string): Promise<string> {
     const id = randomUUID();
-    const version = randomUUID();
     const now = new Date();
-    const common = {
-      id: version,
-      createdAt: now,
-      createdBy: by,
-      opportunity: id,
-      title: content.title,
-      teaser: content.teaser,
-      remoteOk: content.remoteOk,
-      remoteDesc: content.remoteDesc,
-      location: content.location,
-      description: content.description,
-      proposalDeadline: recordedInstantOf(content.proposalDeadline),
-      assignmentDate: recordedInstantOf(content.assignmentDate),
-      questionsWeight: content.weights.questions,
-      priceWeight: content.weights.price,
-    };
-    const questionRows = content.questions.map((question, order) => ({
-      opportunityVersion: version,
-      question: question.question,
-      guideline: question.guideline,
-      score: question.score,
-      minimumScore: question.minimumScore,
-      wordLimit: question.wordLimit,
-      order,
-      createdAt: now,
-      createdBy: by,
-    }));
     const statusRow = { id: randomUUID(), createdAt: now, createdBy: by, opportunity: id, status, event: null, note: null };
     await this.prisma.$transaction(async (tx) => {
-      const panel = (await panelOf(tx, content.panel, by)).map((member, order) => ({ opportunityVersion: version, ...member, order }));
+      const panel = await panelOf(tx, content.panel, by);
       if (program === "sprint-with-us") {
         await tx.swuOpportunities.create({ data: { id, createdAt: now, createdBy: by } });
-        await tx.swuOpportunityVersions.create({
-          data: {
-            ...common,
-            totalMaxBudget: content.budget,
-            mandatorySkills: [...content.skills],
-            codeChallengeWeight: content.weights.codeChallenge,
-            scenarioWeight: content.weights.scenario,
-          },
-        });
-        for (const phase of content.phases) {
-          await tx.swuOpportunityPhases.create({
-            data: {
-              id: randomUUID(),
-              opportunityVersion: version,
-              phase: phase.phase,
-              startDate: recordedInstantOf(phase.startDate),
-              completionDate: recordedInstantOf(phase.completionDate),
-              maxBudget: phase.maxBudget,
-              createdAt: now,
-              createdBy: by,
-            },
-          });
-        }
-        if (questionRows.length > 0) await tx.swuTeamQuestions.createMany({ data: questionRows });
-        if (panel.length > 0) await tx.swuEvaluationPanelMembers.createMany({ data: panel });
+        await writeVersion(tx, program, id, content, panel, by, now);
         await tx.swuOpportunityStatuses.create({ data: statusRow });
       } else {
         await tx.twuOpportunities.create({ data: { id, createdAt: now, createdBy: by } });
-        await tx.twuOpportunityVersions.create({
-          data: {
-            ...common,
-            maxBudget: content.budget,
-            startDate: recordedInstantOf(content.startDate ?? content.assignmentDate),
-            completionDate: content.completionDate ? recordedInstantOf(content.completionDate) : null,
-            challengeWeight: content.weights.challenge,
-          },
-        });
-        const areas = await tx.serviceAreas.findMany({ select: { id: true, serviceArea: true } });
-        const resources = content.resources.flatMap((resource) => {
-          const area = areas.find((entry) => entry.serviceArea === resource.serviceArea);
-          return area ? [{ serviceArea: area.id, targetAllocation: resource.targetAllocation }] : [];
-        });
-        if (resources.length > 0) {
-          await tx.twuResources.createMany({
-            data: resources.map((resource, order) => ({ id: randomUUID(), opportunityVersion: version, ...resource, order })),
-          });
-        }
-        if (questionRows.length > 0) await tx.twuResourceQuestions.createMany({ data: questionRows });
-        if (panel.length > 0) await tx.twuEvaluationPanelMembers.createMany({ data: panel });
+        await writeVersion(tx, program, id, content, panel, by, now);
         await tx.twuOpportunityStatuses.create({ data: statusRow });
       }
     });
     return id;
   }
+
+  async addVersion(
+    program: OtherProgram,
+    id: string,
+    content: OtherProgramDraft,
+    panel: readonly PanelMemberDraft[],
+    by: string,
+  ): Promise<void> {
+    const now = new Date();
+    const edited = { id: randomUUID(), createdAt: now, createdBy: by, opportunity: id, status: null, event: "EDITED", note: null };
+    await this.prisma.$transaction(async (tx) => {
+      await writeVersion(tx, program, id, content, panel, by, now);
+      if (program === "sprint-with-us") await tx.swuOpportunityStatuses.create({ data: edited });
+      else await tx.twuOpportunityStatuses.create({ data: edited });
+    });
+  }
+
+  async remove(program: OtherProgram, id: string): Promise<void> {
+    // Versions, history, addenda and watchers go with it.
+    if (program === "sprint-with-us") await this.prisma.swuOpportunities.delete({ where: { id } });
+    else await this.prisma.twuOpportunities.delete({ where: { id } });
+  }
+
+  async accounts(ids: readonly string[]): Promise<PanelAccount[]> {
+    const valid = ids.filter((id) => IDENTIFIER.test(id));
+    if (valid.length === 0) return [];
+    return this.prisma.users.findMany({ where: { id: { in: valid } }, select: { id: true, name: true, type: true, status: true } });
+  }
+}
+
+const IDENTIFIER = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/**
+ * One version of an opportunity, with what its program holds: its phases or resources, its
+ * questions, numbered by their place in the list (R-1.17), and its panel (R-5.16).
+ */
+async function writeVersion(
+  tx: Prisma.TransactionClient,
+  program: OtherProgram,
+  id: string,
+  content: OtherProgramDraft,
+  panel: readonly PanelMemberDraft[],
+  by: string,
+  now: Date,
+): Promise<void> {
+  const version = randomUUID();
+  const common = {
+    id: version,
+    createdAt: now,
+    createdBy: by,
+    opportunity: id,
+    title: content.title,
+    teaser: content.teaser,
+    remoteOk: content.remoteOk,
+    remoteDesc: content.remoteDesc,
+    location: content.location,
+    description: content.description,
+    proposalDeadline: recordedInstantOf(content.proposalDeadline),
+    assignmentDate: recordedInstantOf(content.assignmentDate),
+    questionsWeight: content.weights.questions,
+    priceWeight: content.weights.price,
+  };
+  const questionRows = content.questions.map((question, order) => ({
+    opportunityVersion: version,
+    question: question.question,
+    guideline: question.guideline,
+    score: question.score,
+    minimumScore: question.minimumScore,
+    wordLimit: question.wordLimit,
+    order,
+    createdAt: now,
+    createdBy: by,
+  }));
+  const panelRows = panel.map((member, order) => ({
+    opportunityVersion: version,
+    user: member.user,
+    evaluator: member.evaluator,
+    chair: member.chair,
+    order,
+  }));
+  if (program === "sprint-with-us") {
+    await tx.swuOpportunityVersions.create({
+      data: {
+        ...common,
+        totalMaxBudget: content.budget,
+        mandatorySkills: [...content.skills],
+        codeChallengeWeight: content.weights.codeChallenge,
+        scenarioWeight: content.weights.scenario,
+      },
+    });
+    for (const phase of content.phases) {
+      await tx.swuOpportunityPhases.create({
+        data: {
+          id: randomUUID(),
+          opportunityVersion: version,
+          phase: phase.phase,
+          startDate: recordedInstantOf(phase.startDate),
+          completionDate: recordedInstantOf(phase.completionDate),
+          maxBudget: phase.maxBudget,
+          createdAt: now,
+          createdBy: by,
+        },
+      });
+    }
+    if (questionRows.length > 0) await tx.swuTeamQuestions.createMany({ data: questionRows });
+    if (panelRows.length > 0) await tx.swuEvaluationPanelMembers.createMany({ data: panelRows });
+    return;
+  }
+  await tx.twuOpportunityVersions.create({
+    data: {
+      ...common,
+      maxBudget: content.budget,
+      startDate: recordedInstantOf(content.startDate ?? content.assignmentDate),
+      completionDate: content.completionDate ? recordedInstantOf(content.completionDate) : null,
+      challengeWeight: content.weights.challenge,
+    },
+  });
+  const areas = await tx.serviceAreas.findMany({ select: { id: true, serviceArea: true } });
+  const resources = content.resources.flatMap((resource) => {
+    const area = areas.find((entry) => entry.serviceArea === resource.serviceArea);
+    return area ? [{ serviceArea: area.id, targetAllocation: resource.targetAllocation }] : [];
+  });
+  if (resources.length > 0) {
+    await tx.twuResources.createMany({
+      data: resources.map((resource, order) => ({ id: randomUUID(), opportunityVersion: version, ...resource, order })),
+    });
+  }
+  if (questionRows.length > 0) await tx.twuResourceQuestions.createMany({ data: questionRows });
+  if (panelRows.length > 0) await tx.twuEvaluationPanelMembers.createMany({ data: panelRows });
 }
 
 /**
@@ -266,7 +323,10 @@ function swuDetails(version: SwuDetailed | undefined): StoredDetails | undefined
   if (!version) return undefined;
   return {
     skills: version.mandatorySkills,
-    phases: version.swuOpportunityPhases.flatMap((phase) =>
+    // In the order the phases run, whatever their dates.
+    phases: [...version.swuOpportunityPhases]
+      .sort((a, b) => SWU_PHASES.indexOf(a.phase as SwuPhase) - SWU_PHASES.indexOf(b.phase as SwuPhase))
+      .flatMap((phase) =>
       isPhase(phase.phase)
         ? [
             {

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Checkbox, Heading, Link, Text } from "@bcgov/design-system-react-components";
-import { mayManageOpportunity } from "@rules/opportunities";
+import { Program, mayManageOpportunity } from "@rules/opportunities";
 import { mayWatch } from "@rules/opportunity-list";
 import { CwuOpportunity, fetchCwuOpportunity } from "../api/opportunities";
 import { countView, setWatching } from "../api/watching";
@@ -165,7 +165,13 @@ export function OpportunityCwuViewScreen({ opportunityId }: { opportunityId: str
  * Watching the opportunity, for anyone signed in who did not create it (R-1.5). Ticking or
  * unticking saves at once, and the change is announced; a refusal puts the box back.
  */
-function WatchControl({ opportunity }: { opportunity: CwuOpportunity }) {
+export function WatchControl({
+  opportunity,
+  program = "code-with-us",
+}: {
+  opportunity: { readonly id: string; readonly subscribed: boolean };
+  program?: Program;
+}) {
   const [watching, setWatched] = useState(opportunity.subscribed);
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
@@ -174,7 +180,7 @@ function WatchControl({ opportunity }: { opportunity: CwuOpportunity }) {
     setWatched(value);
     setSaving(true);
     setStatus(null);
-    const saved = await setWatching("code-with-us", opportunity.id, value);
+    const saved = await setWatching(program, opportunity.id, value);
     setSaving(false);
     if (!saved) {
       setWatched(!value);

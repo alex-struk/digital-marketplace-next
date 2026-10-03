@@ -84,7 +84,7 @@ no calibration ruling open.
 | 2026-09-14.json | 2026-09-14T10:59:25.166Z | 30 | 173 | 0 | 0 | 62 | 0 |
 | 2026-09-11.json | 2026-09-11T04:52:21.727Z | 13 | 154 | 0 | 0 | 98 | 0 |
 
-no calibration ruling open.
+Open calibration proposal: calibrate-triage-old-43.
 
 Current results: 29 rows measured by 2026-10-03 (a run narrowed to one domain), 236 carried (236 from 2026-10-02).
 

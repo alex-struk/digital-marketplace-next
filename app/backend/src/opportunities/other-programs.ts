@@ -3,6 +3,7 @@ import {
   CreationState,
   OtherProgram,
   OtherProgramDraft,
+  PanelMemberDraft,
   QuestionDraft,
   SwuPhase,
   WeightsDraft,
@@ -10,11 +11,11 @@ import {
 import { Person } from "./cwu-opportunity";
 import type { RunningAnswer } from "./opportunity-running.service";
 
-/** The two programs whose opportunities slice 10 completes; until then they are listed, read and created. */
+/** The two programs with an evaluation panel: Sprint With Us and Team With Us. */
 export type { OtherProgram } from "../rules/other-program-drafts";
 
 /**
- * A Sprint With Us or Team With Us opportunity as the list and its interim screens need it: who
+ * A Sprint With Us or Team With Us opportunity as the list and its screens need it: who
  * made it, its state, and its current version's title, place, dates, description and budget — the
  * total maximum budget for Sprint With Us, the maximum budget for Team With Us.
  */
@@ -74,6 +75,24 @@ export interface OtherProgramsStore {
    * that names nobody is the author alone, as chair and evaluator.
    */
   create(program: OtherProgram, content: OtherProgramDraft, status: CreationState, by: string): Promise<string>;
+  /**
+   * A new version of its content with the panel given, recorded in its history as an edit, as one
+   * change (R-1.4, R-5.16). The panel is kept as given; whether it may stand is the service's
+   * question.
+   */
+  addVersion(program: OtherProgram, id: string, content: OtherProgramDraft, panel: readonly PanelMemberDraft[], by: string): Promise<void>;
+  /** Removes the opportunity with its versions, history and addenda (R-1.53). */
+  remove(program: OtherProgram, id: string): Promise<void>;
+  /** The accounts held at these identifiers, for judging a panel that names them (R-5.1). */
+  accounts(ids: readonly string[]): Promise<PanelAccount[]>;
+}
+
+/** An account a panel names, as the panel's rules need it. */
+export interface PanelAccount {
+  readonly id: string;
+  readonly name: string;
+  readonly type: string;
+  readonly status: string;
 }
 
 export const OTHER_PROGRAMS_STORE = Symbol("OtherProgramsStore");

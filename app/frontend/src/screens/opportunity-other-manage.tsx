@@ -1,52 +1,100 @@
 import { useEffect, useRef, useState } from "react";
 import { Button, ButtonGroup, Heading, Link, Text } from "@bcgov/design-system-react-components";
-import { useSearch } from "@tanstack/react-router";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import {
+  OpportunityStatus,
   PROGRAM_NAMES,
   changeIsAnnounced,
+  earliestDeadlineFor,
   isPermittedTransition,
   isUnpublished,
   mayAddAddendum,
   mayCancelOpportunity,
+  mayDeleteOpportunity,
+  mayEditOpportunity,
   mayManageOpportunity,
+  mayPublishOpportunity,
+  maySubmitForReview,
 } from "@rules/opportunities";
 import type { OtherProgram } from "@rules/other-program-drafts";
 import type { Account } from "../api/accounts";
 import type { RunningAction } from "../api/opportunities";
-import { OtherProgramOpportunity, fetchOtherProgramOpportunity, runOtherProgramOpportunity } from "../api/other-programs";
+import {
+  OtherProgramChange,
+  OtherProgramOpportunity,
+  changeOtherProgramOpportunity,
+  deleteOtherProgramOpportunity,
+  fetchOtherProgramOpportunity,
+  runOtherProgramOpportunity,
+  submissionFrom,
+} from "../api/other-programs";
 import { Loading } from "../app/loading";
 import { NotFound } from "../app/not-found";
 import { Stack } from "../app/page-layout";
 import { RequireSignIn } from "../app/require-sign-in";
 import { useScreenTitle } from "../app/screen-title";
-import { TitledAlert } from "../app/titled-alert";
-import { Fact, StatusBadge, dayLabel, deadlineLabel } from "./opportunity-parts";
+import { EvaluationPanelTab } from "./evaluation-panel-tab";
+import { PublishDialog } from "./opportunity-cwu-form";
+import { DeleteDialog, Notice, NoticeArea, refusalNotice } from "./opportunity-cwu-edit";
+import { usePanelCandidates } from "./opportunity-other-create";
+import { OtherProgramForm } from "./opportunity-other-form";
+import { Fact, StatusBadge, dayLabel, deadlineLabel, publishedLabel, todayInPacific } from "./opportunity-parts";
 import { AddendaTab, CancelDialog, HistoryTable, ReportingSection, Sent } from "./opportunity-running";
 
 /**
- * Where a Sprint With Us or Team With Us opportunity is managed, at
- * `/opportunities/<program>/<id>/edit`, as far as slices 8 and 9 build it (decision records 0035 and
- * 0043): its title, state, identifier, key facts and, as R-1.29 allows, who made it, with the
- * reporting figures once it is published (R-1.30); an administrator cancelling it (R-1.28); the
- * Addenda tab once it is no longer a draft (R-1.32); and the History tab, which shows any private
- * notes and their files but offers no way to add one (R-1.33). The program's own tabs and the rest of its actions are slice
- * 10's. Only its author and administrators reach it; anybody else is shown the missing page (R-1.30).
+ * Manage a Sprint With Us or Team With Us opportunity, at `/opportunities/<program>/<id>/edit`
+ * (opportunity-swu-edit, opportunity-twu-edit; decision record 0045): its summary with the
+ * reporting figures (R-1.30), its details in their form (R-1.4, R-1.56), its addenda once it is no
+ * longer a draft (R-1.32), its history, with any private notes but no way to add one (R-1.33), and
+ * its evaluation panel (evaluation-panel-swu, evaluation-panel-twu; R-5.16, R-5.18). Each tab has
+ * its own address (`?tab=…`). Only its author and administrators see it; anybody else, a panel
+ * member included, is shown the missing page (R-1.30, R-5.18).
+ *
+ * The action bar offers only what the person may do in the opportunity's state, as on the Code
+ * With Us manage page (R-1.20, R-1.22, R-1.28, R-1.53, R-1.56).
  */
 type Loaded = { readonly kind: "loading" } | { readonly kind: "missing" } | { readonly kind: "found"; readonly opportunity: OtherProgramOpportunity };
 
-type Tab = "summary" | "addenda" | "history";
+type Tab = "summary" | "opportunity" | "addenda" | "history" | "evaluationPanel";
 
-const TAB_NAMES: Readonly<Record<Tab, string>> = { summary: "Summary", addenda: "Addenda", history: "History" };
+const TAB_NAMES: Readonly<Record<Tab, string>> = {
+  summary: "Summary",
+  opportunity: "Opportunity",
+  addenda: "Addenda",
+  history: "History",
+  evaluationPanel: "Evaluation panel",
+};
+
+const TAB_TEST_IDS: Readonly<Record<Tab, string>> = {
+  summary: "opportunity-tab-summary",
+  opportunity: "opportunity-tab-opportunity",
+  addenda: "opportunity-tab-addenda",
+  history: "opportunity-tab-history",
+  evaluationPanel: "opportunity-tab-evaluation-panel",
+};
 
 const TITLES: Readonly<Record<OtherProgram, string>> = {
   "sprint-with-us": "Manage a Sprint With Us opportunity",
   "team-with-us": "Manage a Team With Us opportunity",
 };
 
-const DONE: Readonly<Record<RunningAction["tag"], string>> = {
+/** The Evaluation panel tab's own surface title (evaluation-panel-swu, evaluation-panel-twu). */
+export const PANEL_TITLE = "Evaluation Panel";
+
+const DONE: Readonly<Record<"submit" | "publish" | "save" | RunningAction["tag"], string>> = {
+  submit: "The opportunity has been submitted for review. Every administrator has been told.",
+  publish: "The opportunity has been published.",
+  save: "Your changes have been saved.",
   cancel: "The opportunity has been cancelled. Everyone watching it and everyone who submitted a proposal is being told.",
   addAddendum: "The addendum has been added.",
 };
+
+/** The tabs follow the stage: an addendum needs an opportunity that is no longer a draft (R-1.32). */
+export function otherTabsFor(status: OpportunityStatus): readonly Tab[] {
+  return status === "DRAFT"
+    ? ["summary", "opportunity", "history", "evaluationPanel"]
+    : ["summary", "opportunity", "addenda", "history", "evaluationPanel"];
+}
 
 export function OpportunityOtherManageScreen({ program, opportunityId }: { program: OtherProgram; opportunityId: string }) {
   useScreenTitle(TITLES[program]);
@@ -85,23 +133,52 @@ function ManageLoader({ program, account, opportunityId }: { program: OtherProgr
 }
 
 function Manage({ program, account, initial }: { program: OtherProgram; account: Account; initial: OtherProgramOpportunity }) {
+  const navigate = useNavigate();
   const search = useSearch({ strict: false }) as Record<string, unknown>;
   const [opportunity, setOpportunity] = useState(initial);
-  const [notice, setNotice] = useState<{ readonly kind: "done" | "refused"; readonly text: string } | null>(null);
-  const [cancelling, setCancelling] = useState(false);
+  const [notice, setNotice] = useState<Notice | null>(null);
+  const [dialog, setDialog] = useState<"publish" | "delete" | "cancel" | null>(null);
   const [busy, setBusy] = useState(false);
+  // Bumped when the form is saved, so it starts again from what was saved.
+  const [formVersion, setFormVersion] = useState(0);
   const noticeRef = useRef<HTMLDivElement>(null);
+  const candidates = usePanelCandidates(account);
 
   useEffect(() => {
-    if (notice?.kind === "refused") noticeRef.current?.focus();
+    if (notice && notice.kind !== "done") noticeRef.current?.focus();
   }, [notice]);
 
   const standing = { status: opportunity.status, createdBy: opportunity.createdBy?.id ?? null };
-  const offered: readonly Tab[] = opportunity.status === "DRAFT" ? ["summary", "history"] : ["summary", "addenda", "history"];
+  const draft = opportunity.status === "DRAFT";
+  const offered = otherTabsFor(opportunity.status);
   const tab: Tab = offered.includes(search.tab as Tab) ? (search.tab as Tab) : "summary";
+  // The document title is the surface title, and the panel tab is a surface of its own.
+  useScreenTitle(tab === "evaluationPanel" ? PANEL_TITLE : TITLES[program]);
   const base = `/opportunities/${program}/${opportunity.id}/edit`;
-  const mayCancel = mayCancelOpportunity(account) && isPermittedTransition(program, opportunity.status, "CANCELED");
+  const mayEdit = mayEditOpportunity(account, standing);
+  const administrator = account.type === "ADMIN";
+  const today = todayInPacific();
 
+  const offers = {
+    edit: mayEdit,
+    // A draft's author is offered Submit for review; an administrator publishes instead.
+    submit: draft && !administrator && maySubmitForReview(account, standing),
+    publish: isUnpublished(opportunity.status) && mayPublishOpportunity(account),
+    delete: mayDeleteOpportunity(account, standing),
+    // Published, an evaluation stage or processing, by an administrator (R-1.20, R-1.28).
+    cancel: mayCancelOpportunity(account) && isPermittedTransition(program, opportunity.status, "CANCELED"),
+  };
+  const editing = tab === "opportunity" && mayEdit;
+
+  function goToTab(next: Tab) {
+    const params = { opportunityId: opportunity.id };
+    const search = { tab: next } as never;
+    void (program === "sprint-with-us"
+      ? navigate({ to: "/opportunities/sprint-with-us/$opportunityId/edit", params, search })
+      : navigate({ to: "/opportunities/team-with-us/$opportunityId/edit", params, search }));
+  }
+
+  /** Cancelling or an addendum; a refusal of the addendum is said beside what was typed. */
   async function run(action: RunningAction): Promise<Sent> {
     setBusy(true);
     const answer = await runOtherProgramOpportunity(program, opportunity.id, action);
@@ -116,6 +193,34 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
     return why;
   }
 
+  async function act(action: "submit" | "publish") {
+    if (busy) return;
+    setBusy(true);
+    const change: OtherProgramChange = { tag: action === "submit" ? "submitForReview" : "publish" };
+    const answer = await changeOtherProgramOpportunity(program, opportunity.id, change);
+    setBusy(false);
+    setDialog(null);
+    if (answer.kind === "saved") {
+      setOpportunity(answer.opportunity);
+      setNotice({ kind: "done", text: DONE[action] });
+      return;
+    }
+    setNotice(refusalNotice(answer, action));
+  }
+
+  async function remove() {
+    if (busy) return;
+    setBusy(true);
+    const answer = await deleteOtherProgramOpportunity(program, opportunity.id);
+    setBusy(false);
+    setDialog(null);
+    if (answer.kind === "saved") {
+      void navigate({ to: "/dashboard" });
+      return;
+    }
+    setNotice({ kind: "refused", text: answer.kind === "refused" ? answer.reasons.join(" ") : "The opportunity could not be deleted. Try again." });
+  }
+
   return (
     <Stack gap="large">
       <Stack gap="small">
@@ -126,24 +231,46 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
       </Stack>
       <Stack direction="row" align="center" gap="medium">
         <Text elementType="p">
-          Status: <StatusBadge status={opportunity.status} />
+          Status: <StatusBadge status={opportunity.status} program={program} />
         </Text>
         <Text elementType="p" size="small" color="secondary">
           Opportunity ID: <span data-testid="opportunity-identifier">{opportunity.id}</span>
         </Text>
       </Stack>
-      {mayCancel ? (
+      {(offers.edit && !editing) || offers.submit || offers.publish || offers.delete || offers.cancel ? (
         <ButtonGroup ariaLabel="Opportunity actions">
-          <Button variant="secondary" danger isDisabled={busy} onPress={() => setCancelling(true)} data-testid="opportunity-cancel-button">
-            Cancel opportunity
-          </Button>
+          {offers.edit && !editing ? (
+            <Button variant="secondary" onPress={() => goToTab("opportunity")} data-testid="opportunity-edit-button">
+              Edit
+            </Button>
+          ) : null}
+          {offers.submit ? (
+            <Button variant="primary" isDisabled={busy} onPress={() => void act("submit")} data-testid="opportunity-submit-for-review">
+              Submit for review
+            </Button>
+          ) : null}
+          {offers.publish ? (
+            <Button variant="primary" isDisabled={busy} onPress={() => setDialog("publish")} data-testid="opportunity-publish">
+              Publish
+            </Button>
+          ) : null}
+          {offers.delete ? (
+            <Button variant="secondary" danger isDisabled={busy} onPress={() => setDialog("delete")} data-testid="opportunity-delete-button">
+              Delete
+            </Button>
+          ) : null}
+          {offers.cancel ? (
+            <Button variant="secondary" danger isDisabled={busy} onPress={() => setDialog("cancel")} data-testid="opportunity-cancel-button">
+              Cancel opportunity
+            </Button>
+          ) : null}
         </ButtonGroup>
       ) : null}
       <nav aria-label="Opportunity sections">
         <Stack as="ul" direction="row" gap="medium">
           {offered.map((name) => (
             <li key={name}>
-              <Link href={`${base}?tab=${name}`} aria-current={name === tab ? "page" : undefined} data-testid={`opportunity-tab-${name}`}>
+              <Link href={`${base}?tab=${name}`} aria-current={name === tab ? "page" : undefined} data-testid={TAB_TEST_IDS[name]}>
                 {TAB_NAMES[name]}
               </Link>
             </li>
@@ -154,14 +281,7 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
         <Heading level={2} id="tab-heading">
           {TAB_NAMES[tab]}
         </Heading>
-        {notice?.kind === "refused" ? (
-          <div tabIndex={-1} ref={noticeRef}>
-            <TitledAlert variant="danger" role="alert" title="That could not be done">
-              <Text elementType="p">{notice.text}</Text>
-            </TitledAlert>
-          </div>
-        ) : null}
-        <div role="status">{notice?.kind === "done" ? <Text elementType="p">{notice.text}</Text> : null}</div>
+        <NoticeArea notice={notice} noticeRef={noticeRef} />
         {tab === "summary" ? (
           <>
             <Stack as="dl" direction="row" gap="medium">
@@ -171,23 +291,47 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
               <Fact label={opportunity.value.term}>
                 {opportunity.value.amount > 0 ? `$${opportunity.value.amount.toLocaleString("en-CA")}` : "Not entered"}
               </Fact>
-              {opportunity.createdBy !== undefined ? (
+              <Fact label="Published">{publishedLabel(opportunity.publishedAt)}</Fact>
+              {opportunity.createdBy ? (
                 <Fact label="Created by" testId="opportunity-created-by">
-                  {opportunity.createdBy?.name ?? ""}
+                  {opportunity.createdBy.name}
                 </Fact>
               ) : null}
-              {opportunity.updatedBy !== undefined ? (
+              {opportunity.updatedBy ? (
                 <Fact label="Last changed by" testId="opportunity-last-changed-by">
-                  {opportunity.updatedBy?.name ?? ""}
+                  {opportunity.updatedBy.name}
                 </Fact>
               ) : null}
             </Stack>
             <ReportingSection reporting={opportunity.reporting} unpublished={isUnpublished(opportunity.status)} />
-            <Text elementType="p">
-              The rest of this opportunity — what makes it a {PROGRAM_NAMES[program]} opportunity, and putting it forward for
-              review or publication — cannot be managed here yet.
-            </Text>
           </>
+        ) : null}
+        {tab === "opportunity" ? (
+          <OtherProgramForm
+            key={formVersion}
+            program={program}
+            purpose="edit"
+            account={account}
+            initial={submissionFrom(opportunity)}
+            isDraft={draft}
+            earliestDeadline={earliestDeadlineFor(opportunity, today)}
+            headingLevel={3}
+            readOnly={!mayEdit}
+            consequence={
+              <Text elementType="p">
+                {draft
+                  ? "Saving records a new version of the draft. Nothing is checked until it is submitted for review or published."
+                  : "Saving records a new version. Everyone watching this opportunity, everyone who has submitted a proposal, and its author will be emailed."}
+              </Text>
+            }
+            onSend={(_action, submission) => changeOtherProgramOpportunity(program, opportunity.id, { tag: "edit", submission })}
+            onSaved={(saved) => {
+              setOpportunity(saved);
+              setFormVersion((version) => version + 1);
+              setNotice({ kind: "done", text: DONE.save });
+            }}
+            onCancel={() => goToTab("summary")}
+          />
         ) : null}
         {tab === "addenda" ? (
           <AddendaTab
@@ -199,17 +343,32 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
         ) : null}
         {/* No screen adds a private note (R-1.33); the history shows the ones there are. */}
         {tab === "history" ? <HistoryTable history={opportunity.history ?? []} /> : null}
+        {tab === "evaluationPanel" ? (
+          <EvaluationPanelTab
+            program={program}
+            status={opportunity.status}
+            panel={opportunity.evaluationPanel ?? []}
+            candidates={candidates}
+            onSave={async (panel) => {
+              const answer = await changeOtherProgramOpportunity(program, opportunity.id, { tag: "editEvaluationPanel", panel });
+              if (answer.kind === "saved") setOpportunity(answer.opportunity);
+              return answer;
+            }}
+          />
+        ) : null}
       </Stack>
       <CancelDialog
-        key={cancelling ? "open" : "closed"}
-        isOpen={cancelling}
+        key={dialog === "cancel" ? "open" : "closed"}
+        isOpen={dialog === "cancel"}
         isSending={busy}
-        onKeep={() => setCancelling(false)}
+        onKeep={() => setDialog(null)}
         onConfirm={(note) => {
           if (busy) return;
-          void run({ tag: "cancel", note }).then(() => setCancelling(false));
+          void run({ tag: "cancel", note }).then(() => setDialog(null));
         }}
       />
+      <PublishDialog isOpen={dialog === "publish"} isSending={busy} onCancel={() => setDialog(null)} onConfirm={() => void act("publish")} />
+      <DeleteDialog isOpen={dialog === "delete"} isSending={busy} onCancel={() => setDialog(null)} onConfirm={() => void remove()} />
     </Stack>
   );
 }
