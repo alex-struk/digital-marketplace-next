@@ -5927,3 +5927,12 @@ rebind:
       why: slice 10 no longer claims it
       by: runner:verify
       at: 2026-10-02T23:29:53.264Z
+  - id: R-7.29
+    target: old
+    why: evaluation-instructions-swu/twu instructionsBody is bound to contentText()
+      (whole page minus top nav/footer), so it returns the evaluation screen's
+      own sidebar menu, headings and opportunity title instead of the embedded
+      instructions page's body; bind it to only the instructions tab's
+      embedded-page content region (as embeddedSection() does for the scope
+      section), returning empty when that region has no body, and stop sharing
+      the same whole-page read with visibleToEvaluatorsOnly
