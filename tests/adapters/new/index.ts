@@ -6100,22 +6100,47 @@ export default function create(
   // so choosing a picture fails, naming that button (see offerFile). A stored picture is shown as "Your current profile
   // picture"; refusals are alerts in the group. Readings read what the page shows and never
   // press "Save changes": saving is userProfileSelf.saveChanges, which a test calls itself.
+  //
+  // On an organization's screens the same picker is the organization's logo. Walked signed in
+  // as the owner of the seeded organizations: /organizations/create draws the group "Logo
+  // (optional)" (with "No logo has been added." or the logo held), the rule "A JPEG or PNG
+  // image, up to 10 MB. A logo wider or taller than 500 pixels is made smaller to fit, …" and
+  // "Choose a logo (optional)" ("Choose a different logo" once one is held or chosen); on
+  // /organizations/<id>/edit the same group is on the form "Edit organization" opens in the
+  // "Organization" section, and the closed screen shows the stored logo in a group "Logo" as
+  // the image "<legal name> logo" (/api/files/<id>?type=blob). This button does open a file
+  // chooser. A file chosen is previewed as "Preview of <name>, the new logo" with the status
+  // "<name> is ready. Save your changes to use it as the logo."; a refused one is an alert in
+  // the group ("<name> cannot be used as a logo" …). An 800×400 PNG saved was stored at
+  // 500×250. While the browser is on one of those screens, this picker is the logo's.
   const PICKER_GROUP = /^\s*(profile picture|logo)\b/i;
-  const PICKER_BUTTON = /^\s*choose (a |a different )?(profile picture|logo)\s*$/i;
-  const CURRENT_PICTURE = /^\s*your current profile picture\s*$|current logo/i;
+  const PICKER_BUTTON = /^\s*choose (a |a different )?(profile picture|logo)(\s*\(optional\))?\s*$/i;
+  const CURRENT_PICTURE = /^\s*your current profile picture\s*$|current logo|\blogo\s*$/i;
   const pickerGroup = (): Locator => seen(page.getByRole("group", { name: PICKER_GROUP })).first();
+  // The group as the form draws it, with its button: the closed organization screen's "Logo"
+  // group holds only the image.
+  const pickerForm = (): Locator =>
+    seen(page.getByRole("group", { name: PICKER_GROUP }).filter({ has: page.getByRole("button", { name: PICKER_BUTTON }) })).first();
+  const onOrganizationScreen = (): boolean =>
+    originOf(page.url()) === originOf(baseURL) && /^\/organizations\/(create|[^/]+\/edit)$/.test(new URL(page.url()).pathname);
 
   async function onPicker(member: string): Promise<void> {
     const where = `file-image-picker.${member}`;
     const at = new URL(page.url());
-    // On an organization's screens the picker is the logo's ("Logo (optional)" with "Choose a
-    // logo (optional)" on the create screen and on the owner's edit form), which this binding
-    // does not drive; reading the profile's picture instead would answer a different question.
-    if (originOf(page.url()) === originOf(baseURL) && /^\/organizations(\/|$)/.test(at.pathname)) {
-      unbound(
-        where,
-        `the browser is on ${at.pathname}, an organization screen, where the picker is the organization's logo ("Logo (optional)" / "Choose a logo (optional)"); this picker is bound to one's own profile picture, and the logo is driven and read through organization-create.change_logo and organization-edit.change_logo, current_logo and logo_refused_error`,
-      );
+    if (onOrganizationScreen()) {
+      await ready();
+      const why = await whyNotHere();
+      if (why) unbound(where, `${at.pathname} did not open as a screen at ${page.url()}: ${why.replace(/\n+/g, " ")}; the logo picker is offered there to the organization's owner`);
+      // The logo is drawn in the edit screen's "Organization" section only.
+      if (/\/edit$/.test(at.pathname) && !(await pickerGroup().count())) {
+        const section = await orgSectionLink(ORG_TAB.organization);
+        if (section) {
+          await section.click();
+          await settle();
+          await ready();
+        }
+      }
+      return;
     }
     const onProfile = originOf(page.url()) === originOf(baseURL) && /^\/(users\/[^/]+|sign-up\/complete)$/.test(at.pathname);
     if (!onProfile) await go("/users/me");
@@ -6132,26 +6157,39 @@ export default function create(
   async function pickerShown(member: string): Promise<Locator> {
     const where = `file-image-picker.${member}`;
     await onPicker(member);
-    if (!(await pickerGroup().count())) {
-      const edit = await findControl(page, /^\s*edit profile\s*$/i);
+    const logo = onOrganizationScreen();
+    const opener = logo ? /^\s*edit organization\s*$/i : /^\s*edit profile\s*$/i;
+    if (!(await pickerForm().count())) {
+      const edit = await findControl(page, opener);
       if (edit && !(await isDisabled(edit))) {
         await edit.click();
         await settle();
-        await pickerGroup().waitFor({ state: "visible", timeout: 10000 }).catch(() => undefined);
+        await pickerForm().waitFor({ state: "visible", timeout: 10000 }).catch(() => undefined);
       }
     }
-    if (!(await pickerGroup().count())) {
-      unbound(where, `signed in, opened ${page.url()} and pressed "Edit profile" where offered; no "Profile picture" group is drawn; it offers ${await offered()}`);
+    if (!(await pickerForm().count())) {
+      unbound(
+        where,
+        logo
+          ? `signed in, opened ${page.url()} (its "Organization" section) and pressed "Edit organization" where offered; no "Logo" group with a "Choose a logo" button is drawn; it offers ${await offered()}`
+          : `signed in, opened ${page.url()} and pressed "Edit profile" where offered; no "Profile picture" group is drawn; it offers ${await offered()}`,
+      );
     }
-    return pickerGroup();
+    return pickerForm();
   }
 
-  // The address of the stored picture as the page draws it, or nothing when it holds none.
+  // The address of the stored picture (or, on an organization screen, logo) as the page draws
+  // it, or nothing when it holds none. A chosen file's preview ("Preview of <name>, the new
+  // logo") is not what is stored, and is never read as it.
   async function storedPictureAddress(member: string): Promise<string> {
     await onPicker(member);
-    const image = seen(page.getByRole("img", { name: CURRENT_PICTURE }));
-    if (!(await image.count())) return "";
-    return (await image.first().getAttribute("src")) ?? "";
+    const images = seen(page.getByRole("main").getByRole("img", { name: CURRENT_PICTURE }));
+    for (let i = 0; i < (await images.count()); i++) {
+      const alt = ((await images.nth(i).getAttribute("alt")) ?? "").trim();
+      if (/^preview of\b/i.test(alt)) continue;
+      return (await images.nth(i).getAttribute("src")) ?? "";
+    }
+    return "";
   }
 
   async function storedPictureSize(member: string, side: "width" | "height"): Promise<string> {
