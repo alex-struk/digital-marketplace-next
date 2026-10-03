@@ -1,0 +1,19 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does this adapter bind every surface action and observation on new, and nothing else? The new code is navigation and locators only. Nothing under tests/acceptance changed. The runner's typecheck on this revision passed. The changes answer all five build-slice-11 requests: organization list headers, section links and regions on the edit screen, edit_organization, a real organization-create page object, and the owned-organizations table. They are recorded as met below. Return anyway, because bindings.yaml now records unbound reasons the proposal itself says are false. save_changes and cancel_editing remain unbound as 'Page not found', yet the proposal saw 'Save changes' and 'Cancel' appear after 'Edit organization' on the same screen, and index.ts already drives both. The other organization-edit members carry the same stale reason. At run time, 13 organization-user-memberships members still go through the absent stub with the 'placeholder line' reason, so verify will tell the application it lacks a surface the proposal saw rendered. affiliated_organizations_table is an example: the 'Organizations you belong to' region is on the page. An unbound reason has to describe the build as it is, so these cannot be approved as they stand. Separately, orgSection falls back to the whole main text when the named region is missing, which can answer a section-specific test with text from another section. What would change the ruling: a revision that rechecks every remaining organization-edit and organization-user-memberships member against the running build, so each is bound or unbound with a current reason, and that makes orgSection return empty when its region is absent.
+conditions:
+  - "organization-edit in tests/adapters/new/bindings.yaml: save_changes and cancel_editing are recorded unbound because the edit screen 'shows Page not found', but the proposal confirmed that pressing 'Edit organization' shows 'Save changes' and 'Cancel', and index.ts already drives both. Recheck them against the running build and mark them bound, or unbound with a reason describing the current screen. Do the same for every other organization-edit member still carrying the 'Page not found' reason: add_team_members, approve_pending_member, remove_team_member, change_logo, organization_identifier, swu_qualified_badge, twu_qualified_badge, owner_badge and the rest."
+  - "organization-user-memberships in tests/adapters/new/index.ts and bindings.yaml: the 13 members still routed through absent(...sectionRedrawn...) report at run time that /users/<id>?tab=organizations is a placeholder line. The proposal saw that section rendered with the regions 'Organizations you own' and 'Organizations you belong to'. Rebind each member against the running build, starting with affiliated_organizations_table from the 'Organizations you belong to' region, or give each an unbound reason that names what the current page lacks. Do the same for organization-user-memberships-self."
+  - "tests/adapters/new/index.ts orgSection: when the region named after the section link is not found, it falls back to the first tabpanel and then to mainText(). That can answer a section-specific observation with text that is not that section. Return \"\" or report unbound naming what the screen offers, instead of falling back to the main text."
+  - "tests/adapters/new/index.ts: update the shared 'nobody signs in' reason, which the proposal says still describes an earlier build, so that no unbound report quotes it against the current build."
+cost: 0.4688378
+turns: 3
+session: "d1add34d-faf3-4bfe-a55d-759adbac3822"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-03T04:49:08.609Z
