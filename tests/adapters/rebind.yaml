@@ -5936,3 +5936,8 @@ rebind:
       embedded-page content region (as embeddedSection() does for the scope
       section), returning empty when that region has no body, and stop sharing
       the same whole-page read with visibleToEvaluatorsOnly
+    closed:
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-10-03T02:10:15.287Z
