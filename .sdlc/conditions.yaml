@@ -2152,3 +2152,14 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-10-03T00:11:03.242Z
+    closed:
+      outcome: met
+      why: the pageMessages reader in tests/adapters/old/index.ts
+        (opportunity-swu-view, added after assignmentDate) now skips role=alert
+        elements inside the tabbed region (anchored on the list holding 'Scope &
+        Contract') and inside the Budget and Phases of Work blocks (anchored on
+        their headings), each region bounded so it excludes the opportunity
+        title. It still reads every other alert, including late-drawn ones, in
+        page order, and the comment above it states what is excluded and why.
+      by: agent:reviewer
+      at: 2026-10-03T00:14:44.329Z
