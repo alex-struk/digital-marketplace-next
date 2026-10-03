@@ -2385,3 +2385,25 @@ conditions:
         inside expectRefusedAsNotPermitted.
       by: agent:reviewer
       at: 2026-10-03T15:20:36.002Z
+  - ref: build-slice-11-5#1
+    text: "Send the permission refusals of the organization routes under the key
+      `permissions`, at status 401, using NamedRefusal in
+      app/backend/src/common/refusals.ts the way
+      app/backend/src/watching/watching.service.ts does. That covers POST
+      /api/organizations (registering by anyone but a signed-in vendor who has
+      accepted the terms, including a visitor with no session) and PUT
+      /api/organizations/:id and DELETE /api/organizations/:id (anyone who is
+      neither the organization's owner nor a service administrator). Leave the
+      BadRequest validation refusals under `errors`. Update
+      app/backend/tests/organizations-end-to-end.test.ts so it asserts the
+      `permissions` key for these refusals. What showed it: the R-3.2 and R-3.18
+      request tests received \"errors\" where they expect a permission refusal,
+      the contract's operations for these routes name the refusals
+      \"(permissions)\", and decision record 0003 makes `permissions` the key
+      for a permission refusal."
+    from: build-slice-11-5
+    family: build-slice-11
+    gate: G3
+    stage: build
+    by: agent:tech-lead
+    at: 2026-10-03T15:45:47.537Z
