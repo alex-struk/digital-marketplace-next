@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does this adapter bind the new target's surface, and nothing else, while fixing the timing race that made R-3.11 fail, pass and fail again? Ruling: approve. The change in orgInRow (tests/adapters/new/index.ts) starts listening for the next non-GET response from /api/affiliations before pressing the row control. After the confirmation it waits up to 15 seconds for that response, then waits for the page to settle and gives an alert in the Team members region up to 2 seconds to appear. Every wait swallows its timeout, so the change controls only when the next read happens; it asserts nothing and does not decide whether any test passes. Nothing under tests/acceptance changed and bindings.yaml is untouched. The runner's typecheck on this revision passed with no diagnostics under adapters/new/. The author's unverified assumption holds on proposal/build-slice-12-4: removal is DELETE /api/affiliations/{id} and approval is PUT /api/affiliations/{id}, so the listener matches both actions that use the helper. This answers the revision request from build-slice-12-4. What would change the ruling: R-3.11 still alternating between pass and fail in the next verify run with this adapter, which would show the race lies elsewhere.
+conditions: []
+cost: 0.39921719999999994
+turns: 10
+session: "79eaecfc-6bc3-4b37-a29a-d6b6f38c9472"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-03T18:16:15.323Z
