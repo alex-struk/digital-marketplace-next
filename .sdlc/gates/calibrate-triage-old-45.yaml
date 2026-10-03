@@ -1,0 +1,16 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: did this project's own adapter cause R-1.33's failures against old? Ruling: approve, with R-1.33 sorted as a product question. The not-signed-in test never signs anyone in. The fixture gives each test a fresh page, so no session carries over from an earlier test. The adapter's history read (tests/adapters/old/index.ts:11269 accountAnswer and :11477 historyEntries) is a cookie-less GET of /api/opportunities/<program>/<id> that only turns the service's own history array into text. The note and its file it returned came from the service, so nothing points at the binding: the old application serves a private note to a reader who is not signed in. The other row, unbound on signIn.public-sector-staff-other, says the oracle's government session route mints one fixed account. That is a limit of the oracle's session routes rather than a binding fault, and with one condition allowed per criterion, the signed-out failure has to reach the product owner. What would change the ruling: evidence that the adapter's page carried a session into the signed-out test, or that historyEntries read something other than the service's answer to that reader. Either would make it adapter-wrong.
+conditions:
+  - "product-question R-1.33"
+cost: 0.44008
+turns: 8
+session: "7fb4cb61-3cfe-41c0-824b-9aafd3c62b91"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-03T03:16:29.371Z
