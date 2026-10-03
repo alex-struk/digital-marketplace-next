@@ -6235,6 +6235,11 @@ rebind:
     app_tree: e2563f92a45a37854cfa0727c4c20b8cdabe44d0
     by: runner:verify
     at: 2026-10-03T05:14:11.977Z
+    closed: &a37
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-03T05:30:00.634Z
   - id: R-3.6
     target: new
     why: 'unbound: organization-create.create_organization — no field on
@@ -6257,6 +6262,7 @@ rebind:
     app_tree: e2563f92a45a37854cfa0727c4c20b8cdabe44d0
     by: runner:verify
     at: 2026-10-03T05:14:11.977Z
+    closed: *a37
   - id: R-3.15
     target: new
     why: 'unbound: organization-create.create_organization — no field on
@@ -6279,6 +6285,7 @@ rebind:
     app_tree: e2563f92a45a37854cfa0727c4c20b8cdabe44d0
     by: runner:verify
     at: 2026-10-03T05:14:11.977Z
+    closed: *a37
   - id: R-3.22
     target: new
     why: 'unbound: organization-create.create_organization — no field on
@@ -6315,6 +6322,7 @@ rebind:
     app_tree: e2563f92a45a37854cfa0727c4c20b8cdabe44d0
     by: runner:verify
     at: 2026-10-03T05:14:11.977Z
+    closed: *a37
   - id: R-3.23
     target: new
     why: 'unbound: organization-create.create_organization — no field on
@@ -6337,3 +6345,86 @@ rebind:
     app_tree: e2563f92a45a37854cfa0727c4c20b8cdabe44d0
     by: runner:verify
     at: 2026-10-03T05:14:11.977Z
+    closed: *a37
+  - id: R-3.2
+    target: new
+    why: "unbound: organization-create.create_organization — /organizations/create
+      did not open as a screen at http://localhost:4500/organizations/create:
+      Page not found The page you are looking for does not exist.; the screen is
+      offered only to a signed-in person who may have it; walked signed in (as
+      the administrator, as a public sector employee, and as a vendor for a
+      vendor's screens — the seeded organization owner, an organization member
+      and the invited vendor for the organization screens — with the seeded
+      records' identifiers), the running build serves a signed-in person
+      /dashboard, /opportunities, the account screens under /users (a vendor's
+      Organizations section, /users/me?tab=organizations, draws \"Organizations
+      you own\" with \"Create organization\" and the owned table, and
+      \"Organizations you belong to\"), /organizations (\"Create organization\",
+      \"My organizations\" and the list), /organizations/create, and to an
+      organization's owner /organizations/:orgId/edit (the \"Organization\"
+      section with \"Edit organization\", and \"Archive organization\"; its Team
+      members, Sprint With Us qualification, Team With Us qualification and
+      Changelog sections say only \"This section is not available yet.\"), to
+      the administrator the content-management screens under /content, and to
+      the administrator and public sector staff /opportunities/create, the three
+      programs' forms and their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (whose
+      sections on the seeded Sprint With Us and Team With Us opportunities are
+      Summary, Opportunity, Addenda, History and Evaluation panel, with no
+      evaluation, consensus or instructions section); the proposal and
+      evaluation screens — /proposals, the Code With Us proposal screens and
+      /opportunities/code-with-us/:opportunityId/complete included — and
+      /organizations/:orgId/sprint-with-us-terms-and-conditions and
+      /organizations/:orgId/team-with-us-terms-and-conditions (opened as the
+      seeded qualified organization's owner) answer \"Page not found\", as
+      /organizations/:orgId/edit does to a member who does not own the
+      organization, and /users/:userId opens for the signed-in person's own
+      identifier and, to the administrator, for another account's"
+    found: unbound
+    adapter: a7770646c5b7368444bea163cdb8ce585c89eab8
+    slice: 11
+    app_tree: 5da5a5d98dd603af21ec75c3c52e75293b268439
+    by: runner:verify
+    at: 2026-10-03T05:30:00.634Z
+  - id: R-3.6
+    target: new
+    why: "unbound: organization-edit.add_team_members — opened the \"Team members\"
+      section of
+      http://localhost:4300/organizations/ff0fbdfe-c4d6-46b5-9de1-793ad68f06e2/\
+      edit?tab=team (as the organization's owner, from \"Organization
+      sections\"); it draws the heading \"Team members\" and only \"This section
+      is not available yet.\", with no control, table or notice in it"
+    found: unbound
+    adapter: a7770646c5b7368444bea163cdb8ce585c89eab8
+    slice: 11
+    app_tree: 5da5a5d98dd603af21ec75c3c52e75293b268439
+    by: runner:verify
+    at: 2026-10-03T05:30:00.634Z
+  - id: R-3.15
+    target: new
+    why: "unbound: organization-edit.add_team_members — opened the \"Team members\"
+      section of
+      http://localhost:4300/organizations/00000000-0000-4000-8000-000000000304/\
+      edit?tab=team (as the organization's owner, from \"Organization
+      sections\"); it draws the heading \"Team members\" and only \"This section
+      is not available yet.\", with no control, table or notice in it"
+    found: unbound
+    adapter: a7770646c5b7368444bea163cdb8ce585c89eab8
+    slice: 11
+    app_tree: 5da5a5d98dd603af21ec75c3c52e75293b268439
+    by: runner:verify
+    at: 2026-10-03T05:30:00.634Z
+  - id: R-3.23
+    target: new
+    why: "unbound: organization-edit.owner_badge — opened the \"Team members\"
+      section of
+      http://localhost:4400/organizations/cbd26a61-7414-4fa0-ba11-21e6c9a2dac2/\
+      edit?tab=team (as the organization's owner, from \"Organization
+      sections\"); it draws the heading \"Team members\" and only \"This section
+      is not available yet.\", with no control, table or notice in it"
+    found: unbound
+    adapter: a7770646c5b7368444bea163cdb8ce585c89eab8
+    slice: 11
+    app_tree: 5da5a5d98dd603af21ec75c3c52e75293b268439
+    by: runner:verify
+    at: 2026-10-03T05:30:00.634Z
