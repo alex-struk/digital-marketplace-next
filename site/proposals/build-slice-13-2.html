@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-13-2 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">567</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">561</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">464</span></a></li><li><a href="../runs.html">Run log <span class="count">21</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-13-2</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-03 19:07</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.288 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 13 (An organization can qualify for Sprint With Us and Team With Us) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> I made no changes to the application in this revision.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.288 (Claude Code))</p>
+<p>I made no changes to the application in this revision. The ruling says the backend and screen code already match R-3.25 to R-3.28. It traces every failure to the test adapter&#39;s bindings, and all four of its conditions are addressed to the bind-adapter stage, not to this one. Nothing under <code>app/</code> or <code>docs/decisions/</code> was named for correction, so I left the slice as it was submitted.</p>
+<p>Before deciding that, I checked the evidence against the ruling&#39;s reading. The outline in <code>.sdlc/evidence/slice-13/R-3.25.txt</code> shows the Sprint With Us tab doing what the criterion asks. Each requirement is one list item in the list named &quot;Sprint With Us requirements&quot;, reading &quot;Met …&quot; or &quot;Not met …&quot;. The tab also has the &quot;not qualified&quot; note and a link to the terms page. The adapter was wrong in four ways, none of them in the application:</p>
+<ul><li><strong>R-3.25:</strong> it read only the label line, so the Met or Not met status beside it was lost.</li><li><strong>R-3.28:</strong> it read service-area approvals only from checkboxes. The Team With Us tab draws those only after &quot;Edit service areas&quot; is pressed; before that, approvals are list items under &quot;Approved service areas&quot;.</li><li><strong>R-3.26:</strong> it was blocked by the same empty read.</li><li><strong>R-3.27:</strong> its binding describes an earlier build where the terms page did not exist.</li></ul>
+<p>I considered changing the markup to suit the adapter, such as putting the status badge on the same text line as the label. I decided against it: the markup already matches the catalogue and the contract, and the fix the ruling asks for is on the adapter&#39;s side.</p>
+<p>The workspace had no installed dependencies, so the first <code>npm --prefix app run check</code> failed because the TypeScript compiler (<code>tsc</code>) was missing. After installing dependencies with <code>npm ci</code>, the check passed:</p>
+<ul><li><strong>First package:</strong> 16 tests.</li><li><strong>Backend:</strong> 570 tests.</li><li><strong>Frontend:</strong> 384 tests.</li></ul>
+<p>The one error line in the output comes from a test that deliberately simulates a failed mail delivery.</p>
+<p>The slice can&#39;t be approved until bind-adapter applies the four fixes and the acceptance tests are run again (verify); only that run will produce a passing result. The rest of the slice is in place for the next one: the qualification tabs, the terms pages with one-time acceptance, the administrator&#39;s service-area approvals and the qualified marks.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by runner:verify (the runner, automatically) on 2026-10-03 19:09.</p>
+<div class="body"><p>Slice 13 does not yet do what 2 of its criteria say. Each condition is the criterion and what the running application did.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>R-3.26, in the case &quot;an organization approved for one service area whose Team With Us terms have not been accepted shows the service-area requirement met, the terms requirement unmet, and is marked as not qualified&quot;: Error: the organization already stands approved — Expected: false — Received: true — at tests/acceptance/organizations/R-3.26.spec.ts:84 — its last steps: organizationTwuTerms.acceptedOnNotice() at /organizations/00000000-0000-4000-8000-000000000302/team-with-us-terms-and-conditions read &quot;&quot; → signIn(persona administrator) at /dashboard → organizationEdit.open({orgId}) at /organizations/00000000-0000-4000-8000-000000000302/edit → organizationEdit.serviceAreaCheckbox() at /organizations/00000000-0000-4000-8000-000000000302/edit?tab=twu-qualification read &quot;Full Stack Developer: unchecked Data Professional: unchecked Agile Coach: unchecked DevOps Specialist: unchecked Service Designer: unchecked&quot; — the page as it failed: .sdlc/evidence/slice-13/R-3.26.png, .sdlc/evidence/slice-13/R-3.26.txt</li><li>R-3.28, in the cases &quot;saving a selection of service areas replaces the organization&#39;s previous approvals entirely&quot; and &quot;only an administrator may set which service areas an organization is approved for, not the organization&#39;s own owner&quot;: Error: the organization does not stand approved for exactly FULL_STACK_DEVELOPER and AGILE_COACH — Expected: true — Received: false — at tests/acceptance/organizations/R-3.28.spec.ts:51 — its last steps: organizationEdit.saveServiceAreas({serviceAreas}) at /organizations/00000000-0000-4000-8000-000000000301/edit?tab=twu-qualification → signIn(persona administrator) at /dashboard → organizationEdit.open({orgId}) at /organizations/00000000-0000-4000-8000-000000000301/edit → organizationEdit.serviceAreaCheckbox() at /organizations/00000000-0000-4000-8000-000000000301/edit?tab=twu-qualification read &quot;Full Stack Developer: checked Data Professional: unchecked Agile Coach: checked DevOps Specialist: unchecked Service Designer: unchecked&quot; — the page as it failed: .sdlc/evidence/slice-13/R-3.28.png, .sdlc/evidence/slice-13/R-3.28.txt</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
