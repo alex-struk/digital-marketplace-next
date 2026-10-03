@@ -2281,3 +2281,29 @@ conditions:
     stage: build
     by: agent:tech-lead
     at: 2026-10-03T14:41:16.143Z
+  - ref: derive-tests-organizations-stale-10#1
+    text: "R-3.18: the clause 'the Edit and Archive controls … are offered … to a
+      service administrator' is asserted by no test and has no not-testable.yaml
+      entry. In tests/acceptance/organizations/R-3.18.spec.ts, sign in as
+      persona.administrator, open organizationEdit with
+      seed.organizations.qualified.id, and assert that the organizationTab
+      reading contains both 'Edit' and 'Archive'."
+    from: derive-tests-organizations-stale-10
+    family: derive-tests-organizations-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-10-03T14:49:30.897Z
+  - ref: derive-tests-organizations-stale-10#2
+    text: "R-3.2: the not-testable.yaml entry for the clause 'a request from anyone
+      else is refused' gives a reason only for a signed-in member of public
+      sector staff. Extend the reason to cover a signed-in vendor who has not
+      accepted the terms and conditions (persona.vendorWithTermsReset), saying
+      what the surface lacks to read that refusal. If the surface does reach
+      that refusal, assert it in R-3.2.spec.ts instead."
+    from: derive-tests-organizations-stale-10
+    family: derive-tests-organizations-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-10-03T14:49:30.897Z
