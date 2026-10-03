@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>contract-v39 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">555</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">549</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">459</span></a></li><li><a href="../runs.html">Run log <span class="count">21</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>contract-v39</h1>
+<p class="lede">G1 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G1</td></tr><tr><th scope="row">opened</th><td>2026-10-03 17:01</td></tr><tr><th scope="row">holder</th><td>agent:product-owner</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Is this the contract the tests will act through?</h2>
+<p><strong>Recommendation.</strong> I added one page to the surface so the R-3.11 test can reach the sole-owner refusal.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I added one page to the surface so the R-3.11 test can reach the sole-owner refusal. I couldn&#39;t run the oracle: the permission layer refused every command that expands <code>$SDLC_BIN</code>, so <code>node $SDLC_BIN oracle up</code> and <code>oracle down</code> never ran.</p>
+<p><strong>The problem from the build-slice-12 ruling.</strong> The surface&#39;s only way to end a membership was the team tab&#39;s Remove control, which the <code>organization-edit</code> page exposes as <code>remove_team_member</code>. The team screen never shows Remove on the sole owner&#39;s row. So no test could make the attempt and see the refusal.</p>
+<p><strong>What the old service does.</strong> <code>sources/old/src/back-end/lib/resources/affiliation.ts:518</code>: when someone asks to delete a membership (<code>DELETE /api/affiliations/:id</code>), the service first checks whether it is an owner&#39;s membership and whether the organization has exactly one active owner. If so, it refuses with status 400 and <code>{ affiliation: [&quot;Unable to remove membership. This is the sole owner for this organization.&quot;] }</code>. This check runs before the permission check, so an administrator gets exactly this refusal. <code>spec/contract/openapi.yaml</code> already describes the route as <code>deleteAffiliation</code>.</p>
+<p><strong>What I added.</strong> A new page, <code>affiliation-removal-request</code>, in <code>spec/contract/surface.yaml</code>:</p>
+<ul><li><strong>Route:</strong> <code>/api/affiliations/:affiliationId</code>, domain <code>organizations</code>, title &quot;End a membership, by request&quot;.</li><li><strong>Action:</strong> <code>end_membership_by_request</code>.</li><li><strong>Observations:</strong> <code>request_accepted</code>, <code>refusal_messages</code> and <code>refusal_status</code>.</li><li><strong>Shape:</strong> it copies the existing <code>affiliation-approval-request</code> page at the same route. The surface already has several pages sharing one route, so this is an established pattern.</li><li><strong>Comment:</strong> the page names <code>affiliations.qualifiedOwner</code> as the value for <code>:affiliationId</code>. That is the &quot;Blake Placeholder&quot; user&#39;s owner membership of <code>organizations.qualified</code>, which already has exactly one owner and two other active members. That is the criterion&#39;s given-clause, so the seed needed no change.</li><li><strong>&quot;The membership remains&quot;:</strong> a test reads this afterwards from <code>organization-edit</code>&#39;s existing <code>team_member_row</code> and <code>owner_badge</code>.</li></ul>
+<p>Nothing else changed: no persona, observable, seed, openapi or compose edits, and no existing page was touched.</p>
+<p><strong>Oracle and checks.</strong> The oracle override and seed are unchanged since the last approved run, but I have no fresh evidence that it starts. No container was started by this run, so none is left running. The YAML parse check also needed approval and didn&#39;t run. I read the edited region back instead, and the indentation matches the neighbouring entries.</p>
+<p><strong>One thing to expect at calibration.</strong> The criteria file notes (dated 2026-09-29) that the old application fails R-3.11. A test written against this page may therefore fail against the oracle while still being correct for the rebuild. That would be the old application&#39;s defect, not a gap in the contract.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:product-owner (persona agent · claude claude-opus-5-5) on 2026-10-03 17:01.</p>
+<div class="body"><p>Question: is this the contract the tests will act through, now that it has one added page for R-3.11? Ruling: approve. The build-slice-12 ruling found that the surface had no way to attempt ending the sole owner&#39;s membership: the team tab offers Remove on no owner&#39;s row, so the remove_team_member binding could never reach the refusal R-3.11 asks to observe. The new affiliation-removal-request page fills exactly that gap. The evidence supports it. sources/old/src/back-end/lib/resources/affiliation.ts:518-530 refuses to delete an OWNER membership when readActiveOwnerCount is 1, with &#39;Unable to remove membership. This is the sole owner for this organization.&#39;, and runs that check before the permission check at :533, so an administrator sees this refusal. tests/seed/manifest.yaml:358-375 makes affiliations.qualifiedOwner the single active OWNER of organizations.qualified, alongside one active ADMIN and one active MEMBER, which matches the criterion&#39;s given-clause, so no seed change is needed. The page follows the established pattern of affiliation-approval-request, which shares the route, and gives refusal_messages, refusal_status and request_accepted to observe. The &#39;membership remains&#39; clause is read from organization-edit&#39;s existing team_member_row and owner_badge. The change only adds and touches no existing page. The surface.d.ts addition matches the YAML. This settles the reviewer&#39;s contract revision request request/build-slice-12#14. The build-owed conditions build-slice-12#1 (R-3.7) and build-slice-12#2 (R-3.30) are not touched by a contract change and stay open. What would change this ruling: evidence that the oracle does not start, or that the YAML fails to parse (neither was run here); or a calibration finding that the page cannot be bound to the service. A failing R-3.11 test against the old application at calibration would not change it, because the criteria already record that the old application fails R-3.11, and that is a defect-in-old question for calibration, not a contract gap.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

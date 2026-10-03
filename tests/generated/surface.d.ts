@@ -100,6 +100,7 @@ export interface Surface {
   organizationActingForList: OrganizationActingForListPage;
   affiliationInvitationRequest: AffiliationInvitationRequestPage;
   affiliationApprovalRequest: AffiliationApprovalRequestPage;
+  affiliationRemovalRequest: AffiliationRemovalRequestPage;
   userListRequest: UserListRequestPage;
   contentRequest: ContentRequestPage;
   evaluationIndividualRequestSwu: EvaluationIndividualRequestSwuPage;
@@ -1415,6 +1416,14 @@ export interface AffiliationApprovalRequestPage {
   acceptMembershipByRequest(input?: unknown): Promise<void>;
   requestAccepted(): Promise<string>;
   membershipStatus(): Promise<string>;
+  refusalMessages(): Promise<string>;
+  refusalStatus(): Promise<string>;
+}
+
+export interface AffiliationRemovalRequestPage {
+  open(params: { affiliationId: string }): Promise<void>;
+  endMembershipByRequest(input?: unknown): Promise<void>;
+  requestAccepted(): Promise<string>;
   refusalMessages(): Promise<string>;
   refusalStatus(): Promise<string>;
 }
