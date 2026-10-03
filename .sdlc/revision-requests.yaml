@@ -1016,3 +1016,28 @@ requests:
     at: 2026-10-03T04:41:04.754Z
     taken: 2026-10-03T04:48:00.120Z
     taken_by: bind-adapter-new-56
+  - stage: plan
+    why: slice 11 claims R-3.6, R-3.15 and R-3.23, but their acceptance tests set up
+      or read team members through the organization's Team members tab
+      (organization-edit.add_team_members, organization-edit.owner_badge), which
+      slice 11 does not build and slice 12 does. Verify found the tab showing
+      only 'This section is not available yet.' Either move these criteria to
+      the slice that builds the team tab, or add the team tab to slice 11.
+    from: build-slice-11-3
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-03T14:41:15.878Z
+  - stage: bind-adapter
+    target: new
+    why: file-image-picker.choose_image (and its stored-image width and height
+      reads) is bound only to the signed-in person's profile picture. The
+      R-8.13, R-8.21 and R-8.28 tests use it on /organizations/<id>/edit after
+      Edit organization, where the picker is the organization's logo ('Logo
+      (optional)', trigger test id organization-logo-button, refusal
+      organization-logo-refused-error, stored logo organization-current-logo).
+      Verify reported all three as unbound there. Bind the picker on
+      organization-create and organization-edit to the logo.
+    from: build-slice-11-3
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-03T14:41:15.878Z
