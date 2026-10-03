@@ -2254,3 +2254,30 @@ conditions:
         organization screens answer 'Page not found'
       by: agent:reviewer
       at: 2026-10-03T05:05:28.495Z
+  - ref: build-slice-11-3#1
+    text: "R-3.18: on the Organization tab of
+      app/frontend/src/screens/organization-edit.tsx, render the Archive control
+      inside the same tab section as 'Edit organization', so that an owner's or
+      service administrator's reading of the tab contains it. An organization
+      administrator still sees neither. Shown by verify: the owner's
+      organizationTab read contained 'Edit organization' but not 'Archive',
+      because ArchiveSection sits outside the section."
+    from: build-slice-11-3
+    family: build-slice-11
+    gate: G3
+    stage: build
+    by: agent:tech-lead
+    at: 2026-10-03T14:41:16.143Z
+  - ref: build-slice-11-3#2
+    text: "R-3.22: in app/frontend/src/screens/organization-form.tsx, stop disabling
+      the 'Create organization' (and save) button while a field is invalid. Let
+      the person submit, then report each offending field and create nothing.
+      Shown by verify: both invalid-submission cases threw 'the control named
+      create organization is disabled', and the criterion's when-clause is a
+      submission."
+    from: build-slice-11-3
+    family: build-slice-11
+    gate: G3
+    stage: build
+    by: agent:tech-lead
+    at: 2026-10-03T14:41:16.143Z
