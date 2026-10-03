@@ -1063,3 +1063,158 @@ requests:
     at: 2026-10-03T15:34:45.754Z
     taken: 2026-10-03T15:35:56.715Z
     taken_by: bind-adapter-new-61
+  - stage: bind-adapter
+    target: new
+    why: "R-3.8: organizationEdit.pendingBadge read \"\" because it matches
+      /^pending$/ against main-text lines, and a table row's text is one line of
+      tab-separated cells; the team table on /organizations/<id>/edit?tab=team
+      draws a cell reading \"Pending\" in the Membership column of the invitee's
+      row (Isolde Brackwater), so read that column's cell rather than whole
+      lines"
+    from: build-slice-12
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-03T17:00:06.478Z
+  - stage: bind-adapter
+    target: new
+    why: "R-3.32: organizationEdit.pendingBadge read \"\" for the same reason as
+      R-3.8; the team table on
+      /organizations/00000000-0000-4000-8000-000000000304/edit?tab=team shows
+      Rosalind Fenwhistle's Membership cell as \"Pending\", so read the
+      Membership column cell"
+    from: build-slice-12
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-03T17:00:06.478Z
+  - stage: bind-adapter
+    target: new
+    why: "R-3.23: organizationEdit.ownerBadge read \"\" because it matches /^owner$/
+      against whole main-text lines; the team table on the newly registered
+      organization's ?tab=team shows the registrant's row \"Blake Placeholder
+      (you)\" with the Membership cell \"Owner\", so read that column's cell"
+    from: build-slice-12
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-03T17:00:06.478Z
+  - stage: bind-adapter
+    target: new
+    why: "R-3.9: organizationUserMembershipsSelf.pendingBadge filters rows with /(^|
+      \\| )pending$/, but the row in \"Organizations you belong to\" on
+      /users/me?tab=organizations reads \"Salt Marsh Labs Ltd. | Pending |
+      Accept … Decline …\", with the action buttons after the Membership cell;
+      read the Membership column instead of requiring the row to end in
+      'pending'"
+    from: build-slice-12
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-03T17:00:06.478Z
+  - stage: bind-adapter
+    target: new
+    why: "R-3.34: organizationEdit.teamCapabilities keeps only lines matching
+      /capabilit/i, which drops the capability list items; the \"Team
+      capabilities\" region on ?tab=team lists each capability as \"<name>:
+      held\" or \"<name>: not held\" (for example \"Technical Architecture: not
+      held\"), so return that region's list items"
+    from: build-slice-12
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-03T17:00:06.478Z
+  - stage: bind-adapter
+    target: new
+    why: 'R-3.13: organizationEdit.changeOwner reports "offers no chooser of people"
+      because it looks only for role combobox; after "Change owner" is pressed
+      on ?tab=team, the open dialog "Change owner" draws a select rendered as a
+      button ("Select an item" / "New owner") that opens a listbox of eligible
+      members — bind that'
+    from: build-slice-12
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-03T17:00:06.478Z
+  - stage: bind-adapter
+    target: new
+    why: 'R-3.12: organizationEdit.acceptOrgAdminTerms reports no terms box on
+      ?tab=team because it searches before the box exists; the statement
+      checkbox is inside the confirmation dialog that the row button "Give
+      administrator rights to <name>" opens, and toggleMemberAdminStatus looks
+      for a checkbox or switch in the row when the row offers that button (and
+      "Remove administrator rights from <name>") instead'
+    from: build-slice-12
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-03T17:00:06.478Z
+  - stage: bind-adapter
+    target: new
+    why: 'R-3.15: the same acceptOrgAdminTerms and toggleMemberAdminStatus binding
+      as R-3.12 — the terms checkbox lives in the dialog opened by "Give
+      administrator rights to Dana Placeholder" on
+      /organizations/00000000-0000-4000-8000-000000000304/edit?tab=team'
+    from: build-slice-12
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-03T17:00:06.478Z
+  - stage: bind-adapter
+    target: new
+    why: "R-3.33: the same acceptOrgAdminTerms and toggleMemberAdminStatus binding
+      as R-3.12 — the terms checkbox lives in the dialog opened by the row's
+      \"Give administrator rights to <name>\" button on ?tab=team"
+    from: build-slice-12
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-03T17:00:06.478Z
+  - stage: bind-adapter
+    target: new
+    why: 'R-3.14: organizationEdit.teamMemberRow reported unbound because
+      /organizations/:orgId/edit drew "Page not found" for the viewer it walked
+      as; that screen is how this target refuses a person who may not see the
+      organization (R-3.3), so for the ordinary member and the outsider the
+      refusal is the not-found page and should be read as refused, not as an
+      unbound screen'
+    from: build-slice-12
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-03T17:00:06.478Z
+  - stage: bind-adapter
+    target: new
+    why: "R-3.10: organizationEdit.teamMemberRow returned rows that name people
+      (\"Dana Placeholder | Member | 3 | …\"), and the test compares them with
+      the leaving member's email \"org.member@example.test\"; the member is on
+      the list by name, so the binding must report the rows in terms the test's
+      persona can be matched against (the persona's name for that email)"
+    from: build-slice-12
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-03T17:00:06.478Z
+  - stage: bind-adapter
+    target: new
+    why: 'R-3.35: organizationUserMembershipsSelf.declineConfirmation returned the
+      open dialog "Join Northern Pines Digital Ltd.?…" at ?answer=accept;
+      answerDialog returns whichever dialog is open, so it must return the
+      dialog only when it is the decline confirmation (and acceptConfirmation
+      only for the accept one)'
+    from: build-slice-12
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-03T17:00:06.478Z
+  - stage: bind-adapter
+    target: new
+    why: 'R-3.30: organizationEdit.fieldError reads only aria-invalid textboxes, but
+      the team screen reports an unregistered address after the invite dialog
+      closes as a warning alert above the team table titled "<address> is not
+      registered with the Digital Marketplace"; bind the R-3.30 read to that
+      alert'
+    from: build-slice-12
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-03T17:00:06.478Z
+  - stage: contract
+    why: "R-3.11: the surface's only way to try ending an owner's membership is the
+      team row's Remove control, and the team screen does not offer Remove on
+      the sole owner's row (the screens deliberately omit controls the service
+      would refuse), so the remove_team_member binding cannot reach the refusal
+      the criterion asks to observe (verify: no row offers removal of Blake
+      Placeholder, the sole owner); the surface needs an action or observation
+      through which the refused removal and its message can be seen"
+    from: build-slice-12
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-03T17:00:06.478Z
