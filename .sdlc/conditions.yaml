@@ -2455,3 +2455,43 @@ conditions:
     stage: build
     by: agent:reviewer
     at: 2026-10-03T17:00:06.560Z
+  - ref: bind-adapter-new-62#1
+    text: "bindings.yaml organization-edit: re-walk add_team_members,
+      approve_pending_member and invalid_membership_type_error against
+      /organizations/<id>/edit?tab=team, which now draws the team table (Name,
+      Membership, Capabilities, Actions), per-row Remove and administrator
+      buttons, and an invitation dialog. Bind each one, or replace its 'This
+      section is not available yet' reason with what the live section actually
+      lacks."
+    from: bind-adapter-new-62
+    family: bind-adapter-new
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-10-03T17:18:34.121Z
+  - ref: bind-adapter-new-62#2
+    text: "bindings.yaml: re-walk every other entry whose unbound reason cites the
+      team section being 'not available yet' or the absence of invitation
+      accept/decline controls. This covers the qualification, changelog and
+      invitation-answer entries named in the proposal's 'Not changed, but worth
+      a look' list, on both membership pages. The pending row now offers 'Accept
+      the invitation from <org>' and 'Decline the invitation from <org>'. Bind
+      each entry, or give a reason that is true of this build."
+    from: bind-adapter-new-62
+    family: bind-adapter-new
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-10-03T17:18:34.121Z
+  - ref: bind-adapter-new-62#3
+    text: "toggleMemberAdminStatus: when the 'Give <name> administrator rights?'
+      dialog is left open because accept_org_admin_terms has not been taken,
+      close it before the next action on the page that does not concern that
+      dialog, or document in the binding why leaving it open cannot block a
+      later locator."
+    from: bind-adapter-new-62
+    family: bind-adapter-new
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-10-03T17:18:34.121Z
