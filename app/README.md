@@ -173,6 +173,20 @@ emailed. Only an administrator, the author and the panel's own members are told 
 names staff choose panel members from come on their own session (`GET /api/sessions/current`,
 `panelCandidates`), since the list of everyone stays an administrator's (decision record 0045).
 
+## Organizations
+
+Anybody browses at `/organizations`: every organization not archived, by legal name, fifty to a
+page, each with its logo. Vendors and administrators are offered the owner, team size and
+qualification columns, filled where the service tells them — every row for an administrator, the
+rows a vendor owns or administers. A vendor who has accepted the terms registers one at
+`/organizations/create` and becomes its owner. Each is managed at `/organizations/<id>/edit` by an
+administrator and by its owner and organization administrators; only the owner and an
+administrator are offered Edit and Archive. An administrator archiving somebody's organization
+emails its owner. `/api/ownedOrganizations` answers a signed-in vendor with the organizations they
+own or administer and refuses everybody else. The rules are `backend/src/rules/organizations.ts`;
+the answers and refusals are decision record 0047. The team, the qualification tabs and the
+program terms pages arrive in slices 12 and 13.
+
 ## The first administrator
 
 The service offers no way to make the first administrator (R-4.13). An administrator is made

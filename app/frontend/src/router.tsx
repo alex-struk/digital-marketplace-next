@@ -26,6 +26,9 @@ import { OpportunityCwuEditScreen } from "./screens/opportunity-cwu-edit";
 import { OpportunityOtherCreateScreen } from "./screens/opportunity-other-create";
 import { OpportunityOtherManageScreen } from "./screens/opportunity-other-manage";
 import { OpportunityOtherViewScreen } from "./screens/opportunity-other-view";
+import { OrganizationListScreen } from "./screens/organization-list";
+import { OrganizationCreateScreen } from "./screens/organization-create";
+import { OrganizationEditScreen } from "./screens/organization-edit";
 
 /**
  * The addresses in `spec/contract/surface.yaml`, and nothing else. Every other address is the
@@ -222,6 +225,28 @@ const opportunityTwuManageRoute = createRoute({
   },
 });
 
+// Organizations. "/organizations/create" is a fixed address, matched before an organization's own.
+const organizationListRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/organizations",
+  component: OrganizationListScreen,
+});
+
+const organizationCreateRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/organizations/create",
+  component: OrganizationCreateScreen,
+});
+
+const organizationEditRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/organizations/$orgId/edit",
+  component: function OrganizationEditRoute() {
+    const { orgId } = organizationEditRoute.useParams();
+    return <OrganizationEditScreen key={orgId} orgId={orgId} />;
+  },
+});
+
 // "me" and an identifier share one route: the screen reads "me" as whoever is signed in.
 const userProfileRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -258,6 +283,9 @@ export const routeTree = rootRoute.addChildren([
   opportunityTwuViewRoute,
   opportunitySwuManageRoute,
   opportunityTwuManageRoute,
+  organizationListRoute,
+  organizationCreateRoute,
+  organizationEditRoute,
 ]);
 
 export const router = createRouter({

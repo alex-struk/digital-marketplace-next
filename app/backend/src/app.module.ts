@@ -5,6 +5,7 @@ import { FilesModule } from "./files/files.module";
 import { MailModule } from "./mail/mail.module";
 import { NotificationsModule } from "./notifications/notifications.module";
 import { OpportunitiesModule } from "./opportunities/opportunities.module";
+import { OrganizationsModule } from "./organizations/organizations.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { StatusController } from "./status/status.controller";
 import { UsersModule } from "./users/users.module";
@@ -21,6 +22,7 @@ import { CountersModule } from "./counters/counters.module";
     FilesModule,
     NotificationsModule,
     OpportunitiesModule,
+    OrganizationsModule,
     WatchingModule,
     CountersModule,
   ],

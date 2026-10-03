@@ -34,6 +34,8 @@ import {
   fetchAccount,
 } from "../api/accounts";
 import { fileAddress, uploadPicture } from "../api/files";
+import { OwnMembership, fetchOwnMemberships } from "../api/organizations";
+import { ownsOrAdministers } from "@rules/organizations";
 import { ImagePicker, PictureRejection, checkChosenPicture } from "../app/image-picker";
 import { Stack } from "../app/page-layout";
 import { Loading } from "../app/loading";
@@ -921,14 +923,157 @@ function CapabilitiesSection({ account }: { account: Account }) {
 
 // ------------------------------------------------------------------------ organizations
 
-/** Which organizations a person owns or belongs to arrives with organizations (slices 11, 12). */
+const MEMBERSHIP_LABELS: Record<OwnMembership["membershipType"], string> = {
+  OWNER: "Owner",
+  ADMIN: "Administrator",
+  MEMBER: "Member",
+};
+
+const memberCell = {
+  textAlign: "start",
+  verticalAlign: "top",
+  padding: "var(--layout-padding-small)",
+  borderBottom: "var(--layout-border-width-small) solid var(--surface-color-border-default)",
+} as const;
+
+/**
+ * The organizations a vendor owns, and those they belong to or are invited to, none of them
+ * archived (R-3.6, R-3.23). The organization's name links to its management page where the
+ * person owns or administers it (R-3.3). Answering an invitation and leaving an organization
+ * arrive with the team (slice 12).
+ */
 function OrganizationsSection() {
   useScreenTitle("My Organizations");
+  const [answer, setAnswer] = useState<readonly OwnMembership[] | "loading" | "failed">("loading");
+
+  useEffect(() => {
+    let current = true;
+    void fetchOwnMemberships().then((found) => {
+      if (current) setAnswer(found.kind === "listed" ? found.memberships : "failed");
+    });
+    return () => {
+      current = false;
+    };
+  }, []);
+
+  if (answer === "loading") return <Loading label="Loading your organizations…" />;
+  if (answer === "failed") {
+    return (
+      <InlineAlert variant="danger" role="alert" title="Your organizations could not be loaded" description="Try again in a moment." />
+    );
+  }
+
+  const owned = answer.filter((membership) => membership.membershipType === "OWNER" && membership.membershipStatus === "ACTIVE");
+  const affiliated = answer.filter((membership) => !owned.includes(membership));
+  const name = (membership: OwnMembership) =>
+    ownsOrAdministers(membership) ? (
+      <Link href={`/organizations/${membership.organization.id}/edit`} data-testid="membership-organization-link">
+        {membership.organization.legalName}
+      </Link>
+    ) : (
+      membership.organization.legalName
+    );
+
   return (
-    <Text elementType="p">
-      The organizations you own or belong to will be listed here once organizations can be registered on the Digital
-      Marketplace.
-    </Text>
+    <>
+      <Stack as="section" aria-labelledby="owned-heading" gap="medium">
+        <Heading level={2} id="owned-heading">
+          Organizations you own
+        </Heading>
+        <div>
+          <Link href="/organizations/create" isButton buttonVariant="primary" data-testid="organization-create-link">
+            Create organization
+          </Link>
+        </div>
+        {owned.length === 0 ? (
+          <Text elementType="p" data-testid="membership-empty-owned">
+            You do not own any organizations. Create one to propose on Sprint With Us and Team With Us opportunities.
+          </Text>
+        ) : (
+          <div role="region" aria-labelledby="owned-caption" tabIndex={0} style={{ overflowX: "auto" }}>
+            <table style={{ borderCollapse: "collapse", width: "100%" }} data-testid="membership-owned-table">
+              <caption id="owned-caption" style={{ textAlign: "start" }}>
+                <Text size="small" color="secondary">
+                  Owned organizations, with team size and Sprint With Us qualification
+                </Text>
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col" style={memberCell}>
+                    Organization
+                  </th>
+                  <th scope="col" style={memberCell}>
+                    Team members
+                  </th>
+                  <th scope="col" style={memberCell}>
+                    Sprint With Us qualified
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {owned.map((membership) => (
+                  <tr key={membership.id}>
+                    <td style={memberCell}>{name(membership)}</td>
+                    <td style={memberCell}>
+                      <span data-testid="membership-team-member-count">{membership.organization.numTeamMembers}</span>
+                    </td>
+                    <td style={memberCell}>
+                      <span data-testid="organization-swu-qualified-mark">{membership.organization.swuQualified ? "Yes" : "No"}</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </Stack>
+      <Stack as="section" aria-labelledby="affiliated-heading" gap="medium">
+        <Heading level={2} id="affiliated-heading">
+          Organizations you belong to
+        </Heading>
+        {affiliated.length === 0 ? (
+          <Text elementType="p" data-testid="membership-empty-affiliated">
+            You do not belong to any other organizations. An organization’s owner or administrators can invite you by email.
+          </Text>
+        ) : (
+          <div role="region" aria-labelledby="affiliated-caption" tabIndex={0} style={{ overflowX: "auto" }}>
+            <table style={{ borderCollapse: "collapse", width: "100%" }} data-testid="membership-affiliated-table">
+              <caption id="affiliated-caption" style={{ textAlign: "start" }}>
+                <Text size="small" color="secondary">
+                  Organizations you are a member of or have been invited to
+                </Text>
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col" style={memberCell}>
+                    Organization
+                  </th>
+                  <th scope="col" style={memberCell}>
+                    Membership
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {affiliated.map((membership) => (
+                  <tr key={membership.id}>
+                    <td style={memberCell}>{name(membership)}</td>
+                    <td style={memberCell}>
+                      {membership.membershipStatus === "PENDING" ? (
+                        <span style={badge} data-testid="organization-pending-badge">
+                          Pending
+                        </span>
+                      ) : (
+                        <span style={badge}>{MEMBERSHIP_LABELS[membership.membershipType]}</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </Stack>
+    </>
   );
 }
 

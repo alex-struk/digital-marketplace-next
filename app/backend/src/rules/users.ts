@@ -66,6 +66,11 @@ export const JOB_TITLE_MAX_LENGTH = 100;
  */
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+/** Whether text is shaped like an email address, by the one rule every form uses. */
+export function isEmailAddress(text: string): boolean {
+  return EMAIL_PATTERN.test(text);
+}
+
 export interface ProfileInput {
   readonly name: string;
   readonly email: string;
