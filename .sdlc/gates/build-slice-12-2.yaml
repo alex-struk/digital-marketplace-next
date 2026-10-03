@@ -1,0 +1,62 @@
+gate: G3
+verdict: return
+by: runner:verify
+held_by: runner
+rationale: Slice 12 does not yet do what 3 of its criteria say. Each condition
+  is the criterion and what the running application did.
+conditions:
+  - 'R-3.11: Error: organization-edit.remove_team_member — the row "Blake
+    Placeholder Owner 3" in the team table on
+    http://localhost:4500/organizations/00000000-0000-4000-8000-000000000301/edit?tab=team
+    offers no control named /^\s*remove\s*$/i — at
+    tests/acceptance/organizations/R-3.11.spec.ts:10 — its last steps:
+    signIn(persona administrator) at /dashboard → organizationEdit.open({orgId})
+    at /organizations/00000000-0000-4000-8000-000000000301/edit →
+    organizationEdit.removeTeamMember({member}) at
+    /organizations/00000000-0000-4000-8000-000000000301/edit?tab=team threw
+    "organization-edit.remove_team_member — the row \"Blake Placeholder Owner
+    3\" in the team table on
+    http://localhost:4500/organizations/00000000-0000-4000-8000-000000000301/edit?tab=team
+    offers no contro…" — the page as it failed:
+    .sdlc/evidence/slice-12/R-3.11.png, .sdlc/evidence/slice-12/R-3.11.txt'
+  - 'R-3.13, in the case "a service administrator may transfer ownership of an
+    organization to a member whose membership is already active": Error:
+    organization-edit.change_owner — the control named /change
+    owner|confirm|yes/i is disabled on
+    http://localhost:4300/organizations/00000000-0000-4000-8000-000000000301/edit?tab=team
+    — at tests/acceptance/organizations/R-3.13.spec.ts:47 — its last steps:
+    signIn(persona administrator) at /dashboard → organizationEdit.open({orgId})
+    at /organizations/00000000-0000-4000-8000-000000000301/edit →
+    organizationEdit.changeOwner({newOwner}) at
+    /organizations/00000000-0000-4000-8000-000000000301/edit?tab=team threw
+    "organization-edit.change_owner — the control named /change
+    owner|confirm|yes/i is disabled on
+    http://localhost:4300/organizations/00000000-0000-4000-8000-000000000301/edit?tab=team"
+    — the page as it failed: .sdlc/evidence/slice-12/R-3.13.png,
+    .sdlc/evidence/slice-12/R-3.13.txt'
+  - 'R-3.13, in the case "once ownership is transferred the previous owner
+    becomes an ordinary member": TimeoutError: locator.click: Timeout 15000ms
+    exceeded. — at tests/acceptance/organizations/R-3.13.spec.ts:47 — its last
+    steps: signIn(persona administrator) at /dashboard →
+    organizationEdit.open({orgId}) at
+    /organizations/00000000-0000-4000-8000-000000000301/edit →
+    organizationEdit.changeOwner({newOwner}) at
+    /organizations/00000000-0000-4000-8000-000000000301/edit?tab=team threw
+    "locator.click: Timeout 15000ms exceeded." — the page as it failed:
+    .sdlc/evidence/slice-12/R-3.13-2.png, .sdlc/evidence/slice-12/R-3.13-2.txt'
+  - 'R-3.34: Error: expect(received).not.toContain(expected) // indexOf —
+    Expected substring: not "Technical Architecture" — Received
+    string:        "Agile Coaching: held — at
+    tests/acceptance/organizations/R-3.34.spec.ts:34 — its last steps:
+    organizationList.open() at /organizations →
+    organizationList.openOrganization({legalName}) at
+    /organizations/1594e0aa-e34e-42b8-84d4-e0b74fa02068/edit →
+    organizationEdit.addTeamMembers({emails}) at
+    /organizations/1594e0aa-e34e-42b8-84d4-e0b74fa02068/edit?tab=team →
+    organizationEdit.teamCapabilities() at
+    /organizations/1594e0aa-e34e-42b8-84d4-e0b74fa02068/edit?tab=team read
+    "Agile Coaching: held Backend Development: held Delivery Management: held
+    DevOps Engineering: not held Frontend Development: not held Security
+    Engineering: not …" — the page as it failed:
+    .sdlc/evidence/slice-12/R-3.34.png, .sdlc/evidence/slice-12/R-3.34.txt'
+at: 2026-10-03T17:41:38.212Z
