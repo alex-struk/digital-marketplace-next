@@ -28,3 +28,23 @@ I fixed request 1 (from build-slice-13-3). The service-area reader on the organi
 **Not checked.** I didn't reopen the target in the browser for this change, since the request was only about the output format. One gap follows from that: if an organization with no approved areas shows a placeholder as a list item under "Approved service areas", that text would come back instead of nothing. This branch reads the list the same way it did before this change.
 
 Nothing outside `tests/adapters/new/` was changed or asked to be changed.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Question: does the new target's adapter bind organizationEdit.serviceAreaCheckbox so that it reports which service areas an organization is approved for, as R-3.26 and R-3.28 read it, and nothing else? Ruling: approve. The revision answers the request build-slice-13-3 sent to bind-adapter. The member now returns only approved areas, one per line: the ticked boxes when the editor is open, or opened and then cancelled by the reader, and the plain items under 'Approved service areas' when no editor is offered. The ': checked'/': unchecked' suffixes that made every named area look approved to both tests are gone. The change only alters output formatting inside a locator-and-read member. Navigation, locators and the cancel step are unchanged, the member contains no assertion or pass/fail logic, bindings.yaml is unchanged, and nothing under tests/acceptance was touched. The runner's typecheck on this revision passed with no diagnostics under adapters/new. The residual risk the author names, a placeholder list item in an empty 'Approved service areas' section, is a reading of the page that a verify run will expose. It does not show the binding is wrong. The owed conditions build-slice-13-3#2 and #3 are documentation changes owed by build and are not settled by this adapter proposal, so they stay open. What would change the ruling: a verify of slice 13 on this adapter showing R-3.26 or R-3.28 still reading an unticked area or placeholder text as approved, or evidence that the member now hides a ticked box.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `5cb32e64e53e215ef015de298d5f0cfd7d2fe751`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
