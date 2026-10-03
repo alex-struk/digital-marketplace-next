@@ -2337,6 +2337,15 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-10-03T15:19:36.815Z
+    closed:
+      outcome: met
+      why: the assertion that refusalStatus() is '401' was removed from 'a
+        registration sent by a visitor who is not signed in is refused' in
+        tests/acceptance/organizations/R-3.2.spec.ts; the test now relies on
+        expectRefusedAsNotPermitted, whose status check only requires a
+        non-empty status.
+      by: agent:reviewer
+      at: 2026-10-03T15:20:35.981Z
   - ref: derive-tests-organizations-stale-12#2
     text: "tests/acceptance/organizations/R-3.2.spec.ts, same test: remove the
       assertion that refusalMessages() contains 'You do not have permission to
@@ -2349,3 +2358,11 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-10-03T15:19:36.815Z
+    closed:
+      outcome: met
+      why: the assertion that refusalMessages() contains 'You do not have permission
+        to perform this action.' was removed from the same test; 'refused as not
+        permitted' is asserted by the /permission/i match on refusalReason()
+        inside expectRefusedAsNotPermitted.
+      by: agent:reviewer
+      at: 2026-10-03T15:20:36.002Z
