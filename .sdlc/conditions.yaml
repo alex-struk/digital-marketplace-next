@@ -2180,6 +2180,15 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-10-03T04:49:08.626Z
+    closed:
+      outcome: met
+      why: organization-edit in tests/adapters/new/bindings.yaml (lines 667-708) binds
+        save_changes, cancel_editing, change_logo, organization_identifier,
+        swu/twu_qualified_badge, field_error, current_logo, logo_refused_error
+        and the section readers; the other 18 members are unbound with reasons
+        describing the unfinished sections, and none still says 'Page not found'
+      by: agent:reviewer
+      at: 2026-10-03T05:05:28.444Z
   - ref: bind-adapter-new-56#2
     text: "organization-user-memberships in tests/adapters/new/index.ts and
       bindings.yaml: the 13 members still routed through
@@ -2197,6 +2206,16 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-10-03T04:49:08.626Z
+    closed:
+      outcome: met
+      why: membershipScreen() in tests/adapters/new/index.ts replaces both
+        absent(...sectionRedrawn...) stubs and binds against the 'Organizations
+        you own' and 'Organizations you belong to' regions; bindings.yaml (lines
+        734-750 and the -self page) binds 10 of 14 members, and
+        approve/reject/leave and both confirmations are unbound with reasons
+        naming what the page lacks
+      by: agent:reviewer
+      at: 2026-10-03T05:05:28.462Z
   - ref: bind-adapter-new-56#3
     text: 'tests/adapters/new/index.ts orgSection: when the region named after the
       section link is not found, it falls back to the first tabpanel and then to
@@ -2209,6 +2228,13 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-10-03T04:49:08.626Z
+    closed:
+      outcome: met
+      why: orgSection in tests/adapters/new/index.ts returns the region named after
+        the section link or an empty string, with no fallback to a tab panel or
+        mainText()
+      by: agent:reviewer
+      at: 2026-10-03T05:05:28.478Z
   - ref: bind-adapter-new-56#4
     text: "tests/adapters/new/index.ts: update the shared 'nobody signs in' reason,
       which the proposal says still describes an earlier build, so that no
@@ -2219,3 +2245,12 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-10-03T04:49:08.626Z
+    closed:
+      outcome: met
+      why: NOBODY_SIGNS_IN in tests/adapters/new/index.ts now describes the current
+        build (organization list, create and owner's edit screens served;
+        proposal, evaluation and organization terms screens answer 'Page not
+        found'), and no reason in bindings.yaml or index.ts still says the
+        organization screens answer 'Page not found'
+      by: agent:reviewer
+      at: 2026-10-03T05:05:28.495Z
