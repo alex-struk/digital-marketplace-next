@@ -68,6 +68,11 @@
 - 19:04:40 propose calibrate-triage-old-44 at G3
 - 19:04:44 drive: step 3: `sdlc rule calibrate-triage-old-44 --by agent:reviewer` — calibrate-triage-old-44 is open at G3, held by agent:reviewer
 - 19:05:47 rule calibrate-triage-old-44 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 19:05:53 drive: step 4: `sdlc run bind-adapter --target old` — 1 binding to fix (rebind) for target old owed by bind-adapter
+- 19:08:57 run bind-adapter: ok, cost 1.2327848000000001, turns 46, on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 19:08:57 propose bind-adapter-old-65 at G3
+- 19:09:00 drive: step 5: `sdlc rule bind-adapter-old-65 --by agent:reviewer` — bind-adapter-old-65 is open at G3, held by agent:reviewer
+- 19:10:08 rule bind-adapter-old-65 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-10-02
 

@@ -7846,18 +7846,110 @@ export default function create(
     "/opportunities/team-with-us/:opportunityId/edit?tab=evaluationPanel",
   );
 
-  function evaluationInstructions(route: string) {
+  // Whether the screen up is the opportunity's editing screen on its Instructions tab, as the
+  // tab's address and the page title ("Instructions — <opportunity> — …") both say.
+  async function onInstructionsTab(): Promise<boolean> {
+    if (!/[?&]tab=instructions\b/.test(page.url())) return false;
+    return /^Instructions\b/.test(await page.title());
+  }
+
+  // The instructions tab, seen as the opportunity's owner and panel member on the seeded
+  // closed opportunities: the left menu, then a column holding the header (the "Sprint With
+  // Us: <title>" heading, published/updated dates, "Status" and "Created By"), then the
+  // embedded instructions page rendered ("Initial version", the body the service's page at
+  // "<program>-evaluation-instructions" holds), then a "Begin Evaluation" link to the
+  // Evaluation tab. The body is what that column holds after the header, less any block that
+  // is only a link to another tab of the same screen; a page that could not be read leaves
+  // nothing there, and that nothing is the answer. A screen this reader is refused — "Not
+  // Found", or sent elsewhere — shows no instructions at all.
+  async function instructionsBody(where: string): Promise<string> {
+    await ready();
+    if (await notFoundShown()) return "";
+    if (!(await onInstructionsTab())) return "";
+    const heading = seen(page.getByRole("heading", { name: /^(Sprint|Team) With Us:/ }));
+    if (!(await heading.count())) {
+      nothing(`${where} — the Instructions tab on ${page.url()} shows no "… With Us: <title>" heading to find its body under`);
+    }
+    const body = await heading.first().evaluate((title: Element): string | null => {
+      const text = (element: Element): string => ((element as HTMLElement).innerText ?? "").trim();
+      const isStatusLabel = (element: Element): boolean => text(element) === "Status";
+      const holdsBeginLink = (element: Element): boolean =>
+        Array.from(element.querySelectorAll("a")).some((link) => text(link) === "Begin Evaluation");
+      let header: Element | null = null;
+      for (let at: Element | null = title.parentElement; at && at !== document.body; at = at.parentElement) {
+        if (Array.from(at.querySelectorAll("*")).some(isStatusLabel)) {
+          header = at;
+          break;
+        }
+      }
+      if (!header) {
+        let at: Element = title;
+        let up: Element | null = title.parentElement;
+        while (up && up !== document.body) {
+          if (holdsBeginLink(up)) {
+            header = at;
+            break;
+          }
+          at = up;
+          up = up.parentElement;
+        }
+      }
+      if (!header || !header.parentElement) return null;
+      const onlyATabLink = (element: Element): boolean => {
+        const links = Array.from(element.querySelectorAll("a"));
+        return (
+          links.length === 1 &&
+          /\/edit\?tab=/.test(links[0].getAttribute("href") ?? "") &&
+          text(links[0]) === text(element)
+        );
+      };
+      const after: string[] = [];
+      let seenHeader = false;
+      for (const child of Array.from(header.parentElement.children)) {
+        if (child === header) {
+          seenHeader = true;
+          continue;
+        }
+        if (!seenHeader || onlyATabLink(child)) continue;
+        const said = text(child);
+        if (said) after.push(said);
+      }
+      return after.join("\n");
+    });
+    if (body === null) {
+      nothing(`${where} — the Instructions tab on ${page.url()} has no opportunity header ("Status") to find its body under`);
+    }
+    return body;
+  }
+
+  // The "Instructions" tab in the editing screen's left menu (under "Opportunity
+  // Evaluation"), read as its name when this reader is shown it and as nothing when not:
+  // a vendor opening the same address is answered "Not Found" and shown no menu at all.
+  async function instructionsTab(): Promise<string> {
+    await ready();
+    if (await notFoundShown()) return "";
+    const links = seen(page.getByRole("link", { name: "Instructions", exact: true }));
+    for (let i = 0; i < (await links.count()); i++) {
+      const link = links.nth(i);
+      if (/[?&]tab=instructions\b/.test((await link.getAttribute("href")) ?? "")) return (await link.innerText()).trim();
+    }
+    return "";
+  }
+
+  function evaluationInstructions(where: string, route: string) {
     return {
       ...at(route),
-      instructionsBody: () => contentText(),
-      visibleToEvaluatorsOnly: () => contentText(),
+      instructionsBody: () => instructionsBody(`${where}.instructions_body`),
+      visibleToEvaluatorsOnly: () => instructionsTab(),
     };
   }
 
   const evaluationInstructionsSwu: S.EvaluationInstructionsSwuPage = evaluationInstructions(
+    "evaluation-instructions-swu",
     "/opportunities/sprint-with-us/:opportunityId/edit?tab=instructions",
   );
   const evaluationInstructionsTwu: S.EvaluationInstructionsTwuPage = evaluationInstructions(
+    "evaluation-instructions-twu",
     "/opportunities/team-with-us/:opportunityId/edit?tab=instructions",
   );
 
