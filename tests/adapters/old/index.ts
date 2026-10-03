@@ -10338,6 +10338,35 @@ export default function create(
     },
   };
 
+  // Ending a membership is DELETE /api/affiliations/:id. Checked here: signed in as the
+  // organization's owner, ending affiliations.qualifiedOwner came back 400
+  // {"affiliation":["Unable to remove membership. This is the sole owner for this organization."]}.
+  const REMOVAL_REQUEST = "affiliation-removal-request";
+  let removalAffiliation = "";
+
+  const affiliationRemovalRequest: PageOf<"affiliationRemovalRequest"> = {
+    open: async (params?: { affiliationId?: string }) => {
+      removalAffiliation = seededId(params?.affiliationId, "affiliations");
+    },
+    async endMembershipByRequest(input?: unknown) {
+      const where = `${REMOVAL_REQUEST}.end_membership_by_request`;
+      const named = seededId(
+        given(input, ["affiliation", "affiliationId", "membership", "membershipId", "membershipIdentifier", "id"]),
+        "affiliations",
+      );
+      const affiliation = named || removalAffiliation;
+      if (!affiliation) nothing(`${where} — no membership was opened or named to end`);
+      await send(where, "DELETE", `${baseURL}/api/affiliations/${encodeURIComponent(affiliation)}`);
+    },
+    requestAccepted: async () => accepted(`${REMOVAL_REQUEST}.request_accepted`),
+    refusalMessages: async () =>
+      (lastRefusal(`${REMOVAL_REQUEST}.refusal_messages`) ?? []).map((entry) => entry.message).join("\n"),
+    refusalStatus: async () => {
+      const got = answer(`${REMOVAL_REQUEST}.refusal_status`);
+      return got.status >= 400 ? String(got.status) : "";
+    },
+  };
+
   const userListRequest: PageOf<"userListRequest"> = {
     open: async () => {
       await send("user-list-request.open", "GET", `${baseURL}/api/users`);
@@ -11786,6 +11815,7 @@ export default function create(
     organizationActingForList,
     affiliationInvitationRequest,
     affiliationApprovalRequest,
+    affiliationRemovalRequest,
     userListRequest,
     contentRequest,
     evaluationIndividualRequestSwu,

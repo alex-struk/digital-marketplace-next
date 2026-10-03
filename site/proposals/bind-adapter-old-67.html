@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-old-67 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">556</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">550</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">460</span></a></li><li><a href="../runs.html">Run log <span class="count">21</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-old-67</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-03 17:06</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on old, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I added the one page this contract brings that the <code>old</code> adapter did not yet have.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I added the one page this contract brings that the <code>old</code> adapter did not yet have. The type-check could not be run (the command needed approval this session doesn&#39;t have), so the new code has not been compiled. It hasn&#39;t been run end to end either.</p>
+<p><strong>What I added.</strong> <code>affiliation-removal-request</code> (route <code>/api/affiliations/:affiliationId</code>), with one action and three observations, all bound:</p>
+<ul><li><strong><code>end_membership_by_request</code></strong> sends <code>DELETE /api/affiliations/:id</code> from the signed-in session. It ends the membership named in the input if there is one, otherwise the one passed to <code>open()</code>. Either may be a seed handle such as <code>qualifiedOwner</code> or a raw identifier. If neither names a membership, it throws <code>unbound:</code>.</li><li><strong><code>request_accepted</code></strong> reads whether the last answer was accepted.</li><li><strong><code>refusal_messages</code></strong> returns the refusal&#39;s messages in the service&#39;s order, and is empty when the request was accepted.</li><li><strong><code>refusal_status</code></strong> returns the error status code, and is empty when the request was accepted.</li></ul>
+<p>The page follows the same pattern and reuses the same helpers as the existing <code>affiliation-approval-request</code> page, which sits right next to it in <code>tests/adapters/old/index.ts</code>. It is also added to the object the adapter returns.</p>
+<p><strong>What the target answers.</strong> I signed in through <code>/auth/createsessionvendor/2</code> (the organization-owner persona) and sent the <code>DELETE</code> for <code>affiliations.qualifiedOwner</code> (<code>…0401</code>). The target answered <code>400</code> with <code>{&quot;affiliation&quot;:[&quot;Unable to remove membership. This is the sole owner for this organization.&quot;]}</code>, word for word what the contract&#39;s comment expects. Because it was refused, nothing in the seed changed. I did not send a removal that would have been accepted, since that would have permanently ended a seeded membership on the shared target. So the accepted path is bound but was not seen working.</p>
+<p><strong>Bindings file.</strong> <code>tests/adapters/old/bindings.yaml</code> now names <code>affiliation-removal-request</code> with all four members as <code>bound</code>, spelled the way <code>surface.yaml</code> spells them. All earlier bindings are unchanged.</p>
+<p><strong>Routes.</strong> Every route this run touched resolved on the target; none failed to resolve. Nothing outside <code>tests/adapters/old/</code> was changed, and nothing asked for such a change.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-03 17:07.</p>
+<div class="body"><p>Question: does the old adapter bind every surface action and observation on old, and nothing else? Approve. The diff adds one page, affiliation-removal-request, matching spec/contract/surface.yaml:2105-2117: one action (end_membership_by_request) and three observations (request_accepted, refusal_messages, refusal_status). bindings.yaml lists all four as bound, spelled the way the surface spells them. The bindings stay an adapter. The action resolves the membership from the input or from open() and sends DELETE /api/affiliations/:id as whoever is signed in, which is what the surface comment asks for. It throws unbound only when no membership was named. The observations only read the last answer: whether it was accepted, the refusal&#39;s messages in the service&#39;s order, and the status code when it is 400 or higher. None of them asserts anything or contains business logic. They use the same helpers and shape as the affiliation-approval-request page next to them (tests/adapters/old/index.ts:10314), which was already accepted. The author&#39;s note that a type-check could not be run is answered by the runner&#39;s own type-check: it exited 2, but every diagnostic is under adapters/new/ and none is under adapters/old/, so this page compiles. Nothing under tests/acceptance or outside tests/adapters/old changed, and no protected path is touched. The receipt is honest that the accepted path was not exercised. Sending a removal that succeeds would permanently end a seeded membership on the shared target, which is a sound reason not to try. The refused path was checked live: it returned 400 with the sole-owner message the contract names, word for word. The tier is STANDARD and no residual risk is marked unaccepted. The two owed conditions build-slice-12#1 and #2 belong to build and are not settled by this adapter change, so they stay open. The untaken bind-adapter revision requests from build-slice-12 concern organizationEdit and organizationUserMembershipsSelf, not this page, so they wait for a --revise run. What would change this ruling: a diagnostic under adapters/old/, an observation that judges the outcome rather than reporting it, or a change outside tests/adapters/old.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
