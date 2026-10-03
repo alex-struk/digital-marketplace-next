@@ -2570,3 +2570,26 @@ conditions:
         tests/results/new/slice-12.json.
       by: agent:tech-lead
       at: 2026-10-03T18:13:49.107Z
+  - ref: build-slice-13-3#2
+    text: "docs/decisions/0054-service-area-checkboxes-follow-the-catalogue.md: take
+      out the claim that the label and value change fixes the acceptance
+      failures. The adapter's reading caused them, and that has been sent to
+      bind-adapter. Keep the change itself only for the reason that it follows
+      the catalogue page."
+    from: build-slice-13-3
+    family: build-slice-13
+    gate: G3
+    stage: build
+    by: agent:tech-lead
+    at: 2026-10-03T19:21:38.802Z
+  - ref: build-slice-13-3#3
+    text: "docs/decisions/0053-qualifying-for-sprint-with-us-and-team-with-us.md:
+      make the Service areas paragraph agree with 0054. It still says the screen
+      names each area by the service's own name ('Full Stack Developer') and
+      that the sentence-case names are illustrative."
+    from: build-slice-13-3
+    family: build-slice-13
+    gate: G3
+    stage: build
+    by: agent:tech-lead
+    at: 2026-10-03T19:21:38.802Z
