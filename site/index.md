@@ -12,7 +12,7 @@ Profile: rebuild
 | users | 0 | 32 | 0 | 0 | 0 | 4 | 1 | 36 | 29/30 (n/t 1) |  | 21 pass · 3 fail · 5 unbound · 0 stale |
 | evaluation | 0 | 37 | 0 | 0 | 0 | 0 | 0 | 37 | 30/30 |  | 24 pass · 6 fail · 0 unbound · 0 stale |
 | notifications | 0 | 28 | 0 | 0 | 0 | 0 | 0 | 28 | 21/21 |  | 17 pass · 6 fail · 2 unbound · 0 stale |
-| content | 0 | 29 | 0 | 0 | 0 | 2 | 0 | 31 | 26/26 |  | 21 pass · 5 fail · 0 unbound · 0 stale |
+| content | 0 | 29 | 0 | 0 | 0 | 2 | 0 | 31 | 26/26 |  | 22 pass · 4 fail · 0 unbound · 0 stale |
 | files | 0 | 31 | 0 | 0 | 0 | 0 | 0 | 31 | 23/24 (n/t 1) |  | 18 pass · 6 fail · 0 unbound · 0 stale |
 | **Totals** | 0 | 286 | 0 | 0 | 0 | 9 | 3 | 295 |  |  |  |
 

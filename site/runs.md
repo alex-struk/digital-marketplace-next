@@ -73,6 +73,14 @@
 - 19:08:57 propose bind-adapter-old-65 at G3
 - 19:09:00 drive: step 5: `sdlc rule bind-adapter-old-65 --by agent:reviewer` — bind-adapter-old-65 is open at G3, held by agent:reviewer
 - 19:10:08 rule bind-adapter-old-65 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 19:10:14 drive: step 6: `sdlc run calibrate --target old` — 1 binding to check again now that its adapter has changed (rebind) for target old owed by calibrate
+- 19:11:49 oracle up old in configuration service_page_absent: local port 3103
+- 19:12:07 oracle down old in configuration service_page_absent
+- 19:12:59 oracle up old in configuration evaluation_instructions_absent_swu: local port 3103
+- 19:13:18 oracle down old in configuration evaluation_instructions_absent_swu
+- 19:14:07 oracle up old in configuration evaluation_instructions_absent_twu: local port 3103
+- 19:14:26 oracle down old in configuration evaluation_instructions_absent_twu
+- 19:14:29 run calibrate: ok, cost 0, turns 0
 
 # Run record 2026-10-02
 
