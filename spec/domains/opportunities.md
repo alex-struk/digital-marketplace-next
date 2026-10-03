@@ -385,6 +385,7 @@ The service accepts a private note, with files, on a Code With Us or Sprint With
 - then: the note and its attachments appear in the opportunity's history, which only the author and administrators can see
 - state: accepted
 - note: Team With Us offers no such action at all. Nothing in the application explains the omission, so a human should decide whether it is a gap to close or a deliberate difference.
+- note: calibrate 2026-10-03: the old target fails this; kept, the rebuild must pass it
 
 ### R-1.34 · v1 · confirmed · recovered
 Publishing an opportunity notifies everyone who has asked for new-opportunity notifications, and separately confirms the publication to the opportunity's author.
