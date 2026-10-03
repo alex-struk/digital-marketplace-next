@@ -5188,7 +5188,7 @@ owed:
     id: R-3.2
     version: 1
     domain: organizations
-    stage: derive-tests
+    stage: calibrate
     why: an observation on organization-create, such as refused_when_not_permitted,
       that reports the screen or the registration refused to a signed-in member
       of public sector staff (on the old application, its not-found page) and to
@@ -5237,8 +5237,18 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-10-03T15:18:03.138Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-10-03T15:20:36.080Z
     target: old
-    clause: a request from anyone else is refused — for a visitor who is not signed in
+    asserted:
+      - clause: a request from anyone else is refused — for a visitor who is not signed
+          in
+        by: derive-tests-organizations-10
+        gate: G3
+        at: 2026-10-03T15:20:36.080Z
   - kind: missing-test
     item: R-3.18
     id: R-3.18

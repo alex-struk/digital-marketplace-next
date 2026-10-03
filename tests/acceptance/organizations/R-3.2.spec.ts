@@ -89,3 +89,10 @@ test(`${STATEMENT} — a registration sent by a signed-in vendor who has never a
   await registerByRequest(surface, "Dogwood Bay Registered Without Terms Ltd.");
   await expectRefusedAsNotPermitted(surface);
 });
+
+test(`${STATEMENT} — a registration sent by a visitor who is not signed in is refused`, async ({ surface }) => {
+  // persona.anonymousVisitor has no sign-in: the request goes with no session at all.
+  expect(persona.anonymousVisitor.signIn).toBeNull();
+  await registerByRequest(surface, "Elm Crossing Registered Signed Out Ltd.");
+  await expectRefusedAsNotPermitted(surface);
+});

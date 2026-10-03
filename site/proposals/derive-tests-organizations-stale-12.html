@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-organizations-stale-12 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">548</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">542</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">455</span></a></li><li><a href="../runs.html">Run log <span class="count">21</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-organizations-stale-12</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-03 15:19</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the organizations criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> R-3.2 (v1) now has a full test, so there is no <code>not-testable.yaml</code> entry for it.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>R-3.2 (v1) now has a full test, so there is no <code>not-testable.yaml</code> entry for it. That makes one of one criteria tested in this run. I couldn&#39;t type-check or run the file: the sandbox wanted approval for the <code>tsc</code> command, and nobody was there to give it.</p>
+<p><strong>What was already there.</strong> <code>tests/acceptance/organizations/R-3.2.spec.ts</code> already existed from the last approved derivation. R-3.2 had no entry in <code>tests/acceptance/not-testable.yaml</code>, so there was nothing to remove. The existing file had four tests, all sent through the organization request page or the create screen:</p>
+<ul><li>a vendor who has accepted the terms registers an organization on the create screen, and it appears among the vendor&#39;s owned organizations;</li><li>the same vendor&#39;s registration sent through <code>organization-request</code> is accepted and returns an organization identifier;</li><li>a signed-in member of public sector staff sends a registration through <code>organization-request</code> and is refused as not permitted;</li><li>a signed-in vendor who has never accepted the terms (<code>persona.vendorCompletingProfile</code>) is refused the same way.</li></ul>
+<p>A note in <code>redo.yaml</code>, marked closed, had objected that an older version made staff fill in the create screen. The current file already avoids that by sending the request directly instead of opening a screen the service never offers staff.</p>
+<p><strong>What I added.</strong> One test for &quot;a request from anyone else&quot; made with no session at all. The contract handed this case back through <code>persona.anonymousVisitor</code> (its sign-in is null) and the <code>register_by_request</code> action. The test does not sign in. It sends the same complete, valid registration the other tests send and checks:</p>
+<ul><li>the request is not accepted;</li><li>the refusal is filed under permissions;</li><li>no organization identifier comes back;</li><li>the status is 401;</li><li>the messages include &quot;You do not have permission to perform this action.&quot;</li></ul>
+<p><strong>What I left out on purpose.</strong> I wrote no test for <code>persona.vendorWithTermsReset</code>. The contract says the old service <em>accepts</em> a registration from a vendor who once agreed to the terms but has since had that agreement withdrawn. The criterion&#39;s &quot;has already accepted the service&#39;s terms&quot; doesn&#39;t settle whether such a vendor should be accepted or refused. Asserting either outcome would mean taking a side the criterion doesn&#39;t state. If someone wants that case pinned down, it belongs to <code>ratify</code>, which would need to say whether &quot;accepted the terms&quot; means the current terms or any terms ever.</p>
+<p><strong>Missing from the surface.</strong> Nothing for this criterion. The <code>organization-request</code> page and its observations were enough.</p>
+<p>I edited no files outside <code>tests/acceptance</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-03 15:19.</p>
+<div class="body"><p>Question: do the R-3.2 tests follow from the organizations criterion and nothing else? Ruling: return. The added test for a visitor who is not signed in correctly covers the owed clause &#39;a request from anyone else is refused&#39; through the shared expectRefusedAsNotPermitted helper, which checks the request is not accepted, a refusal status is present, the reason names permission and no organization identifier is returned. But the test then asserts refusalStatus() equals &#39;401&#39; and that refusalMessages() contains the exact string &#39;You do not have permission to perform this action.&#39;. R-3.2 states neither a status code nor any message wording, only that the request is refused as not permitted. Those two lines encode how the oracle responds, not what the criterion requires, and would fail a rebuild that refuses correctly with a different code or wording. Leaving persona.vendorWithTermsReset untested is correct, because the criterion does not settle it. The ruling would change to approve once those two assertions are removed and the test relies on expectRefusedAsNotPermitted alone, as the staff and never-accepted-terms tests already do.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>tests/acceptance/organizations/R-3.2.spec.ts, test &#39;a registration sent by a visitor who is not signed in is refused&#39;: remove the assertion that refusalStatus() is &#39;401&#39;. R-3.2 says the request is refused as not permitted and names no status code. The non-empty status check in expectRefusedAsNotPermitted is as far as the criterion reaches.</li><li>tests/acceptance/organizations/R-3.2.spec.ts, same test: remove the assertion that refusalMessages() contains &#39;You do not have permission to perform this action.&#39;. R-3.2 names no message wording, and the /permission/ check on refusalReason() in expectRefusedAsNotPermitted already asserts &#39;refused as not permitted&#39;.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

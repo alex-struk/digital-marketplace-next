@@ -206,6 +206,11 @@
 - 08:17:23 propose contract-v38 at G1
 - 08:17:27 drive: step 17: `sdlc rule contract-v38 --by agent:product-owner` — contract-v38 is open at G1, held by agent:product-owner
 - 08:18:02 rule contract-v38 approve at G1 by agent:product-owner (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 08:19:42 drive: step 20: `sdlc run derive-tests --domain organizations --revise` — derive-tests-organizations-stale-12 was returned at G3 by agent:reviewer
+- 08:20:03 run derive-tests: ok, cost 0.1610792, turns 3, on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 08:20:03 propose derive-tests-organizations-10 at G3
+- 08:20:07 drive: step 21: `sdlc rule derive-tests-organizations-10 --by agent:reviewer` — derive-tests-organizations-10 is open at G3, held by agent:reviewer
+- 08:20:35 rule derive-tests-organizations-10 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-10-02
 
