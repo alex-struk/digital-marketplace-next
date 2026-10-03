@@ -1,4 +1,5 @@
 import { AccountKind, CAPABILITIES, isEmailAddress } from "./users";
+import { SERVICE_AREAS, ServiceArea, isServiceArea } from "./other-program-drafts";
 
 /**
  * Rules about organizations, as plain TypeScript.
@@ -363,9 +364,27 @@ export function qualifiesForSprintWithUs(
   activeMemberCapabilities: readonly (readonly string[])[],
   acceptedSWUTerms: string | null,
 ): boolean {
-  if (activeMemberCapabilities.length < 2 || !acceptedSWUTerms) return false;
+  const met = sprintWithUsRequirements(activeMemberCapabilities, acceptedSWUTerms);
+  return met.twoMembers && met.allCapabilities && met.termsAccepted;
+}
+
+/** Each Sprint With Us requirement, and whether it is met, as the qualification tab lists them (R-3.25). */
+export interface SprintWithUsRequirements {
+  readonly twoMembers: boolean;
+  readonly allCapabilities: boolean;
+  readonly termsAccepted: boolean;
+}
+
+export function sprintWithUsRequirements(
+  activeMemberCapabilities: readonly (readonly string[])[],
+  acceptedSWUTerms: string | null,
+): SprintWithUsRequirements {
   const held = new Set(activeMemberCapabilities.flat());
-  return CAPABILITIES.every((capability) => held.has(capability.name));
+  return {
+    twoMembers: activeMemberCapabilities.length >= 2,
+    allCapabilities: CAPABILITIES.every((capability) => held.has(capability.name)),
+    termsAccepted: Boolean(acceptedSWUTerms),
+  };
 }
 
 /**
@@ -374,6 +393,59 @@ export function qualifiesForSprintWithUs(
  */
 export function qualifiesForTeamWithUs(serviceAreaCount: number, acceptedTWUTerms: string | null): boolean {
   return serviceAreaCount > 0 && Boolean(acceptedTWUTerms);
+}
+
+/** The two programs an organization qualifies for, by the tag that accepts each one's terms. */
+export type QualifyingProgram = "sprint-with-us" | "team-with-us";
+
+export const PROGRAM_NAMES: Readonly<Record<QualifyingProgram, string>> = {
+  "sprint-with-us": "Sprint With Us",
+  "team-with-us": "Team With Us",
+};
+
+/**
+ * A program's terms are accepted for an organization by its owner or by a service administrator,
+ * as the contract names who may update an organization (R-3.27). The screens offer Accept to the
+ * owner alone: acceptance is the organization's own act, so an administrator reading the terms is
+ * not offered it (R-3.27's note), and see `offersProgramTermsAcceptance`.
+ */
+export function mayAcceptProgramTerms(viewer: OrganizationViewer | null, membership: Membership | null | undefined): boolean {
+  return mayChangeOrganization(viewer, membership);
+}
+
+/** Whether the terms page offers Accept: to the organization's owner, while not yet accepted. */
+export function offersProgramTermsAcceptance(
+  membership: Membership | null | undefined,
+  acceptedOn: string | null,
+): boolean {
+  return owns(membership) && !acceptedOn;
+}
+
+export const NOT_PERMITTED_TO_ACCEPT_TERMS =
+  "Only the organization's owner or an administrator may accept its program terms and conditions.";
+
+export function termsAlreadyAccepted(program: QualifyingProgram): string {
+  return `The ${PROGRAM_NAMES[program]} terms and conditions have already been accepted for this organization.`;
+}
+
+/** Only a service administrator sets which service areas an organization is approved for (R-3.28). */
+export function mayQualifyServiceAreas(viewer: OrganizationViewer | null): boolean {
+  return viewer?.type === "ADMIN";
+}
+
+export const NOT_PERMITTED_TO_QUALIFY_SERVICE_AREAS =
+  "Only an administrator may set the service areas an organization is approved for.";
+
+export const INVALID_SERVICE_AREAS = "Choose service areas from the five the service recognises.";
+
+/**
+ * A selection of service areas as the service takes it: a list of the recognised keys, each once,
+ * in the service's own order. Anything else is refused whole; an empty list is a selection too,
+ * and leaves the organization approved for none (R-3.28).
+ */
+export function serviceAreaSelection(value: unknown): readonly ServiceArea[] | null {
+  if (!Array.isArray(value) || !value.every(isServiceArea)) return null;
+  return SERVICE_AREAS.map((area) => area.key).filter((key) => value.includes(key));
 }
 
 // ------------------------------------------------------------------------ the profile

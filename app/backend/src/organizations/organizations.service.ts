@@ -29,8 +29,18 @@ import {
   mayReadOrganization,
   mayRegisterOrganization,
   profileErrorLines,
+  INVALID_SERVICE_AREAS,
+  NOT_PERMITTED_TO_ACCEPT_TERMS,
+  NOT_PERMITTED_TO_QUALIFY_SERVICE_AREAS,
+  QualifyingProgram,
+  SprintWithUsRequirements,
+  mayAcceptProgramTerms,
+  mayQualifyServiceAreas,
   qualifiesForSprintWithUs,
   qualifiesForTeamWithUs,
+  serviceAreaSelection,
+  sprintWithUsRequirements,
+  termsAlreadyAccepted,
   validateOrganizationProfile,
 } from "../rules/organizations";
 import {
@@ -64,6 +74,8 @@ export interface OrganizationRecord extends OrganizationProfile {
   readonly swuQualified: boolean;
   readonly twuQualified: boolean;
   readonly serviceAreas: readonly string[];
+  /** Each Sprint With Us requirement and whether it is met, for the qualification tab (R-3.25). */
+  readonly swuRequirements: SprintWithUsRequirements;
   /** The requester's own membership, if they have one, so a screen can offer what they may do. */
   readonly viewerMembership: Membership | null;
   /** Every change of administrator rights and transfer of ownership, newest first (R-3.33). */
@@ -224,6 +236,9 @@ export class OrganizationsService {
    * is left as it is, and `null` takes it away.
    */
   async change(requester: Requester | null, id: string, tag: string, value: unknown): Promise<OrganizationRecord> {
+    if (tag === "acceptSWUTerms") return this.acceptTerms(requester, id, "sprint-with-us");
+    if (tag === "acceptTWUTerms") return this.acceptTerms(requester, id, "team-with-us");
+    if (tag === "qualifyServiceAreas") return this.qualifyServiceAreas(requester, id, value);
     if (!requester) throw notPermitted(NOT_PERMITTED_TO_CHANGE_ORGANIZATION);
     if (tag !== "updateProfile") throw new BadRequestException("That change cannot be made here.");
     const organization = await this.find(requester, id);
@@ -239,6 +254,41 @@ export class OrganizationsService {
       ...validation.profile,
       ...(logoImageFile === undefined ? {} : { logoImageFile }),
     });
+    return this.record(changed, requester);
+  }
+
+  /**
+   * Accepting a program's terms for an organization, by its owner or an administrator: the moment
+   * is recorded, once. A second acceptance is refused, and the first moment stands (R-3.27).
+   */
+  private async acceptTerms(requester: Requester | null, id: string, program: QualifyingProgram): Promise<OrganizationRecord> {
+    if (!requester) throw notPermitted(NOT_PERMITTED_TO_ACCEPT_TERMS);
+    const organization = await this.find(requester, id);
+    if (!mayAcceptProgramTerms(requester, membershipOf(organization, requester))) {
+      throw notPermitted(NOT_PERMITTED_TO_ACCEPT_TERMS);
+    }
+    if (!organization.active) throw new BadRequestException(ARCHIVED_ORGANIZATION);
+    const accepted = program === "sprint-with-us" ? organization.acceptedSWUTerms : organization.acceptedTWUTerms;
+    if (accepted) throw new BadRequestException(termsAlreadyAccepted(program));
+    const now = new Date();
+    const changed = await this.organizations.update(
+      organization.id,
+      program === "sprint-with-us" ? { acceptedSWUTerms: now } : { acceptedTWUTerms: now },
+    );
+    return this.record(changed, requester);
+  }
+
+  /**
+   * Setting the service areas an organization is approved for, by an administrator alone. The
+   * selection replaces every earlier approval (R-3.28).
+   */
+  private async qualifyServiceAreas(requester: Requester | null, id: string, value: unknown): Promise<OrganizationRecord> {
+    if (!requester || !mayQualifyServiceAreas(requester)) throw notPermitted(NOT_PERMITTED_TO_QUALIFY_SERVICE_AREAS);
+    const organization = await this.find(requester, id);
+    if (!organization.active) throw new BadRequestException(ARCHIVED_ORGANIZATION);
+    const selection = serviceAreaSelection(value);
+    if (!selection) throw new BadRequestException(INVALID_SERVICE_AREAS);
+    const changed = await this.organizations.approveServiceAreas(organization.id, selection);
     return this.record(changed, requester);
   }
 
@@ -374,6 +424,10 @@ export class OrganizationsService {
       acceptedTWUTerms: organization.acceptedTWUTerms,
       serviceAreas: organization.serviceAreas,
       ...standing(organization),
+      swuRequirements: sprintWithUsRequirements(
+        activeMembers(organization).map((member) => member.capabilities),
+        organization.acceptedSWUTerms,
+      ),
       viewerMembership: membershipOf(organization, viewer),
       changelog: changelogOf(organization),
     };

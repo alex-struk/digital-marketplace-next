@@ -5,6 +5,8 @@ import {
   type MembershipStatus,
   type MembershipType,
   type OrganizationProfile,
+  type QualifyingProgram,
+  type SprintWithUsRequirements,
   type TeamMember as RulesTeamMember,
 } from "@rules/organizations";
 import { api } from "./client";
@@ -38,6 +40,13 @@ export interface Organization extends OrganizationProfile {
   readonly numTeamMembers: number;
   readonly swuQualified: boolean;
   readonly twuQualified: boolean;
+  /** When each program's terms were accepted for the organization, or null (R-3.27). */
+  readonly acceptedSWUTerms: string | null;
+  readonly acceptedTWUTerms: string | null;
+  /** The service areas it is approved for, by key (R-3.26, R-3.28). */
+  readonly serviceAreas: readonly string[];
+  /** Each Sprint With Us requirement and whether it is met (R-3.25). */
+  readonly swuRequirements: SprintWithUsRequirements;
   readonly viewerMembership: Membership | null;
   /** Changes of administrator rights and ownership, newest first (R-3.33). */
   readonly changelog: readonly ChangelogEntry[];
@@ -128,6 +137,16 @@ export function readOrganization(value: unknown): Organization | null {
     numTeamMembers: count(value.numTeamMembers),
     swuQualified: value.swuQualified === true,
     twuQualified: value.twuQualified === true,
+    acceptedSWUTerms: textOrNull(value.acceptedSWUTerms),
+    acceptedTWUTerms: textOrNull(value.acceptedTWUTerms),
+    serviceAreas: Array.isArray(value.serviceAreas)
+      ? value.serviceAreas.filter((area): area is string => typeof area === "string")
+      : [],
+    swuRequirements: {
+      twoMembers: isRecord(value.swuRequirements) && value.swuRequirements.twoMembers === true,
+      allCapabilities: isRecord(value.swuRequirements) && value.swuRequirements.allCapabilities === true,
+      termsAccepted: isRecord(value.swuRequirements) && value.swuRequirements.termsAccepted === true,
+    },
     viewerMembership: readMembership(value.viewerMembership),
     changelog: Array.isArray(value.changelog)
       ? value.changelog.map(readChangelogEntry).filter((entry): entry is ChangelogEntry => entry !== null)
@@ -262,6 +281,26 @@ export function updateOrganizationProfile(id: string, profile: OrganizationProfi
     api.PUT("/api/organizations/{id}", {
       params: { path: { id } },
       body: { tag: "updateProfile", value: body(profile, logoImageFile) as never },
+    }),
+  );
+}
+
+/** Accepting a program's terms for the organization, once (R-3.27). */
+export function acceptProgramTerms(id: string, program: QualifyingProgram): Promise<SaveAnswer> {
+  return saved(
+    api.PUT("/api/organizations/{id}", {
+      params: { path: { id } },
+      body: { tag: program === "sprint-with-us" ? "acceptSWUTerms" : "acceptTWUTerms" },
+    }),
+  );
+}
+
+/** Setting the service areas the organization is approved for; the selection replaces the last (R-3.28). */
+export function qualifyServiceAreas(id: string, serviceAreas: readonly string[]): Promise<SaveAnswer> {
+  return saved(
+    api.PUT("/api/organizations/{id}", {
+      params: { path: { id } },
+      body: { tag: "qualifyServiceAreas", value: [...serviceAreas] },
     }),
   );
 }

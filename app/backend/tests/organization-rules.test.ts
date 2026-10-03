@@ -14,6 +14,12 @@ import {
   profileErrorLines,
   qualifiesForSprintWithUs,
   qualifiesForTeamWithUs,
+  mayAcceptProgramTerms,
+  mayQualifyServiceAreas,
+  offersProgramTermsAcceptance,
+  serviceAreaSelection,
+  sprintWithUsRequirements,
+  termsAlreadyAccepted,
   validateOrganizationProfile,
 } from "../src/rules/organizations";
 import { CAPABILITIES } from "../src/rules/users";
@@ -177,5 +183,47 @@ describe("qualification (R-3.25, R-3.26), as the list's marks show it", () => {
     expect(qualifiesForTeamWithUs(1, "2026-01-01")).toBe(true);
     expect(qualifiesForTeamWithUs(0, "2026-01-01")).toBe(false);
     expect(qualifiesForTeamWithUs(2, null)).toBe(false);
+  });
+
+  it("tells each Sprint With Us requirement apart, as the qualification tab lists them", () => {
+    expect(sprintWithUsRequirements([all.slice(0, 5), all.slice(5)], null)).toEqual({
+      twoMembers: true,
+      allCapabilities: true,
+      termsAccepted: false,
+    });
+    expect(sprintWithUsRequirements([all], "2026-01-01")).toEqual({ twoMembers: false, allCapabilities: true, termsAccepted: true });
+    expect(sprintWithUsRequirements([[], all.slice(1)], null).allCapabilities).toBe(false);
+  });
+});
+
+describe("program terms and service areas (R-3.27, R-3.28)", () => {
+  const owner = { membershipType: "OWNER", membershipStatus: "ACTIVE" } as const;
+  const orgAdmin = { membershipType: "ADMIN", membershipStatus: "ACTIVE" } as const;
+  const vendor = { id: "v", type: "VENDOR" } as const;
+  const administrator = { id: "a", type: "ADMIN" } as const;
+
+  it("lets the owner or an administrator accept the terms, and offers Accept to the owner alone, once", () => {
+    expect(mayAcceptProgramTerms(vendor, owner)).toBe(true);
+    expect(mayAcceptProgramTerms(administrator, null)).toBe(true);
+    expect(mayAcceptProgramTerms(vendor, orgAdmin)).toBe(false);
+    expect(mayAcceptProgramTerms(null, null)).toBe(false);
+    expect(offersProgramTermsAcceptance(owner, null)).toBe(true);
+    expect(offersProgramTermsAcceptance(owner, "2026-01-01T00:00:00.000Z")).toBe(false);
+    expect(offersProgramTermsAcceptance(null, null)).toBe(false);
+    expect(termsAlreadyAccepted("team-with-us")).toContain("already been accepted");
+  });
+
+  it("lets only an administrator set service areas", () => {
+    expect(mayQualifyServiceAreas(administrator)).toBe(true);
+    expect(mayQualifyServiceAreas(vendor)).toBe(false);
+    expect(mayQualifyServiceAreas(null)).toBe(false);
+  });
+
+  it("takes a selection of recognised areas, each once, in the service's order, and refuses anything else", () => {
+    expect(serviceAreaSelection(["AGILE_COACH", "FULL_STACK_DEVELOPER", "AGILE_COACH"])).toEqual(["FULL_STACK_DEVELOPER", "AGILE_COACH"]);
+    expect(serviceAreaSelection([])).toEqual([]);
+    expect(serviceAreaSelection(["NOPE"])).toBeNull();
+    expect(serviceAreaSelection("AGILE_COACH")).toBeNull();
+    expect(serviceAreaSelection(null)).toBeNull();
   });
 });

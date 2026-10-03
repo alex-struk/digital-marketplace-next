@@ -97,11 +97,13 @@ export class OrganizationsInMemory implements OrganizationStore {
   async update(id: string, change: OrganizationChange): Promise<StoredOrganization> {
     const index = this.rows.findIndex((row) => row.id === id);
     const current = this.rows[index] as StoredOrganization;
-    const { deactivatedOn, ...rest } = change;
+    const { deactivatedOn, acceptedSWUTerms, acceptedTWUTerms, ...rest } = change;
     const next: StoredOrganization = {
       ...current,
       ...rest,
       ...(deactivatedOn ? { deactivatedOn: deactivatedOn.toISOString() } : {}),
+      ...(acceptedSWUTerms ? { acceptedSWUTerms: acceptedSWUTerms.toISOString() } : {}),
+      ...(acceptedTWUTerms ? { acceptedTWUTerms: acceptedTWUTerms.toISOString() } : {}),
     };
     this.rows[index] = next;
     return next;
@@ -142,6 +144,10 @@ export class OrganizationsInMemory implements OrganizationStore {
       ),
       events: [...current.events, this.event(toAffiliationId, "OWNER_STATUS_GRANTED", by)],
     }));
+  }
+
+  async approveServiceAreas(organizationId: string, serviceAreas: readonly string[]): Promise<StoredOrganization> {
+    return this.replace(organizationId, (current) => ({ ...current, serviceAreas: [...serviceAreas].sort() }));
   }
 
   /** Adds memberships to an organization directly, as the seed would. */
