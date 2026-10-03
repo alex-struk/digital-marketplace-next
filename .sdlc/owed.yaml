@@ -5188,7 +5188,7 @@ owed:
     id: R-3.2
     version: 1
     domain: organizations
-    stage: contract
+    stage: derive-tests
     why: an observation on organization-create, such as refused_when_not_permitted,
       that reports the screen or the registration refused to a signed-in member
       of public sector staff (on the old application, its not-found page) and to
@@ -5225,6 +5225,18 @@ owed:
         proposal: derive-tests-organizations-stale-11
         gate: G3
         at: 2026-10-03T15:11:38.082Z
+      - from: contract
+        to: derive-tests
+        why: organization-request now says `register_by_request` may be sent as
+          persona.anonymous-visitor (no session) and is refused with status 401,
+          the "You do not have permission to perform this action." message filed
+          under `permissions`, and an empty `organization_identifier`. I
+          confirmed this against the running oracle, and anonymous-visitor's
+          `can` list now names it.
+        by: contract-v38
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-10-03T15:18:03.138Z
     target: old
     clause: a request from anyone else is refused — for a visitor who is not signed in
   - kind: missing-test

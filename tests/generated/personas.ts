@@ -7,7 +7,8 @@ export const persona = {
       "view a published opportunity",
       "count as a view of an opportunity",
       "read a published page",
-      "read a file marked readable by anyone"
+      "read a file marked readable by anyone",
+      "send an organization registration by request and be refused"
     ],
     "signIn": null
   },
