@@ -184,6 +184,16 @@
 - 08:01:35 propose bind-adapter-old-66 at G3
 - 08:01:39 drive: step 11: `sdlc rule bind-adapter-old-66 --by agent:reviewer` — bind-adapter-old-66 is open at G3, held by agent:reviewer
 - 08:02:16 rule bind-adapter-old-66 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 08:02:23 drive: step 12: `sdlc run bind-adapter --target new` — 10 contract members the adapter does not name for target new owed by bind-adapter
+- 08:02:23 run bind-adapter: pre-checks failed
+- 08:02:23 drive: step 12 recovery: the oracle is up, and the new target's sandbox publishes on this machine's ports beside it; taking the oracle down first (sdlc oracle down)
+- 08:03:12 oracle down old
+- 08:03:12 drive: step 12 recovery: the new target's sandbox was not up; starting it from proposal/build-slice-11-3 (sdlc sandbox up --target new --from proposal/build-slice-11-3), running the step once more, and taking it down after (sdlc sandbox down --target new --from proposal/build-slice-11-3)
+- 08:07:28 run bind-adapter: ok, cost 1.7207539999999997, turns 65, on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 08:07:28 propose bind-adapter-new-60 at G3
+- 08:07:28 drive: step 12 recovery: taking the new target's sandbox down (sdlc sandbox down --target new --from proposal/build-slice-11-3)
+- 08:07:45 drive: step 13: `sdlc rule bind-adapter-new-60 --by agent:reviewer` — bind-adapter-new-60 is open at G3, held by agent:reviewer
+- 08:08:29 rule bind-adapter-new-60 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-10-02
 
