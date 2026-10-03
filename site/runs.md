@@ -239,6 +239,9 @@
 - 08:49:35 propose build-slice-11-6 at G3
 - 09:18:49 drive: step 34: `sdlc rule build-slice-11-6 --by agent:reviewer` — build-slice-11-6 is open at G3, held by agent:reviewer
 - 09:20:06 rule build-slice-11-6 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 09:38:26 drive: step 36: `sdlc run verify --slice 12` — build-slice-12 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
+- 09:44:15 verify slice 12: R-3.7, R-3.8, R-3.9, R-3.10, R-3.13, R-3.23, R-3.30, R-3.32, R-3.34, R-3.35 fail. R-3.8, R-3.9, R-3.23, R-3.30, R-3.32 stopped on a read that came back with nothing, which can be the adapter's as easily as the application's, so build-slice-12 is left open for agent:reviewer to send each failure to the build or to bind-adapter.
+- 09:44:17 run verify: regenerated 4 files in .sdlc, site, tests
 
 # Run record 2026-10-02
 

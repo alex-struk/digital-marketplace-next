@@ -6455,3 +6455,118 @@ rebind:
       why: tests/adapters/new has changed since this was found
       by: runner:verify
       at: 2026-10-03T15:44:05.236Z
+  - id: R-3.11
+    target: new
+    why: 'unbound: organization-edit.remove_team_member — no row on
+      http://localhost:4500/organizations/00000000-0000-4000-8000-000000000301/edit?tab=team
+      names
+      {"member":{"id":"00000000-0000-4000-8000-000000000202","persona":"organization-owner","idp_id":"test-vendor-2","name":"Blake
+      Placeholder","email":"org.owner@example.test","account_type":"VENDOR","capabilities":["Agile
+      Coaching","Backend Development","Delivery Management"]}}; the rows read:
+      Blake Placeholder | Owner | 3 |  / Charlie Placeholder | Administrator | 3
+      | Remove administrator rights Remove / Dana Placeholder | Member | 3 |
+      Give administrator rights Remove / Quinn Placeholder | Pending | 1 |
+      Approve Remove'
+    found: unbound
+    adapter: c21abccefc016311216f34c1d097c99fe7020356
+    slice: 12
+    app_tree: 6ea2025227ec0fc4e059dfa10f08b3ff04368187
+    by: runner:verify
+    at: 2026-10-03T16:44:15.178Z
+  - id: R-3.12
+    target: new
+    why: 'unbound: organization-edit.accept_org_admin_terms — no terms box on
+      http://localhost:4500/organizations/00000000-0000-4000-8000-000000000301/edit?tab=team;
+      it offers button "Add team members", button "Remove administrator rights
+      from Charlie Placeholder", button "Remove Charlie Placeholder", button
+      "Give administrator rights to Dana Placeholder", button "Remove Dana
+      Placeholder", button "Remove Quinn Placeholder", link "Skip to main
+      content", link "Dashboard", link "My profile", link "Sign out", link
+      "Organization", link "Team members", link "Sprint With Us qualification",
+      link "Team With Us qualification", link "Changelog", link "Call, email or
+      text us", link "find a service centre", link "About", link "Disclaimer",
+      link "Privacy", link "Accessibility", link "Copyright"'
+    found: unbound
+    adapter: c21abccefc016311216f34c1d097c99fe7020356
+    slice: 12
+    app_tree: 6ea2025227ec0fc4e059dfa10f08b3ff04368187
+    by: runner:verify
+    at: 2026-10-03T16:44:15.178Z
+  - id: R-3.14
+    target: new
+    why: "unbound: organization-edit.team_member_row — /organizations/:orgId/edit
+      did not open as a screen at
+      http://localhost:4400/organizations/00000000-0000-4000-8000-000000000301/\
+      edit: Page not found The page you are looking for does not exist.; the
+      screen is offered only to a signed-in person who may have it; walked
+      signed in (as the administrator, as a public sector employee, and as a
+      vendor for a vendor's screens — the seeded organization owner, an
+      organization member and the invited vendor for the organization screens —
+      with the seeded records' identifiers), the running build serves a
+      signed-in person /dashboard, /opportunities, the account screens under
+      /users (a vendor's Organizations section, /users/me?tab=organizations,
+      draws \"Organizations you own\" with \"Create organization\" and the owned
+      table, and \"Organizations you belong to\"), /organizations (\"Create
+      organization\", \"My organizations\" and the list), /organizations/create,
+      and to an organization's owner /organizations/:orgId/edit (the
+      \"Organization\" section with \"Edit organization\", and \"Archive
+      organization\"; its Team members, Sprint With Us qualification, Team With
+      Us qualification and Changelog sections say only \"This section is not
+      available yet.\"), to the administrator the content-management screens
+      under /content, and to the administrator and public sector staff
+      /opportunities/create, the three programs' forms and their management
+      screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit
+      (whose sections on the seeded Sprint With Us and Team With Us
+      opportunities are Summary, Opportunity, Addenda, History and Evaluation
+      panel, with no evaluation, consensus or instructions section); the
+      proposal and evaluation screens — /proposals, the Code With Us proposal
+      screens and /opportunities/code-with-us/:opportunityId/complete included —
+      and /organizations/:orgId/sprint-with-us-terms-and-conditions and
+      /organizations/:orgId/team-with-us-terms-and-conditions (opened as the
+      seeded qualified organization's owner) answer \"Page not found\", as
+      /organizations/:orgId/edit does to a member who does not own the
+      organization, and /users/:userId opens for the signed-in person's own
+      identifier and, to the administrator, for another account's"
+    found: unbound
+    adapter: c21abccefc016311216f34c1d097c99fe7020356
+    slice: 12
+    app_tree: 6ea2025227ec0fc4e059dfa10f08b3ff04368187
+    by: runner:verify
+    at: 2026-10-03T16:44:15.178Z
+  - id: R-3.15
+    target: new
+    why: 'unbound: organization-edit.accept_org_admin_terms — no terms box on
+      http://localhost:4400/organizations/00000000-0000-4000-8000-000000000304/edit?tab=team;
+      it offers button "Add team members", button "Give administrator rights to
+      Dana Placeholder", button "Remove Dana Placeholder", button "Remove Indigo
+      Placeholder", link "Skip to main content", link "Dashboard", link "My
+      profile", link "Sign out", link "Organization", link "Team members", link
+      "Sprint With Us qualification", link "Team With Us qualification", link
+      "Changelog", link "Call, email or text us", link "find a service centre",
+      link "About", link "Disclaimer", link "Privacy", link "Accessibility",
+      link "Copyright"'
+    found: unbound
+    adapter: c21abccefc016311216f34c1d097c99fe7020356
+    slice: 12
+    app_tree: 6ea2025227ec0fc4e059dfa10f08b3ff04368187
+    by: runner:verify
+    at: 2026-10-03T16:44:15.178Z
+  - id: R-3.33
+    target: new
+    why: 'unbound: organization-edit.accept_org_admin_terms — no terms box on
+      http://localhost:4400/organizations/00000000-0000-4000-8000-000000000301/edit?tab=team;
+      it offers button "Add team members", button "Remove administrator rights
+      from Charlie Placeholder", button "Remove Charlie Placeholder", button
+      "Give administrator rights to Dana Placeholder", button "Remove Dana
+      Placeholder", button "Remove Quinn Placeholder", link "Skip to main
+      content", link "Dashboard", link "My profile", link "Sign out", link
+      "Organization", link "Team members", link "Sprint With Us qualification",
+      link "Team With Us qualification", link "Changelog", link "Call, email or
+      text us", link "find a service centre", link "About", link "Disclaimer",
+      link "Privacy", link "Accessibility", link "Copyright"'
+    found: unbound
+    adapter: c21abccefc016311216f34c1d097c99fe7020356
+    slice: 12
+    app_tree: 6ea2025227ec0fc4e059dfa10f08b3ff04368187
+    by: runner:verify
+    at: 2026-10-03T16:44:15.178Z
