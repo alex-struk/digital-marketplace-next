@@ -1303,6 +1303,14 @@ pages:
       refusal_messages: bound
       refusal_status: bound
 
+  affiliation-removal-request:
+    actions:
+      end_membership_by_request: bound
+    observations:
+      request_accepted: bound
+      refusal_messages: bound
+      refusal_status: bound
+
   user-list-request:
     actions: {}
     observations:
