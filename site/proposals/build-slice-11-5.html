@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-11-5 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">553</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">547</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">457</span></a></li><li><a href="../runs.html">Run log <span class="count">21</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-11-5</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-03 15:39</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 11 (A vendor can register and look after an organization) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> I made no changes to the application in this revision, because the ruling found nothing in it to fix.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I made no changes to the application in this revision, because the ruling found nothing in it to fix. Both remaining failures, R-3.2 (a vendor who has accepted the terms registers an organization by request) and R-3.18 (an organization administrator who is not the owner is refused a profile change by request), stop inside the new target&#39;s test adapter before any request reaches the service. The adapter does not accept the input key <code>addressLineTwo</code> as the second street-address line. That fix belongs to the bind-adapter stage, which has already been asked for it. The file is <code>tests/adapters/new/index.ts</code>, which is outside <code>app/</code> and <code>docs/decisions/</code>, so I left it alone.</p>
+<p><strong>Checks.</strong> The workspace had no dependencies installed, so the first run of the check failed with <code>tsc: not found</code>. After <code>npm --prefix app install</code>, <code>npm --prefix app run check</code> passes: typechecking, plus all unit tests in every package (16, 533 and 343 tests). The install may have refreshed <code>app/package-lock.json</code>; nothing else under <code>app/</code> changed. One error line about mail not being delivered (<code>smtp-451</code>) appears in the output. It is logged on purpose by a unit test of the welcome-mail failure path and is not a failure.</p>
+<p><strong>The field the adapter will send to.</strong> The API&#39;s name for the second address line is <code>streetAddress2</code>, and the backend already handles it in the organization rules, the service and the store. Once the adapter maps <code>addressLineTwo</code> to it, registration and profile-change requests should reach validation and storage without any change on the app side.</p>
+<p><strong>State of the slice.</strong> From the earlier builds, verify has confirmed:</p>
+<ul><li>R-3.22 passes all its invalid-submission tests.</li><li>The R-3.18 screen tests pass: a service administrator is offered Edit and Archive on the Organization tab, and an organization administrator who is not the owner sees neither.</li></ul>
+<p>The rest of slice 11 is unchanged from what verify last saw. The request tests for R-3.2 and R-3.18 have not yet run against the service. If they fail once the adapter accepts <code>addressLineTwo</code>, the ruling says that failure is the app&#39;s, and the next revision should start from what the service returned.</p>
+<p><strong>What the next slice gets.</strong> Slice 12 inherits archiving (R-3.6), the registering vendor becoming owner of an organization that is active at once (R-3.23), and the list of organizations a vendor may act for (R-3.15). All three are built here; their tests depend on the team tab Slice 12 delivers.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by agent:tech-lead (persona agent · claude claude-opus-5-5) on 2026-10-03 15:45.</p>
+<div class="body"><p>The question is whether slice 11 does what its criteria say. Verify failed R-3.2 and R-3.18, which escalated the slice after three builds; I return it to build. The two failures do not come from the test adapter, contrary to what the proposal says. Both request tests reached the service and got an answer back: they expected a permission refusal and received a body keyed <code>errors</code>. The service sends every permission refusal from the organization routes (registering, a profile change, an archive) as an UnauthorizedException, which the boundary renders as <code>{ errors: [...] }</code>. The contract&#39;s operations for these routes name the refusals &#39;(permissions)&#39;, and decision record 0003 makes <code>permissions</code> the key for a permission refusal. The watch routes already produce that shape through NamedRefusal in app/backend/src/common/refusals.ts. So the fault is in the application, inside build&#39;s own workspace, and nothing here questions the criterion, the test or the sandbox. The ruling would change to approve once a verify run that is current for the revision shows R-3.2 and R-3.18 passing; the tests both are owed can then run against it. If, once the key is right, a request test still stops before reaching the service, that part is the adapter&#39;s and would go to bind-adapter.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>Send the permission refusals of the organization routes under the key <code>permissions</code>, at status 401, using NamedRefusal in app/backend/src/common/refusals.ts the way app/backend/src/watching/watching.service.ts does. That covers POST /api/organizations (registering by anyone but a signed-in vendor who has accepted the terms, including a visitor with no session) and PUT /api/organizations/:id and DELETE /api/organizations/:id (anyone who is neither the organization&#39;s owner nor a service administrator). Leave the BadRequest validation refusals under <code>errors</code>. Update app/backend/tests/organizations-end-to-end.test.ts so it asserts the <code>permissions</code> key for these refusals. What showed it: the R-3.2 and R-3.18 request tests received &quot;errors&quot; where they expect a permission refusal, the contract&#39;s operations for these routes name the refusals &quot;(permissions)&quot;, and decision record 0003 makes <code>permissions</code> the key for a permission refusal.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
