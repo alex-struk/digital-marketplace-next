@@ -34,3 +34,14 @@ Nothing else changed: no persona, observable, seed, openapi or compose edits, an
 **Oracle and checks.** The oracle override and seed are unchanged since the last approved run, but I have no fresh evidence that it starts. No container was started by this run, so none is left running. The YAML parse check also needed approval and didn't run. I read the edited region back instead, and the indentation matches the neighbouring entries.
 
 **One thing to expect at calibration.** The criteria file notes (dated 2026-09-29) that the old application fails R-3.11. A test written against this page may therefore fail against the oracle while still being correct for the rebuild. That would be the old application's defect, not a gap in the contract.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:product-owner
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: is this the contract the tests will act through, now that it has one added page for R-3.11? Ruling: approve. The build-slice-12 ruling found that the surface had no way to attempt ending the sole owner's membership: the team tab offers Remove on no owner's row, so the remove_team_member binding could never reach the refusal R-3.11 asks to observe. The new affiliation-removal-request page fills exactly that gap. The evidence supports it. sources/old/src/back-end/lib/resources/affiliation.ts:518-530 refuses to delete an OWNER membership when readActiveOwnerCount is 1, with 'Unable to remove membership. This is the sole owner for this organization.', and runs that check before the permission check at :533, so an administrator sees this refusal. tests/seed/manifest.yaml:358-375 makes affiliations.qualifiedOwner the single active OWNER of organizations.qualified, alongside one active ADMIN and one active MEMBER, which matches the criterion's given-clause, so no seed change is needed. The page follows the established pattern of affiliation-approval-request, which shares the route, and gives refusal_messages, refusal_status and request_accepted to observe. The 'membership remains' clause is read from organization-edit's existing team_member_row and owner_badge. The change only adds and touches no existing page. The surface.d.ts addition matches the YAML. This settles the reviewer's contract revision request request/build-slice-12#14. The build-owed conditions build-slice-12#1 (R-3.7) and build-slice-12#2 (R-3.30) are not touched by a contract change and stay open. What would change this ruling: evidence that the oracle does not start, or that the YAML fails to parse (neither was run here); or a calibration finding that the page cannot be bound to the service. A failing R-3.11 test against the old application at calibration would not change it, because the criteria already record that the old application fails R-3.11, and that is a defect-in-old question for calibration, not a contract gap.
+
+**Conditions:**
+none
