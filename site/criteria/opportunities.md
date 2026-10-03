@@ -36,7 +36,7 @@
 | R-1.30 | acceptance/opportunities/R-1.30.spec.ts |  | pass (carried from 2026-10-03-5) |
 | R-1.31 | acceptance/opportunities/R-1.31.spec.ts |  | pass (carried from 2026-10-03-5) |
 | R-1.32 | acceptance/opportunities/R-1.32.spec.ts |  | pass (carried from 2026-10-03-5) |
-| R-1.33 | acceptance/opportunities/R-1.33.spec.ts |  | fail |
+| R-1.33 | acceptance/opportunities/R-1.33.spec.ts |  | fail (ruled: defect-in-old) |
 | R-1.34 | acceptance/opportunities/R-1.34.spec.ts |  | pass (carried from 2026-10-03-5) |
 | R-1.35 | acceptance/opportunities/R-1.35.spec.ts |  | pass (carried from 2026-10-03-5) |
 | R-1.36 | acceptance/opportunities/R-1.36.spec.ts |  | pass (carried from 2026-10-03-5) |
@@ -447,6 +447,7 @@ The service accepts a private note, with files, on a Code With Us or Sprint With
 - when: its author adds a note of up to 1,000 characters with attachments
 - then: the note and its attachments appear in the opportunity's history, which only the author and administrators can see
 - note: Team With Us offers no such action at all. Nothing in the application explains the omission, so a human should decide whether it is a gap to close or a deliberate difference.
+- note: calibrate 2026-10-03: the old target fails this; kept, the rebuild must pass it
 
 ### R-1.34 · v1 · confirmed · accepted
 
