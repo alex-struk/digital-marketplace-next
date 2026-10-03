@@ -876,3 +876,11 @@ redo:
       why: derived again by a derive-tests run on opportunities
       by: runner:derive-tests
       at: 2026-10-02T14:31:57.356Z
+  - id: R-1.33
+    version: 2
+    why: the attachment is uploaded without saying who may read the file, which the
+      service requires of every upload, so the upload is refused, no file is
+      stored and the note is never added; the test should upload its attachment
+      the way the files criteria say an upload succeeds, then add the note. Keep
+      the check that a reader who is not signed in is not shown the note or its
+      file exactly as written.
