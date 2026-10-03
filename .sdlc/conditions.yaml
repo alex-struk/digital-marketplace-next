@@ -2469,6 +2469,16 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-10-03T17:18:34.121Z
+    closed:
+      outcome: met
+      why: "add_team_members and approve_pending_member are now bound against
+        ?tab=team in tests/adapters/new/bindings.yaml (organization-edit) and
+        index.ts (addTeamMembers, approvePendingMember via orgInRow).
+        invalid_membership_type_error keeps an unbound reason that is true of
+        this build: the Add team members dialog offers only email boxes and no
+        membership type."
+      by: agent:reviewer
+      at: 2026-10-03T17:29:57.883Z
   - ref: bind-adapter-new-62#2
     text: "bindings.yaml: re-walk every other entry whose unbound reason cites the
       team section being 'not available yet' or the absence of invitation
@@ -2483,6 +2493,18 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-10-03T17:18:34.121Z
+    closed:
+      outcome: met
+      why: every reason in bindings.yaml that said the team section or changelog was
+        not available yet, or that invitation controls were missing, was
+        re-walked. Team rows, badges, capabilities and changelog_entry are
+        bound. approve_invitation, reject_invitation, leave_organization,
+        accept_confirmation and decline_confirmation are bound on both
+        organization-user-memberships and organization-user-memberships-self.
+        The qualification and terms entries were re-walked and are still
+        unavailable, and their reasons say so.
+      by: agent:reviewer
+      at: 2026-10-03T17:29:57.907Z
   - ref: bind-adapter-new-62#3
     text: "toggleMemberAdminStatus: when the 'Give <name> administrator rights?'
       dialog is left open because accept_org_admin_terms has not been taken,
@@ -2495,3 +2517,11 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-10-03T17:18:34.121Z
+    closed:
+      outcome: met
+      why: index.ts records orgAdminTermsLeftOpen when toggleMemberAdminStatus leaves
+        the administrator-rights dialog open. Every other organizationEdit
+        member except open, toggleMemberAdminStatus and acceptOrgAdminTerms is
+        wrapped to call dismissAdminTerms, which presses Cancel first.
+      by: agent:reviewer
+      at: 2026-10-03T17:29:57.926Z
