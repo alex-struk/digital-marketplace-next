@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does slice 12 (An organization can build its team) do what its criteria say? Ruling: approve. Verify recorded a pass for this proposal against application tree e442f07, the branch's current app tree: all 19 claimed criteria were exercised and met, including R-3.11, which previously failed because of the adapter's timing. Approving means asking whether the rest of the code holds up, and it does. In team.service.ts each refusal follows the criterion it enforces. Inviting is open to the owner, its administrators and a service administrator. Only a vendor account that is active and has no current membership in the organization can be invited (R-3.8). Only member or owner can be named (R-3.17). An unregistered address is emailed an invitation to sign up, gets no membership, and the inviter is warned (R-3.30). The owner cannot accept on the invitee's behalf, and a membership that is no longer pending cannot be accepted (R-3.9). Ending a membership marks it inactive rather than deleting it, and the sole owner is refused (R-3.10, R-3.11). Nobody can change their own administrator rights or the owner's (R-3.12). Only a service administrator can transfer ownership, and only to an active member (R-3.13). The rules functions are shared with the screens, so a screen offers only what the service would allow. Rights changes and ownership transfers write their changelog entry in the same transaction as the change itself. The new affiliationEvents migration is additive, and it skips creation where the table already exists, so a database left by the old application keeps its own. The invitation email carries both an accept and a decline link and no unsubscribe offer (R-3.35, R-6.16). Unit tests cover the seams the slice adds: team-service.test.ts against an in-memory store, organizations-end-to-end.test.ts against the seed data, and the frontend team and invitations tests. No code is built for another slice: the qualification tabs are left for slice 13. No secret or real personal data appears; the addresses are example.test placeholders. The only change in this revision is to the database-schema test, which now asks the OS for a free port instead of always using 55432, and it touches no application behaviour. What would change the ruling: a later verify of this tree in which R-3.11 fails again even once the adapter waits for the server's answer. That would point back at what the team page shows after a refused removal.
+conditions: []
+cost: 0.713125
+turns: 2
+session: "23d68dd4-dc28-463f-8a10-725ffc1b7d24"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-03T18:43:48.921Z
