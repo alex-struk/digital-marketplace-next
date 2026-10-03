@@ -1,0 +1,64 @@
+gate: G3
+verdict: return
+by: runner:verify
+held_by: runner
+rationale: Slice 11 does not yet do what 4 of its criteria say. Each condition
+  is the criterion and what the running application did.
+conditions:
+  - "R-3.3, in the case \"an organization's full record can be opened by the
+    member who owns that organization\": Error:
+    expect(received).toContain(expected) // indexOf — Received
+    string:    \"Organization — at
+    tests/acceptance/organizations/R-3.3.spec.ts:52 — its last steps: …or state
+    Postal code or ZIP code …\" → organizationEdit.organizationTab() at
+    /organizations/00000000-0000-4000-8000-000000000301/edit?tab=organization
+    read \"Organization Edit organization No logo has been added. Legal name
+    Website Address Street address Address line 2 City Province or state Postal
+    code or ZIP code …\" → organizationEdit.organizationTab() at
+    /organizations/00000000-0000-4000-8000-000000000301/edit?tab=organization
+    read \"Organization Edit organization No logo has been added. Legal name
+    Website Address Street address Address line 2 City Province or state Postal
+    code or ZIP code …\" — the page as it failed:
+    .sdlc/evidence/slice-11/R-3.3.png, .sdlc/evidence/slice-11/R-3.3.txt"
+  - 'R-3.18, in the case "an organization administrator who is not the owner
+    sees the profile read-only, with no Edit and no Archive control": Error:
+    expect(received).toContain(expected) // indexOf — Received
+    string:    "Organization — at
+    tests/acceptance/organizations/R-3.18.spec.ts:18 — its last steps:
+    signIn(persona organization-owner) at /dashboard →
+    organizationEdit.open({orgId}) at
+    /organizations/00000000-0000-4000-8000-000000000301/edit →
+    organizationEdit.organizationTab() at
+    /organizations/00000000-0000-4000-8000-000000000301/edit?tab=organization
+    read "Organization Edit organization No logo has been added. Legal name
+    Website Address Street address Address line 2 City Province or state Postal
+    code or ZIP code …" — the page as it failed:
+    .sdlc/evidence/slice-11/R-3.18.png, .sdlc/evidence/slice-11/R-3.18.txt'
+  - 'R-3.19, in the case "a change to the contact phone number is saved along
+    with every other profile field": Error: expect(received).toContain(expected)
+    // indexOf — Received string:    "Organization — at
+    tests/acceptance/organizations/R-3.19.spec.ts:17 — its last steps: …gId}) at
+    /organizations/00000000-0000-4000-8000-000000000301/edit →
+    organizationEdit.editOrganization() at
+    /organizations/00000000-0000-4000-8000-000000000301/edit?tab=organization →
+    organizationEdit.saveChanges({contactName, contactPhone}) at
+    /organizations/00000000-0000-4000-8000-000000000301/edit?tab=organization →
+    organizationEdit.organizationTab() at
+    /organizations/00000000-0000-4000-8000-000000000301/edit?tab=organization
+    read "Organization Edit organization No logo has been added. Legal name
+    Website Address Street address Address line 2 City Province or state Postal
+    code or ZIP code …" — the page as it failed:
+    .sdlc/evidence/slice-11/R-3.19.png, .sdlc/evidence/slice-11/R-3.19.txt'
+  - 'R-3.21, in the case "a vendor who is neither owner nor administrator of an
+    organization sees its legal name without the owner, the team size or the
+    qualification marks": Error: expect(received).toBeFalsy() — Received:
+    "······ — at tests/acceptance/organizations/R-3.21.spec.ts:13 — its last
+    steps: organizationList.open() at /organizations →
+    organizationList.organizationName() at /organizations read "Broken Compass
+    Delivery Ltd. Cedar Hollow Systems Inc. Northern Pines Digital Ltd. Quiet
+    Meadow Works Ltd. Red Alder Studio Ltd. Salt Marsh Labs Ltd. Silver Cr…" →
+    organizationList.ownerName() at /organizations read "" →
+    organizationList.swuQualifiedMark() at /organizations read "" — the page as
+    it failed: .sdlc/evidence/slice-11/R-3.21.png,
+    .sdlc/evidence/slice-11/R-3.21.txt'
+at: 2026-10-03T05:13:28.738Z
