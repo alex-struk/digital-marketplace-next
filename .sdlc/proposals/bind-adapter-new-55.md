@@ -38,3 +38,23 @@ On the default seed it returns empty for all three opportunities above. On an in
 - I did not open an instance started with the scope service page missing, so I haven't seen what this build shows in that case.
 
 I edited nothing outside `tests/adapters/new/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does the new adapter bind every surface action and observation and nothing else? Ruling: approve. The diff adds one observation, opportunity-swu-view.page_messages, in tests/adapters/new/index.ts and bindings.yaml and touches nothing under tests/acceptance. The new pageNotices helper only navigates and locates: it reuses the not-found/sign-in unbound refusal, waits out the loading progressbar, reads visible alert/status/alertdialog/dialog text by role, leaves out notices inside the page's sections and the loading status, and returns one notice per line in page order. It asserts nothing and decides no outcome. That matches the contract text at spec/contract/surface.yaml:265-276. Reading empty on the seeded closed, awarded and open Sprint With Us opportunities follows from the page loading and showing nothing, so empty is correct rather than unbound. That the new build does not post the awarded and open-signed-out notices the contract describes is a product fact for calibrate, not an adapter defect. The runner's typecheck on this revision passed with no diagnostics under adapters/new. What would change this: evidence that the new build renders a notice without an ARIA role, which this role-based binding would miss and read as empty. That would surface at calibration as adapter-wrong. The open R-7.29 missing-test stays owed by derive-tests, which can now be served by this observation.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `66a46c188b995aa3d9d9d00e7895cf492395ef9f`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.

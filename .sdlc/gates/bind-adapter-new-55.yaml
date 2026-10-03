@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does the new adapter bind every surface action and observation and nothing else? Ruling: approve. The diff adds one observation, opportunity-swu-view.page_messages, in tests/adapters/new/index.ts and bindings.yaml and touches nothing under tests/acceptance. The new pageNotices helper only navigates and locates: it reuses the not-found/sign-in unbound refusal, waits out the loading progressbar, reads visible alert/status/alertdialog/dialog text by role, leaves out notices inside the page's sections and the loading status, and returns one notice per line in page order. It asserts nothing and decides no outcome. That matches the contract text at spec/contract/surface.yaml:265-276. Reading empty on the seeded closed, awarded and open Sprint With Us opportunities follows from the page loading and showing nothing, so empty is correct rather than unbound. That the new build does not post the awarded and open-signed-out notices the contract describes is a product fact for calibrate, not an adapter defect. The runner's typecheck on this revision passed with no diagnostics under adapters/new. What would change this: evidence that the new build renders a notice without an ARIA role, which this role-based binding would miss and read as empty. That would surface at calibration as adapter-wrong. The open R-7.29 missing-test stays owed by derive-tests, which can now be served by this observation.
+conditions: []
+cost: 0.30382180000000003
+turns: 3
+session: "ba8f5647-32f6-49df-bc45-b59c264b0388"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-03T00:18:45.854Z
