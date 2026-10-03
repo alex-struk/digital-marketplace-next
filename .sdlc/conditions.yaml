@@ -2133,3 +2133,22 @@ conditions:
         notices/page_messages observation in missing, and has owner contract
       by: agent:reviewer
       at: 2026-10-02T23:48:03.854Z
+  - ref: bind-adapter-old-63#1
+    text: opportunity-swu-view.page_messages (tests/adapters/old/index.ts, the new
+      pageMessages reader) must read only the notices, alerts, error or pop-up
+      messages the screen shows outside its own sections. The contract defines
+      the observation as messages shown 'anywhere outside its own sections
+      (scope_section, phases, addenda and the rest above)'. The reader currently
+      returns every role=alert element on the page via everyAlert(), so an alert
+      rendered inside the Scope & Contract tab body (the region
+      scopeSection/embeddedSection reads) or inside phases, addenda or another
+      bound section would be reported as a page message. Exclude alerts that sit
+      within those section regions, keep reading alerts anywhere else on the
+      screen including late-drawn ones, and update the comment above the reader
+      to say what is excluded and why.
+    from: bind-adapter-old-63
+    family: bind-adapter-old
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-10-03T00:11:03.242Z
