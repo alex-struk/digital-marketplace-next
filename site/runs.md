@@ -219,6 +219,15 @@
 - 08:28:15 drive: step 25: `sdlc run verify --slice 11` — build-slice-11-4 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
 - 08:33:17 verify slice 11: 1 criteria still fail after 3 builds; escalated to tech-lead.
 - 08:33:18 run verify: regenerated 564 files in .sdlc, site, tests
+- 08:34:51 drive: step 27: `sdlc run bind-adapter --target new --revise` — 1 revision request for target new owed by bind-adapter; request request/build-slice-11-4#1
+- 08:34:52 run bind-adapter: pre-checks failed
+- 08:34:52 drive: step 27 recovery: the new target's sandbox was not up; starting it from proposal/build-slice-11-4 (sdlc sandbox up --target new --from proposal/build-slice-11-4), running the step once more, and taking it down after (sdlc sandbox down --target new --from proposal/build-slice-11-4)
+- 08:35:56 run bind-adapter: ok, cost 0.23280540000000005, turns 8, on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 08:35:56 propose bind-adapter-new-61 at G3
+- 08:35:56 rule bind-adapter-new-61 escalated at G3 to tech-lead by runner:bind-adapter
+- 08:35:56 drive: step 27 recovery: taking the new target's sandbox down (sdlc sandbox down --target new --from proposal/build-slice-11-4)
+- 08:36:14 drive: step 28: `sdlc rule bind-adapter-new-61 --by agent:tech-lead` — bind-adapter-new-61 was escalated at G3 by runner:bind-adapter to tech-lead, a role an agent plays in this project
+- 08:36:45 rule bind-adapter-new-61 approve at G3 by agent:tech-lead (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-10-02
 

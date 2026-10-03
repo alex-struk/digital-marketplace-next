@@ -8248,7 +8248,7 @@ export default function create(
     legalName: ["legalName", "legal_name", "name"],
     websiteUrl: ["websiteUrl", "website_url", "website", "websiteAddress"],
     streetAddress1: ["streetAddress1", "street_address_1", "streetAddress", "street1", "street", "address"],
-    streetAddress2: ["streetAddress2", "street_address_2", "street2", "addressLine2"],
+    streetAddress2: ["streetAddress2", "street_address_2", "street2", "addressLine2", "addressLineTwo"],
     city: ["city"],
     region: ["region", "province", "state", "provinceOrState"],
     mailCode: ["mailCode", "mail_code", "postalCode", "zip", "zipCode"],

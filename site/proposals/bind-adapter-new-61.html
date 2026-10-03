@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-61 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">551</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">545</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">457</span></a></li><li><a href="../runs.html">Run log <span class="count">21</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-61</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-03 15:35</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I made the one change this condition asked for.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I made the one change this condition asked for. In <code>tests/adapters/new/index.ts</code>, the organization profile field table now accepts the input key <code>addressLineTwo</code> as <code>streetAddress2</code>, the second street-address line. It sits alongside the spellings already accepted there (<code>streetAddress2</code>, <code>street_address_2</code>, <code>street2</code>, <code>addressLine2</code>). Nothing else in the adapter or in <code>bindings.yaml</code> changed.</p>
+<p><strong>Why this fixes the failure.</strong> Before building a request, the adapter checks every input key against that table, and any key it doesn&#39;t recognise makes it throw <code>unbound</code>. That check is why <code>register_by_request</code> (R-3.2) and <code>change_profile_by_request</code> (R-3.18) both threw on <code>addressLineTwo</code> before sending anything. Both the check and the code that copies values into the request read the same table, so the key is now accepted and its value goes out as <code>streetAddress2</code>, matching how the old target&#39;s binding handles it. The adapter&#39;s form-based organization paths already took <code>addressLineTwo</code>; only the request path was missing it.</p>
+<p><strong>Bindings file.</strong> <code>bindings.yaml</code> already lists both actions as <code>bound</code> under <code>organization-request</code>, so it needed no edit.</p>
+<p><strong>What I did not do.</strong> I didn&#39;t open the running target again. The condition was about a missing input key, not a missing control, and the target&#39;s handling of the second address line had already been bound and accepted. I also couldn&#39;t run a type-check: the sandbox needed an approval for it, and there&#39;s nobody here to give one. The edit only adds one string to an existing array, so it shouldn&#39;t change any types.</p>
+<p>Nothing in this request is deferred.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:tech-lead (persona agent · claude claude-opus-5-5) on 2026-10-03 15:36.</p>
+<div class="body"><p>Question: does this revision answer the one request still owed to bind-adapter and bind nothing beyond it? Approved. The escalation came from the loop limit (three sends against a limit of two). That is a count, not a defect in the work, and the checks show only request/build-slice-11-4#1 (the addressLineTwo spelling) still open, so this proposal answers for that request alone. The diff adds &#39;addressLineTwo&#39; to the accepted spellings for streetAddress2 in the new adapter&#39;s organization profile field table (tests/adapters/new/index.ts:8251) and changes nothing else. That matches the evidence cited: verify on build-slice-11-4 saw register_by_request (R-3.2) and change_profile_by_request (R-3.18) throw on that key before sending. The derived organization tests (R-3.2, R-3.18, R-3.22 and others) do send it, and R-3.22&#39;s &#39;second address line&#39; is that field. The runner&#39;s typecheck passed with no diagnostics under adapters/new/. The request&#39;s statement that the old adapter already maps this exact spelling is not borne out (tests/adapters/old/index.ts accepts addressLine2/street2/address2), but the test inputs and the criterion decide the binding, so it does not change the ruling. A verify run showing R-3.2 or R-3.18 still unbound on this key, or the value not reaching the second address line, would change it.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
