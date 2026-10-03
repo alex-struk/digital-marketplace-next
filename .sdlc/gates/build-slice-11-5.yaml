@@ -1,0 +1,18 @@
+gate: G3
+verdict: return
+by: agent:tech-lead
+held_by: agent
+rationale: |2-
+  The question is whether slice 11 does what its criteria say. Verify failed R-3.2 and R-3.18, which escalated the slice after three builds; I return it to build. The two failures do not come from the test adapter, contrary to what the proposal says. Both request tests reached the service and got an answer back: they expected a permission refusal and received a body keyed `errors`. The service sends every permission refusal from the organization routes (registering, a profile change, an archive) as an UnauthorizedException, which the boundary renders as `{ errors: [...] }`. The contract's operations for these routes name the refusals '(permissions)', and decision record 0003 makes `permissions` the key for a permission refusal. The watch routes already produce that shape through NamedRefusal in app/backend/src/common/refusals.ts. So the fault is in the application, inside build's own workspace, and nothing here questions the criterion, the test or the sandbox. The ruling would change to approve once a verify run that is current for the revision shows R-3.2 and R-3.18 passing; the tests both are owed can then run against it. If, once the key is right, a request test still stops before reaching the service, that part is the adapter's and would go to bind-adapter.
+reprompt: |2-
+  You ruled return. "File the permission refusals of POST /api/organizations (registering by anyone but a signed-in vendor who has accepted the terms, including a visitor with no session), PUT /api/organizations/:id and DELETE /api/organizations/:id (anyone who is neither the organization's owner nor a service administrator) under the key `permissions`, at status 401, using NamedRefusal in app/backend/src/common/refusals.ts as the watch routes do. The contract (spec/contract/openapi.yaml lines 289, 318, 327) names these refusals \"(permissions)\", decision record 0003 makes `permissions` the key for a permission refusal, and the R-3.2 and R-3.18 request tests received \"errors\" where they expect a permission refusal." asks for spec/contract/openapi.yaml, which build cannot deliver — build delivers app, docs/decisions, and everything else its workspace carries is there to be read. A condition it cannot carry out is one it either fails at or finds a way round, and the second is reported as done. no stage in this pipeline delivers it, so no ruling can ask for it; say what this proposal must do instead, and take the rest up outside the pipeline.
+conditions:
+  - "Send the permission refusals of the organization routes under the key `permissions`, at status 401, using NamedRefusal in app/backend/src/common/refusals.ts the way app/backend/src/watching/watching.service.ts does. That covers POST /api/organizations (registering by anyone but a signed-in vendor who has accepted the terms, including a visitor with no session) and PUT /api/organizations/:id and DELETE /api/organizations/:id (anyone who is neither the organization's owner nor a service administrator). Leave the BadRequest validation refusals under `errors`. Update app/backend/tests/organizations-end-to-end.test.ts so it asserts the `permissions` key for these refusals. What showed it: the R-3.2 and R-3.18 request tests received \"errors\" where they expect a permission refusal, the contract's operations for these routes name the refusals \"(permissions)\", and decision record 0003 makes `permissions` the key for a permission refusal."
+cost: 1.7199936000000002
+turns: 15
+session: "8f81c2e8-46e9-4e92-9885-482774acf406"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-03T15:45:47.517Z
