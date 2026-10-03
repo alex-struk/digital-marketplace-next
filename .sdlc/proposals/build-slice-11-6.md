@@ -39,3 +39,16 @@ This revision fixes the one fault the ruling named: when the organization routes
 The workspace had no installed dependencies, so I ran `npm ci` under `app/` first. It changed no source files.
 
 I touched nothing outside `app/` and added no decision record, because record 0003 already settles the key. If a request test still stops before reaching the service once the key is right, that part belongs to the bind-adapter stage, not this one. The other criteria of the slice (R-3.1, R-3.3, R-3.19 to R-3.22, R-3.24, R-8.13, R-8.21, R-8.28, R-8.30) are as the previous build left them. The team tab and membership changes are still missing for Slice 12.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does slice 11 do what its criteria say? Ruling: approve. Verify is pass, recorded for build-slice-11-6 against application tree 4082aa0: all 13 claimed criteria were exercised and met, R-3.2 and R-3.18 included, and their passing rows cover the request-level refusals (staff, a vendor without accepted terms and a visitor registering; an organization administrator who is not the owner changing or archiving). The fix owed by build-slice-11-5#1 is in place: organizations.service.ts refuses registering, changing and archiving through a 401 NamedRefusal under `permissions`; validation refusals stay as 400 under `errors`; PUT and DELETE resolve the requester with readingAccount, so a visitor reaches the service's refusal; organizations-end-to-end.test.ts and organizations-service.test.ts assert both shapes. The code stays within the slice: team and qualification tabs are deferred to slices 12 and 13, unit tests cover the rules, the service and the HTTP boundary, and no secret or real personal data appears. The two missing-test entries for R-3.2 and R-3.18 are withdrawn because their tests now exist and ran at v1 in this verify. A minor unit-test stub (`usable` where `mayRead` is expected) is never called on the path it serves and does not affect the ruling. A failing re-verify against a newer tree, or evidence that the R-3.2 or R-3.18 tests do not assert the refusals their titles name, would change the ruling.
+
+**Conditions:**
+- condition-met build-slice-11-5#1: permission refusals for POST /api/organizations and PUT/DELETE /api/organizations/:id now return 401 with { permissions: [...] } via notPermitted()/NamedRefusal in app/backend/src/organizations/organizations.service.ts, validation stays 400 under errors, and app/backend/tests/organizations-end-to-end.test.ts asserts the permissions key for staff, administrator, terms-withdrawn vendor and visitor (register) and for org administrator, member, staff and visitor (change, archive); R-3.2 and R-3.18 pass in tests/results/new/slice-11.json
+- condition-withdrawn missing-test/R-3.2: a test for R-3.2 v1 exists (tests/acceptance/organizations/R-3.2.spec.ts) and ran in verify for build-slice-11-6, passing every case including registrations refused to public sector staff, a vendor without accepted terms and a visitor
+- condition-withdrawn missing-test/R-3.18: a test for R-3.18 v1 exists (tests/acceptance/organizations/R-3.18.spec.ts) and ran in verify for build-slice-11-6, passing every case including a profile change and an archive request by a non-owner organization administrator being refused
