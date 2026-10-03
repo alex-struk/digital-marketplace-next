@@ -390,6 +390,17 @@ reader's attention.
   picture half and a logo half would need new criterion IDs, which are the spec's to author. The fit
   is uneasy in the same way as for R-8.17: the behaviour is built in one slice and answered for in a
   later one where every half of its test can run.
+- **R-3.6, R-3.15 and R-3.23** were placed in Slice 11, which builds registration, archiving and
+  the list of organizations a vendor may act for. Verification of the build of Slice 11 found their
+  tests unbound there: each sets up or reads members through the organization's team members tab
+  (adding team members, the owner's badge), and Slice 11 shows that tab only as "This section is not
+  available yet." All three now sit in Slice 12, which builds the team tab and depends on Slice 11,
+  so its closure holds both the behaviour and the screen the tests go through. The behaviour itself
+  is still built in Slice 11, and Slice 14, which uses the organizations a vendor may act for as
+  proponents, still depends only on what Slice 11 builds. Adding the team tab to Slice 11 was the
+  other way offered and was not taken, because it would fold most of Slice 12 into Slice 11 and
+  leave Slice 12 little of its own to show. The fit is uneasy in the same way as for R-8.17: a rule
+  about registration and archiving is answered for where its test first can run.
 
 ## Accepted criteria that pull against each other
 
@@ -504,7 +515,9 @@ now lists Slice 15, and no count changes. The latest revision moved R-1.39 from 
 10; Slice 8 still answers for other opportunities criteria, so the opportunities row is unchanged.
 The most recent revision moved R-1.35 and R-1.36 from Slice 9 to Slice 14 and added Slice 9 to
 Slice 14's dependencies; Slice 9 still answers for other opportunities criteria and Slice 14 was
-already in the opportunities row, so no row changes.
+already in the opportunities row, so no row changes. The revision after that moved R-3.6, R-3.15
+and R-3.23 from Slice 11 to Slice 12; both slices were already in the organizations row, so no row
+changes.
 
 | Domain | Accepted, not superseded | Placed | Slices |
 | --- | --- | --- | --- |
