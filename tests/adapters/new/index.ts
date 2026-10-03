@@ -297,12 +297,13 @@ export default function create(
 
   const camel = (name: string): string => name.replace(/_([a-z0-9])/g, (_match, c: string) => c.toUpperCase());
 
-  // What walking the target signed in found: the dashboard, one's own account screens, the
-  // opportunity list, and to public sector staff and the administrator the program chooser,
-  // the Code With Us form and the three programs' management screens; the proposal,
-  // organization, evaluation and report screens answer "Page not found".
+  // What walking the target signed in found: the dashboard, one's own account screens (the
+  // Organizations section among them), the organization list, the organization create and
+  // edit screens, the opportunity list, and to public sector staff and the administrator the
+  // program chooser, the forms and the three programs' management screens; the proposal,
+  // evaluation and organization terms screens answer "Page not found".
   const NOBODY_SIGNS_IN =
-    'walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor\'s screens — the seeded organization owner for the organization screens — with the seeded records\' identifiers), the running build serves a signed-in person /dashboard (to the administrator "Create an opportunity" over "All opportunities"; to public sector staff the same over "My opportunities"; to a vendor only "Dashboard" and "You are signed in as <name>."), /opportunities, the account screens under /users (whose Organizations tab says organizations "will be listed here once organizations can be registered"), to the administrator the content-management screens under /content, and to the administrator and public sector staff /opportunities/create, the three programs\' forms /opportunities/{code,sprint,team}-with-us/create and the management screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (whose "Opportunity sections" on the seeded closed and at-consensus Sprint With Us and Team With Us opportunities are Summary, Opportunity, Addenda, History and Evaluation panel — ?tab=evaluation, ?tab=consensus and ?tab=instructions open it on Summary, with no evaluation, consensus or instructions section); the proposal, organization and evaluation screens — the Code With Us proposal screens (tried as a vendor with the seeded published Code With Us opportunity, whose page offers no way to start one), /proposals, /opportunities/code-with-us/:opportunityId/complete, /organizations and /organizations/:orgId/edit included — answer "Page not found"';
+    'walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor\'s screens — the seeded organization owner, an organization member and the invited vendor for the organization screens — with the seeded records\' identifiers), the running build serves a signed-in person /dashboard, /opportunities, the account screens under /users (a vendor\'s Organizations section, /users/me?tab=organizations, draws "Organizations you own" with "Create organization" and the owned table, and "Organizations you belong to"), /organizations ("Create organization", "My organizations" and the list), /organizations/create, and to an organization\'s owner /organizations/:orgId/edit (the "Organization" section with "Edit organization", and "Archive organization"; its Team members, Sprint With Us qualification, Team With Us qualification and Changelog sections say only "This section is not available yet."), to the administrator the content-management screens under /content, and to the administrator and public sector staff /opportunities/create, the three programs\' forms and their management screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (whose sections on the seeded Sprint With Us and Team With Us opportunities are Summary, Opportunity, Addenda, History and Evaluation panel, with no evaluation, consensus or instructions section); the proposal and evaluation screens — /proposals, the Code With Us proposal screens and /opportunities/code-with-us/:opportunityId/complete included — and /organizations/:orgId/sprint-with-us-terms-and-conditions and /organizations/:orgId/team-with-us-terms-and-conditions (opened as the seeded qualified organization\'s owner) answer "Page not found", as /organizations/:orgId/edit does to a member who does not own the organization';
 
   // What each such address answered a signed-out visitor when it was last opened: /dashboard
   // and /sign-up/complete send them to /sign-in?redirectOnSuccess=…, and everything else
@@ -317,10 +318,6 @@ export default function create(
 
   const behindSession = (route: string): string =>
     `${route} is offered only to a signed-in person, and ${NOBODY_SIGNS_IN}; opened signed out (with the seeded record's identifier where it takes one) it ${signedOutAnswer(route)}`;
-
-  // A profile section the running build links to but does not fill.
-  const sectionRedrawn = (route: string, label: string): string =>
-    `walked signed in as a vendor (the seeded organization owner among them), the "${label}" link under "Profile sections" on the profile goes to ${route}, which draws "My Organizations" and only the line "The organizations you own or belong to will be listed here once organizations can be registered on the Digital Marketplace." — no table, badge, invitation or control, though the seed gives that vendor organizations; a public sector account's profile offers no "${label}" link at all, the administrator is shown another account's profile without that section, and /organizations answers "Page not found"`;
 
   function absent<T>(
     pageId: string,
@@ -3588,8 +3585,11 @@ export default function create(
     proposalDeadline: () => linesMatching(/^Close[sd]\b/),
   };
 
-  // The organization list, read signed out: one column, "Organization Name", the names not
-  // links, and no pager, no "Create Organization" and no "My Organizations".
+  // The organization list, a table captioned "Registered organizations by legal name.": read
+  // signed out it has one column, "Organization", the names not links; signed in as a vendor
+  // it has "Organization", "Owner", "Team size", "Sprint With Us qualified" and "Team With Us
+  // qualified", the last four filled ("Yes"/"No") only for organizations the vendor owns or
+  // administers, whose names are links to their screens.
   async function columnValues(header: RegExp): Promise<string> {
     await ready();
     const headers = seen(page.getByRole("columnheader"));
@@ -3613,10 +3613,14 @@ export default function create(
       const where = "organization-list.change_page";
       await ready();
       const wanted = field(input, "page", "to") || textOf(input);
-      const name = wanted ? new RegExp(`^${wanted.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "i") : /^(next|›|»)$/i;
+      // The pager is the navigation "Pages of organizations": "Page N of M" and a link "Page
+      // n" for each page.
+      const name = wanted ? new RegExp(`^(page )?${wanted.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "i") : /^(next|›|»)( page)?$/i;
       const control = seen(page.getByRole("button", { name }).or(page.getByRole("link", { name }))).first();
       if (!(await control.count())) {
-        unbound(where, `opened ${page.url()} signed out; the whole list is on one page and no pager control appears on it`);
+        const pager = seen(page.getByRole("navigation", { name: /pagination|pager|pages of/i }));
+        const says = (await pager.count()) ? (await pager.first().innerText()).replace(/\s+/g, " ").trim() : "no pager";
+        unbound(where, `no pager control named ${name} on ${page.url()}; the pager reads "${says}"`);
       }
       await control.click();
       await settle();
@@ -3627,7 +3631,7 @@ export default function create(
       await ready();
       const link = seen(page.getByRole("link", { name: named ? new RegExp(named.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i") : /./ })).first();
       if (!named || !(await link.count()) || !(await link.getAttribute("href"))?.startsWith("/organizations/")) {
-        unbound(where, `opened ${page.url()} signed out; the names are listed as plain text, not links — an organization's screen ${ORGANIZATIONS_SIGNED_IN}`);
+        unbound(where, `no link named ${JSON.stringify(named)} to an organization's screen on ${page.url()}; signed in, the list links only the organizations the viewer owns and draws the rest as plain text, and an organization's screen ${ORGANIZATIONS_SIGNED_IN}`);
       }
       await link.click();
       await settle();
@@ -3635,18 +3639,18 @@ export default function create(
     createOrganization: async () => {
       await ready();
       if (!(await findControl(page, /^create organization$/i))) {
-        unbound("organization-list.create_organization", `opened ${page.url()} signed out; no "Create Organization" — creating one ${ORGANIZATIONS_SIGNED_IN}`);
+        unbound("organization-list.create_organization", `no "Create organization" on ${page.url()} — it is drawn there for a signed-in person, and creating one ${ORGANIZATIONS_SIGNED_IN}`);
       }
       await press("organization-list.create_organization", /^create organization$/i);
     },
     myOrganizations: async () => {
       await ready();
       if (!(await findControl(page, /^my organizations$/i))) {
-        unbound("organization-list.my_organizations", `opened ${page.url()} signed out; no "My Organizations" — a person's own organizations are ${ORGANIZATIONS_SIGNED_IN.replace(/^is/, "are")}`);
+        unbound("organization-list.my_organizations", `no "My organizations" on ${page.url()} — it is drawn there for a signed-in person, and a person's own organizations are ${ORGANIZATIONS_SIGNED_IN.replace(/^is/, "are")}`);
       }
       await press("organization-list.my_organizations", /^my organizations$/i);
     },
-    organizationName: () => columnValues(/^(organization name|legal name)$/i),
+    organizationName: () => columnValues(/^(organization|organization name|legal name)$/i),
     // A withheld owner is shown as a dash, which is no name.
     ownerName: async () => {
       const shown = await columnValues(/^owner$/i);
@@ -3656,12 +3660,12 @@ export default function create(
         .join("\n")
         .trim();
     },
-    swuQualifiedMark: () => columnValues(/^swu qualified\??$/i),
-    twuQualifiedMark: () => columnValues(/^twu qualified\??$/i),
-    // The list shown fits one page and carries no pager: nothing to read.
+    swuQualifiedMark: () => columnValues(/^(swu|sprint with us) qualified\??$/i),
+    twuQualifiedMark: () => columnValues(/^(twu|team with us) qualified\??$/i),
+    // The navigation "Pages of organizations": "Page 1 of 1" and the link "Page 1".
     pagination: async () => {
       await ready();
-      const pager = seen(page.getByRole("navigation", { name: /pagination|pager/i }));
+      const pager = seen(page.getByRole("navigation", { name: /pagination|pager|pages of/i }));
       return (await pager.count()) ? (await pager.first().innerText()).trim() : "";
     },
     refusedWhenNotPermitted: () => refusalShown(),
@@ -3740,8 +3744,8 @@ export default function create(
   // ================================================================ signed-in screens, found at run time
   //
   // The screens below are shown only to a signed-in person. Walked signed in, the running
-  // build draws /dashboard, /sign-up/complete and one's own profile, and
-  // answers the Code With Us form and an organization's screen with "Page not found". Each
+  // build draws /dashboard, /sign-up/complete, one's own profile and the organization
+  // screens, and answers the proposal and evaluation screens with "Page not found". Each
   // member looks for what the contract names by role and accessible name — the way a person
   // reads the screen — and throws "unbound: …" naming what it looked for, and what the
   // screen offers instead, when it is not there. Nothing here returns a reading from a screen
@@ -4909,25 +4913,95 @@ export default function create(
   // ---------------------------------------------------------------- an organization's own screen
 
   const orgEdit = signedInScreen("organization-edit", "/organizations/:orgId/edit");
+  // Walked signed in as the organization owner on the seeded qualified organization: the
+  // screen's sections are links under the navigation "Organization sections" — "Organization"
+  // (?tab=organization, the one shown first), "Team members" (?tab=team), "Sprint With Us
+  // qualification", "Team With Us qualification" and "Changelog" — and each section's content
+  // is the region named as its link is. The Organization region holds "Edit organization" over
+  // the read-only profile, and the region "Archive this organization" holds "Archive
+  // organization".
   const ORG_TAB = {
     organization: /^\s*organization\s*$/i,
-    team: /^\s*team\s*$/i,
+    team: /^\s*team( members)?\s*$/i,
     swu: /sprint with us/i,
     twu: /team with us/i,
     changelog: /history|change\s*log/i,
   };
+  async function orgSectionLink(name: RegExp): Promise<Locator | null> {
+    const link = seen(page.getByRole("navigation", { name: /organization sections/i }).getByRole("link", { name }));
+    if (await link.count()) return link.first();
+    const tab = seen(page.getByRole("tab", { name }));
+    return (await tab.count()) ? tab.first() : null;
+  }
+  // The region named as a section's link is, once that link has been followed; null when the
+  // screen draws no such region.
+  async function orgSectionRegion(tab: Locator): Promise<{ label: string; region: Locator | null }> {
+    const label = (await tab.innerText()).replace(/\s+/g, " ").trim();
+    await tab.click();
+    await settle();
+    await ready();
+    const exactly = new RegExp(`^\\s*${label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*$`, "i");
+    const region = seen(regionNamed(page.getByRole("main"), exactly)).first();
+    await region.waitFor({ state: "visible", timeout: 10000 }).catch(() => undefined);
+    return { label, region: (await region.count()) ? region : null };
+  }
+  // Opens a section for a member that acts or reads inside it. A section the build draws but
+  // has not filled — on the current build Team members, both qualification sections and
+  // Changelog say only "This section is not available yet." — offers none of what the member
+  // needs, which is unbound, not empty.
   async function orgTabOpen(member: string, name: RegExp): Promise<void> {
     await orgEdit.on(member);
-    const tab = seen(page.getByRole("tab", { name }));
-    if (!(await tab.count())) unbound(orgEdit.where(member), `no tab named ${name} on ${page.url()}; it offers ${await offered()}`);
-    await tab.first().click();
-    await settle();
+    const tab = await orgSectionLink(name);
+    if (!tab) unbound(orgEdit.where(member), `no section named ${name} under "Organization sections" on ${page.url()}; it offers ${await offered()}`);
+    const { label, region } = await orgSectionRegion(tab);
+    const said = region ? (await region.innerText()).trim() : "";
+    if (/not available yet/i.test(said)) {
+      unbound(
+        orgEdit.where(member),
+        `opened the "${label}" section of ${page.url()} (as the organization's owner, from "Organization sections"); it draws the heading "${label}" and only "${lined(said).filter((line) => line !== label).join(" ")}", with no control, table or notice in it`,
+      );
+    }
+  }
+  // A section's content: the region named as its link is. A screen that opened without that
+  // section, or whose section draws no region of that name, reads as nothing — never as the
+  // text of another section.
+  async function orgSection(member: string, name: RegExp): Promise<string> {
+    await orgEdit.on(member);
+    const tab = await orgSectionLink(name);
+    if (!tab) return "";
+    const { region } = await orgSectionRegion(tab);
+    return region ? (await region.innerText()).trim() : "";
+  }
+  // The message of every field marked invalid on an organization's form — the last of what
+  // describes it, its hint coming first — or nothing when no field is.
+  async function orgFieldErrors(): Promise<string> {
+    const said: string[] = [];
+    const boxes = seen(page.getByRole("main").getByRole("textbox"));
+    for (let i = 0; i < (await boxes.count()); i++) {
+      const words = await boxes
+        .nth(i)
+        .evaluate((element) => {
+          if (element.getAttribute("aria-invalid") !== "true") return "";
+          const ids = (element.getAttribute("aria-errormessage") ?? element.getAttribute("aria-describedby") ?? "")
+            .split(/\s+/)
+            .filter(Boolean);
+          return ids.length ? (document.getElementById(ids[ids.length - 1])?.innerText ?? "") : "";
+        })
+        .catch(() => "");
+      said.push(...lined(words));
+    }
+    return [...new Set(said)].join("\n");
   }
   async function orgTabLines(member: string, name: RegExp, pattern: RegExp): Promise<string> {
     await orgTabOpen(member, name);
     return linesMatching(pattern);
   }
+  // The form "Edit organization" opens: "Edit organization" over the logo group and the fields,
+  // closed by "Save changes" and "Cancel". A form already open is left as it is, so what an
+  // earlier step entered in it is kept.
   async function orgEditing(member: string): Promise<void> {
+    await orgEdit.on(member);
+    if (await seen(page.getByRole("main").getByRole("button", { name: /^\s*save changes\s*$/i })).count()) return;
     await orgTabOpen(member, ORG_TAB.organization);
     const edit = await findControl(page, /^\s*edit( organization)?\s*$/i);
     if (edit && !(await isDisabled(edit))) {
@@ -4950,9 +5024,9 @@ export default function create(
     saveChanges: async (input) => {
       const where = orgEdit.where("save_changes");
       await orgEditing("save_changes");
-      const logo = given(input, ["logo", "image", "file"]);
-      await fillFrom(where, input, {}, ["logo", "image", "file"]);
-      if (logo !== undefined) await offerFile(where, /logo|choose image|upload image/i, logo);
+      const logo = LOGO_KEYS.map((key) => given(input, [key])).find((one) => one !== undefined);
+      await fillFrom(where, input, ORG_FIELDS, LOGO_KEYS);
+      if (logo !== undefined) await offerFile(where, ORG_LOGO, logo);
       await press(where, /^\s*save( changes)?\s*$/i);
       await confirmIfAsked(where, /^\s*save( changes)?\s*$/i);
     },
@@ -5005,6 +5079,8 @@ export default function create(
       const where = orgEdit.where("accept_org_admin_terms");
       await orgEdit.on("accept_org_admin_terms");
       const box = seen(page.getByRole("checkbox", { name: /terms|agree/i }));
+      // The box belongs to making a member an administrator, on the team section.
+      if (!(await box.count())) await orgTabOpen("accept_org_admin_terms", ORG_TAB.team);
       if (!(await box.count())) unbound(where, `no terms box on ${page.url()}; it offers ${await offered()}`);
       const wanted = input === undefined ? true : saysYes(given(input, ["checked", "accept", "value"]) ?? input);
       await box.first().setChecked(wanted);
@@ -5031,6 +5107,8 @@ export default function create(
     saveServiceAreas: async (input) => {
       const where = orgEdit.where("save_service_areas");
       await orgEdit.on("save_service_areas");
+      // The boxes belong to the Team With Us qualification section.
+      if (!(await seen(page.getByRole("main").getByRole("checkbox")).count())) await orgTabOpen("save_service_areas", ORG_TAB.twu);
       const areas = [given(input, ["serviceAreas", "areas", "serviceArea"]) ?? []].flat().map(textOf).filter(Boolean);
       for (const area of areas) {
         const box = seen(page.getByRole("checkbox", { name: labelFor(area) }));
@@ -5050,25 +5128,49 @@ export default function create(
     },
     changeLogo: async (input) => {
       await orgEditing("change_logo");
-      await offerFile(orgEdit.where("change_logo"), /logo|choose image|upload image/i, input);
+      await offerFile(orgEdit.where("change_logo"), ORG_LOGO, input);
     },
+    // The closed form's "Logo" group holds the image "<legal name> logo"; an organization
+    // with none says "No logo has been added." instead. The logo held is what the screen shows
+    // with the form closed, so an open form is left by drawing the screen again.
     currentLogo: async () => {
+      await orgEdit.on("current_logo");
+      if (await seen(page.getByRole("main").getByRole("button", { name: /^\s*save changes\s*$/i })).count()) {
+        await visit(page.url());
+        await orgEdit.on("current_logo");
+      }
       await orgTabOpen("current_logo", ORG_TAB.organization);
-      const image = seen(page.getByRole("img", { name: /logo/i }));
+      const image = seen(page.getByRole("main").getByRole("img", { name: /logo/i }));
       return (await image.count()) ? ((await image.first().getAttribute("src")) ?? "") : "";
     },
-    logoRefusedError: () => orgEdit.messages("logo_refused_error", /logo|image/i),
+    // A refused file is answered in the form's "Logo (optional)" group by an alert ("<name>
+    // cannot be used as a logo", then "… Please select a different logo image. The current
+    // logo has been kept."). No alert there, or no form open, reads as nothing.
+    logoRefusedError: async () => {
+      await orgEdit.on("logo_refused_error");
+      const group = seen(page.getByRole("main").getByRole("group", { name: /logo/i }));
+      if (!(await group.count())) return "";
+      const alerts = seen(group.first().getByRole("alert"));
+      const said: string[] = [];
+      for (let i = 0; i < (await alerts.count()); i++) said.push(...lined(await alerts.nth(i).innerText()));
+      return said.join("\n");
+    },
+    // Drawn under the organization's name as "Organization ID: <id>".
     organizationIdentifier: async () => {
       await orgEdit.on("organization_identifier");
-      return /^\/organizations\/([^/?#]+)/.exec(new URL(page.url()).pathname)?.[1] ?? "";
+      const line = (await textLines()).find((one) => /^organization id:/i.test(one));
+      return line ? line.replace(/^organization id:\s*/i, "").trim() : "";
     },
-    organizationTab: () => orgEdit.tab("organization_tab", ORG_TAB.organization),
-    teamTab: () => orgEdit.tab("team_tab", ORG_TAB.team),
-    swuQualificationTab: () => orgEdit.tab("swu_qualification_tab", ORG_TAB.swu),
-    twuQualificationTab: () => orgEdit.tab("twu_qualification_tab", ORG_TAB.twu),
-    changelogTab: () => orgEdit.tab("changelog_tab", ORG_TAB.changelog),
-    swuQualifiedBadge: () => orgTabLines("swu_qualified_badge", ORG_TAB.swu, /^(sprint with us )?qualified$|is qualified/i),
-    twuQualifiedBadge: () => orgTabLines("twu_qualified_badge", ORG_TAB.twu, /^(team with us )?qualified$|is qualified/i),
+    organizationTab: () => orgSection("organization_tab", ORG_TAB.organization),
+    teamTab: () => orgSection("team_tab", ORG_TAB.team),
+    swuQualificationTab: () => orgSection("swu_qualification_tab", ORG_TAB.swu),
+    twuQualificationTab: () => orgSection("twu_qualification_tab", ORG_TAB.twu),
+    changelogTab: () => orgSection("changelog_tab", ORG_TAB.changelog),
+    // Drawn under the organization's name, whichever section is open: "Sprint With Us
+    // qualified" and "Team With Us qualified" for the seeded qualified organization, neither
+    // for the unqualified one.
+    swuQualifiedBadge: () => orgEdit.lines("swu_qualified_badge", /^sprint with us qualified$/i),
+    twuQualifiedBadge: () => orgEdit.lines("twu_qualified_badge", /^team with us qualified$/i),
     ownerBadge: () => orgTabLines("owner_badge", ORG_TAB.team, /^owner$/i),
     pendingBadge: () => orgTabLines("pending_badge", ORG_TAB.team, /^pending$/i),
     teamMemberRow: async () => {
@@ -5094,20 +5196,236 @@ export default function create(
       }
       return out.join("\n");
     },
-    notQualifiedNotice: () => orgEdit.lines("not_qualified_notice", /not (yet )?qualified/i),
+    // The notice belongs to a qualification section, read from the Sprint With Us one.
+    notQualifiedNotice: () => orgTabLines("not_qualified_notice", ORG_TAB.swu, /not (yet )?qualified/i),
     changelogEntry: async () => {
       await orgTabOpen("changelog_entry", ORG_TAB.changelog);
       return (await tableRows()).join("\n");
     },
-    fieldError: () => orgEdit.messages("field_error"),
+    fieldError: async () => {
+      await orgEdit.on("field_error");
+      return orgFieldErrors();
+    },
     invalidMembershipTypeError: async () => {
-      await orgEdit.on("invalid_membership_type_error");
+      await orgTabOpen("invalid_membership_type_error", ORG_TAB.team);
       return unbound(
         orgEdit.where("invalid_membership_type_error"),
         "the team screen offers one kind of membership, so a refusal of another kind can only be sent by request, not read off this screen",
       );
     },
   };
+
+  // ---------------------------------------------------------------- creating an organization
+  //
+  // Walked signed in as the organization-owner vendor: /organizations/create draws "Create
+  // Organization" over the regions "Organization details" (the group "Logo (optional)" with
+  // the button "Choose a logo (optional)", which opens a file chooser; "Legal name(required)",
+  // "Website (optional)"), "Address" and "Contact", then "Create organization" — disabled
+  // until every required field is filled — and "Cancel", which goes back to /organizations.
+  // A field left wrong is marked invalid, its message drawn after its hint, and a note "Fix N
+  // fields to create the organization" lists them. A created organization opens at
+  // /organizations/<id>/edit.
+  const orgCreate = signedInScreen("organization-create", "/organizations/create");
+  const ORG_FIELDS: Record<string, RegExp> = {
+    legalName: /^\s*legal name/i,
+    name: /^\s*legal name/i,
+    websiteUrl: /^\s*website/i,
+    website: /^\s*website/i,
+    streetAddress1: /^\s*street address/i,
+    streetAddress: /^\s*street address/i,
+    streetAddress2: /^\s*address line 2/i,
+    city: /^\s*city/i,
+    region: /^\s*province or state/i,
+    province: /^\s*province or state/i,
+    mailCode: /^\s*postal code/i,
+    postalCode: /^\s*postal code/i,
+    country: /^\s*country/i,
+    contactName: /^\s*contact name/i,
+    contactTitle: /^\s*contact title/i,
+    contactEmail: /^\s*contact email/i,
+    contactPhone: /^\s*contact phone/i,
+  };
+  const LOGO_KEYS = ["logo", "logoImageFile", "image", "file"];
+  const ORG_LOGO = /^\s*choose a logo/i;
+  const organizationCreate: S.OrganizationCreatePage = {
+    open: () => orgCreate.open(),
+    createOrganization: async (input) => {
+      const where = orgCreate.where("create_organization");
+      await orgCreate.on("create_organization");
+      await fillFrom(where, input, ORG_FIELDS, LOGO_KEYS);
+      const logo = LOGO_KEYS.map((key) => given(input, [key])).find((one) => one !== undefined);
+      if (logo !== undefined) await offerFile(where, ORG_LOGO, logo);
+      await press(where, /^\s*create organization\s*$/i, seen(page.getByRole("main")));
+      await page.waitForURL(/\/organizations\/[^/?#]+\/edit/, { timeout: 10000 }).catch(() => undefined);
+      await settle();
+    },
+    cancel: () => orgCreate.press("cancel", /^\s*cancel\s*$/i),
+    changeLogo: async (input) => {
+      await orgCreate.on("change_logo");
+      await offerFile(orgCreate.where("change_logo"), ORG_LOGO, input);
+    },
+    // The message of every field marked invalid — the last of what describes it, its hint
+    // coming first — or nothing when no field is.
+    fieldError: async () => {
+      await orgCreate.on("field_error");
+      const said: string[] = [];
+      const boxes = seen(page.getByRole("main").getByRole("textbox"));
+      for (let i = 0; i < (await boxes.count()); i++) {
+        const words = await boxes
+          .nth(i)
+          .evaluate((element) => {
+            if (element.getAttribute("aria-invalid") !== "true") return "";
+            const ids = (element.getAttribute("aria-errormessage") ?? element.getAttribute("aria-describedby") ?? "")
+              .split(/\s+/)
+              .filter(Boolean);
+            return ids.length ? (document.getElementById(ids[ids.length - 1])?.innerText ?? "") : "";
+          })
+          .catch(() => "");
+        said.push(...lined(words));
+      }
+      return [...new Set(said)].join("\n");
+    },
+    submitDisabledUntilValid: async () => {
+      await orgCreate.on("submit_disabled_until_valid");
+      const control = seen(page.getByRole("main").getByRole("button", { name: /^\s*create organization\s*$/i })).first();
+      if (!(await control.count())) return "absent";
+      return (await isDisabled(control)) ? "disabled" : "enabled";
+    },
+  };
+
+  // ---------------------------------------------------------------- one's organizations
+  //
+  // Walked signed in as the organization-owner vendor at its own /users/<id>?tab=organizations:
+  // "My Organizations" draws the region "Organizations you own" ("Create organization" over a
+  // table "Owned organizations, with team size and Sprint With Us qualification": Organization
+  // (a link to its screen), Team members, Sprint With Us qualified) and the region
+  // "Organizations you belong to".
+  //
+  // "Organizations you own" with none says "You do not own any organizations. Create one to
+  // propose on Sprint With Us and Team With Us opportunities." in place of the table.
+  // "Organizations you belong to" holds a table "Organizations you are a member of or have
+  // been invited to" (Organization, Membership — "Member" or "Pending"; names are plain text,
+  // no link and no control on any row) or, with none, "You do not belong to any other
+  // organizations. An organization's owner or administrators can invite you by email."
+  // Walked as the invited vendor with the seeded pending invitation, as an organization member
+  // and as the owner: no row carries an accept, decline or leave control; no invitation email
+  // reaches the mail catcher, because the team section that would send one says "This section
+  // is not available yet."; and the address the reference application's invitation email
+  // links to (?tab=organizations&invitationAffiliationId=<the seeded pending
+  // affiliation>&invitationResponse=approve, or =reject) draws the same section with no dialog.
+  // An organization as the tables name it — its legal name — from a seed handle, an
+  // identifier, a record handed over whole, or the name itself.
+  function orgNamed(input: unknown): string {
+    const value = given(input, ["organization", "org", "legalName", "name", "id"]) ?? input;
+    if (value && typeof value === "object" && !Array.isArray(value)) {
+      const one = record(value);
+      return textOf(one.legal_name ?? one.legalName ?? one.name) || orgNamed(one.id);
+    }
+    const text = textOf(value).trim();
+    const orgs = seedGroups.organizations ?? {};
+    const byHandle = orgs[text.replace(/^organizations\./, "")];
+    if (byHandle) return textOf(record(byHandle).legal_name);
+    for (const one of Object.values(orgs)) if (String(record(one).id) === text) return textOf(record(one).legal_name);
+    return text;
+  }
+  const OWNED = /^\s*organizations you own\s*$/i;
+  const AFFILIATED = /^\s*organizations you belong to\s*$/i;
+  function membershipScreen(pageId: string, route: string) {
+    const screen = signedInScreen(pageId, route);
+    async function region(member: string, name: RegExp, heading: string): Promise<Locator> {
+      await screen.on(member);
+      const found = seen(regionNamed(page.getByRole("main"), name)).first();
+      await found.waitFor({ state: "visible", timeout: 10000 }).catch(() => undefined);
+      if (!(await found.count())) {
+        unbound(screen.where(member), `${page.url()} shows no "${heading}" section; it offers ${await offered()}`);
+      }
+      return found;
+    }
+    const owned = (member: string) => region(member, OWNED, "Organizations you own");
+    const affiliated = (member: string) => region(member, AFFILIATED, "Organizations you belong to");
+    // One column of the owned table, each value after the organization it belongs to.
+    async function ownedColumn(member: string, header: RegExp): Promise<string> {
+      const scope = await owned(member);
+      const headers = seen(scope.getByRole("columnheader"));
+      let at = -1;
+      for (let i = 0; i < (await headers.count()); i++) if (header.test((await headers.nth(i).innerText()).trim())) at = i;
+      if (at < 0) return "";
+      return (await tableRows(scope))
+        .map((row) => row.split(" | "))
+        .map((cells) => `${cells[0]} | ${cells[at] ?? ""}`)
+        .join("\n");
+    }
+    // A paragraph of a section, drawn only when its table is not.
+    async function emptyNote(scope: Locator): Promise<string> {
+      if (await seen(scope.getByRole("table")).count()) return "";
+      return (await paragraphs(scope)).join("\n");
+    }
+    // An invitation or membership answered from the row that names the organization.
+    async function answer(member: string, input: unknown, control: RegExp, confirm: RegExp): Promise<void> {
+      const where = screen.where(member);
+      const scope = await affiliated(member);
+      const named = orgNamed(input);
+      const rows = seen(scope.getByRole("row"));
+      const row = named ? rows.filter({ hasText: named }).first() : rows.nth(1);
+      if (!(await row.count())) {
+        unbound(where, `no row of "Organizations you belong to" on ${page.url()} names ${JSON.stringify(input)}; the rows read: ${(await tableRows(scope)).join(" / ") || "none"}`);
+      }
+      const found = await findControl(row, control);
+      if (!found || !(await found.evaluate((one) => one.matches("a, button, [role=button], [role=link]")).catch(() => false))) {
+        unbound(
+          where,
+          `the row "${(await row.innerText()).replace(/\s+/g, " ").trim()}" in "Organizations you belong to" on ${page.url()} offers no control named ${control} — the section's rows carry only the organization's name and the membership; walked as the invited vendor with the seeded pending invitation, no invitation email reaches the mail catcher and the reference application's invitation answer address draws no dialog`,
+        );
+      }
+      await press(where, control, row);
+      await confirmIfAsked(where, confirm);
+    }
+    // The dialog an invitation answer lands on, open on the screen; none open is unbound,
+    // since the answer could not be brought to this screen to be confirmed.
+    async function answerDialog(member: string): Promise<string> {
+      await screen.on(member);
+      if (await dialog().count()) return (await dialog().innerText()).trim();
+      return unbound(
+        screen.where(member),
+        `no dialog is open on ${page.url()}; walked as the invited vendor with the seeded pending invitation, the section offers no accept or decline control, no invitation email reaches the mail catcher (the team section that would send one says "This section is not available yet."), and the reference application's answer address (?tab=organizations&invitationAffiliationId=<id>&invitationResponse=approve or =reject) draws the section with no dialog`,
+      );
+    }
+    return {
+      open: (params?: Record<string, string>) => screen.open(params),
+      approveInvitation: (input?: unknown) => answer("approve_invitation", input, /^\s*(approve|accept)( invitation)?\s*$/i, /^\s*(approve|accept|join)/i),
+      rejectInvitation: (input?: unknown) => answer("reject_invitation", input, /^\s*(reject|decline)( invitation)?\s*$/i, /^\s*(reject|decline)/i),
+      leaveOrganization: (input?: unknown) => answer("leave_organization", input, /^\s*leave( organization)?\s*$/i, /^\s*leave/i),
+      createOrganization: async () => {
+        const scope = await owned("create_organization");
+        await press(screen.where("create_organization"), /^\s*create organization\s*$/i, scope);
+      },
+      // Each name in either table is a link to that organization's screen when the viewer
+      // owns it; a member's or invitee's row names it in plain text.
+      openOrganization: async (input?: unknown) => {
+        const where = screen.where("open_organization");
+        await screen.on("open_organization");
+        const named = orgNamed(input);
+        const exactly = named ? new RegExp(`^\\s*${named.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*$`, "i") : undefined;
+        const links = seen(page.getByRole("main").getByRole("table").getByRole("link", exactly ? { name: exactly } : {}));
+        if (!(await links.count())) {
+          unbound(where, `no organization link${named ? ` named "${named}"` : ""} in the tables on ${page.url()}; the owned table links each organization the viewer owns, and "Organizations you belong to" names its organizations in plain text; the rows read: ${(await tableRows()).join(" / ") || "none"}`);
+        }
+        await links.first().click();
+        await settle();
+      },
+      ownedOrganizationsTable: async () => (await tableRows(await owned("owned_organizations_table"))).join("\n"),
+      affiliatedOrganizationsTable: async () => (await tableRows(await affiliated("affiliated_organizations_table"))).join("\n"),
+      // The rows of "Organizations you belong to" whose membership is "Pending".
+      pendingBadge: async () =>
+        (await tableRows(await affiliated("pending_badge"))).filter((row) => /(^| \| )pending$/i.test(row)).join("\n"),
+      teamMemberCount: () => ownedColumn("team_member_count", /^team members$/i),
+      swuQualifiedMark: () => ownedColumn("swu_qualified_mark", /^sprint with us qualified$/i),
+      emptyOwnedMessage: async () => emptyNote(await owned("empty_owned_message")),
+      emptyAffiliatedMessage: async () => emptyNote(await affiliated("empty_affiliated_message")),
+      acceptConfirmation: () => answerDialog("accept_confirmation"),
+      declineConfirmation: () => answerDialog("decline_confirmation"),
+    };
+  }
 
   // ---------------------------------------------------------------- completing a profile
 
@@ -5768,10 +6086,14 @@ export default function create(
   async function onPicker(member: string): Promise<void> {
     const where = `file-image-picker.${member}`;
     const at = new URL(page.url());
-    // On an organization's screens the picker is the logo's, and those screens are not
-    // served; reading the profile's picture instead would answer a different question.
+    // On an organization's screens the picker is the logo's ("Logo (optional)" with "Choose a
+    // logo (optional)" on the create screen and on the owner's edit form), which this binding
+    // does not drive; reading the profile's picture instead would answer a different question.
     if (originOf(page.url()) === originOf(baseURL) && /^\/organizations(\/|$)/.test(at.pathname)) {
-      unbound(where, `the browser is on ${at.pathname}, an organization screen, where the picker would be the logo's; ${NOBODY_SIGNS_IN}`);
+      unbound(
+        where,
+        `the browser is on ${at.pathname}, an organization screen, where the picker is the organization's logo ("Logo (optional)" / "Choose a logo (optional)"); this picker is bound to one's own profile picture, and the logo is driven and read through organization-create.change_logo and organization-edit.change_logo, current_logo and logo_refused_error`,
+      );
     }
     const onProfile = originOf(page.url()) === originOf(baseURL) && /^\/(users\/[^/]+|sign-up\/complete)$/.test(at.pathname);
     if (!onProfile) await go("/users/me");
@@ -6202,7 +6524,7 @@ export default function create(
     if (!(await control.count())) {
       unbound(
         where,
-        `signed in as ${actingId()}, /dashboard at ${page.url()} reads only "${(await mainText()).replace(/\n+/g, " / ")}" and offers no control named ${name}; looked again signed in as the organization-owner vendor, who wrote a seeded proposal: the dashboard is that heading and sentence alone, the header offers only Dashboard, My profile and Sign out, /proposals and /organizations answer "Page not found", the seeded published Code With Us opportunity's page offers no way to start a proposal, and the profile's Organizations tab says organizations "will be listed here once organizations can be registered"; looked once more as that vendor: /dashboard?tab=myProposals shows the same heading and sentence, the seeded awarded Code With Us opportunity's page (whose winning proposal this vendor wrote) offers no proposal link, and that proposal's own screen /opportunities/code-with-us/:opportunityId/proposals/:proposalId answers "Page not found"`,
+        `signed in as ${actingId()}, /dashboard at ${page.url()} reads only "${(await mainText()).replace(/\n+/g, " / ")}" and offers no control named ${name}; looked again signed in as the organization-owner vendor, who wrote a seeded proposal: the dashboard is that heading and sentence alone, the header offers only Dashboard, My profile and Sign out, /proposals answers "Page not found", the seeded published Code With Us opportunity's page offers no way to start a proposal, and the profile's Organizations section lists organizations but no proposals; looked once more as that vendor: /dashboard?tab=myProposals shows the same heading and sentence, the seeded awarded Code With Us opportunity's page (whose winning proposal this vendor wrote) offers no proposal link, and that proposal's own screen /opportunities/code-with-us/:opportunityId/proposals/:proposalId answers "Page not found"`,
       );
     }
     await control.first().click();
@@ -8242,12 +8564,7 @@ export default function create(
 
     organizationList,
 
-    organizationCreate: absent<S.OrganizationCreatePage>(
-      "organization-create",
-      "/organizations/create",
-      behindSession("/organizations/create"),
-      ["create_organization", "cancel", "change_logo", "field_error", "submit_disabled_until_valid"],
-    ),
+    organizationCreate,
 
     organizationEdit,
 
@@ -8265,27 +8582,10 @@ export default function create(
       ["accept_terms", "cancel", "terms_body", "accepted_on_notice"],
     ),
 
-    organizationUserMemberships: absent<S.OrganizationUserMembershipsPage>(
+    organizationUserMemberships: membershipScreen(
       "organization-user-memberships",
       "/users/:userId?tab=organizations",
-      sectionRedrawn("/users/:userId?tab=organizations", "Organizations"),
-      [
-        "approve_invitation",
-        "reject_invitation",
-        "leave_organization",
-        "create_organization",
-        "open_organization",
-        "owned_organizations_table",
-        "affiliated_organizations_table",
-        "pending_badge",
-        "team_member_count",
-        "swu_qualified_mark",
-        "empty_owned_message",
-        "empty_affiliated_message",
-        "accept_confirmation",
-        "decline_confirmation",
-      ],
-    ),
+    ) as S.OrganizationUserMembershipsPage,
 
     userSignIn,
 
@@ -8315,27 +8615,10 @@ export default function create(
 
     userProfileSelfLegal: legalScreen("user-profile-self-legal", "/users/me?tab=legal") as S.UserProfileSelfLegalPage,
 
-    organizationUserMembershipsSelf: absent<S.OrganizationUserMembershipsSelfPage>(
+    organizationUserMembershipsSelf: membershipScreen(
       "organization-user-memberships-self",
       "/users/me?tab=organizations",
-      sectionRedrawn("/users/me?tab=organizations", "Organizations"),
-      [
-        "approve_invitation",
-        "reject_invitation",
-        "leave_organization",
-        "create_organization",
-        "open_organization",
-        "owned_organizations_table",
-        "affiliated_organizations_table",
-        "pending_badge",
-        "team_member_count",
-        "swu_qualified_mark",
-        "empty_owned_message",
-        "empty_affiliated_message",
-        "accept_confirmation",
-        "decline_confirmation",
-      ],
-    ),
+    ) as S.OrganizationUserMembershipsSelfPage,
 
     evaluationPanelDashboard: absent<S.EvaluationPanelDashboardPage>(
       "evaluation-panel-dashboard",
