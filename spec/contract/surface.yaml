@@ -2621,6 +2621,20 @@ pages:
   # than the running oracle: the old service accepts that last registration, because the
   # vendor did agree to the terms once.
   #
+  # Registering signed out. register_by_request may be sent with no signed-in session at
+  # all, as persona.anonymous-visitor (sign_in: null — the request carries no session
+  # cookie). The service refuses it exactly as it refuses public sector staff: status 401,
+  # the message "You do not have permission to perform this action." filed under
+  # permissions, no organization_identifier, and no organization created
+  # (src/back-end/lib/permissions.ts createOrganization, whose isVendor is false without a
+  # session; src/back-end/lib/resources/organization.ts, which also checks isSignedIn; and
+  # src/back-end/lib/server/index.ts wrapRespond, which answers a permissions refusal with
+  # 401). As for any refusal for who is asking, the registration sent must be complete and
+  # valid, or the answer is field errors instead. stored_active and stored_legal_name need
+  # a signed-in reader and read as empty signed out; a test that wants to show nothing was
+  # created signed out relies on organization_identifier being empty, or signs in as
+  # persona.administrator afterwards and looks for the legal name on organization-list.
+  #
   # Changing the profile and archiving. The service accepts both only from a service
   # administrator or the organization's owner, and checks who is asking before it looks
   # at the fields, so a refusal for who is asking does not depend on what was sent.
@@ -2638,7 +2652,8 @@ pages:
       # Input: the registration — legal name, street address (first line), city, region,
       # mail code, country, contact name and contact email, all required; website address,
       # second street line, contact title and contact phone, optional. The email must be
-      # well formed and a website address, when given, must be a web address.
+      # well formed and a website address, when given, must be a web address. Sent as
+      # whoever is signed in, or with no session at all when nobody is.
       register_by_request: { test_id: null }
       # Input: the organization's profile, the same fields as a registration. Sends the
       # service's profile-update operation for :orgId.
