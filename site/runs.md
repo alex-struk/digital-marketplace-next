@@ -273,6 +273,9 @@
 - 10:57:15 drive: step 1: `sdlc run verify --slice 12` — build-slice-12-3 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
 - 11:02:28 verify slice 12: 1 criteria still fail after 3 builds; escalated to tech-lead.
 - 11:02:30 run verify: regenerated 573 files in .sdlc, site
+- 11:06:54 drive: step 4: `sdlc run verify --slice 12` — build-slice-12-4 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
+- 11:12:02 verify slice 12: 1 criteria still fail after 3 builds; escalated to tech-lead.
+- 11:12:04 run verify: regenerated 574 files in .sdlc, site
 
 # Run record 2026-10-02
 
