@@ -670,7 +670,7 @@ pages:
       save_changes: bound
       cancel_editing: bound
       archive_organization: bound
-      add_team_members: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and for ...304 and followed 'Team members' under 'Organization sections'; the region 'Team members' draws its heading and only 'This section is not available yet.' — no add control, member table or badge. At run time the adapter opens that section and reports this while it still says so"
+      add_team_members: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and for ...304 and followed 'Team members' under 'Organization sections'; the region 'Team members' draws its heading and only 'This section is not available yet.' — no add control, member table or badge. Looked again for R-3.6/R-3.15: the same section (?tab=team) says only that signed in as the organization's admin member and as the service administrator; /organizations lists only a 'Team size' count; /organizations/<id>, /organizations/<id>/team and /organizations/<id>/members answer 'Page not found'. At run time the adapter opens that section and reports this while it still says so"
       approve_pending_member: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301, which has a seeded pending member) and for ...304 and followed 'Team members' under 'Organization sections'; the region 'Team members' draws its heading and only 'This section is not available yet.' — no member rows and no approve control. At run time the adapter opens that section and reports this while it still says so"
       remove_team_member: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and for ...304 and followed 'Team members' under 'Organization sections'; the region 'Team members' draws its heading and only 'This section is not available yet.' — no member rows and no remove control. At run time the adapter opens that section and reports this while it still says so"
       toggle_member_admin_status: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301, which has a seeded member) and followed 'Team members' under 'Organization sections'; the region 'Team members' draws its heading and only 'This section is not available yet.' — no member rows and no administrator box. At run time the adapter opens that section and reports this while it still says so"
@@ -690,7 +690,7 @@ pages:
       changelog_tab: bound
       swu_qualified_badge: bound
       twu_qualified_badge: bound
-      owner_badge: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and followed 'Team members' under 'Organization sections'; the region 'Team members' draws its heading and only 'This section is not available yet.' — no member rows, so no owner badge; the screen's header carries only the qualification badges. At run time the adapter opens that section and reports this while it still says so"
+      owner_badge: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and followed 'Team members' under 'Organization sections'; the region 'Team members' draws its heading and only 'This section is not available yet.' — no member rows, so no owner badge; the screen's header carries only the qualification badges. Looked again for R-3.23: the same as the organization's admin member and as the service administrator; /organizations lists owner names and a 'Team size' count with no badge; /organizations/<id>, /organizations/<id>/team and /organizations/<id>/members answer 'Page not found'. At run time the adapter opens that section and reports this while it still says so"
       pending_badge: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301, which has a seeded pending member) and for ...304 (which has a seeded pending invitation) and followed 'Team members'; the region draws its heading and only 'This section is not available yet.' — no member rows, so no pending badge. At run time the adapter opens that section and reports this while it still says so"
       team_member_row: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301, owner plus two members and a pending invitee) and followed 'Team members' under 'Organization sections'; the region draws its heading and only 'This section is not available yet.' — no member table. At run time the adapter opens that section and reports this while it still says so"
       team_capabilities: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and followed 'Team members' under 'Organization sections'; the region draws its heading and only 'This section is not available yet.' — no capabilities. At run time the adapter opens that section and reports this while it still says so"
@@ -1851,3 +1851,16 @@ pages:
       refusal_status: bound
       refusal_messages: bound
       stored_status: bound
+  organization-request:
+    actions:
+      register_by_request: bound
+      change_profile_by_request: bound
+      archive_by_request: bound
+    observations:
+      request_accepted: bound
+      refusal_status: bound
+      refusal_reason: bound
+      refusal_messages: bound
+      organization_identifier: bound
+      stored_active: bound
+      stored_legal_name: bound

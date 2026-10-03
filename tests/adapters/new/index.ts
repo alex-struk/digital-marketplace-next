@@ -8229,6 +8229,155 @@ export default function create(
     },
   };
 
+  // ------------------------------------------------ organizations, by request
+
+  // POST /api/organizations answers 201 with the organization (its "id", "legalName",
+  // "active", ...); PUT /api/organizations/:id { tag: "updateProfile", value } and
+  // DELETE /api/organizations/:id answer 200 with it, "active" false after an archive.
+  // This target files every refusal under one "errors" list: signed out a registration is
+  // 401 ["Only a signed-in vendor who has accepted the terms and conditions may register an
+  // organization."] and a change or archive 401 ["Sign in to do that."]; a change or archive
+  // from a signed-in person who neither owns the organization nor administers the service
+  // 401 ["Only the organization's owner or an administrator may change or archive it."],
+  // the organization still readable by an organization administrator; a missing or
+  // malformed field 400 ["Legal name: Enter the organization’s legal name", ...], one
+  // "<field label>: <message>" line per field; a second archive 400 ["This organization has
+  // already been archived."]; an identifier naming nothing 401 ["You are not permitted to
+  // read that organization."].
+  const ORGANIZATION_FIELDS: Record<string, string[]> = {
+    legalName: ["legalName", "legal_name", "name"],
+    websiteUrl: ["websiteUrl", "website_url", "website", "websiteAddress"],
+    streetAddress1: ["streetAddress1", "street_address_1", "streetAddress", "street1", "street", "address"],
+    streetAddress2: ["streetAddress2", "street_address_2", "street2", "addressLine2"],
+    city: ["city"],
+    region: ["region", "province", "state", "provinceOrState"],
+    mailCode: ["mailCode", "mail_code", "postalCode", "zip", "zipCode"],
+    country: ["country"],
+    contactName: ["contactName", "contact_name"],
+    contactTitle: ["contactTitle", "contact_title"],
+    contactEmail: ["contactEmail", "contact_email", "email"],
+    contactPhone: ["contactPhone", "contact_phone", "phone"],
+  };
+  const ORGANIZATION_TARGET_KEYS = ["orgId", "organization", "organizationId", "organizationIdentifier", "id"];
+
+  // The profile an input carries, every key matched to the field the service takes; a key
+  // that names no field is reported rather than dropped.
+  function organizationProfile(member: string, input: unknown): Record<string, unknown> {
+    const where = `organization-request.${member}`;
+    const handed = record(input);
+    const profile = record(handed.profile ?? handed.registration ?? handed.fields ?? input);
+    const known = new Set(
+      [...Object.values(ORGANIZATION_FIELDS).flat(), ...ORGANIZATION_TARGET_KEYS, "profile", "registration", "fields"].map(squash),
+    );
+    for (const key of Object.keys(profile)) {
+      if (!known.has(squash(key))) unbound(where, `the input key "${key}" names no field of an organization's profile`);
+    }
+    const out: Record<string, unknown> = {};
+    for (const [name, spellings] of Object.entries(ORGANIZATION_FIELDS)) {
+      const value = given(profile, spellings);
+      if (value !== undefined) out[name] = value;
+    }
+    return out;
+  }
+
+  const organizationAsked = requests("organization-request");
+  let organizationOpened = "";
+  let organizationRequested = false;
+  let organizationRegistered = "";
+
+  function organizationTarget(member: string, input: unknown): string {
+    const named = seededId(given(input, ORGANIZATION_TARGET_KEYS), "organizations");
+    const id = named || organizationOpened;
+    if (!id) unbound(`organization-request.${member}`, "no organization was opened or named");
+    return id;
+  }
+
+  async function organizationNow(member: string): Promise<Record<string, unknown> | null> {
+    if (!organizationOpened) unbound(`organization-request.${member}`, "no organization was opened or registered on this page");
+    const got = await peek(`${baseURL}/api/organizations/${encodeURIComponent(organizationOpened)}`);
+    return got.status === 200 ? record(got.json) : null;
+  }
+
+  function organizationAsk(member: string): Answer {
+    if (!organizationRequested) unbound(`organization-request.${member}`, "no request has been sent on this page yet");
+    return organizationAsked.last(member);
+  }
+
+  const organizationRequest: S.OrganizationRequestPage = {
+    open: async (params) => {
+      organizationOpened = seededId(params?.orgId, "organizations") || params?.orgId || "";
+      organizationRequested = false;
+      organizationRegistered = "";
+    },
+    async registerByRequest(input) {
+      const member = "register_by_request";
+      const profile = organizationProfile(member, input);
+      organizationRequested = true;
+      const got = await organizationAsked.send(member, "POST", `${baseURL}/api/organizations`, profile);
+      const created = got.status < 300 ? textOf(record(parse(got.body)).id) : "";
+      organizationRegistered = created;
+      if (created) organizationOpened = created;
+    },
+    async changeProfileByRequest(input) {
+      const member = "change_profile_by_request";
+      const id = organizationTarget(member, input);
+      const changes = organizationProfile(member, input);
+      // Fields the input leaves out keep what is held, when the asker may read it.
+      const held = await peek(`${baseURL}/api/organizations/${encodeURIComponent(id)}`);
+      const current: Record<string, unknown> = {};
+      if (held.status === 200) {
+        for (const name of Object.keys(ORGANIZATION_FIELDS)) {
+          const value = record(held.json)[name];
+          if (value !== undefined && value !== null) current[name] = value;
+        }
+      }
+      organizationOpened = id;
+      organizationRequested = true;
+      organizationRegistered = "";
+      await organizationAsked.send(member, "PUT", `${baseURL}/api/organizations/${encodeURIComponent(id)}`, {
+        tag: "updateProfile",
+        value: { ...current, ...changes },
+      });
+    },
+    async archiveByRequest(input) {
+      const member = "archive_by_request";
+      const id = organizationTarget(member, input);
+      organizationOpened = id;
+      organizationRequested = true;
+      organizationRegistered = "";
+      await organizationAsked.send(member, "DELETE", `${baseURL}/api/organizations/${encodeURIComponent(id)}`);
+    },
+    requestAccepted: async () => acceptedText(organizationAsk("request_accepted")),
+    refusalStatus: async () => refusalStatusOf(organizationAsk("refusal_status")),
+    // The name(s) the refusal is filed under: a field's label for a field error (this
+    // target writes each as "<label>: <message>"), otherwise the key the body files it under.
+    refusalReason: async () => {
+      const got = organizationAsk("refusal_reason");
+      if (got.status < 400) return "";
+      const body = parse(got.body);
+      const fields = record(body);
+      const reasons: string[] = [];
+      for (const [key, value] of Object.entries(fields)) {
+        const lines = Array.isArray(value) ? value.map(textOf) : [textOf(value)];
+        const labelled = lines.map((line) => /^([^:]{1,60}):\s/.exec(line)?.[1] ?? "").filter(Boolean);
+        reasons.push(...(labelled.length ? labelled : [key]));
+      }
+      return [...new Set(reasons)].join("\n");
+    },
+    refusalMessages: async () => messagesOf(organizationAsk("refusal_messages")),
+    organizationIdentifier: async () => organizationRegistered,
+    storedActive: async () => {
+      const held = await organizationNow("stored_active");
+      if (!held) unbound("organization-request.stored_active", "the signed-in person may not read this organization");
+      return textOf(held.active);
+    },
+    storedLegalName: async () => {
+      const held = await organizationNow("stored_legal_name");
+      if (!held) unbound("organization-request.stored_legal_name", "the signed-in person may not read this organization");
+      return textOf(held.legalName);
+    },
+  };
+
   const surface: S.Surface = {
     signIn,
     signOut,
@@ -9004,6 +9153,7 @@ export default function create(
     opportunityCounters,
     opportunityHistoryRequest,
     opportunityStatusRequest,
+    organizationRequest,
   };
 
   return surface;
