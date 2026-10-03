@@ -55,6 +55,16 @@
 - 18:07:00 propose calibrate-triage-old-43 at G3
 - 18:09:25 drive: step 1: `sdlc rule calibrate-triage-old-43 --by agent:reviewer` — calibrate-triage-old-43 is open at G3, held by agent:reviewer
 - 18:10:00 rule calibrate-triage-old-43 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 18:10:05 drive: step 2: `sdlc run calibrate --target old` — 1 missing test owed a run for target old owed by calibrate
+- 19:00:22 oracle up old in configuration notifications_disabled: local port 3103
+- 19:01:04 oracle down old in configuration notifications_disabled
+- 19:01:53 oracle up old in configuration service_page_absent: local port 3103
+- 19:02:14 oracle down old in configuration service_page_absent
+- 19:03:02 oracle up old in configuration evaluation_instructions_absent_swu: local port 3103
+- 19:03:24 oracle down old in configuration evaluation_instructions_absent_swu
+- 19:04:14 oracle up old in configuration evaluation_instructions_absent_twu: local port 3103
+- 19:04:35 oracle down old in configuration evaluation_instructions_absent_twu
+- 19:04:39 run calibrate: ok, cost 0, turns 0
 
 # Run record 2026-10-02
 
