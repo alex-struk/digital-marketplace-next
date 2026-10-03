@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-content-stale-9 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">524</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">518</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">432</span></a></li><li><a href="../runs.html">Run log <span class="count">21</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-content-stale-9</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-03 00:19</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the content criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> R-7.29 now has a full test, and its entry is gone from <code>tests/acceptance/not-testable.yaml</code>.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>R-7.29 now has a full test, and its entry is gone from <code>tests/acceptance/not-testable.yaml</code>. I couldn&#39;t confirm that the file type-checks: running <code>tsc</code> needed approval nobody could give, so it was never run. The method I added, <code>pageMessages()</code>, is declared on the screen&#39;s page in <code>tests/generated/surface.d.ts</code>, and everything else in the file is unchanged.</p>
+<p><strong>What changed.</strong> The test file <code>tests/acceptance/content/R-7.29.spec.ts</code> was already there. Each of its three tests runs only against an instance started in its own setting, which the tag selects:</p>
+<ul><li><strong><code>@service_page_absent</code>:</strong> the Sprint With Us opportunity screen&#39;s scope section is empty while the rest of the opportunity is shown.</li><li><strong><code>@evaluation_instructions_absent_swu</code> and <code>@evaluation_instructions_absent_twu</code>:</strong> the Sprint With Us and Team With Us evaluation instruction screens show an empty instructions body while the screen still loads.</li></ul>
+<p>The criterion&#39;s outcome also says the scope section is empty &quot;with nothing said about why&quot;, and no test checked that part. The entry in <code>not-testable.yaml</code> named exactly that clause, owed to <code>contract</code>. The contract has now added <code>page_messages</code> to the Sprint With Us opportunity screen: the text of every notice, alert or error the screen shows outside its sections. It is empty for <code>seed.opportunities.closedSprintWithUs</code> opened by <code>persona.vendor</code> when the page is present. So in the <code>@service_page_absent</code> test, I now read <code>surface.opportunitySwuView.pageMessages()</code> directly and assert it is empty, next to the existing check on the scope section. I updated the <code>derived</code> date in the header to 2026-10-03.</p>
+<p><strong>Not testable:</strong> nothing is left for R-7.29.</p>
+<p><strong>Missing from the surface:</strong> nothing that the criterion as stated needs. One thing could be added: the evaluation instruction screens have no messages observation like <code>page_messages</code>. The criterion only mentions those screens in a note (&quot;a panel can be shown a blank instruction screen and told nothing&quot;), not in its given/when/then, so I recorded nothing for it. If ratify promotes that note to a stated outcome, the contract would need a <code>page_messages</code> on both evaluation instruction screens.</p>
+<p>I touched no file outside <code>tests/acceptance</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-03 00:20.</p>
+<div class="body"><p>Question: do the R-7.29 tests follow from the criterion and nothing else? Approve. The criterion&#39;s outcome is that the opportunity is shown in full and the scope section is empty &#39;with nothing said about why&#39;. The one new assertion reads opportunitySwuView.pageMessages() on the service_page_absent instance and requires it to be empty, which is exactly that clause. The observation exists in the contract (spec/contract/surface.yaml page_messages, documented as empty under the default so any message under service_page_absent is one the missing page caused) and in tests/generated/surface.d.ts. It leaks no selector, route or status, and the runner&#39;s typecheck of acceptance/content passed with no diagnostics. With the clause asserted, every clause of the given/when/then has a test, so removing the R-7.29 entry from not-testable.yaml is correct. The evaluation-instruction tests are unchanged, and the writer rightly added no message assertion there because the criterion names those screens only in a note. No file outside tests/acceptance changed. missing-test/R-7.29 stays open until this test runs, which a ruling cannot settle. This would change to a return if page_messages were shown to cover text inside the screen&#39;s sections, or were not empty under the default configuration, because the assertion would then not isolate the missing page.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

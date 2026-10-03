@@ -1,5 +1,5 @@
 // criterion: @R-7.29 v1
-// provenance: blind, spec@76d9da180ae1fba4b970cd40bf8a0a55a680eb3e, derived 2026-10-02
+// provenance: blind, spec@76d9da180ae1fba4b970cd40bf8a0a55a680eb3e, derived 2026-10-03
 import { test, expect, persona, seed } from "../../fixtures";
 
 // Each test runs only against an instance started in the configuration its tag names
@@ -47,6 +47,11 @@ test(`${statement} (Sprint With Us opportunity, scope)`, { tag: "@service_page_a
   // The embedded scope page is missing: that section is empty. Read directly, so a section
   // the adapter cannot reach fails the test rather than reading as empty.
   expect((await surface.opportunitySwuView.scopeSection()).trim()).toBe("");
+
+  // Nothing is said about why: the screen shows no notice, alert or error message outside
+  // its sections. For this opportunity opened by this vendor none is shown when the page is
+  // present, so any message here is one the missing page caused. Read directly.
+  expect((await surface.opportunitySwuView.pageMessages()).trim()).toBe("");
 });
 
 test(

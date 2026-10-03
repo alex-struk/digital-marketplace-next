@@ -5061,14 +5061,11 @@ owed:
     id: R-7.29
     version: 1
     domain: content
-    stage: derive-tests
+    stage: calibrate
     why: a seed state in which the embedded page
       (/content/sprint-with-us-opportunity-scope or
       /content/team-with-us-terms-and-conditions) is absent. R-7.25 means no
       path through the screens or the API removes it.
-    clause: the scope section is empty, with nothing said about why — on
-      opportunity-swu-view, that no notice, alert or error message anywhere on
-      the screen outside its scope section explains the missing page
     from: build-slice-10-4
     gate: G3
     by: agent:tech-lead
@@ -5161,3 +5158,16 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-10-03T00:05:08.569Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-10-03T00:20:31.385Z
+    asserted:
+      - clause: the scope section is empty, with nothing said about why — on
+          opportunity-swu-view, that no notice, alert or error message anywhere
+          on the screen outside its scope section explains the missing page
+        by: derive-tests-content-stale-9
+        gate: G3
+        at: 2026-10-03T00:20:31.385Z
+    target: old

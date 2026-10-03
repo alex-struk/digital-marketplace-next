@@ -174,22 +174,3 @@ criteria:
       failing that, a ruling that withdraws the clause as a property of the
       service's storage accepted without a test
     owner: ratify
-  - id: R-7.29
-    version: 1
-    clause: the scope section is empty, with nothing said about why — on the Sprint
-      With Us opportunity screen (opportunity-swu-view), that no notice, alert or
-      error message anywhere on the screen outside its scope section explains the
-      missing page
-    reason: "blocked: the test asserts, on an instance started in
-      service_page_absent, that scope_section on opportunity-swu-view reads empty
-      while the opportunity's own material is shown, and, on instances started in
-      evaluation_instructions_absent_swu and evaluation_instructions_absent_twu,
-      that instructions_body reads empty while the instructions tab is still
-      offered. But opportunity-swu-view offers no observation of an explanatory
-      message shown elsewhere on that screen, so no test can assert that nothing
-      is said about why the section is empty."
-    missing: "an observation on opportunity-swu-view (for example notices or
-      page_messages) returning the text of any notice, alert or error message the
-      screen shows outside its sections, empty when none is shown, so a test on
-      an instance started in service_page_absent can read it as empty"
-    owner: contract
