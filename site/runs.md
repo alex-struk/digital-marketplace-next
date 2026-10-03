@@ -270,6 +270,9 @@
 - 10:36:33 drive: step 4: `sdlc run verify --slice 12` — build-slice-12-2 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
 - 10:42:19 verify slice 12: returned — R-3.11, R-3.13, R-3.34 fail. Next: sdlc run build --slice 12 --revise
 - 10:42:21 run verify: regenerated 573 files in .sdlc, site, tests
+- 10:57:15 drive: step 1: `sdlc run verify --slice 12` — build-slice-12-3 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
+- 11:02:28 verify slice 12: 1 criteria still fail after 3 builds; escalated to tech-lead.
+- 11:02:30 run verify: regenerated 573 files in .sdlc, site
 
 # Run record 2026-10-02
 
