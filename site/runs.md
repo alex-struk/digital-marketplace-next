@@ -94,6 +94,17 @@
 - 19:17:45 propose derive-tests-opportunities-stale-21 at G3
 - 19:20:26 drive: step 1: `sdlc rule derive-tests-opportunities-stale-21 --by agent:reviewer` — derive-tests-opportunities-stale-21 is open at G3, held by agent:reviewer
 - 19:20:59 rule derive-tests-opportunities-stale-21 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 19:21:08 drive: step 2: `sdlc run calibrate --target old --full` — phase 2 Tests is not complete (exit: the contract approved, every domain's tests approved, and every calibration row pass or ruled, all measured by the last run), and calibrate for target old is next in it: every row passes or is ruled, but 249 rows were carried from an earlier run (2026-10-03-2, 2026-10-03-3) rather than measured by the last one; the Tests phase closes only on a run that measures every row
+- 20:11:20 oracle up old in configuration notifications_disabled: local port 3103
+- 20:12:04 oracle down old in configuration notifications_disabled
+- 20:12:53 oracle up old in configuration service_page_absent: local port 3103
+- 20:13:15 oracle down old in configuration service_page_absent
+- 20:14:04 oracle up old in configuration evaluation_instructions_absent_swu: local port 3103
+- 20:14:25 oracle down old in configuration evaluation_instructions_absent_swu
+- 20:15:13 oracle up old in configuration evaluation_instructions_absent_twu: local port 3103
+- 20:15:34 oracle down old in configuration evaluation_instructions_absent_twu
+- 20:15:34 calibrate old: a full run, forced with --full
+- 20:15:38 run calibrate: ok, cost 0, turns 0
 
 # Run record 2026-10-02
 
