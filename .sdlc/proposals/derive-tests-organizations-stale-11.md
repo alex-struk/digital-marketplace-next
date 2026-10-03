@@ -44,3 +44,23 @@ The two accepted cases show that the refusals depend on who asked, not on what w
 - The "yes" values from `request_accepted` and `stored_active` are read loosely: anything other than empty, "false", "no" or "0" counts as yes.
 
 Nothing I needed was missing from the surface, so nothing is owed back to the contract stage. I changed no files outside `tests/acceptance`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: do the R-3.2 and R-3.18 tests follow from those two criteria and from nothing else? Ruling: approve. Both clauses that had been recorded as untestable now have tests. They drive the organization-request page that the contract added (register_by_request, change_profile_by_request, archive_by_request) and read only the observations that page names. R-3.2 sends a registration as public sector staff and as a vendor who never accepted the terms, and expects a refusal as not permitted. R-3.18 sends a profile change and an archive as an organization administrator who is not the owner, and expects each to be refused with the organization left unchanged. Matching the refusal reason against 'permission' follows from the criteria: R-3.2's then-clause says the request is 'refused as not permitted', and R-3.18 refuses on who is asking, which the contract files under 'permissions'. Checking that a refusal status is present only restates that the request was refused. No literal status code, route, selector or table appears in any test. The accepted counterparts (owner changes the profile, service administrator archives) assert the permitted half of R-3.18's 'only to a person permitted'. They are what shows that the refusals depend on who asked. The archive and rename tests do not leak state into other tests, because the fixtures reset each worker's target to its seed before every test. Leaving persona.vendorWithTermsReset unasserted is correct: the criterion says 'has already accepted the service's terms', not the current terms, so expecting a refusal would assert something the criterion does not say. The runner's typecheck passed with no diagnostics in acceptance/organizations. One part of 'anyone else is refused' is still unasserted: a visitor who is not signed in. The contract does not say what a registration request with no session observes, so I am recording that clause as owed by contract rather than returning the tests. This proposal does not settle build-slice-11-3#1 or #2, which ask the build stage for changes to the application, so both stay open. The missing-test rows for R-3.2 and R-3.18 close when these tests run. What would change the ruling: a first run on which any of these tests reports unbound, which would mean the assumed input field names do not match the request page, or a restatement of R-3.2 to require the current terms.
+
+**Conditions:**
+- missing-test R-3.2: a request from anyone else is refused — for a visitor who is not signed in — owed by contract: organization-request does not say what register_by_request sends or observes when there is no signed-in session, so no test can send a registration as a signed-out visitor and read its refusal
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `fa082194fa939da8322553df74a587a9988d60ab`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/organizations/`, which this proposal answers for.
+
+    No diagnostics.
