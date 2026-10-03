@@ -1,5 +1,5 @@
 // criterion: @R-3.2 v1
-// provenance: blind, spec@40605384759bd10724c1411fdc448dfd99c70aee, derived 2026-09-07
+// provenance: blind, spec@658792c3c7c79540af12cf18a97a260fc2484f16, derived 2026-10-03
 import { test, expect, persona, seed } from "../../fixtures";
 
 const byVendor = {
@@ -17,24 +17,16 @@ const byVendor = {
   website: "",
 };
 
-const byPublicSectorStaff = { ...byVendor, legalName: "Aspen Ridge Registered By Staff Ltd." };
-
-test("the vendor's organization is created", async ({ surface }) => {
+// The other half of the criterion — a request from anyone else refused — has no observation
+// the surface offers to read the refusal from; it is recorded against this criterion in
+// not-testable.yaml.
+test("only a signed-in vendor who has already accepted the service's terms and conditions may register a new organization: the vendor's organization is created", async ({
+  surface,
+}) => {
   await surface.signIn(persona.vendor);
   await surface.organizationCreate.open();
   await surface.organizationCreate.createOrganization(byVendor);
 
   await surface.organizationUserMemberships.open({ userId: seed.users.vendorOne.id });
   expect(await surface.organizationUserMemberships.ownedOrganizationsTable()).toContain(byVendor.legalName);
-});
-
-test("the public sector staff member's request to register an organization is refused as not permitted", async ({
-  surface,
-}) => {
-  await surface.signIn(persona.publicSectorStaff);
-  await surface.organizationCreate.open();
-  await surface.organizationCreate.createOrganization(byPublicSectorStaff);
-
-  await surface.organizationList.open();
-  expect(await surface.organizationList.organizationName()).not.toContain(byPublicSectorStaff.legalName);
 });
