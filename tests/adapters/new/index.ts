@@ -1535,6 +1535,50 @@ export default function create(
     return lines.filter((line) => !/awarded to/i.test(line) && kind.test(line)).join("\n");
   }
 
+  // Every notice the opportunity page raises outside its own sections, one per line in the
+  // order shown: its alerts, statuses and pop-ups, leaving out those inside a section's
+  // region ("Scope", "Addenda" and the rest) and the "Loading opportunity…" status it shows
+  // while it fetches. Read on the seeded closed, awarded and open Sprint With Us
+  // opportunities signed out, where the running build raises none, so each reads empty.
+  async function pageNotices(where: string): Promise<string> {
+    await opportunityLines(where);
+    await seen(page.getByRole("progressbar"))
+      .first()
+      .waitFor({ state: "hidden", timeout: 10000 })
+      .catch(() => undefined);
+    const noticeIn = (scope: Page | Locator): Locator =>
+      seen(
+        scope
+          .getByRole("alert")
+          .or(scope.getByRole("status"))
+          .or(scope.getByRole("alertdialog"))
+          .or(scope.getByRole("dialog")),
+      );
+    const textsOf = async (notices: Locator): Promise<string[]> => {
+      const texts: string[] = [];
+      for (let i = 0; i < (await notices.count()); i++) {
+        const notice = notices.nth(i);
+        if (await seen(notice.getByRole("progressbar")).count()) continue;
+        const text = lined(await notice.innerText().catch(() => "")).join("\n");
+        if (text) texts.push(text);
+      }
+      return texts;
+    };
+    const inSections = await textsOf(noticeIn(page.getByRole("main").getByRole("region")));
+    const lines: string[] = [];
+    for (const text of await textsOf(noticeIn(page))) {
+      const at = inSections.indexOf(text);
+      if (at >= 0) {
+        inSections.splice(at, 1);
+        continue;
+      }
+      // A notice nested in another one is read once, with its container.
+      if (lines.some((line) => line.includes(text))) continue;
+      lines.push(text);
+    }
+    return lines.join("\n");
+  }
+
   const CONTACT_DETAIL = /@|\+?\d[\d\s().-]{8,}\d|\b(contact|e-?mail|phone)\b/i;
   const SCORE_DETAIL = /\bscore\b|\d+(\.\d+)?\s*%|\bpoints?\b/i;
 
@@ -7841,6 +7885,7 @@ export default function create(
         phases: () => detailsSection(`${SWU_VIEW}.phases`, /^phases of work$/i, /^\* capabilities are claimed/i),
         assignmentDate: () => figureAbove(`${SWU_VIEW}.assignment_date`, /^assignment date$/i),
         scopeSection: () => sectionBehind(`${SWU_VIEW}.scope_section`, "Scope & Contract", ["Scope"]),
+        pageMessages: () => pageNotices(`${SWU_VIEW}.page_messages`),
         successfulProponentContactDetails: () =>
           awardDetail(`${SWU_VIEW}.successful_proponent_contact_details`, CONTACT_DETAIL),
         successfulProponentScore: () => awardDetail(`${SWU_VIEW}.successful_proponent_score`, SCORE_DETAIL),
