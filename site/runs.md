@@ -10,6 +10,10 @@
 - 17:04:35 propose contract-v36 at G1
 - 17:04:39 drive: step 30: `sdlc rule contract-v36 --by agent:product-owner` — contract-v36 is open at G1, held by agent:product-owner
 - 17:05:07 rule contract-v36 approve at G1 by agent:product-owner (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 17:05:13 drive: step 31: `sdlc run bind-adapter --target old` — 1 contract member the adapter does not name for target old owed by bind-adapter
+- 17:05:13 run bind-adapter: pre-checks failed
+- 17:05:13 drive: step 31 recovery: the oracle was not up; bringing it up (sdlc oracle up), then running the step once more
+- 17:08:37 oracle up old: http://localhost:4300 (local port 4300)
 
 # Run record 2026-10-02
 
