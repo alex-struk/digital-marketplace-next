@@ -1,0 +1,17 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: do the rewritten organizations tests follow from R-3.2 and R-3.18 and from nothing else? Ruling: return. R-3.2 is sound: its test asserts only the vendor half (the vendor registers and the organization appears among that vendor's owned organizations), and the not-testable entry for 'a request from anyone else is refused' names a real gap, because organization-create offers no observation that reports a refusal. R-3.18's test is faithful in what it asserts: the owner's tab offers Edit and Archive, and the organization administrator's tab shows the profile with neither. The refusal clause's not-testable entry is genuine, because the only way the surface sends a change or an archive is through controls the criterion requires to be absent. But the criterion also says the controls are offered to 'the organization's owner or a service administrator', and no test asserts the service-administrator half and no not-testable entry names it. The surface reaches it with the same organizationEdit.open/organizationTab reads under persona.administrator, which the suite already uses, so this is a clause the writer could assert and did not. That is a return, not a note on an approval. The R-3.2 not-testable reason also explains only public-sector staff, while the clause 'anyone else' also covers a vendor who has not accepted the terms. What would change the ruling: the R-3.18 test also reads the organization tab as a service administrator and finds both Edit and Archive offered, and the R-3.2 entry's reason accounts for a vendor without accepted terms, or a test asserts that refusal if the surface reaches it. This proposal settles neither build-slice-11-3#1 nor #2, so both stay open.
+conditions:
+  - "R-3.18: the clause 'the Edit and Archive controls … are offered … to a service administrator' is asserted by no test and has no not-testable.yaml entry. In tests/acceptance/organizations/R-3.18.spec.ts, sign in as persona.administrator, open organizationEdit with seed.organizations.qualified.id, and assert that the organizationTab reading contains both 'Edit' and 'Archive'."
+  - "R-3.2: the not-testable.yaml entry for the clause 'a request from anyone else is refused' gives a reason only for a signed-in member of public sector staff. Extend the reason to cover a signed-in vendor who has not accepted the terms and conditions (persona.vendorWithTermsReset), saying what the surface lacks to read that refusal. If the surface does reach that refusal, assert it in R-3.2.spec.ts instead."
+cost: 0.3861892
+turns: 4
+session: "585d3042-ae2f-4fb9-8517-b3e0987e0a6e"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-03T14:49:30.878Z
