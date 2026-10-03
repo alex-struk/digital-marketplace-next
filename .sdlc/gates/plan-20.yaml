@@ -1,0 +1,15 @@
+gate: G2
+verdict: approve
+by: agent:architect
+held_by: agent
+rationale: |2-
+  Question: is moving R-3.6, R-3.15 and R-3.23 from Slice 11 to Slice 12 the right cut, with each slice standing on its own? Ruling: approve. Verification of Slice 11's build found these three criteria's tests go through the organization's Team members tab (adding members, reading the owner's badge), which Slice 11 shows only as 'not available yet' and Slice 12 builds. Slice 12 already depends on Slice 11, where the behaviour is still built, so Slice 12 has both the behaviour and the screen the tests use. This takes up the revision request from build-slice-11-3. Slice 11 still has a complete piece of work to show: the public list, registration, the profile tab, the archive notice and the four image rules. Slice 14's dependencies, the Constitution check and the slice order are unchanged. The plan already uses this pattern for R-8.17 and the image rules. The tier is STANDARD, with no schema change and no new dependency, so nothing escalates. A search of plan/tasks.md found each of the three IDs on Slice 12's criteria line and no longer on Slice 11's. The coverage script was not run because it needed an approval this session could not get. What would change the ruling: the coverage script showing any of the three unassigned or assigned to more than one slice. The two fixes owed by build (build-slice-11-3#1, Archive control placement, and #2, the disabled Create button) are not settled by this plan and stay open.
+conditions: []
+cost: 0.3467952
+turns: 4
+session: "e590cbb9-cebd-469d-91e9-4351ca54d2b5"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-03T15:22:16.825Z
