@@ -5073,8 +5073,24 @@ export default function create(
         `${where} — the row "${(await row.innerText()).replace(/\s+/g, " ").trim()}" in the team table on ${page.url()} offers no control named ${control}`,
       );
     }
+    // The answer to the membership change (DELETE /api/affiliations/<id> for a removal) is
+    // awaited before returning: a refusal — "This is the sole owner for the organization, and
+    // cannot be removed." under "That change could not be made" — is drawn in the Team members
+    // section only once that answer arrives, and a read taken before it would miss it.
+    const answered = page
+      .waitForResponse(
+        (response) =>
+          /\/api\/affiliations\b/i.test(response.url()) && response.request().method() !== "GET",
+        { timeout: 15000 },
+      )
+      .catch(() => undefined);
     await press(where, control, row);
     await confirmIfAsked(where, confirm);
+    if (await answered) {
+      await settle();
+      const team = seen(regionNamed(page.getByRole("main"), /^\s*team( members)?\s*$/i)).first();
+      await team.getByRole("alert").first().waitFor({ state: "visible", timeout: 2000 }).catch(() => undefined);
+    }
   }
   // Walked as the organization's owner and as the administrator on the seeded qualified
   // organization's ?tab=team: the table "Everyone who belongs to or has been invited to this

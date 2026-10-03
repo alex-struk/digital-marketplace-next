@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-64 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">562</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">556</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">462</span></a></li><li><a href="../runs.html">Run log <span class="count">21</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-64</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-03 18:15</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.288 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I couldn&#39;t type-check the changed file, and the fix has not been run against the target.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.288 (Claude Code))</p>
+<p>I&#39;ve changed <code>removeTeamMember</code> so it now waits for the server to answer the removal before it returns, which should stop R-3.11 from reading an empty refusal. I couldn&#39;t type-check the changed file, and the fix has not been run against the target.</p>
+<p><strong>The problem.</strong> R-3.11 removes the organization&#39;s sole owner and expects the refusal. The adapter clicked Remove, answered the confirmation and returned straight away. The refusal is only drawn after the server answers the delete request for that membership. So whether <code>organizationEdit.fieldError</code> saw it depended on timing, which is why R-3.11 failed, passed and failed again with nothing changed in the application.</p>
+<p><strong>The change.</strong> It is in the shared row helper <code>orgInRow</code> in <code>tests/adapters/new/index.ts</code>, which <code>removeTeamMember</code> and <code>approvePendingMember</code> both use:</p>
+<ul><li>Before pressing the row&#39;s control, it starts listening for the next request to <code>/api/affiliations</code> that isn&#39;t a plain read (GET).</li><li>After the confirmation, it waits up to 15 seconds for that answer.</li><li>Once the answer arrives, it waits for the page to go quiet. It then gives an alert in the Team members section up to 2 seconds to appear.</li><li>If no answer comes, it carries on as before rather than failing, because the action itself didn&#39;t fail.</li></ul>
+<p>I chose to fix the action rather than make <code>fieldError</code> wait for an alert. <code>fieldError</code> is also used where the right answer is that nothing is shown. Making it wait would slow every one of those reads and risk deciding those tests. The cost is that a successful removal or approval now takes up to about 2 extra seconds, spent waiting for an alert that never comes.</p>
+<p><strong>Unverified assumption.</strong> I matched the request by the <code>/api/affiliations</code> path the ruling gave, and did not watch it in the browser this run. I also assumed approving a pending member goes to the same endpoint; if it doesn&#39;t, that action just behaves as before.</p>
+<p><strong>Not checked.</strong> The tool permissions in this session blocked the TypeScript compiler. I did confirm that the two helpers the new code uses are defined at the top of the adapter, where <code>orgInRow</code> can reach them.</p>
+<p>Nothing else in the adapter changed. <code>tests/adapters/new/bindings.yaml</code> is untouched, because no member moved between bound and unbound. I wrote nothing outside <code>tests/adapters/new/</code>, and no page&#39;s route was rechecked this run.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-03 18:16.</p>
+<div class="body"><p>Question: does this adapter bind the new target&#39;s surface, and nothing else, while fixing the timing race that made R-3.11 fail, pass and fail again? Ruling: approve. The change in orgInRow (tests/adapters/new/index.ts) starts listening for the next non-GET response from /api/affiliations before pressing the row control. After the confirmation it waits up to 15 seconds for that response, then waits for the page to settle and gives an alert in the Team members region up to 2 seconds to appear. Every wait swallows its timeout, so the change controls only when the next read happens; it asserts nothing and does not decide whether any test passes. Nothing under tests/acceptance changed and bindings.yaml is untouched. The runner&#39;s typecheck on this revision passed with no diagnostics under adapters/new/. The author&#39;s unverified assumption holds on proposal/build-slice-12-4: removal is DELETE /api/affiliations/{id} and approval is PUT /api/affiliations/{id}, so the listener matches both actions that use the helper. This answers the revision request from build-slice-12-4. What would change the ruling: R-3.11 still alternating between pass and fail in the next verify run with this adapter, which would show the race lies elsewhere.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
