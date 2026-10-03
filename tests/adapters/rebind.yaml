@@ -6473,6 +6473,11 @@ rebind:
     app_tree: 6ea2025227ec0fc4e059dfa10f08b3ff04368187
     by: runner:verify
     at: 2026-10-03T16:44:15.178Z
+    closed: &a39
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-03T17:42:19.165Z
   - id: R-3.12
     target: new
     why: 'unbound: organization-edit.accept_org_admin_terms — no terms box on
@@ -6492,6 +6497,7 @@ rebind:
     app_tree: 6ea2025227ec0fc4e059dfa10f08b3ff04368187
     by: runner:verify
     at: 2026-10-03T16:44:15.178Z
+    closed: *a39
   - id: R-3.14
     target: new
     why: "unbound: organization-edit.team_member_row — /organizations/:orgId/edit
@@ -6533,6 +6539,7 @@ rebind:
     app_tree: 6ea2025227ec0fc4e059dfa10f08b3ff04368187
     by: runner:verify
     at: 2026-10-03T16:44:15.178Z
+    closed: *a39
   - id: R-3.15
     target: new
     why: 'unbound: organization-edit.accept_org_admin_terms — no terms box on
@@ -6551,6 +6558,7 @@ rebind:
     app_tree: 6ea2025227ec0fc4e059dfa10f08b3ff04368187
     by: runner:verify
     at: 2026-10-03T16:44:15.178Z
+    closed: *a39
   - id: R-3.33
     target: new
     why: 'unbound: organization-edit.accept_org_admin_terms — no terms box on
@@ -6570,3 +6578,4 @@ rebind:
     app_tree: 6ea2025227ec0fc4e059dfa10f08b3ff04368187
     by: runner:verify
     at: 2026-10-03T16:44:15.178Z
+    closed: *a39

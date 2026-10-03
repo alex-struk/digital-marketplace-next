@@ -180,6 +180,7 @@ Profile: rebuild
 - [build-slice-11-4](proposals/build-slice-11-4.md)
 - [build-slice-11-5](proposals/build-slice-11-5.md)
 - [build-slice-11-6](proposals/build-slice-11-6.md)
+- [build-slice-12](proposals/build-slice-12.md)
 - [build-slice-2](proposals/build-slice-2.md)
 - [build-slice-2-10](proposals/build-slice-2-10.md)
 - [build-slice-2-11](proposals/build-slice-2-11.md)
@@ -589,9 +590,9 @@ Profile: rebuild
 ## Totals
 
 - Journal cost: $906.329204
-- Rulings cost: $485.112788
-- Total cost: $1391.441992
-- Agent-held rulings: 503
+- Rulings cost: $486.482896
+- Total cost: $1392.8121
+- Agent-held rulings: 504
 - Runner rulings (automatic, no seat held): 30
 - Human rulings: 25
 - Rulings whose seat this page does not recognise: 0
