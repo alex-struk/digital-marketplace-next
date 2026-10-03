@@ -2094,6 +2094,28 @@ pages:
       refusal_messages: { test_id: affiliation-approval-request-refusal-messages }
       refusal_status: { test_id: affiliation-approval-request-refusal-status }
 
+  # Ending a membership, as a request, so that a removal the screens never send can be sent
+  # and its answer read. The team tab offers Remove on no owner's row, so an attempt to end
+  # the sole owner's membership can only be made here. :affiliationId is a seed.affiliations
+  # handle — affiliations.qualifiedOwner is users.organizationOwner's OWNER membership of
+  # organizations.qualified, which has exactly that one owner and two further active members
+  # (users.organizationAdmin and users.organizationMember). The request is made as whoever is
+  # signed in. Whether the membership remains is read afterwards from organization-edit's
+  # team_member_row and owner_badge.
+  - id: affiliation-removal-request
+    domain: organizations
+    route: /api/affiliations/:affiliationId
+    title: "End a membership, by request"
+    actions:
+      end_membership_by_request: { test_id: affiliation-removal-request-end }
+    observations:
+      request_accepted: { test_id: affiliation-removal-request-accepted }
+      # The refusal's messages, in the order the service gives them — for the sole owner,
+      # "Unable to remove membership. This is the sole owner for this organization." —
+      # or empty when the request was accepted.
+      refusal_messages: { test_id: affiliation-removal-request-refusal-messages }
+      refusal_status: { test_id: affiliation-removal-request-refusal-status }
+
   # The list of everyone registered with the service, as the service answers the request
   # for it, whatever the screen shows.
   - id: user-list-request
