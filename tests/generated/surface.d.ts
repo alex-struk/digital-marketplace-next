@@ -116,6 +116,7 @@ export interface Surface {
   opportunityCounters: OpportunityCountersPage;
   opportunityHistoryRequest: OpportunityHistoryRequestPage;
   opportunityStatusRequest: OpportunityStatusRequestPage;
+  organizationRequest: OrganizationRequestPage;
 }
 
 export interface HomePage {
@@ -1573,4 +1574,18 @@ export interface OpportunityStatusRequestPage {
   refusalStatus(): Promise<string>;
   refusalMessages(): Promise<string>;
   storedStatus(): Promise<string>;
+}
+
+export interface OrganizationRequestPage {
+  open(params: { orgId: string }): Promise<void>;
+  registerByRequest(input?: unknown): Promise<void>;
+  changeProfileByRequest(input?: unknown): Promise<void>;
+  archiveByRequest(input?: unknown): Promise<void>;
+  requestAccepted(): Promise<string>;
+  refusalStatus(): Promise<string>;
+  refusalReason(): Promise<string>;
+  refusalMessages(): Promise<string>;
+  organizationIdentifier(): Promise<string>;
+  storedActive(): Promise<string>;
+  storedLegalName(): Promise<string>;
 }

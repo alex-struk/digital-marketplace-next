@@ -2595,3 +2595,75 @@ pages:
       # The opportunity's status as the service holds it, read afresh after the request
       # (as the signed-in person) rather than taken from the request's answer.
       stored_status: { test_id: opportunity-status-request-stored-status }
+
+  # Requests to register an organization, change an organization's profile, or archive
+  # one, sent to the service as whoever is signed in, so that a request no screen sends —
+  # a registration from somebody the create screen is not offered to, a profile change or
+  # an archive from somebody offered no Edit or Archive control — can be sent and its
+  # answer read. :orgId is a seed.organizations handle or an organization_identifier read
+  # where an organization landed; register_by_request addresses the collection
+  # (/api/organizations) and ignores it.
+  #
+  # The service answers a refusal of any of the three for who is asking as not permitted
+  # (status 401), with the message "You do not have permission to perform this action."
+  # filed under permissions. A refused request records nothing.
+  #
+  # Registering. The service accepts a registration only from a signed-in vendor whose
+  # account records an agreement to the service's terms at some time; it does not ask
+  # whether that agreement is to the current terms (src/back-end/lib/permissions.ts,
+  # createOrganization and hasAcceptedPreviousTerms). It checks who is asking only after
+  # every field is valid, so a registration with a missing or malformed field is answered
+  # with field errors (status 400) whoever sends it, and a test about who may register
+  # sends a complete, valid registration. Starting points for R-3.2: persona.staff
+  # (users.staffOne) for the refusal, persona.vendor (users.vendorOne) for an acceptance,
+  # and persona.vendorWithTermsReset (users.vendorWithTermsReset, whose agreement to the
+  # current terms has been withdrawn but who agreed once). Read off the source rather
+  # than the running oracle: the old service accepts that last registration, because the
+  # vendor did agree to the terms once.
+  #
+  # Changing the profile and archiving. The service accepts both only from a service
+  # administrator or the organization's owner, and checks who is asking before it looks
+  # at the fields, so a refusal for who is asking does not depend on what was sent.
+  # Archiving marks the organization inactive rather than removing it. Starting point for
+  # R-3.18: seed.organizations.qualified, owned by users.organizationOwner, with
+  # users.organizationAdmin an active ADMIN member (seed.affiliations.qualifiedAdmin).
+  # Sent as persona.organizationAdmin each is refused; sent as persona.organizationOwner or
+  # persona.administrator each is accepted, which is how a test shows the refusal is about
+  # who asked rather than about the request.
+  - id: organization-request
+    domain: organizations
+    route: /api/organizations/:orgId
+    title: "Requests about an organization"
+    actions:
+      # Input: the registration — legal name, street address (first line), city, region,
+      # mail code, country, contact name and contact email, all required; website address,
+      # second street line, contact title and contact phone, optional. The email must be
+      # well formed and a website address, when given, must be a web address.
+      register_by_request: { test_id: null }
+      # Input: the organization's profile, the same fields as a registration. Sends the
+      # service's profile-update operation for :orgId.
+      change_profile_by_request: { test_id: null }
+      # Input: none. Asks the service to archive :orgId.
+      archive_by_request: { test_id: null }
+    observations:
+      # Whether the service accepted the last request (a successful answer carrying the
+      # organization: 201 for a registration, 200 for a profile change or an archive).
+      request_accepted: { test_id: null }
+      # The status code of a refused request; empty when accepted.
+      refusal_status: { test_id: null }
+      # The name the refusal is filed under — permissions for somebody not permitted,
+      # notFound for an organization that does not exist, or a field's name for a field
+      # error. Absent when accepted.
+      refusal_reason: { test_id: null }
+      # The refusal's messages, in the order the service gives them. Empty when accepted.
+      refusal_messages: { test_id: null }
+      # The identifier of the organization an accepted registration created, from the
+      # service's answer; empty otherwise.
+      organization_identifier: { test_id: null }
+      # Whether :orgId is active, and its legal name, as the service holds them, read
+      # afresh after the request (as the signed-in person) rather than taken from the
+      # request's answer. The service lets an administrator and the organization's owner
+      # or administrators read it, so persona.organizationAdmin can read
+      # seed.organizations.qualified after a refused request and see it unchanged.
+      stored_active: { test_id: null }
+      stored_legal_name: { test_id: null }
