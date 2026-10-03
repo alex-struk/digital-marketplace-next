@@ -6386,6 +6386,11 @@ rebind:
     app_tree: 5da5a5d98dd603af21ec75c3c52e75293b268439
     by: runner:verify
     at: 2026-10-03T05:30:00.634Z
+    closed:
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-03T15:33:16.926Z
   - id: R-3.6
     target: new
     why: "unbound: organization-edit.add_team_members — opened the \"Team members\"
@@ -6400,6 +6405,11 @@ rebind:
     app_tree: 5da5a5d98dd603af21ec75c3c52e75293b268439
     by: runner:verify
     at: 2026-10-03T05:30:00.634Z
+    closed: &a38
+      outcome: withdrawn
+      why: slice 11 no longer claims it
+      by: runner:verify
+      at: 2026-10-03T15:33:17.267Z
   - id: R-3.15
     target: new
     why: "unbound: organization-edit.add_team_members — opened the \"Team members\"
@@ -6414,6 +6424,7 @@ rebind:
     app_tree: 5da5a5d98dd603af21ec75c3c52e75293b268439
     by: runner:verify
     at: 2026-10-03T05:30:00.634Z
+    closed: *a38
   - id: R-3.23
     target: new
     why: "unbound: organization-edit.owner_badge — opened the \"Team members\"
@@ -6428,3 +6439,14 @@ rebind:
     app_tree: 5da5a5d98dd603af21ec75c3c52e75293b268439
     by: runner:verify
     at: 2026-10-03T05:30:00.634Z
+    closed: *a38
+  - id: R-3.2
+    target: new
+    why: "unbound: organization-request.register_by_request — the input key
+      \"addressLineTwo\" names no field of an organization's profile"
+    found: unbound
+    adapter: c4771d78b1aad6992760fb28c87a4b6f7e55317d
+    slice: 11
+    app_tree: cef50b546df3a329e4691bdd109b5096cfe08f35
+    by: runner:verify
+    at: 2026-10-03T15:33:16.926Z
