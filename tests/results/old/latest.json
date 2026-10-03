@@ -2,19 +2,16 @@
   "target": "old",
   "base_url": "http://localhost:4300",
   "spec": "76d9da180ae1fba4b970cd40bf8a0a55a680eb3e",
-  "at": "2026-10-02T11:49:14.341Z",
-  "run": "2026-10-02",
-  "scope": "full",
-  "full_because": [
-    "spec/contract/ or the seed changed since rows on file were measured"
-  ],
+  "at": "2026-10-03T01:06:55.618Z",
+  "run": "2026-10-03",
+  "scope": "domain",
   "full_run": "2026-10-02",
-  "since_full": 0,
+  "since_full": 1,
   "inputs": {
-    "adapter": "4ce48acb6e6c58d23ea59be8ab62e8aec2154b7b",
-    "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
-    "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
-    "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73"
+    "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+    "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+    "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+    "harness": "f085fec9b431068d580169e8d76633f43575cc4c"
   },
   "rows": [
     {
@@ -30,11 +27,11 @@
         }
       ],
       "file_sha": "09a8250ff44dff07264b1225c46adc382cb73c08",
-      "adapter": "4ce48acb6e6c58d23ea59be8ab62e8aec2154b7b",
-      "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
-      "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
-      "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
     },
     {
       "id": "R-7.2",
@@ -49,11 +46,11 @@
         }
       ],
       "file_sha": "4203b22723ee69352ac368c2d1d331c285273e13",
-      "adapter": "4ce48acb6e6c58d23ea59be8ab62e8aec2154b7b",
-      "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
-      "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
-      "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
     },
     {
       "id": "R-7.3",
@@ -68,11 +65,11 @@
         }
       ],
       "file_sha": "cf697324cb49e379a3d57e6f2be1c5ece81afe8a",
-      "adapter": "4ce48acb6e6c58d23ea59be8ab62e8aec2154b7b",
-      "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
-      "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
-      "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
     },
     {
       "id": "R-7.4",
@@ -91,11 +88,11 @@
         }
       ],
       "file_sha": "9abad77aa6a76e4c9bf5f5b9b3a0ef2b72683e00",
-      "adapter": "4ce48acb6e6c58d23ea59be8ab62e8aec2154b7b",
-      "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
-      "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
-      "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
     },
     {
       "id": "R-7.5",
@@ -114,11 +111,11 @@
         }
       ],
       "file_sha": "93603858147f51d24dc1933b7738fc2726a8f5bf",
-      "adapter": "4ce48acb6e6c58d23ea59be8ab62e8aec2154b7b",
-      "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
-      "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
-      "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
     },
     {
       "id": "R-7.6",
@@ -137,11 +134,11 @@
         }
       ],
       "file_sha": "5afb1bd675636affc6d4f4e471b1fa33e412e606",
-      "adapter": "4ce48acb6e6c58d23ea59be8ab62e8aec2154b7b",
-      "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
-      "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
-      "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
     },
     {
       "id": "R-7.7",
@@ -156,11 +153,11 @@
         }
       ],
       "file_sha": "775710536200b028feefc3bdc996e198ead979a2",
-      "adapter": "4ce48acb6e6c58d23ea59be8ab62e8aec2154b7b",
-      "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
-      "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
-      "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
     },
     {
       "id": "R-7.8",
@@ -175,11 +172,11 @@
         }
       ],
       "file_sha": "e9f3d7db7eb0b6a937c9d0257a57b468c998df14",
-      "adapter": "4ce48acb6e6c58d23ea59be8ab62e8aec2154b7b",
-      "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
-      "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
-      "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
     },
     {
       "id": "R-7.9",
@@ -194,11 +191,11 @@
         }
       ],
       "file_sha": "115d322ce61a9a5ae61ab82cb0ea23579f70d40f",
-      "adapter": "4ce48acb6e6c58d23ea59be8ab62e8aec2154b7b",
-      "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
-      "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
-      "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
     },
     {
       "id": "R-7.10",
@@ -221,11 +218,11 @@
         }
       ],
       "file_sha": "57384b1c69479b54cc16c7e247f60ebd58187501",
-      "adapter": "4ce48acb6e6c58d23ea59be8ab62e8aec2154b7b",
-      "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
-      "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
-      "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
     },
     {
       "id": "R-7.11",
@@ -235,7 +232,7 @@
       "result": "not-testable",
       "reason": "The claim is about the shape of a refused answer — a permission refusal reported as though the submission were faulty. Nothing returns that shape: observables.yaml names a `refusal` status for files and for exports but nothing for a page request, and the content surfaces offer only free-text refused_for_non_administrator and field_error, which cannot be compared for the shape of the answer that produced them.",
       "tests": [],
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-03"
     },
     {
       "id": "R-7.12",
@@ -250,11 +247,11 @@
         }
       ],
       "file_sha": "6cc2ac5d1f59645976f408e9b5c7f017cc2f5d8f",
-      "adapter": "4ce48acb6e6c58d23ea59be8ab62e8aec2154b7b",
-      "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
-      "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
-      "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
     },
     {
       "id": "R-7.13",
@@ -269,11 +266,11 @@
         }
       ],
       "file_sha": "0d8495078033e481b21e492cb2533be0569b638f",
-      "adapter": "4ce48acb6e6c58d23ea59be8ab62e8aec2154b7b",
-      "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
-      "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
-      "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
     },
     {
       "id": "R-7.14",
@@ -283,7 +280,7 @@
       "result": "not-testable",
       "reason": "The criterion is a contrast between two renderings of one body, and the second cannot be produced. The screens that embed a page's body — the program qualification terms screens and the evaluation instructions screen — embed pages the service creates for itself, which the seed does not name and which no surface addresses by handle, so the body a test writes through content-create or content-edit cannot be got into an embedded rendering, and the bodies organization-swu-terms, organization-twu-terms and the two evaluation-instructions surfaces do report are ones no test can put raw markup into.",
       "tests": [],
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-03"
     },
     {
       "id": "R-7.15",
@@ -293,7 +290,7 @@
       "result": "not-testable",
       "reason": "The when is following the service level agreement link offered beside the cost of a program. No surface exists for the learn-more index, and no action on any surface follows a service level agreement link — the program cards are reachable only as opportunity_program_select.program_card, an observation with no link to follow — so the five places the criterion names cannot be reached and the link cannot be followed to whatever answers it.",
       "tests": [],
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-03"
     },
     {
       "id": "R-7.16",
@@ -306,7 +303,70 @@
           "title": "a request refused for lack of permission is reported as a permission refusal, in the same shape for every page request, whether it reads the list, creates, changes or removes one",
           "status": "failed",
           "error": "Error: create\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"[\\\"string\\\"]\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7m{\\\"permissions\\\":\u001b[27m[\\\"string\\\"]\u001b[7m}\u001b[27m\"\u001b[39m",
-          "line": 78
+          "line": 78,
+          "steps": [
+            {
+              "step": "contentRequest.refusalStatus",
+              "at": "/dashboard",
+              "read": "\"401\""
+            },
+            {
+              "step": "contentRequest.refusalShape",
+              "at": "/dashboard",
+              "read": "\"{\\\"permissions\\\":[\\\"string\\\"]}\""
+            },
+            {
+              "step": "contentRequest.open",
+              "given": "{slug}",
+              "at": "/dashboard"
+            },
+            {
+              "step": "contentRequest.renamePageByRequest",
+              "given": "{slug}",
+              "at": "/dashboard"
+            },
+            {
+              "step": "contentRequest.requestAccepted",
+              "at": "/dashboard",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentRequest.refusalStatus",
+              "at": "/dashboard",
+              "read": "\"401\""
+            },
+            {
+              "step": "contentRequest.refusalShape",
+              "at": "/dashboard",
+              "read": "\"{\\\"permissions\\\":[\\\"string\\\"]}\""
+            },
+            {
+              "step": "contentRequest.open",
+              "given": "{slug}",
+              "at": "/dashboard"
+            },
+            {
+              "step": "contentRequest.removePageByRequest",
+              "at": "/dashboard"
+            },
+            {
+              "step": "contentRequest.requestAccepted",
+              "at": "/dashboard",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentRequest.refusalStatus",
+              "at": "/dashboard",
+              "read": "\"401\""
+            },
+            {
+              "step": "contentRequest.refusalShape",
+              "at": "/dashboard",
+              "read": "\"{\\\"permissions\\\":[\\\"string\\\"]}\""
+            }
+          ]
         },
         {
           "title": "a request refused for lack of permission to read one page is reported as a permission refusal in the same shape as every other page request",
@@ -314,11 +374,11 @@
         }
       ],
       "file_sha": "c9d8a5f9269cad2d325fdabdb67ae4cacbd5dda3",
-      "adapter": "4ce48acb6e6c58d23ea59be8ab62e8aec2154b7b",
-      "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
-      "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
-      "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03",
       "rulings_seen": [
         "calibrate-old-10",
         "calibrate-triage-old-17"
@@ -340,15 +400,75 @@
           "title": "the same body renders identically on the page's own address and wherever another screen embeds it",
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"Formatting marks make these words bold. Raw markup tries to make these words bold and these words emphasised.\"\u001b[39m\nReceived: \u001b[31m\"Formatting marks make these words bold. Raw markup tries to make \u001b[7m<strong>\u001b[27mthese words bold\u001b[7m</strong>\u001b[27m and \u001b[7m<em>\u001b[27mthese words emphasised\u001b[7m</em>\u001b[27m.\"\u001b[39m",
-          "line": 73
+          "line": 73,
+          "steps": [
+            {
+              "step": "contentEdit.editBody",
+              "given": "{body}",
+              "at": "/content/team-with-us-terms-and-conditions/edit"
+            },
+            {
+              "step": "contentEdit.publishChanges",
+              "at": "/content/team-with-us-terms-and-conditions/edit"
+            },
+            {
+              "step": "contentEdit.confirmPublishChanges",
+              "at": "/content/team-with-us-terms-and-conditions/edit"
+            },
+            {
+              "step": "contentEdit.changesPublishedSuccess",
+              "at": "/content/team-with-us-terms-and-conditions/edit",
+              "read": "\"Published Oct 2, 2026 6:01 PM Published By\""
+            },
+            {
+              "step": "contentView.open",
+              "given": "{slug}",
+              "at": "/content/sprint-with-us-opportunity-scope"
+            },
+            {
+              "step": "contentView.pageBody",
+              "at": "/content/sprint-with-us-opportunity-scope",
+              "read": "\"Formatting marks make these words bold. Raw markup tries to make these words bold and these words emphasised.\""
+            },
+            {
+              "step": "opportunitySwuView.open",
+              "given": "{opportunityId}",
+              "at": "/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701"
+            },
+            {
+              "step": "opportunitySwuView.scopeSection",
+              "at": "/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701",
+              "read": "\"Formatting marks make these words bold. Raw markup tries to make <strong>these words bold</strong> and <em>these words emphasised</em>.\""
+            },
+            {
+              "step": "contentView.open",
+              "given": "{slug}",
+              "at": "/content/team-with-us-terms-and-conditions"
+            },
+            {
+              "step": "contentView.pageBody",
+              "at": "/content/team-with-us-terms-and-conditions",
+              "read": "\"Formatting marks make these words bold. Raw markup tries to make these words bold and these words emphasised.\""
+            },
+            {
+              "step": "opportunityTwuView.open",
+              "given": "{opportunityId}",
+              "at": "/opportunities/team-with-us/00000000-0000-4000-8000-000000000801"
+            },
+            {
+              "step": "opportunityTwuView.termsSection",
+              "at": "/opportunities/team-with-us/00000000-0000-4000-8000-000000000801",
+              "read": "\"Formatting marks make these words bold. Raw markup tries to make <strong>these words bold</strong> and <em>these words emphasised</em>.\""
+            }
+          ]
         }
       ],
       "file_sha": "2689de36626ce6f93749a3624afb2c790c59d6d8",
-      "adapter": "4ce48acb6e6c58d23ea59be8ab62e8aec2154b7b",
-      "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
-      "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
-      "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03",
       "rulings_seen": [
         "calibrate-old-9",
         "calibrate-triage-old-15"
@@ -366,15 +486,89 @@
           "title": "The service level agreement page is one the service creates for itself, so every screen that links to it — the learn-more index, the program cards, and the Code With Us, Sprint With Us and Team With Us opportunity forms — resolves on a fresh installation",
           "status": "failed",
           "error": "Error: given: the screen offers the service level agreement link\n\ngiven: the screen offers the service level agreement link\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate",
-          "line": 26
+          "line": 26,
+          "steps": [
+            {
+              "step": "contentServiceLevelAgreementLink.serviceLevelAgreementLink",
+              "at": "/learn-more/code-with-us",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentServiceLevelAgreementLink.serviceLevelAgreementLink",
+              "at": "/learn-more/code-with-us",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentServiceLevelAgreementLink.serviceLevelAgreementLink",
+              "at": "/learn-more/code-with-us",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentServiceLevelAgreementLink.serviceLevelAgreementLink",
+              "at": "/learn-more/code-with-us",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentServiceLevelAgreementLink.serviceLevelAgreementLink",
+              "at": "/learn-more/code-with-us",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentServiceLevelAgreementLink.serviceLevelAgreementLink",
+              "at": "/learn-more/code-with-us",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentServiceLevelAgreementLink.serviceLevelAgreementLink",
+              "at": "/learn-more/code-with-us",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentServiceLevelAgreementLink.serviceLevelAgreementLink",
+              "at": "/learn-more/code-with-us",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentServiceLevelAgreementLink.serviceLevelAgreementLink",
+              "at": "/learn-more/code-with-us",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentServiceLevelAgreementLink.serviceLevelAgreementLink",
+              "at": "/learn-more/code-with-us",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentServiceLevelAgreementLink.serviceLevelAgreementLink",
+              "at": "/learn-more/code-with-us",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentServiceLevelAgreementLink.serviceLevelAgreementLink",
+              "at": "/learn-more/code-with-us",
+              "read": "\"\"",
+              "empty": true
+            }
+          ]
         }
       ],
       "file_sha": "8fa616544ccf59720ca16735e0fc6774865da7fc",
-      "adapter": "4ce48acb6e6c58d23ea59be8ab62e8aec2154b7b",
-      "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
-      "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
-      "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03",
       "rulings_seen": [
         "calibrate-old-2"
       ],
@@ -393,11 +587,11 @@
         }
       ],
       "file_sha": "96fc1a8a3bce53b52748f48b55d92498658b34b3",
-      "adapter": "4ce48acb6e6c58d23ea59be8ab62e8aec2154b7b",
-      "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
-      "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
-      "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
     },
     {
       "id": "R-7.20",
@@ -410,7 +604,81 @@
           "title": "A page must have a title of between one and a hundred characters and a body of between one and fifty thousand characters, and a submission failing either is refused with the failing field named — creating a page with an empty title",
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate",
-          "line": 60
+          "line": 60,
+          "steps": [
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            }
+          ]
         },
         {
           "title": "A page must have a title of between one and a hundred characters and a body of between one and fifty thousand characters, and a submission failing either is refused with the failing field named — creating a page with a body longer than fifty thousand characters",
@@ -420,13 +688,161 @@
           "title": "A page must have a title of between one and a hundred characters and a body of between one and fifty thousand characters, and a submission failing either is refused with the failing field named — creating a page with a title longer than a hundred characters",
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate",
-          "line": 88
+          "line": 88,
+          "steps": [
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            }
+          ]
         },
         {
           "title": "A page must have a title of between one and a hundred characters and a body of between one and fifty thousand characters, and a submission failing either is refused with the failing field named — creating a page with an empty body",
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate",
-          "line": 102
+          "line": 102,
+          "steps": [
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            }
+          ]
         },
         {
           "title": "A page must have a title of between one and a hundred characters and a body of between one and fifty thousand characters, and a submission failing either is refused with the failing field named — changing a page to an empty title",
@@ -442,11 +858,11 @@
         }
       ],
       "file_sha": "4fd6d775dcdc40b58960a2adcf24b76dfe278c30",
-      "adapter": "4ce48acb6e6c58d23ea59be8ab62e8aec2154b7b",
-      "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
-      "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
-      "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03",
       "rulings_seen": [
         "calibrate-old-5",
         "calibrate-triage-old-6"
@@ -486,11 +902,11 @@
         }
       ],
       "file_sha": "6e85e9d899e0ce83759fbf1c7ca26fa842ec81a8",
-      "adapter": "4ce48acb6e6c58d23ea59be8ab62e8aec2154b7b",
-      "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
-      "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
-      "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
     },
     {
       "id": "R-7.22",
@@ -509,11 +925,11 @@
         }
       ],
       "file_sha": "dce4cd1003049d39f8a7034dcbda1d9d67f99182",
-      "adapter": "4ce48acb6e6c58d23ea59be8ab62e8aec2154b7b",
-      "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
-      "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
-      "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
     },
     {
       "id": "R-7.23",
@@ -528,11 +944,11 @@
         }
       ],
       "file_sha": "80d45da9b26d713b0ae46e5627dec5a3a8a9caf7",
-      "adapter": "4ce48acb6e6c58d23ea59be8ab62e8aec2154b7b",
-      "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
-      "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
-      "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
     },
     {
       "id": "R-7.24",
@@ -547,11 +963,11 @@
         }
       ],
       "file_sha": "d882be6411353a6cdeec3fd88c34e6bb5aa85100",
-      "adapter": "4ce48acb6e6c58d23ea59be8ab62e8aec2154b7b",
-      "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
-      "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
-      "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
     },
     {
       "id": "R-7.25",
@@ -574,11 +990,11 @@
         }
       ],
       "file_sha": "1d33d9b8321c4ff48a520d4e77f9d9137e95d8eb",
-      "adapter": "4ce48acb6e6c58d23ea59be8ab62e8aec2154b7b",
-      "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
-      "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
-      "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
     },
     {
       "id": "R-7.26",
@@ -593,11 +1009,11 @@
         }
       ],
       "file_sha": "c49b3aad1468a813b4ffecf603af5b9d2db5c5a5",
-      "adapter": "4ce48acb6e6c58d23ea59be8ab62e8aec2154b7b",
-      "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
-      "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
-      "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
     },
     {
       "id": "R-7.27",
@@ -616,11 +1032,11 @@
         }
       ],
       "file_sha": "4b2f1430e2096c0eed179594b5b4bbbc9163ee8d",
-      "adapter": "4ce48acb6e6c58d23ea59be8ab62e8aec2154b7b",
-      "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
-      "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
-      "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
     },
     {
       "id": "R-7.28",
@@ -635,21 +1051,102 @@
         }
       ],
       "file_sha": "28524159f7addeb951124bb965c15a0864cb45ac",
-      "adapter": "4ce48acb6e6c58d23ea59be8ab62e8aec2154b7b",
-      "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
-      "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
-      "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
     },
     {
       "id": "R-7.29",
       "version": 1,
       "domain": "content",
-      "file": null,
-      "result": "not-testable",
-      "reason": "The given is a page whose body another screen embeds having been removed. The embedded pages — an opportunity's scope page, a program's evaluation instructions — are ones the service needs, which R-7.25 records the service refuses to remove: content-edit withholds the removal and a request made another way is refused, so there is no path through the surface to the state the criterion starts from.",
-      "tests": [],
-      "measured_in": "2026-10-02"
+      "file": "tests/acceptance/content/R-7.29.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "Where a screen embeds the body of a page beside its own material, a page that is missing or unreadable leaves that part of the screen empty and the screen otherwise works. (Sprint With Us opportunity, scope)",
+          "status": "passed"
+        },
+        {
+          "title": "Where a screen embeds the body of a page beside its own material, a page that is missing or unreadable leaves that part of the screen empty and the screen otherwise works. (Sprint With Us evaluation instructions)",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\"\u001b[39m\nReceived: \u001b[31m\"SUMMARY\u001b[39m\n\u001b[31mSummary\u001b[39m\n\u001b[31mOPPORTUNITY MANAGEMENT\u001b[39m\n\u001b[31mOpportunity\u001b[39m\n\u001b[31mEvaluation Panel\u001b[39m\n\u001b[31mAddenda\u001b[39m\n\u001b[31mHistory\u001b[39m\n\u001b[31mOPPORTUNITY EVALUATION\u001b[39m\n\u001b[31mProposals\u001b[39m\n\u001b[31mInstructions\u001b[39m\n\u001b[31mEvaluation\u001b[39m\n\u001b[31mTeam Questions\u001b[39m\n\u001b[31mConsensus\u001b[39m\n\u001b[31mCode Challenge\u001b[39m\n\u001b[31mTeam Scenario\u001b[39m\n\u001b[31mNEED HELP?\u001b[39m\n\u001b[31mRead Guide\u001b[39m\n\u001b[31mSprint With Us: Seeded closed Sprint With Us opportunity\u001b[39m\n\u001b[31mPublished Aug 4, 2026\u001b[39m\n\u001b[31m|\u001b[39m\n\u001b[31mUpdated Oct 2, 2026\u001b[39m\n\u001b[31mStatus\u001b[39m\n\u001b[31mTeam Questions Evaluation\u001b[39m\n\u001b[31mCreated By\u001b[39m\n\u001b[31mCasey Placeholder\u001b[39m\n\u001b[31mBegin Evaluation\"\u001b[39m",
+          "line": 78,
+          "steps": [
+            {
+              "step": "scheduledTransitionTrigger.open",
+              "at": "/status"
+            },
+            {
+              "step": "scheduledTransitionTrigger.runPendingTransitions",
+              "at": "/status"
+            },
+            {
+              "step": "signIn",
+              "given": "persona public-sector-staff",
+              "at": "/dashboard"
+            },
+            {
+              "step": "evaluationInstructionsSwu.open",
+              "given": "{opportunityId}",
+              "at": "/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=instructions"
+            },
+            {
+              "step": "evaluationInstructionsSwu.visibleToEvaluatorsOnly",
+              "at": "/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=instructions",
+              "read": "\"SUMMARY Summary OPPORTUNITY MANAGEMENT Opportunity Evaluation Panel Addenda History OPPORTUNITY EVALUATION Proposals Instructions Evaluation Team Questions Con…\""
+            },
+            {
+              "step": "evaluationInstructionsSwu.instructionsBody",
+              "at": "/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=instructions",
+              "read": "\"SUMMARY Summary OPPORTUNITY MANAGEMENT Opportunity Evaluation Panel Addenda History OPPORTUNITY EVALUATION Proposals Instructions Evaluation Team Questions Con…\""
+            }
+          ]
+        },
+        {
+          "title": "Where a screen embeds the body of a page beside its own material, a page that is missing or unreadable leaves that part of the screen empty and the screen otherwise works. (Team With Us evaluation instructions)",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\"\u001b[39m\nReceived: \u001b[31m\"SUMMARY\u001b[39m\n\u001b[31mSummary\u001b[39m\n\u001b[31mOPPORTUNITY MANAGEMENT\u001b[39m\n\u001b[31mOpportunity\u001b[39m\n\u001b[31mEvaluation Panel\u001b[39m\n\u001b[31mAddenda\u001b[39m\n\u001b[31mHistory\u001b[39m\n\u001b[31mOPPORTUNITY EVALUATION\u001b[39m\n\u001b[31mProposals\u001b[39m\n\u001b[31mInstructions\u001b[39m\n\u001b[31mEvaluation\u001b[39m\n\u001b[31mResource Questions\u001b[39m\n\u001b[31mConsensus\u001b[39m\n\u001b[31mInterview/Challenge\u001b[39m\n\u001b[31mNEED HELP?\u001b[39m\n\u001b[31mRead Guide\u001b[39m\n\u001b[31mTeam With Us: Seeded closed Team With Us opportunity\u001b[39m\n\u001b[31mPublished Aug 4, 2026\u001b[39m\n\u001b[31m|\u001b[39m\n\u001b[31mUpdated Oct 2, 2026\u001b[39m\n\u001b[31mStatus\u001b[39m\n\u001b[31mResource Questions Evaluation\u001b[39m\n\u001b[31mCreated By\u001b[39m\n\u001b[31mCasey Placeholder\u001b[39m\n\u001b[31mBegin Evaluation\"\u001b[39m",
+          "line": 99,
+          "steps": [
+            {
+              "step": "scheduledTransitionTrigger.open",
+              "at": "/status"
+            },
+            {
+              "step": "scheduledTransitionTrigger.runPendingTransitions",
+              "at": "/status"
+            },
+            {
+              "step": "signIn",
+              "given": "persona public-sector-staff",
+              "at": "/dashboard"
+            },
+            {
+              "step": "evaluationInstructionsTwu.open",
+              "given": "{opportunityId}",
+              "at": "/opportunities/team-with-us/00000000-0000-4000-8000-000000000801/edit?tab=instructions"
+            },
+            {
+              "step": "evaluationInstructionsTwu.visibleToEvaluatorsOnly",
+              "at": "/opportunities/team-with-us/00000000-0000-4000-8000-000000000801/edit?tab=instructions",
+              "read": "\"SUMMARY Summary OPPORTUNITY MANAGEMENT Opportunity Evaluation Panel Addenda History OPPORTUNITY EVALUATION Proposals Instructions Evaluation Resource Questions…\""
+            },
+            {
+              "step": "evaluationInstructionsTwu.instructionsBody",
+              "at": "/opportunities/team-with-us/00000000-0000-4000-8000-000000000801/edit?tab=instructions",
+              "read": "\"SUMMARY Summary OPPORTUNITY MANAGEMENT Opportunity Evaluation Panel Addenda History OPPORTUNITY EVALUATION Proposals Instructions Evaluation Resource Questions…\""
+            }
+          ]
+        }
+      ],
+      "file_sha": "a4d4e99831d0708fa756e819fadee27f8b49609e",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
     },
     {
       "id": "R-5.1",
@@ -687,7 +1184,8 @@
         "calibrate-old-9",
         "calibrate-triage-old-15"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-5.3",
@@ -710,7 +1208,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-5.9",
@@ -736,7 +1235,8 @@
         "calibrate-old-8",
         "calibrate-triage-old-13"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-5.10",
@@ -768,7 +1268,8 @@
         "calibrate-old-10",
         "calibrate-triage-old-17"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-5.11",
@@ -791,7 +1292,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-5.12",
@@ -810,7 +1312,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-5.13",
@@ -836,7 +1339,8 @@
         "calibrate-old-13",
         "calibrate-triage-old-20"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-5.14",
@@ -862,7 +1366,8 @@
         "calibrate-old-11",
         "calibrate-triage-old-18"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-5.16",
@@ -897,7 +1402,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-5.17",
@@ -920,7 +1426,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-5.18",
@@ -954,7 +1461,8 @@
       "measured_in": "2026-10-02",
       "rulings_seen": [
         "calibrate-old-7"
-      ]
+      ],
+      "carried": true
     },
     {
       "id": "R-5.19",
@@ -981,7 +1489,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-5.20",
@@ -1005,7 +1514,8 @@
         "calibrate-old-2",
         "calibrate-triage-old-2"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-5.21",
@@ -1036,7 +1546,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-5.22",
@@ -1067,7 +1578,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-5.23",
@@ -1086,7 +1598,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-5.24",
@@ -1109,7 +1622,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-5.25",
@@ -1139,7 +1653,8 @@
       "measured_in": "2026-10-02",
       "rulings_seen": [
         "calibrate-old-6"
-      ]
+      ],
+      "carried": true
     },
     {
       "id": "R-5.26",
@@ -1158,7 +1673,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-5.27",
@@ -1177,7 +1693,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-5.28",
@@ -1196,7 +1713,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-5.29",
@@ -1239,7 +1757,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-5.30",
@@ -1277,7 +1796,8 @@
       "measured_in": "2026-10-02",
       "rulings_seen": [
         "calibrate-old-11"
-      ]
+      ],
+      "carried": true
     },
     {
       "id": "R-5.31",
@@ -1296,7 +1816,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-5.32",
@@ -1323,7 +1844,8 @@
       "rulings_seen": [
         "calibrate-triage-old-30"
       ],
-      "triage": "product-question"
+      "triage": "product-question",
+      "carried": true
     },
     {
       "id": "R-5.33",
@@ -1342,7 +1864,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-5.34",
@@ -1377,7 +1900,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-5.35",
@@ -1400,7 +1924,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-5.36",
@@ -1427,7 +1952,8 @@
       "rulings_seen": [
         "calibrate-triage-old-30"
       ],
-      "triage": "product-question"
+      "triage": "product-question",
+      "carried": true
     },
     {
       "id": "R-5.37",
@@ -1453,7 +1979,8 @@
         "calibrate-old-9",
         "calibrate-triage-old-15"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-8.1",
@@ -1476,7 +2003,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-8.2",
@@ -1495,7 +2023,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-8.3",
@@ -1505,7 +2034,8 @@
       "result": "not-testable",
       "reason": "Neither half of the given can be produced and the outcome cannot be read. No action declares, or withholds, the size of a submission — a file reaches the service only through add_attachment, choose_image or upload_body_image, each of which submits whatever it is handed — and no observation reports an upload refused for size: file_download names only contents, name, type, disposition and its two refusals, and the attachment control names only file_name_error. The outcome the criterion actually turns on, a fault of the service rather than a message about the file, has no observation reporting a fault of the service at all.",
       "tests": [],
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-8.4",
@@ -1515,7 +2045,8 @@
       "result": "not-testable",
       "reason": "The given is a submission carrying no file part or read-access information that is not well-formed data. Every upload in the surface is made by a control that assembles the submission itself, so a malformed one cannot be sent; and the outcome — failing as an unexpected fault and being written to the service's error log — has no observation, since the surface names nothing that reports a fault of the service and observables.yaml exposes no log.",
       "tests": [],
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-8.5",
@@ -1538,7 +2069,8 @@
       "rulings_seen": [
         "calibrate-triage-old-23"
       ],
-      "triage": "product-question"
+      "triage": "product-question",
+      "carried": true
     },
     {
       "id": "R-8.6",
@@ -1557,7 +2089,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-8.7",
@@ -1588,7 +2121,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-8.8",
@@ -1598,7 +2132,8 @@
       "result": "not-testable",
       "reason": "The when is a visitor who is not signed in asking for the attachment of a draft opportunity by its identifier. A visitor cannot open an unpublished opportunity, so there is no download to follow, and no observation returns the identifier of a file a test has uploaded, so it cannot be asked for directly. The criterion's own note says the identifier is published nowhere, which is exactly the reach the surface lacks.",
       "tests": [],
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-8.9",
@@ -1608,7 +2143,8 @@
       "result": "not-testable",
       "reason": "Nothing in the surface attaches a file to a Team With Us proposal and then offers it to the opportunity's owner. The attachment control is listed on the three opportunity forms and the Code With Us proposal form only, so it has no download to follow on a Team With Us proposal, and proposal-twu-view names no attachment action or observation. The criterion's outcome — the owner being refused — therefore has no request to make.",
       "tests": [],
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-8.10",
@@ -1631,7 +2167,8 @@
       "rulings_seen": [
         "calibrate-triage-old-16"
       ],
-      "triage": "product-question"
+      "triage": "product-question",
+      "carried": true
     },
     {
       "id": "R-8.11",
@@ -1654,7 +2191,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-8.12",
@@ -1681,7 +2219,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-8.13",
@@ -1708,7 +2247,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-8.14",
@@ -1727,7 +2267,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-8.15",
@@ -1737,7 +2278,8 @@
       "result": "not-testable",
       "reason": "The given is a file uploaded by one person and readable only by them, whose identifier a second person then names as an attachment. No observation returns a stored file's identifier, so the second person has nothing to name; and no action attaches a file by identifier rather than by choosing one from the machine the test runs on.",
       "tests": [],
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-8.16",
@@ -1747,7 +2289,8 @@
       "result": "not-testable",
       "reason": "unobservable: the claim is about a working directory on the service's own machine — a copy written there before the file is stored and removed once the upload is answered. Nothing the service answers ever mentions that directory: an upload's answer carries the stored record, and a stored file's description and bytes carry nothing about where the upload waited. Whether a working copy was written, and whether it is gone, can only be seen by reading that machine's filesystem, which is the implementation rather than anything the service shows, so no page, action or observation added to the contract would reach it without exposing the host's disk.",
       "tests": [],
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-8.17",
@@ -1783,7 +2326,8 @@
         "calibrate-old-4",
         "calibrate-triage-old-4"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-8.18",
@@ -1815,7 +2359,8 @@
         "calibrate-old-2",
         "calibrate-triage-old-2"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-8.19",
@@ -1851,7 +2396,8 @@
         "calibrate-old-6",
         "calibrate-triage-old-8"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-8.20",
@@ -1887,7 +2433,8 @@
         "calibrate-old-13",
         "calibrate-triage-old-20"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-8.21",
@@ -1923,7 +2470,8 @@
         "calibrate-old-4",
         "calibrate-triage-old-4"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-8.22",
@@ -1963,7 +2511,8 @@
         "calibrate-old-8",
         "calibrate-triage-old-13"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-8.23",
@@ -1982,7 +2531,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-8.24",
@@ -2005,7 +2555,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-8.25",
@@ -2043,7 +2594,8 @@
         "calibrate-old-8",
         "calibrate-triage-old-13"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-8.26",
@@ -2053,7 +2605,8 @@
       "result": "not-testable",
       "reason": "The claim is about the file after the opportunity it was attached to is gone. Once the opportunity is deleted there is no screen carrying a download to follow, and no observation returns the file's identifier for it to be asked for directly, so whether it remains stored and readable cannot be read either way.",
       "tests": [],
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-8.27",
@@ -2072,7 +2625,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-8.28",
@@ -2095,7 +2649,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-8.29",
@@ -2119,7 +2674,8 @@
         "calibrate-old-25",
         "calibrate-triage-old-37"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-8.30",
@@ -2142,7 +2698,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-8.31",
@@ -2169,7 +2726,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-6.1",
@@ -2192,7 +2750,8 @@
       "rulings_seen": [
         "calibrate-triage-old-20"
       ],
-      "triage": "product-question"
+      "triage": "product-question",
+      "carried": true
     },
     {
       "id": "R-6.2",
@@ -2211,7 +2770,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-6.3",
@@ -2230,7 +2790,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-6.4",
@@ -2249,7 +2810,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-6.5",
@@ -2275,7 +2837,8 @@
         "calibrate-old-9",
         "calibrate-triage-old-15"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-6.6",
@@ -2294,7 +2857,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-6.7",
@@ -2317,7 +2881,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-6.8",
@@ -2336,7 +2901,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-6.9",
@@ -2346,7 +2912,8 @@
       "result": "not-testable",
       "reason": "The claim is about the visible address line of a panel notice listing all of its recipients. `mail.messagesTo` searches by one visible address and hands back `To` as an opaque value, so the addresses of the other recipients of the same message cannot be read.",
       "tests": [],
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-6.10",
@@ -2365,7 +2932,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-6.11",
@@ -2375,7 +2943,8 @@
       "result": "not-testable",
       "reason": "Both halves turn on the notice about a watched opportunity, which is sent as a batch of blind copies. The mail fixture searches by visible recipient only, so a message that did reach a deactivated watcher would not be found, and its absence from a search would be equally consistent with it having been sent.",
       "tests": [],
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-6.12",
@@ -2385,7 +2954,8 @@
       "result": "not-testable",
       "reason": "The criterion is about the wording inside one message. The mail fixture exposes no message body, and the reference page's observations (message_subject, message_summary, message_body) name no way to select one message among the fifty on the page, so a containment assertion over the page as a whole would be satisfied by any message that happens to name a program.",
       "tests": [],
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-6.13",
@@ -2404,7 +2974,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-6.14",
@@ -2423,7 +2994,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-6.15",
@@ -2453,7 +3025,8 @@
         "calibrate-old-10",
         "calibrate-triage-old-16"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-6.16",
@@ -2479,7 +3052,8 @@
         "calibrate-old-10",
         "calibrate-triage-old-16"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-6.17",
@@ -2516,7 +3090,8 @@
       "rulings_seen": [
         "calibrate-old-5"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-6.18",
@@ -2535,7 +3110,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-6.19",
@@ -2561,7 +3137,8 @@
         "calibrate-old-2",
         "calibrate-triage-old-2"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-6.20",
@@ -2588,8 +3165,9 @@
         "personas": [
           "first-time-vendor"
         ],
-        "contract": "contract-v29"
-      }
+        "contract": "contract-v36"
+      },
+      "carried": true
     },
     {
       "id": "R-6.21",
@@ -2608,7 +3186,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-6.22",
@@ -2627,7 +3206,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-6.23",
@@ -2654,8 +3234,9 @@
         "personas": [
           "self-reactivating-vendor"
         ],
-        "contract": "contract-v29"
-      }
+        "contract": "contract-v36"
+      },
+      "carried": true
     },
     {
       "id": "R-6.24",
@@ -2674,7 +3255,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-6.25",
@@ -2693,7 +3275,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-6.26",
@@ -2717,7 +3300,8 @@
         "calibrate-old-4",
         "calibrate-triage-old-5"
       ],
-      "ruled": "test-wrong"
+      "ruled": "test-wrong",
+      "carried": true
     },
     {
       "id": "R-6.27",
@@ -2743,7 +3327,8 @@
         "calibrate-old-2",
         "calibrate-triage-old-2"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-6.28",
@@ -2762,7 +3347,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.1",
@@ -2797,7 +3383,8 @@
         "calibrate-old-6",
         "calibrate-triage-old-34"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-1.2",
@@ -2820,7 +3407,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.3",
@@ -2843,7 +3431,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.4",
@@ -2866,7 +3455,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.5",
@@ -2889,7 +3479,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.6",
@@ -2908,7 +3499,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.7",
@@ -2931,7 +3523,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.8",
@@ -2958,7 +3551,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.9",
@@ -3010,7 +3604,8 @@
         "calibrate-old-12",
         "calibrate-triage-old-19"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-1.10",
@@ -3049,7 +3644,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.11",
@@ -3076,7 +3672,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.12",
@@ -3103,7 +3700,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.13",
@@ -3134,7 +3732,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.14",
@@ -3169,7 +3768,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.15",
@@ -3192,7 +3792,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.16",
@@ -3222,7 +3823,8 @@
         "calibrate-old-14",
         "calibrate-triage-old-21"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-1.17",
@@ -3322,7 +3924,8 @@
         "calibrate-old-6",
         "calibrate-triage-old-41"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-1.18",
@@ -3349,7 +3952,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.19",
@@ -3376,7 +3980,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.20",
@@ -3399,7 +4004,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.21",
@@ -3425,7 +4031,8 @@
         "calibrate-old-8",
         "calibrate-triage-old-13"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-1.22",
@@ -3444,7 +4051,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.23",
@@ -3463,7 +4071,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.24",
@@ -3486,7 +4095,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.25",
@@ -3520,7 +4130,8 @@
         "calibrate-old-10",
         "calibrate-triage-old-17"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-1.26",
@@ -3543,7 +4154,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.27",
@@ -3574,7 +4186,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.28",
@@ -3601,7 +4214,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.29",
@@ -3624,7 +4238,8 @@
       "rulings_seen": [
         "calibrate-old-10",
         "calibrate-triage-old-17"
-      ]
+      ],
+      "carried": true
     },
     {
       "id": "R-1.30",
@@ -3647,7 +4262,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.31",
@@ -3670,7 +4286,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.32",
@@ -3701,7 +4318,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.33",
@@ -3711,7 +4329,8 @@
       "result": "not-testable",
       "reason": "blocked: at v2 the criterion states that no screen of the application offers a way to add a private note, so a note can only reach an opportunity's history without the surface — yet the surface still declares add_note on opportunity-cwu-edit and opportunity-swu-edit, a control the criterion says does not exist, and a test acting through it would contradict the criterion rather than check it. What a test could see is a note already on an opportunity's history and who can read it, but no seeded Code With Us or Sprint With Us opportunity carries a private note with a file, and no observation says whether an edit screen offers a note control at all. The service's acceptance of a note from its author or an administrator is a claim about a request no screen sends, which no page could show.",
       "tests": [],
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.34",
@@ -3734,7 +4353,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.35",
@@ -3757,7 +4377,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.36",
@@ -3780,7 +4401,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.37",
@@ -3803,7 +4425,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.38",
@@ -3830,7 +4453,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.39",
@@ -3865,7 +4489,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.40",
@@ -3888,7 +4513,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.41",
@@ -3920,7 +4546,8 @@
         "calibrate-old-8",
         "calibrate-triage-old-13"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-1.42",
@@ -3939,7 +4566,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.43",
@@ -3962,7 +4590,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.48",
@@ -4013,7 +4642,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.49",
@@ -4039,7 +4669,8 @@
         "calibrate-old-10",
         "calibrate-triage-old-17"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-1.50",
@@ -4062,7 +4693,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.51",
@@ -4072,7 +4704,8 @@
       "result": "not-testable",
       "reason": "unobservable: nothing the service does could show that a state it does not define is gone. No action requests a move to a suspended state, no observation returns the states an opportunity may hold or the states the list's state filter offers, and the mapping of a historical record onto a defined state happens before the rebuilt system reads it, which is a property of the migration rather than of anything the running service answers with. No addition to the surface would help; this is a claim a human accepts about the rebuild rather than one a test can settle.",
       "tests": [],
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.53",
@@ -4147,7 +4780,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-1.55",
@@ -4211,7 +4845,8 @@
         "calibrate-old-9",
         "calibrate-triage-old-15"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-1.56",
@@ -4250,7 +4885,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-3.1",
@@ -4269,7 +4905,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-3.2",
@@ -4292,7 +4929,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-3.3",
@@ -4327,7 +4965,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-3.6",
@@ -4350,7 +4989,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-3.7",
@@ -4369,7 +5009,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-3.8",
@@ -4392,7 +5033,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-3.9",
@@ -4422,7 +5064,8 @@
       "measured_in": "2026-10-02",
       "rulings_seen": [
         "calibrate-old-14"
-      ]
+      ],
+      "carried": true
     },
     {
       "id": "R-3.10",
@@ -4441,7 +5084,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-3.11",
@@ -4467,7 +5111,8 @@
         "calibrate-old-15",
         "calibrate-triage-old-24"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-3.12",
@@ -4494,7 +5139,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-3.13",
@@ -4525,7 +5171,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-3.14",
@@ -4556,7 +5203,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-3.15",
@@ -4575,7 +5223,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-3.17",
@@ -4602,7 +5251,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-3.18",
@@ -4636,7 +5286,8 @@
         "calibrate-old-5",
         "calibrate-triage-old-6"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-3.19",
@@ -4666,7 +5317,8 @@
         "calibrate-old-6",
         "calibrate-triage-old-8"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-3.20",
@@ -4704,7 +5356,8 @@
         "calibrate-old-8",
         "calibrate-triage-old-13"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-3.21",
@@ -4735,7 +5388,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-3.22",
@@ -4771,7 +5425,8 @@
         "calibrate-old-6",
         "calibrate-triage-old-8"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-3.23",
@@ -4790,7 +5445,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-3.24",
@@ -4813,7 +5469,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-3.25",
@@ -4836,7 +5493,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-3.26",
@@ -4859,7 +5517,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-3.27",
@@ -4882,7 +5541,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-3.28",
@@ -4905,7 +5565,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-3.30",
@@ -4924,7 +5585,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-3.31",
@@ -4943,7 +5605,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-3.32",
@@ -4962,7 +5625,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-3.33",
@@ -4981,7 +5645,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-3.34",
@@ -5000,7 +5665,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-3.35",
@@ -5030,7 +5696,8 @@
         "calibrate-old-10",
         "calibrate-triage-old-17"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-2.1",
@@ -5053,7 +5720,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-2.2",
@@ -5075,7 +5743,8 @@
       "measured_in": "2026-10-02",
       "rulings_seen": [
         "calibrate-old-5"
-      ]
+      ],
+      "carried": true
     },
     {
       "id": "R-2.3",
@@ -5098,7 +5767,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-2.4",
@@ -5121,7 +5791,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-2.5",
@@ -5144,7 +5815,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-2.7",
@@ -5167,7 +5839,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-2.9",
@@ -5199,7 +5872,8 @@
         "calibrate-old-13",
         "calibrate-triage-old-20"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-2.10",
@@ -5231,7 +5905,8 @@
         "calibrate-old-12",
         "calibrate-triage-old-19"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-2.11",
@@ -5254,7 +5929,8 @@
       "rulings_seen": [
         "calibrate-triage-old-24"
       ],
-      "triage": "product-question"
+      "triage": "product-question",
+      "carried": true
     },
     {
       "id": "R-2.12",
@@ -5273,7 +5949,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-2.13",
@@ -5304,7 +5981,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-2.14",
@@ -5371,7 +6049,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-2.15",
@@ -5394,7 +6073,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-2.16",
@@ -5417,7 +6097,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-2.17",
@@ -5440,7 +6121,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-2.18",
@@ -5502,7 +6184,8 @@
       "measured_in": "2026-10-02",
       "rulings_seen": [
         "calibrate-old-11"
-      ]
+      ],
+      "carried": true
     },
     {
       "id": "R-2.19",
@@ -5573,7 +6256,8 @@
         "calibrate-old-23",
         "calibrate-triage-old-35"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-2.20",
@@ -5596,7 +6280,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-2.21",
@@ -5623,7 +6308,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-2.22",
@@ -5662,7 +6348,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-2.23",
@@ -5685,7 +6372,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-2.24",
@@ -5712,7 +6400,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-2.25",
@@ -5735,7 +6424,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-2.26",
@@ -5758,7 +6448,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-2.27",
@@ -5785,7 +6476,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-2.28",
@@ -5819,7 +6511,8 @@
       "measured_in": "2026-10-02",
       "rulings_seen": [
         "calibrate-old-13"
-      ]
+      ],
+      "carried": true
     },
     {
       "id": "R-2.29",
@@ -5842,7 +6535,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-2.30",
@@ -5861,7 +6555,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-2.31",
@@ -5892,7 +6587,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-2.32",
@@ -5915,7 +6611,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-2.33",
@@ -5938,7 +6635,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-2.34",
@@ -5981,7 +6679,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-2.35",
@@ -6000,7 +6699,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-2.36",
@@ -6023,7 +6723,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-2.37",
@@ -6050,7 +6751,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-2.38",
@@ -6073,7 +6775,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-4.1",
@@ -6107,8 +6810,9 @@
           "first-time-public-sector-employee",
           "first-time-vendor"
         ],
-        "contract": "contract-v29"
-      }
+        "contract": "contract-v36"
+      },
+      "carried": true
     },
     {
       "id": "R-4.2",
@@ -6142,8 +6846,9 @@
           "first-time-vendor",
           "first-time-vendor-without-email"
         ],
-        "contract": "contract-v29"
-      }
+        "contract": "contract-v36"
+      },
+      "carried": true
     },
     {
       "id": "R-4.3",
@@ -6183,8 +6888,9 @@
           "first-time-vendor",
           "first-time-public-sector-employee"
         ],
-        "contract": "contract-v29"
-      }
+        "contract": "contract-v36"
+      },
+      "carried": true
     },
     {
       "id": "R-4.4",
@@ -6209,7 +6915,8 @@
       "rulings_seen": [
         "calibrate-triage-old-19"
       ],
-      "ruled": "oracle-cannot"
+      "ruled": "oracle-cannot",
+      "carried": true
     },
     {
       "id": "R-4.5",
@@ -6236,8 +6943,9 @@
         "personas": [
           "self-reactivating-vendor"
         ],
-        "contract": "contract-v29"
-      }
+        "contract": "contract-v36"
+      },
+      "carried": true
     },
     {
       "id": "R-4.6",
@@ -6256,7 +6964,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-4.8",
@@ -6279,7 +6988,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-4.9",
@@ -6306,7 +7016,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-4.12",
@@ -6337,7 +7048,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-4.13",
@@ -6347,7 +7059,8 @@
       "result": "not-testable",
       "reason": "unobservable: the outcome is that the service offers no way to create an administrator where none exists, and that only a change to the stored data outside the service can. That is the absence of an action anywhere in the service, and no observation reports an absence of that kind — a test could only show that the particular controls it knows of do not do it, never that no other route exists. The given could be seeded (a seed with no administrator account), but that would not help: the claim a test would then have to settle is still the non-existence of a route, and the documented manual route lies outside the service by definition. This is a property to be accepted by a reader of the rebuilt system's routes, not settled by a test.",
       "tests": [],
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-4.14",
@@ -6374,7 +7087,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-4.16",
@@ -6397,7 +7111,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-4.17",
@@ -6416,7 +7131,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-4.18",
@@ -6439,7 +7155,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-4.19",
@@ -6469,7 +7186,8 @@
         "calibrate-old-5",
         "calibrate-triage-old-6"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-4.20",
@@ -6507,7 +7225,8 @@
         "calibrate-old-10",
         "calibrate-triage-old-16"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-4.21",
@@ -6545,7 +7264,8 @@
         "calibrate-old-8",
         "calibrate-triage-old-13"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-4.22",
@@ -6564,7 +7284,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-4.23",
@@ -6595,7 +7316,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-4.24",
@@ -6614,7 +7336,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-4.25",
@@ -6641,7 +7364,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-4.26",
@@ -6660,7 +7384,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-4.27",
@@ -6699,7 +7424,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-4.28",
@@ -6722,7 +7448,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-4.29",
@@ -6745,7 +7472,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-4.30",
@@ -6768,7 +7496,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-4.31",
@@ -6787,7 +7516,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-4.32",
@@ -6806,7 +7536,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-4.33",
@@ -6829,7 +7560,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     },
     {
       "id": "R-4.34",
@@ -6856,7 +7588,8 @@
       "contract_seed": "14237054aecbb963f6f48290dce6300c71573dd3",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "5aeb14e2e2c30f9242fb2f7fc967a30b195bac73",
-      "measured_in": "2026-10-02"
+      "measured_in": "2026-10-02",
+      "carried": true
     }
   ]
 }

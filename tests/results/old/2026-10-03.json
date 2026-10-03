@@ -1,0 +1,1152 @@
+{
+  "target": "old",
+  "base_url": "http://localhost:4300",
+  "spec": "76d9da180ae1fba4b970cd40bf8a0a55a680eb3e",
+  "at": "2026-10-03T01:06:55.618Z",
+  "run": "2026-10-03",
+  "scope": "domain",
+  "full_run": "2026-10-02",
+  "since_full": 1,
+  "inputs": {
+    "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+    "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+    "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+    "harness": "f085fec9b431068d580169e8d76633f43575cc4c"
+  },
+  "rows": [
+    {
+      "id": "R-7.1",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.1.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "anyone, including a visitor who has not signed in, can read a page by its address and sees its title, its body as formatted text, and the dates it was first published and last updated",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "09a8250ff44dff07264b1225c46adc382cb73c08",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
+    },
+    {
+      "id": "R-7.2",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.2.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a request for a page at an address that no page holds is answered as not found",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "4203b22723ee69352ac368c2d1d331c285273e13",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
+    },
+    {
+      "id": "R-7.3",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.3.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a visitor using the service sees the not-found screen either way, whether the address is malformed or merely one no page holds",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "cf697324cb49e379a3d57e6f2be1c5ece81afe8a",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
+    },
+    {
+      "id": "R-7.4",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.4.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a page can also be read by its identifier",
+          "status": "passed"
+        },
+        {
+          "title": "the service falls back to treating the same value as an address when no page carries that identifier",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "9abad77aa6a76e4c9bf5f5b9b3a0ef2b72683e00",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
+    },
+    {
+      "id": "R-7.5",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.5.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the list of pages names every page with its title, its public address, whether the service needs it, and when it was created and last updated, ordered by title",
+          "status": "passed"
+        },
+        {
+          "title": "only an administrator can see the list of pages",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "93603858147f51d24dc1933b7738fc2726a8f5bf",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
+    },
+    {
+      "id": "R-7.6",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.6.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a signed-in vendor who reaches any of the managing screens directly is shown the not-found screen",
+          "status": "passed"
+        },
+        {
+          "title": "a signed-in public sector employee who reaches any of the managing screens directly is shown the not-found screen",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "5afb1bd675636affc6d4f4e471b1fa33e412e606",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
+    },
+    {
+      "id": "R-7.7",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.7.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "an administrator can create a page by giving it a title, an address and a body, and once published it is readable by anyone at that address",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "775710536200b028feefc3bdc996e198ead979a2",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
+    },
+    {
+      "id": "R-7.8",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.8.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "publishing a change to a page shows the new text to every reader from that moment, and the page's updated date becomes the moment of the change",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "e9f3d7db7eb0b6a937c9d0257a57b468c998df14",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
+    },
+    {
+      "id": "R-7.9",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.9.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "Removing an ordinary page removes it and every version of it permanently, and its address stops answering",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "115d322ce61a9a5ae61ab82cb0ea23579f70d40f",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
+    },
+    {
+      "id": "R-7.10",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.10.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a signed-in vendor asking the service to create, change or remove a page is refused, and nothing is created, changed or removed",
+          "status": "passed"
+        },
+        {
+          "title": "a signed-in public sector employee asking the service to create, change or remove a page is refused, and nothing is created, changed or removed",
+          "status": "passed"
+        },
+        {
+          "title": "a visitor who is not signed in asking the service to create, change or remove a page is refused, and nothing is created, changed or removed",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "57384b1c69479b54cc16c7e247f60ebd58187501",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
+    },
+    {
+      "id": "R-7.11",
+      "version": 1,
+      "domain": "content",
+      "file": null,
+      "result": "not-testable",
+      "reason": "The claim is about the shape of a refused answer — a permission refusal reported as though the submission were faulty. Nothing returns that shape: observables.yaml names a `refusal` status for files and for exports but nothing for a page request, and the content surfaces offer only free-text refused_for_non_administrator and field_error, which cannot be compared for the shape of the answer that produced them.",
+      "tests": [],
+      "measured_in": "2026-10-03"
+    },
+    {
+      "id": "R-7.12",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.12.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a fresh installation carries a full set of the pages the service needs, each holding placeholder text and titled by its own address until somebody writes it",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "6cc2ac5d1f59645976f408e9b5c7f017cc2f5d8f",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
+    },
+    {
+      "id": "R-7.13",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.13.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the service's own terms and conditions page carries, for an administrator, the action that announces changed terms to vendors, and warns first that vendors will have to accept the new terms",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "0d8495078033e481b21e492cb2533be0569b638f",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
+    },
+    {
+      "id": "R-7.14",
+      "version": 1,
+      "domain": "content",
+      "file": null,
+      "result": "not-testable",
+      "reason": "The criterion is a contrast between two renderings of one body, and the second cannot be produced. The screens that embed a page's body — the program qualification terms screens and the evaluation instructions screen — embed pages the service creates for itself, which the seed does not name and which no surface addresses by handle, so the body a test writes through content-create or content-edit cannot be got into an embedded rendering, and the bodies organization-swu-terms, organization-twu-terms and the two evaluation-instructions surfaces do report are ones no test can put raw markup into.",
+      "tests": [],
+      "measured_in": "2026-10-03"
+    },
+    {
+      "id": "R-7.15",
+      "version": 1,
+      "domain": "content",
+      "file": null,
+      "result": "not-testable",
+      "reason": "The when is following the service level agreement link offered beside the cost of a program. No surface exists for the learn-more index, and no action on any surface follows a service level agreement link — the program cards are reachable only as opportunity_program_select.program_card, an observation with no link to follow — so the five places the criterion names cannot be reached and the link cannot be followed to whatever answers it.",
+      "tests": [],
+      "measured_in": "2026-10-03"
+    },
+    {
+      "id": "R-7.16",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.16.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a request refused for lack of permission is reported as a permission refusal, in the same shape for every page request, whether it reads the list, creates, changes or removes one",
+          "status": "failed",
+          "error": "Error: create\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"[\\\"string\\\"]\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7m{\\\"permissions\\\":\u001b[27m[\\\"string\\\"]\u001b[7m}\u001b[27m\"\u001b[39m",
+          "line": 78,
+          "steps": [
+            {
+              "step": "contentRequest.refusalStatus",
+              "at": "/dashboard",
+              "read": "\"401\""
+            },
+            {
+              "step": "contentRequest.refusalShape",
+              "at": "/dashboard",
+              "read": "\"{\\\"permissions\\\":[\\\"string\\\"]}\""
+            },
+            {
+              "step": "contentRequest.open",
+              "given": "{slug}",
+              "at": "/dashboard"
+            },
+            {
+              "step": "contentRequest.renamePageByRequest",
+              "given": "{slug}",
+              "at": "/dashboard"
+            },
+            {
+              "step": "contentRequest.requestAccepted",
+              "at": "/dashboard",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentRequest.refusalStatus",
+              "at": "/dashboard",
+              "read": "\"401\""
+            },
+            {
+              "step": "contentRequest.refusalShape",
+              "at": "/dashboard",
+              "read": "\"{\\\"permissions\\\":[\\\"string\\\"]}\""
+            },
+            {
+              "step": "contentRequest.open",
+              "given": "{slug}",
+              "at": "/dashboard"
+            },
+            {
+              "step": "contentRequest.removePageByRequest",
+              "at": "/dashboard"
+            },
+            {
+              "step": "contentRequest.requestAccepted",
+              "at": "/dashboard",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentRequest.refusalStatus",
+              "at": "/dashboard",
+              "read": "\"401\""
+            },
+            {
+              "step": "contentRequest.refusalShape",
+              "at": "/dashboard",
+              "read": "\"{\\\"permissions\\\":[\\\"string\\\"]}\""
+            }
+          ]
+        },
+        {
+          "title": "a request refused for lack of permission to read one page is reported as a permission refusal in the same shape as every other page request",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "c9d8a5f9269cad2d325fdabdb67ae4cacbd5dda3",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03",
+      "rulings_seen": [
+        "calibrate-old-10",
+        "calibrate-triage-old-17"
+      ],
+      "ruled": "defect-in-old"
+    },
+    {
+      "id": "R-7.17",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.17.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a page's body is rendered as formatted text only; markup embedded in it is never executed",
+          "status": "passed"
+        },
+        {
+          "title": "the same body renders identically on the page's own address and wherever another screen embeds it",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"Formatting marks make these words bold. Raw markup tries to make these words bold and these words emphasised.\"\u001b[39m\nReceived: \u001b[31m\"Formatting marks make these words bold. Raw markup tries to make \u001b[7m<strong>\u001b[27mthese words bold\u001b[7m</strong>\u001b[27m and \u001b[7m<em>\u001b[27mthese words emphasised\u001b[7m</em>\u001b[27m.\"\u001b[39m",
+          "line": 73,
+          "steps": [
+            {
+              "step": "contentEdit.editBody",
+              "given": "{body}",
+              "at": "/content/team-with-us-terms-and-conditions/edit"
+            },
+            {
+              "step": "contentEdit.publishChanges",
+              "at": "/content/team-with-us-terms-and-conditions/edit"
+            },
+            {
+              "step": "contentEdit.confirmPublishChanges",
+              "at": "/content/team-with-us-terms-and-conditions/edit"
+            },
+            {
+              "step": "contentEdit.changesPublishedSuccess",
+              "at": "/content/team-with-us-terms-and-conditions/edit",
+              "read": "\"Published Oct 2, 2026 6:01 PM Published By\""
+            },
+            {
+              "step": "contentView.open",
+              "given": "{slug}",
+              "at": "/content/sprint-with-us-opportunity-scope"
+            },
+            {
+              "step": "contentView.pageBody",
+              "at": "/content/sprint-with-us-opportunity-scope",
+              "read": "\"Formatting marks make these words bold. Raw markup tries to make these words bold and these words emphasised.\""
+            },
+            {
+              "step": "opportunitySwuView.open",
+              "given": "{opportunityId}",
+              "at": "/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701"
+            },
+            {
+              "step": "opportunitySwuView.scopeSection",
+              "at": "/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701",
+              "read": "\"Formatting marks make these words bold. Raw markup tries to make <strong>these words bold</strong> and <em>these words emphasised</em>.\""
+            },
+            {
+              "step": "contentView.open",
+              "given": "{slug}",
+              "at": "/content/team-with-us-terms-and-conditions"
+            },
+            {
+              "step": "contentView.pageBody",
+              "at": "/content/team-with-us-terms-and-conditions",
+              "read": "\"Formatting marks make these words bold. Raw markup tries to make these words bold and these words emphasised.\""
+            },
+            {
+              "step": "opportunityTwuView.open",
+              "given": "{opportunityId}",
+              "at": "/opportunities/team-with-us/00000000-0000-4000-8000-000000000801"
+            },
+            {
+              "step": "opportunityTwuView.termsSection",
+              "at": "/opportunities/team-with-us/00000000-0000-4000-8000-000000000801",
+              "read": "\"Formatting marks make these words bold. Raw markup tries to make <strong>these words bold</strong> and <em>these words emphasised</em>.\""
+            }
+          ]
+        }
+      ],
+      "file_sha": "2689de36626ce6f93749a3624afb2c790c59d6d8",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03",
+      "rulings_seen": [
+        "calibrate-old-9",
+        "calibrate-triage-old-15"
+      ],
+      "ruled": "defect-in-old"
+    },
+    {
+      "id": "R-7.18",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.18.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "The service level agreement page is one the service creates for itself, so every screen that links to it — the learn-more index, the program cards, and the Code With Us, Sprint With Us and Team With Us opportunity forms — resolves on a fresh installation",
+          "status": "failed",
+          "error": "Error: given: the screen offers the service level agreement link\n\ngiven: the screen offers the service level agreement link\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate",
+          "line": 26,
+          "steps": [
+            {
+              "step": "contentServiceLevelAgreementLink.serviceLevelAgreementLink",
+              "at": "/learn-more/code-with-us",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentServiceLevelAgreementLink.serviceLevelAgreementLink",
+              "at": "/learn-more/code-with-us",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentServiceLevelAgreementLink.serviceLevelAgreementLink",
+              "at": "/learn-more/code-with-us",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentServiceLevelAgreementLink.serviceLevelAgreementLink",
+              "at": "/learn-more/code-with-us",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentServiceLevelAgreementLink.serviceLevelAgreementLink",
+              "at": "/learn-more/code-with-us",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentServiceLevelAgreementLink.serviceLevelAgreementLink",
+              "at": "/learn-more/code-with-us",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentServiceLevelAgreementLink.serviceLevelAgreementLink",
+              "at": "/learn-more/code-with-us",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentServiceLevelAgreementLink.serviceLevelAgreementLink",
+              "at": "/learn-more/code-with-us",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentServiceLevelAgreementLink.serviceLevelAgreementLink",
+              "at": "/learn-more/code-with-us",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentServiceLevelAgreementLink.serviceLevelAgreementLink",
+              "at": "/learn-more/code-with-us",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentServiceLevelAgreementLink.serviceLevelAgreementLink",
+              "at": "/learn-more/code-with-us",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentServiceLevelAgreementLink.serviceLevelAgreementLink",
+              "at": "/learn-more/code-with-us",
+              "read": "\"\"",
+              "empty": true
+            }
+          ]
+        }
+      ],
+      "file_sha": "8fa616544ccf59720ca16735e0fc6774865da7fc",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03",
+      "rulings_seen": [
+        "calibrate-old-2"
+      ],
+      "ruled": "defect-in-old"
+    },
+    {
+      "id": "R-7.19",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.19.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the service links its own footer to five of its pages, so every screen offers the about, disclaimer, privacy, accessibility and copyright pages to any visitor",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "96fc1a8a3bce53b52748f48b55d92498658b34b3",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
+    },
+    {
+      "id": "R-7.20",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.20.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "A page must have a title of between one and a hundred characters and a body of between one and fifty thousand characters, and a submission failing either is refused with the failing field named — creating a page with an empty title",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate",
+          "line": 60,
+          "steps": [
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            }
+          ]
+        },
+        {
+          "title": "A page must have a title of between one and a hundred characters and a body of between one and fifty thousand characters, and a submission failing either is refused with the failing field named — creating a page with a body longer than fifty thousand characters",
+          "status": "passed"
+        },
+        {
+          "title": "A page must have a title of between one and a hundred characters and a body of between one and fifty thousand characters, and a submission failing either is refused with the failing field named — creating a page with a title longer than a hundred characters",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate",
+          "line": 88,
+          "steps": [
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            }
+          ]
+        },
+        {
+          "title": "A page must have a title of between one and a hundred characters and a body of between one and fifty thousand characters, and a submission failing either is refused with the failing field named — creating a page with an empty body",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate",
+          "line": 102,
+          "steps": [
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            },
+            {
+              "step": "contentCreate.fieldError",
+              "at": "/content/create",
+              "read": "\"\"",
+              "empty": true
+            }
+          ]
+        },
+        {
+          "title": "A page must have a title of between one and a hundred characters and a body of between one and fifty thousand characters, and a submission failing either is refused with the failing field named — changing a page to an empty title",
+          "status": "passed"
+        },
+        {
+          "title": "A page must have a title of between one and a hundred characters and a body of between one and fifty thousand characters, and a submission failing either is refused with the failing field named — changing a page to a body longer than fifty thousand characters",
+          "status": "passed"
+        },
+        {
+          "title": "A page must have a title of between one and a hundred characters and a body of between one and fifty thousand characters, and a submission failing either is refused with the failing field named — a page with a title of a hundred characters and a body of fifty thousand is accepted",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "4fd6d775dcdc40b58960a2adcf24b76dfe278c30",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03",
+      "rulings_seen": [
+        "calibrate-old-5",
+        "calibrate-triage-old-6"
+      ],
+      "ruled": "defect-in-old"
+    },
+    {
+      "id": "R-7.21",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.21.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "A page's address must be lowercase letters and digits in hyphen-separated groups, and any other address is refused — an address containing a capital letter",
+          "status": "passed"
+        },
+        {
+          "title": "A page's address must be lowercase letters and digits in hyphen-separated groups, and any other address is refused — an address containing a space",
+          "status": "passed"
+        },
+        {
+          "title": "A page's address must be lowercase letters and digits in hyphen-separated groups, and any other address is refused — an address containing an underscore",
+          "status": "passed"
+        },
+        {
+          "title": "A page's address must be lowercase letters and digits in hyphen-separated groups, and any other address is refused — an address containing a leading hyphen",
+          "status": "passed"
+        },
+        {
+          "title": "A page's address must be lowercase letters and digits in hyphen-separated groups, and any other address is refused — an address containing a trailing hyphen",
+          "status": "passed"
+        },
+        {
+          "title": "A page's address must be lowercase letters and digits in hyphen-separated groups, and any other address is refused — an address of lowercase letters and digits in hyphen-separated groups is accepted",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "6e85e9d899e0ce83759fbf1c7ca26fa842ec81a8",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
+    },
+    {
+      "id": "R-7.22",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.22.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "No two pages may share an address, whether the clash arises on creating a page or on renaming one — on creating a page",
+          "status": "passed"
+        },
+        {
+          "title": "No two pages may share an address, whether the clash arises on creating a page or on renaming one — on renaming one",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "dce4cd1003049d39f8a7034dcbda1d9d67f99182",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
+    },
+    {
+      "id": "R-7.23",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.23.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "nothing in the service shows, compares or restores an earlier version of a page",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "80d45da9b26d713b0ae46e5627dec5a3a8a9caf7",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
+    },
+    {
+      "id": "R-7.24",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.24.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "renaming a page moves it to its new address at once and leaves nothing at the old one",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "d882be6411353a6cdeec3fd88c34e6bb5aa85100",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
+    },
+    {
+      "id": "R-7.25",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.25.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a page the service itself depends on may have its title and body changed",
+          "status": "passed"
+        },
+        {
+          "title": "a page the service itself depends on may not be renamed or removed, and its managing screen says so",
+          "status": "passed"
+        },
+        {
+          "title": "a request to rename or remove a page the service itself depends on, made another way, is refused",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "1d33d9b8321c4ff48a520d4e77f9d9137e95d8eb",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
+    },
+    {
+      "id": "R-7.26",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.26.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the editor's image control stores the image, places a reference to it in the body, and the published page shows it",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "c49b3aad1468a813b4ffecf603af5b9d2db5c5a5",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
+    },
+    {
+      "id": "R-7.27",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.27.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the managing screen of a page names the service itself as publisher and last editor where no person is recorded",
+          "status": "passed"
+        },
+        {
+          "title": "the managing screen of a page names who first published it and who last changed it",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "4b2f1430e2096c0eed179594b5b4bbbc9163ee8d",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
+    },
+    {
+      "id": "R-7.28",
+      "version": 2,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.28.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "an administrator who publishes over a page another has changed since it was opened silently replaces that wording and is told the change was published",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "28524159f7addeb951124bb965c15a0864cb45ac",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
+    },
+    {
+      "id": "R-7.29",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.29.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "Where a screen embeds the body of a page beside its own material, a page that is missing or unreadable leaves that part of the screen empty and the screen otherwise works. (Sprint With Us opportunity, scope)",
+          "status": "passed"
+        },
+        {
+          "title": "Where a screen embeds the body of a page beside its own material, a page that is missing or unreadable leaves that part of the screen empty and the screen otherwise works. (Sprint With Us evaluation instructions)",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\"\u001b[39m\nReceived: \u001b[31m\"SUMMARY\u001b[39m\n\u001b[31mSummary\u001b[39m\n\u001b[31mOPPORTUNITY MANAGEMENT\u001b[39m\n\u001b[31mOpportunity\u001b[39m\n\u001b[31mEvaluation Panel\u001b[39m\n\u001b[31mAddenda\u001b[39m\n\u001b[31mHistory\u001b[39m\n\u001b[31mOPPORTUNITY EVALUATION\u001b[39m\n\u001b[31mProposals\u001b[39m\n\u001b[31mInstructions\u001b[39m\n\u001b[31mEvaluation\u001b[39m\n\u001b[31mTeam Questions\u001b[39m\n\u001b[31mConsensus\u001b[39m\n\u001b[31mCode Challenge\u001b[39m\n\u001b[31mTeam Scenario\u001b[39m\n\u001b[31mNEED HELP?\u001b[39m\n\u001b[31mRead Guide\u001b[39m\n\u001b[31mSprint With Us: Seeded closed Sprint With Us opportunity\u001b[39m\n\u001b[31mPublished Aug 4, 2026\u001b[39m\n\u001b[31m|\u001b[39m\n\u001b[31mUpdated Oct 2, 2026\u001b[39m\n\u001b[31mStatus\u001b[39m\n\u001b[31mTeam Questions Evaluation\u001b[39m\n\u001b[31mCreated By\u001b[39m\n\u001b[31mCasey Placeholder\u001b[39m\n\u001b[31mBegin Evaluation\"\u001b[39m",
+          "line": 78,
+          "steps": [
+            {
+              "step": "scheduledTransitionTrigger.open",
+              "at": "/status"
+            },
+            {
+              "step": "scheduledTransitionTrigger.runPendingTransitions",
+              "at": "/status"
+            },
+            {
+              "step": "signIn",
+              "given": "persona public-sector-staff",
+              "at": "/dashboard"
+            },
+            {
+              "step": "evaluationInstructionsSwu.open",
+              "given": "{opportunityId}",
+              "at": "/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=instructions"
+            },
+            {
+              "step": "evaluationInstructionsSwu.visibleToEvaluatorsOnly",
+              "at": "/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=instructions",
+              "read": "\"SUMMARY Summary OPPORTUNITY MANAGEMENT Opportunity Evaluation Panel Addenda History OPPORTUNITY EVALUATION Proposals Instructions Evaluation Team Questions Con…\""
+            },
+            {
+              "step": "evaluationInstructionsSwu.instructionsBody",
+              "at": "/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=instructions",
+              "read": "\"SUMMARY Summary OPPORTUNITY MANAGEMENT Opportunity Evaluation Panel Addenda History OPPORTUNITY EVALUATION Proposals Instructions Evaluation Team Questions Con…\""
+            }
+          ]
+        },
+        {
+          "title": "Where a screen embeds the body of a page beside its own material, a page that is missing or unreadable leaves that part of the screen empty and the screen otherwise works. (Team With Us evaluation instructions)",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\"\u001b[39m\nReceived: \u001b[31m\"SUMMARY\u001b[39m\n\u001b[31mSummary\u001b[39m\n\u001b[31mOPPORTUNITY MANAGEMENT\u001b[39m\n\u001b[31mOpportunity\u001b[39m\n\u001b[31mEvaluation Panel\u001b[39m\n\u001b[31mAddenda\u001b[39m\n\u001b[31mHistory\u001b[39m\n\u001b[31mOPPORTUNITY EVALUATION\u001b[39m\n\u001b[31mProposals\u001b[39m\n\u001b[31mInstructions\u001b[39m\n\u001b[31mEvaluation\u001b[39m\n\u001b[31mResource Questions\u001b[39m\n\u001b[31mConsensus\u001b[39m\n\u001b[31mInterview/Challenge\u001b[39m\n\u001b[31mNEED HELP?\u001b[39m\n\u001b[31mRead Guide\u001b[39m\n\u001b[31mTeam With Us: Seeded closed Team With Us opportunity\u001b[39m\n\u001b[31mPublished Aug 4, 2026\u001b[39m\n\u001b[31m|\u001b[39m\n\u001b[31mUpdated Oct 2, 2026\u001b[39m\n\u001b[31mStatus\u001b[39m\n\u001b[31mResource Questions Evaluation\u001b[39m\n\u001b[31mCreated By\u001b[39m\n\u001b[31mCasey Placeholder\u001b[39m\n\u001b[31mBegin Evaluation\"\u001b[39m",
+          "line": 99,
+          "steps": [
+            {
+              "step": "scheduledTransitionTrigger.open",
+              "at": "/status"
+            },
+            {
+              "step": "scheduledTransitionTrigger.runPendingTransitions",
+              "at": "/status"
+            },
+            {
+              "step": "signIn",
+              "given": "persona public-sector-staff",
+              "at": "/dashboard"
+            },
+            {
+              "step": "evaluationInstructionsTwu.open",
+              "given": "{opportunityId}",
+              "at": "/opportunities/team-with-us/00000000-0000-4000-8000-000000000801/edit?tab=instructions"
+            },
+            {
+              "step": "evaluationInstructionsTwu.visibleToEvaluatorsOnly",
+              "at": "/opportunities/team-with-us/00000000-0000-4000-8000-000000000801/edit?tab=instructions",
+              "read": "\"SUMMARY Summary OPPORTUNITY MANAGEMENT Opportunity Evaluation Panel Addenda History OPPORTUNITY EVALUATION Proposals Instructions Evaluation Resource Questions…\""
+            },
+            {
+              "step": "evaluationInstructionsTwu.instructionsBody",
+              "at": "/opportunities/team-with-us/00000000-0000-4000-8000-000000000801/edit?tab=instructions",
+              "read": "\"SUMMARY Summary OPPORTUNITY MANAGEMENT Opportunity Evaluation Panel Addenda History OPPORTUNITY EVALUATION Proposals Instructions Evaluation Resource Questions…\""
+            }
+          ]
+        }
+      ],
+      "file_sha": "a4d4e99831d0708fa756e819fadee27f8b49609e",
+      "adapter": "e24b6df613fbe0d4056f7cc203d6b4b491298371",
+      "contract_seed": "f33f7a5b90e1579dbf734f308ed13bbb966c551f",
+      "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
+      "harness": "f085fec9b431068d580169e8d76633f43575cc4c",
+      "measured_in": "2026-10-03"
+    }
+  ]
+}

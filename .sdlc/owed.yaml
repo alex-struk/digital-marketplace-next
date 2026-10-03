@@ -5171,3 +5171,9 @@ owed:
         gate: G3
         at: 2026-10-03T00:20:31.385Z
     target: old
+    closed:
+      outcome: met
+      why: "tests/results/old/latest.json: R-7.29 v1 fail"
+      file_sha: a4d4e99831d0708fa756e819fadee27f8b49609e
+      by: runner
+      at: 2026-10-03T01:06:55.621Z
