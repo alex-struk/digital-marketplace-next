@@ -1,0 +1,16 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The question is whether the revised opportunity-swu-view.page_messages reader binds the contract's observation (messages shown outside the screen's own sections) and nothing else, settling bind-adapter-old-63#1. It does. In the old app's SWU view (sources/old/src/front-end/typescript/lib/pages/opportunity/sprint-with-us/view.tsx:815-825), Header (holding the h2 title), Info (the tabbed region), Budget and Phases are siblings in one container, with How To Apply outside it. The reader climbs from each anchor (the tab list, or the Budget/Phases of Work headings) to the widest ancestor that excludes the title, which in that tree is each section's own root div. Alerts in the header, the award notice, How To Apply or after the footer are therefore still read, and alerts inside the tab body, Budget or Phases are skipped. The binding uses roles and visible text only, makes no assertion, keeps the unbound throws for not-found and page-did-not-open, and its comment says what is excluded and why. Nothing under tests/acceptance changed, and the runner's typecheck on this revision passed with no diagnostics under adapters/old/. The author's runs on the target (award notice still returned, closed record empty, injected in-section alerts skipped and an end-of-page alert kept) agree with this reading. The missing test owed for R-7.29 belongs to derive-tests and stays open. The ruling would change on evidence that an alert outside every section is dropped, or that a region climbs into the header.
+conditions:
+  - "condition-met bind-adapter-old-63#1: the pageMessages reader in tests/adapters/old/index.ts (opportunity-swu-view, added after assignmentDate) now skips role=alert elements inside the tabbed region (anchored on the list holding 'Scope & Contract') and inside the Budget and Phases of Work blocks (anchored on their headings), each region bounded so it excludes the opportunity title. It still reads every other alert, including late-drawn ones, in page order, and the comment above it states what is excluded and why."
+cost: 0.38673100000000005
+turns: 7
+session: "a86ab8f5-9a1e-4719-be6a-72c3cfaf7b64"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-03T00:14:44.293Z

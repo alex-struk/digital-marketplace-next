@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-old-63 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">522</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">516</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">430</span></a></li><li><a href="../runs.html">Run log <span class="count">21</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-old-63</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-03 00:09</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on old, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I added the one observation that was missing.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I added the one observation that was missing. <code>opportunity-swu-view.page_messages</code> is now bound in <code>tests/adapters/old/index.ts</code> and listed as <code>bound</code> in <code>tests/adapters/old/bindings.yaml</code>. The type check didn&#39;t run because the command needed an approval this session couldn&#39;t give, so I have only read the new code over, not compiled it.</p>
+<p><strong>What I saw on the target.</strong> I signed in as vendor 1 through the session route and opened the seeded closed Sprint With Us opportunity (<code>…-8000-000000000701</code>). It is in its evaluation stage. The page has no notices at all, either when it first loads or after opening its &quot;Scope &amp; Contract&quot; tab. That matches the contract, which says this opportunity with this persona should show nothing. To see what a notice looks like when one is there, I opened the seeded awarded Sprint With Us opportunity (<code>…-a020-000000000001</code>). There the page puts a single alert above the header that reads &quot;This opportunity was awarded to Northern Pines Digital Ltd..&quot;. Notices on this screen are elements the browser reports with the alert role.</p>
+<p><strong>How it reads.</strong> The new reader waits for the page to finish loading. It then returns the text of every visible alert on the screen, one line each, in the order they appear. It doesn&#39;t stop at the space above the header, because a notice caused by the missing scope page could be drawn somewhere else. I could not see the target in that state; it needs a separately started instance (<code>service_page_absent</code>). When the page loads and shows no alerts, the reader returns an empty string, and that empty answer is what the criterion checks for. If the opportunity shows &quot;Not Found&quot;, or the page never loads a heading, it throws <code>unbound:</code> instead, because the page the contract describes was never reached. It uses only alert roles and visible text, no CSS selectors.</p>
+<p><strong>Changes.</strong> The only edits are the new reader in <code>index.ts</code> and its line in <code>bindings.yaml</code>. All earlier bindings are unchanged. Every route I opened loaded, so no page&#39;s route failed to resolve.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-03 00:11.</p>
+<div class="body"><p>Question: does the old adapter bind every surface action and observation, and nothing else? It does not yet. The new opportunity-swu-view.page_messages reader stays an adapter: it only navigates and locates, uses alert roles and visible text, throws unbound: when the page is never reached, and adds no assertion. No file under tests/acceptance changed, and the runner&#39;s typecheck on this revision passed with no diagnostics under adapters/old. But the reader returns what everyAlert() finds anywhere on the page. The contract defines the observation as every notice, alert, error message or pop-up message the screen shows &#39;anywhere outside its own sections (scope_section, phases, addenda and the rest above)&#39;. An alert drawn inside the Scope &amp; Contract tab body or another bound section would be reported as a page message, so the binding reads something other than what the observation names. That fault is in tests/adapters/old/index.ts, which bind-adapter owns. The contract&#39;s definition needs no change, so the condition goes back to bind-adapter and not to design. The ruling changes to approve once the reader excludes alerts inside the screen&#39;s bound section regions and still reads late-drawn alerts everywhere else.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>opportunity-swu-view.page_messages (tests/adapters/old/index.ts, the new pageMessages reader) must read only the notices, alerts, error or pop-up messages the screen shows outside its own sections. The contract defines the observation as messages shown &#39;anywhere outside its own sections (scope_section, phases, addenda and the rest above)&#39;. The reader currently returns every role=alert element on the page via everyAlert(), so an alert rendered inside the Scope &amp; Contract tab body (the region scopeSection/embeddedSection reads) or inside phases, addenda or another bound section would be reported as a page message. Exclude alerts that sit within those section regions, keep reading alerts anywhere else on the screen including late-drawn ones, and update the comment above the reader to say what is excluded and why.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

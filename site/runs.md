@@ -14,6 +14,11 @@
 - 17:05:13 run bind-adapter: pre-checks failed
 - 17:05:13 drive: step 31 recovery: the oracle was not up; bringing it up (sdlc oracle up), then running the step once more
 - 17:08:37 oracle up old: http://localhost:4300 (local port 4300)
+- 17:11:08 drive: step 33: `sdlc run bind-adapter --target old --revise` — bind-adapter-old-63 was returned at G3 by agent:reviewer
+- 17:13:55 run bind-adapter: ok, cost 0.8124600000000001, turns 25, on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 17:13:55 propose bind-adapter-old-64 at G3
+- 17:13:59 drive: step 34: `sdlc rule bind-adapter-old-64 --by agent:reviewer` — bind-adapter-old-64 is open at G3, held by agent:reviewer
+- 17:14:44 rule bind-adapter-old-64 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-10-02
 
