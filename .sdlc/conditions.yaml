@@ -2582,6 +2582,16 @@ conditions:
     stage: build
     by: agent:tech-lead
     at: 2026-10-03T19:21:38.802Z
+    closed:
+      outcome: met
+      why: docs/decisions/0054-service-area-checkboxes-follow-the-catalogue.md no
+        longer claims the label and value change fixes the R-3.26 and R-3.28
+        failures. It gives following the catalogue story organization-edit ·
+        service-areas-editing as the only reason for the change, and its third
+        paragraph attributes the earlier failures to the new target's adapter,
+        which reported every checkbox with its checked state.
+      by: agent:reviewer
+      at: 2026-10-03T19:47:45.147Z
   - ref: build-slice-13-3#3
     text: "docs/decisions/0053-qualifying-for-sprint-with-us-and-team-with-us.md:
       make the Service areas paragraph agree with 0054. It still says the screen
@@ -2593,3 +2603,15 @@ conditions:
     stage: build
     by: agent:tech-lead
     at: 2026-10-03T19:21:38.802Z
+    closed:
+      outcome: met
+      why: the Service areas paragraph of
+        docs/decisions/0053-qualifying-for-sprint-with-us-and-team-with-us.md
+        now says the screen names each area in sentence case ('Full stack
+        developer') with kebab-case checkbox values that become the service's
+        keys on save, and points to 0054. This matches SENTENCE_CASE and
+        SERVICE_AREA_CHOICES in
+        app/frontend/src/screens/organization-qualification.tsx and the
+        assertions in app/frontend/tests/qualification.test.tsx.
+      by: agent:reviewer
+      at: 2026-10-03T19:47:45.169Z
