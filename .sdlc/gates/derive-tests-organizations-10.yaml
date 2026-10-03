@@ -1,0 +1,17 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: do the revised organizations tests follow from their criteria and nothing else? Ruling: approve. The only change is the signed-out visitor test in tests/acceptance/organizations/R-3.2.spec.ts. Both assertions the previous ruling asked to remove are gone: refusalStatus() equal to '401', and refusalMessages() containing the exact permission wording. The test now relies only on expectRefusedAsNotPermitted. That helper checks that the request was not accepted, that the refusal carries some status, that the reason mentions permission, and that no organization identifier was returned. Each of these follows from R-3.2's 'refused as not permitted' and from its rule that only a vendor who has accepted the terms may register. The persona precondition, that the visitor has no sign-in, is a setup check and claims nothing about the application. The test asserts the 'anyone else is refused' clause for a visitor who is not signed in, so it can close missing-test/R-3.2 once it runs. That record closes on a result row, not on a ruling, so it is left open. No not-testable entry, protected path or other file in the domain was touched, and the runner's typecheck passed. This would change to a return if any test asserted a status code, message wording or other detail R-3.2 does not state, or if the shared helper were narrowed to one.
+conditions:
+  - "condition-met derive-tests-organizations-stale-12#1: the assertion that refusalStatus() is '401' was removed from 'a registration sent by a visitor who is not signed in is refused' in tests/acceptance/organizations/R-3.2.spec.ts; the test now relies on expectRefusedAsNotPermitted, whose status check only requires a non-empty status."
+  - "condition-met derive-tests-organizations-stale-12#2: the assertion that refusalMessages() contains 'You do not have permission to perform this action.' was removed from the same test; 'refused as not permitted' is asserted by the /permission/i match on refusalReason() inside expectRefusedAsNotPermitted."
+cost: 0.2983084
+turns: 2
+session: "7e910b7f-fd7a-4fb6-86b0-d4b09cf788d8"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-03T15:20:35.952Z
