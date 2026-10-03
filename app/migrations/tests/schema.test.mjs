@@ -1,6 +1,7 @@
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import fs from "node:fs";
+import net from "node:net";
 import path from "node:path";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { PGlite } from "@electric-sql/pglite";
@@ -22,7 +23,18 @@ const { PAGE_SLUGS, PLACEHOLDER_BODY, SERVICE_LEVEL_AGREEMENT_SLUG } = require("
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const SEED_DIR = path.resolve(here, "../../../tests/seed");
-const PORT = 55432;
+
+/** A port the operating system says is free now, so a run never collides with another. */
+function freePort() {
+  return new Promise((resolve, reject) => {
+    const probe = net.createServer();
+    probe.once("error", reject);
+    probe.listen(0, "127.0.0.1", () => {
+      const { port } = /** @type {import("node:net").AddressInfo} */ (probe.address());
+      probe.close(() => resolve(port));
+    });
+  });
+}
 
 /** @type {import("@electric-sql/pglite").PGlite} */
 let database;
@@ -33,6 +45,7 @@ let knex;
 
 beforeAll(async () => {
   database = await PGlite.create();
+  const PORT = await freePort();
   socket = new PGLiteSocketServer({ db: database, port: PORT, host: "127.0.0.1" });
   await socket.start();
   knex = knexFactory({

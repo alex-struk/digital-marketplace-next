@@ -117,6 +117,241 @@ export function listOffersRegistration(viewer: OrganizationViewer | null): boole
   return viewer?.type === "VENDOR";
 }
 
+// ------------------------------------------------------------------------ the team
+
+/**
+ * The membership types an invitation may name: an ordinary member or an owner. Administrator
+ * rights are never granted by an invitation, only afterwards to a member who has joined, and any
+ * other type is refused (R-3.17, R-3.12).
+ */
+export const INVITABLE_MEMBERSHIP_TYPES: readonly MembershipType[] = ["MEMBER", "OWNER"];
+
+export function isInvitableMembershipType(value: unknown): value is MembershipType {
+  return INVITABLE_MEMBERSHIP_TYPES.includes(value as MembershipType);
+}
+
+export const INVALID_MEMBERSHIP_TYPE =
+  "Invalid membership type: an invitation can only be for a member or an owner.";
+
+/**
+ * Who may invite people to the team, read the team and remove somebody else from it: a service
+ * administrator, and the organization's owner and administrators (R-3.7, R-3.10, R-3.14). An
+ * ordinary member may do none of these.
+ */
+export function mayManageTeam(viewer: OrganizationViewer | null, membership: Membership | null | undefined): boolean {
+  if (!viewer) return false;
+  return viewer.type === "ADMIN" || ownsOrAdministers(membership);
+}
+
+export const NOT_PERMITTED_TO_MANAGE_TEAM =
+  "Only the organization's owner, its administrators or a service administrator may do that.";
+
+/** A person found by the email address an invitation names. */
+export interface Invitee {
+  readonly type: AccountKind;
+  readonly status: "ACTIVE" | "INACTIVE_USER" | "INACTIVE_ADMIN";
+}
+
+export const INVITEE_NOT_A_VENDOR = "Only people with a vendor account can be invited.";
+export const INVITEE_NOT_ACTIVE = "Only people with an active vendor account can be invited.";
+export const INVITEE_ALREADY_MEMBER = "This person is already a member of the organization.";
+
+/**
+ * Why a person may not be invited, or null when they may: only an active vendor account, and
+ * never somebody whose membership already stands, pending or active. An ended membership does not
+ * stand, so a person who left or was removed can be invited again (R-3.8).
+ */
+export function invitationRefusal(invitee: Invitee, standing: Membership | null | undefined): string | null {
+  if (invitee.type !== "VENDOR") return INVITEE_NOT_A_VENDOR;
+  if (invitee.status !== "ACTIVE") return INVITEE_NOT_ACTIVE;
+  if (standing && standing.membershipStatus !== "INACTIVE") return INVITEE_ALREADY_MEMBER;
+  return null;
+}
+
+/**
+ * A pending invitation is accepted only by the invited person — or, on their behalf, by a service
+ * administrator; never by the organization's owner (R-3.9). Whether it is still pending is
+ * checked afterwards, so somebody who may not accept is told so first.
+ */
+export function mayAcceptInvitation(viewer: OrganizationViewer | null, invitedUserId: string): boolean {
+  if (!viewer) return false;
+  return viewer.type === "ADMIN" || viewer.id === invitedUserId;
+}
+
+export const NOT_PERMITTED_TO_ACCEPT = "Only the invited person may accept this membership.";
+export const NOT_PENDING = "Membership is not pending.";
+
+/**
+ * A membership is ended by the member themselves, by the organization's owner or administrators,
+ * or by a service administrator (R-3.10).
+ */
+export function mayEndMembership(
+  viewer: OrganizationViewer | null,
+  memberUserId: string,
+  viewerMembership: Membership | null | undefined,
+): boolean {
+  if (!viewer) return false;
+  return viewer.id === memberUserId || mayManageTeam(viewer, viewerMembership);
+}
+
+export const NOT_PERMITTED_TO_END_MEMBERSHIP = "You are not permitted to end that membership.";
+export const SOLE_OWNER = "This is the sole owner for the organization, and cannot be removed.";
+export const ALREADY_ENDED = "This membership has already ended.";
+
+/**
+ * Whether ending this membership would leave the organization with no owner: it is the only
+ * active owner (R-3.11).
+ */
+export function isSoleOwner(
+  target: Membership & { readonly affiliationId: string },
+  members: readonly (Membership & { readonly affiliationId: string })[],
+): boolean {
+  if (!owns(target)) return false;
+  return !members.some((other) => other.affiliationId !== target.affiliationId && owns(other));
+}
+
+export const NOT_PERMITTED_TO_CHANGE_RIGHTS =
+  "Only the organization's owner, its administrators or a service administrator may change administrator rights.";
+export const OWN_RIGHTS = "You cannot change your own administrator rights.";
+export const OWNER_RIGHTS = "The owner's membership cannot be changed this way.";
+export const RIGHTS_NEED_ACTIVE_MEMBER = "Administrator rights can only be given to a member who has joined.";
+
+/**
+ * Why administrator rights over the organization may not be given to or taken from this member,
+ * or null when they may: the person changing them must be a service administrator or own or
+ * administer the organization, the member must be active, and nobody may change their own rights
+ * or the owner's (R-3.12).
+ */
+export function adminRightsRefusal(
+  viewer: OrganizationViewer | null,
+  viewerMembership: Membership | null | undefined,
+  target: Membership & { readonly userId: string },
+): string | null {
+  if (!viewer || !mayManageTeam(viewer, viewerMembership)) return NOT_PERMITTED_TO_CHANGE_RIGHTS;
+  if (target.userId === viewer.id) return OWN_RIGHTS;
+  if (target.membershipType === "OWNER") return OWNER_RIGHTS;
+  if (target.membershipStatus !== "ACTIVE") return RIGHTS_NEED_ACTIVE_MEMBER;
+  return null;
+}
+
+export const NOT_PERMITTED_TO_CHANGE_OWNER = "Only a service administrator may transfer ownership of an organization.";
+export const NEW_OWNER_NOT_ACTIVE = "Ownership can only be transferred to a member who has joined.";
+export const ALREADY_OWNER = "This member already owns the organization.";
+
+/**
+ * Only a service administrator transfers ownership, and only to a member whose membership is
+ * already active (R-3.13).
+ */
+export function ownershipTransferRefusal(viewer: OrganizationViewer | null, target: Membership): string | null {
+  if (viewer?.type !== "ADMIN") return NOT_PERMITTED_TO_CHANGE_OWNER;
+  if (target.membershipStatus !== "ACTIVE") return NEW_OWNER_NOT_ACTIVE;
+  if (target.membershipType === "OWNER") return ALREADY_OWNER;
+  return null;
+}
+
+/** A member of the team as the team tab lists them. */
+export interface TeamMember extends Membership {
+  readonly affiliationId: string;
+  readonly userId: string;
+  readonly name: string;
+  readonly capabilities: readonly string[];
+}
+
+/**
+ * The team as it is shown: everyone whose membership stands, active or pending, the owner first,
+ * then by name. An ended membership is not on the team (R-3.10).
+ */
+export function teamShown<T extends TeamMember>(members: readonly T[]): T[] {
+  const rank = (member: T) => (member.membershipType === "OWNER" && member.membershipStatus === "ACTIVE" ? 0 : 1);
+  return members
+    .filter((member) => member.membershipStatus !== "INACTIVE")
+    .sort((a, b) => rank(a) - rank(b) || a.name.localeCompare(b.name, "en-CA") || a.affiliationId.localeCompare(b.affiliationId));
+}
+
+/** What the team tab offers on one member's row (design/DESIGN.md, "Who is offered what"). */
+export interface RowControls {
+  readonly giveAdminRights: boolean;
+  readonly removeAdminRights: boolean;
+  readonly remove: boolean;
+  readonly approve: boolean;
+}
+
+/**
+ * Administrator rights are given or withdrawn on active members other than the owner and the
+ * viewer themselves (R-3.12); Remove is on every row but the viewer's own (R-3.10). It is on the
+ * owner's row too, so that trying to remove the sole owner is answered by the service's refusal
+ * rather than by a missing control (R-3.11). Only a service administrator approves a pending
+ * member (R-3.9).
+ */
+export function rowControls(
+  viewer: OrganizationViewer,
+  viewerMembership: Membership | null | undefined,
+  member: TeamMember,
+): RowControls {
+  const manages = mayManageTeam(viewer, viewerMembership);
+  const rights = manages && adminRightsRefusal(viewer, viewerMembership, member) === null;
+  return {
+    giveAdminRights: rights && member.membershipType === "MEMBER",
+    removeAdminRights: rights && member.membershipType === "ADMIN",
+    remove: manages && member.userId !== viewer.id,
+    approve: viewer.type === "ADMIN" && member.membershipStatus === "PENDING",
+  };
+}
+
+/**
+ * Change owner is offered to a service administrator alone, and only when the organization has a
+ * member besides its owner who could take it (R-3.13).
+ */
+export function offersChangeOwner(viewer: OrganizationViewer, members: readonly TeamMember[]): boolean {
+  return viewer.type === "ADMIN" && members.some((member) => ownershipTransferRefusal(viewer, member) === null);
+}
+
+/**
+ * Every capability the service recognises, and whether the team holds it: only active members
+ * count, so a pending invitee's capabilities are not held until they accept (R-3.34).
+ */
+export function teamCapabilities(
+  members: readonly Pick<TeamMember, "membershipStatus" | "capabilities">[],
+): { readonly name: string; readonly held: boolean }[] {
+  const held = new Set(members.filter((member) => member.membershipStatus === "ACTIVE").flatMap((member) => member.capabilities));
+  return CAPABILITIES.map((capability) => ({ name: capability.name, held: held.has(capability.name) }));
+}
+
+/**
+ * The team's capabilities split as the summary shows them: the summary itself names only the
+ * capabilities the team holds, and those it lacks are listed apart from it, so a capability only
+ * a pending invitee holds is never named inside the summary (R-3.34).
+ */
+export function capabilitySummary(
+  members: readonly Pick<TeamMember, "membershipStatus" | "capabilities">[],
+): { readonly held: readonly string[]; readonly missing: readonly string[] } {
+  const all = teamCapabilities(members);
+  return {
+    held: all.filter((capability) => capability.held).map((capability) => capability.name),
+    missing: all.filter((capability) => !capability.held).map((capability) => capability.name),
+  };
+}
+
+// ------------------------------------------------------------------------ the changelog
+
+/** The kept `affiliationEvents.event`. */
+export type AffiliationEventKind = "ADMIN_STATUS_GRANTED" | "ADMIN_STATUS_REVOKED" | "OWNER_STATUS_GRANTED";
+
+/** How the changelog names each event (R-3.33). */
+export const AFFILIATION_EVENT_LABELS: Readonly<Record<AffiliationEventKind, string>> = {
+  ADMIN_STATUS_GRANTED: "Admin Rights Given",
+  ADMIN_STATUS_REVOKED: "Admin Rights Removed",
+  OWNER_STATUS_GRANTED: "Ownership Transferred",
+};
+
+/** Newest first, as the changelog is shown (R-3.33); ties keep a fixed order by identifier. */
+export function compareNewestFirst(
+  a: { readonly createdAt: string; readonly id: string },
+  b: { readonly createdAt: string; readonly id: string },
+): number {
+  return b.createdAt.localeCompare(a.createdAt) || b.id.localeCompare(a.id);
+}
+
 // ------------------------------------------------------------------------ qualification
 
 /**

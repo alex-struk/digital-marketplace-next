@@ -12,6 +12,8 @@ import { organizationArchivedByAdministrator } from "../mail/notifications/organ
 import { isIdentifier } from "../rules/files";
 import {
   ACTING_FOR_REFUSED,
+  AffiliationEventKind,
+  compareNewestFirst,
   Membership,
   MembershipStatus,
   MembershipType,
@@ -64,6 +66,17 @@ export interface OrganizationRecord extends OrganizationProfile {
   readonly serviceAreas: readonly string[];
   /** The requester's own membership, if they have one, so a screen can offer what they may do. */
   readonly viewerMembership: Membership | null;
+  /** Every change of administrator rights and transfer of ownership, newest first (R-3.33). */
+  readonly changelog: readonly ChangelogEntry[];
+}
+
+/** One changelog entry: what happened, to whom, when and by whom (R-3.33). */
+export interface ChangelogEntry {
+  readonly id: string;
+  readonly event: AffiliationEventKind;
+  readonly createdAt: string;
+  readonly member: { readonly id: string; readonly name: string } | null;
+  readonly createdBy: { readonly id: string; readonly name: string } | null;
 }
 
 /**
@@ -108,25 +121,38 @@ export const LOGO_NOT_USABLE = "Please select a different logo image.";
  * A permission refusal of registering, changing or archiving, filed under `permissions` at 401
  * as the contract names these refusals (decision 0003). Validation refusals stay under `errors`.
  */
-function notPermitted(message: string): NamedRefusal {
+export function notPermitted(message: string): NamedRefusal {
   return new NamedRefusal(401, "permissions", [message]);
 }
 
-function activeMembers(organization: StoredOrganization): Member[] {
+export function activeMembers(organization: StoredOrganization): Member[] {
   return organization.members.filter((member) => member.membershipStatus === "ACTIVE");
 }
 
-function ownerOf(organization: StoredOrganization): Member | null {
+export function ownerOf(organization: StoredOrganization): Member | null {
   return activeMembers(organization).find((member) => member.membershipType === "OWNER") ?? null;
 }
 
-function membershipOf(organization: StoredOrganization, viewer: OrganizationViewer | null): Membership | null {
+export function membershipOf(organization: StoredOrganization, viewer: OrganizationViewer | null): Membership | null {
   if (!viewer) return null;
   // An ended membership is kept on record but counts for nothing.
   const member = organization.members.find(
     (candidate) => candidate.userId === viewer.id && candidate.membershipStatus !== "INACTIVE",
   );
   return member ? { membershipType: member.membershipType, membershipStatus: member.membershipStatus } : null;
+}
+
+function changelogOf(organization: StoredOrganization): ChangelogEntry[] {
+  return [...organization.events].sort(compareNewestFirst).map((event) => {
+    const member = organization.members.find((candidate) => candidate.affiliationId === event.affiliationId);
+    return {
+      id: event.id,
+      event: event.event,
+      createdAt: event.createdAt,
+      member: member ? { id: member.userId, name: member.name } : null,
+      createdBy: event.createdBy,
+    };
+  });
 }
 
 function standing(organization: StoredOrganization) {
@@ -349,6 +375,7 @@ export class OrganizationsService {
       serviceAreas: organization.serviceAreas,
       ...standing(organization),
       viewerMembership: membershipOf(organization, viewer),
+      changelog: changelogOf(organization),
     };
   }
 }

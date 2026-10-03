@@ -1,6 +1,7 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Put, Query, Req } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req } from "@nestjs/common";
 import { IdentifiedRequest } from "../auth/bearer-token";
 import { AccountsService } from "../users/accounts.service";
+import { MembershipRecord, TeamService } from "./team.service";
 import {
   ListedOrganization,
   OrganizationRecord,
@@ -76,14 +77,16 @@ export class OwnedOrganizationsController {
 }
 
 /**
- * `/api/affiliations`, as far as it is built: the signed-in person's own memberships, for their
- * organizations section (R-3.6, R-3.23). An organization's team (`?organization=`) and the
- * changes to memberships arrive with the team (slice 12).
+ * `/api/affiliations` and `/api/affiliations/<id>`: the signed-in person's own memberships, for
+ * their organizations section (R-3.6, R-3.23), or with `?organization=` that organization's team
+ * (R-3.14); inviting (R-3.7, R-3.8, R-3.17, R-3.30); accepting, administrator rights and
+ * transferring ownership (R-3.9, R-3.12, R-3.13); and ending a membership (R-3.10, R-3.11, R-3.32).
  */
 @Controller("api/affiliations")
 export class AffiliationsController {
   constructor(
     private readonly organizations: OrganizationsService,
+    private readonly team: TeamService,
     private readonly accounts: AccountsService,
   ) {}
 
@@ -91,11 +94,28 @@ export class AffiliationsController {
   async list(
     @Query("organization") organization: string | undefined,
     @Req() request: IdentifiedRequest,
-  ): Promise<OwnMembership[]> {
+  ): Promise<OwnMembership[] | MembershipRecord[]> {
     const viewer = await this.accounts.actingAccount(request.identity);
-    if (organization !== undefined) {
-      throw new BadRequestException("An organization's team cannot be listed here yet.");
-    }
+    if (organization !== undefined) return this.team.team(viewer, organization);
     return this.organizations.ownMemberships(viewer);
+  }
+
+  @Post()
+  async invite(@Body() body: Record<string, unknown>, @Req() request: IdentifiedRequest): Promise<MembershipRecord> {
+    return this.team.invite(await this.accounts.readingAccount(request.identity), body ?? {});
+  }
+
+  @Put(":id")
+  async update(
+    @Param("id") id: string,
+    @Body() body: TaggedRequestBody,
+    @Req() request: IdentifiedRequest,
+  ): Promise<MembershipRecord> {
+    return this.team.change(await this.accounts.readingAccount(request.identity), id, body.tag, body.value);
+  }
+
+  @Delete(":id")
+  async end(@Param("id") id: string, @Req() request: IdentifiedRequest): Promise<MembershipRecord> {
+    return this.team.end(await this.accounts.readingAccount(request.identity), id);
   }
 }

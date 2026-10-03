@@ -1,4 +1,12 @@
-import type { Membership, MembershipStatus, MembershipType, OrganizationProfile } from "@rules/organizations";
+import {
+  AFFILIATION_EVENT_LABELS,
+  type AffiliationEventKind,
+  type Membership,
+  type MembershipStatus,
+  type MembershipType,
+  type OrganizationProfile,
+  type TeamMember as RulesTeamMember,
+} from "@rules/organizations";
 import { api } from "./client";
 
 /**
@@ -31,7 +39,21 @@ export interface Organization extends OrganizationProfile {
   readonly swuQualified: boolean;
   readonly twuQualified: boolean;
   readonly viewerMembership: Membership | null;
+  /** Changes of administrator rights and ownership, newest first (R-3.33). */
+  readonly changelog: readonly ChangelogEntry[];
 }
+
+/** One changelog entry: what happened, to whom, when and by whom. */
+export interface ChangelogEntry {
+  readonly id: string;
+  readonly event: AffiliationEventKind;
+  readonly createdAt: string;
+  readonly memberName: string;
+  readonly createdByName: string;
+}
+
+/** One person on an organization's team (R-3.14). */
+export type TeamMember = RulesTeamMember;
 
 /** One of the signed-in person's own memberships. */
 export interface OwnMembership {
@@ -107,6 +129,39 @@ export function readOrganization(value: unknown): Organization | null {
     swuQualified: value.swuQualified === true,
     twuQualified: value.twuQualified === true,
     viewerMembership: readMembership(value.viewerMembership),
+    changelog: Array.isArray(value.changelog)
+      ? value.changelog.map(readChangelogEntry).filter((entry): entry is ChangelogEntry => entry !== null)
+      : [],
+  };
+}
+
+const name = (value: unknown) => (isRecord(value) && typeof value.name === "string" ? value.name : "");
+
+function readChangelogEntry(value: unknown): ChangelogEntry | null {
+  if (!isRecord(value) || typeof value.id !== "string" || typeof value.createdAt !== "string") return null;
+  if (!(typeof value.event === "string" && value.event in AFFILIATION_EVENT_LABELS)) return null;
+  return {
+    id: value.id,
+    event: value.event as AffiliationEventKind,
+    createdAt: value.createdAt,
+    memberName: name(value.member),
+    createdByName: name(value.createdBy),
+  };
+}
+
+function readTeamMember(value: unknown): TeamMember | null {
+  const membership = readMembership(value);
+  if (!membership || !isRecord(value) || typeof value.id !== "string" || !isRecord(value.user)) return null;
+  const user = value.user;
+  if (typeof user.id !== "string") return null;
+  return {
+    ...membership,
+    affiliationId: value.id,
+    userId: user.id,
+    name: text(user.name),
+    capabilities: Array.isArray(user.capabilities)
+      ? user.capabilities.filter((capability): capability is string => typeof capability === "string")
+      : [],
   };
 }
 
@@ -231,4 +286,98 @@ export async function fetchOwnMemberships(): Promise<MembershipsAnswer> {
   } catch {
     return { kind: "failed" };
   }
+}
+
+/** What asking for an organization's team came back with. */
+export type TeamAnswer =
+  | { readonly kind: "listed"; readonly members: readonly TeamMember[] }
+  | { readonly kind: "failed" };
+
+/** An organization's team, everyone whose membership stands (R-3.14). */
+export async function fetchTeam(organizationId: string): Promise<TeamAnswer> {
+  try {
+    const { data, response } = await api.GET("/api/affiliations", { params: { query: { organization: organizationId } } });
+    if (!response.ok || !Array.isArray(data)) return { kind: "failed" };
+    const members = (data as unknown[]).map(readTeamMember).filter((entry): entry is TeamMember => entry !== null);
+    return { kind: "listed", members };
+  } catch {
+    return { kind: "failed" };
+  }
+}
+
+/** What one invitation came back with (R-3.7, R-3.8, R-3.17, R-3.30). */
+export type InvitationAnswer =
+  | { readonly kind: "invited" }
+  /** Nobody registered uses the address; it has been emailed an invitation to sign up. */
+  | { readonly kind: "not-registered" }
+  /** The membership type was refused. */
+  | { readonly kind: "invalid-type"; readonly reasons: readonly string[] }
+  | { readonly kind: "refused"; readonly reasons: readonly string[] };
+
+/** Every reason in a refusal, whatever it is filed under. */
+function allReasonsIn(body: unknown): string[] {
+  if (!isRecord(body)) return [];
+  return Object.values(body).flatMap((reasons) =>
+    Array.isArray(reasons) ? reasons.filter((reason): reason is string => typeof reason === "string") : [],
+  );
+}
+
+/** Inviting one email address to the team; the team tab always names an ordinary member. */
+export async function inviteToTeam(
+  organizationId: string,
+  userEmail: string,
+  membershipType: MembershipType = "MEMBER",
+): Promise<InvitationAnswer> {
+  try {
+    const { error: refusal, response } = await api.POST("/api/affiliations", {
+      body: { organization: organizationId, userEmail, membershipType },
+    });
+    if (response.ok) return { kind: "invited" };
+    // The contract declares no refusal shape, so the answer is read rather than trusted.
+    const error: unknown = refusal;
+    if (isRecord(error) && Array.isArray(error.inviteeNotRegistered)) return { kind: "not-registered" };
+    if (isRecord(error) && Array.isArray(error.membershipType)) return { kind: "invalid-type", reasons: allReasonsIn(error) };
+    return { kind: "refused", reasons: allReasonsIn(error) };
+  } catch {
+    return { kind: "refused", reasons: [] };
+  }
+}
+
+/** What a change to a membership came back with. */
+export type MembershipChangeAnswer =
+  | { readonly kind: "saved" }
+  | { readonly kind: "refused"; readonly reasons: readonly string[] };
+
+async function changed(call: Promise<{ error?: unknown; response: Response }>): Promise<MembershipChangeAnswer> {
+  try {
+    const { error, response } = await call;
+    return response.ok ? { kind: "saved" } : { kind: "refused", reasons: allReasonsIn(error) };
+  } catch {
+    return { kind: "refused", reasons: [] };
+  }
+}
+
+/** Accepting a pending invitation (R-3.9). */
+export function acceptMembership(affiliationId: string): Promise<MembershipChangeAnswer> {
+  return changed(api.PUT("/api/affiliations/{id}", { params: { path: { id: affiliationId } }, body: { tag: "approve" } }));
+}
+
+/** Giving or withdrawing administrator rights (R-3.12). */
+export function setAdministratorRights(affiliationId: string, administrator: boolean): Promise<MembershipChangeAnswer> {
+  return changed(
+    api.PUT("/api/affiliations/{id}", {
+      params: { path: { id: affiliationId } },
+      body: { tag: "updateAdminStatus", value: administrator },
+    }),
+  );
+}
+
+/** Making this member the organization's owner (R-3.13). */
+export function transferOwnership(affiliationId: string): Promise<MembershipChangeAnswer> {
+  return changed(api.PUT("/api/affiliations/{id}", { params: { path: { id: affiliationId } }, body: { tag: "changeOwner" } }));
+}
+
+/** Ending a membership: leaving, declining, removing, or withdrawing an invitation (R-3.10, R-3.32). */
+export function endMembership(affiliationId: string): Promise<MembershipChangeAnswer> {
+  return changed(api.DELETE("/api/affiliations/{id}", { params: { path: { id: affiliationId } } }));
 }

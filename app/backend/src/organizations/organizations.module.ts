@@ -10,13 +10,18 @@ import {
 } from "./organizations.controller";
 import { OrganizationsService } from "./organizations.service";
 import { PrismaOrganizationStore } from "./prisma-organization.store";
+import { TeamService } from "./team.service";
 
-/** Organizations: the list, registering, the profile and archiving (slice 11). */
+/**
+ * Organizations: the list, registering, the profile and archiving (slice 11); the team, its
+ * invitations, administrator rights, ownership and the changelog (slice 12).
+ */
 @Module({
   imports: [UsersModule, FileStoreModule],
   controllers: [OrganizationsController, OwnedOrganizationsController, AffiliationsController],
   providers: [
     OrganizationsService,
+    TeamService,
     { provide: ORGANIZATION_STORE, useClass: PrismaOrganizationStore },
     // A logo is a stored picture the person may read, as a profile picture is (R-8.28).
     { provide: LOGO_ACCESS, useExisting: FilesService },

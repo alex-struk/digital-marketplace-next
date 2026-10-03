@@ -34,7 +34,13 @@ import {
   fetchAccount,
 } from "../api/accounts";
 import { fileAddress, uploadPicture } from "../api/files";
-import { OwnMembership, fetchOwnMemberships } from "../api/organizations";
+import {
+  MembershipChangeAnswer,
+  OwnMembership,
+  acceptMembership,
+  endMembership,
+  fetchOwnMemberships,
+} from "../api/organizations";
 import { ownsOrAdministers } from "@rules/organizations";
 import { ImagePicker, PictureRejection, checkChosenPicture } from "../app/image-picker";
 import { Stack } from "../app/page-layout";
@@ -118,6 +124,7 @@ export function UserProfileScreen({ userId }: { userId: string }) {
             base={userId === "me" ? "/users/me" : `/users/${viewer.id}`}
             asked={search.tab}
             unsubscribe={search.unsubscribe !== undefined}
+            invitation={invitationArrival(search)}
           />
         ) : (
           <SomebodyElsesProfile viewer={viewer} userId={userId} />
@@ -374,11 +381,13 @@ function OwnProfile({
   base,
   asked,
   unsubscribe,
+  invitation,
 }: {
   account: Account;
   base: string;
   asked: unknown;
   unsubscribe: boolean;
+  invitation: InvitationArrival | null;
 }) {
   const offered = profileSections(account, account);
   // Arriving from a message's unsubscribe offer opens the notifications section with the
@@ -405,7 +414,7 @@ function OwnProfile({
       {section === "capabilities" ? (
         <CapabilitiesSection account={account} />
       ) : section === "organizations" ? (
-        <OrganizationsSection />
+        <OrganizationsSection arrival={invitation} />
       ) : section === "notifications" ? (
         <NotificationsSection account={account} base={base} askOnArrival={unsubscribe} />
       ) : section === "legal" ? (
@@ -936,15 +945,62 @@ const memberCell = {
   borderBottom: "var(--layout-border-width-small) solid var(--surface-color-border-default)",
 } as const;
 
+/** An answer to an invitation, or leaving, waiting to be confirmed. */
+type MembershipAnswer = "accept" | "decline" | "leave";
+
+/**
+ * Arriving from an invitation message: the membership it is about and the answer chosen there
+ * (R-3.35). The address names nothing about the reader, who is whoever is signed in.
+ */
+export interface InvitationArrival {
+  readonly invitation: string;
+  readonly answer: "accept" | "decline";
+}
+
+export function invitationArrival(search: Record<string, unknown>): InvitationArrival | null {
+  const { invitation, answer } = search;
+  if (typeof invitation !== "string" || invitation === "") return null;
+  return answer === "accept" || answer === "decline" ? { invitation, answer } : null;
+}
+
+const CONFIRMED: Record<MembershipAnswer, (name: string) => string> = {
+  accept: (name) => `You have joined ${name}.`,
+  decline: (name) => `You have declined the invitation from ${name}.`,
+  leave: (name) => `You have left ${name}.`,
+};
+
+/**
+ * The person's memberships once an answer has been confirmed: an accepted invitation is active, a
+ * declined invitation or a membership left is gone.
+ */
+export function membershipsAfter(
+  memberships: readonly OwnMembership[],
+  membershipId: string,
+  chosen: MembershipAnswer,
+): readonly OwnMembership[] {
+  if (chosen !== "accept") return memberships.filter((membership) => membership.id !== membershipId);
+  return memberships.map((membership) =>
+    membership.id === membershipId ? { ...membership, membershipStatus: "ACTIVE" as const } : membership,
+  );
+}
+
 /**
  * The organizations a vendor owns, and those they belong to or are invited to, none of them
  * archived (R-3.6, R-3.23). The organization's name links to its management page where the
- * person owns or administers it (R-3.3). Answering an invitation and leaving an organization
- * arrive with the team (slice 12).
+ * person owns or administers it (R-3.3). A pending invitation is accepted or declined here, and an
+ * active membership of an organization the person does not own is left here, each confirmed
+ * first (R-3.9, R-3.10, R-3.31, R-3.32). Arriving from an invitation message opens the matching
+ * confirmation at once (R-3.35).
  */
-function OrganizationsSection() {
+function OrganizationsSection({ arrival }: { arrival: InvitationArrival | null }) {
   useScreenTitle("My Organizations");
   const [answer, setAnswer] = useState<readonly OwnMembership[] | "loading" | "failed">("loading");
+  const [asking, setAsking] = useState<{ membership: OwnMembership; answer: MembershipAnswer } | null>(null);
+  const [working, setWorking] = useState(false);
+  const [status, setStatus] = useState<string | null>(null);
+  const [failure, setFailure] = useState<string | null>(null);
+  const [arrivalMissing, setArrivalMissing] = useState(false);
+  const arrivalHandled = useRef(false);
 
   useEffect(() => {
     let current = true;
@@ -955,6 +1011,37 @@ function OrganizationsSection() {
       current = false;
     };
   }, []);
+
+  // The invitation message's choice is asked once the memberships are known.
+  useEffect(() => {
+    if (!arrival || arrivalHandled.current || answer === "loading" || answer === "failed") return;
+    arrivalHandled.current = true;
+    const waiting = answer.find((membership) => membership.id === arrival.invitation && membership.membershipStatus === "PENDING");
+    if (waiting) setAsking({ membership: waiting, answer: arrival.answer });
+    else setArrivalMissing(true);
+  }, [arrival, answer]);
+
+  async function confirm() {
+    if (!asking || working) return;
+    const { membership, answer: chosen } = asking;
+    setWorking(true);
+    setFailure(null);
+    const result: MembershipChangeAnswer =
+      chosen === "accept" ? await acceptMembership(membership.id) : await endMembership(membership.id);
+    setWorking(false);
+    setAsking(null);
+    setArrivalMissing(false);
+    if (result.kind === "refused") {
+      setFailure(result.reasons.join(" ") || "Try again in a moment.");
+      return;
+    }
+    // The list takes the confirmed answer in the same render as the status that announces it, so the
+    // page never says the person has left while still listing the organization with Leave (R-3.10).
+    setAnswer((listed) => (Array.isArray(listed) ? membershipsAfter(listed, membership.id, chosen) : listed));
+    setStatus(CONFIRMED[chosen](membership.organization.legalName));
+    const found = await fetchOwnMemberships();
+    if (found.kind === "listed") setAnswer(found.memberships);
+  }
 
   if (answer === "loading") return <Loading label="Loading your organizations…" />;
   if (answer === "failed") {
@@ -973,9 +1060,24 @@ function OrganizationsSection() {
     ) : (
       membership.organization.legalName
     );
+  const ask = (membership: OwnMembership, chosen: MembershipAnswer) => {
+    setStatus(null);
+    setFailure(null);
+    setAsking({ membership, answer: chosen });
+  };
 
   return (
     <>
+      <div role="status">{status ? <Text elementType="p">{status}</Text> : null}</div>
+      {failure ? <InlineAlert variant="danger" role="alert" title="That could not be done" description={failure} /> : null}
+      {arrivalMissing ? (
+        <InlineAlert
+          variant="warning"
+          role="alert"
+          title="That invitation is no longer waiting for your answer"
+          description="It may have been answered already or withdrawn. Your organizations are listed below."
+        />
+      ) : null}
       <Stack as="section" aria-labelledby="owned-heading" gap="medium">
         <Heading level={2} id="owned-heading">
           Organizations you own
@@ -1036,44 +1138,156 @@ function OrganizationsSection() {
             You do not belong to any other organizations. An organization’s owner or administrators can invite you by email.
           </Text>
         ) : (
-          <div role="region" aria-labelledby="affiliated-caption" tabIndex={0} style={{ overflowX: "auto" }}>
-            <table style={{ borderCollapse: "collapse", width: "100%" }} data-testid="membership-affiliated-table">
-              <caption id="affiliated-caption" style={{ textAlign: "start" }}>
-                <Text size="small" color="secondary">
-                  Organizations you are a member of or have been invited to
-                </Text>
-              </caption>
-              <thead>
-                <tr>
-                  <th scope="col" style={memberCell}>
-                    Organization
-                  </th>
-                  <th scope="col" style={memberCell}>
-                    Membership
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {affiliated.map((membership) => (
-                  <tr key={membership.id}>
-                    <td style={memberCell}>{name(membership)}</td>
-                    <td style={memberCell}>
-                      {membership.membershipStatus === "PENDING" ? (
-                        <span style={badge} data-testid="organization-pending-badge">
-                          Pending
-                        </span>
-                      ) : (
-                        <span style={badge}>{MEMBERSHIP_LABELS[membership.membershipType]}</span>
-                      )}
-                    </td>
+          <>
+            <Text elementType="p">Leaving an organization takes you off its team. You would need to be invited again to rejoin.</Text>
+            <div role="region" aria-labelledby="affiliated-caption" tabIndex={0} style={{ overflowX: "auto" }}>
+              <table style={{ borderCollapse: "collapse", width: "100%" }} data-testid="membership-affiliated-table">
+                <caption id="affiliated-caption" style={{ textAlign: "start" }}>
+                  <Text size="small" color="secondary">
+                    Organizations you are a member of or have been invited to
+                  </Text>
+                </caption>
+                <thead>
+                  <tr>
+                    <th scope="col" style={memberCell}>
+                      Organization
+                    </th>
+                    <th scope="col" style={memberCell}>
+                      Membership
+                    </th>
+                    <th scope="col" style={memberCell}>
+                      Actions
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {affiliated.map((membership) => (
+                    <tr key={membership.id}>
+                      <td style={memberCell}>{name(membership)}</td>
+                      <td style={memberCell}>
+                        {membership.membershipStatus === "PENDING" ? (
+                          <span style={badge} data-testid="organization-pending-badge">
+                            Pending
+                          </span>
+                        ) : (
+                          <span style={badge}>{MEMBERSHIP_LABELS[membership.membershipType]}</span>
+                        )}
+                      </td>
+                      <td style={memberCell}>
+                        {membership.membershipStatus === "PENDING" ? (
+                          <Stack direction="row" gap="small">
+                            <Button
+                              variant="tertiary"
+                              size="small"
+                              aria-label={`Accept the invitation from ${membership.organization.legalName}`}
+                              onPress={() => ask(membership, "accept")}
+                              data-testid="membership-approve-button"
+                            >
+                              Accept
+                            </Button>
+                            <Button
+                              variant="tertiary"
+                              size="small"
+                              danger
+                              aria-label={`Decline the invitation from ${membership.organization.legalName}`}
+                              onPress={() => ask(membership, "decline")}
+                              data-testid="membership-reject-button"
+                            >
+                              Decline
+                            </Button>
+                          </Stack>
+                        ) : (
+                          <Button
+                            variant="tertiary"
+                            size="small"
+                            danger
+                            aria-label={`Leave ${membership.organization.legalName}`}
+                            onPress={() => ask(membership, "leave")}
+                            data-testid="membership-leave-button"
+                          >
+                            Leave
+                          </Button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </Stack>
+      {/* Drawn only while something is being asked, so a closed confirmation leaves no empty dialog behind. */}
+      {asking ? (
+        <MembershipDialog asking={asking} working={working} onCancel={() => setAsking(null)} onConfirm={() => void confirm()} />
+      ) : null}
     </>
+  );
+}
+
+/** The confirmation an answer to an invitation, or leaving, waits for. Nothing changes until it is given. */
+function MembershipDialog({
+  asking,
+  working,
+  onCancel,
+  onConfirm,
+}: {
+  asking: { membership: OwnMembership; answer: MembershipAnswer } | null;
+  working: boolean;
+  onCancel: () => void;
+  onConfirm: () => void;
+}) {
+  const name = asking?.membership.organization.legalName ?? "";
+  const shapes = {
+    accept: {
+      variant: "confirmation" as const,
+      title: `Join ${name}?`,
+      testId: "membership-accept-dialog",
+      confirm: "Join organization",
+      text: `You will join ${name}’s team and can be put forward on its proposals. Its owner will be emailed that you accepted.`,
+    },
+    decline: {
+      variant: "destructive" as const,
+      title: `Decline the invitation from ${name}?`,
+      testId: "membership-decline-dialog",
+      confirm: "Decline invitation",
+      text: "The invitation will be removed and you will not join the team. Its owner will be emailed that you declined.",
+    },
+    leave: {
+      variant: "destructive" as const,
+      title: `Leave ${name}?`,
+      testId: "membership-leave-dialog",
+      confirm: "Leave organization",
+      text: `You will no longer be on ${name}’s team or be put forward on its proposals. To rejoin, you would need to be invited again.`,
+    },
+  };
+  const shape = shapes[asking?.answer ?? "accept"];
+  return (
+    <Modal isOpen={asking !== null} isDismissable onOpenChange={(open) => (!open && !working ? onCancel() : undefined)}>
+      <AlertDialog
+        variant={shape.variant}
+        title={shape.title}
+        data-testid={shape.testId}
+        buttons={
+          <>
+            <Button variant="secondary" isDisabled={working} onPress={onCancel} data-testid="membership-dialog-cancel">
+              Cancel
+            </Button>
+            <Button
+              variant="primary"
+              danger={shape.variant === "destructive"}
+              isDisabled={working}
+              onPress={onConfirm}
+              data-testid="membership-confirm-button"
+            >
+              {shape.confirm}
+            </Button>
+          </>
+        }
+      >
+        <Text elementType="p">{shape.text}</Text>
+      </AlertDialog>
+    </Modal>
   );
 }
 

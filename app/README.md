@@ -184,8 +184,22 @@ administrator and by its owner and organization administrators; only the owner a
 administrator are offered Edit and Archive. An administrator archiving somebody's organization
 emails its owner. `/api/ownedOrganizations` answers a signed-in vendor with the organizations they
 own or administer and refuses everybody else. The rules are `backend/src/rules/organizations.ts`;
-the answers and refusals are decision record 0047. The team, the qualification tabs and the
-program terms pages arrive in slices 12 and 13.
+the answers and refusals are decision record 0047.
+
+The Team members tab (`?tab=team`) lists everyone whose membership stands, read from
+`GET /api/affiliations?organization=<id>` by an administrator and the owner and organization
+administrators only. From it they invite people by email (`POST /api/affiliations`, always as an
+ordinary member), remove people, and give or withdraw administrator rights; an administrator alone
+approves a pending invitee and changes the owner. An address nobody registered uses is emailed an
+invitation to sign up and makes no membership. The invited person is emailed a way to accept and a
+way to decline, both landing on `/users/me?tab=organizations&invitation=<id>&answer=accept|decline`
+with the matching confirmation open; that section also offers Accept, Decline and Leave. Every
+grant or withdrawal of rights and every transfer of ownership is kept in `affiliationEvents` and
+shown on the Changelog tab (`?tab=changelog`), read from the organization's own record. The
+service is `backend/src/organizations/team.service.ts`, the rules the team section of
+`backend/src/rules/organizations.ts`, the screens `frontend/src/screens/organization-team.tsx`;
+the answers and refusals are decision record 0050. The qualification tabs and the program terms
+pages arrive in slice 13.
 
 ## The first administrator
 
