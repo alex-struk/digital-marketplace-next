@@ -1027,6 +1027,8 @@ requests:
     gate: G3
     by: agent:tech-lead
     at: 2026-10-03T14:41:15.878Z
+    taken: 2026-10-03T15:21:41.795Z
+    taken_by: plan-20
   - stage: bind-adapter
     target: new
     why: file-image-picker.choose_image (and its stored-image width and height
