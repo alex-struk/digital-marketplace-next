@@ -5515,10 +5515,10 @@ export default function create(
       requirementItem("twu_requirement_service_area", ORG_TAB.twu, /team with us requirements/i, /service area/i),
     twuRequirementTermsAccepted: () =>
       requirementItem("twu_requirement_terms_accepted", ORG_TAB.twu, /team with us requirements/i, /terms/i),
-    // With the editor open (the service administrator's "Edit service areas"), one line per
-    // box, "<area>: checked" or "<area>: unchecked". With it closed the section lists only the
-    // approved areas under "Approved service areas", each read as "<area>: checked"; where the
-    // editor is offered it is opened to read the other areas too, then cancelled.
+    // The approved service areas only, one per line: with the editor open (the service
+    // administrator's "Edit service areas"), the areas whose boxes are ticked; with it closed,
+    // the items under "Approved service areas". Where the editor is offered it is opened to read
+    // the ticked boxes, then cancelled. An unticked area is never named.
     serviceAreaCheckbox: async () => {
       await orgEdit.on("service_area_checkbox");
       const editing = (await seen(page.getByRole("main").getByRole("checkbox")).count()) > 0;
@@ -5528,13 +5528,13 @@ export default function create(
         const section = seen(regionNamed(page.getByRole("main"), /^\s*approved service areas\s*$/i)).last();
         if (!(await section.count())) return "";
         const items = (await seen(section.getByRole("listitem")).allInnerTexts()).map((one) => one.trim()).filter(Boolean);
-        return items.map((one) => `${one}: checked`).join("\n");
+        return items.join("\n");
       }
       const boxes = await serviceAreaBoxes("service_area_checkbox");
       if (!boxes) return "";
       const out: string[] = [];
       for (let i = 0; i < (await boxes.count()); i++) {
-        out.push(`${await boxName(boxes.nth(i))}: ${(await boxes.nth(i).isChecked()) ? "checked" : "unchecked"}`);
+        if (await boxes.nth(i).isChecked()) out.push(await boxName(boxes.nth(i)));
       }
       if (!editing) {
         const actions = page.getByRole("group", { name: /service area actions/i });
