@@ -2325,3 +2325,27 @@ conditions:
         and its missing field covers both kinds of person
       by: agent:reviewer
       at: 2026-10-03T14:51:04.739Z
+  - ref: derive-tests-organizations-stale-12#1
+    text: "tests/acceptance/organizations/R-3.2.spec.ts, test 'a registration sent
+      by a visitor who is not signed in is refused': remove the assertion that
+      refusalStatus() is '401'. R-3.2 says the request is refused as not
+      permitted and names no status code. The non-empty status check in
+      expectRefusedAsNotPermitted is as far as the criterion reaches."
+    from: derive-tests-organizations-stale-12
+    family: derive-tests-organizations-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-10-03T15:19:36.815Z
+  - ref: derive-tests-organizations-stale-12#2
+    text: "tests/acceptance/organizations/R-3.2.spec.ts, same test: remove the
+      assertion that refusalMessages() contains 'You do not have permission to
+      perform this action.'. R-3.2 names no message wording, and the
+      /permission/ check on refusalReason() in expectRefusedAsNotPermitted
+      already asserts 'refused as not permitted'."
+    from: derive-tests-organizations-stale-12
+    family: derive-tests-organizations-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-10-03T15:19:36.815Z
