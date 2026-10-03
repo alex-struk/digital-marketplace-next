@@ -100,3 +100,14 @@ not span more than one line. When the evidence is genuinely unclear, it is a `pr
 a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the
 adapter comes back from the next binding run unchanged and costs a run to find out.
 
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: did this project's own adapter cause R-7.29's two failures on the old target (Sprint With Us and Team With Us evaluation instructions)? Ruling: approve with R-7.29 triaged as adapter-wrong. Both failures have one cause. The test asks for the body of the embedded instructions page and expects it to be empty, because the page was removed. The adapter's evaluationInstructions().instructionsBody (tests/adapters/old/index.ts:7852) is bound to contentText(), which returns the whole page apart from the top navigation bar and footer. So it returned the screen's own sidebar menu (SUMMARY, OPPORTUNITY MANAGEMENT, OPPORTUNITY EVALUATION, Instructions, NEED HELP?, Read Guide) and the opportunity title, which is exactly the screen material the criterion says must keep working. The Sprint With Us scope-section test reads through the dedicated embeddedSection() binding and did not fail, which shows the application can render an embedded section empty. Nothing in the evidence points at the application or the criterion. What would change the ruling: if a binding scoped to the instructions tab's embedded body still returned text once the page was removed, that would be a product-question.
+
+**Conditions:**
+- adapter-wrong R-7.29: evaluation-instructions-swu/twu instructionsBody is bound to contentText() (whole page minus top nav/footer), so it returns the evaluation screen's own sidebar menu, headings and opportunity title instead of the embedded instructions page's body; bind it to only the instructions tab's embedded-page content region (as embeddedSection() does for the scope section), returning empty when that region has no body, and stop sharing the same whole-page read with visibleToEvaluatorsOnly
