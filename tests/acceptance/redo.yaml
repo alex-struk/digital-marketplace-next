@@ -889,3 +889,19 @@ redo:
       why: derived again by a derive-tests run on opportunities
       by: runner:derive-tests
       at: 2026-10-03T02:17:45.574Z
+  - id: R-3.18
+    version: 1
+    why: tests 2 and 3 have an organization administrator press
+      organizationEdit.editOrganization / saveChanges and archiveOrganization,
+      but the criterion says that person is offered no Edit and no Archive
+      control. The test demands driving controls the criterion requires to be
+      absent, rather than showing the service's refusal some way the UI allows.
+    verb: test-overreaches
+  - id: R-3.2
+    version: 1
+    why: the public-sector-staff test demands that staff open the registration form
+      and submit it, but the criterion only requires their request to be
+      refused. The app refuses by not offering the screen to staff (it shows
+      'Page not found'), and the test cannot bind because it insists the form be
+      filled in.
+    verb: test-overreaches
