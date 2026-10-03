@@ -1283,6 +1283,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-03T18:59:01.439Z
+    taken: 2026-10-03T19:03:40.202Z
+    taken_by: bind-adapter-new-65
   - stage: bind-adapter
     target: new
     why: "R-3.28: organizationEdit.serviceAreaCheckbox read \"\" on
@@ -1300,6 +1302,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-03T18:59:01.439Z
+    taken: 2026-10-03T19:03:40.202Z
+    taken_by: bind-adapter-new-65
   - stage: bind-adapter
     target: new
     why: "R-3.26: both tests were left with no result. The first was skipped as
@@ -1317,6 +1321,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-03T18:59:01.439Z
+    taken: 2026-10-03T19:03:40.202Z
+    taken_by: bind-adapter-new-65
   - stage: bind-adapter
     target: new
     why: "R-3.27: organizationSwuTerms.acceptedOnNotice was reported unbound with a
@@ -1337,3 +1343,5 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-03T18:59:01.439Z
+    taken: 2026-10-03T19:03:40.202Z
+    taken_by: bind-adapter-new-65
