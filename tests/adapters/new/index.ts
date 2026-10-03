@@ -303,7 +303,7 @@ export default function create(
   // program chooser, the forms and the three programs' management screens; the proposal,
   // evaluation and organization terms screens answer "Page not found".
   const NOBODY_SIGNS_IN =
-    'walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor\'s screens — the seeded organization owner, an organization member and the invited vendor for the organization screens — with the seeded records\' identifiers), the running build serves a signed-in person /dashboard, /opportunities, the account screens under /users (a vendor\'s Organizations section, /users/me?tab=organizations, draws "Organizations you own" with "Create organization" and the owned table, and "Organizations you belong to"), /organizations ("Create organization", "My organizations" and the list), /organizations/create, and to an organization\'s owner /organizations/:orgId/edit (the "Organization" section with "Edit organization", and "Archive organization"; its Team members, Sprint With Us qualification, Team With Us qualification and Changelog sections say only "This section is not available yet."), to the administrator the content-management screens under /content, and to the administrator and public sector staff /opportunities/create, the three programs\' forms and their management screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (whose sections on the seeded Sprint With Us and Team With Us opportunities are Summary, Opportunity, Addenda, History and Evaluation panel, with no evaluation, consensus or instructions section); the proposal and evaluation screens — /proposals, the Code With Us proposal screens and /opportunities/code-with-us/:opportunityId/complete included — and /organizations/:orgId/sprint-with-us-terms-and-conditions and /organizations/:orgId/team-with-us-terms-and-conditions (opened as the seeded qualified organization\'s owner) answer "Page not found", as /organizations/:orgId/edit does to a member who does not own the organization';
+    'walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor\'s screens — the seeded organization owner, an organization member and the invited vendor for the organization screens — with the seeded records\' identifiers), the running build serves a signed-in person /dashboard, /opportunities, the account screens under /users (a vendor\'s Organizations section, /users/me?tab=organizations, draws "Organizations you own" with "Create organization" and the owned table, and "Organizations you belong to"), /organizations ("Create organization", "My organizations" and the list), /organizations/create, and to an organization\'s owner /organizations/:orgId/edit (the "Organization" section with "Edit organization", and "Archive organization"; its Team members section draws the team table, its row actions and "Add team members", its Changelog section the changes to administrator rights and ownership, and its Sprint With Us qualification and Team With Us qualification sections say only "This section is not available yet."), to the administrator the content-management screens under /content, and to the administrator and public sector staff /opportunities/create, the three programs\' forms and their management screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (whose sections on the seeded Sprint With Us and Team With Us opportunities are Summary, Opportunity, Addenda, History and Evaluation panel, with no evaluation, consensus or instructions section); the proposal and evaluation screens — /proposals, the Code With Us proposal screens and /opportunities/code-with-us/:opportunityId/complete included — and /organizations/:orgId/sprint-with-us-terms-and-conditions and /organizations/:orgId/team-with-us-terms-and-conditions (opened as the seeded qualified organization\'s owner) answer "Page not found", as /organizations/:orgId/edit does to a member who does not own the organization';
 
   // What each such address answered a signed-out visitor when it was last opened: /dashboard
   // and /sign-up/complete send them to /sign-in?redirectOnSuccess=…, and everything else
@@ -2390,6 +2390,32 @@ export default function create(
     refusalStatus: async () => refusalStatusOf(approval.last("refusal_status")),
   };
 
+  // DELETE /api/affiliations/:id ends a membership, answering 200 with the membership. This
+  // target refuses ending the sole owner's (affiliations.qualifiedOwner) with 400
+  // {"errors":["This is the sole owner for the organization, and cannot be removed."]}, and
+  // an identifier holding no membership with 404 {"errors":["No membership is held at that
+  // address."]}.
+  const removal = requests("affiliation-removal-request");
+  let removalOpened = "";
+  const affiliationRemovalRequest: S.AffiliationRemovalRequestPage = {
+    open: async (params) => {
+      removalOpened = seededId(params?.affiliationId, "affiliations");
+    },
+    async endMembershipByRequest(input) {
+      const member = "end_membership_by_request";
+      const named = seededId(
+        given(input, ["affiliation", "affiliationId", "membership", "membershipId", "membershipIdentifier", "id"]),
+        "affiliations",
+      );
+      const affiliation = named || removalOpened;
+      if (!affiliation) unbound(`affiliation-removal-request.${member}`, "no membership was opened or named to end");
+      await removal.send(member, "DELETE", `${baseURL}/api/affiliations/${encodeURIComponent(affiliation)}`);
+    },
+    requestAccepted: async () => acceptedText(removal.last("request_accepted")),
+    refusalMessages: async () => messagesOf(removal.last("refusal_messages")),
+    refusalStatus: async () => refusalStatusOf(removal.last("refusal_status")),
+  };
+
   // ------------------------------------------------ accounts
 
   // Signed out, GET /api/users answers 401 ["You do not have permission to perform this action."].
@@ -3968,11 +3994,35 @@ export default function create(
     return (await tableRows()).map((row) => row.split(" | ")[at] ?? "").filter(Boolean);
   }
 
-  // A row of the screen's tables that names the person or thing the test gave.
+  // The name a screen shows for a person named by seed handle, persona, identifier or
+  // address, or handed over whole (a persona carries its name); empty when none is known.
+  function shownName(value: unknown): string {
+    if (value && typeof value === "object" && !Array.isArray(value)) {
+      const handed = record(value);
+      if (typeof handed.name === "string" && handed.name.trim()) return handed.name.trim();
+      for (const key of ["member", "user", "person", "newOwner", "owner"]) {
+        if (handed[key] !== undefined) {
+          const inner = shownName(handed[key]);
+          if (inner) return inner;
+        }
+      }
+    }
+    const person = personOf(value);
+    if (!person) return "";
+    const found = Object.values(seedGroups.users ?? {}).find(
+      (each) => (person.id && each.id === person.id) || (person.email && each.email === person.email),
+    );
+    const name = found ? record(found).name : undefined;
+    return typeof name === "string" ? name : "";
+  }
+
+  // A row of the screen's tables that names the person or thing the test gave. Team tables
+  // name people by name alone, so a person is looked for by address and by name.
   async function rowNaming(where: string, input: unknown, groups: string[]): Promise<Locator> {
     const person = personOf(given(input, ["member", "user", "email", "person"]) ?? input);
     const words = [
       person?.email,
+      shownName(input),
       givenText(input, ["email", "name", "title"]),
       typeof input === "string" ? input : "",
       seededId(given(input, ["id"]) ?? "", ...groups),
@@ -4946,9 +4996,12 @@ export default function create(
     return { label, region: (await region.count()) ? region : null };
   }
   // Opens a section for a member that acts or reads inside it. A section the build draws but
-  // has not filled — on the current build Team members, both qualification sections and
-  // Changelog say only "This section is not available yet." — offers none of what the member
-  // needs, which is unbound, not empty.
+  // has not filled — on the current build both qualification sections say only "This section
+  // is not available yet." — offers none of what the member needs, which is unbound, not
+  // empty. Team members and Changelog are drawn: the Changelog region holds the table
+  // "Changes to administrator rights and ownership, newest first" (Date | Change | Member |
+  // Made by, e.g. "Admin Rights Given") or, with none, "No administrator rights have been
+  // given or withdrawn, and ownership has not been transferred."
   async function orgTabOpen(member: string, name: RegExp): Promise<void> {
     await orgEdit.on(member);
     const tab = await orgSectionLink(name);
@@ -5009,11 +5062,102 @@ export default function create(
       await settle();
     }
   }
+  // A row that names the person but offers no such control (the owner's row offers none) is
+  // the screen's answer, reported as such rather than as a control never found.
   async function orgInRow(member: string, input: unknown, control: RegExp, confirm: RegExp): Promise<void> {
     await orgTabOpen(member, ORG_TAB.team);
-    const row = await rowNaming(orgEdit.where(member), input, ["users"]);
-    await press(orgEdit.where(member), control, row);
-    await confirmIfAsked(orgEdit.where(member), confirm);
+    const where = orgEdit.where(member);
+    const row = await rowNaming(where, input, ["users"]);
+    if (!(await findControl(row, control))) {
+      throw new Error(
+        `${where} — the row "${(await row.innerText()).replace(/\s+/g, " ").trim()}" in the team table on ${page.url()} offers no control named ${control}`,
+      );
+    }
+    await press(where, control, row);
+    await confirmIfAsked(where, confirm);
+  }
+  // Walked as the organization's owner and as the administrator on the seeded qualified
+  // organization's ?tab=team: the table "Everyone who belongs to or has been invited to this
+  // organization" has the columns Name ("Blake Placeholder (you)" on the viewer's own row),
+  // Membership ("Owner", "Administrator", "Member", "Pending"), Capabilities (a count) and
+  // Actions. The cells of one column, on the rows whose cell matches.
+  async function teamColumn(header: RegExp, pattern: RegExp): Promise<string> {
+    const at = await columnIndex(header);
+    if (at < 0) return "";
+    return (await tableRows(seen(page.getByRole("main"))))
+      .map((row) => (row.split(" | ")[at] ?? "").trim())
+      .filter((cell) => pattern.test(cell))
+      .join("\n");
+  }
+  async function columnIndex(header: RegExp): Promise<number> {
+    const headers = seen(page.getByRole("main").getByRole("columnheader"));
+    for (let i = 0; i < (await headers.count()); i++) {
+      if (header.test((await headers.nth(i).innerText()).trim())) return i;
+    }
+    return -1;
+  }
+  // The team table names people only; each row's name is followed by the address and persona
+  // of the account it is, looked up from the organization's memberships (each carries its
+  // user's identifier and name) and the seed, so that a row can be matched to a persona.
+  async function teamRowsNamed(): Promise<string[]> {
+    const rows = await tableRows(seen(page.getByRole("main")));
+    const orgId = /\/organizations\/([^/?#]+)\/edit/.exec(page.url())?.[1] ?? "";
+    const byName = new Map<string, string>();
+    const known = await peek(`${baseURL}/api/affiliations?organization=${encodeURIComponent(orgId)}`);
+    if (Array.isArray(known.json)) {
+      for (const one of known.json) {
+        const user = record(record(one).user);
+        if (typeof user.name === "string" && user.id !== undefined) byName.set(user.name.trim(), String(user.id));
+      }
+    }
+    const users = Object.values(seedGroups.users ?? {});
+    return rows.map((row) => {
+      const cells = row.split(" | ");
+      const shown = (cells[0] ?? "").replace(/\s*\(you\)\s*$/i, "").trim();
+      const id = byName.get(shown);
+      const found = users.find((each) => (id && each.id === id) || record(each).name === shown);
+      const also = found ? [found.email, found.persona].filter((one) => typeof one === "string" && one) : [];
+      if (also.length) cells[0] = `${cells[0]} (${also.join(", ")})`;
+      return cells.join(" | ");
+    });
+  }
+  // Making a member an administrator opens the dialog "Give <name> administrator rights?",
+  // whose box "I have read this statement and confirm it" must be ticked before its "Give
+  // administrator rights" is enabled; withdrawing the rights takes effect at once.
+  let orgAdminTermsWanted: boolean | null = null;
+  // Set when toggle_member_admin_status leaves the statement dialog open for
+  // accept_org_admin_terms to answer; any other member of the screen cancels it first.
+  let orgAdminTermsLeftOpen = false;
+  async function dismissAdminTerms(): Promise<void> {
+    if (!orgAdminTermsLeftOpen) return;
+    orgAdminTermsLeftOpen = false;
+    const open = dialog();
+    if (!(await open.count()) || !(await seen(open.getByRole("checkbox", { name: ADMIN_TERMS })).count())) return;
+    const cancel = seen(open.getByRole("button", { name: /^\s*(cancel|close)\s*$/i })).first();
+    if (await cancel.count()) await cancel.click().catch(() => undefined);
+    else await page.keyboard.press("Escape").catch(() => undefined);
+    await open.waitFor({ state: "hidden", timeout: 3000 }).catch(() => undefined);
+    await settle();
+  }
+  const ADMIN_TERMS = /statement|terms|agree|confirm/i;
+  const ADMIN_GIVE = /^\s*give administrator rights\s*$/i;
+  async function adminTermsDialog(): Promise<Locator | null> {
+    const open = dialog();
+    await open.waitFor({ state: "visible", timeout: 3000 }).catch(() => undefined);
+    if (!(await open.count())) return null;
+    return (await seen(open.getByRole("checkbox", { name: ADMIN_TERMS })).count()) ? open : null;
+  }
+  async function answerAdminTerms(where: string, open: Locator, wanted: boolean): Promise<void> {
+    orgAdminTermsLeftOpen = false;
+    const box = seen(open.getByRole("checkbox", { name: ADMIN_TERMS })).first();
+    await box.setChecked(wanted);
+    await settle();
+    if (!wanted) return;
+    const give = seen(open.getByRole("button", { name: ADMIN_GIVE })).first();
+    if (!(await give.count())) unbound(where, `the dialog "${(await open.innerText()).split("\n")[0]}" on ${page.url()} offers no "Give administrator rights"`);
+    if (await isDisabled(give)) throw new Error(`${where} — "Give administrator rights" stays disabled with the statement ticked on ${page.url()}`);
+    await give.click();
+    await settle();
   }
   const organizationEdit: S.OrganizationEditPage = {
     open: (params) => orgEdit.open(params as unknown as Record<string, string>),
@@ -5054,50 +5198,120 @@ export default function create(
         }
         await boxes.nth(i).fill(emails[i]);
       }
+      // The dialog "Add team members" says each person "joins the team as a member once they
+      // accept" and offers no membership type; a member kind is what it sends, any other kind
+      // cannot be entered on it.
       const kind = givenText(input, ["membershipType", "type", "role"]);
-      if (kind) {
+      if (kind && !/^\s*member(ship)?\s*$/i.test(kind)) {
         const chooser = await fieldLabelled(/membership|type|role/i, false);
-        if (!chooser) unbound(where, `the invitation form on ${page.url()} offers no membership type to choose "${kind}" from`);
+        if (!chooser) unbound(where, `the "Add team members" dialog on ${page.url()} offers only "Email address N" boxes, "Add another email address", "Cancel" and "Send invitations" — no membership type, so the input's membershipType "${kind}" cannot be entered`);
         await enter(where, "membershipType", chooser, kind);
       }
       await press(where, /^\s*(add|invite|send)( team members?| invitations?)?\s*$/i, scope);
     },
-    approvePendingMember: (input) => orgInRow("approve_pending_member", input, /^\s*approve\s*$/i, /^\s*approve\s*$/i),
-    removeTeamMember: (input) => orgInRow("remove_team_member", input, /^\s*remove\s*$/i, /^\s*remove( team member)?\s*$/i),
+    // Offered to the service administrator only: a pending row's "Approve <name>" makes the
+    // person a member at once, with no confirmation. The organization's owner is shown the
+    // pending row with only "Remove <name>", which is reported as the row's answer.
+    approvePendingMember: (input) => orgInRow("approve_pending_member", input, /^\s*approve\b/i, /^\s*approve\b/i),
+    // Each row's "Remove" asks "Remove <name> from the team?" and is confirmed by "Remove from
+    // team". The owner's row offers no Remove.
+    removeTeamMember: (input) =>
+      orgInRow("remove_team_member", input, /^\s*remove\s*$/i, /^\s*remove( team member| from team)?\s*$/i),
+    // A row offers "Give administrator rights to <name>" or "Remove administrator rights from
+    // <name>". The input may say which is wanted (admin / isAdmin / grant: true or false);
+    // otherwise whichever the row offers is pressed. Giving the rights opens the statement
+    // dialog, which is answered here when accept_org_admin_terms was taken first, and is
+    // otherwise left open for it.
     toggleMemberAdminStatus: async (input) => {
       const where = orgEdit.where("toggle_member_admin_status");
       await orgTabOpen("toggle_member_admin_status", ORG_TAB.team);
       const row = await rowNaming(where, input, ["users"]);
-      const box = seen(row.getByRole("checkbox").or(row.getByRole("switch")));
-      if (!(await box.count())) unbound(where, `the member's row on ${page.url()} carries no administrator box`);
-      if (await isDisabled(box.first())) throw new Error(`${where} — the member's administrator box is disabled on ${page.url()}`);
-      await box.first().click();
-      await confirmIfAsked(where, /^\s*(yes|confirm|save|ok|update)\b/i);
+      const said = given(input, ["admin", "isAdmin", "administrator", "grant", "makeAdmin", "value"]);
+      const giving = said === undefined ? null : saysYes(said);
+      const control =
+        giving === null
+          ? /^\s*(give administrator rights|remove administrator rights)/i
+          : giving
+            ? /^\s*give administrator rights/i
+            : /^\s*remove administrator rights/i;
+      const button = seen(row.getByRole("button", { name: control })).first();
+      if (!(await button.count())) {
+        throw new Error(
+          `${where} — the row "${(await row.innerText()).replace(/\s+/g, " ").trim()}" in the team table on ${page.url()} offers no control named ${control}`,
+        );
+      }
+      if (await isDisabled(button)) throw new Error(`${where} — the row's ${control} is disabled on ${page.url()}`);
+      await button.click();
       await settle();
+      const open = await adminTermsDialog();
+      if (open && orgAdminTermsWanted !== null) {
+        await answerAdminTerms(where, open, orgAdminTermsWanted);
+        orgAdminTermsWanted = null;
+      } else if (open) {
+        orgAdminTermsLeftOpen = true;
+      }
     },
+    // The statement box is in the dialog a row's "Give administrator rights to <name>" opens.
+    // With that dialog open the box is set and, when ticked, "Give administrator rights" is
+    // pressed. With none open, a member named in the input has their dialog opened first;
+    // otherwise the answer is kept for the next toggle_member_admin_status to give.
     acceptOrgAdminTerms: async (input) => {
       const where = orgEdit.where("accept_org_admin_terms");
       await orgEdit.on("accept_org_admin_terms");
-      const box = seen(page.getByRole("checkbox", { name: /terms|agree/i }));
-      // The box belongs to making a member an administrator, on the team section.
-      if (!(await box.count())) await orgTabOpen("accept_org_admin_terms", ORG_TAB.team);
-      if (!(await box.count())) unbound(where, `no terms box on ${page.url()}; it offers ${await offered()}`);
-      const wanted = input === undefined ? true : saysYes(given(input, ["checked", "accept", "value"]) ?? input);
-      await box.first().setChecked(wanted);
-      await settle();
+      const said = given(input, ["checked", "accept", "accepted", "value"]);
+      const wanted = input === undefined || input === null ? true : saysYes(said ?? (typeof input === "object" ? true : input));
+      let open = await adminTermsDialog();
+      const named = given(input, ["member", "user", "email", "person", "name"]);
+      if (!open && named !== undefined) {
+        await orgTabOpen("accept_org_admin_terms", ORG_TAB.team);
+        const row = await rowNaming(where, input, ["users"]);
+        const give = seen(row.getByRole("button", { name: /^\s*give administrator rights/i })).first();
+        if (!(await give.count())) {
+          throw new Error(
+            `${where} — the row "${(await row.innerText()).replace(/\s+/g, " ").trim()}" in the team table on ${page.url()} offers no "Give administrator rights", so there is no statement to confirm`,
+          );
+        }
+        await give.click();
+        await settle();
+        open = await adminTermsDialog();
+        if (!open) unbound(where, `pressing "Give administrator rights" on ${page.url()} opened no dialog with a statement box`);
+      }
+      if (!open) {
+        orgAdminTermsWanted = wanted;
+        return;
+      }
+      await answerAdminTerms(where, open, wanted);
+      orgAdminTermsWanted = null;
     },
+    // Offered to the service administrator (the organization's owner is not offered it):
+    // "Change owner" in the team section's "Team actions" opens the dialog "Change owner",
+    // whose "New owner (required)" is a button reading "Select an item" that opens a listbox
+    // of the members who have accepted, by name; its own "Change owner" makes the change.
     changeOwner: async (input) => {
       const where = orgEdit.where("change_owner");
       await orgTabOpen("change_owner", ORG_TAB.team);
-      await press(where, /change owner/i);
-      const person = personOf(given(input, ["newOwner", "owner", "user", "member"]) ?? input);
-      const scope = (await dialog().count()) ? dialog() : page;
-      const chooser = seen(scope.getByRole("combobox")).first();
-      if (!(await chooser.count())) unbound(where, `choosing "Change Owner" on ${page.url()} offers no chooser of people`);
-      const wanted = person?.email || givenText(input, ["name", "email"]);
-      if (!wanted) unbound(where, "the input names no new owner");
-      await pickFrom(where, chooser, wanted);
-      await press(where, /change owner|confirm|save/i, scope);
+      await press(where, /^\s*change owner\s*$/i, seen(page.getByRole("main")));
+      await dialog().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+      if (!(await dialog().count())) unbound(where, `pressing "Change owner" on ${page.url()} opened no dialog`);
+      const scope = dialog();
+      const target = given(input, ["newOwner", "owner", "user", "member"]) ?? input;
+      const wanted = shownName(target) || givenText(input, ["name"]) || (typeof target === "string" ? target : "");
+      if (!wanted) unbound(where, `the input ${JSON.stringify(input)} names no new owner`);
+      const chooser = seen(scope.getByRole("button", { name: /new owner/i }).or(scope.getByRole("combobox", { name: /new owner/i }))).first();
+      if (!(await chooser.count())) unbound(where, `the "Change owner" dialog on ${page.url()} offers no "New owner" chooser`);
+      await chooser.click();
+      const exactly = new RegExp(`^\\s*${wanted.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*$`, "i");
+      const options = seen(page.getByRole("option"));
+      await options.first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+      const option = seen(page.getByRole("option", { name: exactly })).first();
+      if (!(await option.count())) {
+        const offeredNames = (await options.allInnerTexts()).map((one) => one.trim()).join(", ") || "nobody";
+        await page.keyboard.press("Escape").catch(() => undefined);
+        throw new Error(`${where} — "${wanted}" is not among the eligible new owners on ${page.url()}; it offers ${offeredNames}`);
+      }
+      await option.click();
+      await settle();
+      await press(where, /^\s*change owner\s*$/i, scope);
       await confirmIfAsked(where, /change owner|confirm|yes/i);
     },
     editServiceAreas: async () => {
@@ -5171,13 +5385,33 @@ export default function create(
     // for the unqualified one.
     swuQualifiedBadge: () => orgEdit.lines("swu_qualified_badge", /^sprint with us qualified$/i),
     twuQualifiedBadge: () => orgEdit.lines("twu_qualified_badge", /^team with us qualified$/i),
-    ownerBadge: () => orgTabLines("owner_badge", ORG_TAB.team, /^owner$/i),
-    pendingBadge: () => orgTabLines("pending_badge", ORG_TAB.team, /^pending$/i),
-    teamMemberRow: async () => {
-      await orgTabOpen("team_member_row", ORG_TAB.team);
-      return (await tableRows()).join("\n");
+    // The team table's Membership cells that read "Owner" / "Pending".
+    ownerBadge: async () => {
+      await orgTabOpen("owner_badge", ORG_TAB.team);
+      return teamColumn(/^membership$/i, /^owner$/i);
     },
-    teamCapabilities: () => orgTabLines("team_capabilities", ORG_TAB.team, /capabilit/i),
+    pendingBadge: async () => {
+      await orgTabOpen("pending_badge", ORG_TAB.team);
+      return teamColumn(/^membership$/i, /^pending$/i);
+    },
+    // One line per row, the name followed by the account's address and persona. A person who
+    // may not see the organization (an ordinary member, an outsider) is answered "Page not
+    // found" at /organizations/:orgId/edit, which is this target's refusal: no rows are shown.
+    teamMemberRow: async () => {
+      await ready();
+      if (/\/organizations\/[^/?#]+\/edit/.test(new URL(page.url()).pathname) && (await notFoundShown())) return "";
+      await orgTabOpen("team_member_row", ORG_TAB.team);
+      return (await teamRowsNamed()).join("\n");
+    },
+    // The "Team capabilities" region lists each capability as "<name>: held" or "<name>: not
+    // held".
+    teamCapabilities: async () => {
+      await orgTabOpen("team_capabilities", ORG_TAB.team);
+      // The innermost region: "Team members" holds the "Team capabilities" heading too.
+      const region = seen(regionNamed(page.getByRole("main"), /^\s*team capabilities\s*$/i)).last();
+      if (!(await region.count())) return "";
+      return (await seen(region.getByRole("listitem")).allInnerTexts()).map((one) => one.trim()).filter(Boolean).join("\n");
+    },
     swuRequirementTwoMembers: () => orgTabLines("swu_requirement_two_members", ORG_TAB.swu, /\b(two|2)\b.*member/i),
     swuRequirementAllCapabilities: () => orgTabLines("swu_requirement_all_capabilities", ORG_TAB.swu, /capabilit/i),
     swuRequirementTermsAccepted: () => orgTabLines("swu_requirement_terms_accepted", ORG_TAB.swu, /terms/i),
@@ -5202,18 +5436,42 @@ export default function create(
       await orgTabOpen("changelog_entry", ORG_TAB.changelog);
       return (await tableRows()).join("\n");
     },
+    // Fields marked invalid on the organization's form, and, on the team section, the warning
+    // drawn above the team table once the invitation dialog closes — an address nobody has
+    // registered is reported by an alert titled "<address> is not registered with the Digital
+    // Marketplace", over "They have been emailed an invitation to sign up. They are not on your
+    // team."
     fieldError: async () => {
       await orgEdit.on("field_error");
-      return orgFieldErrors();
+      const said = lined(await orgFieldErrors());
+      const team = seen(regionNamed(page.getByRole("main"), /^\s*team( members)?\s*$/i)).first();
+      if (await team.count()) {
+        const alerts = seen(team.getByRole("alert"));
+        for (let i = 0; i < (await alerts.count()); i++) said.push(...lined(await alerts.nth(i).innerText()));
+      }
+      return [...new Set(said)].join("\n");
     },
     invalidMembershipTypeError: async () => {
       await orgTabOpen("invalid_membership_type_error", ORG_TAB.team);
       return unbound(
         orgEdit.where("invalid_membership_type_error"),
-        "the team screen offers one kind of membership, so a refusal of another kind can only be sent by request, not read off this screen",
+        `opened the Team members section of ${page.url()} (signed in as the organization's owner and as the service administrator) and its "Add team members" dialog: it offers only "Email address N" boxes, "Add another email address", "Cancel" and "Send invitations", and says each person "joins the team as a member" — there is no membership type to choose, so no other kind can be sent from the screen and no refusal of one is ever drawn on it`,
       );
     },
   };
+  // "Give <name> administrator rights?" is modal: left open by toggle_member_admin_status for
+  // accept_org_admin_terms, it would stand over every other control and text on the screen.
+  // Every member but those two (and open, which draws the screen afresh) cancels it first —
+  // which gives nobody the rights, as leaving it unanswered does not.
+  for (const key of Object.keys(organizationEdit)) {
+    if (key === "open" || key === "toggleMemberAdminStatus" || key === "acceptOrgAdminTerms") continue;
+    const members = organizationEdit as unknown as Record<string, (...args: unknown[]) => Promise<unknown>>;
+    const original = members[key];
+    members[key] = async (...args: unknown[]) => {
+      await dismissAdminTerms();
+      return original(...args);
+    };
+  }
 
   // ---------------------------------------------------------------- creating an organization
   //
@@ -5326,15 +5584,17 @@ export default function create(
   // "Organizations you own" with none says "You do not own any organizations. Create one to
   // propose on Sprint With Us and Team With Us opportunities." in place of the table.
   // "Organizations you belong to" holds a table "Organizations you are a member of or have
-  // been invited to" (Organization, Membership — "Member" or "Pending"; names are plain text,
-  // no link and no control on any row) or, with none, "You do not belong to any other
-  // organizations. An organization's owner or administrators can invite you by email."
-  // Walked as the invited vendor with the seeded pending invitation, as an organization member
-  // and as the owner: no row carries an accept, decline or leave control; no invitation email
-  // reaches the mail catcher, because the team section that would send one says "This section
-  // is not available yet."; and the address the reference application's invitation email
-  // links to (?tab=organizations&invitationAffiliationId=<the seeded pending
-  // affiliation>&invitationResponse=approve, or =reject) draws the same section with no dialog.
+  // been invited to" (Organization, Membership — "Member" or "Pending" —, Actions; names are
+  // plain text) or, with none, "You do not belong to any other organizations. An
+  // organization's owner or administrators can invite you by email."
+  // Walked as the invited vendor and as an organization member: a pending row's Actions are
+  // "Accept the invitation from <org>" (opens "Join <org>?", confirmed by "Join organization")
+  // and "Decline the invitation from <org>" (opens "Decline the invitation from <org>?",
+  // confirmed by "Decline invitation"); a member's row offers "Leave <org>" (opens "Leave
+  // <org>?", confirmed by "Leave organization"). Each dialog also has "Cancel". The invitation
+  // email ("<org> has invited you to join its team") links to
+  // ?tab=organizations&invitation=<affiliation>&answer=accept (or =decline), which opens this
+  // section with that answer's dialog already open.
   // An organization as the tables name it — its legal name — from a seed handle, an
   // identifier, a record handed over whole, or the name itself.
   function orgNamed(input: unknown): string {
@@ -5382,9 +5642,21 @@ export default function create(
       if (await seen(scope.getByRole("table")).count()) return "";
       return (await paragraphs(scope)).join("\n");
     }
-    // An invitation or membership answered from the row that names the organization.
-    async function answer(member: string, input: unknown, control: RegExp, confirm: RegExp): Promise<void> {
+    // An invitation or membership answered from the row that names the organization. Arrived
+    // from the invitation email, the screen already holds this answer's dialog open, and it is
+    // confirmed there; a dialog of another kind is cancelled before the row is pressed.
+    async function answer(member: string, input: unknown, control: RegExp, confirm: RegExp, kind: RegExp): Promise<void> {
       const where = screen.where(member);
+      await screen.on(member);
+      if (await dialog().count()) {
+        const said = (await dialog().innerText()).trim();
+        const named = orgNamed(input);
+        if (kind.test(said) && (!named || said.toLowerCase().includes(named.toLowerCase()))) {
+          await press(where, confirm, dialog());
+          return;
+        }
+        await closeDialog();
+      }
       const scope = await affiliated(member);
       const named = orgNamed(input);
       const rows = seen(scope.getByRole("row"));
@@ -5396,7 +5668,7 @@ export default function create(
       if (!found || !(await found.evaluate((one) => one.matches("a, button, [role=button], [role=link]")).catch(() => false))) {
         unbound(
           where,
-          `the row "${(await row.innerText()).replace(/\s+/g, " ").trim()}" in "Organizations you belong to" on ${page.url()} offers no control named ${control} — the section's rows carry only the organization's name and the membership; walked as the invited vendor with the seeded pending invitation, no invitation email reaches the mail catcher and the reference application's invitation answer address draws no dialog`,
+          `the row "${(await row.innerText()).replace(/\s+/g, " ").trim()}" in "Organizations you belong to" on ${page.url()} offers no control named ${control} — a pending row offers "Accept the invitation from <org>" and "Decline the invitation from <org>", a member's row "Leave <org>"`,
         );
       }
       await press(where, control, row);
@@ -5404,19 +5676,26 @@ export default function create(
     }
     // The dialog an invitation answer lands on, open on the screen; none open is unbound,
     // since the answer could not be brought to this screen to be confirmed.
-    async function answerDialog(member: string): Promise<string> {
+    // Walked as the invited vendor: a pending row's "Accept the invitation from <org>" opens
+    // "Join <org>?" (confirmed by "Join organization"), and its "Decline the invitation from
+    // <org>" opens "Decline the invitation from <org>?" (confirmed by "Decline invitation").
+    // Each read returns the open dialog only when it is its own kind; the screen open with the
+    // other dialog, or with none, shows no such confirmation.
+    async function answerDialog(member: string, kind: RegExp): Promise<string> {
       await screen.on(member);
-      if (await dialog().count()) return (await dialog().innerText()).trim();
-      return unbound(
-        screen.where(member),
-        `no dialog is open on ${page.url()}; walked as the invited vendor with the seeded pending invitation, the section offers no accept or decline control, no invitation email reaches the mail catcher (the team section that would send one says "This section is not available yet."), and the reference application's answer address (?tab=organizations&invitationAffiliationId=<id>&invitationResponse=approve or =reject) draws the section with no dialog`,
-      );
+      await dialog().waitFor({ state: "visible", timeout: 3000 }).catch(() => undefined);
+      if (!(await dialog().count())) return "";
+      const said = (await dialog().innerText()).trim();
+      return kind.test(said) ? said : "";
     }
     return {
       open: (params?: Record<string, string>) => screen.open(params),
-      approveInvitation: (input?: unknown) => answer("approve_invitation", input, /^\s*(approve|accept)( invitation)?\s*$/i, /^\s*(approve|accept|join)/i),
-      rejectInvitation: (input?: unknown) => answer("reject_invitation", input, /^\s*(reject|decline)( invitation)?\s*$/i, /^\s*(reject|decline)/i),
-      leaveOrganization: (input?: unknown) => answer("leave_organization", input, /^\s*leave( organization)?\s*$/i, /^\s*leave/i),
+      approveInvitation: (input?: unknown) =>
+        answer("approve_invitation", input, /^\s*(approve|accept)\b/i, /^\s*join organization\s*$/i, /^\s*join\b/i),
+      rejectInvitation: (input?: unknown) =>
+        answer("reject_invitation", input, /^\s*(reject|decline)\b/i, /^\s*decline invitation\s*$/i, /^\s*decline the invitation/i),
+      leaveOrganization: (input?: unknown) =>
+        answer("leave_organization", input, /^\s*leave\b/i, /^\s*leave organization\s*$/i, /^\s*leave\b/i),
       createOrganization: async () => {
         const scope = await owned("create_organization");
         await press(screen.where("create_organization"), /^\s*create organization\s*$/i, scope);
@@ -5437,15 +5716,22 @@ export default function create(
       },
       ownedOrganizationsTable: async () => (await tableRows(await owned("owned_organizations_table"))).join("\n"),
       affiliatedOrganizationsTable: async () => (await tableRows(await affiliated("affiliated_organizations_table"))).join("\n"),
-      // The rows of "Organizations you belong to" whose membership is "Pending".
-      pendingBadge: async () =>
-        (await tableRows(await affiliated("pending_badge"))).filter((row) => /(^| \| )pending$/i.test(row)).join("\n"),
+      // The rows of "Organizations you belong to" whose Membership cell reads "Pending" (the
+      // Actions cell, "Accept … Decline …", follows it).
+      pendingBadge: async () => {
+        const scope = await affiliated("pending_badge");
+        const headers = seen(scope.getByRole("columnheader"));
+        let at = -1;
+        for (let i = 0; i < (await headers.count()); i++) if (/^membership$/i.test((await headers.nth(i).innerText()).trim())) at = i;
+        if (at < 0) return "";
+        return (await tableRows(scope)).filter((row) => /^pending$/i.test((row.split(" | ")[at] ?? "").trim())).join("\n");
+      },
       teamMemberCount: () => ownedColumn("team_member_count", /^team members$/i),
       swuQualifiedMark: () => ownedColumn("swu_qualified_mark", /^sprint with us qualified$/i),
       emptyOwnedMessage: async () => emptyNote(await owned("empty_owned_message")),
       emptyAffiliatedMessage: async () => emptyNote(await affiliated("empty_affiliated_message")),
-      acceptConfirmation: () => answerDialog("accept_confirmation"),
-      declineConfirmation: () => answerDialog("decline_confirmation"),
+      acceptConfirmation: () => answerDialog("accept_confirmation", /^\s*join\b|join organization/i),
+      declineConfirmation: () => answerDialog("decline_confirmation", /^\s*decline\b|decline invitation/i),
     };
   }
 
@@ -9125,6 +9411,7 @@ export default function create(
     organizationActingForList,
     affiliationInvitationRequest,
     affiliationApprovalRequest,
+    affiliationRemovalRequest,
     userListRequest,
     contentRequest,
     evaluationIndividualRequestSwu: evaluationRequest<S.EvaluationIndividualRequestSwuPage>(
