@@ -5061,7 +5061,7 @@ owed:
     id: R-7.29
     version: 1
     domain: content
-    stage: contract
+    stage: derive-tests
     why: a seed state in which the embedded page
       (/content/sprint-with-us-opportunity-scope or
       /content/team-with-us-terms-and-conditions) is absent. R-7.25 means no
@@ -5149,3 +5149,15 @@ owed:
         proposal: derive-tests-content-stale-8
         gate: G3
         at: 2026-10-02T23:57:57.361Z
+      - from: contract
+        to: derive-tests
+        why: added observation `page_messages` on `opportunity-swu-view`
+          (spec/contract/surface.yaml) — the text of every notice, alert or
+          error message shown outside the screen's sections, empty when none;
+          for `opportunities.closedSprintWithUs` opened by persona `vendor` it
+          is empty by default, so a test tagged `@service_page_absent` can read
+          it as empty alongside `scope_section`.
+        by: contract-v36
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-10-03T00:05:08.569Z
