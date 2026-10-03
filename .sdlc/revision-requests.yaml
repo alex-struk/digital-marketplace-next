@@ -1075,6 +1075,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-03T17:00:06.478Z
+    taken: 2026-10-03T17:17:20.267Z
+    taken_by: bind-adapter-new-62
   - stage: bind-adapter
     target: new
     why: "R-3.32: organizationEdit.pendingBadge read \"\" for the same reason as
@@ -1086,6 +1088,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-03T17:00:06.478Z
+    taken: 2026-10-03T17:17:20.267Z
+    taken_by: bind-adapter-new-62
   - stage: bind-adapter
     target: new
     why: "R-3.23: organizationEdit.ownerBadge read \"\" because it matches /^owner$/
@@ -1096,6 +1100,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-03T17:00:06.478Z
+    taken: 2026-10-03T17:17:20.267Z
+    taken_by: bind-adapter-new-62
   - stage: bind-adapter
     target: new
     why: "R-3.9: organizationUserMembershipsSelf.pendingBadge filters rows with /(^|
@@ -1108,6 +1114,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-03T17:00:06.478Z
+    taken: 2026-10-03T17:17:20.267Z
+    taken_by: bind-adapter-new-62
   - stage: bind-adapter
     target: new
     why: "R-3.34: organizationEdit.teamCapabilities keeps only lines matching
@@ -1119,6 +1127,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-03T17:00:06.478Z
+    taken: 2026-10-03T17:17:20.267Z
+    taken_by: bind-adapter-new-62
   - stage: bind-adapter
     target: new
     why: 'R-3.13: organizationEdit.changeOwner reports "offers no chooser of people"
@@ -1130,6 +1140,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-03T17:00:06.478Z
+    taken: 2026-10-03T17:17:20.267Z
+    taken_by: bind-adapter-new-62
   - stage: bind-adapter
     target: new
     why: 'R-3.12: organizationEdit.acceptOrgAdminTerms reports no terms box on
@@ -1142,6 +1154,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-03T17:00:06.478Z
+    taken: 2026-10-03T17:17:20.267Z
+    taken_by: bind-adapter-new-62
   - stage: bind-adapter
     target: new
     why: 'R-3.15: the same acceptOrgAdminTerms and toggleMemberAdminStatus binding
@@ -1152,6 +1166,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-03T17:00:06.478Z
+    taken: 2026-10-03T17:17:20.267Z
+    taken_by: bind-adapter-new-62
   - stage: bind-adapter
     target: new
     why: "R-3.33: the same acceptOrgAdminTerms and toggleMemberAdminStatus binding
@@ -1161,6 +1177,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-03T17:00:06.478Z
+    taken: 2026-10-03T17:17:20.267Z
+    taken_by: bind-adapter-new-62
   - stage: bind-adapter
     target: new
     why: 'R-3.14: organizationEdit.teamMemberRow reported unbound because
@@ -1173,6 +1191,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-03T17:00:06.478Z
+    taken: 2026-10-03T17:17:20.267Z
+    taken_by: bind-adapter-new-62
   - stage: bind-adapter
     target: new
     why: "R-3.10: organizationEdit.teamMemberRow returned rows that name people
@@ -1184,6 +1204,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-03T17:00:06.478Z
+    taken: 2026-10-03T17:17:20.267Z
+    taken_by: bind-adapter-new-62
   - stage: bind-adapter
     target: new
     why: 'R-3.35: organizationUserMembershipsSelf.declineConfirmation returned the
@@ -1195,6 +1217,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-03T17:00:06.478Z
+    taken: 2026-10-03T17:17:20.267Z
+    taken_by: bind-adapter-new-62
   - stage: bind-adapter
     target: new
     why: 'R-3.30: organizationEdit.fieldError reads only aria-invalid textboxes, but
@@ -1206,6 +1230,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-03T17:00:06.478Z
+    taken: 2026-10-03T17:17:20.267Z
+    taken_by: bind-adapter-new-62
   - stage: contract
     why: "R-3.11: the surface's only way to try ending an owner's membership is the
       team row's Remove control, and the team screen does not offer Remove on
