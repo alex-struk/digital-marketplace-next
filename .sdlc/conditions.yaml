@@ -2294,6 +2294,15 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-10-03T14:49:30.897Z
+    closed:
+      outcome: met
+      why: tests/acceptance/organizations/R-3.18.spec.ts adds the test 'the Edit and
+        Archive controls on an organization's management page are offered to a
+        service administrator', which signs in as persona.administrator, opens
+        organizationEdit for seed.organizations.qualified and asserts the
+        organizationTab reading contains 'Edit' and 'Archive'
+      by: agent:reviewer
+      at: 2026-10-03T14:51:04.721Z
   - ref: derive-tests-organizations-stale-10#2
     text: "R-3.2: the not-testable.yaml entry for the clause 'a request from anyone
       else is refused' gives a reason only for a signed-in member of public
@@ -2307,3 +2316,12 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-10-03T14:49:30.897Z
+    closed:
+      outcome: met
+      why: the R-3.2 entry in tests/acceptance/not-testable.yaml now gives the reason
+        for persona.vendorWithTermsReset (no observation on organization-create
+        reports a refusal for want of accepted terms, and absence from the
+        owned-organizations table cannot tell a refusal from a form never sent),
+        and its missing field covers both kinds of person
+      by: agent:reviewer
+      at: 2026-10-03T14:51:04.739Z
