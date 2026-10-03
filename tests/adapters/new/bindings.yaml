@@ -661,21 +661,29 @@ pages:
   # logo file is answered by an alert in the logo group ("notes.txt cannot be used as a logo …
   # Please select a different logo image. The current logo has been kept."), a field left
   # wrong is marked invalid with its message. "Archive organization" asks in a dialog with
-  # "Cancel" and "Archive organization". The other four sections say only "This section is
-  # not available yet." A member who does not own the organization is answered "Page not
-  # found".
+  # "Cancel" and "Archive organization". Re-walked on this build: Team members (?tab=team)
+  # draws "Team actions" ("Add team members"; "Change owner" for the service administrator
+  # only), the table Name | Membership | Capabilities | Actions — per row "Give administrator
+  # rights to <name>" / "Remove administrator rights from <name>" and "Remove <name>", and on a
+  # pending row, for the service administrator only, "Approve <name>" (immediate) — and "Team
+  # capabilities". "Add team members" opens a dialog of "Email address N" boxes, "Add another
+  # email address", "Cancel" and "Send invitations". Changelog draws the table Date | Change |
+  # Member | Made by, or "No administrator rights have been given or withdrawn, and ownership
+  # has not been transferred." Sprint With Us qualification and Team With Us qualification
+  # still say only "This section is not available yet." (re-walked for ...301 and ...304). A
+  # member who does not own the organization is answered "Page not found".
   organization-edit:
     actions:
       edit_organization: bound
       save_changes: bound
       cancel_editing: bound
       archive_organization: bound
-      add_team_members: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and for ...304 and followed 'Team members' under 'Organization sections'; the region 'Team members' draws its heading and only 'This section is not available yet.' — no add control, member table or badge. Looked again for R-3.6/R-3.15: the same section (?tab=team) says only that signed in as the organization's admin member and as the service administrator; /organizations lists only a 'Team size' count; /organizations/<id>, /organizations/<id>/team and /organizations/<id>/members answer 'Page not found'. At run time the adapter opens that section and reports this while it still says so"
-      approve_pending_member: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301, which has a seeded pending member) and for ...304 and followed 'Team members' under 'Organization sections'; the region 'Team members' draws its heading and only 'This section is not available yet.' — no member rows and no approve control. At run time the adapter opens that section and reports this while it still says so"
-      remove_team_member: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and for ...304 and followed 'Team members' under 'Organization sections'; the region 'Team members' draws its heading and only 'This section is not available yet.' — no member rows and no remove control. At run time the adapter opens that section and reports this while it still says so"
-      toggle_member_admin_status: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301, which has a seeded member) and followed 'Team members' under 'Organization sections'; the region 'Team members' draws its heading and only 'This section is not available yet.' — no member rows and no administrator box. At run time the adapter opens that section and reports this while it still says so"
-      accept_org_admin_terms: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301): neither the Organization section nor the form 'Edit organization' opens draws a terms box, and the 'Team members' section, where making a member an administrator would ask for it, draws its heading and only 'This section is not available yet.'. At run time the adapter looks for the box, then opens that section and reports this while it still says so"
-      change_owner: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and followed 'Team members' under 'Organization sections'; the region 'Team members' draws its heading and only 'This section is not available yet.' — no change-owner control, and none appears in the Organization section or its edit form. At run time the adapter opens that section and reports this while it still says so"
+      add_team_members: bound
+      approve_pending_member: bound
+      remove_team_member: bound
+      toggle_member_admin_status: bound
+      accept_org_admin_terms: bound
+      change_owner: bound
       edit_service_areas: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and for ...304 and followed 'Team With Us qualification' under 'Organization sections'; the region draws its heading and only 'This section is not available yet.' — no service areas and no edit control. At run time the adapter opens that section and reports this while it still says so"
       save_service_areas: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and for ...304 and followed 'Team With Us qualification' under 'Organization sections'; the region draws its heading and only 'This section is not available yet.' — no service area boxes and no save control. At run time the adapter opens that section and reports this while it still says so"
       view_swu_terms: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and followed 'Sprint With Us qualification' under 'Organization sections'; the region draws its heading and only 'This section is not available yet.' — no terms link — and /organizations/<id>/sprint-with-us-terms-and-conditions itself answers 'Page not found' to the owner. At run time the adapter opens that section and reports this while it still says so"
@@ -690,10 +698,10 @@ pages:
       changelog_tab: bound
       swu_qualified_badge: bound
       twu_qualified_badge: bound
-      owner_badge: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and followed 'Team members' under 'Organization sections'; the region 'Team members' draws its heading and only 'This section is not available yet.' — no member rows, so no owner badge; the screen's header carries only the qualification badges. Looked again for R-3.23: the same as the organization's admin member and as the service administrator; /organizations lists owner names and a 'Team size' count with no badge; /organizations/<id>, /organizations/<id>/team and /organizations/<id>/members answer 'Page not found'. At run time the adapter opens that section and reports this while it still says so"
-      pending_badge: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301, which has a seeded pending member) and for ...304 (which has a seeded pending invitation) and followed 'Team members'; the region draws its heading and only 'This section is not available yet.' — no member rows, so no pending badge. At run time the adapter opens that section and reports this while it still says so"
-      team_member_row: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301, owner plus two members and a pending invitee) and followed 'Team members' under 'Organization sections'; the region draws its heading and only 'This section is not available yet.' — no member table. At run time the adapter opens that section and reports this while it still says so"
-      team_capabilities: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and followed 'Team members' under 'Organization sections'; the region draws its heading and only 'This section is not available yet.' — no capabilities. At run time the adapter opens that section and reports this while it still says so"
+      owner_badge: bound
+      pending_badge: bound
+      team_member_row: bound
+      team_capabilities: bound
       swu_requirement_two_members: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and for the unqualified ...304 and followed 'Sprint With Us qualification' under 'Organization sections'; the region draws its heading and only 'This section is not available yet.' — no requirements listed. At run time the adapter opens that section and reports this while it still says so"
       swu_requirement_all_capabilities: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and for the unqualified ...304 and followed 'Sprint With Us qualification' under 'Organization sections'; the region draws its heading and only 'This section is not available yet.' — no requirements listed. At run time the adapter opens that section and reports this while it still says so"
       swu_requirement_terms_accepted: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and for the unqualified ...304 and followed 'Sprint With Us qualification' under 'Organization sections'; the region draws its heading and only 'This section is not available yet.' — no requirements listed. At run time the adapter opens that section and reports this while it still says so"
@@ -701,9 +709,9 @@ pages:
       twu_requirement_terms_accepted: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and for the unqualified ...304 and followed 'Team With Us qualification' under 'Organization sections'; the region draws its heading and only 'This section is not available yet.' — no requirements listed. At run time the adapter opens that section and reports this while it still says so"
       service_area_checkbox: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and for ...304 and followed 'Team With Us qualification' under 'Organization sections'; the region draws its heading and only 'This section is not available yet.' — no service area boxes. At run time the adapter opens that section and reports this while it still says so"
       not_qualified_notice: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the unqualified ...304 (and the qualified ...301): the header simply carries no qualification badge for ...304, and its 'Sprint With Us qualification' and 'Team With Us qualification' sections draw their headings and only 'This section is not available yet.' — no notice anywhere on the screen. At run time the adapter opens the Sprint With Us section and reports this while it still says so"
-      changelog_entry: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and for ...304 and followed 'Changelog' under 'Organization sections'; the region 'Changelog' draws its heading and only 'This section is not available yet.' — no entries. At run time the adapter opens that section and reports this while it still says so"
+      changelog_entry: bound
       field_error: bound
-      invalid_membership_type_error: "unbound: signed in as the seeded organization owner, opened /organizations/<id>/edit for the seeded qualified organization (...301) and followed 'Team members' under 'Organization sections'; the region draws its heading and only 'This section is not available yet.' — no invitation form, so no membership type to refuse. At run time the adapter opens that section and reports this while it still says so"
+      invalid_membership_type_error: "unbound: signed in as the seeded organization owner and as the service administrator, opened /organizations/<id>/edit?tab=team for the seeded qualified organization (...301) and ...304, which draws the team table and 'Add team members'; that dialog offers only 'Email address N' boxes, 'Add another email address', 'Cancel' and 'Send invitations' and says each person 'joins the team as a member' — there is no membership type to choose, so no other kind can be sent from the screen and no refusal of one is drawn on it (an unregistered address draws only the alert '<address> is not registered with the Digital Marketplace', read by field_error)"
       current_logo: bound
       logo_refused_error: bound
 
@@ -729,13 +737,19 @@ pages:
   # "Organizations you own" — "Create organization" over the table Organization (a link to its
   # edit screen) | Team members | Sprint With Us qualified, or "You do not own any
   # organizations. ..." — and the region "Organizations you belong to" — the table
-  # Organization | Membership ("Member" or "Pending", names in plain text), or "You do not
-  # belong to any other organizations. ...".
+  # Organization | Membership ("Member" or "Pending", names in plain text) | Actions, or "You
+  # do not belong to any other organizations. ...". Re-walked on this build: a pending row
+  # offers "Accept the invitation from <org>" (dialog "Join <org>?", confirmed by "Join
+  # organization") and "Decline the invitation from <org>" (dialog "Decline the invitation
+  # from <org>?", confirmed by "Decline invitation"); a member's row offers "Leave <org>"
+  # (dialog "Leave <org>?", confirmed by "Leave organization"). The invitation email links to
+  # ?tab=organizations&invitation=<affiliation>&answer=accept|decline, which opens the section
+  # with that answer's dialog already open; approve/reject confirm it there.
   organization-user-memberships:
     actions:
-      approve_invitation: "unbound: signed in as the seeded invited vendor (pending invitation to ...304), its own ?tab=organizations lists 'Salt Marsh Labs Ltd. | Pending' under 'Organizations you belong to' with no accept control on the row or anywhere on the screen; no invitation email reaches the mail catcher (the team section that would send one says 'This section is not available yet.'), and the reference application's invitation answer address (?tab=organizations&invitationAffiliationId=<the seeded pending affiliation>&invitationResponse=approve) draws the same section with no dialog"
-      reject_invitation: "unbound: signed in as the seeded invited vendor (pending invitation to ...304), its own ?tab=organizations lists 'Salt Marsh Labs Ltd. | Pending' under 'Organizations you belong to' with no decline control on the row or anywhere on the screen; no invitation email reaches the mail catcher (the team section that would send one says 'This section is not available yet.'), and the reference application's invitation answer address (?tab=organizations&invitationAffiliationId=<the seeded pending affiliation>&invitationResponse=reject) draws the same section with no dialog"
-      leave_organization: "unbound: signed in as the seeded organization member, its own ?tab=organizations lists 'Northern Pines Digital Ltd. | Member' under 'Organizations you belong to' as plain text with no leave control on the row or anywhere on the screen, and that organization's /organizations/<id>/edit answers this member 'Page not found'"
+      approve_invitation: bound
+      reject_invitation: bound
+      leave_organization: bound
       create_organization: bound
       open_organization: bound
     observations:
@@ -746,8 +760,8 @@ pages:
       swu_qualified_mark: bound
       empty_owned_message: bound
       empty_affiliated_message: bound
-      accept_confirmation: "unbound: no invitation answer can be brought to this screen to confirm — signed in as the seeded invited vendor, the pending row offers no accept control, no invitation email reaches the mail catcher (the team section that would send one says 'This section is not available yet.'), and the reference application's answer address (?tab=organizations&invitationAffiliationId=<the seeded pending affiliation>&invitationResponse=approve) draws the section with no dialog"
-      decline_confirmation: "unbound: no invitation answer can be brought to this screen to confirm — signed in as the seeded invited vendor, the pending row offers no decline control, no invitation email reaches the mail catcher (the team section that would send one says 'This section is not available yet.'), and the reference application's answer address (?tab=organizations&invitationAffiliationId=<the seeded pending affiliation>&invitationResponse=reject) draws the section with no dialog"
+      accept_confirmation: bound
+      decline_confirmation: bound
 
   # "Sign In": a "Vendor" region with the button "Sign in as a vendor" and a "Public sector
   # employee" region with "Sign in as a public sector employee"; each hands off to the sandbox
@@ -1038,9 +1052,9 @@ pages:
   # as the same three vendors.
   organization-user-memberships-self:
     actions:
-      approve_invitation: "unbound: signed in as the seeded invited vendor (pending invitation to ...304), /users/me?tab=organizations lists 'Salt Marsh Labs Ltd. | Pending' under 'Organizations you belong to' with no accept control on the row or anywhere on the screen; no invitation email reaches the mail catcher (the team section that would send one says 'This section is not available yet.'), and the reference application's invitation answer address (?tab=organizations&invitationAffiliationId=<the seeded pending affiliation>&invitationResponse=approve) draws the same section with no dialog"
-      reject_invitation: "unbound: signed in as the seeded invited vendor (pending invitation to ...304), /users/me?tab=organizations lists 'Salt Marsh Labs Ltd. | Pending' under 'Organizations you belong to' with no decline control on the row or anywhere on the screen; no invitation email reaches the mail catcher (the team section that would send one says 'This section is not available yet.'), and the reference application's invitation answer address (?tab=organizations&invitationAffiliationId=<the seeded pending affiliation>&invitationResponse=reject) draws the same section with no dialog"
-      leave_organization: "unbound: signed in as the seeded organization member, /users/me?tab=organizations lists 'Northern Pines Digital Ltd. | Member' under 'Organizations you belong to' as plain text with no leave control on the row or anywhere on the screen, and that organization's /organizations/<id>/edit answers this member 'Page not found'"
+      approve_invitation: bound
+      reject_invitation: bound
+      leave_organization: bound
       create_organization: bound
       open_organization: bound
     observations:
@@ -1051,8 +1065,8 @@ pages:
       swu_qualified_mark: bound
       empty_owned_message: bound
       empty_affiliated_message: bound
-      accept_confirmation: "unbound: no invitation answer can be brought to this screen to confirm — signed in as the seeded invited vendor, the pending row offers no accept control, no invitation email reaches the mail catcher (the team section that would send one says 'This section is not available yet.'), and the reference application's answer address (/users/me?tab=organizations&invitationAffiliationId=<the seeded pending affiliation>&invitationResponse=approve) draws the section with no dialog"
-      decline_confirmation: "unbound: no invitation answer can be brought to this screen to confirm — signed in as the seeded invited vendor, the pending row offers no decline control, no invitation email reaches the mail catcher (the team section that would send one says 'This section is not available yet.'), and the reference application's answer address (/users/me?tab=organizations&invitationAffiliationId=<the seeded pending affiliation>&invitationResponse=reject) draws the section with no dialog"
+      accept_confirmation: bound
+      decline_confirmation: bound
 
   evaluation-panel-dashboard:
     actions:
@@ -1695,6 +1709,14 @@ pages:
     observations:
       request_accepted: bound
       membership_status: bound
+      refusal_messages: bound
+      refusal_status: bound
+
+  affiliation-removal-request:
+    actions:
+      end_membership_by_request: bound
+    observations:
+      request_accepted: bound
       refusal_messages: bound
       refusal_status: bound
 
