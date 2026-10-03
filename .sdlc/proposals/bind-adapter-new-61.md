@@ -24,3 +24,23 @@ I made the one change this condition asked for. In `tests/adapters/new/index.ts`
 **What I did not do.** I didn't open the running target again. The condition was about a missing input key, not a missing control, and the target's handling of the second address line had already been bound and accepted. I also couldn't run a type-check: the sandbox needed an approval for it, and there's nobody here to give one. The edit only adds one string to an existing array, so it shouldn't change any types.
 
 Nothing in this request is deferred.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:tech-lead
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does this revision answer the one request still owed to bind-adapter and bind nothing beyond it? Approved. The escalation came from the loop limit (three sends against a limit of two). That is a count, not a defect in the work, and the checks show only request/build-slice-11-4#1 (the addressLineTwo spelling) still open, so this proposal answers for that request alone. The diff adds 'addressLineTwo' to the accepted spellings for streetAddress2 in the new adapter's organization profile field table (tests/adapters/new/index.ts:8251) and changes nothing else. That matches the evidence cited: verify on build-slice-11-4 saw register_by_request (R-3.2) and change_profile_by_request (R-3.18) throw on that key before sending. The derived organization tests (R-3.2, R-3.18, R-3.22 and others) do send it, and R-3.22's 'second address line' is that field. The runner's typecheck passed with no diagnostics under adapters/new/. The request's statement that the old adapter already maps this exact spelling is not borne out (tests/adapters/old/index.ts accepts addressLine2/street2/address2), but the test inputs and the criterion decide the binding, so it does not change the ruling. A verify run showing R-3.2 or R-3.18 still unbound on this key, or the value not reaching the second address line, would change it.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `5062a730fc351bd58e0dd5ee2e5e94deb9af6485`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.

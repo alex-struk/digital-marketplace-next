@@ -1,20 +1,15 @@
 gate: G3
-verdict: escalated
-by: runner:bind-adapter
-held_by: runner
-escalate_to: tech-lead
-rationale: >-
-  bind-adapter was handed owed work sent back to it more times than the
-  project's policy allows, so this proposal is ruled by tech-lead rather than
-  put to G3's holder for another round.
-
-  - requests from build-slice-11: sent to bind-adapter 3 times, past the limit
-  of 2 that policy.loops.request sets. What each send asked for:
-    1. R-3.1, R-3.21: organizationList.organizationName reads columnValues(/^(organization name|legal name)$/i) and returns "". On /organizations the page draws a table captioned "Registered organizations by legal name." whose name column header is "Organization" (design/DESIGN.md organization list: "Organization only" for a visitor; "Organization, Owner, Team size, ..." for a vendor). The cells hold the legal names. Match the "Organization" header. The owner and qualification column readers should be checked against the same design table.
-    2. R-3.3, R-3.18: organizationEdit.organizationTab (orgEdit.tab) looks only for role=tab and returns "". On /organizations/<id>/edit the sections are links inside navigation "Organization sections" (link "Organization" -> ?tab=organization, "Team members" -> ?tab=team, "Sprint With Us qualification", "Team With Us qualification", "Changelog"), which is what the design specifies for the management tabs. The Organization section's content sits in region "Organization" (heading level 2, button "Edit organization", read-only profile fields), and region "Archive this organization" holds button "Archive organization". Bind the tabs to those links and read the matching region.
-    3. R-3.19, R-8.13, R-8.21, R-8.28, R-8.30: organization-edit.edit_organization (orgTabOpen) reports unbound with "no tab named /^\s*organization\s*$/i", although its own message lists link "Organization" and button "Edit organization" on the page. Open the Organization section through that link, or stay on the default tab, then press "Edit organization". ORG_TAB.team (/^\s*team\s*$/i) and ORG_TAB.changelog likewise need to match the page's link labels "Team members" and "Changelog".
-    4. R-3.2, R-3.6, R-3.15, R-3.23: organizationCreate is bound as absent, with a reason recorded against an earlier build where /organizations/create sent people to /dashboard. This branch serves /organizations/create to a signed-in vendor who has accepted the terms: heading "Create Organization", the profile form, a logo picker whose trigger is data-testid organization-logo-button, and a "Create organization" button that stays disabled until the form is valid. On success it goes to /organizations/<id>/edit. Bind create_organization, cancel, change_logo, field_error and submit_disabled_until_valid against the running build.
-    5. R-3.22: organization-user-memberships.owned_organizations_table is unbound, with a reason describing the profile's Organizations section as a placeholder line. This branch renders that section at /users/<id>?tab=organizations with the organizations the person owns (with team size) and the ones they belong to or are invited to. Rebind it against the running build.
-    6. file-image-picker.choose_image (and its stored-image width and height reads) is bound only to the signed-in person's profile picture. The R-8.13, R-8.21 and R-8.28 tests use it on /organizations/<id>/edit after Edit organization, where the picker is the organization's logo ('Logo (optional)', trigger test id organization-logo-button, refusal organization-logo-refused-error, stored logo organization-current-logo). Verify reported all three as unbound there. Bind the picker on organization-create and organization-edit to the logo.
-    7. in the new target's organization-request bindings (tests/adapters/new/index.ts, the accepted spellings for each organization profile field), accept the input key 'addressLineTwo' as streetAddress2, the second address line. The derived tests send it in every organization registration and profile-change input, and the old target's binding already maps it to the second street-address box. Shown by verify on build-slice-11-4: register_by_request (R-3.2) and change_profile_by_request (R-3.18) both threw 'the input key "addressLineTwo" names no field of an organization's profile' before sending anything, so neither test reached the service.
-at: 2026-10-03T15:35:56.668Z
+verdict: approve
+by: agent:tech-lead
+held_by: agent
+rationale: |2-
+  Question: does this revision answer the one request still owed to bind-adapter and bind nothing beyond it? Approved. The escalation came from the loop limit (three sends against a limit of two). That is a count, not a defect in the work, and the checks show only request/build-slice-11-4#1 (the addressLineTwo spelling) still open, so this proposal answers for that request alone. The diff adds 'addressLineTwo' to the accepted spellings for streetAddress2 in the new adapter's organization profile field table (tests/adapters/new/index.ts:8251) and changes nothing else. That matches the evidence cited: verify on build-slice-11-4 saw register_by_request (R-3.2) and change_profile_by_request (R-3.18) throw on that key before sending. The derived organization tests (R-3.2, R-3.18, R-3.22 and others) do send it, and R-3.22's 'second address line' is that field. The runner's typecheck passed with no diagnostics under adapters/new/. The request's statement that the old adapter already maps this exact spelling is not borne out (tests/adapters/old/index.ts accepts addressLine2/street2/address2), but the test inputs and the criterion decide the binding, so it does not change the ruling. A verify run showing R-3.2 or R-3.18 still unbound on this key, or the value not reaching the second address line, would change it.
+conditions: []
+cost: 0.3137936
+turns: 3
+session: "68e19fe3-023f-4872-a3ee-e53752dcff6d"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-03T15:36:45.815Z
