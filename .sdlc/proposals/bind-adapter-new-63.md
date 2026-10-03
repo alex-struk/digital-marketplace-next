@@ -47,3 +47,25 @@ I've updated the adapter at `tests/adapters/new/` to meet all three conditions i
 - **Unregistered-address invitation:** I also sent one invitation to `nobody.binding.check@example.test` to confirm the alert for an address nobody has registered.
 
 No page's route failed to load at all on this target. I didn't touch anything outside `tests/adapters/new/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Question: does the new adapter bind every surface action and observation on the new target, and nothing else? Approve. The diff touches only tests/adapters/new/, nothing under tests/acceptance changed, no protected path is involved, and the runner's typecheck passed with no diagnostics under adapters/new/. The newly bound team, changelog and membership-answer members use locators and navigation only: buttons found by name, dialogs confirmed, the New owner listbox, table columns read. None of them decides a pass. The bound affiliation-removal-request page exists in spec/contract/surface.yaml, added by contract-v39. The remaining unbound reasons name what the surface actually lacks: an invitation dialog with no membership type, and qualification sections and terms pages that are still unavailable. Calibration should watch two things. teamRowsNamed adds each row's address and persona, looked up from the seed and the affiliations API, after the on-screen name. And orgInRow and toggleMemberAdminStatus throw a plain error where a row offers no control, which a test expecting a refusal will see as an error rather than a refusal. The walk changed the target's data (organization ...301's changelog and the pending invitation on ...304), so it needs reseeding before calibration. The ruling would change if a binding were found to assert, or the diff reached outside tests/adapters. The build-slice-12 conditions belong to build and stay open.
+
+**Conditions:**
+- condition-met bind-adapter-new-62#1: add_team_members and approve_pending_member are now bound against ?tab=team in tests/adapters/new/bindings.yaml (organization-edit) and index.ts (addTeamMembers, approvePendingMember via orgInRow). invalid_membership_type_error keeps an unbound reason that is true of this build: the Add team members dialog offers only email boxes and no membership type.
+- condition-met bind-adapter-new-62#2: every reason in bindings.yaml that said the team section or changelog was not available yet, or that invitation controls were missing, was re-walked. Team rows, badges, capabilities and changelog_entry are bound. approve_invitation, reject_invitation, leave_organization, accept_confirmation and decline_confirmation are bound on both organization-user-memberships and organization-user-memberships-self. The qualification and terms entries were re-walked and are still unavailable, and their reasons say so.
+- condition-met bind-adapter-new-62#3: index.ts records orgAdminTermsLeftOpen when toggleMemberAdminStatus leaves the administrator-rights dialog open. Every other organizationEdit member except open, toggleMemberAdminStatus and acceptOrgAdminTerms is wrapped to call dismissAdminTerms, which presses Cancel first.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `82b8ed424646d570f47d95be6313514ca444565e`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
