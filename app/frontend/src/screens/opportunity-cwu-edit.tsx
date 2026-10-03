@@ -102,7 +102,7 @@ function ManageLoader({ account, opportunityId }: { account: Account; opportunit
 }
 
 /** What the page says after something it did: done, refused as incomplete, or refused otherwise. */
-type Notice =
+export type Notice =
   | { readonly kind: "done"; readonly text: string }
   | { readonly kind: "incomplete"; readonly action: "submit" | "publish" }
   | { readonly kind: "refused"; readonly text: string };
@@ -341,26 +341,43 @@ function Manage({ account, initial }: { account: Account; initial: CwuOpportunit
         onCancel={() => setDialog(null)}
         onConfirm={() => void act("publish")}
       />
-      <Modal isOpen={dialog === "delete"} isDismissable onOpenChange={(open) => (!open && !busy ? setDialog(null) : undefined)}>
-        <AlertDialog
-          variant="destructive"
-          title="Delete this opportunity?"
-          data-testid="opportunity-delete-dialog"
-          buttons={
-            <>
-              <Button variant="secondary" isDisabled={busy} onPress={() => setDialog(null)} data-testid="opportunity-dialog-cancel">
-                Cancel
-              </Button>
-              <Button variant="primary" danger isDisabled={busy} onPress={() => void remove()} data-testid="opportunity-delete-confirm">
-                Delete opportunity
-              </Button>
-            </>
-          }
-        >
-          <Text elementType="p">The opportunity and everything entered in it will be removed. This cannot be undone.</Text>
-        </AlertDialog>
-      </Modal>
+      <DeleteDialog isOpen={dialog === "delete"} isSending={busy} onCancel={() => setDialog(null)} onConfirm={() => void remove()} />
     </Stack>
+  );
+}
+
+/** Asks before an opportunity is deleted (design/DESIGN.md, "Confirmation dialogs"). */
+export function DeleteDialog({
+  isOpen,
+  isSending,
+  onCancel,
+  onConfirm,
+}: {
+  readonly isOpen: boolean;
+  readonly isSending: boolean;
+  readonly onCancel: () => void;
+  readonly onConfirm: () => void;
+}) {
+  return (
+    <Modal isOpen={isOpen} isDismissable onOpenChange={(open) => (!open && !isSending ? onCancel() : undefined)}>
+      <AlertDialog
+        variant="destructive"
+        title="Delete this opportunity?"
+        data-testid="opportunity-delete-dialog"
+        buttons={
+          <>
+            <Button variant="secondary" isDisabled={isSending} onPress={onCancel} data-testid="opportunity-dialog-cancel">
+              Cancel
+            </Button>
+            <Button variant="primary" danger isDisabled={isSending} onPress={onConfirm} data-testid="opportunity-delete-confirm">
+              Delete opportunity
+            </Button>
+          </>
+        }
+      >
+        <Text elementType="p">The opportunity and everything entered in it will be removed. This cannot be undone.</Text>
+      </AlertDialog>
+    </Modal>
   );
 }
 
@@ -376,13 +393,16 @@ export function tabsFor(status: CwuStatus): readonly Tab[] {
   return status === "DRAFT" ? ["summary", "opportunity", "history"] : ["summary", "opportunity", "addenda", "history"];
 }
 
-function refusalNotice(answer: Exclude<SaveAnswer, { kind: "saved" }>, action: "submit" | "publish"): Notice {
+export function refusalNotice(
+  answer: { readonly kind: "refused"; readonly reasons: readonly string[] } | { readonly kind: "failed" },
+  action: "submit" | "publish",
+): Notice {
   if (answer.kind === "refused" && answer.reasons.includes(OPPORTUNITY_INCOMPLETE)) return { kind: "incomplete", action };
   if (answer.kind === "refused") return { kind: "refused", text: answer.reasons.join(" ") };
   return { kind: "refused", text: "The service could not do that. Try again." };
 }
 
-function NoticeArea({ notice, noticeRef }: { notice: Notice | null; noticeRef: RefObject<HTMLDivElement> }) {
+export function NoticeArea({ notice, noticeRef }: { notice: Notice | null; noticeRef: RefObject<HTMLDivElement> }) {
   let shown: ReactNode = null;
   if (notice?.kind === "incomplete") {
     shown = (

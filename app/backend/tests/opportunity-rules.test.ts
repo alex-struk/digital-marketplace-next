@@ -22,6 +22,7 @@ import {
   pacificDayOf,
   readCwuInput,
   recordedInstantOf,
+  statusLabel,
 } from "../src/rules/opportunities";
 
 const admin = { id: "a", type: "ADMIN" } as const;
@@ -55,6 +56,13 @@ const fieldsOf = (input: CwuInput, today = TODAY) => cwuProblems(input, today).m
 describe("the states and the path an opportunity follows (R-1.19, R-1.20, R-1.49, R-1.51)", () => {
   it("defines no suspended state in any program", () => {
     for (const program of PROGRAMS) expect(OPPORTUNITY_STATES[program]).not.toContain("SUSPENDED");
+  });
+
+  it("names each program's question stages in the program's own words", () => {
+    expect(statusLabel("EVAL_QUESTIONS_INDIVIDUAL", "sprint-with-us")).toBe("Team questions: individual evaluation");
+    expect(statusLabel("EVAL_QUESTIONS_CONSENSUS", "team-with-us")).toBe("Resource questions: consensus");
+    expect(statusLabel("EVAL_CC", "sprint-with-us")).toBe("Code challenge");
+    expect(statusLabel("DRAFT", "team-with-us")).toBe("Draft");
   });
 
   it("lets a draft go for review or straight to publication, and under review only to publication", () => {

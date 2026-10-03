@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { RouterProvider, createMemoryHistory, createRouter } from "@tanstack/react-router";
 import axe from "axe-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -6,11 +6,12 @@ import type { Account } from "../src/api/accounts";
 import type { IdentityClient } from "../src/auth/identity-client";
 import { resetSessionForTests } from "../src/auth/session";
 import { routeTree } from "../src/router";
+import { createPanelProblems } from "../src/screens/opportunity-other-form";
 
 /**
- * Sprint With Us and Team With Us drafts as slice 8 builds them (opportunity-swu-create,
- * opportunity-twu-create, and the manage page a draft lands on; decision record 0035). The service
- * is stood in for; what is checked is what the screens show and what they ask of the service.
+ * Creating Sprint With Us and Team With Us opportunities (opportunity-swu-create,
+ * opportunity-twu-create, and the manage page a new one lands on; decision records 0035 and 0045).
+ * The service is stood in for; what is checked is what the screens show and what they ask of it.
  */
 
 function account(overrides: Partial<Account>): Account {
@@ -181,16 +182,16 @@ describe("creating a Sprint With Us draft (R-1.7, R-1.9, R-1.39)", () => {
     expect(document.getElementById("opp-assignment")).not.toBeNull();
   });
 
-  it("submits for review what the form holds: the shared fields, phases, team questions, weights and panel", async () => {
+  it("saves as a draft what the form holds: the shared fields, phases, team questions, weights and panel", async () => {
     serve((method, path) => {
-      if (method === "POST" && path === "/api/opportunities/sprint-with-us") return json(201, drafted("sprint-with-us", { status: "UNDER_REVIEW" }));
-      if (method === "GET" && path === `/api/opportunities/sprint-with-us/${ID}`) return json(200, drafted("sprint-with-us", { status: "UNDER_REVIEW" }));
+      if (method === "POST" && path === "/api/opportunities/sprint-with-us") return json(201, drafted("sprint-with-us"));
+      if (method === "GET" && path === `/api/opportunities/sprint-with-us/${ID}`) return json(200, drafted("sprint-with-us"));
       return json(404, { errors: ["Not here."] });
     });
     resetSessionForTests({ status: "signed-in", account: staff }, fakeIdentity());
     renderAt("/opportunities/sprint-with-us/create");
     await screen.findByTestId("opportunity-title-field");
-    fireEvent.change(field("opportunity-title-field"), { target: { value: "Under review" } });
+    fireEvent.change(field("opportunity-title-field"), { target: { value: "A draft" } });
     fireEvent.click(screen.getAllByTestId("add-phase-button")[0] as HTMLElement);
     fireEvent.change(screen.getAllByTestId("phase-start-date-field")[0]?.querySelector("input") as HTMLInputElement, {
       target: { value: "2030-03-01" },
@@ -198,22 +199,80 @@ describe("creating a Sprint With Us draft (R-1.7, R-1.9, R-1.39)", () => {
     fireEvent.change(screen.getByTestId("question-text-field").querySelector("textarea") as HTMLTextAreaElement, {
       target: { value: "Why your team?" },
     });
-    fireEvent.click(screen.getByTestId("opportunity-submit-for-review"));
+    fireEvent.click(screen.getByTestId("opportunity-save-draft"));
 
     expect(await screen.findByTestId("opportunity-identifier")).toBeTruthy();
     expect(requests.find((request) => request.method === "POST")?.body).toMatchObject({
-      status: "UNDER_REVIEW",
-      title: "Under review",
+      status: "DRAFT",
+      title: "A draft",
       mandatorySkills: [],
       inceptionPhase: { startDate: "2030-03-01", completionDate: "" },
+      prototypePhase: null,
       implementationPhase: { startDate: "", completionDate: "" },
       teamQuestions: [{ question: "Why your team?", guideline: "", score: null, minimumScore: null, wordLimit: null }],
       questionsWeight: null,
       codeChallengeWeight: null,
       scenarioWeight: null,
       priceWeight: null,
-      evaluationPanel: [{ user: staff.id, evaluator: true, chair: true }],
+      // Nobody chosen yet: the service gives the draft its author alone (decision record 0045).
+      evaluationPanel: [],
     });
+  });
+
+  it("lets the team questions run to 101, positions 0 to 100, and no further (R-1.17)", async () => {
+    serve(() => json(404, { errors: ["Not here."] }));
+    resetSessionForTests({ status: "signed-in", account: staff }, fakeIdentity());
+    renderAt("/opportunities/sprint-with-us/create");
+    const add = (await screen.findByTestId("add-team-question-button")) as HTMLButtonElement;
+    while (screen.getAllByTestId("question-text-field").length < 101) {
+      expect(add.disabled).toBe(false);
+      fireEvent.click(add);
+    }
+    expect(screen.getAllByTestId("question-text-field")).toHaveLength(101);
+    expect(add.disabled).toBe(true);
+  }, 120_000);
+
+  it("starts the panel as its story draws it: two members to choose, each an evaluator, neither the chair", async () => {
+    serve(() => json(404, { errors: ["Not here."] }));
+    resetSessionForTests({ status: "signed-in", account: staff }, fakeIdentity());
+    renderAt("/opportunities/sprint-with-us/create");
+    const editor = await screen.findByTestId("evaluation-panel-editor");
+    expect(within(editor).getAllByRole("group").map((group) => group.querySelector("legend")?.textContent)).toEqual([
+      "Panel member 1",
+      "Panel member 2",
+    ]);
+    const boxes = within(editor).getAllByRole("checkbox") as HTMLInputElement[];
+    expect(boxes.map((box) => box.checked)).toEqual([true, false, true, false]);
+  });
+
+  it("names the Resources section by its heading (Team With Us)", async () => {
+    serve(() => json(404, { errors: ["Not here."] }));
+    resetSessionForTests({ status: "signed-in", account: staff }, fakeIdentity());
+    renderAt("/opportunities/team-with-us/create");
+    const section = await screen.findByRole("region", { name: "Resources" });
+    expect(within(section).getByTestId("add-resource-button")).toBeTruthy();
+  });
+
+  it("checks the whole form before submitting for review, naming each problem and sending nothing (R-1.13 to R-1.17, R-1.55)", async () => {
+    serve(() => json(404, { errors: ["Not here."] }));
+    resetSessionForTests({ status: "signed-in", account: staff }, fakeIdentity());
+    renderAt("/opportunities/sprint-with-us/create");
+    await screen.findByTestId("opportunity-title-field");
+    fireEvent.click(screen.getAllByTestId("add-phase-button")[0] as HTMLElement);
+    fireEvent.click(screen.getByTestId("opportunity-submit-for-review"));
+    const named = (await screen.findAllByTestId("field-error")).map((item) => item.textContent);
+    expect(named).toEqual(
+      expect.arrayContaining([
+        "Title: enter a title.",
+        "Total maximum budget: enter a total maximum budget between $1 and $5,000,000, in whole dollars.",
+        "Phases: a prototype phase must follow an inception phase.",
+        "Team questions: add at least one team question.",
+        "Scoring weights: the scoring weights must total 100%.",
+        "Evaluation panel: the panel needs at least two members.",
+      ]),
+    );
+    expect(screen.getByTestId("score-weight-error")).toBeTruthy();
+    expect(requests.some((request) => request.method === "POST")).toBe(false);
   });
 
   it("totals the scoring weights as they are entered, and says when they do not make 100%", async () => {
@@ -243,19 +302,19 @@ describe("creating a Sprint With Us draft (R-1.7, R-1.9, R-1.39)", () => {
     await screen.findByTestId("opportunity-title-field");
     fireEvent.change(field("opportunity-title-field"), { target: { value: "Kept" } });
     fireEvent.click(screen.getByTestId("opportunity-save-draft"));
-    expect((await screen.findByTestId("field-error")).textContent).toBe("status: An opportunity is created as a draft.");
+    expect((await screen.findByTestId("field-error")).textContent).toBe("status: an opportunity is created as a draft.");
     expect(field("opportunity-title-field").value).toBe("Kept");
   });
 
-  it("shows a refusal about the remote work question in the summary and on the question (R-1.11, decision record 0041)", async () => {
+  it("shows the service's refusal about the remote work question in the summary and on the question (R-1.11)", async () => {
     serve((method) =>
       method === "POST" ? json(400, { errors: ["remoteOk: Say whether remote work is acceptable."] }) : json(404, { errors: ["Not here."] }),
     );
     resetSessionForTests({ status: "signed-in", account: staff }, fakeIdentity());
     renderAt("/opportunities/team-with-us/create");
     await screen.findByTestId("opportunity-title-field");
-    fireEvent.click(screen.getByTestId("opportunity-submit-for-review"));
-    expect((await screen.findByTestId("field-error")).textContent).toBe("Remote work: Say whether remote work is acceptable.");
+    fireEvent.click(screen.getByTestId("opportunity-save-draft"));
+    expect((await screen.findByTestId("field-error")).textContent).toBe("Remote work: say whether remote work is acceptable.");
     expect(screen.getByTestId("opportunity-remote-field").textContent).toContain("Say whether remote work is acceptable.");
   });
 
@@ -307,19 +366,14 @@ describe("creating a Team With Us draft", () => {
     expect(sent).not.toHaveProperty("implementationPhase");
   });
 
-  it("publishes for an administrator once confirmed", async () => {
-    serve((method, path) => {
-      if (method === "GET" && path === "/api/users") return json(200, []);
-      if (method === "POST" && path === "/api/opportunities/team-with-us") return json(201, drafted("team-with-us", { status: "PUBLISHED" }));
-      if (method === "GET" && path === `/api/opportunities/team-with-us/${ID}`) return json(200, drafted("team-with-us", { status: "PUBLISHED" }));
-      return json(404, { errors: ["Not here."] });
-    });
+  it("asks an administrator to confirm before publishing only once the form passes the program's rules", async () => {
+    serve(() => json(404, { errors: ["Not here."] }));
     resetSessionForTests({ status: "signed-in", account: administrator }, fakeIdentity());
     renderAt("/opportunities/team-with-us/create");
     fireEvent.click(await screen.findByTestId("opportunity-publish"));
-    fireEvent.click(await screen.findByTestId("opportunity-publish-confirm"));
-    await screen.findByTestId("opportunity-identifier");
-    expect(requests.find((request) => request.method === "POST")?.body).toMatchObject({ status: "PUBLISHED" });
+    expect((await screen.findAllByTestId("field-error")).length).toBeGreaterThan(0);
+    expect(screen.queryByTestId("opportunity-publish-confirm")).toBeNull();
+    expect(requests.some((request) => request.method === "POST")).toBe(false);
   });
 
   it("has no accessibility violations", async () => {
@@ -343,5 +397,31 @@ describe("the manage page a draft lands on", () => {
     renderAt(`/opportunities/sprint-with-us/${ID}/edit`);
     expect(await screen.findByRole("heading", { level: 1, name: /not found/i })).toBeTruthy();
     await waitFor(() => expect(screen.queryByTestId("opportunity-identifier")).toBeNull());
+  });
+});
+
+describe("the create form's panel rules (R-1.55, R-5.1)", () => {
+  const nameOf = (id: string) => ({ a: "Ann", b: "Bo" })[id] ?? null;
+  const messages = (panel: { user: string; evaluator: boolean; chair: boolean }[]) =>
+    createPanelProblems(panel, nameOf).map((problem) => problem.message);
+
+  it("leaves out a row with nobody chosen, so one chosen person is a panel too small", () => {
+    expect(messages([{ user: "a", evaluator: true, chair: true }, { user: "", evaluator: true, chair: false }])).toEqual([
+      "The panel needs at least two members.",
+    ]);
+  });
+
+  it("numbers a member's problem by its row on the form", () => {
+    expect(
+      messages([
+        { user: "a", evaluator: true, chair: true },
+        { user: "", evaluator: true, chair: false },
+        { user: "a", evaluator: true, chair: false },
+      ]),
+    ).toEqual(["Panel member 3: Ann is already on the panel."]);
+  });
+
+  it("accepts two people with one chair", () => {
+    expect(messages([{ user: "a", evaluator: true, chair: false }, { user: "b", evaluator: true, chair: true }])).toEqual([]);
   });
 });

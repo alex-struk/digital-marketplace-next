@@ -152,11 +152,26 @@ for and have what they show; their loading state appears only if that takes more
 question, and a program, or a page of prose, the service faulted on is asked for again (decision
 record 0039).
 
-Until slice 10 builds them out, a Sprint With Us or Team With Us opportunity is created at
-`/opportunities/sprint-with-us/create` and `/opportunities/team-with-us/create`, as a draft, under
-review or, by an administrator, published. It is kept as sent, except that one which is not a
-draft and accepts remote work must describe it (R-1.11). It lands on an interim manage page at
-`/opportunities/<program>/<id>/edit` (decision records 0035, 0036 and 0040).
+## Sprint With Us and Team With Us opportunities
+
+Staff create one at `/opportunities/sprint-with-us/create` or `/opportunities/team-with-us/create`:
+as a draft, which is kept whatever it holds, or under review, or — by an administrator only —
+published. Anything that is not a draft is checked in full: budget, dates, Sprint With Us's skills
+and phases or Team With Us's resources, the team or resource questions, the scoring weights totalling
+100%, and an evaluation panel of at least two public sector employees with exactly one chair. The
+rules are `backend/src/rules/other-program-content.ts`, shared by the form and the service, and each
+refusal names its field as Code With Us's do.
+
+Each is managed at `/opportunities/<program>/<id>/edit` (Summary, Opportunity, Addenda, History and
+Evaluation panel) and read by anyone at `/opportunities/<program>/<id>` once published. The public
+page embeds a page of the service's own prose — `/content/sprint-with-us-opportunity-scope` or
+`/content/team-with-us-terms-and-conditions` — through the same renderer that page's own address
+uses; if it cannot be read, that section is simply empty. The panel is changed on its own tab
+(`editEvaluationPanel` on `PUT /api/opportunities/<program>/<id>`) until the consensus stage begins;
+each change is a new version, and once the opportunity has left draft the people newly added are
+emailed. Only an administrator, the author and the panel's own members are told who is on it. The
+names staff choose panel members from come on their own session (`GET /api/sessions/current`,
+`panelCandidates`), since the list of everyone stays an administrator's (decision record 0045).
 
 ## The first administrator
 

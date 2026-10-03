@@ -772,7 +772,7 @@ describe("running a Code With Us opportunity after publication", () => {
   });
 });
 
-describe("running a Sprint With Us or Team With Us opportunity before slice 10 (decision record 0043)", () => {
+describe("running a Sprint With Us or Team With Us opportunity (decision records 0043, 0045)", () => {
   const SPRINT = "00000000-0000-4000-8000-000000000711";
   const sprint = (overrides: Record<string, unknown> = {}) => ({
     id: SPRINT,

@@ -4,6 +4,7 @@ import { api } from "./client";
 import {
   Addendum,
   HistoryEntry,
+  Person,
   Reporting,
   RunningAction,
   readAddenda,
@@ -14,20 +15,55 @@ import {
 } from "./opportunities";
 
 /**
- * A Sprint With Us or Team With Us opportunity until slice 10: created from what its interim
- * create screen offers — the fields every program shares and the program's own phases or
- * resources, questions, weights and panel — and read back as the list reads it with its dates
- * (decision records 0035 and 0036).
+ * A Sprint With Us or Team With Us opportunity as the service answers with it (decision records
+ * 0035, 0036 and 0045): what every program holds, and its own phases or resources, questions,
+ * weights and — to an administrator, its author and its panel only (R-5.18) — its evaluation panel.
+ * Answers are read defensively rather than trusted.
  */
 export interface OtherProgramOpportunity extends ListedOpportunity {
-  readonly updatedBy?: { readonly id: string; readonly name: string } | null;
+  readonly updatedBy?: Person | null;
+  readonly publishedAt: string | null;
+  readonly teaser: string;
+  readonly description: string;
   readonly assignmentDate: string;
+  /** Team With Us. */
+  readonly startDate: string;
+  readonly completionDate: string | null;
+  /** Sprint With Us. */
+  readonly skills: readonly string[];
+  readonly phases: readonly StoredPhase[];
+  readonly questions: readonly StoredQuestion[];
+  /** Team With Us. */
+  readonly resources: readonly { readonly serviceArea: string; readonly targetAllocation: number }[];
+  readonly weights: Readonly<Record<string, number>>;
+  /** Absent unless the reader may see it (R-5.18). */
+  readonly evaluationPanel?: readonly PanelMember[];
   /** Every addendum, oldest first (R-1.32). */
   readonly addenda: readonly Addendum[];
   /** The author and administrators only (R-1.30). */
   readonly history?: readonly HistoryEntry[];
   /** The author and administrators only, once it has been published (R-1.30). */
   readonly reporting?: Reporting;
+}
+
+export interface StoredPhase {
+  readonly phase: SwuPhase;
+  readonly startDate: string;
+  readonly completionDate: string;
+}
+
+export interface StoredQuestion {
+  readonly question: string;
+  readonly guideline: string;
+  readonly score: number;
+  readonly minimumScore: number | null;
+  readonly wordLimit: number;
+}
+
+export interface PanelMember {
+  readonly user: Person;
+  readonly evaluator: boolean;
+  readonly chair: boolean;
 }
 
 /** A phase's dates as entered; Sprint With Us. */
@@ -58,7 +94,7 @@ export interface PanelEntry {
   readonly chair: boolean;
 }
 
-/** What the interim create form sends. */
+/** What the create form, and the Opportunity tab's form, send. */
 export interface OtherProgramSubmission {
   readonly title: string;
   readonly teaser: string;
@@ -85,54 +121,105 @@ export interface OtherProgramSubmission {
   readonly panel: readonly PanelEntry[];
 }
 
-const numberOrNull = (value: number): number | null => (Number.isNaN(value) ? null : value);
+const text = (value: unknown): string => (typeof value === "string" ? value : "");
+const num = (value: unknown): number => (typeof value === "number" && Number.isFinite(value) ? value : 0);
+const list = (value: unknown): Record<string, unknown>[] =>
+  Array.isArray(value) ? value.filter((item): item is Record<string, unknown> => typeof item === "object" && item !== null) : [];
+
+function readPhase(value: unknown, phase: SwuPhase): StoredPhase | null {
+  if (typeof value !== "object" || value === null) return null;
+  const record = value as Record<string, unknown>;
+  return { phase, startDate: text(record.startDate), completionDate: text(record.completionDate) };
+}
 
 export function readOtherProgramOpportunity(program: OtherProgram, value: unknown): OtherProgramOpportunity | null {
   const listed = readListedOpportunity(program, value);
   if (!listed) return null;
   const record = value as Record<string, unknown>;
   const updatedBy = record.updatedBy as { id?: unknown; name?: unknown } | null | undefined;
+  const sprint = program === "sprint-with-us";
+  const phases = sprint
+    ? ([
+        readPhase(record.inceptionPhase, "INCEPTION"),
+        readPhase(record.prototypePhase, "PROTOTYPE"),
+        readPhase(record.implementationPhase, "IMPLEMENTATION"),
+      ].filter((phase) => phase !== null) as StoredPhase[])
+    : [];
+  const weights: Record<string, number> = { questions: num(record.questionsWeight), price: num(record.priceWeight) };
+  if (sprint) Object.assign(weights, { codeChallenge: num(record.codeChallengeWeight), scenario: num(record.scenarioWeight) });
+  else weights.challenge = num(record.challengeWeight);
   return {
     ...listed,
     ...("updatedBy" in record
       ? { updatedBy: updatedBy && typeof updatedBy.id === "string" && typeof updatedBy.name === "string" ? { id: updatedBy.id, name: updatedBy.name } : null }
       : {}),
-    assignmentDate: typeof record.assignmentDate === "string" ? record.assignmentDate : "",
+    publishedAt: typeof record.publishedAt === "string" ? record.publishedAt : null,
+    teaser: text(record.teaser),
+    description: text(record.description),
+    assignmentDate: text(record.assignmentDate),
+    startDate: text(record.startDate),
+    completionDate: typeof record.completionDate === "string" ? record.completionDate : null,
+    skills: Array.isArray(record.mandatorySkills) ? record.mandatorySkills.filter((skill): skill is string => typeof skill === "string") : [],
+    phases,
+    questions: list(sprint ? record.teamQuestions : record.resourceQuestions).map((question) => ({
+      question: text(question.question),
+      guideline: text(question.guideline),
+      score: num(question.score),
+      minimumScore: typeof question.minimumScore === "number" ? question.minimumScore : null,
+      wordLimit: num(question.wordLimit),
+    })),
+    resources: list(record.resources).map((resource) => ({ serviceArea: text(resource.serviceArea), targetAllocation: num(resource.targetAllocation) })),
+    weights,
+    ...(Array.isArray(record.evaluationPanel)
+      ? {
+          evaluationPanel: list(record.evaluationPanel).flatMap((member) => {
+            const user = member.user as { id?: unknown; name?: unknown } | null;
+            return user && typeof user.id === "string"
+              ? [{ user: { id: user.id, name: text(user.name) }, evaluator: member.evaluator === true, chair: member.chair === true }]
+              : [];
+          }),
+        }
+      : {}),
     addenda: readAddenda(record.addenda),
     ...("history" in record ? { history: readHistory(record.history) } : {}),
     ...(readReporting(record.reporting) ? { reporting: readReporting(record.reporting)! } : {}),
   };
 }
 
-/** Cancelling, an addendum or, for Sprint With Us, a private note (decision record 0043). */
-export async function runOtherProgramOpportunity(
-  program: OtherProgram,
-  id: string,
-  action: RunningAction,
-): Promise<OtherProgramSaveAnswer> {
-  try {
-    const request = { params: { path: { id } }, body: runningBody(action) as never };
-    const { data, error, response } =
-      program === "sprint-with-us"
-        ? await api.PUT("/api/opportunities/sprint-with-us/{id}", request)
-        : await api.PUT("/api/opportunities/team-with-us/{id}", request);
-    if (response.ok) {
-      const opportunity = readOtherProgramOpportunity(program, data);
-      return opportunity ? { kind: "saved", opportunity } : { kind: "failed" };
-    }
-    const reasons = reasonsIn(error);
-    return reasons.length > 0 ? { kind: "refused", reasons } : { kind: "failed" };
-  } catch {
-    return { kind: "failed" };
-  }
+/** What the form starts from, for an opportunity already kept. */
+export function submissionFrom(opportunity: OtherProgramOpportunity): OtherProgramSubmission {
+  const phases: Partial<Record<SwuPhase, PhaseEntry>> = {};
+  for (const phase of opportunity.phases) phases[phase.phase] = { startDate: phase.startDate, completionDate: phase.completionDate };
+  return {
+    title: opportunity.title,
+    teaser: opportunity.teaser,
+    remoteOk: opportunity.remoteOk,
+    remoteDesc: opportunity.remoteDesc,
+    location: opportunity.location,
+    budget: opportunity.value.amount > 0 ? opportunity.value.amount : Number.NaN,
+    description: opportunity.description,
+    proposalDeadline: opportunity.proposalDeadline,
+    assignmentDate: opportunity.assignmentDate,
+    startDate: opportunity.startDate,
+    completionDate: opportunity.completionDate ?? "",
+    skills: opportunity.skills,
+    phases: opportunity.program === "sprint-with-us" && !phases.IMPLEMENTATION ? { ...phases, IMPLEMENTATION: { startDate: "", completionDate: "" } } : phases,
+    questions: opportunity.questions.map((question) => ({ ...question, minimumScore: question.minimumScore ?? Number.NaN })),
+    resources: opportunity.resources,
+    weights: opportunity.weights,
+    panel: (opportunity.evaluationPanel ?? []).map((member) => ({ user: member.user.id, evaluator: member.evaluator, chair: member.chair })),
+  };
 }
 
+const numberOrNull = (value: number): number | null => (Number.isNaN(value) ? null : value);
+
 /**
- * The request's body, named as the old service named it: the budget, the questions and the weights
- * under the program's own names, only the dates the program has, and a panel member or resource
- * only once something is chosen for it.
+ * The content as a request carries it, named as the old service named it: the budget, the
+ * questions and the weights under the program's own names, only the dates the program has, and a
+ * resource only once its service area is chosen. A phase that is not there is sent as nothing, so
+ * an edit removes it.
  */
-export function bodyOf(program: OtherProgram, submission: OtherProgramSubmission, status: "DRAFT" | "UNDER_REVIEW" | "PUBLISHED") {
+export function contentOf(program: OtherProgram, submission: OtherProgramSubmission): Record<string, unknown> {
   const budget = numberOrNull(submission.budget);
   const weight = (name: string) => numberOrNull(submission.weights[name] ?? Number.NaN);
   const questions = submission.questions.map((question) => ({
@@ -143,7 +230,6 @@ export function bodyOf(program: OtherProgram, submission: OtherProgramSubmission
     wordLimit: numberOrNull(question.wordLimit),
   }));
   const common = {
-    status,
     title: submission.title,
     teaser: submission.teaser,
     remoteOk: submission.remoteOk,
@@ -154,7 +240,6 @@ export function bodyOf(program: OtherProgram, submission: OtherProgramSubmission
     assignmentDate: submission.assignmentDate,
     questionsWeight: weight("questions"),
     priceWeight: weight("price"),
-    evaluationPanel: submission.panel.filter((member) => member.user !== ""),
   };
   if (program === "sprint-with-us") {
     const { INCEPTION, PROTOTYPE, IMPLEMENTATION } = submission.phases;
@@ -162,8 +247,8 @@ export function bodyOf(program: OtherProgram, submission: OtherProgramSubmission
       ...common,
       totalMaxBudget: budget,
       mandatorySkills: submission.skills,
-      ...(INCEPTION ? { inceptionPhase: INCEPTION } : {}),
-      ...(PROTOTYPE ? { prototypePhase: PROTOTYPE } : {}),
+      inceptionPhase: INCEPTION ?? null,
+      prototypePhase: PROTOTYPE ?? null,
       implementationPhase: IMPLEMENTATION ?? { startDate: "", completionDate: "" },
       teamQuestions: questions,
       codeChallengeWeight: weight("codeChallenge"),
@@ -183,22 +268,22 @@ export function bodyOf(program: OtherProgram, submission: OtherProgramSubmission
   };
 }
 
+/** A new opportunity's request: its content, the state asked for, and its panel as entered. */
+export function bodyOf(program: OtherProgram, submission: OtherProgramSubmission, status: "DRAFT" | "UNDER_REVIEW" | "PUBLISHED") {
+  return { ...contentOf(program, submission), status, evaluationPanel: submission.panel.filter((member) => member.user !== "") };
+}
+
 export type OtherProgramSaveAnswer =
   | { readonly kind: "saved"; readonly opportunity: OtherProgramOpportunity }
   | { readonly kind: "refused"; readonly reasons: readonly string[] }
   | { readonly kind: "failed" };
 
-export async function createOtherProgramOpportunity(
+async function answered(
   program: OtherProgram,
-  submission: OtherProgramSubmission,
-  status: "DRAFT" | "UNDER_REVIEW" | "PUBLISHED",
+  request: Promise<{ data?: unknown; error?: unknown; response: Response }>,
 ): Promise<OtherProgramSaveAnswer> {
   try {
-    const body = bodyOf(program, submission, status) as never;
-    const { data, error, response } =
-      program === "sprint-with-us"
-        ? await api.POST("/api/opportunities/sprint-with-us", { body })
-        : await api.POST("/api/opportunities/team-with-us", { body });
+    const { data, error, response } = await request;
     if (response.ok) {
       const opportunity = readOtherProgramOpportunity(program, data);
       return opportunity ? { kind: "saved", opportunity } : { kind: "failed" };
@@ -208,6 +293,70 @@ export async function createOtherProgramOpportunity(
   } catch {
     return { kind: "failed" };
   }
+}
+
+export function createOtherProgramOpportunity(
+  program: OtherProgram,
+  submission: OtherProgramSubmission,
+  status: "DRAFT" | "UNDER_REVIEW" | "PUBLISHED",
+): Promise<OtherProgramSaveAnswer> {
+  const body = bodyOf(program, submission, status) as never;
+  return answered(
+    program,
+    program === "sprint-with-us"
+      ? api.POST("/api/opportunities/sprint-with-us", { body })
+      : api.POST("/api/opportunities/team-with-us", { body }),
+  );
+}
+
+/** The changes the manage page sends, by the tag the contract names. */
+export type OtherProgramChange =
+  | { readonly tag: "edit"; readonly submission: OtherProgramSubmission }
+  | { readonly tag: "submitForReview" }
+  | { readonly tag: "publish" }
+  | { readonly tag: "editEvaluationPanel"; readonly panel: readonly PanelEntry[] };
+
+function changeBody(program: OtherProgram, change: OtherProgramChange): { tag: string; value?: unknown } {
+  switch (change.tag) {
+    case "edit":
+      return { tag: "edit", value: contentOf(program, change.submission) };
+    case "editEvaluationPanel":
+      return { tag: "editEvaluationPanel", value: change.panel.map((member) => ({ ...member })) };
+    default:
+      return { tag: change.tag };
+  }
+}
+
+export function changeOtherProgramOpportunity(program: OtherProgram, id: string, change: OtherProgramChange): Promise<OtherProgramSaveAnswer> {
+  const request = { params: { path: { id } }, body: changeBody(program, change) as never };
+  return answered(
+    program,
+    program === "sprint-with-us"
+      ? api.PUT("/api/opportunities/sprint-with-us/{id}", request)
+      : api.PUT("/api/opportunities/team-with-us/{id}", request),
+  );
+}
+
+/** Cancelling or an addendum (decision record 0043). */
+export function runOtherProgramOpportunity(program: OtherProgram, id: string, action: RunningAction): Promise<OtherProgramSaveAnswer> {
+  const request = { params: { path: { id } }, body: runningBody(action) as never };
+  return answered(
+    program,
+    program === "sprint-with-us"
+      ? api.PUT("/api/opportunities/sprint-with-us/{id}", request)
+      : api.PUT("/api/opportunities/team-with-us/{id}", request),
+  );
+}
+
+/** Deletes a draft, or one under review (R-1.53). */
+export function deleteOtherProgramOpportunity(program: OtherProgram, id: string): Promise<OtherProgramSaveAnswer> {
+  const request = { params: { path: { id } } };
+  return answered(
+    program,
+    program === "sprint-with-us"
+      ? api.DELETE("/api/opportunities/sprint-with-us/{id}", request)
+      : api.DELETE("/api/opportunities/team-with-us/{id}", request),
+  );
 }
 
 export type OtherProgramAnswer =
@@ -225,5 +374,28 @@ export async function fetchOtherProgramOpportunity(program: OtherProgram, id: st
     return opportunity ? { kind: "found", opportunity } : { kind: "missing" };
   } catch {
     return { kind: "missing" };
+  }
+}
+
+/** Someone who may sit on an evaluation panel. */
+export interface PanelCandidate {
+  readonly id: string;
+  readonly label: string;
+}
+
+/**
+ * Who may be put on a panel: every active public sector employee and administrator, as the
+ * service names them on a member of staff's own session (decision record 0045). Empty when it
+ * cannot be read.
+ */
+export async function fetchPanelCandidates(): Promise<PanelCandidate[]> {
+  try {
+    const { data, response } = await api.GET("/api/sessions/{id}", { params: { path: { id: "current" } } });
+    const candidates = response.ok ? (data as { panelCandidates?: unknown } | undefined)?.panelCandidates : null;
+    return list(candidates).flatMap((candidate) =>
+      typeof candidate.id === "string" ? [{ id: candidate.id, label: text(candidate.name) || candidate.id }] : [],
+    );
+  } catch {
+    return [];
   }
 }

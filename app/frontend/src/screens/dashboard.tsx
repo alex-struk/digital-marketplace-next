@@ -16,8 +16,8 @@ import { StatusBadge } from "./opportunity-parts";
  *
  * A member of public sector staff sees the opportunities they created, and an administrator every
  * opportunity with who created it (opportunity-dashboard; R-1.3). Each row names the opportunity,
- * links to its manage page, and shows its state, in all three programs (the Sprint With Us and
- * Team With Us manage pages are slice 10's). What a vendor or an evaluation panel member sees here
+ * links to its manage page, and shows its state, in all three programs. What a vendor or an
+ * evaluation panel member sees here
  * belongs to the slices that make proposals and evaluations.
  */
 export function DashboardScreen() {
@@ -130,7 +130,7 @@ function OpportunityDashboard({ account }: { account: Account }) {
                     </td>
                     <td style={cell}>{PROGRAM_NAMES[opportunity.program]}</td>
                     <td style={cell}>
-                      <StatusBadge status={opportunity.status} />
+                      <StatusBadge status={opportunity.status} program={opportunity.program} />
                     </td>
                     <td style={cell}>{readDate(opportunity.updatedAt)?.label ?? ""}</td>
                     {administrator ? <td style={cell}>{opportunity.createdBy?.name ?? ""}</td> : null}

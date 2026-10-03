@@ -11,7 +11,7 @@ import {
 import type { Response } from "express";
 import { IdentifiedRequest } from "../auth/bearer-token";
 import { Account } from "./account";
-import { AccountsService } from "./accounts.service";
+import { AccountsService, PanelCandidate } from "./accounts.service";
 import { SessionEnding } from "./session-ending";
 
 /**
@@ -22,6 +22,11 @@ import { SessionEnding } from "./session-ending";
 export interface Session {
   readonly id: string | null;
   readonly user: Account | null;
+  /**
+   * For public sector staff and administrators only: who may be put on an evaluation panel, by
+   * name (decision record 0045).
+   */
+  readonly panelCandidates?: readonly PanelCandidate[];
 }
 
 /**
@@ -54,7 +59,8 @@ export class SessionsController {
     const identity = request.identity;
     if (!identity) return { id: null, user: null };
     const { account } = await this.accounts.signIn(identity);
-    return { id: identity.sessionId, user: account };
+    const panelCandidates = await this.accounts.panelCandidates(account);
+    return { id: identity.sessionId, user: account, ...(panelCandidates ? { panelCandidates } : {}) };
   }
 
   /**

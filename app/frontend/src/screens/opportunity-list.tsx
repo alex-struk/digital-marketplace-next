@@ -251,7 +251,7 @@ function OpportunityCard({
           <Link href={`/opportunities/${opportunity.program}/${opportunity.id}`}>{title}</Link>
         </Heading>
         <div>
-          <StatusBadge status={opportunity.status} />
+          <StatusBadge status={opportunity.status} program={opportunity.program} />
         </div>
         <Text elementType="p">{where}</Text>
         <Text elementType="p">{`${opportunity.value.term}: ${amount}`}</Text>

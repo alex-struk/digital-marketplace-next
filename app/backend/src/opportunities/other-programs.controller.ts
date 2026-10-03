@@ -7,7 +7,7 @@ import { OtherProgramsService } from "./other-programs.service";
 
 /**
  * The lists of Sprint With Us and Team With Us opportunities, so the opportunity list covers all
- * three programs (R-1.38, R-1.39). Reading, making and changing one is slice 10's.
+ * three programs (R-1.38, R-1.39). One opportunity is `OtherProgramOpportunitiesController`'s.
  */
 @Controller("api/opportunities")
 export class OtherProgramListsController {

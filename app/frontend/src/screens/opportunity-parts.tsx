@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { OpportunityStatus, STATUS_LABELS, pacificDayOf } from "@rules/opportunities";
+import { OpportunityStatus, Program, pacificDayOf, statusLabel } from "@rules/opportunities";
 import { badge, term } from "../app/layout";
 import { Stack } from "../app/page-layout";
 import { readDate, readDay } from "../lib/dates";
@@ -9,11 +9,11 @@ import { readDate, readDay } from "../lib/dates";
  * components"): the status badge and the key facts, and the way dates and money read.
  */
 
-/** The state in words, never colour alone (`opportunity-status`). */
-export function StatusBadge({ status }: { status: OpportunityStatus }) {
+/** The state in words, never colour alone (`opportunity-status`), as its program names it. */
+export function StatusBadge({ status, program }: { status: OpportunityStatus; program?: Program }) {
   return (
     <span style={badge} data-testid="opportunity-status">
-      {STATUS_LABELS[status]}
+      {statusLabel(status, program)}
     </span>
   );
 }

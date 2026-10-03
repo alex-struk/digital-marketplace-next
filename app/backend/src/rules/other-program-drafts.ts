@@ -1,16 +1,14 @@
 /**
- * Sprint With Us and Team With Us opportunities as created before slice 10, as plain TypeScript
- * (decision records 0035 and 0036): what one holds when it is created — the fields every program
- * shares, and each program's own phases or resources, questions, scoring weights and evaluation
- * panel as its create screen offers them — and how what was sent becomes what is kept. The service
- * and the single-page app both call these.
+ * Sprint With Us and Team With Us opportunities, as plain TypeScript (decision records 0035, 0036
+ * and 0045): what one holds — the fields every program shares, and each program's own phases or
+ * resources, questions, scoring weights and evaluation panel — and how what was sent becomes what
+ * is kept. The service and the single-page app both call these.
  */
 
 import {
   CalendarDay,
   DRAFT_DATE_DAYS_AHEAD,
   OpportunityStatus,
-  REMOTE_DESC_MAX,
   OpportunityViewer,
   addDays,
   calendarDayFrom,
@@ -54,8 +52,14 @@ export function isServiceArea(value: unknown): value is ServiceArea {
   return SERVICE_AREAS.some((area) => area.key === value);
 }
 
-/** How many questions, resources or panel members one opportunity may name. */
+/** How many resources or panel members one opportunity may name. */
 export const LIST_MAX = 100;
+
+/**
+ * How many evaluation questions one opportunity may hold: a question's position runs from 0 to
+ * 100 (R-1.17), so 101 questions are valid and a 102nd is not.
+ */
+export const QUESTIONS_MAX = 101;
 
 export interface PhaseDraft {
   readonly phase: SwuPhase;
@@ -143,17 +147,13 @@ function yes(value: unknown): boolean {
   return value === true || value === "yes" || value === "true";
 }
 
-function no(value: unknown): boolean {
-  return value === false || value === "no" || value === "false";
-}
-
-const listFrom = (value: unknown): readonly Record<string, unknown>[] =>
+const listFrom = (value: unknown, max: number = LIST_MAX): readonly Record<string, unknown>[] =>
   Array.isArray(value)
-    ? value.filter((item): item is Record<string, unknown> => typeof item === "object" && item !== null).slice(0, LIST_MAX)
+    ? value.filter((item): item is Record<string, unknown> => typeof item === "object" && item !== null).slice(0, max)
     : [];
 
 function questionsFrom(value: unknown): QuestionDraft[] {
-  return listFrom(value)
+  return listFrom(value, QUESTIONS_MAX)
     .map((item) => ({
       question: text(item.question),
       guideline: text(item.guideline),
@@ -164,14 +164,31 @@ function questionsFrom(value: unknown): QuestionDraft[] {
     .filter((item) => item.question !== "" || item.guideline !== "" || item.score !== 0 || item.wordLimit !== 0 || item.minimumScore !== null);
 }
 
+/**
+ * A draft's panel, kept so the store can hold it: each account once, only members who evaluate or
+ * chair, and only the first chair as chair. The panel's own rules are applied when it is put
+ * forward or changed on its own (R-1.55, R-5.1).
+ */
 function panelFrom(value: unknown): PanelMemberDraft[] {
   const seen = new Set<string>();
   const members: PanelMemberDraft[] = [];
+  let chaired = false;
   for (const item of listFrom(value)) {
-    const user = typeof item.user === "string" ? item.user.toLowerCase() : "";
+    const named = item.user as unknown;
+    const raw =
+      typeof named === "string"
+        ? named
+        : typeof named === "object" && named !== null && typeof (named as { id?: unknown }).id === "string"
+          ? (named as { id: string }).id
+          : "";
+    const user = raw.toLowerCase();
     if (!IDENTIFIER.test(user) || seen.has(user)) continue;
+    const chair: boolean = yes(item.chair) && !chaired;
+    const evaluator: boolean = yes(item.evaluator);
+    if (!chair && !evaluator) continue;
     seen.add(user);
-    members.push({ user, evaluator: yes(item.evaluator), chair: yes(item.chair) });
+    chaired ||= chair;
+    members.push({ user, evaluator, chair });
   }
   return members;
 }
@@ -190,9 +207,9 @@ function skillsFrom(value: unknown): string[] {
 }
 
 /**
- * What is kept of what was sent, in every state an opportunity may be created in (R-1.9). Nothing
- * is refused for its content here: whether an opportunity is complete enough to be reviewed or
- * published is each program's own rule, and slice 10's. A proposal deadline or assignment date
+ * What is kept of what was sent (R-1.9). Nothing is refused for its content here: an opportunity
+ * that is not a draft has already been judged by `otherProblems` (other-program-content.ts), and
+ * a draft is never judged. A proposal deadline or assignment date
  * that is missing, or earlier than the date it must follow, is set to fourteen days from the day
  * of saving; so is a Team With Us start date. A completion date that is missing or earlier than
  * the start date is left empty. A Sprint With Us phase's dates follow the same rule from the
@@ -200,14 +217,20 @@ function skillsFrom(value: unknown): string[] {
  * phases do not. The budget is read from `totalMaxBudget` or `maxBudget`, whichever the program
  * names it by; the request names the rest as the old service's did.
  */
-export function draftOf(program: OtherProgram, body: unknown, today: CalendarDay): OtherProgramDraft {
+export function draftOf(
+  program: OtherProgram,
+  body: unknown,
+  today: CalendarDay,
+  earliestDeadline: CalendarDay = today,
+): OtherProgramDraft {
   const record = typeof body === "object" && body !== null ? (body as Record<string, unknown>) : {};
   const fallback = addDays(today, DRAFT_DATE_DAYS_AHEAD);
   const valid = (value: unknown, earliest: CalendarDay): CalendarDay | null => {
     const day = calendarDayFrom(typeof value === "string" ? value.trim() : null);
     return day !== null && day >= earliest ? day : null;
   };
-  const deadline = valid(record.proposalDeadline, today) ?? fallback;
+  // A published opportunity whose deadline has passed keeps it when changed (R-1.14 note).
+  const deadline = valid(record.proposalDeadline, earliestDeadline) ?? fallback;
   const assignment = valid(record.assignmentDate, deadline) ?? fallback;
   const sprint = program === "sprint-with-us";
   const start = sprint ? null : (valid(record.startDate, assignment) ?? fallback);
@@ -289,28 +312,6 @@ export function isCreationRefusal(decision: CreationState | CreationRefusal): de
 
 export const UNKNOWN_CREATION_STATE =
   "status: An opportunity is created as a draft (DRAFT), under review (UNDER_REVIEW) or published (PUBLISHED).";
-
-/**
- * Why an opportunity created in `state` may not be kept as sent, before slice 10 brings each
- * program's own rules: what R-1.11 asks of every program. One that is not a draft must say whether
- * remote work is acceptable, must describe it when it is, and a description runs to at most 500
- * characters. A draft is never refused for its content (R-1.9). Each line names its field as Code
- * With Us's refusals do, and in their words (decision records 0040 and 0041).
- */
-export function remoteWorkProblems(state: CreationState, body: unknown): string[] {
-  if (state === "DRAFT") return [];
-  const record = typeof body === "object" && body !== null ? (body as Record<string, unknown>) : {};
-  const problems: string[] = [];
-  const stated = yes(record.remoteOk) || no(record.remoteOk);
-  if (!stated) problems.push("remoteOk: Say whether remote work is acceptable.");
-  const description = text(record.remoteDesc);
-  if (description.length > REMOTE_DESC_MAX) {
-    problems.push(`remoteDesc: Enter a remote work description of up to ${REMOTE_DESC_MAX} characters.`);
-  } else if (yes(record.remoteOk) && description.trim() === "") {
-    problems.push("remoteDesc: Describe the remote work, because remote work is acceptable.");
-  }
-  return problems;
-}
 
 /** The scoring weights a program has, in the order its form asks for them. */
 export const WEIGHT_FIELDS: Readonly<Record<OtherProgram, readonly (keyof WeightsDraft)[]>> = {

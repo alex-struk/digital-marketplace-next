@@ -132,6 +132,18 @@ export const STATUS_LABELS: Readonly<Record<OpportunityStatus, string>> = {
   CANCELED: "Cancelled",
 };
 
+/**
+ * A state in words as its own program names it (R-1.19 note): Sprint With Us evaluates "team
+ * questions" and Team With Us "resource questions", so their question stages say so.
+ */
+export function statusLabel(status: OpportunityStatus, program?: Program): string {
+  const label = STATUS_LABELS[status];
+  if (status !== "EVAL_QUESTIONS_INDIVIDUAL" && status !== "EVAL_QUESTIONS_CONSENSUS") return label;
+  if (program === "sprint-with-us") return `Team ${label.charAt(0).toLowerCase()}${label.slice(1)}`;
+  if (program === "team-with-us") return `Resource ${label.charAt(0).toLowerCase()}${label.slice(1)}`;
+  return label;
+}
+
 /** What the history records for an event that is not a change of state. */
 export const OPPORTUNITY_EVENTS = ["EDITED", "ADDENDUM_ADDED", "NOTE_ADDED"] as const;
 export type OpportunityEvent = (typeof OPPORTUNITY_EVENTS)[number];
