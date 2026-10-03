@@ -29,3 +29,23 @@ The edit-organization form uses the same map, so it gets the same keys. `create_
 **One reason that isn't about this target.** Part of R-3.2's quoted reason says `/organizations/create` answered "Page not found". That was observed on the target at port 4500, not this one. Here the page answers "Page not found" to a signed-out visitor and opens normally once signed in, which is how the adapter's `signedInScreen` already treats it.
 
 **Not done.** I couldn't run the TypeScript check because the commands needed approval this session doesn't have. Instead I read the edited object literal and confirmed there are no duplicate keys. Every route involved resolved on the target. I wrote nothing outside `tests/adapters/new/`, and no password or environment value appears in the adapter or this entry.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does this adapter change bind the create-organization surface on target new correctly, stay pure navigation/locator code, and touch nothing it shouldn't? Ruling: approve. The organization acceptance tests (R-3.2, R-3.6, R-3.15, R-3.22, R-3.23 among them) pass the input key `addressLineTwo`; the adapter's ORG_FIELDS key-to-label map in tests/adapters/new/index.ts only knew `streetAddress2`, so createOrganization could not locate the second address line and the action surfaced as unbound. The diff adds key aliases to that map, each resolving to a label the form renders ("Street address", "Address line 2", "Province or state", "Postal code or ZIP code"). It is locator data only: no assertion, no business logic, nothing that decides a test's outcome. Nothing under tests/acceptance changed, no protected path is touched, and the runner-owned typecheck on 40a02279e passed with no diagnostics under adapters/new/. The extra aliases no current test uses are inert lookups and do not warrant a return. The proposal is candid that the suite was not run; verify establishes that downstream. What would change the ruling: a verify run that still reports these criteria unbound at create_organization, or fails them on the address fields, would show the map is not the whole cause.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `40a02279e6149c6d39b53c0918e3b0100ff2e4e6`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
