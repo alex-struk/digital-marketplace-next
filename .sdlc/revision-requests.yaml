@@ -934,3 +934,75 @@ requests:
     at: 2026-10-02T23:31:10.897Z
     taken: 2026-10-02T23:42:32.061Z
     taken_by: bind-adapter-new-54
+  - stage: bind-adapter
+    target: new
+    why: 'R-3.1, R-3.21: organizationList.organizationName reads
+      columnValues(/^(organization name|legal name)$/i) and returns "". On
+      /organizations the page draws a table captioned "Registered organizations
+      by legal name." whose name column header is "Organization"
+      (design/DESIGN.md organization list: "Organization only" for a visitor;
+      "Organization, Owner, Team size, ..." for a vendor). The cells hold the
+      legal names. Match the "Organization" header. The owner and qualification
+      column readers should be checked against the same design table.'
+    from: build-slice-11
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-03T04:41:04.754Z
+  - stage: bind-adapter
+    target: new
+    why: "R-3.3, R-3.18: organizationEdit.organizationTab (orgEdit.tab) looks only
+      for role=tab and returns \"\". On /organizations/<id>/edit the sections
+      are links inside navigation \"Organization sections\" (link
+      \"Organization\" -> ?tab=organization, \"Team members\" -> ?tab=team,
+      \"Sprint With Us qualification\", \"Team With Us qualification\",
+      \"Changelog\"), which is what the design specifies for the management
+      tabs. The Organization section's content sits in region \"Organization\"
+      (heading level 2, button \"Edit organization\", read-only profile fields),
+      and region \"Archive this organization\" holds button \"Archive
+      organization\". Bind the tabs to those links and read the matching
+      region."
+    from: build-slice-11
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-03T04:41:04.754Z
+  - stage: bind-adapter
+    target: new
+    why: "R-3.19, R-8.13, R-8.21, R-8.28, R-8.30:
+      organization-edit.edit_organization (orgTabOpen) reports unbound with \"no
+      tab named /^\\s*organization\\s*$/i\", although its own message lists link
+      \"Organization\" and button \"Edit organization\" on the page. Open the
+      Organization section through that link, or stay on the default tab, then
+      press \"Edit organization\". ORG_TAB.team (/^\\s*team\\s*$/i) and
+      ORG_TAB.changelog likewise need to match the page's link labels \"Team
+      members\" and \"Changelog\"."
+    from: build-slice-11
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-03T04:41:04.754Z
+  - stage: bind-adapter
+    target: new
+    why: 'R-3.2, R-3.6, R-3.15, R-3.23: organizationCreate is bound as absent, with
+      a reason recorded against an earlier build where /organizations/create
+      sent people to /dashboard. This branch serves /organizations/create to a
+      signed-in vendor who has accepted the terms: heading "Create
+      Organization", the profile form, a logo picker whose trigger is
+      data-testid organization-logo-button, and a "Create organization" button
+      that stays disabled until the form is valid. On success it goes to
+      /organizations/<id>/edit. Bind create_organization, cancel, change_logo,
+      field_error and submit_disabled_until_valid against the running build.'
+    from: build-slice-11
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-03T04:41:04.754Z
+  - stage: bind-adapter
+    target: new
+    why: "R-3.22: organization-user-memberships.owned_organizations_table is
+      unbound, with a reason describing the profile's Organizations section as a
+      placeholder line. This branch renders that section at
+      /users/<id>?tab=organizations with the organizations the person owns (with
+      team size) and the ones they belong to or are invited to. Rebind it
+      against the running build."
+    from: build-slice-11
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-03T04:41:04.754Z
