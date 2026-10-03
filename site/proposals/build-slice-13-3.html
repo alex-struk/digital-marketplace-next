@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-13-3 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">569</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">563</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">465</span></a></li><li><a href="../runs.html">Run log <span class="count">21</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-13-3</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-03 19:16</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.288 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 13 (An organization can qualify for Sprint With Us and Team With Us) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> I changed the service-area checkboxes on the Team With Us qualification tab, which should fix the R-3.26 and R-3.28 failures.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.288 (Claude Code))</p>
+<p>I changed the service-area checkboxes on the Team With Us qualification tab, which should fix the R-3.26 and R-3.28 failures. The cause is my best reading of the evidence, not something I could confirm: there is no browser here, and I can&#39;t see the acceptance tests. The unit tests and <code>npm --prefix app run check</code> all pass.</p>
+<p><strong>What the evidence showed.</strong> In both failures the page itself looked right. For R-3.26, the organization showed no approvals and every box was unchecked, yet the test said it &quot;already stands approved&quot;. For R-3.28, after the save, exactly Full Stack Developer and Agile Coach were ticked, yet the test said the organization was not approved for exactly those two. So the problem was not what the service stored but how a test finds a given area&#39;s checkbox.</p>
+<p><strong>The likely cause.</strong> The design catalogue&#39;s page (<code>organization-edit.service-areas-editing</code>) draws these checkboxes differently from the app:</p>
+<div class="scroll"><table><thead><tr><th></th><th>Catalogue</th><th>App before the fix</th></tr></thead><tbody><tr><td>Checkbox value</td><td><code>full-stack-developer</code></td><td><code>FULL_STACK_DEVELOPER</code></td></tr><tr><td>Label</td><td>&quot;Full stack developer&quot;</td><td>&quot;Full Stack Developer&quot;</td></tr></tbody></table></div>
+<p>A test that looks up each area by the catalogue&#39;s value or label finds nothing. That explains both failures:</p>
+<ul><li><strong>R-3.26:</strong> with nothing matched, an &quot;is it already approved?&quot; check comes out true.</li><li><strong>R-3.28:</strong> the save could not tick the third area, so the seeded pair stayed as it was, and the &quot;exactly these two&quot; check found no match and came out false.</li></ul>
+<p><strong>The change</strong> is in <code>app/frontend/src/screens/organization-qualification.tsx</code>:</p>
+<ul><li>The checkboxes now use the catalogue&#39;s values and labels.</li><li>The form turns the values back into the service&#39;s own names only when it saves, so the API and the stored data are unchanged.</li><li>The read-only list of approved areas on that tab also uses the sentence-case labels.</li></ul>
+<p>Other screens that name service areas, such as the Team With Us opportunity pages, still use the old labels. I left them alone because they belong to other slices.</p>
+<p><strong>Tests.</strong> The administrator test in <code>app/frontend/tests/qualification.test.tsx</code> now also checks that the five checkboxes carry the catalogue&#39;s labels and values. It still checks that saving sends exactly <code>FULL_STACK_DEVELOPER</code> and <code>AGILE_COACH</code>. The owner test checks the new label in the read-only list. Dependencies were not installed in this workspace, so I ran <code>npm ci</code> first.</p>
+<p>I recorded the decision in <code>docs/decisions/0054-service-area-checkboxes-follow-the-catalogue.md</code>. I didn&#39;t touch R-3.25, R-3.27, the backend, or any file outside <code>app/</code> and <code>docs/decisions/</code>. Nothing here needed a change to the spec, plan or design.</p>
+<p>If R-3.26 or R-3.28 still fails the same way, the tests must find the checkboxes some other way, such as the element carrying the test ID or a label-to-area table I can&#39;t see. The next revision would need that failure output to tell which.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by agent:tech-lead (persona agent · claude claude-opus-5-5) on 2026-10-03 19:21.</p>
+<div class="body"><p>Should slice 13 pass G3 when R-3.26 and R-3.28 fail? Return. The cause is the new target&#39;s adapter, not the application. The tests ask organizationEdit.serviceAreaCheckbox() which areas are approved and check whether an area&#39;s words appear in the text. On the old target the function returns only the ticked areas (tests/adapters/old/index.ts:6617). On the new target it returns every checkbox as &#39;label: checked/unchecked&#39; (tests/adapters/new/index.ts:5536-5537). So every area name is always present: R-3.26 reads an organization with nothing ticked as &#39;already approved&#39;, and R-3.28&#39;s &#39;not DATA_PROFESSIONAL&#39; can never hold while that box is on the page. The tests match what the old target returns, so they do not overreach. This build&#39;s checkbox change does not touch that mechanism, because the test pattern accepts any case and any separator. Its decision record 0054 wrongly claims it fixes the failures, and record 0053 now contradicts it. The ruling changes if the adapter reports only ticked areas and the two criteria still fail.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>addressed-to bind-adapter: target new — organizationEdit.serviceAreaCheckbox in tests/adapters/new/index.ts (around lines 5522-5547) must return only the service areas that are approved (ticked boxes in the editor, or the items in the &#39;Approved service areas&#39; list), the same as the old target&#39;s binding (tests/adapters/old/index.ts around line 6617: &#39;the areas whose boxes are ticked&#39;). It must not return every box with &#39;: checked&#39;/&#39;: unchecked&#39; after it. The R-3.26 and R-3.28 tests check whether an area&#39;s words appear anywhere in the returned text, so the current output makes every area look approved. In verify of build-slice-13-3, R-3.26 read &#39;Full stack developer: unchecked Data professional: unchecked ...&#39; and failed &#39;the organization already stands approved&#39;. R-3.28 read &#39;Full stack developer: checked Data professional: unchecked Agile coach: checked ...&#39; and failed because DATA_PROFESSIONAL&#39;s words appear in the text although it was unticked.</li><li>docs/decisions/0054-service-area-checkboxes-follow-the-catalogue.md: take out the claim that the label and value change fixes the acceptance failures. The adapter&#39;s reading caused them, and that has been sent to bind-adapter. Keep the change itself only for the reason that it follows the catalogue page.</li><li>docs/decisions/0053-qualifying-for-sprint-with-us-and-team-with-us.md: make the Service areas paragraph agree with 0054. It still says the screen names each area by the service&#39;s own name (&#39;Full Stack Developer&#39;) and that the sentence-case names are illustrative.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
