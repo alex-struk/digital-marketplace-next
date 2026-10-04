@@ -38,3 +38,23 @@ I added a test for the one remaining gap in R-5.27 (v2) and left the existing te
 I didn't add a `not-testable.yaml` entry for these points. The clause is asserted from the side the contract offers, and none of them is a clause that goes unasserted. If the ruling says the clause also needs the move to be shown happening under the newer count, the missing piece belongs to `contract`: a persona that signs in as `users.staffPanelEvaluator`.
 
 I changed nothing outside `tests/acceptance`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Question: does the new R-5.27 test follow from the criterion's clause 'counted against the panel and the questions of the opportunity's most recent version', and from nothing else? Approved. The contract (spec/contract/surface.yaml evaluation-panel notes) states that the panel can be changed in individual evaluation, that questions cannot, that saving the panel publishes a new version, and that the newest panel decides how many submissions the move waits for. The test does exactly that on the seeded closed Team With Us opportunity, whose seeded panel (staffOne as evaluator, administratorOne as chair and evaluator) matches the two personas it signs in. It seats users.staffPanelEvaluator, has both seeded evaluators submit the twenty-four scores that moved the first version on, and asserts the opportunity has not moved to consensus. The guards that the panel saved without error and that each submission went through follow from that setup and stop the negative check passing vacuously. No selector, route or status code appears. The 'consensus' substring read matches the existing test's convention, because the contract names no display text. The runner's typecheck of acceptance/evaluation passed. The clause is asserted only in its negative direction: personas.yaml confirms no persona signs in as users.staffPanelEvaluator, so no test can show the move happening once the newer, larger count is reached. The writer could not assert that, so it is kept owed by contract rather than returned. The existing missing-test/R-5.27 stays open until this test runs. This ruling would become a return if the contract's panel notes did not hold on the oracle, or if a sign-in for a third evaluator existed and the test still left the positive direction unasserted.
+
+**Conditions:**
+- missing-test R-5.27: counted against the panel and the questions of the opportunity's most recent version — that the move to consensus happens once the newer version's larger count (three evaluators × three proponents × four questions) is reached — owed by contract: a persona or sign-in that reaches users.staffPanelEvaluator (or another account seatable as a third evaluator), so that the added evaluator can submit their scores
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `7729eba0164cf0d5a5e2578b6e438b3ac788718d`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/evaluation/`, which this proposal answers for.
+
+    No diagnostics.
