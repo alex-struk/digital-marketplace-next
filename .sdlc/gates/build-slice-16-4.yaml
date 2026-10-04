@@ -1,0 +1,17 @@
+gate: G3
+verdict: return
+by: agent:tech-lead
+held_by: agent
+rationale: |2-
+  The question is whether slice 16 does what its criteria say. All 12 claimed criteria pass against tree adfa76f, but the result is fail on two regressions this slice caused by making deadline closing real, and the escalation asks whether those are the application's or a test's. They differ. R-2.15 (slice 14) is the application's: the criterion refuses a Code With Us proposal created already submitted after the deadline with "This opportunity is no longer accepting proposals.", and it names hiding a closed opportunity from vendors as the barrier only for Sprint With Us and Team With Us. The test closes the opportunity first, as R-1.1 now makes inevitable, and the vendor's create page then shows "Page not found" (.sdlc/evidence/slice-16/R-2.15.txt) because proposal-cwu-create.tsx:64 treats any non-PUBLISHED opportunity as missing. That was harmless before the hook existed and now hides the refusal the backend already gives (cwu-proposals.service.ts:149). R-4.2 (slice 2) is the test's: the criterion withholds a welcome message from a person with no email address, but the test demands that the mail catcher holds nothing for anybody after that person signs in. It found 14, which are the closing notices R-1.1 and R-5.20 require the sign-in's first /api request to send. So this is a return to build for R-2.15 plus a test-overreaches filing for R-4.2. Neither is a pipeline fault, so this is not escalated. The ruling becomes an approval once R-2.15 passes and a regenerated R-4.2 test binds and passes, with the 12 claimed criteria still passing.
+conditions:
+  - "R-2.15 regressed: now that the deadline hook closes a lapsed Code With Us opportunity on the first /api request, the vendor's create page at /opportunities/code-with-us/<id>/proposals/create renders \"Page not found\" (proposal-cwu-create.tsx:64 treats any status other than PUBLISHED as missing), so the refusal the criterion quotes is never shown. Let a vendor reach the Code With Us create screen for an opportunity that is closed or past its deadline, and show the service's refusal \"This opportunity is no longer accepting proposals.\" when they submit it, as the backend already answers. Leave the Sprint With Us and Team With Us create screens hiding a closed opportunity, as the criterion says."
+  - "test-overreaches R-4.2: the test asserts the mail catcher holds zero messages for anyone after a first-time person with no email address signs in, while the criterion asks only that no welcome message is attempted for that person; the closing notices R-1.1 and R-5.20 require, sent on that sign-in's first /api request, make the catcher hold 14 unrelated messages, so the test must look only for a welcome message rather than counting all mail."
+cost: 1.0273970000000001
+turns: 9
+session: "d632a3ac-0f06-4480-a6ff-bff7f79c1a67"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T10:23:28.163Z
