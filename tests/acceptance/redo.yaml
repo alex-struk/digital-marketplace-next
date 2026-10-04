@@ -984,6 +984,14 @@ redo:
       the rewritten R-5.31 and R-5.33 tests do. The Code With Us author clause
       is unaffected."
     verb: test-overreaches
+    closed:
+      outcome: met
+      why: derived again by derive-tests-opportunities-stale-22, in the line of work
+        approved as derive-tests-opportunities-15
+      by: derive-tests-opportunities-15
+      at: 2026-10-04T15:17:47.606Z
+      gate: G3
+      approved_by: agent:reviewer
   - id: R-2.36
     version: 1
     why: "the withdrawal check polls mail.messagesTo(administratorOne), a Mailpit

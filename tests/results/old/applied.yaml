@@ -483,11 +483,6 @@ rulings:
     gate: calibrate-triage-old-30
   - id: R-1.1
     version: 3
-    verb: product-question
-    gate: calibrate-triage-old-34
-    file_sha: e578a5959f3b2e9ced33c820d4867a43a54c2796
-  - id: R-1.1
-    version: 3
     verb: defect-in-old
     gate: calibrate-old-22
   - id: R-2.19

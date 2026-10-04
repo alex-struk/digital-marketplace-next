@@ -474,6 +474,7 @@ Profile: rebuild
 - [derive-tests-opportunities-12](proposals/derive-tests-opportunities-12.md)
 - [derive-tests-opportunities-13](proposals/derive-tests-opportunities-13.md)
 - [derive-tests-opportunities-14](proposals/derive-tests-opportunities-14.md)
+- [derive-tests-opportunities-15](proposals/derive-tests-opportunities-15.md)
 - [derive-tests-opportunities-2](proposals/derive-tests-opportunities-2.md)
 - [derive-tests-opportunities-3](proposals/derive-tests-opportunities-3.md)
 - [derive-tests-opportunities-4](proposals/derive-tests-opportunities-4.md)
@@ -496,6 +497,7 @@ Profile: rebuild
 - [derive-tests-opportunities-stale-2](proposals/derive-tests-opportunities-stale-2.md)
 - [derive-tests-opportunities-stale-20](proposals/derive-tests-opportunities-stale-20.md)
 - [derive-tests-opportunities-stale-21](proposals/derive-tests-opportunities-stale-21.md)
+- [derive-tests-opportunities-stale-22](proposals/derive-tests-opportunities-stale-22.md)
 - [derive-tests-opportunities-stale-3](proposals/derive-tests-opportunities-stale-3.md)
 - [derive-tests-opportunities-stale-4](proposals/derive-tests-opportunities-stale-4.md)
 - [derive-tests-opportunities-stale-5](proposals/derive-tests-opportunities-stale-5.md)
@@ -652,10 +654,10 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $977.407505
-- Rulings cost: $524.906478
-- Total cost: $1502.313983
-- Agent-held rulings: 563
+- Journal cost: $978.203382
+- Rulings cost: $525.693374
+- Total cost: $1503.896756
+- Agent-held rulings: 565
 - Runner rulings (automatic, no seat held): 34
 - Human rulings: 25
 - Rulings whose seat this page does not recognise: 0

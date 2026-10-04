@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-opportunities-15 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">624</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">618</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">501</span></a></li><li><a href="../runs.html">Run log <span class="count">22</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-opportunities-15</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-04 15:16</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.288 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do the revised opportunities tests now follow from their criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I made both changes to <code>tests/acceptance/opportunities/R-1.1.spec.ts</code>, but the typecheck did not run, so the edits are unchecked.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.288 (Claude Code))</p>
+<p>I made both changes to <code>tests/acceptance/opportunities/R-1.1.spec.ts</code>, but the typecheck did not run, so the edits are unchecked. Running <code>tsc</code> here needed an approval that nobody was present to give. I checked by hand that every page and reading the new code uses exists in <code>tests/generated/surface.d.ts</code> under the name used, but the runner&#39;s typecheck should be run before ruling.</p>
+<p><strong>Condition 1: the note &quot;This opportunity has closed.&quot;</strong> I restored this check for all three programs, so no not-testable entry was needed. The edit page for each program has a History tab reading: <code>opportunityCwuEdit.historyTab()</code>, <code>opportunitySwuEdit.historyTab()</code> and <code>opportunityTwuEdit.historyTab()</code>. The contract shows that tab to an administrator. An existing test (R-2.27) already reads a note&#39;s text from the Code With Us History tab, so the reading carries the history&#39;s text.</p>
+<p>After closure, the administrator now opens the edit page of each seeded opportunity: the lapsed Code With Us one, the closed Sprint With Us one and the closed Team With Us one. The test then waits until each History tab contains the note. These checks sit in the test for the &quot;first evaluation stage&quot; outcome, because the criterion&#39;s &quot;then&quot; states the note as part of that move. That test&#39;s title now names the note too.</p>
+<p><strong>Condition 2: the stage check.</strong> The pattern <code>/evaluat|question/</code> is replaced with checks for each program&#39;s first stage:</p>
+<ul><li><strong>Sprint With Us</strong> must read &quot;team question&quot;.</li><li><strong>Team With Us</strong> must read &quot;resource question&quot;.</li><li><strong>Both</strong> must not match &quot;consensus&quot;, &quot;challenge&quot;, &quot;scenario&quot;, &quot;processing&quot;, &quot;award&quot;, &quot;cancel&quot; or &quot;publish&quot;. Those words cover every later evaluation stage and every state after evaluation.</li></ul>
+<p>The spec gives these stages as &quot;team questions individual&quot; and &quot;resource questions individual&quot;. The contract does not spell out the exact text the status reading shows. So the check relies on the stage&#39;s distinguishing words rather than a full label, as other existing evaluation tests already do. The Code With Us check is unchanged, since that program has only one evaluation stage.</p>
+<p>Nothing else changed. No other test file and no entry in <code>tests/acceptance/not-testable.yaml</code> was touched. The existing entry for the third Sprint With Us and Team With Us proposal still stands. The file&#39;s header keeps its derived date of 2026-10-04, which is today&#39;s date anyway.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-04 15:17.</p>
+<div class="body"><p>Question: do the revised R-1.1 v3 tests follow from the criterion and nothing else, and do they settle the two conditions derive-tests-opportunities-stale-22 left owed? Ruling: approve. The first-stage test now polls the History tab of the Code With Us, Sprint With Us and Team With Us edit pages for the note &quot;This opportunity has closed.&quot;, which the criterion&#39;s then states. The stage check now asserts each program&#39;s first evaluation stage by its distinguishing words (&#39;team question&#39; for Sprint With Us, &#39;resource question&#39; for Team With Us) and rules out every later stage and post-evaluation state, in line with the spec&#39;s stage list (opportunities.md: team questions individual / resource questions individual first). Code With Us has only one evaluation stage, so &#39;evaluat&#39; is enough there. The added Code With Us checks follow from the criterion&#39;s own clauses: the one submitted proposal moves to review, read by its seeded vendor users.organizationOwner, and the author is announced to. The service address used to find the announcement is quoted from the contract&#39;s observables, not from an implementation. The third Sprint With Us and Team With Us proposal is named by a clause-scoped not-testable entry with a real surface gap and contract as its owner, and the ledger already carries it as a missing test owed by contract. The R-1.51 entry was moved, not changed. The runner&#39;s typecheck on this revision passed with no diagnostics. What would change this: evidence that the status reading presents the first stage without those distinguishing words, or that the History tab&#39;s text does not carry the note.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met derive-tests-opportunities-stale-22#1: tests/acceptance/opportunities/R-1.1.spec.ts, in the &#39;moves to the first evaluation stage ... with the note&#39; test, polls opportunityCwuEdit/opportunitySwuEdit/opportunityTwuEdit.historyTab() for &quot;This opportunity has closed.&quot; on the lapsed Code With Us, closed Sprint With Us and closed Team With Us opportunities, as an administrator</li><li>condition-met derive-tests-opportunities-stale-22#2: tests/acceptance/opportunities/R-1.1.spec.ts now requires &#39;team question&#39; for Sprint With Us and &#39;resource question&#39; for Team With Us, and rejects /consensus|challenge|scenario|processing|award|cancel|publish/, so a later evaluation stage no longer passes</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
