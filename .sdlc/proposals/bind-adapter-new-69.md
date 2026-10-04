@@ -32,3 +32,23 @@ I couldn't bind any of the seven criteria on this run. I reopened every screen t
   - These reasons in `bindings.yaml` already said this accurately, so I left them as they were.
 
 Every page route in `surface.yaml` that I opened resolved on the target. The proposal and evaluation screens above load but answer "Page not found", and the reasons say so. I touched nothing outside `tests/adapters/new/`, and no password or environment value appears in anything I wrote.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Question: does the new adapter bind every surface action and observation it can, and nothing else? Approve. The only code change, in addAttachmentFile, is a locator check: when 'Add attachment' is present but disabled (as on the Sprint With Us and Team With Us create forms), it reports unbound at once and quotes the page's note, where before it would have clicked until the test timed out. It decides nothing about whether a test passes. It uses the existing isDisabled helper (disabled or aria-disabled) and the existing unbound helper, which never returns, and the runner's typecheck on this revision passed with no diagnostics under adapters/new/. The two edited proposals_tab reasons (R-1.31, R-2.25) and the unchanged reasons for R-2.7, R-2.9, R-2.11 and R-2.24 each name a screen or action the target does not offer: no Proposals section on either management screen, and 'Page not found' on the proposal view and create routes for both the administrator and the vendor. These are application gaps to be built, not tests asking for more than their criteria, so the reasons are real. Nothing under tests/acceptance changed and no protected path is touched. What would change the ruling: evidence that the target does render any of these surfaces, under another label, behind another step or for another persona, while the adapter still reports it unbound.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `cfd5a4068764eaad3cf9112adc3c6826e5e2eff2`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
