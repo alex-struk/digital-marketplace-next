@@ -1517,6 +1517,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-04T09:05:56.561Z
+    taken: 2026-10-04T09:13:18.928Z
+    taken_by: bind-adapter-new-78
   - stage: bind-adapter
     target: new
     why: "R-6.25, R-1.26, R-2.26, R-2.27, R-2.33, R-2.34: verify reports the
@@ -1529,6 +1531,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-04T09:05:56.561Z
+    taken: 2026-10-04T09:13:18.928Z
+    taken_by: bind-adapter-new-78
   - stage: plan
     why: R-1.24 and R-2.5 are claimed by Slice 16, but their tests read the
       anonymous proponent names on evaluation-individual-list-swu and
