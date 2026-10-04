@@ -504,6 +504,9 @@
 - 15:43:29 rule bind-adapter-old-71 approve at G3 by runner:checks (agent)
 - 15:43:37 drive: step 5: `sdlc run calibrate --target old` — 1 unbound row to check again now that its adapter has changed for target old owed by calibrate
 - 15:45:20 run calibrate: ok, cost 0, turns 0
+- 15:45:22 propose calibrate-old-29 at G1
+- 15:45:28 drive: step 6: `sdlc rule calibrate-old-29 --by agent:product-owner` — calibrate-old-29 is open at G1, held by agent:product-owner
+- 15:46:08 rule calibrate-old-29 approve at G1 by agent:product-owner (agent) on claude claude-opus-5-5 (2.1.288 (Claude Code))
 
 # Run record 2026-10-03
 
