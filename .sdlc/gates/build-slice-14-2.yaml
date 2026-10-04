@@ -1,0 +1,20 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does slice 14 (a vendor can propose on a Code With Us opportunity) do what its criteria say? Ruling: return. Verify is unbound for this tree (80f368e): 18 of 25 criteria pass, R-2.13 among them, so the no-proponent-chosen fix holds. The other 7 established nothing. The gaps have two causes. (1) Code With Us screens the slice was asked for and did not build: the router registers only /opportunities/code-with-us/$opportunityId/proposals/create and .../$proposalId/edit, with no read-only proposal page at .../proposals/:proposalId (R-2.24 'a vendor never sees another vendor's proposal'), and the Code With Us opportunity management screen has no Proposals tab (R-1.31 and R-2.25, Code With Us cases). (2) The plan gave a Code With Us-only slice criteria that span all three programs. R-2.7, R-2.9, R-2.11, R-2.24 and the Sprint With Us cases of R-1.31 and R-2.25 need the Sprint With Us and Team With Us proposal screens, which the proposals module says arrive in slice 15. R-8.20 needs attachments on Sprint With Us and Team With Us opportunities, which the app says it does not offer and no slice builds. Rebuilding this slice cannot close group (2). The ruling changes when build adds the two Code With Us screens and the plan re-scopes group (2), and a current verify then passes.
+conditions:
+  - "Add the read-only Code With Us proposal page at /opportunities/code-with-us/:opportunityId/proposals/:proposalId (app/frontend/src/router.tsx and a proposal-cwu-view screen). Its author, and anyone who owns or administers its organization, can read it; any other vendor is refused. Verify reported proposal-cwu-view.open unbound for R-2.24."
+  - "Add a Proposals tab to the Code With Us opportunity management screen (/opportunities/code-with-us/:id/edit?tab=proposals). It refuses staff and administrators until the opportunity has closed, then lists the submitted proposals and never a draft, using the existing GET /api/proposals/code-with-us?opportunity=. Verify reported opportunity-cwu-edit.proposals_tab unbound for R-1.31 and R-2.25."
+  - "app/backend/src/proposals/prisma-cwu-proposal.store.ts: in create and update, write null to proponentOrganization when the organization proponent's value is \"\". Today a draft saved with 'An organization' chosen but none picked writes an empty string into a uuid foreign-key column, which goes against R-2.12 (a draft is kept however incomplete). Add a unit or end-to-end test that saves that draft and reopens it."
+  - "addressed-to plan: slice 14 builds only Code With Us proposals (Sprint With Us and Team With Us proposals arrive in slice 15), yet it claims R-2.7, R-2.9, R-2.11, R-2.24 and the Sprint With Us and Team With Us cases of R-1.31 and R-2.25, whose tests open proposal-swu-create, proposal-twu-create and opportunity-swu-edit.proposals_tab. Verify reported all of these unbound because those screens belong to a later slice. Move these criteria, or their non-Code With Us cases, to the slice that builds Sprint With Us and Team With Us proposals."
+  - "addressed-to plan: slice 14 claims R-8.20, whose test cases attach files to Sprint With Us and Team With Us opportunities. The new app has no attachments on those opportunities ('Files cannot be attached to a Sprint With Us opportunity in this version of the service'), and slice 14 does not build them. Verify reported file-attachment-control.add_attachment unbound for both cases. Assign R-8.20 to a slice that builds attachments on Sprint With Us and Team With Us opportunities, or add that work to a slice explicitly."
+cost: 0.1881002
+turns: 2
+session: "9a861b1a-6951-40ac-aa82-9394800b33d3"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T04:10:30.178Z
