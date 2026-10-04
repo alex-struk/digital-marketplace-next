@@ -32,3 +32,23 @@ I left `add_phase` as `bound` in `bindings.yaml` because the action itself is re
 **Not verified:** the workspace has no TypeScript compiler, so I couldn't type-check the file. The new code reuses helpers that are already in the file and follows the same patterns as the code around it.
 
 All of the requested change is done; none of it is deferred. No page's route failed to resolve during this revision.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:tech-lead
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+The question is whether this revision of opportunity-swu-create.add_phase binds what build-slice-15 asked and nothing more. It was escalated only because the request loop passed policy.loops.request, not because of a defect in the diff. The diff answers the one ask still owed, the sixth in the runner's account. addPhase now fills a phase's maximum budget and ticks each named required capability, both looked up by label inside that phase's own group each time the action runs. Where the group has no field for a key, it throws unbound:, naming the key, value, phase and the fields the group does offer, rather than dropping the key. A disabled capability box throws at once. No other adapter code or bindings.yaml entry changed, and the runner's typecheck of adapters/new passed with no diagnostics. The author's walk of /opportunities/sprint-with-us/create as administrator found each phase group offering only start and completion dates. So R-2.19's two form cases now end at a named unbound: instead of passing on a half-filled form, which is what the ask required, and a later build that adds the fields will be filled without rebinding. This does not settle build-slice-15-3#2, which belongs to build: the Sprint With Us form must offer per-phase budget and capabilities. It stays open, and those two R-2.19 cases cannot be judged on the application's merits until it is met. This ruling would change if the adapter refused keys the form does offer, filled the opportunity-wide Total maximum budget instead of a box inside the phase group, or changed anything beyond addPhase.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `89db465ab9fd8fa18e069e3caf5983fc5cab5555`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
