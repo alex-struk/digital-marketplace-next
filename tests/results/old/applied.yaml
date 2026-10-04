@@ -527,13 +527,3 @@ rulings:
     version: 2
     verb: defect-in-old
     gate: calibrate-old-28
-  - id: R-2.36
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-46
-    file_sha: 335b675a5128a6c2ed5dd45033d0e1e0408e0b11
-  - id: R-2.36
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-29
-    file_sha: 335b675a5128a6c2ed5dd45033d0e1e0408e0b11

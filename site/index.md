@@ -576,6 +576,7 @@ Profile: rebuild
 - [derive-tests-proposals-stale-2](proposals/derive-tests-proposals-stale-2.md)
 - [derive-tests-proposals-stale-20](proposals/derive-tests-proposals-stale-20.md)
 - [derive-tests-proposals-stale-21](proposals/derive-tests-proposals-stale-21.md)
+- [derive-tests-proposals-stale-22](proposals/derive-tests-proposals-stale-22.md)
 - [derive-tests-proposals-stale-3](proposals/derive-tests-proposals-stale-3.md)
 - [derive-tests-proposals-stale-4](proposals/derive-tests-proposals-stale-4.md)
 - [derive-tests-proposals-stale-5](proposals/derive-tests-proposals-stale-5.md)
@@ -684,10 +685,10 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $1010.469331
+- Journal cost: $1010.988992
 - Rulings cost: $538.486922
-- Total cost: $1548.956253
-- Agent-held rulings: 594
+- Total cost: $1549.475914
+- Agent-held rulings: 595
 - Runner rulings (automatic, no seat held): 35
 - Human rulings: 25
 - Rulings whose seat this page does not recognise: 0

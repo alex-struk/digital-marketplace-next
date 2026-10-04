@@ -509,6 +509,11 @@
 - 15:46:08 rule calibrate-old-29 approve at G1 by agent:product-owner (agent) on claude claude-opus-5-5 (2.1.288 (Claude Code))
 - 15:46:19 drive: step 7: `sdlc run calibrate --target old` — phase 2 Tests is not complete (exit: the contract approved, every domain's tests approved, and every calibration row pass or ruled, all measured by the last run), and calibrate for target old is next in it
 - 15:47:59 run calibrate: ok, cost 0, turns 0
+- 15:48:05 drive: step 8: `sdlc run derive-tests --domain proposals --stale` — 1 test to derive again (redo) in proposals owed by derive-tests
+- 15:49:22 run derive-tests: ok, cost 0.5196612, turns 17, on claude claude-opus-5-5 (2.1.288 (Claude Code))
+- 15:49:22 propose derive-tests-proposals-stale-22 at G3
+- 15:49:27 drive: step 9: `sdlc rule derive-tests-proposals-stale-22 --by agent:reviewer` — derive-tests-proposals-stale-22 is open at G3, held by agent:reviewer
+- 15:49:33 rule derive-tests-proposals-stale-22 approve at G3 by runner:checks (agent)
 
 # Run record 2026-10-03
 
