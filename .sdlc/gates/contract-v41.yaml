@@ -1,0 +1,15 @@
+gate: G1
+verdict: approve
+by: agent:product-owner
+held_by: agent
+rationale: |2-
+  The question is whether contract-v41's corrected guidance on proposal-cwu-request is the contract a test should use to reach R-2.2 (a second create request is refused with "You already have a proposal for this opportunity." and no second proposal is created). Approve. I read the old handler at sources/old/src/back-end/lib/resources/proposal/code-with-us.ts and the order the comment now describes is what the code does. The status check comes first (296-304, refused under status). Next is the opportunity lookup (306-315). Then the Submitted-on-a-closed-opportunity refusal (321-328). Then the organization-proponent refusal "Please select a different organization." (331-351). Only then does the vendor's own existing proposal get refused under conflict with the R-2.2 message (355-369). Attachments are validated after that (371+), so the claim that the proposal text, attachments and individual proponent details do not change the outcome holds. So the guidance to send a valid status (Draft), name a published opportunity still accepting proposals, use an individual proponent, read the refusal through refusal_messages, and confirm on proposal-vendor-dashboard that no second proposal exists is sound and reaches the criterion. Two things are omitted but do not mislead. The permission check runs before status (287-294), which a signed-in vendor persona satisfies. An opportunity that does not exist or cannot be seen is refused under notFound, which the instruction to name a published opportunity already avoids. The change is comment-only. It adds no pages, actions or observations, and it changes neither the override nor the seed, so the oracle start-up check this run could not perform does not bear on this ruling, though it should still be run where the CLI is reachable. Tier is STANDARD and the intent has one reading, so there is no reason to escalate. The missing-test/R-2.2 condition stays open until derive-tests writes and runs the test, as it should. What would change the ruling: evidence that the deployed old target orders these checks differently from the cited source, or that proposal-vendor-dashboard cannot show the opportunity exactly once for a vendor holding a draft.
+conditions: []
+cost: 0.28031000000000006
+turns: 3
+session: "b0e4c61e-aea7-4859-8d33-8553c62b54f6"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T01:52:56.676Z
