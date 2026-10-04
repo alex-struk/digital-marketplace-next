@@ -1558,3 +1558,40 @@ requests:
     at: 2026-10-04T09:05:56.561Z
     taken: 2026-10-04T09:15:22.476Z
     taken_by: plan-23
+  - stage: bind-adapter
+    target: new
+    why: tests/adapters/new/bindings.yaml records proposal-swu-view observations
+      total_score (line 593) and rank (line 595), and questions_score,
+      challenge_score, scenario_score and price_score, as unbound because 'the
+      screen shows no score of any kind'. That was walked on an earlier build.
+      On the current build, signed in as the administrator,
+      /opportunities/sprint-with-us/00000000-0000-4000-a018-000000000001/proposals/00000000-0000-4000-a018-000000000101
+      has a 'Scores' region with Team questions 100%, Code challenge 80%, Team
+      scenario 70%, Price 100%, Total score 87.5% and Rank 1 of 2, and the total
+      carries the contract test id proposal-total-score (page outline
+      .sdlc/evidence/slice-16/R-2.32.txt lines 36-49). The unbound total_score
+      fails R-2.32 at tests/acceptance/proposals/R-2.32.spec.ts:51 and the
+      Sprint With Us score check of R-1.27 at
+      tests/acceptance/opportunities/R-1.27.spec.ts:100. Bind these observations
+      against the current build, and walk proposal-twu-view's matching score
+      observations again, since the same screen serves Team With Us.
+    from: build-slice-16-3
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-04T09:43:32.233Z
+  - stage: bind-adapter
+    target: new
+    why: tests/adapters/new/bindings.yaml marks scoresheet_tab unbound on
+      proposal-swu-edit (line 554) and proposal-twu-edit (line 650) because 'the
+      vendor's proposal screen offers only Proposal and History'. The current
+      build says that once a proposal is awarded or not awarded, the vendor's
+      manage page has a Scoresheet tab with each stage's score, the weighted
+      total and the rank. R-2.32 then reads the vendor's score and rank through
+      proposalSwuEdit.totalScore and rank. Check these against the current build
+      on a decided Sprint With Us proposal, for example
+      00000000-0000-4000-a020-000000000101 as the organization owner, so
+      R-2.32's vendor half reads the screen as it now is.
+    from: build-slice-16-3
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-04T09:43:32.233Z
