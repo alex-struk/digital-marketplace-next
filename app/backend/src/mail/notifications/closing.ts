@@ -35,7 +35,7 @@ export function readyForEvaluationToAuthor(opportunity: ClosedOpportunity, origi
   };
 }
 
-/** To each evaluator on its panel, addressed to them alone: it is ready for their evaluation (R-5.20). */
+/** To the evaluators on its panel, as blind copies: it is ready for their evaluation (R-5.20, R-6.15). */
 export function readyForEvaluationToEvaluators(opportunity: ClosedOpportunity, origin: string): Message {
   const program = PROGRAM_NAMES[opportunity.program];
   return {

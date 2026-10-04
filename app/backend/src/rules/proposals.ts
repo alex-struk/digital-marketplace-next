@@ -10,6 +10,7 @@
 import { CalendarDay, OpportunityStatus, isCalendarDay, recordedInstantOf } from "./opportunities";
 import { isPhoneNumber } from "./organizations";
 import { SCORE_ENTERED, scoreInNote } from "./proposal-evaluation";
+import { QUESTIONS_SCORE_ENTERED } from "./consensus";
 import { AccountKind, isEmailAddress } from "./users";
 
 // ------------------------------------------------------------------------ states
@@ -72,6 +73,10 @@ export function proposalHistoryLabel(entry: {
   if (entry.event === SCORE_ENTERED) {
     const score = scoreInNote(entry.note ?? null);
     return score ? `Score entered: ${score}` : "Score entered";
+  }
+  // The agreed scores recorded when the consensus is finalised (R-5.32); the note gives each question's.
+  if (entry.event === QUESTIONS_SCORE_ENTERED) {
+    return entry.note?.startsWith("Resource") ? "Resource question scores entered" : "Team question scores entered";
   }
   return entry.event ?? "";
 }

@@ -41,7 +41,9 @@ own addressed to them alone and naming the opportunity's title in its subject, w
 not evaluate left out (R-5.20). Deactivated accounts are told nothing. (An earlier revision sent the
 panel one blind-copied message; nobody was then a visible recipient, and a reader of the mail could
 not tell that a given evaluator had been told. A panel is small, so one message each costs nothing
-and still shows nobody who else was told — `addressedToEach` in `mail/message.ts`.)
+and still shows nobody who else was told — `addressedToEach` in `mail/message.ts`.) Superseded by
+decision record 0063: the panel is again told as blind copies of one message visibly addressed to the
+service alone, as R-6.15 requires (`blindCopiedToStaff`).
 
 **Scoring, disqualifying and awarding.** An administrator, or the public sector employee who wrote
 the opportunity, may do all three (`mayEvaluateProposal`). Anybody else who can read the proposal

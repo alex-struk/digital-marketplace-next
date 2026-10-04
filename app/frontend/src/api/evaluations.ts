@@ -127,9 +127,107 @@ export function saveEvaluation(
 }
 
 /** Submits the person's whole set for consensus (R-5.25, R-5.26); answers with the opportunity as it then stands. */
-export async function submitEvaluations(program: OtherProgram, opportunityId: string): Promise<OtherProgramSaveAnswer> {
+export function submitEvaluations(program: OtherProgram, opportunityId: string): Promise<OtherProgramSaveAnswer> {
+  return changeEvaluationStage(program, opportunityId, "submitIndividualQuestionEvaluations");
+}
+
+/** Every panel member's evaluation of one proponent that the person may read (R-5.28); none when there are none to read. */
+export async function fetchProposalEvaluations(program: OtherProgram, proposalId: string): Promise<Evaluation[] | null> {
   try {
-    const request = { params: { path: { id: opportunityId } }, body: { tag: "submitIndividualQuestionEvaluations" } as never };
+    const params = { params: { path: { proposalId } } };
+    const { data, response } =
+      program === "sprint-with-us"
+        ? await api.GET("/api/proposal/sprint-with-us/{proposalId}/team-questions/evaluations", params)
+        : await api.GET("/api/proposal/team-with-us/{proposalId}/resource-questions/evaluations", params);
+    if (response.status === 404 || response.status === 401) return [];
+    if (!response.ok || !Array.isArray(data)) return null;
+    return (data as unknown[]).map(readEvaluation).filter((evaluation): evaluation is Evaluation => evaluation !== null);
+  } catch {
+    return null;
+  }
+}
+
+// ------------------------------------------------------------------------ the consensus (decision record 0063)
+
+/** A consensus is answered in the shape of an evaluation, the chair as its panel member. */
+export type Consensus = Evaluation;
+
+export type ConsensusListAnswer =
+  | { readonly kind: "found"; readonly consensuses: readonly Consensus[] }
+  /** The owner off the panel, while it is agreed (R-5.12): the service's reason. */
+  | { readonly kind: "withheld"; readonly reason: string }
+  | { readonly kind: "missing" }
+  | { readonly kind: "failed" };
+
+export async function fetchConsensuses(program: OtherProgram, opportunityId: string): Promise<ConsensusListAnswer> {
+  try {
+    const params = { params: { path: { opportunityId } } };
+    const { data, error, response } =
+      program === "sprint-with-us"
+        ? await api.GET("/api/opportunity/sprint-with-us/{opportunityId}/team-questions/consensus", params)
+        : await api.GET("/api/opportunity/team-with-us/{opportunityId}/resource-questions/consensus", params);
+    if (response.status === 401) return { kind: "withheld", reason: reasonsIn(error).join(" ") };
+    if (response.status === 404) return { kind: "missing" };
+    if (!response.ok || !Array.isArray(data)) return { kind: "failed" };
+    return { kind: "found", consensuses: (data as unknown[]).map(readEvaluation).filter((entry): entry is Consensus => entry !== null) };
+  } catch {
+    return { kind: "failed" };
+  }
+}
+
+export async function fetchConsensus(program: OtherProgram, proposalId: string, chairId: string): Promise<EvaluationAnswer> {
+  try {
+    const params = { params: { path: { proposalId, id: chairId } } };
+    const { data, response } =
+      program === "sprint-with-us"
+        ? await api.GET("/api/proposal/sprint-with-us/{proposalId}/team-questions/consensus/{id}", params)
+        : await api.GET("/api/proposal/team-with-us/{proposalId}/resource-questions/consensus/{id}", params);
+    if (response.status === 404 || response.status === 401) return { kind: "missing" };
+    const consensus = response.ok ? readEvaluation(data) : null;
+    return consensus ? { kind: "found", evaluation: consensus } : { kind: "failed" };
+  } catch {
+    return { kind: "failed" };
+  }
+}
+
+/** Starts the chair's draft consensus of one proponent, kept as entered. */
+export function startConsensus(program: OtherProgram, proposalId: string, scores: readonly EnteredScore[]): Promise<EvaluationSaveAnswer> {
+  const request = { params: { path: { proposalId } }, body: { proposal: proposalId, status: "DRAFT", scores: scoresBody(scores) } as never };
+  return saved(
+    program === "sprint-with-us"
+      ? api.POST("/api/proposal/sprint-with-us/{proposalId}/team-questions/consensus", request)
+      : api.POST("/api/proposal/team-with-us/{proposalId}/resource-questions/consensus", request),
+  );
+}
+
+/** Saves the chair's agreed scores as entered; a submitted consensus stays submitted (R-5.30). */
+export function saveConsensus(
+  program: OtherProgram,
+  proposalId: string,
+  chairId: string,
+  scores: readonly EnteredScore[],
+): Promise<EvaluationSaveAnswer> {
+  const request = { params: { path: { proposalId, id: chairId } }, body: { tag: "edit", value: { scores: scoresBody(scores) } } as never };
+  return saved(
+    program === "sprint-with-us"
+      ? api.PUT("/api/proposal/sprint-with-us/{proposalId}/team-questions/consensus/{id}", request)
+      : api.PUT("/api/proposal/team-with-us/{proposalId}/resource-questions/consensus/{id}", request),
+  );
+}
+
+/** The chair submits the agreed scores of every proponent (R-5.31). */
+export function submitConsensus(program: OtherProgram, opportunityId: string): Promise<OtherProgramSaveAnswer> {
+  return changeEvaluationStage(program, opportunityId, "submitConsensusQuestionEvaluations");
+}
+
+/** The owner or an administrator finalises the consensus, the one way out of the stage (R-1.50, R-5.14). */
+export function finalizeConsensus(program: OtherProgram, opportunityId: string): Promise<OtherProgramSaveAnswer> {
+  return changeEvaluationStage(program, opportunityId, "finalizeQuestionConsensuses");
+}
+
+async function changeEvaluationStage(program: OtherProgram, opportunityId: string, tag: string): Promise<OtherProgramSaveAnswer> {
+  try {
+    const request = { params: { path: { id: opportunityId } }, body: { tag } as never };
     const { data, error, response } =
       program === "sprint-with-us"
         ? await api.PUT("/api/opportunities/sprint-with-us/{id}", request)

@@ -60,13 +60,13 @@ describe("the deadline hook (R-1.1, decision record 0005)", () => {
     expect(sent[0]!.message.subject).toBe("Your Code With Us Opportunity is Ready to Be Evaluated");
   });
 
-  it("tells each evaluator of a panel in a message addressed to them alone, and nobody deactivated (R-5.20)", async () => {
+  it("tells the evaluators of a panel as blind copies, and nobody deactivated (R-5.20, R-6.15)", async () => {
     const { store, closing, sent } = setUp(0);
     store.open.set("swu", { ...cwu("swu"), program: "sprint-with-us", evaluators: ["evaluator-1", "deactivated", "evaluator-2"] });
     await closing.runDue();
-    await vi.waitFor(() => expect(sent).toHaveLength(2));
-    expect(sent.map((envelope) => envelope.to)).toEqual([["evaluator-1@example.test"], ["evaluator-2@example.test"]]);
-    expect(sent.every((envelope) => !envelope.bcc || envelope.bcc.length === 0)).toBe(true);
+    await vi.waitFor(() => expect(sent).toHaveLength(1));
+    expect(sent[0]!.to).toEqual([]);
+    expect(sent[0]!.bcc).toEqual(["evaluator-1@example.test", "evaluator-2@example.test"]);
     expect(sent[0]!.message.subject).toContain("Opportunity swu");
   });
 

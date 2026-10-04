@@ -61,6 +61,8 @@ import {
 import type { AccountKind } from "../rules/users";
 import { WatchingService } from "../watching/watching.service";
 import { IndividualEvaluationsService } from "../evaluations/individual-evaluations.service";
+import { ConsensusService } from "../evaluations/consensus.service";
+import { ONLY_FINALIZING_LEAVES_CONSENSUS } from "../rules/consensus";
 import { CWU_OPPORTUNITY_STORE, CwuOpportunityStore } from "./cwu-opportunity";
 import { ATTACHMENT_ACCESS, AttachmentAccess } from "./attachment-access";
 import { ATTACHMENT_NOT_READABLE, CLOCK, Clock } from "./cwu-opportunities.service";
@@ -106,6 +108,7 @@ export class OtherProgramsService {
     @Inject(MAIL_SETTINGS) private readonly mail: Pick<MailSettings, "serviceOrigin" | "batchSize">,
     @Inject(ATTACHMENT_ACCESS) private readonly files: AttachmentAccess,
     private readonly evaluations: IndividualEvaluationsService,
+    private readonly consensus: ConsensusService,
   ) {}
 
   async list(viewer: OpportunityViewer | null, program: OtherProgram): Promise<SummaryAnswer[]> {
@@ -167,7 +170,9 @@ export class OtherProgramsService {
    * One tagged change: an edit, a submission for review, publication, a new evaluation panel, or
    * running the opportunity under way — cancelling it (R-1.28), adding an addendum (R-1.32) or, for
    * Sprint With Us, a private note (R-1.33) — or an evaluator submitting their scores, which may move
-   * it to consensus (R-5.25 to R-5.27). Its later evaluation stages are not yet taken.
+   * it to consensus (R-5.25 to R-5.27) — or the chair submitting the consensus and its owner or an
+   * administrator finalising it, the one way out of that stage (R-1.50, decision record 0063). The
+   * stages after the questions are not yet taken.
    */
   async change(
     viewer: OpportunityViewer | null,
@@ -203,8 +208,21 @@ export class OtherProgramsService {
         break;
       case "submitIndividualQuestionEvaluations":
         // An evaluator's whole set of scores, for consensus (R-5.25 to R-5.27).
-        await this.evaluations.submitAll(viewer, current);
+        await this.evaluations.submitAll(viewer, current, change.value);
         break;
+      case "submitConsensusQuestionEvaluations":
+        // The chair's agreed scores for every proponent (R-5.29 to R-5.31).
+        await this.consensus.submitAll(viewer, current);
+        break;
+      case "finalizeQuestionConsensuses":
+        // The one way out of the consensus stage (R-1.41, R-1.50, R-5.13, R-5.14, R-5.32).
+        await this.consensus.finalize(viewer, current);
+        break;
+      case "startCodeChallenge":
+      case "startChallenge":
+        // The older way on from the consensus is gone; the stage is left only by finalising it (R-1.50).
+        if (current.status === "EVAL_QUESTIONS_CONSENSUS") throw new BadRequestException([ONLY_FINALIZING_LEAVES_CONSENSUS]);
+        throw new BadRequestException([NOT_YET_AVAILABLE]);
       default:
         throw new BadRequestException([NOT_YET_AVAILABLE]);
     }

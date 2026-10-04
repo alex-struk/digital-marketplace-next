@@ -206,16 +206,16 @@ describe("closing at the proposal deadline (R-1.1, R-1.19, R-1.24, R-2.5, R-5.20
 
     await expect.poll(() => mailAbout("Seeded lapsed Sprint With Us opportunity with a chair who does not evaluate")).toBeGreaterThan(-1);
     const panel = catcher.caught[mailAbout("Seeded lapsed Sprint With Us opportunity with a chair who does not evaluate")]!;
-    // Each evaluator is the visible recipient of a message of their own; the chair is told nothing.
+    // The evaluators are blind copies of a message visibly addressed to the service alone; the chair is told nothing.
     const about = "Seeded lapsed Sprint With Us opportunity with a chair who does not evaluate";
     const panelMailNow = () => catcher.caught.filter((_, index) => text(index).includes(about));
     await expect.poll(() => panelMailNow().flatMap((mail) => mail.recipients)).toContain("admin.one@example.test");
     const panelMail = panelMailNow();
-    expect(panel.recipients).toHaveLength(1);
     expect(panelMail.flatMap((mail) => mail.recipients)).toContain("admin.one@example.test");
     expect(panelMail.flatMap((mail) => mail.recipients)).not.toContain("staff.one@example.test");
-    const toEvaluator = panelMail.find((mail) => mail.recipients.includes("admin.one@example.test"))!;
-    expect(toEvaluator.data.replace(/=\r\n/g, "")).toMatch(/^To: .*admin\.one@example\.test/im);
+    // Visibly addressed to the service alone (R-6.15).
+    expect(panel.data.replace(/=\r\n/g, "")).toMatch(/^To: .*donotreply@example\.test\s*$/im);
+    expect(panel.data).not.toMatch(/^To: .*admin\.one@example\.test/im);
 
     await expect.poll(() => mailAbout("Seeded lapsed Code With Us opportunity at its final stage")).toBeGreaterThan(-1);
     const author = catcher.caught[mailAbout("Seeded lapsed Code With Us opportunity at its final stage")]!;
@@ -413,10 +413,11 @@ describe("withdrawing (R-2.36)", () => {
     await expect.poll(() => catcher.caught.findIndex((mail) => mail.recipients.includes("proponent.two@example.test"))).toBeGreaterThan(-1);
     const toVendor = catcher.caught.findIndex((mail) => mail.recipients.includes("proponent.two@example.test"));
     expect(text(toVendor)).toContain("Your Code With Us Proposal Has Been Withdrawn");
-    // Each administrator is the visible recipient of a message of their own.
+    // The administrators are blind copies of one message visibly addressed to the service alone (R-6.15).
     const toAdministrator = catcher.caught.findIndex((mail) => mail.recipients.includes("admin.one@example.test"));
     expect(text(toAdministrator)).toContain("A Code With Us Proposal Has Been Withdrawn");
-    expect(catcher.caught[toAdministrator]!.recipients).toEqual(["admin.one@example.test"]);
-    expect(text(toAdministrator)).toMatch(/^To: .*admin\.one@example\.test/im);
+    expect(catcher.caught[toAdministrator]!.recipients).toEqual(["donotreply@example.test", "admin.one@example.test", "admin.two@example.test"]);
+    expect(text(toAdministrator)).toMatch(/^To: .*donotreply@example\.test\s*$/im);
+    expect(text(toAdministrator)).not.toContain("admin.two@example.test");
   });
 });

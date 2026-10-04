@@ -35,7 +35,7 @@ import { evaluatedFrom } from "./opportunity-other-manage";
  * R-5.21).
  */
 
-const PROGRAM_WORDS: Readonly<Record<OtherProgram, string>> = { "sprint-with-us": "Sprint With Us", "team-with-us": "Team With Us" };
+export const PROGRAM_WORDS: Readonly<Record<OtherProgram, string>> = { "sprint-with-us": "Sprint With Us", "team-with-us": "Team With Us" };
 
 const createTitle = (program: OtherProgram) => `Evaluate a ${PROGRAM_WORDS[program]} proponent`;
 const editTitle = (program: OtherProgram) => `${PROGRAM_WORDS[program]} evaluation`;
@@ -174,7 +174,7 @@ function EvaluationLoader({
 }
 
 /** Where the proponent stands among those evaluated, and who comes before and after it (R-5.35). */
-function placeOf(opportunity: OtherProgramOpportunity, proponent: Proponent) {
+export function placeOf(opportunity: OtherProgramOpportunity, proponent: Proponent) {
   const proponents = opportunity.proponents ?? [];
   const index = proponents.findIndex((entry) => entry.id === proponent.id);
   return {
@@ -185,7 +185,7 @@ function placeOf(opportunity: OtherProgramOpportunity, proponent: Proponent) {
   };
 }
 
-function Heading1({ kind, proponent }: { kind: string; proponent: Proponent }) {
+export function Heading1({ kind, proponent }: { kind: string; proponent: Proponent }) {
   return (
     <Stack gap="small">
       <Text elementType="p" size="small" color="secondary">
@@ -198,7 +198,7 @@ function Heading1({ kind, proponent }: { kind: string; proponent: Proponent }) {
   );
 }
 
-function OpportunityLine({ opportunity, proponent }: { opportunity: OtherProgramOpportunity; proponent: Proponent }) {
+export function OpportunityLine({ opportunity, proponent }: { opportunity: OtherProgramOpportunity; proponent: Proponent }) {
   const place = placeOf(opportunity, proponent);
   return (
     <Stack direction="row" align="center" gap="medium">
@@ -213,14 +213,14 @@ function OpportunityLine({ opportunity, proponent }: { opportunity: OtherProgram
 const listAddress = (program: OtherProgram, opportunityId: string) => `/opportunities/${program}/${opportunityId}/edit?tab=evaluation`;
 
 /** "Question 1: enter a score between 0 and 5", from the field's own message. */
-function summaryLine(problem: ScoreProblem): string {
+export function summaryLine(problem: ScoreProblem): string {
   const words = problem.message.replace(/ for question \d+\.$/, "");
   return `Question ${problem.order + 1}: ${words.charAt(0).toLowerCase()}${words.slice(1)}`;
 }
 
-type Entry = { readonly score: number; readonly notes: string };
+export type Entry = { readonly score: number; readonly notes: string };
 
-function entriesFrom(questions: readonly StoredQuestion[], evaluation: Evaluation | null): Entry[] {
+export function entriesFrom(questions: readonly StoredQuestion[], evaluation: Evaluation | null): Entry[] {
   return questions.map((_, order) => {
     const stored = evaluation?.scores.find((score) => score.order === order);
     return { score: typeof stored?.score === "number" ? stored.score : Number.NaN, notes: stored?.notes ?? "" };
@@ -228,7 +228,7 @@ function entriesFrom(questions: readonly StoredQuestion[], evaluation: Evaluatio
 }
 
 /** A score as typed, read from the field itself so nothing is rounded on the way; null when empty or not a number. */
-function typedScore(container: HTMLElement | null, fallback: number): number | null {
+export function typedScore(container: HTMLElement | null, fallback: number): number | null {
   const typed = container?.querySelector("input")?.value;
   if (typed !== undefined) {
     const cleaned = typed.replace(/[,\s]/g, "");

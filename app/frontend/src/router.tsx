@@ -38,6 +38,7 @@ import { OrganizationCreateScreen } from "./screens/organization-create";
 import { OrganizationEditScreen } from "./screens/organization-edit";
 import { OrganizationTermsScreen } from "./screens/organization-terms";
 import { EvaluationIndividualScreen } from "./screens/evaluation-individual-form";
+import { ConsensusScreen } from "./screens/evaluation-consensus-form";
 
 /**
  * The addresses in `spec/contract/surface.yaml`, and nothing else. Every other address is the
@@ -383,6 +384,44 @@ const evaluationTwuEditRoute = createRoute({
   },
 });
 
+// The chair's agreed scores for one proponent, reached from the Consensus tab (decision record
+// 0063): started at ".../consensus/create", and the chair's at ".../consensus/<the chair>/edit".
+const consensusSwuCreateRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/sprint-with-us/$opportunityId/proposals/$proposalId/team-questions/consensus/create",
+  component: function ConsensusSwuCreateRoute() {
+    const { opportunityId, proposalId } = consensusSwuCreateRoute.useParams();
+    return <ConsensusScreen key={proposalId} program="sprint-with-us" opportunityId={opportunityId} proposalId={proposalId} chairId={null} />;
+  },
+});
+
+const consensusSwuEditRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/sprint-with-us/$opportunityId/proposals/$proposalId/team-questions/consensus/$userId/edit",
+  component: function ConsensusSwuEditRoute() {
+    const { opportunityId, proposalId, userId } = consensusSwuEditRoute.useParams();
+    return <ConsensusScreen key={`${proposalId}/${userId}`} program="sprint-with-us" opportunityId={opportunityId} proposalId={proposalId} chairId={userId} />;
+  },
+});
+
+const consensusTwuCreateRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/team-with-us/$opportunityId/proposals/$proposalId/resource-questions/consensus/create",
+  component: function ConsensusTwuCreateRoute() {
+    const { opportunityId, proposalId } = consensusTwuCreateRoute.useParams();
+    return <ConsensusScreen key={proposalId} program="team-with-us" opportunityId={opportunityId} proposalId={proposalId} chairId={null} />;
+  },
+});
+
+const consensusTwuEditRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/team-with-us/$opportunityId/proposals/$proposalId/resource-questions/consensus/$userId/edit",
+  component: function ConsensusTwuEditRoute() {
+    const { opportunityId, proposalId, userId } = consensusTwuEditRoute.useParams();
+    return <ConsensusScreen key={`${proposalId}/${userId}`} program="team-with-us" opportunityId={opportunityId} proposalId={proposalId} chairId={userId} />;
+  },
+});
+
 // Organizations. "/organizations/create" is a fixed address, matched before an organization's own.
 const organizationListRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -473,6 +512,10 @@ export const routeTree = rootRoute.addChildren([
   evaluationSwuEditRoute,
   evaluationTwuCreateRoute,
   evaluationTwuEditRoute,
+  consensusSwuCreateRoute,
+  consensusSwuEditRoute,
+  consensusTwuCreateRoute,
+  consensusTwuEditRoute,
   organizationListRoute,
   organizationCreateRoute,
   organizationEditRoute,

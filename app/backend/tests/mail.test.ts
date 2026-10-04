@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { MailLog, Mailer, MailTransport, OutgoingMail, RecipientStanding } from "../src/mail/mailer";
-import { Envelope, Message } from "../src/mail/message";
+import { Envelope, Message, blindCopiedToStaff } from "../src/mail/message";
 import { renderHtml, renderText, render } from "../src/mail/render";
 import { mailSettingsFrom, parseSender, MailSettings } from "../src/mail/settings";
 import { welcome } from "../src/mail/notifications/welcome";
@@ -72,6 +72,16 @@ describe("the configured sender (R-6.4)", () => {
 
     expect(transport.sent[0]?.from).toBe("Digital Marketplace <donotreply@example.test>");
     expect(transport.sent[0]).not.toHaveProperty("replyTo");
+  });
+});
+
+describe("a notice to a panel's chair and an opportunity's owner (R-6.15)", () => {
+  it("is visibly addressed to the service alone and carries them as blind copies", async () => {
+    const { mailer, transport } = mailerWith();
+    const [batch] = blindCopiedToStaff(["chair@example.test", "owner@example.test"], { kind: "k", subject: "s", title: "t", body: [] });
+    await mailer.deliver(batch!);
+    expect(transport.sent[0]?.to).toEqual(["donotreply@example.test"]);
+    expect(transport.sent[0]?.bcc).toEqual(["chair@example.test", "owner@example.test"]);
   });
 });
 

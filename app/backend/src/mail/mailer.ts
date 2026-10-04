@@ -117,7 +117,7 @@ export class Mailer {
         from: this.settings.from,
         // A batch that is all blind copies is visibly addressed to the service itself, so
         // nobody sees who else it reached.
-        to: to.length > 0 ? to : [this.settings.fromAddress],
+        to: to.length === 0 ? [this.settings.fromAddress] : to,
         bcc,
         subject: rendered.subject,
         html: rendered.html,

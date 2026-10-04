@@ -18,8 +18,10 @@ import {
 } from "@rules/opportunities";
 import type { OtherProgram } from "@rules/other-program-drafts";
 import { EvaluatedOpportunity, EvaluationTab, evaluationTabsFor } from "@rules/individual-evaluation";
+import { offersFinalize } from "@rules/consensus";
 import type { Account } from "../api/accounts";
 import type { RunningAction } from "../api/opportunities";
+import { finalizeConsensus } from "../api/evaluations";
 import {
   OtherProgramChange,
   OtherProgramOpportunity,
@@ -36,7 +38,8 @@ import { Stack } from "../app/page-layout";
 import { RequireSignIn } from "../app/require-sign-in";
 import { useScreenTitle } from "../app/screen-title";
 import { EvaluationPanelTab } from "./evaluation-panel-tab";
-import { ConsensusTab, EvaluationListTab, InstructionsTab } from "./evaluation-tabs";
+import { EvaluationListTab, InstructionsTab } from "./evaluation-tabs";
+import { ConsensusTab, FinalizeDialog, FinalizeRefusal, finalizingWords } from "./evaluation-consensus-tab";
 import { ProposalsTab } from "./opportunity-cwu-proposals-tab";
 import { PublishDialog } from "./opportunity-cwu-form";
 import { DeleteDialog, Notice, NoticeArea, refusalNotice } from "./opportunity-cwu-edit";
@@ -105,12 +108,13 @@ const TITLES: Readonly<Record<OtherProgram, string>> = {
 /** The Evaluation panel tab's own surface title (evaluation-panel-swu, evaluation-panel-twu). */
 export const PANEL_TITLE = "Evaluation Panel";
 
-const DONE: Readonly<Record<"submit" | "publish" | "save" | RunningAction["tag"], string>> = {
+const DONE: Readonly<Record<"submit" | "publish" | "save" | "finalize" | RunningAction["tag"], string>> = {
   submit: "The opportunity has been submitted for review. Every administrator has been told.",
   publish: "The opportunity has been published.",
   save: "Your changes have been saved.",
   cancel: "The opportunity has been cancelled. Everyone watching it and everyone who submitted a proposal is being told.",
   addAddendum: "The addendum has been added.",
+  finalize: "The consensus scores have been finalized. The chair and the opportunity's owner are being told.",
 };
 
 /**
@@ -195,7 +199,10 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
   const search = useSearch({ strict: false }) as Record<string, unknown>;
   const [opportunity, setOpportunity] = useState(initial);
   const [notice, setNotice] = useState<Notice | null>(null);
-  const [dialog, setDialog] = useState<"publish" | "delete" | "cancel" | null>(null);
+  const [dialog, setDialog] = useState<"publish" | "delete" | "cancel" | "finalize" | null>(null);
+  // A refusal to finalise, named (R-1.41); shown above the tab, whichever tab is open.
+  const [finalizeRefusal, setFinalizeRefusal] = useState<readonly string[] | null>(null);
+  const finalizeRef = useRef<HTMLDivElement>(null);
   const [busy, setBusy] = useState(false);
   // Bumped when the form is saved, so it starts again from what was saved.
   const [formVersion, setFormVersion] = useState(0);
@@ -205,6 +212,10 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
   useEffect(() => {
     if (notice && notice.kind !== "done") noticeRef.current?.focus();
   }, [notice]);
+
+  useEffect(() => {
+    if (finalizeRefusal) finalizeRef.current?.focus();
+  }, [finalizeRefusal]);
 
   const standing = { status: opportunity.status, createdBy: opportunity.createdBy?.id ?? null };
   const draft = opportunity.status === "DRAFT";
@@ -226,6 +237,8 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
     delete: mayDeleteOpportunity(account, standing),
     // Published, an evaluation stage or processing, by an administrator (R-1.20, R-1.28).
     cancel: mayCancelOpportunity(account) && isPermittedTransition(program, opportunity.status, "CANCELED"),
+    // The one way out of the consensus stage, for the owner and administrators alike (R-1.50, R-5.14).
+    finalize: offersFinalize(account, evaluatedFrom(opportunity)),
   };
   const editing = tab === "opportunity" && mayEdit;
 
@@ -267,6 +280,23 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
     setNotice(refusalNotice(answer, action));
   }
 
+  /** Finalises the consensus; a refusal names why and the opportunity stays where it is (R-1.41). */
+  async function finalize() {
+    if (busy) return;
+    setBusy(true);
+    const answer = await finalizeConsensus(program, opportunity.id);
+    setBusy(false);
+    setDialog(null);
+    if (answer.kind === "saved") {
+      setFinalizeRefusal(null);
+      setOpportunity(answer.opportunity);
+      setNotice({ kind: "done", text: DONE.finalize });
+      return;
+    }
+    setNotice(null);
+    setFinalizeRefusal(answer.kind === "refused" ? answer.reasons : ["The consensus scores could not be finalized. Try again."]);
+  }
+
   async function remove() {
     if (busy) return;
     setBusy(true);
@@ -298,7 +328,7 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
           Opportunity ID: <span data-testid="opportunity-identifier">{opportunity.id}</span>
         </Text>
       </Stack>
-      {(offers.edit && !editing) || offers.submit || offers.publish || offers.delete || offers.cancel ? (
+      {(offers.edit && !editing) || offers.submit || offers.publish || offers.delete || offers.cancel || offers.finalize ? (
         <ButtonGroup ariaLabel="Opportunity actions">
           {offers.edit && !editing ? (
             <Button variant="secondary" onPress={() => goToTab("opportunity")} data-testid="opportunity-edit-button">
@@ -313,6 +343,11 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
           {offers.publish ? (
             <Button variant="primary" isDisabled={busy} onPress={() => setDialog("publish")} data-testid="opportunity-publish">
               Publish
+            </Button>
+          ) : null}
+          {offers.finalize ? (
+            <Button variant="primary" isDisabled={busy} onPress={() => setDialog("finalize")} data-testid="finalize-consensus-button">
+              Finalize consensus scores
             </Button>
           ) : null}
           {offers.delete ? (
@@ -338,6 +373,7 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
           ))}
         </Stack>
       </nav>
+      {finalizeRefusal ? <FinalizeRefusal reasons={finalizeRefusal} alertRef={finalizeRef} /> : null}
       <Stack as="section" gap="medium" aria-labelledby="tab-heading">
         <Heading level={2} id="tab-heading">
           {TAB_NAMES[tab]}
@@ -345,6 +381,7 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
         <NoticeArea notice={notice} noticeRef={noticeRef} />
         {tab === "summary" ? (
           <>
+            {opportunity.status === "EVAL_QUESTIONS_CONSENSUS" && offers.finalize ? <Text elementType="p">{finalizingWords(program)}</Text> : null}
             <Stack as="dl" direction="row" gap="medium">
               <Fact label="Program">{PROGRAM_NAMES[program]}</Fact>
               <Fact label="Proposal deadline">{deadlineLabel(opportunity.proposalDeadline)}</Fact>
@@ -431,7 +468,7 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
         {tab === "evaluation" ? (
           <EvaluationListTab program={program} account={account} opportunity={opportunity} onSubmitted={setOpportunity} />
         ) : null}
-        {tab === "consensus" ? <ConsensusTab opportunity={opportunity} /> : null}
+        {tab === "consensus" ? <ConsensusTab program={program} account={account} opportunity={opportunity} onSubmitted={setOpportunity} /> : null}
       </Stack>
       <CancelDialog
         key={dialog === "cancel" ? "open" : "closed"}
@@ -444,6 +481,13 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
         }}
       />
       <PublishDialog isOpen={dialog === "publish"} isSending={busy} onCancel={() => setDialog(null)} onConfirm={() => void act("publish")} />
+      <FinalizeDialog
+        program={program}
+        isOpen={dialog === "finalize"}
+        isSending={busy}
+        onCancel={() => setDialog(null)}
+        onConfirm={() => void finalize()}
+      />
       <DeleteDialog isOpen={dialog === "delete"} isSending={busy} onCancel={() => setDialog(null)} onConfirm={() => void remove()} />
     </Stack>
   );
