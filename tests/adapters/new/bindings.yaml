@@ -551,7 +551,7 @@ pages:
       proposal_identifier: bound
       opportunity_identifier: bound
       proposal_tab: bound
-      scoresheet_tab: "unbound: the vendor's proposal screen offers only the sections 'Proposal' and 'History'; walked as the organization owner on the seeded awarded Sprint With Us proposal (00000000-0000-4000-a020-000000000101), the seeded Team With Us proposal under review at the challenge (00000000-0000-4000-a035-000000000101), the seeded closed Team With Us proposal (00000000-0000-4000-8000-000000000841) and a fresh draft on the open Sprint With Us opportunity, and none has a 'Scoresheet' section or link"
+      scoresheet_tab: bound
       status: bound
       anonymous_proponent_name: bound
       total_score: bound
@@ -565,9 +565,13 @@ pages:
   # proponent's link in the opportunity's Proposals section (edit?tab=proposals). It draws
   # "Sprint With Us proposal" over the proponent's name, the terms Opportunity, Status,
   # Submitted and Proposal ID, "Printable copy", and the sections Proposal and History (the
-  # table Date | Entry | By | Note, newest first). No stage tab, score or rank, on the
+  # table Date | Entry | By | Note, newest first). No stage tab or score control, on the
   # seeded proposal at the team scenario (...a016...101) whose code challenge and team
-  # scenario are scored. Its "Proposal actions" now hold "Award" and "Disqualify" as the
+  # scenario are scored. Re-walked again on the current build as the administrator: a
+  # "Scores" region now sits under the terms (...a018...101: Team questions 100%, Code
+  # challenge 80%, Team scenario 70%, Price 100%, Total score 87.5%, Rank 1 of 2), which the
+  # score observations read; a figure the proposal does not yet hold ("Not scored", "Not yet
+  # calculated", no Rank term) reads as nothing, and the rank is read as a place ("1st"). Its "Proposal actions" now hold "Award" and "Disqualify" as the
   # state allows (both on ...a019...101), bound with the dialogs they open as on Code With Us. Each member below that the screen lacks reports unbound when it
   # runs, and says so if the screen has since started to offer it.
   proposal-swu-view:
@@ -586,13 +590,13 @@ pages:
       team_scenario_tab: "unbound: signed in as the administrator, opened the seeded Sprint With Us proposal scored on the team scenario (...a016...101); its sections are only Proposal and History, no team scenario section"
       history_tab: bound
       wrong_stage_error: "unbound: signed in as the administrator, opened the seeded Sprint With Us proposals; the screen offers no score control, so no stage message can be raised from it"
-      questions_score: "unbound: signed in as the administrator, opened the seeded Sprint With Us proposal at the team scenario (...a016...101), which holds scores; the screen shows no score of any kind"
-      challenge_score: "unbound: signed in as the administrator, opened the seeded Sprint With Us proposal scored on the code challenge (...a016...101); the screen shows no score of any kind"
-      scenario_score: "unbound: signed in as the administrator, opened the seeded Sprint With Us proposal scored on the team scenario (...a016...101); the screen shows no score of any kind"
-      price_score: "unbound: signed in as the administrator, opened the seeded Sprint With Us proposal at the team scenario (...a016...101); the screen shows no score of any kind, and the opportunity's Proposals section shows only Proponent | Status | Submitted"
-      total_score: "unbound: signed in as the administrator, opened the seeded Sprint With Us proposal at the team scenario (...a016...101); the screen shows no score of any kind"
+      questions_score: bound
+      challenge_score: bound
+      scenario_score: bound
+      price_score: bound
+      total_score: bound
       history_entries: bound
-      rank: "unbound: signed in as the administrator, opened the seeded Sprint With Us proposal scored on every stage (...a016...101); the screen shows no rank or ranking"
+      rank: bound
       offered_score_actions: "unbound: signed in as the administrator, opened the seeded Sprint With Us proposals; the screen has no stage tab and no score control to read the offered score actions from"
 
   proposal-swu-export-one:
@@ -647,7 +651,7 @@ pages:
       proposal_identifier: bound
       opportunity_identifier: bound
       proposal_tab: bound
-      scoresheet_tab: "unbound: the vendor's proposal screen offers only the sections 'Proposal' and 'History'; walked as the organization owner on the seeded Team With Us proposal under review at the challenge (00000000-0000-4000-a035-000000000101), the seeded closed Team With Us proposal (00000000-0000-4000-8000-000000000841), the seeded awarded Sprint With Us proposal (00000000-0000-4000-a020-000000000101) and a fresh Sprint With Us draft, and none has a 'Scoresheet' section or link"
+      scoresheet_tab: bound
       status: bound
       anonymous_proponent_name: bound
       total_score: bound
@@ -660,8 +664,12 @@ pages:
   # :proposalId is served to the administrator and to public sector staff, reached from each
   # proponent's link in the opportunity's Proposals section. The same screen as Sprint With
   # Us ("Team With Us proposal"): the terms Opportunity, Status, Submitted and Proposal ID,
-  # "Printable copy", and the sections Proposal and History; no stage tab, score or rank, on
-  # the seeded proposals at the challenge (...a032...101 scored, ...a032...102 not). Its
+  # "Printable copy", and the sections Proposal and History; no stage tab or score control, on
+  # the seeded proposals at the challenge (...a032...101 scored, ...a032...102 not). The
+  # current build adds the same "Scores" region as Sprint With Us (...a032...101: Resource
+  # questions 100%, Challenge 80%, Price 100%, Total score 92%, Rank 1 of 1; ...a032...102:
+  # Resource questions 80%, the rest "Not scored" / "Not yet calculated", no Rank), read as
+  # on Sprint With Us. Its
   # "Proposal actions" now hold "Disqualify" (...8000...841) and, once evaluated at the
   # challenge, "Award" (...a033...101), bound as on Code With Us.
   proposal-twu-view:
@@ -679,12 +687,12 @@ pages:
       challenge_tab: "unbound: signed in as the administrator, opened the seeded Team With Us proposal scored on the challenge (...a032...101); its sections are only Proposal and History, no challenge section"
       history_tab: bound
       wrong_stage_error: "unbound: signed in as the administrator, opened the seeded Team With Us proposals; the screen offers no score control, so no stage message can be raised from it"
-      questions_score: "unbound: signed in as the administrator, opened the seeded Team With Us proposal past the questions (...a032...101); the screen shows no score of any kind"
-      challenge_score: "unbound: signed in as the administrator, opened the seeded Team With Us proposal scored on the challenge (...a032...101); the screen shows no score of any kind"
-      price_score: "unbound: signed in as the administrator, opened the seeded Team With Us proposal (...a032...101); the screen shows no score of any kind, and the opportunity's Proposals section shows only Proponent | Status | Submitted"
-      total_score: "unbound: signed in as the administrator, opened the seeded Team With Us proposal (...a032...101); the screen shows no score of any kind"
+      questions_score: bound
+      challenge_score: bound
+      price_score: bound
+      total_score: bound
       history_entries: bound
-      rank: "unbound: signed in as the administrator, opened the seeded Team With Us proposal scored on the challenge (...a032...101); the screen shows no rank or ranking"
+      rank: bound
       offered_score_actions: "unbound: signed in as the administrator, opened the seeded Team With Us proposals at the challenge; the screen has no stage tab and no score control to read the offered score actions from"
 
   proposal-twu-export-one:
