@@ -33,3 +33,22 @@ I rebound the three criteria. All three were stuck for the same reason: the page
 **Still unserved:** `/proposals` still answers "Page not found" for test-vendor-2; I left those bindings as they were. Every route in `surface.yaml` that I opened this run resolved.
 
 I didn't touch anything outside `tests/adapters/new/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** runner:checks
+
+Approved by the runner's checks, which policy.gates.G3.auto_approve lets settle bind-adapter proposals: the acceptance typecheck of 39129a028 is clean; no condition is open against it; no escalation stands on it; nothing outside tests/adapters changed.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `39129a028563bbdddfb98a4e5cbe18cc0b09d78b`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
