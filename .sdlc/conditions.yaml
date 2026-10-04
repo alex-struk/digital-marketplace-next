@@ -2909,3 +2909,33 @@ conditions:
     stage: build
     by: agent:tech-lead
     at: 2026-10-04T07:31:18.462Z
+    closed:
+      outcome: met
+      why: opportunity-other-form.tsx now asks for each phase's maximum budget and
+        required capabilities, sends them through draftOf/writeVersion into
+        swuOpportunityPhases.maxBudget and swuPhaseCapabilities, and loads them
+        back on edit (app/frontend/src/api/other-programs.ts). R-2.19's 'phase
+        capability' and 'phase cost over that phase's budget' cases pass in
+        tests/results/new/slice-15.json against tree ab2b512.
+      by: agent:tech-lead
+      at: 2026-10-04T07:50:16.426Z
+  - ref: build-slice-15-4#1
+    text: "R-2.19, case 'a proposal with a total cost over the opportunity's total
+      budget is not submitted': remove the refusal in
+      app/backend/src/rules/other-program-content.ts (phaseProblems) that
+      rejects an opportunity whose phase maximum budgets add up to more than its
+      total maximum budget, and remove that rule from docs/decisions/0059.
+      Neither R-2.19 nor the old application refuses such an opportunity: the
+      old application passes this case. With the refusal in place, the test's
+      opportunity (phases 200,000 and 300,000, total 400,000) cannot be
+      published, so verify fails on 'the opportunity was published'. Keep the
+      check that a phase budget, if given, is a whole number of at least $1.
+      Afterwards, a proposal costing 190,000 + 290,000 against that opportunity
+      must show 'The proposed cost exceeds the maximum budget for this
+      opportunity.' against the total, with no error against either phase."
+    from: build-slice-15-4
+    family: build-slice-15
+    gate: G3
+    stage: build
+    by: agent:tech-lead
+    at: 2026-10-04T07:50:16.292Z
