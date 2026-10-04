@@ -3336,3 +3336,26 @@ conditions:
         later evaluation stage no longer passes
       by: agent:reviewer
       at: 2026-10-04T15:17:46.194Z
+  - ref: build-slice-18-5#1
+    text: "submitIndividualQuestionEvaluations must read the proposals named in the
+      request's value, as the contract's tagged change specifies. In
+      IndividualEvaluationsService.submitAll
+      (app/backend/src/evaluations/individual-evaluations.service.ts), check
+      completeness over the signed-in evaluator's evaluations of the named
+      proposals only, and submit only those, so that a submission naming two
+      complete proponents is accepted even when a third proponent of the
+      opportunity has no scores at all (R-5.25 v3: the service refuses only a
+      submitted set that contains an incomplete evaluation). Count toward the
+      automatic move to consensus over the proponents named in the triggering
+      submission (R-5.27 v2), and keep the chair-and-owner notice as blind
+      copies of one message visibly addressed to the service (R-6.15). What
+      showed it: verify's R-5.27 recheck sent a submission naming two of three
+      proponents and received the refusal 'This evaluation could not be
+      submitted for review because it is incomplete…'. Record the reading in a
+      decision record under docs/decisions/."
+    from: build-slice-18-5
+    family: build-slice-18
+    gate: G3
+    stage: build
+    by: agent:tech-lead
+    at: 2026-10-04T17:00:24.089Z
