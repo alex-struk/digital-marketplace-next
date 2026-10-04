@@ -2792,6 +2792,16 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-10-04T06:01:33.627Z
+    closed:
+      outcome: met
+      why: proposal-cwu-view in tests/adapters/new/bindings.yaml binds
+        proposal_identifier, proposal_tab, history_tab, proponent, score and
+        export_link (implemented as proposalCwuView in index.ts); enter_score,
+        award_proposal, disqualify_proposal and rank are unbound with reasons
+        naming the seeded proposals walked and that the screen draws no button
+        and no rank
+      by: agent:reviewer
+      at: 2026-10-04T06:22:59.561Z
   - ref: bind-adapter-new-72#2
     text: "tests/adapters/new/index.ts: rewrite the shared signed-in reason
       (NOBODY_SIGNS_IN and its comment around line 300) and the comment near
@@ -2806,6 +2816,15 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-10-04T06:01:33.627Z
+    closed:
+      outcome: met
+      why: NOBODY_SIGNS_IN, its comment, the file header and the attachment-region
+        comment in tests/adapters/new/index.ts now list what the current build
+        serves and only the routes still answering 'Page not found'; dependent
+        unbound reasons (SWU/TWU proposal view/export, complete, evaluation
+        screens, instructions/evaluation/consensus tabs) were rewritten to match
+      by: agent:reviewer
+      at: 2026-10-04T06:22:59.584Z
   - ref: bind-adapter-new-72#3
     text: "tests/adapters/new/bindings.yaml: on proposal-swu-create and
       proposal-twu-create, record that submit_proposal and the terms actions
@@ -2819,3 +2838,11 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-10-04T06:01:33.627Z
+    closed:
+      outcome: met
+      why: tests/adapters/new/bindings.yaml carries a 'Defaults the adapter supplies'
+        comment above proposal-swu-create and proposal-twu-create recording the
+        placeholder 'Response to question N' fill and the
+        first-offered-organization default
+      by: agent:reviewer
+      at: 2026-10-04T06:22:59.605Z
