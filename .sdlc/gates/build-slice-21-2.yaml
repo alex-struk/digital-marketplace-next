@@ -1,0 +1,16 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does slice 21 (an administrator can preview every message the service sends) do what its criteria say? Ruling: return. All three criteria the slice claims (R-6.6, R-6.13, R-6.19) pass against tree 14b5752. The code builds each preview from the same function that builds the sent message, from invented sample data. A unit test fails if any message builder in src/mail/notifications is missing from the reference. Anybody but an administrator is answered not-found. This revision's caching fix (no-store on the screen's request, Vary: Accept and no-store under /admin in the Caddyfile, no-store on the controller) is scoped to /admin and covered by unit tests. Nothing in the diff belongs to another slice, and I found no secret or personal data. The verify verdict is still fail, from a regression row on R-2.3, which this diff does not touch. The saved page and its outline at .sdlc/evidence/slice-21/R-2.3.{png,txt} plainly show the term 'Status' with the definition 'Submitted' on the proposal edit page. The adapter's proposalCwuEdit.status(), which reads proposalTerm(/^status$/i) in tests/adapters/new/index.ts, returned an empty string. The empty read is the adapter's, so it goes to bind-adapter, and the build stage is given nothing to change. An approval is refused while the verdict is fail. What would change the ruling: a current verify result for this proposal with R-2.3 passing again and slice 21's criteria still passing. Note: R-6.6 as written conflicts with R-6.16 (decision record 0067). The build follows R-6.16, and R-6.6's test passes regardless, so the conflict does not block this slice.
+conditions:
+  - "addressed-to bind-adapter: R-2.3: after proposalCwuCreate.submitProposal lands on /opportunities/code-with-us/<id>/proposals/<id>/edit, proposalCwuEdit.status() (proposalTerm(/^status$/i) in tests/adapters/new/index.ts) read \"\". The page as it failed (.sdlc/evidence/slice-21/R-2.3.png and .txt) shows, in main, the description-list term \"Status\" with the definition \"Submitted\" (rendered as a pill), directly under the level-1 heading and beside \"Submitted\", \"Proposal ID\" and \"Opportunity ID\". The adapter must wait for and read that term's definition after the submit lands, rather than reading before the page has rendered it or missing the term."
+cost: 0.6360924
+turns: 7
+session: "f6e295e4-7d9f-4e5d-800c-148d1ab4305e"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T20:54:42.032Z
