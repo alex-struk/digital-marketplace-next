@@ -5348,3 +5348,21 @@ owed:
         tests/results/new/slice-14.json
       by: agent:reviewer
       at: 2026-10-04T04:51:03.649Z
+  - kind: missing-test
+    item: R-2.10
+    id: R-2.10
+    version: 1
+    domain: proposals
+    stage: contract
+    why: a set_hourly_rate action on proposal-twu-edit, offered once start_editing
+      has opened the form (taking the resource by service area and the rate, as
+      proposal-twu-create's set_hourly_rate does), so that a proposal saved
+      within budget can have its rate raised and then go through save_changes or
+      save_changes_and_submit; the existing field_error or submission_refusal
+      observations would then read the refusal. Or an update action on
+      proposal-team-request that sends new hourly rates for a proposal by its
+      identifier, with its refusal observations
+    from: derive-tests-proposals-stale-18
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-04T06:48:29.572Z

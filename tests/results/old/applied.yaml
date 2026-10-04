@@ -387,10 +387,6 @@ rulings:
     version: 2
     verb: product-question
     gate: calibrate-triage-old-19
-  - id: R-2.10
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-19
   - id: R-4.4
     version: 1
     verb: oracle-cannot

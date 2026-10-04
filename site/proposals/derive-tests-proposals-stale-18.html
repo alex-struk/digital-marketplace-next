@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-proposals-stale-18 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">588</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">582</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">479</span></a></li><li><a href="../runs.html">Run log <span class="count">22</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-proposals-stale-18</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-04 06:47</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.288 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the proposals criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I wrote one test for the one criterion, R-2.10.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.288 (Claude Code))</p>
+<p>I wrote one test for the one criterion, R-2.10. It covers the create path only. The edit-path clause now has a clause-scoped <code>blocked:</code> entry in <code>tests/acceptance/not-testable.yaml</code>, owned by <code>contract</code>. Nothing was compiled or run: the commands to type-check the file and parse the YAML both needed approval, and neither was given.</p>
+<p><strong>Why the old edit-path test is gone.</strong> The ruling said it stored an over-budget Team With Us proposal as a draft before trying the edit path. The criterion doesn&#39;t ask for that. To do it properly, the test has to start from a proposal saved within budget and then raise its hourly rate past the opportunity&#39;s maximum. The contract offers no way to make that change:</p>
+<ul><li>The Team With Us proposal management screen (<code>proposalTwuEdit</code>) can start editing, change the organization, add a team member, save, save and submit, submit, withdraw and delete. It has no hourly-rate control. A comment in <code>surface.yaml</code> says the create screen&#39;s controls open once editing starts, but the declared actions don&#39;t include setting the rate.</li><li>The team proposal request (<code>proposalTeamRequest</code>) only creates and submits a new proposal in one go. It has no update.</li><li>Nothing else edits a stored proposal&#39;s rates.</li></ul>
+<p>I also considered lowering the opportunity&#39;s budget after the proposal was saved. I rejected it because the ruling says the proposal itself has to be edited over budget, and that route would add a step the criterion never asks for. So I deleted the edit-path test rather than rewrite it.</p>
+<p><strong>What the remaining test does.</strong> It publishes two identical opportunities, each with one full-time resource, a two-month contract and a $50,000 maximum budget. On one, a proposal at $100 an hour is submitted and accepted. On the other, a proposal at $5,000 an hour is refused with a field error. The rates are far enough apart that the test doesn&#39;t depend on how the service counts working days, and the $100 proposal acts as a control so the rate is the only thing that changes. This test body is unchanged from the previous version. I only updated the header to spec@658792c3 / derived 2026-10-04 and rewrote the explanatory comment.</p>
+<p><strong>Clause entry for R-2.10.</strong> It names the clause &quot;the check runs on both the create and the edit path&quot;, for the edit-path half. It is blocked, owned by <code>contract</code>. That half could be tested with either of these, which is what the contract needs to add:</p>
+<ul><li><strong>Preferred:</strong> a <code>set_hourly_rate</code> action on <code>proposal-twu-edit</code>, available once editing has started, taking the resource and the rate the way the create screen&#39;s action does. The page&#39;s existing <code>field_error</code> and <code>submission_refusal</code> observations would then read the refusal.</li><li><strong>Alternatively:</strong> an update action on <code>proposal-team-request</code> that sends new hourly rates for an existing proposal by its identifier, with its refusal observations.</li></ul>
+<p>I changed no files outside <code>tests/acceptance</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-04 06:48.</p>
+<div class="body"><p>Should the derive-tests-proposals-stale-18 tests be accepted as following from R-2.10 and nothing else? Approve. The one remaining test checks only what R-2.10 says on the create path. It uses two opportunities of the same shape: the $100-an-hour proposal is a control and is accepted, and the $5,000-an-hour proposal is refused with a field error. The rates are far enough apart that the test does not depend on how the service counts working days, and no implementation detail leaks in. The returned edit-path test, which saved an over-budget draft that the criterion never asks for, is deleted. Its clause (&#39;the check runs on both the create and the edit path&#39;) is recorded in not-testable.yaml as a clause-scoped blocked entry owned by contract. The reason checks out against spec/contract/surface.yaml: proposal-twu-edit declares no set_hourly_rate action, and proposal-team-request only creates and submits a new proposal. So the edit-path half stays owed and is not silently closed by this test passing; the checks already list it as missing-test/R-2.10 owed by contract. The typecheck run by the runner passes. The removal of R-2.10&#39;s old calibrate-triage ruling from tests/results/old/applied.yaml is housekeeping for the replaced test. build-slice-15-2#1 is unrelated and stays open. The ruling would change if the contract offered an edit path the test could reach, or if the create-path assertions went beyond the criterion.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
