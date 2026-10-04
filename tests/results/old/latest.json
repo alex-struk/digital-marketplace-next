@@ -2,17 +2,13 @@
   "target": "old",
   "base_url": "http://localhost:3100",
   "spec": "658792c3c7c79540af12cf18a97a260fc2484f16",
-  "at": "2026-10-04T22:40:33.430Z",
-  "run": "2026-10-04",
-  "scope": "full",
-  "full_because": [
-    "spec/contract/ or the seed changed since rows on file were measured",
-    "the test harness changed since rows on file were measured"
-  ],
+  "at": "2026-10-04T22:45:15.815Z",
+  "run": "2026-10-04-2",
+  "scope": "changed",
   "full_run": "2026-10-04",
-  "since_full": 0,
+  "since_full": 1,
   "inputs": {
-    "adapter": "fddfbcd67b408d8e120d4412b47a34c0e6a4c75a",
+    "adapter": "523556d5b2b60ab50aeeea750e6016c5161949ed",
     "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
     "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
     "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28"
@@ -35,7 +31,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-7.2",
@@ -54,7 +51,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-7.3",
@@ -73,7 +71,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-7.4",
@@ -96,7 +95,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-7.5",
@@ -119,7 +119,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-7.6",
@@ -142,7 +143,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-7.7",
@@ -161,7 +163,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-7.8",
@@ -180,7 +183,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-7.9",
@@ -199,7 +203,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-7.10",
@@ -226,7 +231,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-7.11",
@@ -236,7 +242,7 @@
       "result": "not-testable",
       "reason": "The claim is about the shape of a refused answer — a permission refusal reported as though the submission were faulty. Nothing returns that shape: observables.yaml names a `refusal` status for files and for exports but nothing for a page request, and the content surfaces offer only free-text refused_for_non_administrator and field_error, which cannot be compared for the shape of the answer that produced them.",
       "tests": [],
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04-2"
     },
     {
       "id": "R-7.12",
@@ -255,7 +261,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-7.13",
@@ -274,7 +281,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-7.14",
@@ -284,7 +292,7 @@
       "result": "not-testable",
       "reason": "The criterion is a contrast between two renderings of one body, and the second cannot be produced. The screens that embed a page's body — the program qualification terms screens and the evaluation instructions screen — embed pages the service creates for itself, which the seed does not name and which no surface addresses by handle, so the body a test writes through content-create or content-edit cannot be got into an embedded rendering, and the bodies organization-swu-terms, organization-twu-terms and the two evaluation-instructions surfaces do report are ones no test can put raw markup into.",
       "tests": [],
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04-2"
     },
     {
       "id": "R-7.15",
@@ -294,7 +302,7 @@
       "result": "not-testable",
       "reason": "The when is following the service level agreement link offered beside the cost of a program. No surface exists for the learn-more index, and no action on any surface follows a service level agreement link — the program cards are reachable only as opportunity_program_select.program_card, an observation with no link to follow — so the five places the criterion names cannot be reached and the link cannot be followed to whatever answers it.",
       "tests": [],
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04-2"
     },
     {
       "id": "R-7.16",
@@ -387,7 +395,8 @@
         "calibrate-old-10",
         "calibrate-triage-old-17"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-7.17",
@@ -477,7 +486,8 @@
         "calibrate-old-9",
         "calibrate-triage-old-15"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-7.18",
@@ -576,7 +586,8 @@
       "rulings_seen": [
         "calibrate-old-2"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-7.19",
@@ -595,7 +606,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-7.20",
@@ -871,7 +883,8 @@
         "calibrate-old-5",
         "calibrate-triage-old-6"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-7.21",
@@ -910,7 +923,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-7.22",
@@ -933,7 +947,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-7.23",
@@ -952,7 +967,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-7.24",
@@ -971,7 +987,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-7.25",
@@ -998,7 +1015,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-7.26",
@@ -1017,7 +1035,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-7.27",
@@ -1040,7 +1059,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-7.28",
@@ -1059,7 +1079,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-7.29",
@@ -1086,7 +1107,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-5.1",
@@ -1198,7 +1220,8 @@
         "calibrate-old-9",
         "calibrate-triage-old-15"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-5.3",
@@ -1221,7 +1244,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-5.9",
@@ -1321,7 +1345,8 @@
         "calibrate-old-8",
         "calibrate-triage-old-13"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-5.10",
@@ -1469,7 +1494,8 @@
         "calibrate-old-10",
         "calibrate-triage-old-17"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-5.11",
@@ -1492,7 +1518,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-5.12",
@@ -1511,7 +1538,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-5.13",
@@ -1577,7 +1605,8 @@
         "calibrate-old-13",
         "calibrate-triage-old-20"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-5.14",
@@ -1661,7 +1690,8 @@
         "calibrate-old-11",
         "calibrate-triage-old-18"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-5.16",
@@ -1696,7 +1726,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-5.17",
@@ -1719,7 +1750,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-5.18",
@@ -1753,7 +1785,8 @@
       "measured_in": "2026-10-04",
       "rulings_seen": [
         "calibrate-old-7"
-      ]
+      ],
+      "carried": true
     },
     {
       "id": "R-5.19",
@@ -1780,7 +1813,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-5.20",
@@ -1804,7 +1838,8 @@
         "calibrate-old-2",
         "calibrate-triage-old-2"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-5.21",
@@ -1835,7 +1870,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-5.22",
@@ -1866,7 +1902,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-5.23",
@@ -1885,7 +1922,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-5.24",
@@ -1908,7 +1946,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-5.25",
@@ -1938,7 +1977,8 @@
       "measured_in": "2026-10-04",
       "rulings_seen": [
         "calibrate-old-6"
-      ]
+      ],
+      "carried": true
     },
     {
       "id": "R-5.26",
@@ -1957,7 +1997,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-5.27",
@@ -1988,7 +2029,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-5.28",
@@ -2007,7 +2049,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-5.29",
@@ -2050,7 +2093,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-5.30",
@@ -2088,7 +2132,8 @@
       "measured_in": "2026-10-04",
       "rulings_seen": [
         "calibrate-old-11"
-      ]
+      ],
+      "carried": true
     },
     {
       "id": "R-5.31",
@@ -2107,7 +2152,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-5.32",
@@ -2134,7 +2180,8 @@
       "rulings_seen": [
         "calibrate-triage-old-30"
       ],
-      "triage": "product-question"
+      "triage": "product-question",
+      "carried": true
     },
     {
       "id": "R-5.33",
@@ -2153,7 +2200,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-5.34",
@@ -2188,7 +2236,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-5.35",
@@ -2211,7 +2260,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-5.36",
@@ -2238,7 +2288,8 @@
       "rulings_seen": [
         "calibrate-triage-old-30"
       ],
-      "triage": "product-question"
+      "triage": "product-question",
+      "carried": true
     },
     {
       "id": "R-5.37",
@@ -2324,7 +2375,8 @@
         "calibrate-old-9",
         "calibrate-triage-old-15"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-8.1",
@@ -2347,7 +2399,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-8.2",
@@ -2366,7 +2419,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-8.3",
@@ -2376,7 +2430,7 @@
       "result": "not-testable",
       "reason": "Neither half of the given can be produced and the outcome cannot be read. No action declares, or withholds, the size of a submission — a file reaches the service only through add_attachment, choose_image or upload_body_image, each of which submits whatever it is handed — and no observation reports an upload refused for size: file_download names only contents, name, type, disposition and its two refusals, and the attachment control names only file_name_error. The outcome the criterion actually turns on, a fault of the service rather than a message about the file, has no observation reporting a fault of the service at all.",
       "tests": [],
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04-2"
     },
     {
       "id": "R-8.4",
@@ -2386,7 +2440,7 @@
       "result": "not-testable",
       "reason": "The given is a submission carrying no file part or read-access information that is not well-formed data. Every upload in the surface is made by a control that assembles the submission itself, so a malformed one cannot be sent; and the outcome — failing as an unexpected fault and being written to the service's error log — has no observation, since the surface names nothing that reports a fault of the service and observables.yaml exposes no log.",
       "tests": [],
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04-2"
     },
     {
       "id": "R-8.5",
@@ -2409,7 +2463,8 @@
       "rulings_seen": [
         "calibrate-triage-old-23"
       ],
-      "triage": "product-question"
+      "triage": "product-question",
+      "carried": true
     },
     {
       "id": "R-8.6",
@@ -2428,7 +2483,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-8.7",
@@ -2459,7 +2515,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-8.8",
@@ -2469,7 +2526,7 @@
       "result": "not-testable",
       "reason": "The when is a visitor who is not signed in asking for the attachment of a draft opportunity by its identifier. A visitor cannot open an unpublished opportunity, so there is no download to follow, and no observation returns the identifier of a file a test has uploaded, so it cannot be asked for directly. The criterion's own note says the identifier is published nowhere, which is exactly the reach the surface lacks.",
       "tests": [],
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04-2"
     },
     {
       "id": "R-8.9",
@@ -2479,7 +2536,7 @@
       "result": "not-testable",
       "reason": "Nothing in the surface attaches a file to a Team With Us proposal and then offers it to the opportunity's owner. The attachment control is listed on the three opportunity forms and the Code With Us proposal form only, so it has no download to follow on a Team With Us proposal, and proposal-twu-view names no attachment action or observation. The criterion's outcome — the owner being refused — therefore has no request to make.",
       "tests": [],
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04-2"
     },
     {
       "id": "R-8.10",
@@ -2502,7 +2559,8 @@
       "rulings_seen": [
         "calibrate-triage-old-16"
       ],
-      "triage": "product-question"
+      "triage": "product-question",
+      "carried": true
     },
     {
       "id": "R-8.11",
@@ -2525,7 +2583,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-8.12",
@@ -2552,7 +2611,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-8.13",
@@ -2579,7 +2639,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-8.14",
@@ -2598,7 +2659,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-8.15",
@@ -2608,7 +2670,7 @@
       "result": "not-testable",
       "reason": "The given is a file uploaded by one person and readable only by them, whose identifier a second person then names as an attachment. No observation returns a stored file's identifier, so the second person has nothing to name; and no action attaches a file by identifier rather than by choosing one from the machine the test runs on.",
       "tests": [],
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04-2"
     },
     {
       "id": "R-8.16",
@@ -2618,7 +2680,7 @@
       "result": "not-testable",
       "reason": "unobservable: the claim is about a working directory on the service's own machine — a copy written there before the file is stored and removed once the upload is answered. Nothing the service answers ever mentions that directory: an upload's answer carries the stored record, and a stored file's description and bytes carry nothing about where the upload waited. Whether a working copy was written, and whether it is gone, can only be seen by reading that machine's filesystem, which is the implementation rather than anything the service shows, so no page, action or observation added to the contract would reach it without exposing the host's disk.",
       "tests": [],
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04-2"
     },
     {
       "id": "R-8.17",
@@ -2717,7 +2779,8 @@
         "calibrate-old-4",
         "calibrate-triage-old-4"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-8.18",
@@ -2796,7 +2859,8 @@
         "calibrate-old-2",
         "calibrate-triage-old-2"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-8.19",
@@ -2952,7 +3016,8 @@
         "calibrate-old-6",
         "calibrate-triage-old-8"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-8.20",
@@ -2988,7 +3053,8 @@
         "calibrate-old-13",
         "calibrate-triage-old-20"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-8.21",
@@ -3082,7 +3148,8 @@
         "calibrate-old-4",
         "calibrate-triage-old-4"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-8.22",
@@ -3201,7 +3268,8 @@
         "calibrate-old-8",
         "calibrate-triage-old-13"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-8.23",
@@ -3220,7 +3288,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-8.24",
@@ -3243,7 +3312,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-8.25",
@@ -3342,7 +3412,8 @@
         "calibrate-old-8",
         "calibrate-triage-old-13"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-8.26",
@@ -3352,7 +3423,7 @@
       "result": "not-testable",
       "reason": "The claim is about the file after the opportunity it was attached to is gone. Once the opportunity is deleted there is no screen carrying a download to follow, and no observation returns the file's identifier for it to be asked for directly, so whether it remains stored and readable cannot be read either way.",
       "tests": [],
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04-2"
     },
     {
       "id": "R-8.27",
@@ -3371,7 +3442,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-8.28",
@@ -3394,7 +3466,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-8.29",
@@ -3418,7 +3491,8 @@
         "calibrate-old-25",
         "calibrate-triage-old-37"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-8.30",
@@ -3441,7 +3515,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-8.31",
@@ -3468,7 +3543,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-6.1",
@@ -3491,7 +3567,8 @@
       "rulings_seen": [
         "calibrate-triage-old-20"
       ],
-      "triage": "product-question"
+      "triage": "product-question",
+      "carried": true
     },
     {
       "id": "R-6.2",
@@ -3510,7 +3587,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-6.3",
@@ -3529,7 +3607,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-6.4",
@@ -3548,7 +3627,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-6.5",
@@ -3633,7 +3713,8 @@
         "calibrate-old-9",
         "calibrate-triage-old-15"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-6.6",
@@ -3652,7 +3733,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-6.7",
@@ -3675,7 +3757,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-6.8",
@@ -3694,7 +3777,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-6.9",
@@ -3704,7 +3788,7 @@
       "result": "not-testable",
       "reason": "The claim is about the visible address line of a panel notice listing all of its recipients. `mail.messagesTo` searches by one visible address and hands back `To` as an opaque value, so the addresses of the other recipients of the same message cannot be read.",
       "tests": [],
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04-2"
     },
     {
       "id": "R-6.10",
@@ -3723,7 +3807,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-6.11",
@@ -3733,7 +3818,7 @@
       "result": "not-testable",
       "reason": "Both halves turn on the notice about a watched opportunity, which is sent as a batch of blind copies. The mail fixture searches by visible recipient only, so a message that did reach a deactivated watcher would not be found, and its absence from a search would be equally consistent with it having been sent.",
       "tests": [],
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04-2"
     },
     {
       "id": "R-6.12",
@@ -3743,7 +3828,7 @@
       "result": "not-testable",
       "reason": "The criterion is about the wording inside one message. The mail fixture exposes no message body, and the reference page's observations (message_subject, message_summary, message_body) name no way to select one message among the fifty on the page, so a containment assertion over the page as a whole would be satisfied by any message that happens to name a program.",
       "tests": [],
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04-2"
     },
     {
       "id": "R-6.13",
@@ -3762,7 +3847,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-6.14",
@@ -3781,7 +3867,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-6.15",
@@ -3871,7 +3958,8 @@
         "calibrate-old-10",
         "calibrate-triage-old-16"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-6.16",
@@ -3938,7 +4026,8 @@
         "calibrate-old-10",
         "calibrate-triage-old-16"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-6.17",
@@ -4162,7 +4251,8 @@
       "rulings_seen": [
         "calibrate-old-5"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-6.18",
@@ -4181,7 +4271,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-6.19",
@@ -4228,7 +4319,8 @@
         "calibrate-old-2",
         "calibrate-triage-old-2"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-6.20",
@@ -4282,7 +4374,8 @@
           "first-time-vendor"
         ],
         "contract": "contract-v47"
-      }
+      },
+      "carried": true
     },
     {
       "id": "R-6.21",
@@ -4301,7 +4394,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-6.22",
@@ -4320,7 +4414,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-6.23",
@@ -4408,7 +4503,8 @@
           "self-reactivating-vendor"
         ],
         "contract": "contract-v47"
-      }
+      },
+      "carried": true
     },
     {
       "id": "R-6.24",
@@ -4427,7 +4523,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-6.25",
@@ -4446,7 +4543,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-6.26",
@@ -4470,7 +4568,8 @@
         "calibrate-old-4",
         "calibrate-triage-old-5"
       ],
-      "ruled": "test-wrong"
+      "ruled": "test-wrong",
+      "carried": true
     },
     {
       "id": "R-6.27",
@@ -4513,7 +4612,8 @@
         "calibrate-old-2",
         "calibrate-triage-old-2"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-6.28",
@@ -4532,7 +4632,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.1",
@@ -4632,7 +4733,8 @@
         "calibrate-old-22",
         "calibrate-old-6"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-1.2",
@@ -4655,7 +4757,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.3",
@@ -4678,7 +4781,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.4",
@@ -4701,7 +4805,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.5",
@@ -4724,7 +4829,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.6",
@@ -4743,7 +4849,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.7",
@@ -4766,7 +4873,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.8",
@@ -4793,7 +4901,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.9",
@@ -5044,7 +5153,8 @@
         "calibrate-old-12",
         "calibrate-triage-old-19"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-1.10",
@@ -5083,7 +5193,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.11",
@@ -5110,7 +5221,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.12",
@@ -5137,7 +5249,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.13",
@@ -5168,7 +5281,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.14",
@@ -5203,7 +5317,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.15",
@@ -5226,7 +5341,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.16",
@@ -5298,7 +5414,8 @@
         "calibrate-old-14",
         "calibrate-triage-old-21"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-1.17",
@@ -5460,7 +5577,8 @@
         "calibrate-old-6",
         "calibrate-triage-old-41"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-1.18",
@@ -5487,7 +5605,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.19",
@@ -5514,7 +5633,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.20",
@@ -5549,7 +5669,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.21",
@@ -5636,7 +5757,8 @@
         "calibrate-old-8",
         "calibrate-triage-old-13"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-1.22",
@@ -5655,7 +5777,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.23",
@@ -5674,7 +5797,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.24",
@@ -5697,7 +5821,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.25",
@@ -5793,7 +5918,8 @@
         "calibrate-old-10",
         "calibrate-triage-old-17"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-1.26",
@@ -5816,7 +5942,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.27",
@@ -5847,7 +5974,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.28",
@@ -5874,7 +6002,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.29",
@@ -5897,7 +6026,8 @@
       "rulings_seen": [
         "calibrate-old-10",
         "calibrate-triage-old-17"
-      ]
+      ],
+      "carried": true
     },
     {
       "id": "R-1.30",
@@ -5920,7 +6050,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.31",
@@ -5943,7 +6074,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.32",
@@ -5974,7 +6106,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.33",
@@ -6072,7 +6205,8 @@
         "calibrate-old-28",
         "calibrate-triage-old-45"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-1.34",
@@ -6095,7 +6229,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.35",
@@ -6118,7 +6253,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.36",
@@ -6141,7 +6277,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.37",
@@ -6164,7 +6301,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.38",
@@ -6191,7 +6329,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.39",
@@ -6226,7 +6365,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.40",
@@ -6249,7 +6389,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.41",
@@ -6429,7 +6570,8 @@
         "calibrate-old-8",
         "calibrate-triage-old-13"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-1.42",
@@ -6448,7 +6590,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.43",
@@ -6471,7 +6614,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.48",
@@ -6522,7 +6666,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.49",
@@ -6610,7 +6755,8 @@
         "calibrate-old-10",
         "calibrate-triage-old-17"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-1.50",
@@ -6633,7 +6779,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.51",
@@ -6643,7 +6790,7 @@
       "result": "not-testable",
       "reason": "unobservable: nothing the service does could show that a state it does not define is gone. No action requests a move to a suspended state, no observation returns the states an opportunity may hold or the states the list's state filter offers, and the mapping of a historical record onto a defined state happens before the rebuilt system reads it, which is a property of the migration rather than of anything the running service answers with. No addition to the surface would help; this is a claim a human accepts about the rebuild rather than one a test can settle.",
       "tests": [],
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04-2"
     },
     {
       "id": "R-1.53",
@@ -6718,7 +6865,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-1.55",
@@ -6930,7 +7078,8 @@
         "calibrate-old-9",
         "calibrate-triage-old-15"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-1.56",
@@ -6969,7 +7118,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-3.1",
@@ -6988,14 +7138,15 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-3.2",
       "version": 1,
       "domain": "organizations",
       "file": "tests/acceptance/organizations/R-3.2.spec.ts",
-      "result": "unbound",
+      "result": "pass",
       "tests": [
         {
           "title": "Only a signed-in vendor who has already accepted the service's terms and conditions may register a new organization; a request from anyone else is refused. — a vendor who has accepted the terms registers an organization through the create screen",
@@ -7003,102 +7154,27 @@
         },
         {
           "title": "Only a signed-in vendor who has already accepted the service's terms and conditions may register a new organization; a request from anyone else is refused. — a registration sent by a vendor who has accepted the terms is accepted",
-          "status": "failed",
-          "error": "Error: unbound: organization-request.register_by_request — the input's \"addressLineTwo\" names no field of an organization's profile",
-          "line": 45,
-          "steps": [
-            {
-              "step": "signIn",
-              "given": "persona vendor",
-              "at": "/dashboard"
-            },
-            {
-              "step": "organizationRequest.open",
-              "given": "{orgId}",
-              "at": "/dashboard"
-            },
-            {
-              "step": "organizationRequest.registerByRequest",
-              "given": "{legalName, streetAddress, addressLineTwo, city, region, mailCode, …}",
-              "at": "/dashboard",
-              "threw": "unbound: organization-request.register_by_request — the input's \"addressLineTwo\" names no field of an organization's profile"
-            }
-          ]
+          "status": "passed"
         },
         {
           "title": "Only a signed-in vendor who has already accepted the service's terms and conditions may register a new organization; a request from anyone else is refused. — a registration sent by a signed-in member of public sector staff is refused",
-          "status": "failed",
-          "error": "Error: unbound: organization-request.register_by_request — the input's \"addressLineTwo\" names no field of an organization's profile",
-          "line": 45,
-          "steps": [
-            {
-              "step": "signIn",
-              "given": "persona public-sector-staff",
-              "at": "/dashboard"
-            },
-            {
-              "step": "organizationRequest.open",
-              "given": "{orgId}",
-              "at": "/dashboard"
-            },
-            {
-              "step": "organizationRequest.registerByRequest",
-              "given": "{legalName, streetAddress, addressLineTwo, city, region, mailCode, …}",
-              "at": "/dashboard",
-              "threw": "unbound: organization-request.register_by_request — the input's \"addressLineTwo\" names no field of an organization's profile"
-            }
-          ]
+          "status": "passed"
         },
         {
           "title": "Only a signed-in vendor who has already accepted the service's terms and conditions may register a new organization; a request from anyone else is refused. — a registration sent by a signed-in vendor who has never accepted the terms is refused",
-          "status": "failed",
-          "error": "Error: unbound: organization-request.register_by_request — the input's \"addressLineTwo\" names no field of an organization's profile",
-          "line": 45,
-          "steps": [
-            {
-              "step": "signIn",
-              "given": "persona vendor-completing-profile",
-              "at": "/sign-up/complete"
-            },
-            {
-              "step": "organizationRequest.open",
-              "given": "{orgId}",
-              "at": "/sign-up/complete"
-            },
-            {
-              "step": "organizationRequest.registerByRequest",
-              "given": "{legalName, streetAddress, addressLineTwo, city, region, mailCode, …}",
-              "at": "/sign-up/complete",
-              "threw": "unbound: organization-request.register_by_request — the input's \"addressLineTwo\" names no field of an organization's profile"
-            }
-          ]
+          "status": "passed"
         },
         {
           "title": "Only a signed-in vendor who has already accepted the service's terms and conditions may register a new organization; a request from anyone else is refused. — a registration sent by a visitor who is not signed in is refused",
-          "status": "failed",
-          "error": "Error: unbound: organization-request.register_by_request — the input's \"addressLineTwo\" names no field of an organization's profile",
-          "line": 45,
-          "steps": [
-            {
-              "step": "organizationRequest.open",
-              "given": "{orgId}",
-              "at": "blank"
-            },
-            {
-              "step": "organizationRequest.registerByRequest",
-              "given": "{legalName, streetAddress, addressLineTwo, city, region, mailCode, …}",
-              "at": "blank",
-              "threw": "unbound: organization-request.register_by_request — the input's \"addressLineTwo\" names no field of an organization's profile"
-            }
-          ]
+          "status": "passed"
         }
       ],
       "file_sha": "619fabc178f3b2c826ea7fd9fe59c51143403d0c",
-      "adapter": "fddfbcd67b408d8e120d4412b47a34c0e6a4c75a",
+      "adapter": "523556d5b2b60ab50aeeea750e6016c5161949ed",
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04-2"
     },
     {
       "id": "R-3.3",
@@ -7133,7 +7209,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-3.6",
@@ -7156,7 +7233,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-3.7",
@@ -7175,7 +7253,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-3.8",
@@ -7198,7 +7277,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-3.9",
@@ -7228,7 +7308,8 @@
       "measured_in": "2026-10-04",
       "rulings_seen": [
         "calibrate-old-14"
-      ]
+      ],
+      "carried": true
     },
     {
       "id": "R-3.10",
@@ -7247,7 +7328,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-3.11",
@@ -7296,7 +7378,8 @@
         "calibrate-old-15",
         "calibrate-triage-old-24"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-3.12",
@@ -7323,7 +7406,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-3.13",
@@ -7354,7 +7438,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-3.14",
@@ -7385,7 +7470,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-3.15",
@@ -7404,7 +7490,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-3.17",
@@ -7431,7 +7518,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-3.18",
@@ -7548,7 +7636,8 @@
       "rulings_seen": [
         "calibrate-old-5"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-3.19",
@@ -7604,7 +7693,8 @@
         "calibrate-old-6",
         "calibrate-triage-old-8"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-3.20",
@@ -7688,7 +7778,8 @@
         "calibrate-old-8",
         "calibrate-triage-old-13"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-3.21",
@@ -7719,7 +7810,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-3.22",
@@ -7799,7 +7891,8 @@
         "calibrate-old-6",
         "calibrate-triage-old-8"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-3.23",
@@ -7818,7 +7911,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-3.24",
@@ -7841,7 +7935,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-3.25",
@@ -7864,7 +7959,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-3.26",
@@ -7887,7 +7983,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-3.27",
@@ -7910,7 +8007,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-3.28",
@@ -7933,7 +8031,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-3.30",
@@ -7952,7 +8051,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-3.31",
@@ -7971,7 +8071,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-3.32",
@@ -7990,7 +8091,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-3.33",
@@ -8009,7 +8111,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-3.34",
@@ -8028,7 +8131,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-3.35",
@@ -8128,7 +8232,8 @@
         "calibrate-old-10",
         "calibrate-triage-old-17"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-2.1",
@@ -8151,7 +8256,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-2.2",
@@ -8177,7 +8283,8 @@
       "measured_in": "2026-10-04",
       "rulings_seen": [
         "calibrate-old-5"
-      ]
+      ],
+      "carried": true
     },
     {
       "id": "R-2.3",
@@ -8200,7 +8307,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-2.4",
@@ -8223,7 +8331,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-2.5",
@@ -8246,7 +8355,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-2.7",
@@ -8269,7 +8379,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-2.9",
@@ -8420,7 +8531,8 @@
         "calibrate-old-13",
         "calibrate-triage-old-20"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-2.10",
@@ -8574,7 +8686,8 @@
       "rulings_seen": [
         "calibrate-old-12"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-2.11",
@@ -8597,7 +8710,8 @@
       "rulings_seen": [
         "calibrate-triage-old-24"
       ],
-      "triage": "product-question"
+      "triage": "product-question",
+      "carried": true
     },
     {
       "id": "R-2.12",
@@ -8616,7 +8730,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-2.13",
@@ -8647,7 +8762,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-2.14",
@@ -8714,7 +8830,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-2.15",
@@ -8737,7 +8854,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-2.16",
@@ -8760,7 +8878,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-2.17",
@@ -8783,7 +8902,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-2.18",
@@ -8845,7 +8965,8 @@
       "measured_in": "2026-10-04",
       "rulings_seen": [
         "calibrate-old-11"
-      ]
+      ],
+      "carried": true
     },
     {
       "id": "R-2.19",
@@ -8977,7 +9098,8 @@
         "calibrate-old-23",
         "calibrate-triage-old-35"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-2.20",
@@ -9000,7 +9122,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-2.21",
@@ -9027,7 +9150,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-2.22",
@@ -9066,7 +9190,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-2.23",
@@ -9089,7 +9214,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-2.24",
@@ -9116,7 +9242,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-2.25",
@@ -9139,7 +9266,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-2.26",
@@ -9162,7 +9290,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-2.27",
@@ -9189,7 +9318,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-2.28",
@@ -9223,7 +9353,8 @@
       "measured_in": "2026-10-04",
       "rulings_seen": [
         "calibrate-old-13"
-      ]
+      ],
+      "carried": true
     },
     {
       "id": "R-2.29",
@@ -9246,7 +9377,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-2.30",
@@ -9265,7 +9397,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-2.31",
@@ -9296,7 +9429,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-2.32",
@@ -9319,7 +9453,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-2.33",
@@ -9342,7 +9477,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-2.34",
@@ -9385,7 +9521,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-2.35",
@@ -9404,7 +9541,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-2.36",
@@ -9434,17 +9572,17 @@
             {
               "step": "opportunityCwuCreate.publish",
               "given": "{teaser, location, description, remoteOk, remoteDescription, reward, …}",
-              "at": "/opportunities/code-with-us/ca0426f6-1d30-4140-8d90-22ac20ab04f9/edit?tab=summary"
+              "at": "/opportunities/code-with-us/c7133fbc-e9f0-4e2d-a28e-b4e899737e78/edit?tab=summary"
             },
             {
               "step": "opportunityCwuEdit.opportunityIdentifier",
-              "at": "/opportunities/code-with-us/ca0426f6-1d30-4140-8d90-22ac20ab04f9/edit?tab=summary",
-              "read": "\"ca0426f6-1d30-4140-8d90-22ac20ab04f9\""
+              "at": "/opportunities/code-with-us/c7133fbc-e9f0-4e2d-a28e-b4e899737e78/edit?tab=summary",
+              "read": "\"c7133fbc-e9f0-4e2d-a28e-b4e899737e78\""
             },
             {
               "step": "opportunityCwuEdit.opportunityIdentifier",
-              "at": "/opportunities/code-with-us/ca0426f6-1d30-4140-8d90-22ac20ab04f9/edit?tab=summary",
-              "read": "\"ca0426f6-1d30-4140-8d90-22ac20ab04f9\""
+              "at": "/opportunities/code-with-us/c7133fbc-e9f0-4e2d-a28e-b4e899737e78/edit?tab=summary",
+              "read": "\"c7133fbc-e9f0-4e2d-a28e-b4e899737e78\""
             },
             {
               "step": "signOut",
@@ -9458,38 +9596,42 @@
             {
               "step": "proposalCwuCreate.open",
               "given": "{opportunityId}",
-              "at": "/opportunities/code-with-us/ca0426f6-1d30-4140-8d90-22ac20ab04f9/proposals/create"
+              "at": "/opportunities/code-with-us/c7133fbc-e9f0-4e2d-a28e-b4e899737e78/proposals/create"
             },
             {
               "step": "proposalCwuCreate.chooseProponentIndividual",
-              "at": "/opportunities/code-with-us/ca0426f6-1d30-4140-8d90-22ac20ab04f9/proposals/create"
+              "at": "/opportunities/code-with-us/c7133fbc-e9f0-4e2d-a28e-b4e899737e78/proposals/create"
             },
             {
               "step": "proposalCwuCreate.acceptProgramTerms",
-              "at": "/opportunities/code-with-us/ca0426f6-1d30-4140-8d90-22ac20ab04f9/proposals/create"
+              "at": "/opportunities/code-with-us/c7133fbc-e9f0-4e2d-a28e-b4e899737e78/proposals/create"
             },
             {
               "step": "proposalCwuCreate.acceptAppTerms",
-              "at": "/opportunities/code-with-us/ca0426f6-1d30-4140-8d90-22ac20ab04f9/proposals/create"
+              "at": "/opportunities/code-with-us/c7133fbc-e9f0-4e2d-a28e-b4e899737e78/proposals/create"
             },
             {
               "step": "proposalCwuCreate.submitProposal",
               "given": "{proposalText}",
-              "at": "/opportunities/code-with-us/ca0426f6-1d30-4140-8d90-22ac20ab04f9/proposals/2d9546b3-aa27-461e-ad06-fa789f433a84/edit"
+              "at": "/opportunities/code-with-us/c7133fbc-e9f0-4e2d-a28e-b4e899737e78/proposals/96c57a3d-aaff-4240-9bce-ab59b2028bf6/edit"
             },
             {
               "step": "proposalCwuEdit.withdrawProposal",
-              "at": "/opportunities/code-with-us/ca0426f6-1d30-4140-8d90-22ac20ab04f9/proposals/2d9546b3-aa27-461e-ad06-fa789f433a84/edit"
+              "at": "/opportunities/code-with-us/c7133fbc-e9f0-4e2d-a28e-b4e899737e78/proposals/96c57a3d-aaff-4240-9bce-ab59b2028bf6/edit"
             }
           ]
         }
       ],
       "file_sha": "335b675a5128a6c2ed5dd45033d0e1e0408e0b11",
-      "adapter": "fddfbcd67b408d8e120d4412b47a34c0e6a4c75a",
+      "adapter": "523556d5b2b60ab50aeeea750e6016c5161949ed",
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04-2",
+      "rulings_seen": [
+        "calibrate-triage-old-46"
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-2.37",
@@ -9516,7 +9658,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-2.38",
@@ -9539,7 +9682,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-4.1",
@@ -9590,7 +9734,8 @@
           "first-time-vendor"
         ],
         "contract": "contract-v47"
-      }
+      },
+      "carried": true
     },
     {
       "id": "R-4.2",
@@ -9641,7 +9786,8 @@
           "first-time-vendor-without-email"
         ],
         "contract": "contract-v47"
-      }
+      },
+      "carried": true
     },
     {
       "id": "R-4.3",
@@ -9706,7 +9852,8 @@
           "first-time-public-sector-employee"
         ],
         "contract": "contract-v47"
-      }
+      },
+      "carried": true
     },
     {
       "id": "R-4.4",
@@ -9739,7 +9886,8 @@
       "rulings_seen": [
         "calibrate-triage-old-19"
       ],
-      "ruled": "oracle-cannot"
+      "ruled": "oracle-cannot",
+      "carried": true
     },
     {
       "id": "R-4.5",
@@ -9775,7 +9923,8 @@
           "self-reactivating-vendor"
         ],
         "contract": "contract-v47"
-      }
+      },
+      "carried": true
     },
     {
       "id": "R-4.6",
@@ -9794,7 +9943,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-4.8",
@@ -9817,7 +9967,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-4.9",
@@ -9844,7 +9995,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-4.12",
@@ -9875,7 +10027,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-4.13",
@@ -9885,7 +10038,7 @@
       "result": "not-testable",
       "reason": "unobservable: the outcome is that the service offers no way to create an administrator where none exists, and that only a change to the stored data outside the service can. That is the absence of an action anywhere in the service, and no observation reports an absence of that kind — a test could only show that the particular controls it knows of do not do it, never that no other route exists. The given could be seeded (a seed with no administrator account), but that would not help: the claim a test would then have to settle is still the non-existence of a route, and the documented manual route lies outside the service by definition. This is a property to be accepted by a reader of the rebuilt system's routes, not settled by a test.",
       "tests": [],
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04-2"
     },
     {
       "id": "R-4.14",
@@ -9912,7 +10065,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-4.16",
@@ -9935,7 +10089,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-4.17",
@@ -9954,7 +10109,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-4.18",
@@ -9977,7 +10133,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-4.19",
@@ -10041,7 +10198,8 @@
         "calibrate-old-5",
         "calibrate-triage-old-6"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-4.20",
@@ -10157,7 +10315,8 @@
         "calibrate-old-10",
         "calibrate-triage-old-16"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-4.21",
@@ -10223,7 +10382,8 @@
         "calibrate-old-8",
         "calibrate-triage-old-13"
       ],
-      "ruled": "defect-in-old"
+      "ruled": "defect-in-old",
+      "carried": true
     },
     {
       "id": "R-4.22",
@@ -10242,7 +10402,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-4.23",
@@ -10273,7 +10434,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-4.24",
@@ -10292,7 +10454,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-4.25",
@@ -10319,7 +10482,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-4.26",
@@ -10338,7 +10502,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-4.27",
@@ -10377,7 +10542,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-4.28",
@@ -10400,7 +10566,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-4.29",
@@ -10423,7 +10590,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-4.30",
@@ -10446,7 +10614,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-4.31",
@@ -10465,7 +10634,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-4.32",
@@ -10484,7 +10654,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-4.33",
@@ -10507,7 +10678,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     },
     {
       "id": "R-4.34",
@@ -10534,7 +10706,8 @@
       "contract_seed": "ab10413a1228b1bb715af1e109570fdbfb774b8d",
       "override": "fca7dae562d800493fa4e223949624d9ec48d6b4",
       "harness": "9d5bb9aa3486c8eb22ac4feb2ed7a7e45fe5df28",
-      "measured_in": "2026-10-04"
+      "measured_in": "2026-10-04",
+      "carried": true
     }
   ]
 }
