@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { Injectable } from "@nestjs/common";
 import { Prisma } from "@prisma/client";
+import { FileRecord, asFileRecord } from "../files/file";
 import { PrismaService } from "../prisma/prisma.service";
 import { OpportunityStatus, isStatusOf, pacificDayOf, recordedInstantOf } from "../rules/opportunities";
 import { CreationState, OtherProgramDraft, PanelMemberDraft, SWU_PHASES, SwuPhase } from "../rules/other-program-drafts";
@@ -31,9 +32,10 @@ const swuWithDetails = {
     ...latestVersion,
     include: {
       users: person,
-      swuOpportunityPhases: { orderBy: { startDate: "asc" } },
+      swuOpportunityPhases: { orderBy: { startDate: "asc" }, include: { swuPhaseCapabilities: { orderBy: { capability: "asc" } } } },
       swuTeamQuestions: questions,
       swuEvaluationPanelMembers: panelMembers,
+      swuOpportunityAttachments: { include: { files: true } },
     },
   },
 } as const satisfies Prisma.swuOpportunitiesInclude;
@@ -48,6 +50,7 @@ const twuWithDetails = {
       twuResources: { orderBy: { order: "asc" }, include: { serviceAreas: true } },
       twuResourceQuestions: questions,
       twuEvaluationPanelMembers: panelMembers,
+      twuOpportunityAttachments: { include: { files: true } },
     },
   },
 } as const satisfies Prisma.twuOpportunitiesInclude;
@@ -202,6 +205,8 @@ async function writeVersion(
     chair: member.chair,
     order,
   }));
+  // The files this version is saved with; the current version's are the opportunity's (0055).
+  const attachmentRows = [...new Set(content.attachments)].map((file) => ({ opportunityVersion: version, file }));
   if (program === "sprint-with-us") {
     await tx.swuOpportunityVersions.create({
       data: {
@@ -213,9 +218,10 @@ async function writeVersion(
       },
     });
     for (const phase of content.phases) {
+      const phaseId = randomUUID();
       await tx.swuOpportunityPhases.create({
         data: {
-          id: randomUUID(),
+          id: phaseId,
           opportunityVersion: version,
           phase: phase.phase,
           startDate: recordedInstantOf(phase.startDate),
@@ -225,9 +231,16 @@ async function writeVersion(
           createdBy: by,
         },
       });
+      const capabilities = phase.requiredCapabilities ?? [];
+      if (capabilities.length > 0) {
+        await tx.swuPhaseCapabilities.createMany({
+          data: capabilities.map((capability) => ({ phase: phaseId, capability, fullTime: false, createdAt: now, createdBy: by })),
+        });
+      }
     }
     if (questionRows.length > 0) await tx.swuTeamQuestions.createMany({ data: questionRows });
     if (panelRows.length > 0) await tx.swuEvaluationPanelMembers.createMany({ data: panelRows });
+    if (attachmentRows.length > 0) await tx.swuOpportunityAttachments.createMany({ data: attachmentRows });
     return;
   }
   await tx.twuOpportunityVersions.create({
@@ -251,6 +264,7 @@ async function writeVersion(
   }
   if (questionRows.length > 0) await tx.twuResourceQuestions.createMany({ data: questionRows });
   if (panelRows.length > 0) await tx.twuEvaluationPanelMembers.createMany({ data: panelRows });
+  if (attachmentRows.length > 0) await tx.twuOpportunityAttachments.createMany({ data: attachmentRows });
 }
 
 /**
@@ -315,6 +329,12 @@ function questionOf(row: { question: string; guideline: string; score: number; m
   return { question: row.question, guideline: row.guideline, score: row.score, minimumScore: row.minimumScore, wordLimit: row.wordLimit };
 }
 
+function attachmentOf(row: { files: { id: string; name: string; createdAt: Date; createdBy: string | null; fileBlob: string } }): FileRecord {
+  return asFileRecord({ ...row.files, createdAt: row.files.createdAt.toISOString() });
+}
+
+const byName = (a: FileRecord, b: FileRecord) => a.name.localeCompare(b.name);
+
 function panelMemberOf(row: { users: Person; evaluator: boolean; chair: boolean }) {
   return { user: { id: row.users.id, name: row.users.name }, evaluator: row.evaluator, chair: row.chair };
 }
@@ -334,12 +354,14 @@ function swuDetails(version: SwuDetailed | undefined): StoredDetails | undefined
               startDate: pacificDayOf(phase.startDate),
               completionDate: pacificDayOf(phase.completionDate),
               maxBudget: phase.maxBudget,
+              requiredCapabilities: phase.swuPhaseCapabilities.map((capability) => capability.capability),
             },
           ]
         : [],
     ),
     questions: version.swuTeamQuestions.map(questionOf),
     resources: [],
+    attachments: version.swuOpportunityAttachments.map(attachmentOf).sort(byName),
     weights: {
       questions: version.questionsWeight,
       codeChallenge: version.codeChallengeWeight,
@@ -358,9 +380,11 @@ function twuDetails(version: TwuDetailed | undefined): StoredDetails | undefined
     phases: [],
     questions: version.twuResourceQuestions.map(questionOf),
     resources: version.twuResources.map((resource) => ({
+      id: resource.id,
       serviceArea: resource.serviceAreas.serviceArea,
       targetAllocation: resource.targetAllocation,
     })),
+    attachments: version.twuOpportunityAttachments.map(attachmentOf).sort(byName),
     weights: { questions: version.questionsWeight, codeChallenge: 0, scenario: 0, challenge: version.challengeWeight, price: version.priceWeight },
     panel: version.twuEvaluationPanelMembers.map(panelMemberOf),
   };

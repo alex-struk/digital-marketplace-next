@@ -8,8 +8,8 @@ import { hasClosedToProposals, mayReadProposal } from "../rules/proposals";
 
 /**
  * The tables each program keeps a proposal's attachments in, with the proposal, its history and its
- * opportunity's. Sprint With Us proposals carry no attachments. The names are this file's own
- * constants and are the only identifiers ever written into a statement; every value is bound.
+ * opportunity's. The names are this file's own constants and are the only identifiers ever written
+ * into a statement; every value is bound.
  */
 const PROGRAMS: readonly {
   readonly program: Program;
@@ -30,6 +30,16 @@ const PROGRAMS: readonly {
     opportunities: "cwuOpportunities",
     opportunityHistory: "cwuOpportunityStatuses",
     opportunityVersions: "cwuOpportunityVersions",
+  },
+  {
+    program: "sprint-with-us",
+    attachments: "swuProposalAttachments",
+    proposals: "swuProposals",
+    organization: "organization",
+    proposalHistory: "swuProposalStatuses",
+    opportunities: "swuOpportunities",
+    opportunityHistory: "swuOpportunityStatuses",
+    opportunityVersions: "swuOpportunityVersions",
   },
   {
     program: "team-with-us",

@@ -191,6 +191,28 @@ proposal, by one rule for every program (`mayReadProposal` in `backend/src/rules
 `backend/src/proposals/`, the screens `frontend/src/screens/proposal-cwu-*.tsx` and
 `vendor-dashboard.tsx`; the answers and refusals are decision record 0055.
 
+## Sprint With Us and Team With Us proposals
+
+A vendor starts one from "Start a proposal" on a published opportunity's page, at
+`/opportunities/<program>/<id>/proposals/create`, for an organization they own or administer. Its
+qualification is said as soon as it is chosen and checked again at submission. Sprint With Us asks
+for a team for each of the opportunity's phases, one scrum master in each, a cost per phase and an
+answer to each team question, and says as the team is named what each phase still lacks and whether
+a cost is over its budget; Team With Us asks for people against the opportunity's resources at an
+hourly rate, and says what the rates come to over the contract against the maximum budget, a
+ceiling the service also holds every save to. Each is managed at
+`/opportunities/<program>/<id>/proposals/<proposalId>/edit`; once submitted its organization stays
+until it is withdrawn. The vendor's `/dashboard` lists all three programs' proposals together, and
+both programs' manage pages have a Proposals tab, withheld until the opportunity closes. The
+service is `backend/src/proposals/team-proposals.service.ts`, the rules
+`backend/src/rules/team-proposals.ts`, the screens `frontend/src/screens/proposal-team-*.tsx`; the
+answers, refusals and readings are decision record 0058.
+
+Files attach to these programs' opportunities as they do to Code With Us's, and to Sprint With Us
+proposals as to the other two programs'. A file on an opportunity or a proposal is read through what
+it hangs on, by one rule for every program (`OpportunityAttachmentReadPath`,
+`ProposalAttachmentReadPath`).
+
 ## Organizations
 
 Anybody browses at `/organizations`: every organization not archived, by legal name, fifty to a

@@ -85,7 +85,7 @@ function readPerson(value: unknown): Person | null {
   return typeof record.id === "string" && typeof record.name === "string" ? { id: record.id, name: record.name } : null;
 }
 
-function readAttachment(value: unknown): Attachment | null {
+export function readAttachment(value: unknown): Attachment | null {
   if (typeof value !== "object" || value === null) return null;
   const record = value as Record<string, unknown>;
   return typeof record.id === "string" && typeof record.name === "string" ? { id: record.id, name: record.name } : null;

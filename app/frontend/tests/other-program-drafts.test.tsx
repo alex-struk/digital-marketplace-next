@@ -6,6 +6,7 @@ import type { Account } from "../src/api/accounts";
 import type { IdentityClient } from "../src/auth/identity-client";
 import { resetSessionForTests } from "../src/auth/session";
 import { routeTree } from "../src/router";
+import { readOtherProgramOpportunity, submissionFrom } from "../src/api/other-programs";
 import { createPanelProblems } from "../src/screens/opportunity-other-form";
 
 /**
@@ -217,6 +218,53 @@ describe("creating a Sprint With Us draft (R-1.7, R-1.9, R-1.39)", () => {
       // Nobody chosen yet: the service gives the draft its author alone (decision record 0045).
       evaluationPanel: [],
     });
+  });
+
+  it("asks each phase for its maximum budget and required capabilities, and sends them (R-2.19)", async () => {
+    serve((method, path) => {
+      if (method === "POST" && path === "/api/opportunities/sprint-with-us") return json(201, drafted("sprint-with-us"));
+      if (method === "GET" && path === `/api/opportunities/sprint-with-us/${ID}`) return json(200, drafted("sprint-with-us"));
+      return json(404, { errors: ["Not here."] });
+    });
+    resetSessionForTests({ status: "signed-in", account: staff }, fakeIdentity());
+    renderAt("/opportunities/sprint-with-us/create");
+    await screen.findByTestId("opportunity-title-field");
+    // The prototype phase is the second one the form offers to add.
+    fireEvent.click(screen.getAllByTestId("add-phase-button")[1] as HTMLElement);
+    const prototype = screen.getByRole("group", { name: "Prototype phase" });
+    const budget = within(prototype).getByRole("textbox", { name: /Maximum budget/ });
+    fireEvent.change(budget, { target: { value: "200000" } });
+    fireEvent.blur(budget);
+    fireEvent.click(within(prototype).getByRole("checkbox", { name: "Frontend Development" }));
+    const implementation = screen.getByRole("group", { name: "Implementation phase" });
+    expect(within(implementation).getByRole("checkbox", { name: "Backend Development" })).toBeTruthy();
+    fireEvent.click(screen.getByTestId("opportunity-save-draft"));
+
+    expect(await screen.findByTestId("opportunity-identifier")).toBeTruthy();
+    expect(requests.find((request) => request.method === "POST")?.body).toMatchObject({
+      prototypePhase: { maxBudget: 200000, requiredCapabilities: ["Frontend Development"] },
+      implementationPhase: { maxBudget: null, requiredCapabilities: [] },
+    });
+  });
+
+  it("starts an edit from each phase's kept maximum budget and required capabilities (R-2.19)", () => {
+    const kept = readOtherProgramOpportunity(
+      "sprint-with-us",
+      drafted("sprint-with-us", {
+        totalMaxBudget: 500000,
+        prototypePhase: { startDate: "2030-11-02", completionDate: "2031-01-29", maxBudget: 200000, requiredCapabilities: ["Frontend Development"] },
+        implementationPhase: { startDate: "2031-02-01", completionDate: "2031-09-30", maxBudget: 0, requiredCapabilities: [] },
+      }),
+    );
+    const phases = submissionFrom(kept!).phases;
+    expect(phases.PROTOTYPE).toEqual({
+      startDate: "2030-11-02",
+      completionDate: "2031-01-29",
+      maxBudget: 200000,
+      requiredCapabilities: ["Frontend Development"],
+    });
+    // No budget recorded reads as a blank box, not as $0.
+    expect(phases.IMPLEMENTATION?.maxBudget).toBeNaN();
   });
 
   it("lets the team questions run to 101, positions 0 to 100, and no further (R-1.17)", async () => {

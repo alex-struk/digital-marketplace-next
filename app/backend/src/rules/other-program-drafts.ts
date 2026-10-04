@@ -15,6 +15,7 @@ import {
   mayCreateInState,
   mayCreateOpportunity,
 } from "./opportunities";
+import { readAttachments } from "./proposals";
 
 export type OtherProgram = "sprint-with-us" | "team-with-us";
 
@@ -66,6 +67,12 @@ export interface PhaseDraft {
   readonly startDate: CalendarDay;
   readonly completionDate: CalendarDay;
   readonly maxBudget: number;
+  /**
+   * The capabilities the phase's team must hold between them (R-2.19), as the kept
+   * `swuPhaseCapabilities` holds them. The opportunity form asks for them in each phase's group
+   * (decision record 0059); a change that does not name them keeps the ones the phase had.
+   */
+  readonly requiredCapabilities?: readonly string[];
 }
 
 export interface QuestionDraft {
@@ -124,6 +131,8 @@ export interface OtherProgramDraft {
   readonly weights: WeightsDraft;
   /** The evaluation panel, in order. Nobody named means the author alone, as chair and evaluator. */
   readonly panel: readonly PanelMemberDraft[];
+  /** Stored files, by identifier, that this version carries (decision record 0055). */
+  readonly attachments: readonly string[];
 }
 
 const text = (value: unknown): string => (typeof value === "string" ? value : "");
@@ -242,11 +251,13 @@ export function draftOf(
     const phaseOf = (phase: SwuPhase, value: unknown, budgetLeft: number | null): PhaseDraft => {
       const given = typeof value === "object" && value !== null ? (value as Record<string, unknown>) : {};
       const phaseStart = valid(given.startDate, assignment) ?? assignment;
+      const capabilities = capabilitiesFrom(given.requiredCapabilities);
       return {
         phase,
         startDate: phaseStart,
         completionDate: valid(given.completionDate, phaseStart) ?? phaseStart,
         maxBudget: wholeFrom(given.maxBudget) ?? budgetLeft ?? 0,
+        ...(capabilities.length > 0 ? { requiredCapabilities: capabilities } : {}),
       };
     };
     for (const [phase, key] of [["INCEPTION", "inceptionPhase"], ["PROTOTYPE", "prototypePhase"]] as const) {
@@ -280,7 +291,18 @@ export function draftOf(
       price: whole(record.priceWeight),
     },
     panel: panelFrom(record.evaluationPanel),
+    attachments: readAttachments(record.attachments),
   };
+}
+
+/** A phase's required capabilities, named as text or as `{ capability }`, each once. */
+function capabilitiesFrom(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  const names = value
+    .map((item) => (typeof item === "string" ? item : typeof item === "object" && item !== null ? (item as { capability?: unknown }).capability : null))
+    .filter((name): name is string => typeof name === "string" && name.trim() !== "")
+    .map((name) => name.trim());
+  return [...new Set(names)];
 }
 
 /** The states an opportunity may be created in. */

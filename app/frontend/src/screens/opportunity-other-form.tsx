@@ -3,6 +3,7 @@ import {
   Button,
   ButtonGroup,
   Checkbox,
+  CheckboxGroup,
   Form,
   Heading,
   Link,
@@ -37,8 +38,10 @@ import {
   WeightsDraft,
   weightTotal,
 } from "@rules/other-program-drafts";
+import { CAPABILITIES } from "@rules/users";
 import type { Account } from "../api/accounts";
 import {
+  BLANK_PHASE,
   OtherProgramOpportunity,
   OtherProgramSaveAnswer,
   OtherProgramSubmission,
@@ -49,6 +52,8 @@ import {
   ResourceEntry,
   contentOf,
 } from "../api/other-programs";
+import type { Attachment } from "../api/opportunities";
+import { AttachmentControl, AttachmentList, useAttachments } from "../app/attachments";
 import { card } from "../app/layout";
 import { Stack } from "../app/page-layout";
 import { TitledAlert } from "../app/titled-alert";
@@ -123,7 +128,6 @@ const currency = { style: "currency", currency: "CAD", currencyDisplay: "narrowS
 const group = { ...card, margin: "var(--layout-margin-none)" } as const;
 const legend = { paddingInline: "var(--layout-padding-small)", font: "var(--typography-bold-body)" } as const;
 
-const BLANK_PHASE: PhaseEntry = { startDate: "", completionDate: "" };
 const BLANK_QUESTION: QuestionEntry = { question: "", guideline: "", score: Number.NaN, minimumScore: Number.NaN, wordLimit: Number.NaN };
 const BLANK_RESOURCE: ResourceEntry = { serviceArea: "", targetAllocation: Number.NaN };
 const BLANK_MEMBER: PanelEntry = { user: "", evaluator: true, chair: false };
@@ -166,6 +170,7 @@ export function blankOtherForm(program: OtherProgram): OtherProgramSubmission {
     resources: program === "team-with-us" ? [BLANK_RESOURCE] : [],
     weights: Object.fromEntries(WEIGHT_FIELDS[program].map((field) => [field, Number.NaN])),
     panel: [BLANK_MEMBER, BLANK_MEMBER],
+    attachments: [],
   };
 }
 
@@ -195,7 +200,10 @@ export function otherFieldId(program: OtherProgram, field: string): string {
   if (field in fixed) return fixed[field] as string;
   const [head, second, third] = field.split(".");
   const phase = PHASE_ORDER.find((key) => PHASE_KEYS[key] === head);
-  if (phase) return `opp-${phase.toLowerCase()}-${second === "startDate" ? "start" : "completion"}`;
+  if (phase) {
+    const part: Record<string, string> = { startDate: "start", maxBudget: "budget", requiredCapabilities: "capabilities" };
+    return `opp-${phase.toLowerCase()}-${part[second ?? ""] ?? "completion"}`;
+  }
   if (head === PROGRAM_TERMS[program].questionsKey) return `opp-question-${second}${QUESTION_PARTS[third ?? "question"] ?? ""}`;
   if (head === "resources") return `opp-resource-${second}-${third === "serviceArea" ? "area" : "allocation"}`;
   return "form-overview";
@@ -248,6 +256,13 @@ interface OtherFormProps {
   readonly onCancel?: () => void;
   /** Shown to someone who may read the opportunity's details but not change them. */
   readonly readOnly?: boolean;
+  /** The files the opportunity already carries. */
+  readonly initialAttachments?: readonly Attachment[];
+  /**
+   * On a saved opportunity, makes it carry exactly these files at once, answering with why not when
+   * refused, so a file is attached as soon as it is chosen (decision record 0033).
+   */
+  readonly attachNow?: (fileIds: readonly string[]) => Promise<string | null>;
 }
 
 export function OtherProgramForm({
@@ -264,6 +279,8 @@ export function OtherProgramForm({
   onSaved,
   onCancel,
   readOnly = false,
+  initialAttachments = [],
+  attachNow,
 }: OtherFormProps) {
   const words = WORDS[program];
   const sprint = program === "sprint-with-us";
@@ -274,6 +291,7 @@ export function OtherProgramForm({
   const [failure, setFailure] = useState<readonly string[] | null>(null);
   const [sending, setSending] = useState(false);
   const [confirming, setConfirming] = useState(false);
+  const attachments = useAttachments(initialAttachments, { attach: attachNow });
   const summaryRef = useRef<HTMLDivElement>(null);
   const failureRef = useRef<HTMLDivElement>(null);
   const H = headingLevel;
@@ -306,7 +324,14 @@ export function OtherProgramForm({
     if (sending) return;
     setFailure(null);
     setSending(true);
-    const answer = await onSend(action, values);
+    // Every new attachment is stored first; a row that cannot be is marked, and nothing is sent.
+    const stored = await attachments.store();
+    if (!stored.ok) {
+      setSending(false);
+      setConfirming(false);
+      return;
+    }
+    const answer = await onSend(action, { ...values, attachments: stored.ids });
     setSending(false);
     setConfirming(false);
     if (answer.kind === "saved") {
@@ -615,6 +640,36 @@ export function OtherProgramForm({
                           {...invalid(`${PHASE_KEYS[phase]}.completionDate`)}
                           data-testid="phase-completion-date-field"
                         />
+                        <NumberField
+                          id={`opp-${key}-budget`}
+                          label="Maximum budget"
+                          isReadOnly={readOnly}
+                          description={
+                            phase === "IMPLEMENTATION"
+                              ? "What this phase may cost at most. Left blank, it is what the other phases leave of the total."
+                              : "What this phase may cost at most. Part of the total maximum budget."
+                          }
+                          formatOptions={currency}
+                          value={entry.maxBudget}
+                          onChange={(value) => setPhase(phase, { ...entry, maxBudget: value })}
+                          {...invalid(`${PHASE_KEYS[phase]}.maxBudget`)}
+                          data-testid="phase-max-budget-field"
+                        />
+                        <CheckboxGroup
+                          id={`opp-${key}-capabilities`}
+                          label="Required capabilities"
+                          description="What the team on this phase must hold between them."
+                          isDisabled={readOnly}
+                          value={[...entry.requiredCapabilities]}
+                          onChange={(chosen) => setPhase(phase, { ...entry, requiredCapabilities: chosen })}
+                          data-testid="phase-capabilities-field"
+                        >
+                          {[...new Set([...CAPABILITIES.map((capability) => capability.name), ...entry.requiredCapabilities])].map((name) => (
+                            <Checkbox key={name} value={name}>
+                              {name}
+                            </Checkbox>
+                          ))}
+                        </CheckboxGroup>
                         {phase === "IMPLEMENTATION" || readOnly ? null : (
                           <div>
                             <Button variant="tertiary" size="small" onPress={() => setPhase(phase, null)}>
@@ -923,23 +978,22 @@ export function OtherProgramForm({
               </Stack>
             </section>
           ) : null}
-          {creating ? (
+          {readOnly ? (
             <section aria-labelledby="form-attachments" style={card}>
               <Stack gap="medium">
                 <Heading level={H} id="form-attachments">
                   Attachments
                 </Heading>
-                <Text elementType="p">
-                  {`Files cannot be attached to a ${program === "sprint-with-us" ? "Sprint With Us" : "Team With Us"} opportunity in this version of the service. Code With Us opportunities take attachments.`}
-                </Text>
-                <div>
-                  <Button variant="secondary" isDisabled data-testid="attachment-add-button">
-                    Add attachment
-                  </Button>
-                </div>
+                {initialAttachments.length > 0 ? (
+                  <AttachmentList attachments={initialAttachments} heading={false} />
+                ) : (
+                  <Text elementType="p">No attachments have been added.</Text>
+                )}
               </Stack>
             </section>
-          ) : null}
+          ) : (
+            <AttachmentControl state={attachments} headingLevel={H} saved={!creating} />
+          )}
           {readOnly ? null : consequence}
           {readOnly ? null : (
             <ButtonGroup ariaLabel={creating ? "Opportunity actions" : "Form actions"}>

@@ -28,6 +28,9 @@ import { ProposalCwuCreateScreen } from "./screens/proposal-cwu-create";
 import { ProposalCwuEditScreen } from "./screens/proposal-cwu-edit";
 import { ProposalCwuViewScreen } from "./screens/proposal-cwu-view";
 import { OpportunityOtherManageScreen } from "./screens/opportunity-other-manage";
+import { ProposalTeamCreateScreen } from "./screens/proposal-team-create";
+import { ProposalTeamEditScreen } from "./screens/proposal-team-edit";
+import { ProposalTeamViewScreen } from "./screens/proposal-team-view";
 import { OpportunityOtherViewScreen } from "./screens/opportunity-other-view";
 import { OrganizationListScreen } from "./screens/organization-list";
 import { OrganizationCreateScreen } from "./screens/organization-create";
@@ -258,6 +261,64 @@ const opportunityTwuManageRoute = createRoute({
   },
 });
 
+// A Sprint With Us or Team With Us proposal: started from its opportunity, and managed by the vendor
+// who wrote it or who owns or administers its organization (decision record 0058).
+const proposalSwuCreateRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/sprint-with-us/$opportunityId/proposals/create",
+  component: function ProposalSwuCreateRoute() {
+    const { opportunityId } = proposalSwuCreateRoute.useParams();
+    return <ProposalTeamCreateScreen key={opportunityId} program="sprint-with-us" opportunityId={opportunityId} />;
+  },
+});
+
+const proposalTwuCreateRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/team-with-us/$opportunityId/proposals/create",
+  component: function ProposalTwuCreateRoute() {
+    const { opportunityId } = proposalTwuCreateRoute.useParams();
+    return <ProposalTeamCreateScreen key={opportunityId} program="team-with-us" opportunityId={opportunityId} />;
+  },
+});
+
+// Read-only, to whoever the service lets read it: its vendors, and once the opportunity has closed
+// its author and administrators (R-2.25).
+const proposalSwuViewRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/sprint-with-us/$opportunityId/proposals/$proposalId",
+  component: function ProposalSwuViewRoute() {
+    const { opportunityId, proposalId } = proposalSwuViewRoute.useParams();
+    return <ProposalTeamViewScreen key={proposalId} program="sprint-with-us" opportunityId={opportunityId} proposalId={proposalId} />;
+  },
+});
+
+const proposalTwuViewRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/team-with-us/$opportunityId/proposals/$proposalId",
+  component: function ProposalTwuViewRoute() {
+    const { opportunityId, proposalId } = proposalTwuViewRoute.useParams();
+    return <ProposalTeamViewScreen key={proposalId} program="team-with-us" opportunityId={opportunityId} proposalId={proposalId} />;
+  },
+});
+
+const proposalSwuEditRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/sprint-with-us/$opportunityId/proposals/$proposalId/edit",
+  component: function ProposalSwuEditRoute() {
+    const { opportunityId, proposalId } = proposalSwuEditRoute.useParams();
+    return <ProposalTeamEditScreen key={proposalId} program="sprint-with-us" opportunityId={opportunityId} proposalId={proposalId} />;
+  },
+});
+
+const proposalTwuEditRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/team-with-us/$opportunityId/proposals/$proposalId/edit",
+  component: function ProposalTwuEditRoute() {
+    const { opportunityId, proposalId } = proposalTwuEditRoute.useParams();
+    return <ProposalTeamEditScreen key={proposalId} program="team-with-us" opportunityId={opportunityId} proposalId={proposalId} />;
+  },
+});
+
 // Organizations. "/organizations/create" is a fixed address, matched before an organization's own.
 const organizationListRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -337,6 +398,12 @@ export const routeTree = rootRoute.addChildren([
   opportunityTwuViewRoute,
   opportunitySwuManageRoute,
   opportunityTwuManageRoute,
+  proposalSwuCreateRoute,
+  proposalTwuCreateRoute,
+  proposalSwuViewRoute,
+  proposalTwuViewRoute,
+  proposalSwuEditRoute,
+  proposalTwuEditRoute,
   organizationListRoute,
   organizationCreateRoute,
   organizationEditRoute,
