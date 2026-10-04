@@ -955,6 +955,11 @@ redo:
       both administrators from its blind-copy list
       (caughtMessage.copiedRecipients after opening it by id).
     verb: test-overreaches
+    closed: &a19
+      outcome: met
+      why: derived again by a derive-tests run on evaluation
+      by: runner:derive-tests
+      at: 2026-10-04T14:32:57.708Z
   - id: R-5.33
     version: 1
     why: the test only counts a notice it finds through mail.messagesTo(chair or
@@ -965,3 +970,4 @@ redo:
       another way and assert the chair and the owner from its blind-copy list
       (caughtMessage.copiedRecipients after opening it by id).
     verb: test-overreaches
+    closed: *a19
