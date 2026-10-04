@@ -1545,6 +1545,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-04T09:05:56.561Z
+    taken: 2026-10-04T09:15:22.476Z
+    taken_by: plan-23
   - stage: plan
     why: R-2.35 is claimed by Slice 16, but its test enters a code challenge score
       on proposal-swu-view (proposal-swu-view.score_code_challenge), which
@@ -1554,3 +1556,5 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-04T09:05:56.561Z
+    taken: 2026-10-04T09:15:22.476Z
+    taken_by: plan-23
