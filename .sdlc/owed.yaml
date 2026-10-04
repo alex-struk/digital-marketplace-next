@@ -5431,7 +5431,7 @@ owed:
     id: R-5.27
     version: 2
     domain: evaluation
-    stage: contract
+    stage: derive-tests
     why: a surface action that changes an opportunity's evaluation panel or its
       questions (publishing a new version) while it is in individual evaluation,
       so a test can show that the most recent version's panel and questions
@@ -5506,6 +5506,20 @@ owed:
         proposal: derive-tests-evaluation-stale-16
         gate: G3
         at: 2026-10-04T16:03:01.452Z
+      - from: contract
+        to: derive-tests
+        why: seeded opportunities.swuSubmissionNamesTwoOfThree (proposals swuNamedOne,
+          swuNamedTwo, swuLeftOut) and added surface page
+          evaluation-individual-submission-request-swu with action
+          submit_scores_for_consensus_naming and observations request_accepted,
+          refusal_messages, stored_status; on the oracle, submitting as
+          users.staffOne naming only the first two moves the opportunity to
+          EVAL_QUESTIONS_CONSENSUS and sends the consensus-ready notice to the
+          chair and owner
+        by: contract-v47
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-10-04T16:11:24.347Z
     asserted:
       - clause: the count is taken against the panel and the questions of the
           opportunity's most recent version

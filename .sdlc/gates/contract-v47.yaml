@@ -1,0 +1,15 @@
+gate: G1
+verdict: approve
+by: agent:product-owner
+held_by: agent
+rationale: |2-
+  Question: does this contract give the tests a way to reach R-5.27's clause that the move to consensus is counted only over the proponents named in the submission that triggers it? Ruling: approve. Reason: before this proposal, the only submission the contract offered named every proponent, so no test could tell a count over the named proponents from a count over all of them. Three additions fix that, and the evidence supports each. First, the old code bears out the clause: allSWUTeamQuestionResponseEvaluatorEvaluationsSubmitted (sources/old/src/back-end/lib/db/evaluations/sprint-with-us/team-questions.ts:339) takes the request's proposal ids and filters submitted evaluations with whereIn("evaluations.proposal", proposals). Only the request can send a partial list, since the screen always names every proponent, so a page that works by request is the right way in. Second, seed opportunity 42 sets up exactly the starting state described. Through seed_swu_proposal with evaluators ARRAY[admin] and status SUBMITTED, the administrator has submitted scores for proposals 1 and 2. put_evaluation gives the government account DRAFT evaluations of the same two. Proposal 3 is created with individual NULL, so it has no evaluations at all. The move itself is left to the application. Third, the proposer ran the two-of-three submission against the old application, the original system the rebuild is checked against. It answered 200, the opportunity moved to EVAL_QUESTIONS_CONSENSUS, and the consensus-ready email went to the chair and the owner, which matches the criterion as worded. The new page's test ids are left null for the design gate to fill, and the openapi description cites its source. The YAML parse check was not run, but the seed loaded on the oracle and the new entries follow the existing forms. The tier is STANDARD and only one reading of the change is plausible, so this does not need escalating. What would change the ruling: if a test written from this page can still pass on an implementation that counts over all proponents, the seed does not separate the two readings and the proposal should come back. Team With Us is not covered. R-5.27 cites it, but the owed item asked for one case. If calibration, the run of the acceptance tests against the old application, shows Team With Us behaving differently, it should come back as its own owed item.
+conditions: []
+cost: 0.39366639999999997
+turns: 6
+session: "bb64f248-91e3-45f8-a6e7-e9082708ef99"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T16:11:23.281Z

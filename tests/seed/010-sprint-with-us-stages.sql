@@ -456,5 +456,26 @@ BEGIN
     PERFORM pg_temp.seed_swu_proposal(41, p, v[p], o[p], staff, 'UNDER_REVIEW_QUESTIONS', 400000 + p * 20000, good, 'SUBMITTED', NULL,
       ARRAY['00000000-0000-4000-8000-000000000104']::uuid[], admin, NULL, NULL, NULL);
   END LOOP;
+
+  -- 42. At individual evaluation with the usual panel, three proponents and four
+  --     questions, set up for a submission that names fewer than every proponent. The
+  --     service's submission request carries a list of proposals and checks only the ones
+  --     it names; the screen always names every proposal the evaluator holds an
+  --     evaluation of, so only a request can leave one out. The administrator has already
+  --     submitted scores for the first two proponents (4, 4, 4, 4 each); the government
+  --     account holds complete drafts of the same two (3, 3, 3, 3 each); nobody has begun
+  --     the third. The government account submitting only the first two brings the count
+  --     over the named proponents to two evaluators × two × four = 16, which is what the
+  --     check asks of those two, while a count over all three would ask 24. The move to
+  --     consensus, or its absence, is the application's (R-5.27).
+  PERFORM pg_temp.seed_swu_opportunity(42, 'Seeded Sprint With Us opportunity awaiting a submission that names two of three proponents', staff, 'EVAL_QUESTIONS_INDIVIDUAL', panel, admin);
+  FOR p IN 1..2 LOOP
+    PERFORM pg_temp.seed_swu_proposal(42, p, v[p], o[p], staff, 'UNDER_REVIEW_QUESTIONS', 400000 + p * 20000, good, 'SUBMITTED', NULL,
+      ARRAY[admin]::uuid[], admin, NULL, NULL, NULL);
+    PERFORM pg_temp.put_evaluation('swuTeamQuestionResponseEvaluator', pg_temp.sid(42, 100 + p),
+      staff, low, 'DRAFT', now() - INTERVAL '26 days');
+  END LOOP;
+  PERFORM pg_temp.seed_swu_proposal(42, 3, v[3], o[3], staff, 'UNDER_REVIEW_QUESTIONS', 460000, NULL, NULL, NULL,
+    panel, admin, NULL, NULL, NULL);
 END
 $$;

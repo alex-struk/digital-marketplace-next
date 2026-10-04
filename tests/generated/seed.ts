@@ -1312,6 +1312,25 @@ export const seed = {
       ],
       "note": "In individual question evaluation with three proponents and four questions on both of its versions. The first version seats users.staffOne as an evaluator and users.administratorOne as chair and evaluator; the newest, published a day after the opportunity closed, adds users.staffPanelEvaluator as a third evaluator. That third evaluator has already scored all three proponents (4, 4, 4, 4) and submitted — twelve submitted scores — because no sign-in route on the oracle reaches them; neither users.staffOne nor users.administratorOne has begun. The move to consensus is counted against the newest version: three evaluators × three proponents × four questions = 36. users.staffOne (persona public-sector-staff or evaluation-panel-evaluator) scoring every proponent and submitting brings the count to 24, which is the whole of what the first version would have required, and the status stays at individual evaluation. users.administratorOne (persona administrator) then scoring and submitting brings it to 36, and the application moves the opportunity to consensus and tells the chair (users.administratorOne) and the owner (users.staffOne). Nothing here is in consensus; the move and the notice are the application's."
     },
+    "swuSubmissionNamesTwoOfThree": {
+      "id": "00000000-0000-4000-a042-000000000001",
+      "version_id": "00000000-0000-4000-a042-000000000002",
+      "program": "sprint-with-us",
+      "title": "Seeded Sprint With Us opportunity awaiting a submission that names two of three proponents",
+      "seeded_status": "EVAL_QUESTIONS_INDIVIDUAL",
+      "owner": "users.staffOne",
+      "proposals": [
+        "proposals.swuNamedOne",
+        "proposals.swuNamedTwo",
+        "proposals.swuLeftOut"
+      ],
+      "panel": "the usual one — users.staffOne evaluator, users.administratorOne chair and evaluator",
+      "questions": 4,
+      "for": [
+        "R-5.27"
+      ],
+      "note": "In individual question evaluation with three proponents and four questions. The clause of R-5.27 it serves is that the count is taken only over the proponents named in the submission that triggers the check. users.administratorOne has already submitted individual scores for proposals.swuNamedOne and proposals.swuNamedTwo (4, 4, 4, 4 each); users.staffOne holds complete DRAFT evaluations of the same two (3, 3, 3, 3 each); nobody has begun proposals.swuLeftOut. Signed in as users.staffOne (persona evaluation-panel-evaluator or public-sector-staff), a test sends submit_scores_for_consensus_naming on evaluation-individual-submission-request-swu naming only swuNamedOne and swuNamedTwo. Counted over the named two, the submitted scores then number 2 evaluators × 2 proponents × 4 questions = 16, which is the whole of what the check asks of them; counted over all three it would ask 24 and find 16. On the oracle the opportunity then moves to EVAL_QUESTIONS_CONSENSUS (read as status on opportunity-swu-view, or stored_status on the request page) and the consensus-ready notice (\"A Sprint With Us Opportunity Is Ready for Question Consensus\") goes to the chair and the owner, although swuLeftOut has no scores at all. The screen cannot send this submission: submit_scores_for_consensus on evaluation-individual-list-swu names every proposal the evaluator holds an evaluation of and is offered only once they hold one of every proponent. Nothing here is in consensus; the move and the notice are the application's."
+    },
     "twuConsensusFiveProponents": {
       "id": "00000000-0000-4000-a031-000000000001",
       "version_id": "00000000-0000-4000-a031-000000000002",
@@ -2127,6 +2146,65 @@ export const seed = {
           4
         ]
       }
+    },
+    "swuNamedOne": {
+      "id": "00000000-0000-4000-a042-000000000101",
+      "opportunity": "opportunities.swuSubmissionNamesTwoOfThree",
+      "vendor": "users.organizationOwner",
+      "organization": "organizations.qualified",
+      "seeded_status": "UNDER_REVIEW_QUESTIONS",
+      "evaluation_of_administratorOne": {
+        "status": "SUBMITTED",
+        "scores": [
+          4,
+          4,
+          4,
+          4
+        ]
+      },
+      "evaluation_of_staffOne": {
+        "status": "DRAFT",
+        "scores": [
+          3,
+          3,
+          3,
+          3
+        ]
+      }
+    },
+    "swuNamedTwo": {
+      "id": "00000000-0000-4000-a042-000000000102",
+      "opportunity": "opportunities.swuSubmissionNamesTwoOfThree",
+      "vendor": "users.proponentTwo",
+      "organization": "organizations.proponentTwo",
+      "seeded_status": "UNDER_REVIEW_QUESTIONS",
+      "evaluation_of_administratorOne": {
+        "status": "SUBMITTED",
+        "scores": [
+          4,
+          4,
+          4,
+          4
+        ]
+      },
+      "evaluation_of_staffOne": {
+        "status": "DRAFT",
+        "scores": [
+          3,
+          3,
+          3,
+          3
+        ]
+      }
+    },
+    "swuLeftOut": {
+      "id": "00000000-0000-4000-a042-000000000103",
+      "opportunity": "opportunities.swuSubmissionNamesTwoOfThree",
+      "vendor": "users.proponentThree",
+      "organization": "organizations.proponentThree",
+      "seeded_status": "UNDER_REVIEW_QUESTIONS",
+      "evaluation_of_administratorOne": "none",
+      "evaluation_of_staffOne": "none"
     },
     "twuScreenedIntoChallengeEarly": {
       "id": "00000000-0000-4000-a038-000000000101",
