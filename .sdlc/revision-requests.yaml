@@ -1448,3 +1448,34 @@ requests:
     at: 2026-10-04T05:42:27.643Z
     taken: 2026-10-04T05:59:54.800Z
     taken_by: bind-adapter-new-72
+  - stage: bind-adapter
+    target: new
+    why: "R-2.19: in the cases \"a team for a phase the opportunity does not have is
+      not submitted\" and \"a proposal leaving out a phase the opportunity has
+      is not submitted\", proposalTeamRequest.refusalByField() returned the
+      service's raw lines 'inceptionPhase: This opportunity does not require
+      this phase.' and 'prototypePhase: This opportunity requires this phase.'
+      The service names the phase by its request field key (inceptionPhase,
+      prototypePhase, implementationPhase); the binding must report each entry
+      against the phase's name (Inception, Prototype, Implementation) so the
+      refusal reads as standing against that phase (evidence
+      .sdlc/evidence/slice-15/R-2.19-2.txt, R-2.19-3.txt)."
+    from: build-slice-15-2
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-04T06:37:43.659Z
+  - stage: bind-adapter
+    target: new
+    why: "R-2.25: proposal-swu-view (and proposal-twu-view) are reported unbound
+      with the reason that the running build serves a signed-in person only
+      /dashboard and similar. This build serves
+      /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId and the
+      Team With Us equivalent (app/frontend/src/router.tsx, screen
+      proposal-team-view.tsx), reached from each row of the opportunity manage
+      page's Proposals tab, with proposal-proponent-name, proposal-identifier,
+      proposal-status, proposal-tab-proposal, proposal-tab-history and
+      proposal-export-link; bind them against it."
+    from: build-slice-15-2
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-04T06:37:43.659Z
