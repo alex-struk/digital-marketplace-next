@@ -257,13 +257,23 @@ export async function createTeamProposal(
 /**
  * One tagged change: new content, a submission, or a withdrawal (R-2.22, R-2.23); or, by the
  * opportunity's author or an administrator, an award or a disqualification with its reason (R-1.26,
- * R-2.34).
+ * R-2.34), a stage score out of 100 or a screening in to or out of the team scenario (R-2.28).
  */
 export async function changeTeamProposal(
   program: TeamProgram,
   id: string,
-  tag: "edit" | "submit" | "withdraw" | "award" | "disqualify",
-  content?: Record<string, unknown> | string,
+  tag:
+    | "edit"
+    | "submit"
+    | "withdraw"
+    | "award"
+    | "disqualify"
+    | "scoreCodeChallenge"
+    | "scoreTeamScenario"
+    | "scoreChallenge"
+    | "screenInToTeamScenario"
+    | "screenOutFromTeamScenario",
+  content?: Record<string, unknown> | string | number,
 ): Promise<TeamProposalSaveAnswer> {
   try {
     const request = { params: { path: { id } }, body: (content === undefined ? { tag } : { tag, value: content }) as never };

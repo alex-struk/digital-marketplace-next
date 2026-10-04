@@ -11,6 +11,7 @@ import { CalendarDay, OpportunityStatus, isCalendarDay, recordedInstantOf } from
 import { isPhoneNumber } from "./organizations";
 import { SCORE_ENTERED, scoreInNote } from "./proposal-evaluation";
 import { QUESTIONS_SCORE_ENTERED } from "./consensus";
+import { stageEventLabel } from "./team-evaluation";
 import { AccountKind, isEmailAddress } from "./users";
 
 // ------------------------------------------------------------------------ states
@@ -78,6 +79,9 @@ export function proposalHistoryLabel(entry: {
   if (entry.event === QUESTIONS_SCORE_ENTERED) {
     return entry.note?.startsWith("Resource") ? "Resource question scores entered" : "Team question scores entered";
   }
+  // Each stage score entered, and each price score worked out, with the score (R-2.30, R-2.35).
+  const stage = entry.event ? stageEventLabel(entry.event, entry.note ?? null) : null;
+  if (stage) return stage;
   return entry.event ?? "";
 }
 

@@ -427,6 +427,11 @@
 - 11:29:03 drive: step 10: `sdlc run verify --slice 19` — build-slice-19-2 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
 - 12:00:59 verify slice 19 verified: every claimed criterion passes against the application in build-slice-19-2. Ready for G3.
 - 12:01:01 run verify: regenerated 656 files in .sdlc, site
+- 11:22:36 drive: step 9: `sdlc run build --slice 19 --revise` — build-slice-19 was returned at G3 by agent:reviewer
+- 11:28:56 run build: ok, cost 0.38328500000000004, turns 15, on claude claude-opus-5-5 (2.1.288 (Claude Code))
+- 11:28:56 propose build-slice-19-2 at G3
+- 12:01:13 drive: step 11: `sdlc rule build-slice-19-2 --by agent:reviewer` — build-slice-19-2 is open at G3, held by agent:reviewer
+- 12:01:46 rule build-slice-19-2 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.288 (Claude Code))
 
 # Run record 2026-10-03
 

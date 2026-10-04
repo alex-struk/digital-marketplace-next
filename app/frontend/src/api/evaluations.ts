@@ -225,6 +225,14 @@ export function finalizeConsensus(program: OtherProgram, opportunityId: string):
   return changeEvaluationStage(program, opportunityId, "finalizeQuestionConsensuses");
 }
 
+/**
+ * The owner or an administrator moves a Sprint With Us opportunity from the code challenge to the
+ * team scenario, once every proponent there is scored or disqualified and one is screened in (R-1.42).
+ */
+export function startTeamScenario(opportunityId: string): Promise<OtherProgramSaveAnswer> {
+  return changeEvaluationStage("sprint-with-us", opportunityId, "startTeamScenario");
+}
+
 async function changeEvaluationStage(program: OtherProgram, opportunityId: string, tag: string): Promise<OtherProgramSaveAnswer> {
   try {
     const request = { params: { path: { id: opportunityId } }, body: { tag } as never };

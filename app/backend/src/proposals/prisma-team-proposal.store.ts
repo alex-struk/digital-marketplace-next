@@ -15,9 +15,11 @@ import {
   isTeamProposalStatus,
 } from "../rules/team-proposals";
 import { TeamProposalScores, TeamWeights, isInContention } from "../rules/proposal-evaluation";
+import { PRICE_SCORE_ENTERED } from "../rules/team-evaluation";
 import { Person, ProposalOrganization } from "./cwu-proposal";
 import { organizationOfRow } from "./prisma-cwu-proposal.store";
 import {
+  StageScoreEntry,
   StoredPhaseTeam,
   StoredTeamProposal,
   TeamHistoryEntry,
@@ -398,6 +400,64 @@ export class PrismaTeamProposalStore implements TeamProposalStore {
         data: { id: randomUUID(), createdAt: now, createdBy: by, opportunity: winner.opportunity, status: "AWARDED", event: null, note: null },
       });
       return passedOver;
+    });
+  }
+
+  async enterStageScore(program: TeamProgram, id: string, entry: StageScoreEntry, by: string): Promise<void> {
+    const now = new Date();
+    const later = new Date(now.getTime() + 1);
+    const rows = [
+      ...(entry.status ? [{ id: randomUUID(), createdAt: now, createdBy: by, proposal: id, status: entry.status, event: null, note: null }] : []),
+      { id: randomUUID(), createdAt: later, createdBy: by, proposal: id, status: null, event: entry.event, note: entry.note },
+    ];
+    const column = entry.score === "challenge" ? { challengeScore: entry.value } : { scenarioScore: entry.value };
+    await this.prisma.$transaction(async (tx) => {
+      if (program === "sprint-with-us") {
+        await tx.swuProposals.update({ where: { id }, data: { ...column, updatedAt: now, updatedBy: by } });
+        await tx.swuProposalStatuses.createMany({ data: rows });
+      } else {
+        await tx.twuProposals.update({ where: { id }, data: { challengeScore: entry.value, updatedAt: now, updatedBy: by } });
+        await tx.twuProposalStatuses.createMany({ data: rows });
+      }
+    });
+  }
+
+  async completeEvaluation(
+    program: TeamProgram,
+    opportunityId: string,
+    finalStage: string,
+    prices: readonly { readonly id: string; readonly price: number; readonly note: string }[],
+    note: string,
+  ): Promise<boolean> {
+    const now = new Date();
+    const events = prices.map((entry) => ({
+      id: randomUUID(),
+      createdAt: now,
+      createdBy: null,
+      proposal: entry.id,
+      status: null,
+      event: PRICE_SCORE_ENTERED,
+      note: entry.note,
+    }));
+    const moved = { id: randomUUID(), createdAt: new Date(now.getTime() + 1), createdBy: null, opportunity: opportunityId, status: "PROCESSING", event: null, note };
+    return this.prisma.$transaction(async (tx) => {
+      // The opportunity is held while it is checked, so two last scores at once move it once.
+      const table = program === "sprint-with-us" ? "swuOpportunities" : "twuOpportunities";
+      await tx.$queryRawUnsafe(`SELECT "id" FROM "${table}" WHERE "id" = $1::uuid FOR UPDATE`, opportunityId);
+      if (program === "sprint-with-us") {
+        const latest = await tx.swuOpportunityStatuses.findFirst({ where: { opportunity: opportunityId, status: { not: null } }, orderBy: { createdAt: "desc" } });
+        if (latest?.status !== finalStage) return false;
+        for (const entry of prices) await tx.swuProposals.update({ where: { id: entry.id }, data: { priceScore: entry.price } });
+        if (events.length > 0) await tx.swuProposalStatuses.createMany({ data: events });
+        await tx.swuOpportunityStatuses.create({ data: moved });
+        return true;
+      }
+      const latest = await tx.twuOpportunityStatuses.findFirst({ where: { opportunity: opportunityId, status: { not: null } }, orderBy: { createdAt: "desc" } });
+      if (latest?.status !== finalStage) return false;
+      for (const entry of prices) await tx.twuProposals.update({ where: { id: entry.id }, data: { priceScore: entry.price } });
+      if (events.length > 0) await tx.twuProposalStatuses.createMany({ data: events });
+      await tx.twuOpportunityStatuses.create({ data: moved });
+      return true;
     });
   }
 

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-19-2 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">644</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">638</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">518</span></a></li><li><a href="../runs.html">Run log <span class="count">22</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-19-2</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-04 18:28</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.288 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 19 (Sprint With Us and Team With Us proposals go through their challenge stages to an award) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> I made no change to slice 19&#39;s application behaviour in this revision.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.288 (Claude Code))</p>
+<p>I made no change to slice 19&#39;s application behaviour in this revision. The one failure in the ruling can&#39;t be fixed from this slice without building another slice&#39;s work.</p>
+<p><strong>What failed:</strong> the ruling passed six of the seven criteria (R-1.25, R-1.42, R-1.49, R-2.28, R-2.31, R-2.35). R-2.30 failed. The saved page outline shows the test opening <code>/opportunities/sprint-with-us/…/proposals/…/export</code> and getting &quot;Page not found&quot;. That printable copy of a proposal belongs to Slice 20 in <code>plan/tasks.md</code>, together with the all-proposals export and the completed-opportunity report.</p>
+<p>R-2.30 itself only asks that the price score be the bid&#39;s share of the lowest bid still in contention, worked out when the last human-entered score is recorded. The score must also go into the proposal&#39;s history, and the proposal must become fully evaluated. The ruling found the application already does this: price scores and the move to processing are written in one locked transaction, with unit and end-to-end tests. The failure comes from the test opening the export page outside its guards. Fixing that belongs to the test-writing stage, and the ruling has already sent it there.</p>
+<p><strong>Why I didn&#39;t build the export page:</strong> it would mean building Slice 20&#39;s work here, which this stage must not do. It would also be guesswork, since Slice 20&#39;s criteria (R-1.40, R-2.37, R-2.38) set who may read that page and what it hides from staff before the challenge stage. A partial page here would pre-empt that slice. R-2.30 should pass once its test is rewritten without the export page, or once Slice 20 delivers the page.</p>
+<p><strong>One change I did make:</strong> this workspace had no packages installed, so I installed them and ran <code>npm --prefix app run check</code>. On that first run after the install, one backend end-to-end test failed. Every later run passed in full. The failing file runs PostgreSQL inside the test process: it takes about 6s on a warm run but took 15s on that first run, and one of its tests went over the 5-second-per-test default. Because <code>check</code> decides whether this proposal fails, I raised the backend limits in <code>app/backend/vitest.config.mts</code> to 30s per test and 60s per setup step, with a comment saying why. Afterwards the whole check passed: 16 tests in the shared package, 836 in the backend and 508 in the frontend.</p>
+<p>I added no decision record; the comment in the config file explains the change. <strong>What&#39;s still missing:</strong> Slice 20 will find that no export, printable copy or opportunity report exists yet for any of the three programs.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-04 19:01.</p>
+<div class="body"><p>Does slice 19 do what its criteria say? Approve. The verify result is pass and current for this proposal: it was recorded against application tree 4f0236b, which is this branch&#39;s app tree, and all seven claimed criteria (R-1.25, R-1.42, R-1.49, R-2.28, R-2.30, R-2.31, R-2.35) were exercised and met. The proposal page&#39;s account of an R-2.30 failure on the missing export page describes an earlier run and no longer stands; the export, printable copy and completed-opportunity report remain Slice 20&#39;s (R-1.40, R-2.37, R-2.38) and nothing here pre-empts them. The code matches the criteria. Stage scores are refused at the wrong stage with the criterion&#39;s exact message, and the proposal page offers only what the service accepts (R-2.28). Starting the team scenario is refused until every code-challenge proponent is scored or disqualified and at least one is screened in (R-1.42). The last final-stage score works out price scores as a share of the lowest bid among the proposals evaluated at the final stage, writes them to the history, and moves the opportunity to processing with the automatic note, in one transaction under a row lock (R-2.30, R-1.25, R-2.35). Only fully evaluated proposals are ranked (R-2.31), and a Team With Us opportunity in processing is awarded (R-1.49). The score-column migration to double precision keeps existing values. The one raw query takes its table name from a fixed ternary and passes the id as a parameter. Nothing under tests/acceptance changed. There is no secret or personal data in the code or logs. Unit and backend end-to-end tests cover the new rules and the store&#39;s seams. The backend timeout increase is justified in its comment. The ruling would change if a later verify result were stale or failing for this slice, or if the price score were found to count proposals out of contention.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

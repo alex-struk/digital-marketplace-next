@@ -129,6 +129,34 @@ export interface TeamProposalStore {
    * with the proposals marked not awarded.
    */
   award(program: TeamProgram, id: string, by: string): Promise<string[]>;
+  /**
+   * Records a stage score as one change: the score, the proposal's move to evaluated at that stage
+   * when it is not there already, and an event naming the score a moment later, so the history,
+   * newest first, shows the score above the state (R-2.28, R-2.35).
+   */
+  enterStageScore(program: TeamProgram, id: string, entry: StageScoreEntry, by: string): Promise<void>;
+  /**
+   * Ends the final stage as one change, if the opportunity still stands at it: each price score
+   * written with an event by nobody, and the opportunity moved to processing by nobody with the
+   * note given (R-1.25, R-2.30). Answers whether it moved.
+   */
+  completeEvaluation(
+    program: TeamProgram,
+    opportunityId: string,
+    finalStage: string,
+    prices: readonly { readonly id: string; readonly price: number; readonly note: string }[],
+    note: string,
+  ): Promise<boolean>;
+}
+
+/** One stage score as it is recorded. */
+export interface StageScoreEntry {
+  readonly score: "challenge" | "scenario";
+  readonly value: number;
+  /** The state it moves the proposal to, or null when the proposal is already there. */
+  readonly status: TeamProposalStatus | null;
+  readonly event: string;
+  readonly note: string;
 }
 
 export const TEAM_PROPOSAL_STORE = Symbol("TeamProposalStore");

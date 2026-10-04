@@ -11,14 +11,37 @@ import { NoticeProposal, ProposalNotices } from "./proposal-notices";
 import {
   CANNOT_AWARD_NOW,
   CANNOT_DISQUALIFY_NOW,
+  MOVED_TO_PROCESSING_NOTE,
   NOT_PERMITTED_TO_EVALUATE,
+  SCORE_MESSAGE,
   Scoresheet,
   disqualificationReasonProblem,
   mayAwardTeamProposalInState,
   mayDisqualifyTeamProposalInState,
   mayEvaluateProposal,
+  readScore,
   teamScoresheet,
 } from "../rules/proposal-evaluation";
+import {
+  FINAL_STAGES,
+  NOT_PERMITTED,
+  SCREENED_BY_FINALIZING,
+  SCREENINGS,
+  STAGE_SCORES,
+  ScreeningTag,
+  StageDecision,
+  StageScoreTag,
+  WRONG_STAGE,
+  finalStageComplete,
+  isScreeningTag,
+  isStageScoreTag,
+  priceScoreNote,
+  priceScores,
+  screeningDecision,
+  stageScoreDecision,
+  stageScoreNote,
+  twuBid,
+} from "../rules/team-evaluation";
 import { DetailedRefusal } from "../common/refusals";
 import { FileRecord } from "../files/file";
 import { ATTACHMENT_ACCESS, AttachmentAccess } from "../opportunities/attachment-access";
@@ -192,7 +215,14 @@ export class TeamProposalsService {
       throw new UnauthorizedException(PROPOSALS_NOT_YET_VISIBLE);
     }
     const all = await this.store.forOpportunity(program, opportunity.id);
-    return all.filter((proposal) => this.mayRead(asker, proposal, managed)).map(answerFor);
+    // Staff read each proposal's scoresheet beside it, so the stage tabs can list the scores (R-2.31).
+    const scoring = await this.store.scoring(program, opportunity.id);
+    return all
+      .filter((proposal) => this.mayRead(asker, proposal, managed))
+      .map((proposal) => {
+        const answer = answerFor(proposal);
+        return scoring ? { ...answer, scoresheet: teamScoresheet(program, proposal.id, scoring.proposals, scoring.weights) } : answer;
+      });
   }
 
   async read(asker: ProposalAsker | null, program: TeamProgram, id: string): Promise<TeamProposalAnswer> {
@@ -229,6 +259,74 @@ export class TeamProposalsService {
       throw new BadRequestException([CANNOT_DISQUALIFY_NOW]);
     }
     await this.store.changeStatus(proposal.program, proposal.id, "DISQUALIFIED", asker.id, (value as string).trim());
+    // Disqualifying the last proponent waited for at the final stage ends that stage (R-2.34, R-1.25).
+    await this.settleFinalStage(proposal.program, proposal.opportunity.id);
+  }
+
+  /**
+   * A stage score, by an administrator or the opportunity's author, out of 100 with at most two
+   * decimal places. The proposal must be in the stage and the opportunity standing at it; the
+   * proposal is checked first (R-2.28). Entering it moves the proposal to evaluated at that stage
+   * and records the score in its history (R-2.35); the last at the final stage ends it (R-1.25, R-2.30).
+   */
+  private async scoreStage(asker: ProposalAsker | null, proposal: StoredTeamProposal, tag: StageScoreTag, value: unknown): Promise<void> {
+    if (!asker || !mayEvaluateProposal(asker, proposal.opportunity)) throw new UnauthorizedException(NOT_PERMITTED_TO_EVALUATE);
+    const rule = STAGE_SCORES[tag];
+    if (rule.program !== proposal.program) throw new BadRequestException([PROPOSAL_ACTION_NOT_AVAILABLE]);
+    refuseUnless(stageScoreDecision(tag, proposal.status, proposal.opportunity.status));
+    const score = readScore(value);
+    if (score === null) throw new BadRequestException([`score: ${SCORE_MESSAGE}`]);
+    await this.store.enterStageScore(
+      proposal.program,
+      proposal.id,
+      {
+        score: rule.score,
+        value: score,
+        status: proposal.status === rule.evaluated ? null : (rule.evaluated as TeamProposalStatus),
+        event: rule.event,
+        note: stageScoreNote(rule.name, score),
+      },
+      asker.id,
+    );
+    await this.settleFinalStage(proposal.program, proposal.opportunity.id);
+  }
+
+  /**
+   * A Sprint With Us proponent scored on the code challenge screened in to the team scenario, or out
+   * again, while the opportunity is still at the code challenge. Team With Us proponents are carried
+   * into the challenge by finalising the consensus.
+   */
+  private async screen(asker: ProposalAsker | null, proposal: StoredTeamProposal, tag: ScreeningTag): Promise<void> {
+    if (!asker || !mayEvaluateProposal(asker, proposal.opportunity)) throw new UnauthorizedException(NOT_PERMITTED_TO_EVALUATE);
+    if (tag === "screenInToChallenge" || tag === "screenOutFromChallenge") {
+      if (proposal.program !== "team-with-us") throw new BadRequestException([PROPOSAL_ACTION_NOT_AVAILABLE]);
+      throw new BadRequestException([SCREENED_BY_FINALIZING]);
+    }
+    if (proposal.program !== "sprint-with-us") throw new BadRequestException([PROPOSAL_ACTION_NOT_AVAILABLE]);
+    refuseUnless(screeningDecision(tag, proposal.status, proposal.opportunity.status));
+    const screening = SCREENINGS[tag];
+    await this.store.changeStatus(proposal.program, proposal.id, screening.to as TeamProposalStatus, asker.id, screening.note);
+  }
+
+  /**
+   * Once every proponent still in contention at the program's final stage is scored there, each of
+   * those proposals' price score is worked out against the lowest of their bids and recorded by
+   * nobody, and the opportunity moves to processing (R-1.25, R-2.30).
+   */
+  private async settleFinalStage(program: TeamProgram, opportunityId: string): Promise<void> {
+    const opportunity = await this.store.opportunity(program, opportunityId);
+    if (!opportunity) return;
+    const proposals = await this.store.forOpportunity(program, opportunityId);
+    if (!finalStageComplete(program, opportunity.status, proposals.map((proposal) => proposal.status))) return;
+    const final = FINAL_STAGES[program];
+    const priced = priceScores(proposals.filter((proposal) => proposal.status === final.evaluated).map((proposal) => ({ id: proposal.id, bid: bidOf(proposal) })));
+    await this.store.completeEvaluation(
+      program,
+      opportunityId,
+      final.opportunity,
+      priced.map((entry) => ({ ...entry, note: priceScoreNote(entry.price) })),
+      MOVED_TO_PROCESSING_NOTE,
+    );
   }
 
   /**
@@ -276,12 +374,18 @@ export class TeamProposalsService {
     return answerFor(created);
   }
 
-  /** One tagged change: an edit, a submission or a withdrawal. Evaluation's changes come later. */
+  /**
+   * One tagged change: an edit, a submission or a withdrawal by the vendor; or, by the opportunity's
+   * author or an administrator, a stage score, a screening, an award or a disqualification.
+   */
   async change(asker: ProposalAsker | null, program: TeamProgram, id: string, change: TaggedChange): Promise<TeamProposalAnswer> {
     const { proposal, managed } = await this.readable(asker, program, id);
-    if (change?.tag === "award" || change?.tag === "disqualify") {
-      if (change.tag === "award") await this.award(asker, proposal);
-      else await this.disqualify(asker, proposal, change.value);
+    const tag = change?.tag;
+    if (tag === "award" || tag === "disqualify" || isStageScoreTag(tag) || isScreeningTag(tag)) {
+      if (tag === "award") await this.award(asker, proposal);
+      else if (tag === "disqualify") await this.disqualify(asker, proposal, change.value);
+      else if (isStageScoreTag(tag)) await this.scoreStage(asker, proposal, tag, change.value);
+      else await this.screen(asker, proposal, tag);
       return this.answerWithScoresheet(asker, await this.mustFind(program, proposal.id));
     }
     if (!asker || !mayManageProposal(asker, this.standingOf(proposal), managesOrganization(proposal, managed))) {
@@ -475,6 +579,21 @@ function unknownPeople(
   members: ReadonlyMap<string, MemberStanding>,
 ): TeamProblem[] {
   return named.filter((entry) => !members.has(entry.id)).map((entry) => ({ field: entry.key, message: NOT_ACTIVE_MEMBER }));
+}
+
+/** A stage action refused as the proposal or the opportunity stands (R-2.28). */
+function refuseUnless(decision: StageDecision): void {
+  if (decision === "not-permitted") throw new UnauthorizedException(NOT_PERMITTED);
+  if (decision === "wrong-stage") throw new BadRequestException([WRONG_STAGE]);
+}
+
+/**
+ * What a proposal bids: a Sprint With Us proposal's total proposed cost, or a Team With Us team's
+ * hourly rates weighted by their resources' target allocations (R-2.30).
+ */
+export function bidOf(proposal: StoredTeamProposal): number {
+  if (proposal.program === "sprint-with-us") return swuTotalCost(storedInput(proposal).content as SwuProposalInput);
+  return twuBid(proposal.team.map((member) => ({ hourlyRate: member.hourlyRate, targetAllocation: member.resource?.targetAllocation ?? null })));
 }
 
 const noteFrom = (value: unknown): string | null => (typeof value === "string" && value.trim() !== "" ? value.trim() : null);
