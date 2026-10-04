@@ -465,6 +465,9 @@
 - 13:14:18 drive: step 22: `sdlc run verify --slice 21` — 2 unbound rows to check again now that their adapter has changed for slice 21 owed by verify
 - 13:16:41 verify slice 21: returned — R-6.6, R-6.13, R-6.19 fail. Next: sdlc run build --slice 21 --revise
 - 13:16:42 run verify: regenerated 4 files in .sdlc, site, tests
+- 13:22:50 drive: step 24: `sdlc run verify --slice 21` — build-slice-21-2 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
+- 13:53:51 verify slice 21: R-2.3 (slice 14) fail (1 that an earlier slice passed). R-2.3 stopped on a read that came back with nothing, which can be the adapter's as easily as the application's, so build-slice-21-2 is left open for agent:reviewer to send each failure to the build or to bind-adapter.
+- 13:53:53 run verify: regenerated 661 files in .sdlc, site
 
 # Run record 2026-10-03
 
