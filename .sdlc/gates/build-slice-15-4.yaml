@@ -1,0 +1,17 @@
+gate: G3
+verdict: return
+by: agent:tech-lead
+held_by: agent
+rationale: |2-
+  Question: does slice 15 do what its criteria say? Ruling: return to build. Verify failed on one case: R-2.19's 'total cost over the opportunity's total budget'. The test publishes an opportunity whose phase budgets (200,000 + 300,000) add up to more than its 400,000 total. Its own comment notes that nothing in the specification refuses such an opportunity, and the old application accepts it: the case passes in tests/results/old/latest.json. This build added a refusal in app/backend/src/rules/other-program-content.ts (phaseProblems: 'The phases' maximum budgets together cannot be more than the total maximum budget.'). That refusal keeps the opportunity from being published, which is exactly the setup failure verify recorded. No criterion and no old-application behaviour backs that rule; only the build's own decision record 0059 does. The build's claim that the adapter still drops phase budgets is contradicted by the run itself: R-2.19's 'phase cost over that phase's budget' case passed, which needs the budget to arrive. So this failure belongs to the application, not to the test, the adapter or the sandbox. The earlier ruling's instruction to put phase budget and capabilities on the opportunity form is met. What would change the ruling: with the sum refusal removed and R-2.19 passing, the slice is approvable. Evidence that the old application or a criterion refuses such an opportunity would instead make this a criterion question.
+conditions:
+  - "R-2.19, case 'a proposal with a total cost over the opportunity's total budget is not submitted': remove the refusal in app/backend/src/rules/other-program-content.ts (phaseProblems) that rejects an opportunity whose phase maximum budgets add up to more than its total maximum budget, and remove that rule from docs/decisions/0059. Neither R-2.19 nor the old application refuses such an opportunity: the old application passes this case. With the refusal in place, the test's opportunity (phases 200,000 and 300,000, total 400,000) cannot be published, so verify fails on 'the opportunity was published'. Keep the check that a phase budget, if given, is a whole number of at least $1. Afterwards, a proposal costing 190,000 + 290,000 against that opportunity must show 'The proposed cost exceeds the maximum budget for this opportunity.' against the total, with no error against either phase."
+  - "condition-met build-slice-15-3#2: opportunity-other-form.tsx now asks for each phase's maximum budget and required capabilities, sends them through draftOf/writeVersion into swuOpportunityPhases.maxBudget and swuPhaseCapabilities, and loads them back on edit (app/frontend/src/api/other-programs.ts). R-2.19's 'phase capability' and 'phase cost over that phase's budget' cases pass in tests/results/new/slice-15.json against tree ab2b512."
+cost: 0.9377618000000001
+turns: 8
+session: "080a610b-7d35-4271-b3e4-9486507676eb"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T07:50:16.273Z
