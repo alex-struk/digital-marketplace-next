@@ -5426,6 +5426,12 @@ owed:
         by: runner
         at: 2026-10-04T15:44:07.588Z
     target: old
+    closed:
+      outcome: met
+      why: "tests/results/old/latest.json: R-1.1 v3 fail"
+      file_sha: 8890d462879a8c5e47cc21854f791115ff1e3f52
+      by: runner
+      at: 2026-10-04T22:40:33.440Z
   - kind: missing-test
     item: R-5.27
     id: R-5.27
@@ -5537,3 +5543,9 @@ owed:
         gate: G3
         at: 2026-10-04T16:24:32.830Z
     target: old
+    closed:
+      outcome: met
+      why: "tests/results/old/latest.json: R-5.27 v2 pass"
+      file_sha: 47d4142a87d9e2e4383e2790cdf177ef80e151f2
+      by: runner
+      at: 2026-10-04T22:40:33.440Z

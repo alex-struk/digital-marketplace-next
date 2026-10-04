@@ -14134,3 +14134,11 @@ rebind:
       why: tests/adapters/new has changed since this was found
       by: runner:verify
       at: 2026-10-04T20:16:40.541Z
+  - id: R-3.2
+    target: old
+    why: "unbound: organization-request.register_by_request — the input's
+      \"addressLineTwo\" names no field of an organization's profile"
+    found: unbound
+    adapter: fddfbcd67b408d8e120d4412b47a34c0e6a4c75a
+    by: runner:calibrate
+    at: 2026-10-04T22:40:34.826Z

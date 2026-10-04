@@ -5,7 +5,7 @@
 | id | test | new | old |
 | --- | --- | --- | --- |
 | R-3.1 | acceptance/organizations/R-3.1.spec.ts |  | pass |
-| R-3.2 | acceptance/organizations/R-3.2.spec.ts |  | pass |
+| R-3.2 | acceptance/organizations/R-3.2.spec.ts |  | unbound |
 | R-3.3 | acceptance/organizations/R-3.3.spec.ts |  | pass |
 | R-3.4 | — |  |  |
 | R-3.5 | — |  |  |

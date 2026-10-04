@@ -40,7 +40,7 @@
 | R-2.34 | acceptance/proposals/R-2.34.spec.ts |  | pass |
 | D-proposals-35 | — |  |  |
 | R-2.35 | acceptance/proposals/R-2.35.spec.ts |  | pass |
-| R-2.36 | acceptance/proposals/R-2.36.spec.ts |  | pass |
+| R-2.36 | acceptance/proposals/R-2.36.spec.ts |  | fail |
 | D-proposals-37 | — |  |  |
 | R-2.37 | acceptance/proposals/R-2.37.spec.ts |  | pass |
 | R-2.38 | acceptance/proposals/R-2.38.spec.ts |  | pass |
