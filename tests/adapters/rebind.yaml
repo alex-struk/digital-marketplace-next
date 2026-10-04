@@ -11882,6 +11882,11 @@ rebind:
     app_tree: 2af7c556e00ac8eafcf3bb5105c994e3ba9be61e
     by: runner:verify
     at: 2026-10-04T13:52:00.376Z
+    closed: &a50
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-04T14:13:54.257Z
   - id: R-5.14
     target: new
     why: 'unbound: evaluation-consensus-create-swu.open —
@@ -11895,6 +11900,7 @@ rebind:
     app_tree: 2af7c556e00ac8eafcf3bb5105c994e3ba9be61e
     by: runner:verify
     at: 2026-10-04T13:52:00.376Z
+    closed: *a50
   - id: R-5.28
     target: new
     why: 'unbound: evaluation-consensus-create-swu.open —
@@ -11908,6 +11914,7 @@ rebind:
     app_tree: 2af7c556e00ac8eafcf3bb5105c994e3ba9be61e
     by: runner:verify
     at: 2026-10-04T13:52:00.376Z
+    closed: *a50
   - id: R-5.30
     target: new
     why: 'unbound: evaluation-consensus-edit-swu.open —
@@ -11926,6 +11933,7 @@ rebind:
     app_tree: 2af7c556e00ac8eafcf3bb5105c994e3ba9be61e
     by: runner:verify
     at: 2026-10-04T13:52:00.376Z
+    closed: *a50
   - id: R-5.31
     target: new
     why: 'unbound: evaluation-consensus-create-twu.open —
@@ -11939,6 +11947,7 @@ rebind:
     app_tree: 2af7c556e00ac8eafcf3bb5105c994e3ba9be61e
     by: runner:verify
     at: 2026-10-04T13:52:00.376Z
+    closed: *a50
   - id: R-5.32
     target: new
     why: "unbound: evaluation-consensus-list-swu.finalize_consensus_scores — no
@@ -11976,6 +11985,7 @@ rebind:
     app_tree: 2af7c556e00ac8eafcf3bb5105c994e3ba9be61e
     by: runner:verify
     at: 2026-10-04T13:52:00.376Z
+    closed: *a50
   - id: R-5.33
     target: new
     why: 'unbound: evaluation-consensus-create-twu.open —
@@ -11989,6 +11999,7 @@ rebind:
     app_tree: 2af7c556e00ac8eafcf3bb5105c994e3ba9be61e
     by: runner:verify
     at: 2026-10-04T13:52:00.376Z
+    closed: *a50
   - id: R-5.36
     target: new
     why: 'unbound: evaluation-consensus-create-swu.open —
@@ -12007,6 +12018,7 @@ rebind:
     app_tree: 2af7c556e00ac8eafcf3bb5105c994e3ba9be61e
     by: runner:verify
     at: 2026-10-04T13:52:00.376Z
+    closed: *a50
   - id: R-1.41
     target: new
     why: 'unbound: evaluation-consensus-list-swu.not_all_consensuses_submitted_error
@@ -12021,6 +12033,7 @@ rebind:
     app_tree: 2af7c556e00ac8eafcf3bb5105c994e3ba9be61e
     by: runner:verify
     at: 2026-10-04T13:52:00.376Z
+    closed: *a50
   - id: R-2.29
     target: new
     why: "unbound: evaluation-consensus-list-swu.finalize_consensus_scores — no
@@ -12058,3 +12071,4 @@ rebind:
     app_tree: 2af7c556e00ac8eafcf3bb5105c994e3ba9be61e
     by: runner:verify
     at: 2026-10-04T13:52:00.376Z
+    closed: *a50
