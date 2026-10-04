@@ -943,3 +943,25 @@ redo:
       why: derived again by a derive-tests run on users
       by: runner:derive-tests
       at: 2026-10-04T10:24:36.762Z
+  - id: R-5.31
+    version: 1
+    why: the test only counts a notice it finds through mail.messagesTo(owner or
+      administrator), a Mailpit search on the visible To line, so it requires
+      one of the readers to be a visible recipient. R-5.31 asks only that the
+      owner and every administrator are notified, and R-6.15 requires the
+      visible recipient of a multi-recipient notice to be the service's own
+      address alone. Find the submitted-consensus notice another way (for
+      example by subject, or by the service address) and assert the owner and
+      both administrators from its blind-copy list
+      (caughtMessage.copiedRecipients after opening it by id).
+    verb: test-overreaches
+  - id: R-5.33
+    version: 1
+    why: the test only counts a notice it finds through mail.messagesTo(chair or
+      owner), a Mailpit search on the visible To line, so it requires the chair
+      or the owner to be a visible recipient. R-5.33 asks only that the chair
+      and the owner are notified, and R-6.15 requires the visible recipient to
+      be the service's own address alone. Find the finalised-consensus notice
+      another way and assert the chair and the owner from its blind-copy list
+      (caughtMessage.copiedRecipients after opening it by id).
+    verb: test-overreaches
