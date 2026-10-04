@@ -971,3 +971,38 @@ redo:
       (caughtMessage.copiedRecipients after opening it by id).
     verb: test-overreaches
     closed: *a19
+  - id: R-1.1
+    version: 3
+    why: "the Sprint With Us / Team With Us clause looks for the
+      ready-for-evaluation notice with mail.messagesTo(evaluator), a Mailpit to:
+      search that only matches the visible To line, so it requires each
+      evaluator to be a visible recipient. The criterion only says the
+      evaluators on the panel are announced to, and R-6.15 requires a panel
+      notice to carry them as blind copies with the service's own address as the
+      only visible recipient. Find the notice through the service's address (or
+      by subject) and check that each evaluator is in its blind-copy list, as
+      the rewritten R-5.31 and R-5.33 tests do. The Code With Us author clause
+      is unaffected."
+    verb: test-overreaches
+  - id: R-2.36
+    version: 1
+    why: "the withdrawal check polls mail.messagesTo(administratorOne), a Mailpit
+      to: search on the visible To line, so it requires the administrator to be
+      a visible recipient. The criterion only says a withdrawal notice is sent
+      to every administrator, and R-6.15 requires that multi-recipient notice to
+      carry the administrators as blind copies under the service's own address.
+      Find the administrators' notice through the service's address and check
+      its blind-copy list. Keep the vendor's own message checked by its To line,
+      since it has a single recipient."
+    verb: test-overreaches
+  - id: R-5.27
+    version: 2
+    why: "the check polls mail.messagesTo for the chair and the owner, a Mailpit to:
+      search on the visible To line, so it requires them to be visible
+      recipients. The criterion only says the chair and the owner are notified,
+      and R-6.15 names notices to a panel and to an opportunity's owner as ones
+      that must carry their readers as blind copies with the service's own
+      address as the only visible recipient. Find the ready-for-consensus notice
+      through the service's address and check that both the chair and the owner
+      are in its blind-copy list, as the rewritten R-5.31 and R-5.33 tests do."
+    verb: test-overreaches
