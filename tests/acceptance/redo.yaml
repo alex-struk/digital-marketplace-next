@@ -938,3 +938,8 @@ redo:
       request, make the catcher hold 14 unrelated messages, so the test must
       look only for a welcome message rather than counting all mail.
     verb: test-overreaches
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on users
+      by: runner:derive-tests
+      at: 2026-10-04T10:24:36.762Z
