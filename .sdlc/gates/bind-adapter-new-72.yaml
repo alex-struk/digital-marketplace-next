@@ -1,0 +1,18 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does this adapter bind every action and observation on new, and nothing else, with every unbound reason true? Ruling: return. The three earlier requests are answered. opportunityCwuEdit.proposalsTab() reads empty while the section withholds proposals. Sprint With Us publish no longer writes opportunity-level dates into a phase group. The four Sprint With Us / Team With Us proposal pages are bound to visible labels, with navigation and locators only. Nothing under tests/acceptance changed, and the runner's typecheck passed. It goes back because some unbound reasons are not true and the author knows it. The author opened /opportunities/code-with-us/:opportunityId/proposals/:proposalId as the administrator and recorded that it shows the proponent, Status, Submitted, Proposal ID, Score, 'Printable copy' and the sections Proposal and History. Yet proposal-cwu-view's proposal_identifier, proposal_tab, history_tab, proponent, score, rank and export_link stay unbound with a reason saying the page answers 'Page not found'. The shared signed-in reason (index.ts around line 300, NOBODY_SIGNS_IN and the comment above it) still says the proposal screens answer 'Page not found', and other pages' unbound members quote it. Unbound reasons have to describe what the target serves now. Binding those members, or giving each a true reason, and correcting the shared text would turn this into an approval. build-slice-15#4 (the read-only Sprint With Us / Team With Us proposal pages) belongs to build and is not settled here.
+conditions:
+  - "proposal-cwu-view: bind proposal_identifier, proposal_tab, history_tab, proponent, score, rank and export_link against /opportunities/code-with-us/:opportunityId/proposals/:proposalId, which the walk recorded as showing the administrator the proponent, Status, Submitted, Proposal ID, Score, 'Printable copy' and the Proposal and History sections. Leave a member unbound only with a reason that names what that screen actually lacks for it (enter_score, award_proposal and disqualify_proposal included). Update tests/adapters/new/bindings.yaml to match."
+  - "tests/adapters/new/index.ts: rewrite the shared signed-in reason (NOBODY_SIGNS_IN and its comment around line 300) and the comment near line 8244, so they no longer say the Sprint With Us / Team With Us proposal forms or the Code With Us proposal view answer 'Page not found'. Re-walk every page whose unbound members quote that text (the Sprint With Us / Team With Us proposal view and export pages, among others) and give each member a reason that is true on the current build."
+  - "tests/adapters/new/bindings.yaml: on proposal-swu-create and proposal-twu-create, record that submit_proposal and the terms actions fill any empty 'Response to question N' with placeholder text, and that the team actions choose the first offered organization when the test names none. Those defaults change what is submitted and should be visible to whoever reads the bindings."
+cost: 0.7657590000000001
+turns: 7
+session: "594fce25-f3d1-4e53-8d39-515b9ca0b3f3"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T06:01:33.610Z
