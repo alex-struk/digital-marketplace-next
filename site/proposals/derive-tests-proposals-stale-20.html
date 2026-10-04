@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-proposals-stale-20 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">625</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">619</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">502</span></a></li><li><a href="../runs.html">Run log <span class="count">22</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-proposals-stale-20</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-04 15:19</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.288 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the proposals criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I rewrote the test for R-2.36 (v1) in <code>tests/acceptance/proposals/R-2.36.spec.ts</code>.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.288 (Claude Code))</p>
+<p>I rewrote the test for R-2.36 (v1) in <code>tests/acceptance/proposals/R-2.36.spec.ts</code>. It is the only criterion in this run, so one criterion has a test and nothing went to <code>not-testable.yaml</code>. I didn&#39;t run it, and didn&#39;t type-check it either: there is no target here and no TypeScript compiler installed in the workspace.</p>
+<p><strong>What the ruling asked for.</strong> The old test looked for the administrators&#39; withdrawal notice by their address on the visible To line. The new withdrawal test finds that notice through the service&#39;s own address, <code>donotreply@example.test</code>, which is the sender address named in <code>observables.yaml</code>. It opens each message sent there through <code>surface.caughtMessage</code> and requires both seeded administrators, <code>seed.users.administratorOne</code> and <code>administratorTwo</code>, to be on its blind-copy list. As the ruling asked, the vendor&#39;s own withdrawal notice is still found by its To line because it has one recipient.</p>
+<p><strong>What changed beyond the ruling.</strong> The old test had two tests: submission and withdrawal. It skipped the award clause because it believed the surface could not carry a proposal as far as an award. It left no <code>not-testable.yaml</code> entry for that clause, so a passing run would have counted as the whole criterion met. The seed now has a Code With Us opportunity already in processing, <code>seed.opportunities.cwuInProcessing</code>, with two evaluated proposals. <code>surface.proposalCwuView.awardProposal()</code> awards one of them directly. So the file now has three tests, one for each act, each titled with the criterion&#39;s statement and a suffix naming the act:</p>
+<ul><li><strong>Submitting:</strong> an administrator publishes an opportunity and the vendor submits a proposal to it. The vendor&#39;s confirmation is found by its To line.</li><li><strong>Awarding:</strong> the administrator awards the organization owner&#39;s proposal. The decision notice may go to several people as blind copies, so each proponent&#39;s messages are found both by their own address and through the service&#39;s address, then opened. A message counts only if that proponent is a visible or blind-copied recipient. The winner must get a notice that reaches no other proponent, and the other proponent must be reached.</li><li><strong>Withdrawing:</strong> as described above.</li></ul>
+<p><strong>What the tests don&#39;t check.</strong> None of them checks message wording, subject lines or links, because the criterion only says who is notified.</p>
+<p><strong>Unchanged from the old test.</strong> In the withdrawal test, <code>withdrawProposal()</code> is called on the edit page straight after <code>submitProposal()</code>, as the old test did. The ruling didn&#39;t question that step, but if submitting does not land the vendor on the edit page, that is the first place to look.</p>
+<p><strong>Missing from the surface.</strong> I found no surface action or observation that I needed and could not reach.</p>
+<p><strong>Outside this stage.</strong> Nothing asked me to change paths outside <code>tests/acceptance</code> or <code>tests/generated</code>, and I touched none.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-04 15:20.</p>
+<div class="body"><p>Question: do the R-2.36 tests follow from the criterion and from nothing else? Ruling: approve. All five clauses are asserted, one test per act. (1) Submitting: the vendor&#39;s confirmation is found by its To line. (2) Awarding: the winner must be reached by a notice that reaches no other proponent, and every other proponent must be reached, so the award notice and the decision notice are told apart without reading their wording. (3) Withdrawing: the vendor&#39;s notice is found by its To line, and every seeded administrator must be on the blind-copy list of the notice sent to the service&#39;s own address. That last check is what the earlier test-overreaches ruling asked for. It rests on the blind-copy observation in spec/contract/observables.yaml and on R-6.15, not on anything about how the app is built. No assertion touches wording, subject lines, links, selectors, routes or status codes. The award test uses an opportunity with two proponents where the criterion&#39;s given has three. That is a smaller instance of &#39;everyone else&#39;, not a different claim. The award clause, which the old test skipped without a not-testable entry, is now asserted against seed data that exists (opportunities.cwuInProcessing with two EVALUATED proposals in tests/seed/manifest.yaml). The runner&#39;s typecheck on this revision passed with no diagnostics. I would return the proposal if a run showed the seeded opportunity can&#39;t be awarded because R-1.26 awarded it first. That would make the award test depend on shared seed state.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
