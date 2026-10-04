@@ -316,6 +316,15 @@ reader's attention.
   (`evaluation-individual-list-swu`, `evaluation-individual-list-twu`), which Slice 17 delivers.
   They therefore sit in Slice 17, as R-5.16 does for the same reason; the hook stays built in
   Slice 16, so for one slice the naming is in force but answered for by no slice.
+- **R-5.28 and R-5.36 (Slice 18)** were first placed in Slice 17, which builds individual
+  evaluation and the read rules on it. A G3 ruling on the build of Slice 17 found both unbound
+  there: R-5.28's test opens the chair's per-proponent consensus create page
+  (`/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/create`),
+  and both of R-5.36's cases open the Sprint With Us and Team With Us consensus create pages and
+  go on through finalising, all of which Slice 18 delivers. They therefore sit in Slice 18, whose
+  closure (Slices 17 back through 7) holds every screen they walk. The read rules and the shared
+  two-program implementation are still built in Slice 17, so for one slice they are in force but
+  answered for by no slice.
 - **R-2.35 (Slice 19)** says every state change and every score entered against a proposal is
   recorded in its history. Slice 16 builds proposal history with the Code With Us proposal view,
   and the criterion was first placed there. A G3 ruling on the build of Slice 16 found it unbound,
@@ -479,9 +488,11 @@ the named slice should raise them rather than silently pick a reading.
   reading is that R-6.16, authored later to replace R-6.10, narrows R-6.6 to the new-opportunity
   announcement — which means R-6.6's test, if it expects the offer on every sample in the reference,
   will meet the organization invitation and others without it, and should be raised rather than satisfied.
-- **R-5.11 vs R-5.28 (Slice 17).** R-5.11 opens individual evaluations to the administrator and the
+- **R-5.11 vs R-5.28 (slices 17 and 18).** R-5.11 opens individual evaluations to the administrator and the
   owner "at every stage"; R-5.28 says no one but the evaluator reads them before consensus, and an
-  administrator off the panel only after the question stages. Both are in Slice 17. They cannot
+  administrator off the panel only after the question stages. R-5.11 is answered for in Slice 17
+  and R-5.28 in Slice 18, but both are built in Slice 17's read checks, so the Slice 17 builder
+  makes the reconciliation and must not settle it in a way Slice 18's test will refuse. They cannot
   both hold for an administrator during individual evaluation.
 - **R-8.25 vs R-8.20 (both Slice 15).** R-8.25 names only Code With Us and Sprint With Us
   attachments; R-8.20 requires one rule for all three programs. The plan applies R-8.25's rule to
