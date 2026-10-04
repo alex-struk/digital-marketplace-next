@@ -2876,3 +2876,36 @@ conditions:
     stage: build
     by: agent:reviewer
     at: 2026-10-04T06:37:43.960Z
+    closed:
+      outcome: met
+      why: each Sprint With Us 'Reference N' group in
+        app/frontend/src/screens/proposal-team-form.tsx now has a Company box,
+        sent as references.N.company and covered by a new case in
+        app/frontend/tests/team-proposals.test.tsx; verify for build-slice-15-3
+        shows R-2.7, R-2.9, R-2.11, R-2.16, R-2.18 and R-2.22 passing.
+      by: agent:tech-lead
+      at: 2026-10-04T07:31:18.534Z
+  - ref: build-slice-15-3#2
+    text: "R-2.19, in the cases 'a proposal missing a phase capability… the form
+      shows which phase is incomplete' and 'a proposal with a phase cost over
+      that phase's budget… the form shows which cost is over its budget': the
+      Sprint With Us opportunity form
+      (app/frontend/src/screens/opportunity-other-form.tsx and what it sends)
+      must ask, inside each phase group (Inception, Prototype, Implementation),
+      for that phase's maximum budget and its required capabilities, as the old
+      application's phase form does. Each must be saved through
+      draftOf/writeVersion into swuOpportunityPhases.maxBudget and
+      swuPhaseCapabilities and shown again on edit. Then a proposal against a
+      published opportunity with a 200,000 Prototype budget requiring Frontend
+      Development shows the Prototype phase incomplete, naming Frontend
+      Development, when its team lacks that capability, and shows 'Please enter
+      a Proposed Cost less than or equal to 200,000.' against the Prototype cost
+      when it is 250,000. Today both are invisible, because every opportunity
+      published through the form carries no phase capabilities and a phase
+      budget of 0."
+    from: build-slice-15-3
+    family: build-slice-15
+    gate: G3
+    stage: build
+    by: agent:tech-lead
+    at: 2026-10-04T07:31:18.462Z
