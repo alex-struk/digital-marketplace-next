@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>calibrate-triage-old-46 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">652</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">646</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">524</span></a></li><li><a href="../runs.html">Run log <span class="count">22</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>calibrate-triage-old-46</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-04 22:40</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>1 criterion(s) fail against old: which of them did this project&#39;s own adapter cause?</h2>
+<p><strong>Recommendation.</strong> Sort R-2.36 with a triage condition each, so the adapter&#39;s failures are fixed there and only product questions reach the product owner.</p>
+<p>1 criterion(s) failed against the <strong>old</strong> target at <a href="http://localhost:3100,">http://localhost:3100,</a> and nobody has sorted them yet. Before any reaches the product owner, say which of them this project&#39;s own adapter caused. The adapter is under <code>tests/adapters/old/</code>; read each one against it and against the test.</p>
+<h4>R-2.36 · v1</h4>
+<p>Submitting a proposal, awarding one and withdrawing one each send notifications: a confirmation to the submitting vendor, an award notice to the winner and a decision notice to everyone else, and a withdrawal notice to the vendor and to every administrator.</p>
+<ul><li>given: an opportunity with three submitted proposals</li><li>when: one of them is awarded</li><li>then: its vendor receives an award notice and the other two vendors each receive a decision notice, and a later withdrawal sends a notice to the withdrawing vendor and to every administrator</li><li>test: tests/acceptance/proposals/R-2.36.spec.ts</li></ul>
+<p><strong>Submitting a proposal, awarding one and withdrawing one each send notifications: a confirmation to the submitting vendor, an award notice to the winner and a decision notice to everyone else, and a withdrawal notice to the vendor and to every administrator. (withdrawing)</strong> — failed</p>
+<pre><code>Error: administrators missing from the blind-copy list of the withdrawal notice
+
+administrators missing from the blind-copy list of the withdrawal notice
+
+[2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+[32m- Expected  - 1[39m
+[31m+ Received  + 4[39m
+
+[32m- Array [][39m
+[31m+ Array [[39m
+[31m+   &quot;admin.one@example.test&quot;,[39m
+[31m+   &quot;admin.two@example.test&quot;,[39m
+[31m+ ][39m
+
+Call Log:
+- Timeout 30000ms exceeded while waiting on the predicate</code></pre>
+<h3>Triage conditions</h3>
+<p>One condition per line, one for every criterion the page lists, in exactly one of these forms:</p>
+<ul><li><code>adapter-wrong &lt;ID&gt;: &lt;why&gt;</code> — the criterion and the test are both fine, and this target&#39;s adapter is what failed: it read the wrong thing off the page, reported a control missing that the page does render, or answered empty where it never reached the page. <code>&lt;why&gt;</code> names what the adapter did wrong, specifically enough for the next binding run to fix it. The criterion is not touched. On an unbound row it sends the binding back to <code>bind-adapter</code> however often it has been sent.</li><li><code>product-question &lt;ID&gt;</code> — nothing in the evidence points at the adapter. The failure goes to the product owner, who decides whether the application, the criterion or the test is wrong. No text after the ID. On an unbound row, use it when the criterion itself looks suspect.</li><li><code>oracle-cannot &lt;ID&gt;: &lt;why&gt;</code> — only for a row listed as unbound, on the oracle&#39;s target: the oracle genuinely cannot be driven into, or observed in, the state the test needs without changing its code — the state sits behind an external identity provider, is reachable only through a link the application emails, or is enforced only by a browser-native dialog. <code>&lt;why&gt;</code> names that state and why the oracle cannot reach it. It closes the row, changes no criterion, and stands until the criterion&#39;s version changes. It is never a way to skip binding work: where the application offers the control under another label, behind a step or as another persona, the answer is <code>adapter-wrong</code>.</li></ul>
+<p>The ID is the criterion&#39;s own id exactly as <code>spec/criteria-index.json</code> spells it. A condition may not span more than one line. When the evidence is genuinely unclear, it is a <code>product-question</code>: a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the adapter comes back from the next binding run unchanged and costs a run to find out.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-04 22:41.</p>
+<div class="body"><p>Question: did this project&#39;s adapter for the old target cause R-2.36&#39;s withdrawal failure? Ruling: approve, sorted as a product question. The adapter reads blind copies from Mailpit&#39;s per-message Bcc field (tests/adapters/old/index.ts:9917), the field the criterion depends on, and the awarding test in the same file passed through that same Bcc path. The withdrawal itself was driven through: the vendor&#39;s notice arrived after the catcher was emptied. The failure lists the two administrator addresses as absent from every message addressed to the service, which is an observation of what the old app sent, not an empty or misread answer. One doubt remains: the vendor check could be satisfied by a late-arriving submission confirmation. Nothing in the evidence shows that, and an unclear case goes to the product owner. The product owner should also note that the test requires administrators specifically as blind copies under the service address, which comes from R-6.15; R-2.36 itself only says administrators receive a notice. Evidence that the withdrawal never took effect, or that Mailpit drops these blind copies, would change this to adapter-wrong.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>product-question R-2.36</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
