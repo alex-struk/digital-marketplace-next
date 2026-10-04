@@ -914,3 +914,13 @@ redo:
       filled in.
     verb: test-overreaches
     closed: *a18
+  - id: R-2.10
+    version: 1
+    why: the edit-path case requires that a Team With Us proposal whose hourly rates
+      already exceed the opportunity's maximum budget be stored by 'Save draft'
+      before the edit path is tried. R-2.10 asks for the budget check on both
+      the create and the edit path and exempts no draft, and R-2.12 exempts
+      incomplete or blank fields, not a budget breach, so the criterion does not
+      ask for an over-budget draft to be kept. The edit path has to be reached
+      from a proposal saved within budget and then edited over it.
+    verb: test-overreaches
