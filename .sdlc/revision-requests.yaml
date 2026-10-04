@@ -1483,3 +1483,19 @@ requests:
     at: 2026-10-04T06:37:43.659Z
     taken: 2026-10-04T06:44:44.803Z
     taken_by: bind-adapter-new-74
+  - stage: bind-adapter
+    target: new
+    why: tests/adapters/new/index.ts opportunity-swu-create add_phase (addPhase,
+      around line 4830) fills only startDate and completionDate and silently
+      drops the maxBudget and capabilities its input carries (R-2.19.spec.ts
+      publishSprintOpportunity passes maxBudget 200000/300000 and capabilities
+      ['Frontend Development']/['Backend Development']). It must fill the phase
+      group's maximum budget box and tick each named required capability once
+      the application's opportunity form offers them, and report unbound if a
+      given field has no box rather than dropping it. As things stand, R-2.19's
+      two form cases (phase incomplete for a missing capability; phase cost over
+      its budget) cannot fail or pass on the application's merits.
+    from: build-slice-15-3
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-04T07:31:18.363Z
