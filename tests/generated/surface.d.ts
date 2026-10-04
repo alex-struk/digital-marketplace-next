@@ -105,6 +105,7 @@ export interface Surface {
   contentRequest: ContentRequestPage;
   evaluationIndividualRequestSwu: EvaluationIndividualRequestSwuPage;
   evaluationIndividualRequestTwu: EvaluationIndividualRequestTwuPage;
+  evaluationIndividualSubmissionRequestSwu: EvaluationIndividualSubmissionRequestSwuPage;
   evaluationConsensusRequestSwu: EvaluationConsensusRequestSwuPage;
   evaluationConsensusRequestTwu: EvaluationConsensusRequestTwuPage;
   evaluationPanelRequest: EvaluationPanelRequestPage;
@@ -1477,6 +1478,14 @@ export interface EvaluationIndividualRequestTwuPage {
   refusedAtSubmission(): Promise<string>;
   evaluationCreated(): Promise<string>;
   creationRefusalMessage(): Promise<string>;
+}
+
+export interface EvaluationIndividualSubmissionRequestSwuPage {
+  open(params: { opportunityId: string }): Promise<void>;
+  submitScoresForConsensusNaming(input?: unknown): Promise<void>;
+  requestAccepted(): Promise<string>;
+  refusalMessages(): Promise<string>;
+  storedStatus(): Promise<string>;
 }
 
 export interface EvaluationConsensusRequestSwuPage {

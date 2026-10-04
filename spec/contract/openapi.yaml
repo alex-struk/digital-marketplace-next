@@ -601,6 +601,14 @@ paths:
       parameters: [{ $ref: "#/components/parameters/PathId" }]
       requestBody:
         required: true
+        description: >-
+          For submitIndividualQuestionEvaluations and submitConsensusQuestionEvaluations the
+          value is { note: string, proposals: [proposal id, ...] }. The service validates
+          and submits the signed-in panel member's evaluation of each proposal named, and
+          of no other; it does not require every proposal of the opportunity to be named
+          (src/back-end/lib/resources/opportunity/sprint-with-us/index.ts, and
+          src/shared/lib/resources/opportunity/sprint-with-us.ts
+          SubmitQuestionEvaluationsWithNoteRequestBody).
         content:
           application/json:
             schema:

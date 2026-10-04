@@ -2259,6 +2259,40 @@ pages:
       evaluation_created: { test_id: evaluation-individual-request-created }
       creation_refusal_message: { test_id: evaluation-individual-request-creation-refusal-message }
 
+  # An evaluator's submission of their individual scores for consensus, sent as a request
+  # that names which proponents it covers. submit_scores_for_consensus on
+  # evaluation-individual-list-swu always names every proposal the evaluator holds an
+  # evaluation of, and is offered only once they hold one of every proponent; the service
+  # itself takes any list of proposals, checks and submits the signed-in evaluator's
+  # evaluation of each one named and of no other, and then counts submitted scores toward
+  # the move to consensus over the named proposals only (R-5.27). This is how a submission
+  # naming fewer than every proponent is sent. :opportunityId is a seed.opportunities
+  # handle; the starting point is seed.opportunities.swuSubmissionNamesTwoOfThree, sent as
+  # users.staffOne (persona evaluation-panel-evaluator) naming proposals.swuNamedOne and
+  # proposals.swuNamedTwo. The chair and the owner are told through the consensus-ready
+  # notice in the mail catcher (observables.yaml, email).
+  - id: evaluation-individual-submission-request-swu
+    domain: evaluation
+    route: /api/opportunities/sprint-with-us/:opportunityId
+    title: "Submit individual scores for consensus, naming the proponents, by request"
+    actions:
+      # Input: the proponents to name, as seed.proposals handles (or proposal identifiers),
+      # and an optional note. Sends the submission for exactly those proposals.
+      submit_scores_for_consensus_naming: { test_id: null }
+    observations:
+      # Whether the service accepted the submission (a successful answer carrying the
+      # opportunity).
+      request_accepted: { test_id: null }
+      # The refusal's messages, in the order the service gives them; empty when accepted.
+      # A named proposal the evaluator holds no complete draft of is refused with "This
+      # evaluation could not be submitted for review because it is incomplete. Please
+      # edit, complete and save the appropriate form before trying to submit it again."
+      refusal_messages: { test_id: null }
+      # The opportunity's status as the service holds it, read afresh after the request
+      # (as the signed-in person) rather than taken from the request's answer:
+      # EVAL_QUESTIONS_INDIVIDUAL or EVAL_QUESTIONS_CONSENSUS.
+      stored_status: { test_id: null }
+
   # One consensus — the chair's agreed scores and notes for one proponent — as a request.
   # :userId is the panel member whose consensus it is, which is the chair: on the seeded
   # panels users.administratorOne. The screens show the panel members' own scores beside
