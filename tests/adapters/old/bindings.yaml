@@ -419,6 +419,7 @@ pages:
       start_editing: bound
       choose_organization: bound
       add_team_member_for_resource: bound
+      set_hourly_rate: bound
       save_changes: bound
       save_changes_and_submit: bound
       submit_proposal: bound
