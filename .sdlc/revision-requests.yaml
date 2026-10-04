@@ -1718,3 +1718,23 @@ requests:
     at: 2026-10-04T13:52:53.849Z
     taken: 2026-10-04T13:59:14.203Z
     taken_by: bind-adapter-new-82
+  - stage: bind-adapter
+    target: new
+    why: "R-5.10: evaluation-consensus-list-swu.confirm_finalize_consensus and
+      evaluation-consensus-list-twu.confirm_finalize_consensus throw when the
+      finalize refusal alert appears (tests/adapters/new/index.ts:2130, which
+      stores finalizeRefusal and then throws). The page at
+      /opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?t\
+      ab=consensus shows 'The consensus scores could not be finalized — You must
+      have at least one proponent that can be screened into the Code
+      Challenge.', and the Team With Us page at
+      /opportunities/team-with-us/00000000-0000-4000-8000-000000000801/edit?tab\
+      =consensus shows the same refusal naming the Challenge. That is the
+      outcome the test expects, and its next step, noScreenableProponentError(),
+      is where it reads that text. Confirming must complete when the page
+      answers with a refusal, and noScreenableProponentError must return the
+      refusal text."
+    from: build-slice-18-2
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-04T14:14:40.270Z
