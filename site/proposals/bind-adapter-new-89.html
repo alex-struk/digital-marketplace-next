@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-89 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">647</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">641</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">521</span></a></li><li><a href="../runs.html">Run log <span class="count">22</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-89</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-04 20:13</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.288 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> But R-6.13 and R-6.19 will now fail for real rather than read as unbound, because the page breaks when it is opened by its address.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.288 (Claude Code))</p>
+<p>I&#39;ve bound the Email Notification Reference page (<code>/admin/email-notification-reference</code>) in <code>tests/adapters/new/</code>. But R-6.13 and R-6.19 will now fail for real rather than read as unbound, because the page breaks when it is opened by its address. I couldn&#39;t run the type-checker or the separation check: both commands needed an approval this session can&#39;t get, so the edits are checked by reading and by trying the locators on the live page.</p>
+<p><strong>What changed on the target.</strong> The last binding run found nothing at this address: the service answered a raw 404 (<code>Cannot GET …</code>). On today&#39;s build it is a real screen. Signed out, it shows the application&#39;s &quot;Page not found&quot;. Signed in as the administrator (test-admin), it shows the heading &quot;Email Notification Reference&quot;, an index called &quot;Events that send email&quot;, and then one titled section per event (45 in all). Each section holds one message per recipient, with &quot;Subject&quot; over the subject, &quot;Who receives it and why&quot; over a summary, and the email itself (62 messages). No link on the dashboard, profile, notifications tab, Users or Content screens leads to it, so the address is the only way in.</p>
+<p><strong>The page fails when opened by its address.</strong> It fetches its sample emails from its own address. The browser answers that fetch from its cache, with the page&#39;s own HTML from the visit that just loaded it. So the person sees only the heading and the alert &quot;The sample emails could not be loaded / Reload the page to try again.&quot; This happens with a freshly cleared cache too. Reloading, as the alert advises, changes nothing. The data is there: a request for JSON to that address returns the groups, and the full page draws once the same request skips the cache. I made the page draw that way only to see its structure, and the adapter does not do it. That would hide a fault a real person meets. I take the fault to be the application&#39;s: the screen and its data share one address, and the response doesn&#39;t vary by what was asked for. Whoever rules the build should decide that.</p>
+<p><strong>How the binding behaves:</strong></p>
+<ul><li><code>open</code> and <code>open_reference</code> go to the address directly.</li><li>If the page shows its &quot;could not be loaded&quot; alert, the adapter reloads once. If the alert is still there, each reader throws a plain failure, not <code>unbound:</code> and not an empty string. The message names the address, the persona, the alert&#39;s words, and the cached-HTML cause. Returning empty would let a criterion about something not being shown pass falsely.</li><li>When the samples do load, the readers return text in the old binding&#39;s form:</li><li><code>message_group_title</code>: each event&#39;s title, one per line. The index heading &quot;Events that send email&quot; is left out.</li><li><code>message_subject</code>: lines of the form &quot;Subject: …&quot;.</li><li><code>message_summary</code>: lines of the form &quot;Summary: …&quot;, taken from &quot;Who receives it and why&quot;.</li><li><code>message_body</code>: the page&#39;s main text.</li><li>A non-administrator is refused with &quot;Page not found&quot;. The readers return empty for that person, and <code>refused_for_non_administrator</code> still reads the refusal, as before.</li></ul>
+<p>In <code>bindings.yaml</code> all six members of this page are now <code>bound</code>, with a comment describing the cache fault. In <code>index.ts</code> I removed the helper that used to report pages as absent, because nothing uses it any more. No other page&#39;s bindings changed, and every route in <code>surface.yaml</code> that I opened this run answered. I touched nothing outside <code>tests/adapters/new/</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by runner:checks (persona agent) on 2026-10-04 20:14.</p>
+<div class="body"><p>Approved by the runner&#39;s checks, which policy.gates.G3.auto_approve lets settle bind-adapter proposals: the acceptance typecheck of 85de353a4 is clean; no condition is open against it; no escalation stands on it; nothing outside tests/adapters changed.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

@@ -324,44 +324,6 @@ export default function create(
   const NOBODY_SIGNS_IN =
     'walked signed in on the current build (as the administrator, as the public sector employee who owns the seeded opportunities and sits on their panels, and as vendors — the seeded organization owner, who wrote the seeded proposals, and a vendor with none — with the seeded records\' identifiers), the running build serves a signed-in person /dashboard (to staff "Create an opportunity" over "My opportunities", to the administrator every opportunity, to a vendor "My proposals" and "My organizations\' proposals"), /opportunities and every program\'s public opportunity page (with "Watch this opportunity", and "Start a proposal" while it takes proposals), the account screens under /users, /organizations, /organizations/create, /organizations/:orgId/edit (its Sprint With Us and Team With Us qualification sections drawing the requirements and "Read the … terms and conditions") and /organizations/:orgId/{sprint,team}-with-us-terms-and-conditions, to the administrator the content-management screens under /content, to a vendor the three programs\' proposal forms .../proposals/create and their own proposal\'s screen .../proposals/:proposalId/edit, and to the administrator and public sector staff /opportunities/create, the three programs\' forms, their management screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (sections Summary, Opportunity, Addenda, History, Proposals — proponents in plain text with no link onward — and, on Sprint With Us and Team With Us, Evaluation panel and, since 2026-10-04, to the panel\'s members Instructions, Evaluation and Consensus) and the Code With Us proposal\'s screen /opportunities/code-with-us/:opportunityId/proposals/:proposalId (proponent, Status, Submitted, Proposal ID, Score, "Printable copy", and the sections Proposal and History, with no button); the Sprint With Us and Team With Us proposal\'s screen /opportunities/{sprint,team}-with-us/:opportunityId/proposals/:proposalId (proponent, Opportunity, Status, Submitted, Proposal ID, "Printable copy", and the sections Proposal and History, with no button); since 2026-10-04 it serves every program\'s report .../complete and printable copies .../proposals/:proposalId/export and .../proposals/export to the administrator (and a proposal\'s own copy to its vendor); walked the same way it still answers "Page not found" at /proposals and at the consensus score sheets under .../team-questions/consensus/ and .../resource-questions/consensus/ (the individual score sheets under .../evaluations/ open, since 2026-10-04, to the panel\'s evaluators)';
 
-  function absent<T>(
-    pageId: string,
-    route: string,
-    answers: string,
-    members: readonly string[],
-    refusals: readonly string[] = [],
-  ): T {
-    const built: Record<string, unknown> = {
-      open: async (params?: Record<string, string>): Promise<void> => {
-        // Under /api there is nothing for a browser to show, so nothing is opened.
-        if (route.startsWith("/api/")) {
-          throw new Error(`unbound: ${pageId}.open — ${answers}`);
-        }
-        await page
-          .goto(leniently(route, params), { waitUntil: "domcontentloaded" })
-          .catch(() => undefined);
-        await settle();
-        if (refusals.length) return;
-        // A build that serves the screen to whoever signed in has opened it, and only the
-        // members nothing on it does report unbound.
-        if (!(await whyNotHere().catch(() => ""))) return;
-        // What the address actually answered this time, rather than what it answered when
-        // this adapter was written.
-        const shown = await firstHeading().catch(() => "");
-        throw new Error(
-          `unbound: ${pageId}.open — ${answers}${shown ? ` (it shows "${shown}" at ${page.url()})` : ""}`,
-        );
-      },
-    };
-    for (const member of members) {
-      built[camel(member)] = async (): Promise<never> => {
-        throw new Error(`unbound: ${pageId}.${member} — ${answers}`);
-      };
-    }
-    for (const member of refusals) built[camel(member)] = () => refusalShown();
-    return built as unknown as T;
-  }
-
   // ---------------------------------------------------------------- reports and printable copies
   //
   // Seen 2026-10-04. Each program's .../complete is the "<program> opportunity report": the
@@ -1087,6 +1049,72 @@ export default function create(
     },
     notifyVendorsSuccess: () => announcementSays("status", /have been notified/i),
     notifyVendorsFailure: () => announcementSays("alert", /\S/),
+  };
+
+  // Seen 2026-10-04, signed in as the administrator: /admin/email-notification-reference is
+  // "Email Notification Reference" over "Every email the service sends, shown as its
+  // recipient would see it. …", a navigation "Events that send email" linking to each event,
+  // then one region per event under its level-2 heading ("A Code With Us opportunity is
+  // published"), holding one article per message under a level-3 heading naming who it goes
+  // to, with "Subject" over the subject, "Who receives it and why" over the summary, and the
+  // email itself. Anyone else is shown "Page not found".
+  //
+  // Opened by its address, the screen asks the same address for its samples, and the browser
+  // answers that request from its cache with the screen's own HTML, so the page shows only
+  // its heading and the alert "The sample emails could not be loaded" / "Reload the page to
+  // try again." (reloading changes nothing). That is the page failing in front of the person
+  // who opened it, and is reported as such: not unbound, and not an empty reading.
+  const EMAIL_REFERENCE_ROUTE = "/admin/email-notification-reference";
+  const SAMPLES_FAILED = /could not be loaded/i;
+
+  // True once the reference's samples are shown, false on a refusal (a non-administrator is
+  // shown "Page not found", which has no groups, subjects or bodies to read).
+  async function emailReferenceShown(where: string): Promise<boolean> {
+    await ready();
+    if (await refusalShown()) return false;
+    const failed = () => seen(page.getByRole("main").getByRole("alert").filter({ hasText: SAMPLES_FAILED }));
+    if (await failed().count()) {
+      // What the page itself advises.
+      await page.reload({ waitUntil: "domcontentloaded" }).catch(() => undefined);
+      await ready();
+    }
+    if (await failed().count()) {
+      const said = lined(await failed().first().innerText()).join(" / ");
+      throw new Error(
+        `${where} — opened ${page.url()} as ${actingId()}: the page shows "${await firstHeading()}" and the alert "${said}" in place of its samples, also after reloading as it advises; its own request for them goes to the same address and is answered with the page's HTML from the browser's cache`,
+      );
+    }
+    return true;
+  }
+
+  // The lines that follow a label in each message ("Subject" over the subject), written the
+  // way the old binding returns them: "<label>: <value>", one per message.
+  async function emailReferenceValues(where: string, label: string, as: string): Promise<string> {
+    if (!(await emailReferenceShown(where))) return "";
+    const lines = await textLines();
+    const out: string[] = [];
+    for (let i = 0; i < lines.length - 1; i++) if (lines[i] === label) out.push(`${as}: ${lines[i + 1]}`);
+    return out.join("\n");
+  }
+
+  const emailReference: S.NotificationEmailReferencePage = {
+    open: () => go(EMAIL_REFERENCE_ROUTE),
+    openReference: () => go(EMAIL_REFERENCE_ROUTE),
+    // Each event's title, in the order the page gives them, one per line; the navigation's
+    // own heading "Events that send email" is not one.
+    messageGroupTitle: async () => {
+      if (!(await emailReferenceShown("notification-email-reference.message_group_title"))) return "";
+      const titles = await seen(page.getByRole("main").getByRole("region").getByRole("heading", { level: 2 })).allInnerTexts();
+      return titles.map((title) => title.trim()).filter(Boolean).join("\n");
+    },
+    messageSubject: () => emailReferenceValues("notification-email-reference.message_subject", "Subject", "Subject"),
+    messageSummary: () =>
+      emailReferenceValues("notification-email-reference.message_summary", "Who receives it and why", "Summary"),
+    messageBody: async () => {
+      if (!(await emailReferenceShown("notification-email-reference.message_body"))) return "";
+      return mainText();
+    },
+    refusedForNonAdministrator: () => refusalShown(),
   };
 
   const contentList: S.ContentListPage = {
@@ -12209,17 +12237,7 @@ export default function create(
 
     notificationTermsBroadcast: termsBroadcast,
 
-    // The service answers this address itself, and is no screen: signed in as the
-    // administrator it answers 404 {"errors":["Cannot GET /admin/email-notification-reference"]},
-    // and /api/email-notification-reference and /api/admin/email-notification-reference are
-    // 404 too. The refusal reader reads whatever refusal the address gives a non-administrator.
-    notificationEmailReference: absent<S.NotificationEmailReferencePage>(
-      "notification-email-reference",
-      "/admin/email-notification-reference",
-      `signed in as the administrator (test-admin) and opened /admin/email-notification-reference: the service answers it 404 {"errors":["Cannot GET /admin/email-notification-reference"]} rather than drawing a screen, the same addresses under /api answer 404 "not found", and no link on the administrator's dashboard or profile leads to an email reference; ${NOBODY_SIGNS_IN}`,
-      ["open_reference", "message_group_title", "message_subject", "message_summary", "message_body"],
-      ["refused_for_non_administrator"],
-    ),
+    notificationEmailReference: emailReference,
 
     contentFooter,
     contentServiceLevelAgreementLink,
