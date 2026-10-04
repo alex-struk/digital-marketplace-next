@@ -1,0 +1,36 @@
+gate: G3
+verdict: return
+by: runner:verify
+held_by: runner
+rationale: Slice 16 does not yet do what 2 of its criteria say. Each condition
+  is the criterion and what the running application did.
+conditions:
+  - "R-1.27, in the cases \"Code With Us: a reader permitted to see proposal
+    scores\" and \"Sprint With Us: a reader permitted to see proposal scores\":
+    Error: the successful proponent's contact details are shown somewhere this
+    reader sees the award — Expected: true — Received: false — at
+    tests/acceptance/opportunities/R-1.27.spec.ts:152 — its last steps:
+    …0-4000-a008-000000000001/proposals/00000000-0000-4000-a008-000000000101
+    read \"Northern Pines Digital Ltd.\" → proposalCwuView.proposalTab() at
+    /opportunities/code-with-us/00000000-0000-4000-a008-000000000001/proposals/\
+    00000000-0000-4000-a008-000000000101?tab=proposal read \"Proposal Proponent
+    Proponent type Organization Organization Northern Pines Digital Ltd.
+    Proposal text The seeded proposal text of proponent 1. Additional comme…\" →
+    proposalCwuView.score() at
+    /opportunities/code-with-us/00000000-0000-4000-a008-000000000001/proposals/\
+    00000000-0000-4000-a008-000000000101?tab=proposal read \"91%\" — the page as
+    it failed: .sdlc/evidence/slice-16/R-1.27.png,
+    .sdlc/evidence/slice-16/R-1.27.txt"
+  - 'R-2.32, in the cases "their proposal awarded" and "their proposal passed
+    over": Error: the proposal carries no score — Expected pattern: /\d/ —
+    Received string:  "" — at tests/acceptance/proposals/R-2.32.spec.ts:51 — its
+    last steps: signIn(persona administrator) at /dashboard →
+    proposalSwuView.open({opportunityId, proposalId}) at
+    /opportunities/sprint-with-us/00000000-0000-4000-a018-000000000001/proposals/00000000-0000-4000-a018-000000000101
+    → proposalSwuView.totalScore() at
+    /opportunities/sprint-with-us/00000000-0000-4000-a018-000000000001/proposals/00000000-0000-4000-a018-000000000101
+    threw "unbound: proposal-swu-view.total_score —
+    http://localhost:4700/opportunities/sprint-with-us/00000000-0000-4000-a018-000000000001/proposals/00000000-0000-4000-a018-000000000101
+    now offers administrato…" — the page as it failed:
+    .sdlc/evidence/slice-16/R-2.32.png, .sdlc/evidence/slice-16/R-2.32.txt'
+at: 2026-10-04T09:27:47.239Z
