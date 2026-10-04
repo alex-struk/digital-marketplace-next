@@ -34,3 +34,23 @@ One part was missing: "every proposal submitted against it moves to review." On 
 All three proposals on each of those opportunities, and the one on the lapsed Code With Us opportunity, are now checked. I also rewrote the file's header comment, which had said the third proposal could not be read.
 
 **Counts.** One criterion was assigned, and it got a test. None remain untestable, and I found no surface action or observation still missing for this criterion. I changed nothing outside `tests/acceptance`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Question: do the R-1.1 tests follow from the criterion and nothing else, and is every clause now asserted? Approve. The one clause previously recorded as untestable — every submitted proposal moves to review, for the third proposal on the Sprint With Us and Team With Us opportunities — is now asserted: the test signs in as persona.thirdProponent and polls both proposals' status for 'review', the same observation already used for the other proposals. The branch confirms the seed assigns proposals.sprintWithUsThree and proposals.teamWithUsThree to users.proponentThree on the closed SWU and TWU opportunities, and tests/generated/personas.ts defines thirdProponent as able to read the status of their own proposal; the runner's typecheck passed with no diagnostics. The added assertions follow from the criterion's own words and leak no route, selector or status code. Removing the R-1.1 not-testable entry is correct since no clause is left unasserted, and the header comment now matches. The missing test for R-1.1 is not withdrawn: it closes when this test produces a result row at v3. R-5.27's owed test concerns another criterion and is unaffected. This would become a return if the test's first run reports the persona unbound or the status it reads is not the proposal's own.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `dadf8b7556732fca2aa31df5eea9140e7f1ebaa7`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/opportunities/`, which this proposal answers for.
+
+    No diagnostics.
