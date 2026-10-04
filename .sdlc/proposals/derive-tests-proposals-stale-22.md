@@ -29,3 +29,22 @@ I rewrote the test for the one criterion in this run, R-2.36 v1, at `tests/accep
 None of them asserts anything about addressing, subject or content, because the criterion states none of that.
 
 I needed no surface actions or observations that the contract doesn't already provide, and I changed nothing outside `tests/acceptance/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** runner:checks
+
+Approved by the runner's checks, which policy.gates.G3.auto_approve lets settle derive-tests proposals: the acceptance typecheck of 6ee673cfd5 is clean; no condition is open against it; no escalation stands on it; no test file was deleted, no changed test asserts less than before and no new test asserts nothing.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `6ee673cfd5c5d771c02fb8693d780975e4329911`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/proposals/`, which this proposal answers for.
+
+    No diagnostics.
