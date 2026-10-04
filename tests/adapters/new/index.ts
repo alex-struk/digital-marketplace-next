@@ -34,10 +34,11 @@
 // serves the program chooser (/opportunities/create), the three programs' forms
 // (/opportunities/{code,sprint,team}-with-us/create), each program's management screen
 // (/opportunities/<program>/:opportunityId/edit, its ?tab= sections, Proposals among them,
-// and form, attachments included) and the Code With Us proposal's screen
-// (/opportunities/code-with-us/:opportunityId/proposals/:proposalId). It still answers
-// "Page not found", to everybody walked, at /proposals, at a Sprint With Us or Team With Us
-// proposal's screen, at every program's printable copies (.../proposals/:proposalId/export,
+// and form, attachments included) and every program's proposal screen
+// (/opportunities/<program>/:opportunityId/proposals/:proposalId, the Sprint With Us and
+// Team With Us ones reached from the proponent links of the opportunity's Proposals
+// section). It still answers "Page not found", to everybody walked, at /proposals, at
+// every program's printable copies (.../proposals/:proposalId/export,
 // .../proposals/export) and .../complete, and at the evaluation and consensus screens
 // (.../team-questions/..., .../resource-questions/...); and
 // /admin/email-notification-reference is not a screen at all (the service answers it 404
@@ -2247,9 +2248,11 @@ export default function create(
     country: "country",
     proposaltext: "proposal text",
     additionalcomment: "additional comments",
-    inceptionphase: "inception phase",
-    prototypephase: "prototype phase",
-    implementationphase: "implementation phase",
+    // A Sprint With Us phase is named as the phases are named everywhere else ("Inception"),
+    // with the part of it a message concerns after it ("Inception members: ...").
+    inceptionphase: "Inception",
+    prototypephase: "Prototype",
+    implementationphase: "Implementation",
     teamquestionresponses: "team question responses",
     resourcequestionresponses: "resource question responses",
     hourlyrate: "hourly rate",
@@ -2264,7 +2267,16 @@ export default function create(
 
   function refusalEntries(body: unknown, path: string[] = [], out: Refused[] = []): Refused[] {
     if (typeof body === "string") {
-      out.push({ where: path.join(" "), message: body });
+      // This target names a phase by its request key inside the message itself
+      // ("inceptionPhase: This opportunity does not require this phase."); the message is
+      // reported against the phase's name instead.
+      const phase = /^\s*(inceptionPhase|prototypePhase|implementationPhase)(?:\.([A-Za-z0-9#]+))?\s*:\s*([\s\S]*)$/.exec(body);
+      if (phase) {
+        const named = [...path, fieldName(phase[1]), ...(phase[2] ? [fieldName(phase[2])] : [])];
+        out.push({ where: named.join(" "), message: phase[3].trim() });
+      } else {
+        out.push({ where: path.join(" "), message: body });
+      }
     } else if (Array.isArray(body)) {
       const prose = body.every((each) => typeof each === "string");
       body.forEach((each, i) => refusalEntries(each, prose ? path : [...path, `#${i + 1}`], out));
@@ -9662,6 +9674,133 @@ export default function create(
     },
   };
 
+  // ---------------------------------------------------------------- a Sprint With Us or Team With Us proposal, as staff read it
+  //
+  // /opportunities/{sprint,team}-with-us/:opportunityId/proposals/:proposalId, reached from
+  // each proponent's link in the Proposals section of the opportunity's management screen
+  // (edit?tab=proposals). Walked on the current build as the administrator on the seeded
+  // Sprint With Us proposal at the team scenario (...a016...101, "Evaluated: team scenario")
+  // and the seeded Team With Us proposals at the challenge (...a032...101 and ...102): "Sprint
+  // With Us proposal" / "Team With Us proposal" over the proponent's name (the level-1
+  // heading), the terms Opportunity (a link), Status, Submitted and Proposal ID, the link
+  // "Printable copy" to .../export, and under the navigation "Proposal sections" the links
+  // Proposal (?tab=proposal: the regions Organization, Team, Team questions / Resource
+  // questions, References and Attachments) and History (?tab=history: the table "Every change
+  // of state and every score entered, newest first", Date | Entry | By | Note). There is no
+  // button of any kind, no stage tab (team questions, code challenge, team scenario, resource
+  // questions, challenge), no score and no rank, though the seeded proposals hold scores.
+  function teamViewWalked(program: string): string {
+    const seeded = program === "sprint-with-us" ? "...a016...101 (scored on the code challenge and the team scenario)" : "...a032...101 (scored on the challenge) and ...a032...102";
+    return `walked on the current build as the administrator, from the proponent links of the opportunity's Proposals section, on the seeded ${program} proposal(s) ${seeded}: the screen draws the terms Opportunity, Status, Submitted and Proposal ID, "Printable copy", the sections Proposal and History, and no button, stage tab, score or rank`;
+  }
+  // A control or reading the screen has never been seen to offer: unbound, saying what is
+  // there. Should the screen one day offer it, that is said too, so the next run binds it.
+  async function teamViewLacks(pageId: string, program: string, member: string, name: RegExp, what: string): Promise<never> {
+    const where = `${pageId}.${member}`;
+    await ready();
+    const why = await whyNotHere();
+    if (why) unbound(where, `the proposal's screen did not open at ${page.url()} for ${actingId()}: ${why.replace(/\n+/g, " ")}; ${teamViewWalked(program)}`);
+    const main = page.getByRole("main");
+    const offeredNow = seen(main.getByRole("button", { name }).or(main.getByRole("link", { name })).or(main.getByRole("term").filter({ hasText: name })));
+    if (await offeredNow.count()) {
+      unbound(where, `${page.url()} now offers ${actingId()} something named ${name}, which this binding has not seen; the next binding run binds it (${teamViewWalked(program)})`);
+    }
+    return unbound(where, `the proposal's screen offers no ${what}: ${teamViewWalked(program)}; on ${page.url()} as ${actingId()} it offers ${await offered()}`);
+  }
+  // The History section's table, one cell list per row (header row left out).
+  async function teamViewHistoryRows(): Promise<string[][]> {
+    if (!(await cwuViewSection(/^\s*history\s*$/i))) return [];
+    const region = seen(regionNamed(proposalMain(), /^\s*history\s*$/i)).first();
+    const rows = region.getByRole("row");
+    const out: string[][] = [];
+    for (let r = 0; r < (await rows.count()); r++) {
+      const cells = rows.nth(r).getByRole("cell");
+      const count = await cells.count();
+      if (!count) continue;
+      const texts: string[] = [];
+      for (let c = 0; c < count; c++) texts.push((await cells.nth(c).innerText()).replace(/\s*\n\s*/g, " ").trim());
+      out.push(texts);
+    }
+    return out;
+  }
+  function teamProposalView<T>(
+    pageId: string,
+    route: string,
+    program: string,
+    lacking: { member: string; name: RegExp; what: string }[],
+  ): T {
+    const built: Record<string, unknown> = {
+      open: async (params?: Record<string, string>) => {
+        await go(route, params as unknown as Record<string, string>);
+        await ready();
+      },
+      proposalIdentifier: async () => ((await proposalShown()) ? (await proposalTerm(/^proposal id$/i)) || proposalPathId() : ""),
+      // The "Proposal" section: Organization, Team, the questions and their responses,
+      // References and Attachments.
+      proposalTab: () => cwuViewSection(/^\s*proposal\s*$/i),
+      // The History table's rows, newest first, one per line, cells joined by " | " as the
+      // screen orders them (Date | Entry | By | Note).
+      historyTab: async () => (await teamViewHistoryRows()).map((cells) => cells.filter(Boolean).join(" | ")).join("\n"),
+      // The same rows as entries, newest first: "<kind> | <note> | <who> | <when>", from the
+      // Entry, Note, By and Date columns.
+      historyEntries: async () =>
+        (await teamViewHistoryRows())
+          .map(([when = "", kind = "", who = "", note = ""]) => [kind, note.replace(/^[—–-]$/, ""), who, when].join(" | "))
+          .join("\n"),
+    };
+    for (const each of lacking) {
+      built[camel(each.member)] = () => teamViewLacks(pageId, program, each.member, each.name, each.what);
+    }
+    return built as unknown as T;
+  }
+  const SCORE_LACKS = (stage: string, member: string) => ({ member, name: new RegExp(`^\\s*${stage}( score)?\\s*$`, "i"), what: `${stage} score` });
+  const proposalSwuViewBound = teamProposalView<S.ProposalSwuViewPage>(
+    "proposal-swu-view",
+    "/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId",
+    "sprint-with-us",
+    [
+      { member: "score_code_challenge", name: /^\s*(enter|edit) (code challenge )?score\s*$/i, what: "control to enter a code challenge score" },
+      { member: "screen_in_to_team_scenario", name: /^\s*screen in\b/i, what: '"Screen in" control' },
+      { member: "screen_out_from_team_scenario", name: /^\s*screen out\b/i, what: '"Screen out" control' },
+      { member: "score_team_scenario", name: /^\s*(enter|edit) (team scenario )?score\s*$/i, what: "control to enter a team scenario score" },
+      { member: "award_proposal", name: /^\s*award( proposal)?\s*$/i, what: '"Award" control' },
+      { member: "disqualify_proposal", name: /^\s*disqualify( proposal)?\s*$/i, what: '"Disqualify" control' },
+      { member: "team_questions_tab", name: /^\s*team questions\s*$/i, what: '"Team questions" stage section (the Proposal section lists the questions with the responses, and no scores)' },
+      { member: "code_challenge_tab", name: /^\s*code challenge\s*$/i, what: '"Code challenge" section' },
+      { member: "team_scenario_tab", name: /^\s*team scenario\s*$/i, what: '"Team scenario" section' },
+      { member: "wrong_stage_error", name: /^\s*(enter|edit) .*score\s*$/i, what: "score control, so no stage message can be raised from it" },
+      SCORE_LACKS("team questions", "questions_score"),
+      SCORE_LACKS("code challenge", "challenge_score"),
+      SCORE_LACKS("team scenario", "scenario_score"),
+      SCORE_LACKS("price", "price_score"),
+      SCORE_LACKS("total", "total_score"),
+      { member: "rank", name: /^\s*rank(ing)?\s*$/i, what: "rank or ranking" },
+      { member: "offered_score_actions", name: /^\s*(enter|edit) .*score\s*$/i, what: "stage tab or score control to read offered score actions from" },
+    ],
+  );
+  const proposalTwuViewBound = teamProposalView<S.ProposalTwuViewPage>(
+    "proposal-twu-view",
+    "/opportunities/team-with-us/:opportunityId/proposals/:proposalId",
+    "team-with-us",
+    [
+      { member: "score_resource_questions", name: /^\s*(enter|edit) (resource questions? )?score/i, what: "control to enter resource question scores" },
+      { member: "screen_in_to_challenge", name: /^\s*screen in\b/i, what: '"Screen in" control' },
+      { member: "screen_out_from_challenge", name: /^\s*screen out\b/i, what: '"Screen out" control' },
+      { member: "score_challenge", name: /^\s*(enter|edit) (challenge )?score\s*$/i, what: "control to enter a challenge score" },
+      { member: "award_proposal", name: /^\s*award( proposal)?\s*$/i, what: '"Award" control' },
+      { member: "disqualify_proposal", name: /^\s*disqualify( proposal)?\s*$/i, what: '"Disqualify" control' },
+      { member: "resource_questions_tab", name: /^\s*resource questions\s*$/i, what: '"Resource questions" stage section (the Proposal section lists the questions with the responses, and no scores)' },
+      { member: "challenge_tab", name: /^\s*(interview\/)?challenge\s*$/i, what: '"Challenge" section' },
+      { member: "wrong_stage_error", name: /^\s*(enter|edit) .*score\s*$/i, what: "score control, so no stage message can be raised from it" },
+      SCORE_LACKS("resource questions", "questions_score"),
+      SCORE_LACKS("challenge", "challenge_score"),
+      SCORE_LACKS("price", "price_score"),
+      SCORE_LACKS("total", "total_score"),
+      { member: "rank", name: /^\s*rank(ing)?\s*$/i, what: "rank or ranking" },
+      { member: "offered_score_actions", name: /^\s*(enter|edit) .*score\s*$/i, what: "stage tab or score control to read offered score actions from" },
+    ],
+  );
+
   // ---------------------------------------------------------------- Sprint With Us and Team With Us proposals
   //
   // Walked signed in as the organization owner (Northern Pines Digital Ltd. and Salt Marsh Labs
@@ -10681,38 +10820,7 @@ export default function create(
 
     proposalSwuEdit,
 
-    proposalSwuView: {
-      ...unboundMembers(
-        "proposal-swu-view",
-        behindSignIn("a Sprint With Us proposal's evaluation screen", 'shows the "Page not found" screen (tried with the seeded Sprint With Us proposals)'),
-        ["history_entries", "rank", "offered_score_actions"],
-      ),
-      ...absent<S.ProposalSwuViewPage>(
-      "proposal-swu-view",
-      "/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId",
-      behindSession("/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId"),
-      [
-        "score_code_challenge",
-        "screen_in_to_team_scenario",
-        "screen_out_from_team_scenario",
-        "score_team_scenario",
-        "award_proposal",
-        "disqualify_proposal",
-        "proposal_identifier",
-        "proposal_tab",
-        "team_questions_tab",
-        "code_challenge_tab",
-        "team_scenario_tab",
-        "history_tab",
-        "wrong_stage_error",
-        "questions_score",
-        "challenge_score",
-        "scenario_score",
-        "price_score",
-        "total_score",
-      ],
-    ),
-    } as S.ProposalSwuViewPage,
+    proposalSwuView: proposalSwuViewBound,
 
     proposalSwuExportOne: absent<S.ProposalSwuExportOnePage>(
       "proposal-swu-export-one",
@@ -10732,36 +10840,7 @@ export default function create(
 
     proposalTwuEdit,
 
-    proposalTwuView: {
-      ...unboundMembers(
-        "proposal-twu-view",
-        behindSignIn("a Team With Us proposal's evaluation screen", 'shows the "Page not found" screen (tried with the seeded Team With Us proposals)'),
-        ["history_entries", "rank", "offered_score_actions"],
-      ),
-      ...absent<S.ProposalTwuViewPage>(
-      "proposal-twu-view",
-      "/opportunities/team-with-us/:opportunityId/proposals/:proposalId",
-      behindSession("/opportunities/team-with-us/:opportunityId/proposals/:proposalId"),
-      [
-        "score_resource_questions",
-        "screen_in_to_challenge",
-        "screen_out_from_challenge",
-        "score_challenge",
-        "award_proposal",
-        "disqualify_proposal",
-        "proposal_identifier",
-        "proposal_tab",
-        "resource_questions_tab",
-        "challenge_tab",
-        "history_tab",
-        "wrong_stage_error",
-        "questions_score",
-        "challenge_score",
-        "price_score",
-        "total_score",
-      ],
-    ),
-    } as S.ProposalTwuViewPage,
+    proposalTwuView: proposalTwuViewBound,
 
     proposalTwuExportOne: absent<S.ProposalTwuExportOnePage>(
       "proposal-twu-export-one",
