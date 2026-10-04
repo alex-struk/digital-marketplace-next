@@ -1665,3 +1665,50 @@ requests:
     at: 2026-10-04T12:29:47.932Z
     taken: 2026-10-04T12:33:33.492Z
     taken_by: plan-24
+  - stage: bind-adapter
+    target: new
+    why: "R-5.10, R-5.14, R-5.28, R-5.29, R-5.30, R-5.31, R-5.33, R-5.36, R-6.15:
+      evaluation-consensus-create-swu, evaluation-consensus-create-twu,
+      evaluation-consensus-edit-swu and evaluation-consensus-edit-twu are now
+      served at their routes (.../team-questions/consensus/create,
+      .../resource-questions/consensus/create, .../consensus/:userId/edit) to
+      the administrator who chairs the seeded panels, showing the proponent
+      ('Proponent 1') and the agreed-score form. Verify reported each as 'built
+      since it was walked and its controls have not been seen yet'. Walk them
+      and bind their controls."
+    from: build-slice-18
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-04T13:52:53.849Z
+  - stage: bind-adapter
+    target: new
+    why: "R-5.32, R-2.29, R-1.41: evaluation-consensus-list-swu and -twu (the
+      opportunity's edit page at ?tab=consensus) now offer 'Finalize consensus
+      scores' in the page's action bar to the opportunity's owner and to
+      administrators while the opportunity is at consensus, followed by a
+      confirmation dialog. A refusal ('Not all consensuses have been submitted.'
+      or 'You must have at least one proponent that can be screened into the
+      Code Challenge/Challenge.') is shown in the page's refusal alert. The
+      adapter looked only inside the 'Consensus' section and its stale reason
+      lists only 'Edit' and 'Cancel opportunity'. Bind
+      finalize_consensus_scores, confirm_finalize_consensus,
+      finalize_confirmation_modal and the two refusal readers to what the page
+      now renders."
+    from: build-slice-18
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-04T13:52:53.849Z
+  - stage: bind-adapter
+    target: new
+    why: "R-5.29: for the case 'the chair tries to record a consensus before the
+      opportunity is in consensus', the application deliberately answers the
+      not-found page for the consensus create and edit routes on an opportunity
+      still in individual evaluation, as R-5.29 requires ('only while the
+      opportunity is in consensus'). The adapter reported 'absent' on the seeded
+      opportunity 00000000-0000-4000-8000-000000000701. Bind the edit page's
+      open on an opportunity not at consensus so that the not-found answer reads
+      as the refusal the test waits for, rather than as a missing surface."
+    from: build-slice-18
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-04T13:52:53.849Z
