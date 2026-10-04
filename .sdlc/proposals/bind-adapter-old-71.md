@@ -26,3 +26,22 @@ I bound `organization-request.register_by_request` for R-3.2. The fix is new spe
 - **A real registration:** I didn't submit one with the new key, because that would leave a lasting organization on the target. The only request I sent was the blank one, which the service refused and stored nothing.
 
 **Bindings and routes.** `tests/adapters/old/bindings.yaml` already listed `register_by_request: bound`, so I left it unchanged. No other member was touched. Every route this work used responded on the target, and I found no page whose route failed to resolve. I changed nothing outside `tests/adapters/old/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** runner:checks
+
+Approved by the runner's checks, which policy.gates.G3.auto_approve lets settle bind-adapter proposals: the acceptance typecheck of 0bdd6d1a0 is clean; no condition is open against it; no escalation stands on it; nothing outside tests/adapters changed.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `0bdd6d1a07e3922139074f6b11027d2dd9dc8b7a`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    No diagnostics.
