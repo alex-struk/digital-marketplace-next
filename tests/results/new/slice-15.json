@@ -1,0 +1,621 @@
+{
+  "slice": 15,
+  "proposal": "build-slice-15-5",
+  "app_tree": "aa721292b35aabb50eac9eebe7af03e57f3e525c",
+  "at": "2026-10-04T08:20:01.965Z",
+  "verdict": "pass",
+  "adapter": "21e983249d2d6b2394c66d72c7fa2016c41b703b",
+  "rechecked": [
+    "R-7.1",
+    "R-7.2",
+    "R-7.3",
+    "R-7.4",
+    "R-7.18",
+    "R-7.19",
+    "R-4.1",
+    "R-4.2",
+    "R-4.3",
+    "R-4.17",
+    "R-4.24",
+    "R-8.1",
+    "R-8.2",
+    "R-8.5",
+    "R-8.6",
+    "R-8.7",
+    "R-8.10",
+    "R-8.11",
+    "R-8.12",
+    "R-8.18",
+    "R-8.23",
+    "R-8.24",
+    "R-6.7",
+    "R-4.5",
+    "R-4.6",
+    "R-4.8",
+    "R-4.9",
+    "R-4.18",
+    "R-4.25",
+    "R-4.26",
+    "R-4.27",
+    "R-4.28",
+    "R-4.29",
+    "R-4.34",
+    "R-4.4",
+    "R-4.12",
+    "R-4.14",
+    "R-4.19",
+    "R-4.20",
+    "R-4.21",
+    "R-4.30",
+    "R-4.31",
+    "R-4.32",
+    "R-7.5",
+    "R-7.6",
+    "R-7.7",
+    "R-7.8",
+    "R-7.9",
+    "R-7.10",
+    "R-7.12",
+    "R-7.16",
+    "R-7.20",
+    "R-7.21",
+    "R-7.22",
+    "R-7.23",
+    "R-7.24",
+    "R-7.25",
+    "R-7.26",
+    "R-7.27",
+    "R-7.28",
+    "R-8.29",
+    "R-7.13",
+    "R-6.18",
+    "R-6.23",
+    "R-6.24",
+    "R-6.28",
+    "R-4.16",
+    "R-4.33",
+    "R-8.17",
+    "R-8.27",
+    "R-6.8",
+    "R-1.4",
+    "R-1.7",
+    "R-1.10",
+    "R-1.11",
+    "R-1.12",
+    "R-1.14",
+    "R-1.21",
+    "R-1.22",
+    "R-1.23",
+    "R-1.29",
+    "R-1.34",
+    "R-1.37",
+    "R-6.20",
+    "R-6.21",
+    "R-6.27",
+    "R-1.2",
+    "R-1.3",
+    "R-1.5",
+    "R-1.6",
+    "R-1.38",
+    "R-4.22",
+    "R-6.17",
+    "R-1.20",
+    "R-1.28",
+    "R-1.30",
+    "R-1.32",
+    "R-7.17",
+    "R-5.1",
+    "R-5.9",
+    "R-5.17",
+    "R-5.18",
+    "R-5.37",
+    "R-1.8",
+    "R-1.9",
+    "R-1.13",
+    "R-1.15",
+    "R-1.16",
+    "R-1.17",
+    "R-1.18",
+    "R-1.39",
+    "R-1.43",
+    "R-1.48",
+    "R-1.53",
+    "R-1.55",
+    "R-1.56",
+    "R-8.13",
+    "R-8.21",
+    "R-8.28",
+    "R-8.30",
+    "R-3.1",
+    "R-3.2",
+    "R-3.3",
+    "R-3.18",
+    "R-3.19",
+    "R-3.20",
+    "R-3.21",
+    "R-3.22",
+    "R-3.24",
+    "R-6.16",
+    "R-3.6",
+    "R-3.7",
+    "R-3.8",
+    "R-3.9",
+    "R-3.10",
+    "R-3.11",
+    "R-3.12",
+    "R-3.13",
+    "R-3.14",
+    "R-3.15",
+    "R-3.17",
+    "R-3.23",
+    "R-3.30",
+    "R-3.31",
+    "R-3.32",
+    "R-3.33",
+    "R-3.34",
+    "R-3.35",
+    "R-3.25",
+    "R-3.26",
+    "R-3.27",
+    "R-3.28",
+    "R-8.22",
+    "R-8.31",
+    "R-6.2",
+    "R-6.3",
+    "R-6.4",
+    "R-6.5",
+    "R-1.35",
+    "R-1.36",
+    "R-2.1",
+    "R-2.2",
+    "R-2.3",
+    "R-2.4",
+    "R-2.12",
+    "R-2.13",
+    "R-2.14",
+    "R-2.15",
+    "R-2.23",
+    "R-4.23"
+  ],
+  "rows": [
+    {
+      "id": "R-8.19",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.19.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "an attachment on a Code With Us opportunity is uploaded with no read access recorded against the file itself, so that the opportunity decides who may read it",
+          "status": "passed"
+        },
+        {
+          "title": "an attachment on a Sprint With Us opportunity is uploaded with no read access recorded against the file itself, so that the opportunity decides who may read it",
+          "status": "passed"
+        },
+        {
+          "title": "an attachment on a Team With Us opportunity is uploaded with no read access recorded against the file itself, so that the opportunity decides who may read it",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "30f3519b79116388fb73969dd123b0c7e05e0eb9",
+      "adapter": "21e983249d2d6b2394c66d72c7fa2016c41b703b"
+    },
+    {
+      "id": "R-8.20",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.20.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a file attached to a Code With Us opportunity is readable by whoever may read the opportunity",
+          "status": "passed"
+        },
+        {
+          "title": "a file attached to a Sprint With Us opportunity is readable by whoever may read the opportunity, under the same rule",
+          "status": "passed"
+        },
+        {
+          "title": "a file attached to a Team With Us opportunity is readable by whoever may read the opportunity, under the same rule",
+          "status": "passed"
+        },
+        {
+          "title": "a file attached to a proposal is readable by whoever may read the proposal",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "64abbdb48dc67ca1c7ece3b50f0614649157963d",
+      "adapter": "21e983249d2d6b2394c66d72c7fa2016c41b703b"
+    },
+    {
+      "id": "R-8.25",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.25.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "an attachment on a Code With Us opportunity is refused to a vendor before the opportunity is publicly visible, and readable by them once it is",
+          "status": "passed"
+        },
+        {
+          "title": "an attachment on a Sprint With Us opportunity is refused to a vendor before the opportunity is publicly visible, and readable by them once it is",
+          "status": "passed"
+        },
+        {
+          "title": "an attachment on an opportunity that is not yet publicly visible is readable by the opportunity's creator",
+          "status": "passed"
+        },
+        {
+          "title": "an attachment on a proposal is readable by whoever may read that proposal",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "3dea46f61c56ee6819beaf1453ad2ce0efc6ae60",
+      "adapter": "21e983249d2d6b2394c66d72c7fa2016c41b703b"
+    },
+    {
+      "id": "R-1.31",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.31.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "public sector staff cannot see the proposals submitted against an opportunity while it is published",
+          "status": "passed"
+        },
+        {
+          "title": "public sector staff can see the proposals once the opportunity has left the published state",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "acf8b4b62321ae2ae20d7bd3960a4082147bcacc",
+      "adapter": "21e983249d2d6b2394c66d72c7fa2016c41b703b"
+    },
+    {
+      "id": "R-2.7",
+      "version": 2,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.7.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a proposal may be created as a draft, in all three programs",
+          "status": "passed"
+        },
+        {
+          "title": "a proposal may be created as a submission, in all three programs",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "6b7cd4fdc276698b8b3865e7efeeb296378fe66f",
+      "adapter": "21e983249d2d6b2394c66d72c7fa2016c41b703b"
+    },
+    {
+      "id": "R-2.9",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.9.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a vendor may read the history of a proposal they authored, in all three programs",
+          "status": "passed"
+        },
+        {
+          "title": "a vendor may read the history of a proposal belonging to an organization they own or administer, in all three programs",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "9352db51ac67548e345390e5525da3cc44d7c7cd",
+      "adapter": "21e983249d2d6b2394c66d72c7fa2016c41b703b"
+    },
+    {
+      "id": "R-2.10",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.10.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a Team With Us proposal whose hourly rates come to more than the opportunity's maximum budget is refused on the create path",
+          "status": "passed"
+        },
+        {
+          "title": "a Team With Us proposal whose hourly rates come to more than the opportunity's maximum budget is refused on the edit path",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "a56404769120f6b84313647c472275fb712f0fc2",
+      "adapter": "21e983249d2d6b2394c66d72c7fa2016c41b703b"
+    },
+    {
+      "id": "R-2.11",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.11.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "an organization may appear on at most one proposal per opportunity, and a proposal naming an organization that already bid is refused",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "b101af18985eed843d5e15649c231b86c7cc0b69",
+      "adapter": "21e983249d2d6b2394c66d72c7fa2016c41b703b"
+    },
+    {
+      "id": "R-2.16",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.16.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "A Sprint With Us proposal may only be submitted on behalf of an organization that is a qualified supplier for that program, and the organization is re-checked at the moment of submission.",
+          "status": "passed"
+        },
+        {
+          "title": "A Sprint With Us proposal may only be submitted on behalf of an organization that is a qualified supplier for that program: a submission naming no organization is refused.",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "a1c971140fbdb4243256a0eef40345f1ce3fb44b",
+      "adapter": "21e983249d2d6b2394c66d72c7fa2016c41b703b"
+    },
+    {
+      "id": "R-2.17",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.17.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "A Team With Us proposal may only be submitted on behalf of an organization that is a qualified supplier for that program and that provides every service area the opportunity's resources call for. (an organization that does not provide a service area the opportunity calls for is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "A Team With Us proposal may only be submitted on behalf of an organization that is a qualified supplier for that program and that provides every service area the opportunity's resources call for. (an organization that is not a qualified Team With Us supplier is refused)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "17103304bf1f403b4e1243b0e897a99e6fd6ae97",
+      "adapter": "21e983249d2d6b2394c66d72c7fa2016c41b703b"
+    },
+    {
+      "id": "R-2.18",
+      "version": 4,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.18.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "Every person named on a proposal's team must be an active member of the organization the proposal is submitted for, and the service refuses anyone else with \"User is not an active member of the organization.\"; a Team With Us proposal is additionally refused by the service when the same person is named twice, with \"Please select unique team members.\", while the service applies no such uniqueness check to a Sprint With Us phase. The Team With Us proposal form offers only the organization's active members; the Sprint With Us form also lists members whose invitation is still pending, marked pending, and a proposal naming one can be saved as a draft but is refused on submission. Neither form offers a person already named on the proposal. (a Team With Us team of active members is accepted)",
+          "status": "passed"
+        },
+        {
+          "title": "Every person named on a proposal's team must be an active member of the organization the proposal is submitted for, and the service refuses anyone else with \"User is not an active member of the organization.\"; a Team With Us proposal is additionally refused by the service when the same person is named twice, with \"Please select unique team members.\", while the service applies no such uniqueness check to a Sprint With Us phase. The Team With Us proposal form offers only the organization's active members; the Sprint With Us form also lists members whose invitation is still pending, marked pending, and a proposal naming one can be saved as a draft but is refused on submission. Neither form offers a person already named on the proposal. (a Team With Us team naming a person whose invitation to the organization is unanswered is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "Every person named on a proposal's team must be an active member of the organization the proposal is submitted for, and the service refuses anyone else with \"User is not an active member of the organization.\"; a Team With Us proposal is additionally refused by the service when the same person is named twice, with \"Please select unique team members.\", while the service applies no such uniqueness check to a Sprint With Us phase. The Team With Us proposal form offers only the organization's active members; the Sprint With Us form also lists members whose invitation is still pending, marked pending, and a proposal naming one can be saved as a draft but is refused on submission. Neither form offers a person already named on the proposal. (a Team With Us team naming a person whose membership of the organization has ended is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "Every person named on a proposal's team must be an active member of the organization the proposal is submitted for, and the service refuses anyone else with \"User is not an active member of the organization.\"; a Team With Us proposal is additionally refused by the service when the same person is named twice, with \"Please select unique team members.\", while the service applies no such uniqueness check to a Sprint With Us phase. The Team With Us proposal form offers only the organization's active members; the Sprint With Us form also lists members whose invitation is still pending, marked pending, and a proposal naming one can be saved as a draft but is refused on submission. Neither form offers a person already named on the proposal. (a Team With Us team naming a person who belongs to no organization is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "Every person named on a proposal's team must be an active member of the organization the proposal is submitted for, and the service refuses anyone else with \"User is not an active member of the organization.\"; a Team With Us proposal is additionally refused by the service when the same person is named twice, with \"Please select unique team members.\", while the service applies no such uniqueness check to a Sprint With Us phase. The Team With Us proposal form offers only the organization's active members; the Sprint With Us form also lists members whose invitation is still pending, marked pending, and a proposal naming one can be saved as a draft but is refused on submission. Neither form offers a person already named on the proposal. (a Sprint With Us phase naming a person whose invitation to the organization is unanswered is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "Every person named on a proposal's team must be an active member of the organization the proposal is submitted for, and the service refuses anyone else with \"User is not an active member of the organization.\"; a Team With Us proposal is additionally refused by the service when the same person is named twice, with \"Please select unique team members.\", while the service applies no such uniqueness check to a Sprint With Us phase. The Team With Us proposal form offers only the organization's active members; the Sprint With Us form also lists members whose invitation is still pending, marked pending, and a proposal naming one can be saved as a draft but is refused on submission. Neither form offers a person already named on the proposal. (a Sprint With Us phase naming a person who belongs to no organization is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "Every person named on a proposal's team must be an active member of the organization the proposal is submitted for, and the service refuses anyone else with \"User is not an active member of the organization.\"; a Team With Us proposal is additionally refused by the service when the same person is named twice, with \"Please select unique team members.\", while the service applies no such uniqueness check to a Sprint With Us phase. The Team With Us proposal form offers only the organization's active members; the Sprint With Us form also lists members whose invitation is still pending, marked pending, and a proposal naming one can be saved as a draft but is refused on submission. Neither form offers a person already named on the proposal. (a Team With Us team naming the same person twice is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "Every person named on a proposal's team must be an active member of the organization the proposal is submitted for, and the service refuses anyone else with \"User is not an active member of the organization.\"; a Team With Us proposal is additionally refused by the service when the same person is named twice, with \"Please select unique team members.\", while the service applies no such uniqueness check to a Sprint With Us phase. The Team With Us proposal form offers only the organization's active members; the Sprint With Us form also lists members whose invitation is still pending, marked pending, and a proposal naming one can be saved as a draft but is refused on submission. Neither form offers a person already named on the proposal. (a Sprint With Us phase naming the same person twice meets no uniqueness refusal)",
+          "status": "passed"
+        },
+        {
+          "title": "Every person named on a proposal's team must be an active member of the organization the proposal is submitted for, and the service refuses anyone else with \"User is not an active member of the organization.\"; a Team With Us proposal is additionally refused by the service when the same person is named twice, with \"Please select unique team members.\", while the service applies no such uniqueness check to a Sprint With Us phase. The Team With Us proposal form offers only the organization's active members; the Sprint With Us form also lists members whose invitation is still pending, marked pending, and a proposal naming one can be saved as a draft but is refused on submission. Neither form offers a person already named on the proposal. (the Team With Us form offers only active members, and not a person already named)",
+          "status": "passed"
+        },
+        {
+          "title": "Every person named on a proposal's team must be an active member of the organization the proposal is submitted for, and the service refuses anyone else with \"User is not an active member of the organization.\"; a Team With Us proposal is additionally refused by the service when the same person is named twice, with \"Please select unique team members.\", while the service applies no such uniqueness check to a Sprint With Us phase. The Team With Us proposal form offers only the organization's active members; the Sprint With Us form also lists members whose invitation is still pending, marked pending, and a proposal naming one can be saved as a draft but is refused on submission. Neither form offers a person already named on the proposal. (the Sprint With Us form offers the active members and lists a pending member, marked pending, and not a person already named)",
+          "status": "passed"
+        },
+        {
+          "title": "Every person named on a proposal's team must be an active member of the organization the proposal is submitted for, and the service refuses anyone else with \"User is not an active member of the organization.\"; a Team With Us proposal is additionally refused by the service when the same person is named twice, with \"Please select unique team members.\", while the service applies no such uniqueness check to a Sprint With Us phase. The Team With Us proposal form offers only the organization's active members; the Sprint With Us form also lists members whose invitation is still pending, marked pending, and a proposal naming one can be saved as a draft but is refused on submission. Neither form offers a person already named on the proposal. (a Sprint With Us proposal naming a pending member is saved as a draft but refused on submission)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "337acb0dae4baf0544de9f479c8c7f149adf4f8d",
+      "adapter": "21e983249d2d6b2394c66d72c7fa2016c41b703b"
+    },
+    {
+      "id": "R-2.19",
+      "version": 3,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.19.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "A Sprint With Us proposal can be submitted only when it gives a team to every phase the opportunity has and to no other phase, the proposal form offering a team section for exactly the opportunity's phases; each phase has exactly one scrum master, chosen as a single choice among that phase's members; each phase has at least one confirmed member, and those members together hold every capability that phase requires; each phase's proposed cost is no more than that phase's maximum budget, and the total proposed cost is no more than the opportunity's total maximum budget. A proposal missing a phase team or a phase capability, or with a cost over budget, is not submitted, and the form shows which phase is incomplete or which cost is over its budget. (a proposal meeting every rule is submitted)",
+          "status": "passed"
+        },
+        {
+          "title": "A Sprint With Us proposal can be submitted only when it gives a team to every phase the opportunity has and to no other phase, the proposal form offering a team section for exactly the opportunity's phases; each phase has exactly one scrum master, chosen as a single choice among that phase's members; each phase has at least one confirmed member, and those members together hold every capability that phase requires; each phase's proposed cost is no more than that phase's maximum budget, and the total proposed cost is no more than the opportunity's total maximum budget. A proposal missing a phase team or a phase capability, or with a cost over budget, is not submitted, and the form shows which phase is incomplete or which cost is over its budget. (the proposal form offers a team section for exactly the opportunity's phases)",
+          "status": "passed"
+        },
+        {
+          "title": "A Sprint With Us proposal can be submitted only when it gives a team to every phase the opportunity has and to no other phase, the proposal form offering a team section for exactly the opportunity's phases; each phase has exactly one scrum master, chosen as a single choice among that phase's members; each phase has at least one confirmed member, and those members together hold every capability that phase requires; each phase's proposed cost is no more than that phase's maximum budget, and the total proposed cost is no more than the opportunity's total maximum budget. A proposal missing a phase team or a phase capability, or with a cost over budget, is not submitted, and the form shows which phase is incomplete or which cost is over its budget. (a team for a phase the opportunity does not have is not submitted)",
+          "status": "passed"
+        },
+        {
+          "title": "A Sprint With Us proposal can be submitted only when it gives a team to every phase the opportunity has and to no other phase, the proposal form offering a team section for exactly the opportunity's phases; each phase has exactly one scrum master, chosen as a single choice among that phase's members; each phase has at least one confirmed member, and those members together hold every capability that phase requires; each phase's proposed cost is no more than that phase's maximum budget, and the total proposed cost is no more than the opportunity's total maximum budget. A proposal missing a phase team or a phase capability, or with a cost over budget, is not submitted, and the form shows which phase is incomplete or which cost is over its budget. (a proposal leaving out a phase the opportunity has is not submitted)",
+          "status": "passed"
+        },
+        {
+          "title": "A Sprint With Us proposal can be submitted only when it gives a team to every phase the opportunity has and to no other phase, the proposal form offering a team section for exactly the opportunity's phases; each phase has exactly one scrum master, chosen as a single choice among that phase's members; each phase has at least one confirmed member, and those members together hold every capability that phase requires; each phase's proposed cost is no more than that phase's maximum budget, and the total proposed cost is no more than the opportunity's total maximum budget. A proposal missing a phase team or a phase capability, or with a cost over budget, is not submitted, and the form shows which phase is incomplete or which cost is over its budget. (a proposal missing a phase team is not submitted, and the form shows which phase is incomplete)",
+          "status": "passed"
+        },
+        {
+          "title": "A Sprint With Us proposal can be submitted only when it gives a team to every phase the opportunity has and to no other phase, the proposal form offering a team section for exactly the opportunity's phases; each phase has exactly one scrum master, chosen as a single choice among that phase's members; each phase has at least one confirmed member, and those members together hold every capability that phase requires; each phase's proposed cost is no more than that phase's maximum budget, and the total proposed cost is no more than the opportunity's total maximum budget. A proposal missing a phase team or a phase capability, or with a cost over budget, is not submitted, and the form shows which phase is incomplete or which cost is over its budget. (the scrum master is a single choice among the phase's members)",
+          "status": "passed"
+        },
+        {
+          "title": "A Sprint With Us proposal can be submitted only when it gives a team to every phase the opportunity has and to no other phase, the proposal form offering a team section for exactly the opportunity's phases; each phase has exactly one scrum master, chosen as a single choice among that phase's members; each phase has at least one confirmed member, and those members together hold every capability that phase requires; each phase's proposed cost is no more than that phase's maximum budget, and the total proposed cost is no more than the opportunity's total maximum budget. A proposal missing a phase team or a phase capability, or with a cost over budget, is not submitted, and the form shows which phase is incomplete or which cost is over its budget. (a phase with two scrum masters is not submitted)",
+          "status": "passed"
+        },
+        {
+          "title": "A Sprint With Us proposal can be submitted only when it gives a team to every phase the opportunity has and to no other phase, the proposal form offering a team section for exactly the opportunity's phases; each phase has exactly one scrum master, chosen as a single choice among that phase's members; each phase has at least one confirmed member, and those members together hold every capability that phase requires; each phase's proposed cost is no more than that phase's maximum budget, and the total proposed cost is no more than the opportunity's total maximum budget. A proposal missing a phase team or a phase capability, or with a cost over budget, is not submitted, and the form shows which phase is incomplete or which cost is over its budget. (a phase with no scrum master is not submitted)",
+          "status": "passed"
+        },
+        {
+          "title": "A Sprint With Us proposal can be submitted only when it gives a team to every phase the opportunity has and to no other phase, the proposal form offering a team section for exactly the opportunity's phases; each phase has exactly one scrum master, chosen as a single choice among that phase's members; each phase has at least one confirmed member, and those members together hold every capability that phase requires; each phase's proposed cost is no more than that phase's maximum budget, and the total proposed cost is no more than the opportunity's total maximum budget. A proposal missing a phase team or a phase capability, or with a cost over budget, is not submitted, and the form shows which phase is incomplete or which cost is over its budget. (a phase whose only holder of a required capability is not a confirmed member is not submitted)",
+          "status": "passed"
+        },
+        {
+          "title": "A Sprint With Us proposal can be submitted only when it gives a team to every phase the opportunity has and to no other phase, the proposal form offering a team section for exactly the opportunity's phases; each phase has exactly one scrum master, chosen as a single choice among that phase's members; each phase has at least one confirmed member, and those members together hold every capability that phase requires; each phase's proposed cost is no more than that phase's maximum budget, and the total proposed cost is no more than the opportunity's total maximum budget. A proposal missing a phase team or a phase capability, or with a cost over budget, is not submitted, and the form shows which phase is incomplete or which cost is over its budget. (a proposal missing a phase capability is not submitted, and the form shows which phase is incomplete)",
+          "status": "passed"
+        },
+        {
+          "title": "A Sprint With Us proposal can be submitted only when it gives a team to every phase the opportunity has and to no other phase, the proposal form offering a team section for exactly the opportunity's phases; each phase has exactly one scrum master, chosen as a single choice among that phase's members; each phase has at least one confirmed member, and those members together hold every capability that phase requires; each phase's proposed cost is no more than that phase's maximum budget, and the total proposed cost is no more than the opportunity's total maximum budget. A proposal missing a phase team or a phase capability, or with a cost over budget, is not submitted, and the form shows which phase is incomplete or which cost is over its budget. (a proposal with a phase cost over that phase's budget is not submitted, and the form shows which cost is over its budget)",
+          "status": "passed"
+        },
+        {
+          "title": "A Sprint With Us proposal can be submitted only when it gives a team to every phase the opportunity has and to no other phase, the proposal form offering a team section for exactly the opportunity's phases; each phase has exactly one scrum master, chosen as a single choice among that phase's members; each phase has at least one confirmed member, and those members together hold every capability that phase requires; each phase's proposed cost is no more than that phase's maximum budget, and the total proposed cost is no more than the opportunity's total maximum budget. A proposal missing a phase team or a phase capability, or with a cost over budget, is not submitted, and the form shows which phase is incomplete or which cost is over its budget. (a proposal with a total cost over the opportunity's total budget is not submitted, and the form shows which cost is over its budget)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "f332e0b8ce29f8b75787f43b934e161b62a96069",
+      "adapter": "21e983249d2d6b2394c66d72c7fa2016c41b703b"
+    },
+    {
+      "id": "R-2.20",
+      "version": 2,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.20.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a Team With Us proposal must name at least one team member",
+          "status": "passed"
+        },
+        {
+          "title": "each team member on a Team With Us proposal carries an hourly rate of at least one dollar",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "017998fedf4937682c4fa5fa1211442152b368bc",
+      "adapter": "21e983249d2d6b2394c66d72c7fa2016c41b703b"
+    },
+    {
+      "id": "R-2.21",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.21.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "A response to an opportunity question is rejected if it is empty or longer than the word limit that question carries, or if it answers a question the opportunity does not ask. (an empty response is rejected)",
+          "status": "passed"
+        },
+        {
+          "title": "A response to an opportunity question is rejected if it is empty or longer than the word limit that question carries, or if it answers a question the opportunity does not ask. (a response longer than the question's word limit is rejected)",
+          "status": "passed"
+        },
+        {
+          "title": "A response to an opportunity question is rejected if it is empty or longer than the word limit that question carries, or if it answers a question the opportunity does not ask. (a response to a question the opportunity does not ask is rejected)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "269a99cd52d86d57d8c3ad16c82230fd305470b7",
+      "adapter": "21e983249d2d6b2394c66d72c7fa2016c41b703b"
+    },
+    {
+      "id": "R-2.22",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.22.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "Once a proposal has been submitted, the organization it was submitted for cannot be changed until it is withdrawn. (changing a submitted Team With Us proposal's organization is refused, and it keeps the organization it was submitted for)",
+          "status": "passed"
+        },
+        {
+          "title": "Once a proposal has been submitted, the organization it was submitted for cannot be changed until it is withdrawn. (a withdrawn Team With Us proposal may be moved to another organization)",
+          "status": "passed"
+        },
+        {
+          "title": "Once a proposal has been submitted, the organization it was submitted for cannot be changed until it is withdrawn. (a draft Team With Us proposal may be moved to another organization)",
+          "status": "passed"
+        },
+        {
+          "title": "Once a proposal has been submitted, the organization it was submitted for cannot be changed until it is withdrawn. (changing a submitted Sprint With Us proposal's organization is refused, and it keeps the organization it was submitted for)",
+          "status": "passed"
+        },
+        {
+          "title": "Once a proposal has been submitted, the organization it was submitted for cannot be changed until it is withdrawn. (a withdrawn Sprint With Us proposal may be moved to another organization)",
+          "status": "passed"
+        },
+        {
+          "title": "Once a proposal has been submitted, the organization it was submitted for cannot be changed until it is withdrawn. (a draft Sprint With Us proposal may be moved to another organization)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "71b1305b73fa9c44a4fd1ff2e945874e797d16cc",
+      "adapter": "21e983249d2d6b2394c66d72c7fa2016c41b703b"
+    },
+    {
+      "id": "R-2.24",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.24.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a vendor sees only the proposals they authored",
+          "status": "passed"
+        },
+        {
+          "title": "a vendor additionally sees the proposals of organizations they own or administer, under a separate heading",
+          "status": "passed"
+        },
+        {
+          "title": "a vendor never sees another vendor's proposal",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "d1dbb1934feb44b8a34285f8e7d56450d70c5c0f",
+      "adapter": "21e983249d2d6b2394c66d72c7fa2016c41b703b"
+    },
+    {
+      "id": "R-2.25",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.25.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "public sector staff and administrators cannot see any proposal against an opportunity until that opportunity has closed",
+          "status": "passed"
+        },
+        {
+          "title": "once the opportunity has closed, its submitted proposals are shown to the opportunity's author and to an administrator",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "023beca0e06dc58be7abc0056c9ade191aa4363a",
+      "adapter": "21e983249d2d6b2394c66d72c7fa2016c41b703b"
+    }
+  ]
+}
