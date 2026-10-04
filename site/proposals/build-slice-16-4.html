@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-16-4 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">606</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">600</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">490</span></a></li><li><a href="../runs.html">Run log <span class="count">22</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-16-4</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-04 09:53</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.288 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 16 (Opportunities close at their deadline, and a Code With Us one is scored and awarded) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> I made no changes to <code>app/</code> or <code>docs/decisions/</code> in this revision.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.288 (Claude Code))</p>
+<p>I made no changes to <code>app/</code> or <code>docs/decisions/</code> in this revision. The ruling has nothing left for the build to do: both remaining failures come from the new app&#39;s adapter bindings file, which belongs to bind-adapter. The two conditions that go with it were filed for that stage, and I left them alone.</p>
+<p><strong>The failures.</strong> R-2.32 (both cases) and R-1.27&#39;s Sprint With Us score check both stopped at one lookup: <code>proposalSwuView.totalScore</code> threw &quot;unbound: proposal-swu-view.total_score&quot;. The bindings file marks total_score, rank and the four stage scores as unbound because &quot;the screen shows no score of any kind&quot;. That was written against an earlier build.</p>
+<p><strong>What the current build shows.</strong> The saved page outline for R-2.32 (<code>.sdlc/evidence/slice-16/R-2.32.txt</code>, lines 36–49) has the administrator&#39;s Sprint With Us proposal page with a &quot;Scores&quot; region:</p>
+<div class="scroll"><table><thead><tr><th>Score</th><th>Value</th></tr></thead><tbody><tr><td>Team questions</td><td>100%</td></tr><tr><td>Code challenge</td><td>80%</td></tr><tr><td>Team scenario</td><td>70%</td></tr><tr><td>Price</td><td>100%</td></tr><tr><td>Total score</td><td>87.5%</td></tr><tr><td>Rank</td><td>1 of 2</td></tr></tbody></table></div>
+<p>The total score carries the contract&#39;s <code>proposal-total-score</code> test id. The vendor&#39;s side is in place too. <code>app/frontend/src/screens/proposal-team-edit.tsx</code> gives the vendor&#39;s manage page a Scoresheet tab next to Proposal and History, and it appears only once a proposal is awarded or not awarded. The unit tests in <code>app/frontend/tests/team-proposals.test.tsx</code> cover it from line 623: the tab shows the anonymous name, a total of 87.5% under <code>proposal-total-score</code> and the rank, and has no Scoresheet tab before a decision. So bind-adapter&#39;s re-check should find the total score and rank on both the staff page and the vendor&#39;s decided page. If it does not, the fault comes back to build.</p>
+<p><strong>The check.</strong> At first <code>npm --prefix app run check</code> failed with &quot;tsc: not found&quot;, because this workspace had no installed dependencies. After <code>npm --prefix app install</code> it passes:</p>
+<ul><li>46 backend test files, 729 tests passed.</li><li>26 frontend test files, 464 tests passed.</li><li>The whole check passed on a second run.</li></ul>
+<p>The error lines in the test output, such as &quot;closing-failed&quot; from the deadline closing and an undelivered welcome mail, come from tests that exercise those failure paths on purpose; none of them fail the check.</p>
+<p><strong>What I could not do.</strong> I could not re-bind the adapter or run the acceptance suite; neither is this stage&#39;s to do. Whether R-2.32 and R-1.27 now pass depends on bind-adapter binding these lookups against the current build. The next slice should find nothing missing from this slice&#39;s criteria beyond those bindings.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by agent:tech-lead (persona agent · claude claude-opus-5-5) on 2026-10-04 10:23.</p>
+<div class="body"><p>The question is whether slice 16 does what its criteria say. All 12 claimed criteria pass against tree adfa76f, but the result is fail on two regressions this slice caused by making deadline closing real, and the escalation asks whether those are the application&#39;s or a test&#39;s. They differ. R-2.15 (slice 14) is the application&#39;s: the criterion refuses a Code With Us proposal created already submitted after the deadline with &quot;This opportunity is no longer accepting proposals.&quot;, and it names hiding a closed opportunity from vendors as the barrier only for Sprint With Us and Team With Us. The test closes the opportunity first, as R-1.1 now makes inevitable, and the vendor&#39;s create page then shows &quot;Page not found&quot; (.sdlc/evidence/slice-16/R-2.15.txt) because proposal-cwu-create.tsx:64 treats any non-PUBLISHED opportunity as missing. That was harmless before the hook existed and now hides the refusal the backend already gives (cwu-proposals.service.ts:149). R-4.2 (slice 2) is the test&#39;s: the criterion withholds a welcome message from a person with no email address, but the test demands that the mail catcher holds nothing for anybody after that person signs in. It found 14, which are the closing notices R-1.1 and R-5.20 require the sign-in&#39;s first /api request to send. So this is a return to build for R-2.15 plus a test-overreaches filing for R-4.2. Neither is a pipeline fault, so this is not escalated. The ruling becomes an approval once R-2.15 passes and a regenerated R-4.2 test binds and passes, with the 12 claimed criteria still passing.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>R-2.15 regressed: now that the deadline hook closes a lapsed Code With Us opportunity on the first /api request, the vendor&#39;s create page at /opportunities/code-with-us/&lt;id&gt;/proposals/create renders &quot;Page not found&quot; (proposal-cwu-create.tsx:64 treats any status other than PUBLISHED as missing), so the refusal the criterion quotes is never shown. Let a vendor reach the Code With Us create screen for an opportunity that is closed or past its deadline, and show the service&#39;s refusal &quot;This opportunity is no longer accepting proposals.&quot; when they submit it, as the backend already answers. Leave the Sprint With Us and Team With Us create screens hiding a closed opportunity, as the criterion says.</li><li>test-overreaches R-4.2: the test asserts the mail catcher holds zero messages for anyone after a first-time person with no email address signs in, while the criterion asks only that no welcome message is attempted for that person; the closing notices R-1.1 and R-5.20 require, sent on that sign-in&#39;s first /api request, make the catcher hold 14 unrelated messages, so the test must look only for a welcome message rather than counting all mail.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
