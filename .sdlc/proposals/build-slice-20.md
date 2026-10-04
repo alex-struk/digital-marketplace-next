@@ -46,3 +46,14 @@ I built slice 20: R-2.37, R-2.38 and R-1.40, for all three programs. `npm --pref
 - On the report, before an opportunity has closed, the service lists no proposals, so the report says they appear once it has.
 
 **For the next slice.** Nothing in the app links to the all-proposals export or to the full report; they are reached by their addresses only, because no story draws a link to them. If links are wanted, a manage page's story would need to draw them first. `compose.yaml` and the seed are unchanged.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Slice 20 claims R-2.37, R-2.38 and R-1.40. The verify result is a current pass for this proposal (tree 16902be, 3 of 3 met), so the question is whether the code does what those criteria say and nothing more. It does. copyIsAnonymous in app/backend/src/rules/exports.ts names a Sprint With Us or Team With Us proponent anonymously to staff while the proposal is SUBMITTED, UNDER_REVIEW_QUESTIONS or EVALUATED_QUESTIONS and names the organization after that. The vendor always sees their own organization and Code With Us is never anonymised, which is R-2.37 read with R-1.24. The all-proposals document refuses a vendor or visitor before any request, drops DRAFT and WITHDRAWN as R-2.25 requires, and offers an anonymous variant kept in the address in a stable order (R-2.38). The full report is ADMIN-only, the author is refused, and it renders the opportunity, addenda, history and every proposal in one article (R-1.40). No new service operation was added, so access is still decided by the service's existing reads. Nothing was built that belongs to another slice. The only change outside the new screens is the proposal-export-link the SWU and TWU manage stories draw. Apart from pipeline records, all changes are under app/ and docs/decisions/. Test fixtures use placeholder identities and there are no secrets. The new rules and screens have unit tests, including axe checks. The open judgement calls (which statuses count as before the challenge, not-found rather than sign-in for visitors, existing status labels, the report's wording before closing) are recorded in decision record 0066 and are consistent with the criteria. The ruling would change if the verify result became stale against a newer tree, or if an anonymous copy were shown to reveal the organization other than through the name field.
+
+**Conditions:**
+none
