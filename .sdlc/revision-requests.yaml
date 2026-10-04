@@ -1501,3 +1501,52 @@ requests:
     at: 2026-10-04T07:31:18.363Z
     taken: 2026-10-04T07:33:34.221Z
     taken_by: bind-adapter-new-77
+  - stage: bind-adapter
+    target: new
+    why: "R-1.27: opportunityCwuView.successfulProponent
+      (tests/adapters/new/index.ts, the Code With Us view member near line 7378)
+      looks only for an 'Awarded to <name>' line or a 'Successful proponent'
+      definition term, so it read ''. On
+      /opportunities/code-with-us/00000000-0000-4000-a008-000000000001 the page
+      draws a region named 'Successful proponent' (heading level 2) whose
+      paragraph is 'Northern Pines Digital Ltd.'
+      (.sdlc/evidence/slice-16/R-1.27.txt line 34). Read the name from that
+      region, on the Sprint With Us and Team With Us views as well. Also correct
+      the bindings.yaml comment saying the awarded page names no winner."
+    from: build-slice-16
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-04T09:05:56.561Z
+  - stage: bind-adapter
+    target: new
+    why: "R-6.25, R-1.26, R-2.26, R-2.27, R-2.33, R-2.34: verify reports the
+      read-only proposal pages now offer controls this binding has not seen: on
+      proposal-cwu-view 'Enter score', 'Disqualify' and 'Award' for the
+      administrator and the opportunity's author; on proposal-swu-view 'Award';
+      on proposal-twu-view 'Disqualify'. Bind enter_score, disqualify_proposal
+      and award_proposal on those screens, including the dialogs each opens."
+    from: build-slice-16
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-04T09:05:56.561Z
+  - stage: plan
+    why: R-1.24 and R-2.5 are claimed by Slice 16, but their tests read the
+      anonymous proponent names on evaluation-individual-list-swu and
+      evaluation-individual-list-twu (the individual evaluation section of
+      /opportunities/<program>/:id/edit?tab=evaluation). Verify of
+      build-slice-16 found both unbound there because that screen is Slice 17's.
+      Place them in Slice 17, as R-5.16 was placed for the same reason; the hook
+      that assigns the names stays built in Slice 16.
+    from: build-slice-16
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-04T09:05:56.561Z
+  - stage: plan
+    why: R-2.35 is claimed by Slice 16, but its test enters a code challenge score
+      on proposal-swu-view (proposal-swu-view.score_code_challenge), which
+      verify of build-slice-16 found unbound. Code challenge scoring is Slice
+      19's. Place R-2.35 where its test can first run.
+    from: build-slice-16
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-04T09:05:56.561Z
