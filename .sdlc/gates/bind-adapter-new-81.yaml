@@ -1,0 +1,16 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does the bind-adapter-new-81 adapter bind every surface action and observation on new, and nothing else? Approve. The diff touches only tests/adapters/new (bindings.yaml, index.ts) plus pipeline records; nothing under tests/acceptance or app/ changed. The new bindings for the dashboard Evaluations section, the SWU/TWU Instructions, Evaluation and Consensus sections, and the individual score sheets (create and edit) are navigation and locators only: readers return page text, refused non-admin readers read nothing with the refusal logged, and an administrator refused or a section missing reports unbound rather than deciding a result. The remaining unbound and absent reasons are real and name what the surface lacks: the Consensus section draws one sentence with no table, link or control even to the chair, and the four consensus score sheets answer 'Page not found' with nothing linking to them, re-checked at run time so they turn unbound once served. The section-switching fix (whole ?tab= value, so 'evaluationPanel' no longer matches 'evaluation') and confining the opportunity-dashboard readers to their own section are correct. The runner's typecheck on this revision passed with no diagnostics under adapters/new. The author's walk wrote a draft evaluation into the shared environment's seed (swuEvaluationAlreadyBegun, second proponent), which is environment state, not part of the diff; the seed should be reapplied before calibration. A compile failure at calibration, or evidence that the application offers a consensus control or link the adapter missed, would change this ruling.
+conditions:
+  - "Reapply the seed before calibrating the 'new' target: during this binding run a 'Save draft' as test-gov stored an incomplete draft (question 1 score 9, no comments) for the second proponent of the seeded already-begun Sprint With Us opportunity, so that proponent reads 'Draft: incomplete' instead of 'Not started' until the seed is restored."
+cost: 0.6125978000000001
+turns: 4
+session: "3dde9ef3-d3ee-4bba-a711-b9adce0588cc"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T12:23:17.936Z
