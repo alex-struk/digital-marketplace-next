@@ -303,7 +303,7 @@ export default function create(
   // program chooser, the forms and the three programs' management screens; the proposal,
   // evaluation and organization terms screens answer "Page not found".
   const NOBODY_SIGNS_IN =
-    'walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor\'s screens — the seeded organization owner, an organization member and the invited vendor for the organization screens — with the seeded records\' identifiers), the running build serves a signed-in person /dashboard, /opportunities, the account screens under /users (a vendor\'s Organizations section, /users/me?tab=organizations, draws "Organizations you own" with "Create organization" and the owned table, and "Organizations you belong to"), /organizations ("Create organization", "My organizations" and the list), /organizations/create, and to an organization\'s owner /organizations/:orgId/edit (the "Organization" section with "Edit organization", and "Archive organization"; its Team members section draws the team table, its row actions and "Add team members", its Changelog section the changes to administrator rights and ownership, and its Sprint With Us qualification and Team With Us qualification sections say only "This section is not available yet."), to the administrator the content-management screens under /content, and to the administrator and public sector staff /opportunities/create, the three programs\' forms and their management screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (whose sections on the seeded Sprint With Us and Team With Us opportunities are Summary, Opportunity, Addenda, History and Evaluation panel, with no evaluation, consensus or instructions section); the proposal and evaluation screens — /proposals, the Code With Us proposal screens and /opportunities/code-with-us/:opportunityId/complete included — and /organizations/:orgId/sprint-with-us-terms-and-conditions and /organizations/:orgId/team-with-us-terms-and-conditions (opened as the seeded qualified organization\'s owner) answer "Page not found", as /organizations/:orgId/edit does to a member who does not own the organization';
+    'walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor\'s screens — the seeded organization owner, an organization member and the invited vendor for the organization screens — with the seeded records\' identifiers), the running build serves a signed-in person /dashboard, /opportunities, the account screens under /users (a vendor\'s Organizations section, /users/me?tab=organizations, draws "Organizations you own" with "Create organization" and the owned table, and "Organizations you belong to"), /organizations ("Create organization", "My organizations" and the list), /organizations/create, and to an organization\'s owner /organizations/:orgId/edit (the "Organization" section with "Edit organization", and "Archive organization"; its Team members section draws the team table, its row actions and "Add team members", its Changelog section the changes to administrator rights and ownership, and its Sprint With Us qualification and Team With Us qualification sections say only "This section is not available yet."), to the administrator the content-management screens under /content, and to the administrator and public sector staff /opportunities/create, the three programs\' forms and their management screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (whose sections on the seeded Sprint With Us and Team With Us opportunities are Summary, Opportunity, Addenda, History and Evaluation panel, with no evaluation, consensus or instructions section), and to a vendor the Code With Us proposal form /opportunities/code-with-us/:opportunityId/proposals/create and the vendor\'s own proposal\'s screen .../proposals/:proposalId/edit (rechecked on the current build as test-vendor-1); the other proposal and evaluation screens — /proposals, the Sprint With Us and Team With Us proposal forms, the Code With Us proposal\'s evaluation view .../proposals/:proposalId, its "Printable copy" .../proposals/:proposalId/export (to its own author too) and .../proposals/export (to the administrator too), and /opportunities/code-with-us/:opportunityId/complete included — and /organizations/:orgId/sprint-with-us-terms-and-conditions and /organizations/:orgId/team-with-us-terms-and-conditions (opened as the seeded qualified organization\'s owner) answer "Page not found", as /organizations/:orgId/edit does to a member who does not own the organization';
 
   // What each such address answered a signed-out visitor when it was last opened: /dashboard
   // and /sign-up/complete send them to /sign-in?redirectOnSuccess=…, and everything else
@@ -8780,6 +8780,654 @@ export default function create(
     },
   };
 
+  // ---------------------------------------------------------------- the Code With Us proposal form and screen
+  //
+  // Walked signed in as the seeded vendor (test-vendor-1) through the identity provider on the
+  // seeded published Code With Us opportunity, whose public page now carries a "Start a
+  // proposal" link to /opportunities/code-with-us/:opportunityId/proposals/create. The form is
+  // one page under the heading "Create a Code With Us proposal": a "The opportunity" region
+  // (Opportunity, Reward, Proposal deadline), then "Proponent" — a "Who is submitting this
+  // proposal? (required)" radio group of "An individual" (ticked to start with) and "An
+  // organization" — with, for an individual, "Legal name", "Email address", "Phone number
+  // (optional)", "Street address", "Street address line 2 (optional)", "City", "Province or
+  // state", "Postal code" and "Country" (each "(required)" unless marked otherwise), and for an
+  // organization a chooser button "Organization (required)" ("Select an item") listing the
+  // organizations the vendor owns or administers; then "Proposal" ("Proposal (required)",
+  // "Additional comments (optional)"), "Attachments" ("Add attachment", "Any type of file, up to
+  // 10 MB each.") and the "Proposal actions" group of "Cancel" (back to the opportunity's public
+  // page), "Save draft" and "Submit proposal". The radios are drawn under their own labels,
+  // which take the click.
+  //
+  // "Submit proposal" with anything missing stays on the form under an alert ("This proposal
+  // has 8 problems" then one "<Field>: <message>" line each, "Legal name: enter your legal name")
+  // and the same message under each field. With everything filled it raises the dialog "Submit
+  // your proposal": links to both sets of terms, the boxes "I accept the Code With Us terms and
+  // conditions (required)" and "I accept the Digital Marketplace terms and conditions
+  // (required)", and "Cancel" and "Submit proposal", the latter disabled until both are ticked.
+  // A save or a submit lands on the proposal's own screen,
+  // /opportunities/code-with-us/:opportunityId/proposals/:proposalId/edit. A vendor who already
+  // has a proposal on the opportunity is sent from the create address to that screen instead.
+  //
+  // The proposal's screen ("Manage a Code With Us proposal" over the opportunity's title) lists
+  // Status, Submitted (once submitted), Proposal ID, Opportunity ID and Proposal deadline as
+  // terms, links "View the opportunity" and "Printable copy", and offers the "Proposal actions"
+  // group: "Edit", "Submit proposal" and "Delete" on a draft; "Edit" and "Withdraw" once
+  // submitted ("Withdraw this proposal?" with "Keep proposal" / "Withdraw proposal"); "Edit" and
+  // "Submit proposal" once withdrawn. Its sections are "Proposal" and "History" (?tab=proposal,
+  // ?tab=history). "Edit" opens the same fields in place with "Cancel", "Save changes" ("Your
+  // changes have been saved.") and "Save changes and submit" (the same terms dialog). The
+  // screen is answered "Page not found" to anybody but the proposal's own author, the
+  // administrator included; so are the proposal's "Printable copy" (.../export), the evaluation
+  // view (/opportunities/code-with-us/:opportunityId/proposals/:proposalId) and .../proposals/export.
+  const PCWU_CREATE = "proposal-cwu-create";
+  const PCWU_EDIT = "proposal-cwu-edit";
+
+  // Each field by the start of its label, with the spellings a test may give its value under.
+  const PROPOSAL_FIELDS: [RegExp, string[]][] = [
+    [/^\s*legal name/i, ["legalName", "name", "proponentName", "individualName", "fullName"]],
+    [/^\s*email address/i, ["email", "emailAddress", "contactEmail"]],
+    [/^\s*phone number/i, ["phone", "phoneNumber", "contactPhone"]],
+    [/^\s*street address(?! line 2)/i, [
+      "street", "street1", "streetAddress", "streetAddress1", "streetAddressOne",
+      "address", "addressLine", "addressLine1", "addressLineOne",
+    ]],
+    [/^\s*street address line 2/i, [
+      "street2", "streetAddress2", "streetAddressTwo", "addressLine2", "addressLineTwo", "address2", "addressTwo",
+    ]],
+    [/^\s*city/i, ["city"]],
+    [/^\s*province or state/i, ["region", "province", "state", "provinceState", "provinceOrState"]],
+    [/^\s*postal code/i, ["postalCode", "mailCode", "postal", "zip", "zipCode"]],
+    [/^\s*country/i, ["country"]],
+    [/^\s*proposal\s*\(/i, ["proposalText", "proposal", "text", "body"]],
+    [/^\s*additional comments/i, ["additionalComments", "comments", "additionalComment"]],
+  ];
+  const PROPONENT_KEYS = ["proponentType", "proponent", "type", "kind", "proponentKind"];
+  const PROPOSAL_ORG_KEYS = ["organization", "org", "organizationId", "orgId", "organizationName", "organizationLegalName"];
+  const PROPOSAL_FILE_KEYS = ["attachments", "attachment", "files", "file"];
+  // Said about a file beside its name, read by the chooser along with it.
+  const PROPOSAL_FILE_DETAIL = ["content", "contents", "bytes", "size", "sizeBytes", "mimeType"];
+
+  // The labels of the fields a test gave a value for, empty values included: a field the test
+  // named is left exactly as the test left it, never filled in on its behalf.
+  const proposalNamed = new Set<string>();
+  // Set when the organization a test named is not among those the chooser offers, so none is
+  // picked in its place.
+  let proposalOrganizationWithheld = false;
+  // The terms a test has agreed to; the dialog unticks them when it closes, so they are ticked
+  // again whenever it opens.
+  const proposalTermsAgreed = new Set<"program" | "app">();
+  // What the form said when it last refused a submit, as the alert's lines.
+  let proposalRefusal: string[] = [];
+  const PROGRAM_TERMS = /^\s*i accept the code with us terms/i;
+  const APP_TERMS = /^\s*i accept the digital marketplace terms/i;
+
+  const proposalMain = (): Locator => page.getByRole("main");
+  const proposalBox = (label: RegExp): Locator => seen(proposalMain().getByRole("textbox", { name: label })).first();
+  const proposalActions = (): Locator => seen(proposalMain().getByRole("group", { name: /^\s*proposal actions\s*$/i })).first();
+  const saveChoices = (): Locator => seen(proposalMain().getByRole("group", { name: /^\s*save choices\s*$/i })).first();
+
+  // The form's fields are on screen and can be typed in: the create form, or the proposal's
+  // screen once "Edit" is pressed.
+  async function proposalFieldsOpen(): Promise<boolean> {
+    const box = proposalBox(/^\s*proposal\s*\(/i);
+    return (await box.count()) > 0 && (await box.isEditable().catch(() => false));
+  }
+
+  // Where the browser stands, for an action: on the form or the proposal's screen (true), or
+  // refused — "Page not found" for somebody who may not have it, which is recorded and left
+  // for the test's own reading — (false). An address that hands off elsewhere is unbound.
+  async function onProposal(where: string): Promise<boolean> {
+    await ready();
+    const why = await whyNotHere();
+    if (!why) return true;
+    if (/not found/i.test(why)) {
+      noteRefusal(`${where} — ${page.url()} answered ${actingId()} with ${why.replace(/\n+/g, " ")}`);
+      return false;
+    }
+    unbound(where, `the proposal screen did not open at ${page.url()} for ${actingId()}: ${why.replace(/\n+/g, " ")}`);
+  }
+
+  // The same, for a reading: "" when the screen refused this person.
+  async function proposalShown(): Promise<boolean> {
+    await ready();
+    return !(await whyNotHere());
+  }
+
+  // The fields opened for typing: already open, or opened with the screen's "Edit". A screen
+  // offering no "Edit" in its state is the page withholding the change, recorded and left.
+  async function openProposalFields(where: string): Promise<boolean> {
+    if (!(await onProposal(where))) return false;
+    if (await proposalFieldsOpen()) return true;
+    const edit = seen(proposalActions().getByRole("button", { name: /^\s*edit\s*$/i })).first();
+    if (!(await edit.count())) {
+      noteRefusal(`${where} — ${page.url()} offers no "Edit" (its actions: ${(await proposalActionNames()) || "none"})`);
+      return false;
+    }
+    await edit.click();
+    await proposalBox(/^\s*proposal\s*\(/i).waitFor({ state: "visible", timeout: 10000 }).catch(() => undefined);
+    await settle();
+    return proposalFieldsOpen();
+  }
+
+  async function proposalActionNames(): Promise<string> {
+    const group = (await proposalActions().count()) ? proposalActions() : saveChoices();
+    if (!(await group.count())) return "";
+    return (await seen(group.getByRole("button")).allInnerTexts()).map((one) => one.trim()).filter(Boolean).join("\n");
+  }
+
+  // The organization a test names, as the chooser shows it: by its seed handle
+  // ("qualified", "organizations.qualified"), its identifier, its record, or its legal name.
+  function proposalOrganizationName(value: unknown): string {
+    const groups = seedGroups.organizations as unknown as Record<string, { id?: unknown; legal_name?: unknown }> | undefined;
+    const byKey = (key: string): string => {
+      const handle = key.startsWith("organizations.") ? key.slice("organizations.".length) : key;
+      const found = groups?.[handle] ?? Object.values(groups ?? {}).find((one) => String(one.id) === key);
+      return typeof found?.legal_name === "string" ? found.legal_name : "";
+    };
+    if (value && typeof value === "object" && !Array.isArray(value)) {
+      const named = field(value, "legal_name", "legalName", "name", "organizationName");
+      if (named) return named;
+      const id = field(value, "id");
+      return id ? byKey(id) || id : "";
+    }
+    const text = textOf(value).trim();
+    return text ? byKey(text) || text : "";
+  }
+
+  // "An individual" or "An organization", by the label the radio is drawn under.
+  async function chooseProponent(where: string, kind: "individual" | "organization"): Promise<void> {
+    const words = kind === "organization" ? "An organization" : "An individual";
+    const radio = seen(proposalMain().getByRole("radio", { name: new RegExp(`^\\s*${words}\\s*$`, "i") })).first();
+    if (!(await radio.count())) {
+      unbound(where, `no "${words}" choice under "Who is submitting this proposal?" on ${page.url()}; it offers ${await offered()}`);
+    }
+    if (await radio.isChecked()) return;
+    if (await isDisabled(radio)) throw new Error(`${where} — the "${words}" choice is disabled on ${page.url()}`);
+    await seen(proposalMain().getByRole("radiogroup").getByText(words, { exact: true })).first().click();
+    await settle();
+    if (!(await radio.isChecked())) await radio.check({ force: true }).catch(() => undefined);
+  }
+
+  // The "Organization (required)" chooser, shown once "An organization" is chosen. An
+  // organization it does not offer (one archived, one the vendor does not own) is left
+  // unchosen, never replaced by another: the refusal the test goes on to read.
+  async function chooseProposalOrg(where: string, value: unknown): Promise<void> {
+    const name = proposalOrganizationName(value);
+    proposalNamed.add("organization");
+    const chooser = seen(proposalMain().getByRole("button", { name: /organization\s*\(required\)/i })).first();
+    if (!(await chooser.count())) {
+      unbound(where, `chose "An organization" but no "Organization" chooser appeared on ${page.url()}; it offers ${await offered()}`);
+    }
+    if (!name) return;
+    await chooser.click();
+    const options = seen(page.getByRole("option"));
+    await options.first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+    const option = seen(page.getByRole("option", { name, exact: true })).first();
+    if (!(await option.count())) {
+      const listed = (await options.allInnerTexts().catch(() => [] as string[])).map((one) => one.trim());
+      await page.keyboard.press("Escape").catch(() => undefined);
+      proposalOrganizationWithheld = true;
+      noteRefusal(`${where} — the "Organization" chooser on ${page.url()} does not offer "${name}" (it offers: ${listed.join(", ") || "nothing"})`);
+      return;
+    }
+    proposalOrganizationWithheld = false;
+    await option.click();
+    await settle();
+  }
+
+  // A test's values one field at a time; a group of them ({ address: { city } }) is entered
+  // field by field.
+  function proposalEntries(input: unknown): [string, unknown][] {
+    const out: [string, unknown][] = [];
+    const kept = [...PROPOSAL_ORG_KEYS, ...PROPOSAL_FILE_KEYS].map(squash);
+    for (const [key, value] of Object.entries(record(input))) {
+      if (value === undefined) continue;
+      const nested = value !== null && typeof value === "object" && !Array.isArray(value);
+      if (nested && !kept.includes(squash(key))) out.push(...proposalEntries(value));
+      else out.push([key, value]);
+    }
+    return out;
+  }
+
+  // Every value the test gave, entered before anything is pressed: the kind of proponent
+  // first (it decides which fields are shown), then the organization, the fields by their
+  // labels, and the files. A key no field takes is named, never dropped.
+  async function fillProposal(where: string, input: unknown): Promise<void> {
+    if (input === undefined || input === null) return;
+    if (typeof input !== "object" || Array.isArray(input)) {
+      unbound(where, `the input ${JSON.stringify(input)} names no field of the proposal form`);
+    }
+    let kind = "";
+    let organization: unknown;
+    const files: unknown[] = [];
+    const rest: [string, unknown][] = [];
+    for (const [key, value] of proposalEntries(input)) {
+      const k = squash(key);
+      if (PROPONENT_KEYS.map(squash).includes(k)) kind = textOf(value);
+      else if (PROPOSAL_ORG_KEYS.map(squash).includes(k)) organization = value;
+      else if (PROPOSAL_FILE_KEYS.map(squash).includes(k)) {
+        // One file named beside what is said about it ({ file, content }) is offered whole.
+        if (!Array.isArray(value) && typeof value !== "object") files.push(input);
+        else files.push(...[value].flat());
+      } else if (!PROPOSAL_FILE_DETAIL.map(squash).includes(k)) rest.push([key, value]);
+    }
+    if (organization !== undefined && !kind) kind = "organization";
+    if (kind) await chooseProponent(where, /org/i.test(kind) ? "organization" : "individual");
+    if (organization !== undefined) await chooseProposalOrg(where, organization);
+    for (const [key, value] of rest) {
+      const slot = PROPOSAL_FIELDS.find(([, keys]) => keys.map(squash).includes(squash(key)));
+      const label = slot ? slot[0] : labelFor(key);
+      const box = proposalBox(label);
+      if (!(await box.count())) {
+        unbound(where, `no field on ${page.url()} takes "${key}" (looked for one labelled ${label}); it offers ${await offered()}`);
+      }
+      if (!(await box.isEditable().catch(() => false))) throw new Error(`${where} — the field for "${key}" is read-only on ${page.url()}`);
+      await box.fill(textOf(value));
+      proposalNamed.add(String(label));
+    }
+    await page.keyboard.press("Tab").catch(() => undefined);
+    for (const file of files) await addAttachmentFile(where, file);
+    await settle();
+  }
+
+  // A test hands an action only the values its criterion is about; every other required
+  // field is given something valid, so the form will submit on what the test did give. A
+  // field the test named, even as empty, is never touched; nor is one already filled.
+  async function completeProposal(): Promise<void> {
+    const boxes = seen(proposalMain().getByRole("textbox", { name: /\(required\)/i }));
+    for (let i = 0; i < (await boxes.count()); i++) {
+      const box = boxes.nth(i);
+      if (!(await box.isEditable().catch(() => false))) continue;
+      if ((await box.inputValue().catch(() => "x")).trim()) continue;
+      const name = await box
+        .evaluate((element) => ((element as HTMLInputElement).labels?.[0]?.innerText ?? element.getAttribute("aria-label") ?? "").trim())
+        .catch(() => "");
+      const slot = PROPOSAL_FIELDS.find(([label]) => label.test(name));
+      if (slot && proposalNamed.has(String(slot[0]))) continue;
+      await box.fill(proposalPlaceholder(name));
+    }
+    const chooser = seen(proposalMain().getByRole("button", { name: /organization\s*\(required\)/i })).first();
+    if (
+      (await chooser.count()) &&
+      !proposalNamed.has("organization") &&
+      !proposalOrganizationWithheld &&
+      /select an item/i.test(await chooser.innerText().catch(() => ""))
+    ) {
+      await chooser.click();
+      const first = seen(page.getByRole("option")).first();
+      await first.waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+      if (await first.count()) await first.click();
+      else await page.keyboard.press("Escape").catch(() => undefined);
+    }
+    await settle();
+  }
+
+  function proposalPlaceholder(label: string): string {
+    const words = label.toLowerCase();
+    if (/email/.test(words)) return "adapter.proponent@example.test";
+    if (/postal/.test(words)) return "V8W 9V1";
+    if (/country/.test(words)) return "Canada";
+    if (/province|state/.test(words)) return "BC";
+    if (/city/.test(words)) return "Victoria";
+    if (/street/.test(words)) return "501 Belleville Street";
+    if (/phone/.test(words)) return "250-555-0100";
+    if (/legal name/.test(words)) return "Adapter Proponent";
+    return "Entered by the acceptance adapter so the proposal can be submitted.";
+  }
+
+  // The lines of the form's refusal alert ("This proposal has N problems", then "<Field>:
+  // <message>" each), on the screen now.
+  async function proposalAlertLines(): Promise<string[]> {
+    const alerts = seen(proposalMain().getByRole("alert"));
+    const out: string[] = [];
+    for (let i = 0; i < (await alerts.count()); i++) out.push(...lined(await alerts.nth(i).innerText().catch(() => "")));
+    return out;
+  }
+
+  // The terms dialog open, with the terms already agreed to ticked; false when the form
+  // refused what it holds (the refusal is kept for the readers). A refusal over required
+  // fields the test never named is answered by filling those in and asking again.
+  async function openProposalTerms(where: string): Promise<boolean> {
+    if (await dialogShown(300)) return tickAgreedTerms();
+    if (!(await onProposal(where))) return false;
+    const ask = async (): Promise<boolean> => {
+      const submit = seen(proposalMain().getByRole("button", { name: /^\s*(submit proposal|save changes and submit)\s*$/i })).first();
+      if (!(await submit.count())) {
+        unbound(where, `no "Submit proposal" on ${page.url()}; it offers ${await offered()}`);
+      }
+      if (await isDisabled(submit)) throw new Error(`${where} — "Submit proposal" is disabled on ${page.url()}`);
+      await submit.click();
+      const deadline = Date.now() + 10000;
+      while (Date.now() < deadline) {
+        if (await openDialog().count()) break;
+        if ((await proposalAlertLines()).length) break;
+        await page.waitForTimeout(200);
+      }
+      return dialogShown(500);
+    };
+    if (await ask()) return tickAgreedTerms();
+    if (await proposalFieldsOpen()) {
+      await completeProposal();
+      if (await ask()) return tickAgreedTerms();
+    }
+    proposalRefusal = await proposalAlertLines();
+    noteRefusal(`${where} — the form on ${page.url()} refused to submit: ${proposalRefusal.join(" | ") || "it raised no terms dialog"}`);
+    return false;
+  }
+
+  async function tickAgreedTerms(): Promise<boolean> {
+    const box = openDialog().first();
+    for (const which of proposalTermsAgreed) {
+      const tick = seen(box.getByRole("checkbox", { name: which === "program" ? PROGRAM_TERMS : APP_TERMS })).first();
+      if ((await tick.count()) && !(await tick.isChecked())) await tick.check();
+    }
+    return true;
+  }
+
+  async function agreeToTerms(where: string, which: "program" | "app"): Promise<void> {
+    proposalTermsAgreed.add(which);
+    if (!(await openProposalTerms(where))) return;
+    const tick = seen(openDialog().first().getByRole("checkbox", { name: which === "program" ? PROGRAM_TERMS : APP_TERMS })).first();
+    if (!(await tick.count())) {
+      unbound(where, `the "Submit your proposal" dialog on ${page.url()} has no box accepting the ${which === "program" ? "Code With Us" : "Digital Marketplace"} terms; it reads: ${(await openDialog().first().innerText()).replace(/\s+/g, " ")}`);
+    }
+    if (!(await tick.isChecked())) await tick.check();
+    // Put away so the form behind it can be reached again; the submit reopens and reticks it.
+    await closeDialog();
+  }
+
+  // The dialog's own "Submit proposal", pressed once the boxes agreed to are ticked. Disabled,
+  // it names the boxes left unticked, so a submit without the terms fails on that.
+  async function confirmProposalSubmit(where: string): Promise<void> {
+    const box = openDialog().first();
+    const confirm = seen(box.getByRole("button", { name: /^\s*submit( proposal)?\s*$/i })).first();
+    if (!(await confirm.count())) unbound(where, `the "Submit your proposal" dialog on ${page.url()} offers no "Submit proposal"`);
+    if (await isDisabled(confirm)) {
+      const unticked: string[] = [];
+      const ticks = seen(box.getByRole("checkbox"));
+      for (let i = 0; i < (await ticks.count()); i++) {
+        if (!(await ticks.nth(i).isChecked())) unticked.push(((await ticks.nth(i).getAttribute("aria-label")) ?? "") || `box ${i + 1}`);
+      }
+      throw new Error(`${where} — "Submit proposal" in the terms dialog is disabled on ${page.url()}; the terms were not all accepted${unticked.length ? ` (${unticked.join(" | ")})` : ""}`);
+    }
+    await confirm.click();
+    await openDialog().first().waitFor({ state: "hidden", timeout: 15000 }).catch(() => undefined);
+    await landOnProposal();
+    proposalTermsAgreed.clear();
+  }
+
+  // A save or a submit lands on the proposal's own screen, or stays where it was under an
+  // alert; either ends the wait.
+  async function landOnProposal(): Promise<void> {
+    const deadline = Date.now() + 15000;
+    while (Date.now() < deadline) {
+      const path = new URL(page.url()).pathname;
+      if (/\/proposals\/[0-9a-f-]{36}\/edit$/i.test(path) && !(await openDialog().count())) {
+        const said = await seen(proposalMain().getByRole("status")).allInnerTexts().catch(() => [] as string[]);
+        if (said.some((one) => one.trim()) || !(await proposalFieldsOpen())) break;
+      }
+      if ((await proposalAlertLines()).length) break;
+      await page.waitForTimeout(250);
+    }
+    await ready();
+  }
+
+  // A fresh visit to a proposal's address forgets what the last one entered or agreed to.
+  function forgetProposalForm(): void {
+    proposalNamed.clear();
+    proposalTermsAgreed.clear();
+    proposalRefusal = [];
+    proposalOrganizationWithheld = false;
+  }
+
+  // Entered into the form, opening it with "Edit" on the proposal's screen where needed.
+  async function enterProposal(where: string, input: unknown): Promise<boolean> {
+    const values = proposalEntries(input).length > 0;
+    if (!values) return onProposal(where);
+    proposalRefusal = [];
+    await closeDialog();
+    if (!(await openProposalFields(where))) return false;
+    await fillProposal(where, input);
+    return true;
+  }
+
+  // The proposal's terms (Status, Proposal ID, …): the words of the definition beside one.
+  async function proposalTerm(label: RegExp): Promise<string> {
+    if (!(await proposalShown())) return "";
+    // Every term on these screens carries exactly one definition, so they pair by position.
+    const names = (await seen(proposalMain().getByRole("term")).allInnerTexts()).map((one) => one.trim());
+    const values = (await seen(proposalMain().getByRole("definition")).allInnerTexts()).map((one) => one.trim());
+    const at = names.findIndex((name) => label.test(name));
+    return at >= 0 && names.length === values.length ? values[at] : "";
+  }
+
+  const proposalPathId = (): string => /\/proposals\/([0-9a-f-]{36})(?:\/|$)/i.exec(new URL(page.url()).pathname)?.[1] ?? "";
+  const opportunityPathId = (): string => /^\/opportunities\/[a-z-]+\/([0-9a-f-]{36})/i.exec(new URL(page.url()).pathname)?.[1] ?? "";
+
+  // A control of the screen's "Proposal actions", confirmed in the dialog it raises. Not
+  // offered in the proposal's state, it is the page withholding it: recorded and left.
+  async function proposalAction(where: string, name: RegExp, confirm: RegExp | null): Promise<boolean> {
+    if (!(await onProposal(where))) return false;
+    await closeDialog();
+    const control = seen(proposalActions().getByRole("button", { name })).first();
+    if (!(await control.count())) {
+      noteRefusal(`${where} — ${page.url()} (Status: ${(await proposalTerm(/^status$/i)) || "not shown"}) does not offer ${name}; its actions: ${(await proposalActionNames()) || "none"}`);
+      return false;
+    }
+    if (await isDisabled(control)) throw new Error(`${where} — the control named ${name} is disabled on ${page.url()}`);
+    await control.click();
+    if (confirm) {
+      if (await dialogShown()) await pressInDialog(where, confirm);
+    }
+    await settle();
+    return true;
+  }
+
+  async function proposalSubmit(where: string, input: unknown): Promise<void> {
+    if (!(await enterProposal(where, input))) return;
+    if (!(await openProposalTerms(where))) return;
+    await confirmProposalSubmit(where);
+  }
+
+  // What the form says against its fields: the alert and each field's own message, with what
+  // it said when it last refused a submit.
+  async function proposalFieldMessages(): Promise<string> {
+    if (!(await proposalShown())) return "";
+    if (await openDialog().count()) return lined(await openDialog().first().innerText()).filter((line) => /tick|accept/i.test(line) && !/^\s*i accept/i.test(line)).join("\n");
+    const found = lined(await formMessages());
+    for (const line of proposalRefusal) if (!found.includes(line)) found.push(line);
+    return found.join("\n");
+  }
+
+  const proposalCwuCreate: S.ProposalCwuCreatePage = {
+    open: async (params) => {
+      forgetProposalForm();
+      await go("/opportunities/code-with-us/:opportunityId/proposals/create", params as unknown as Record<string, string>);
+      await ready();
+    },
+    // Choosing to answer as an individual shows the individual's own details, which are
+    // entered from the input; every other required field is then given something valid.
+    chooseProponentIndividual: async (input) => {
+      const where = `${PCWU_CREATE}.choose_proponent_individual`;
+      if (!(await openProposalFields(where))) return;
+      await chooseProponent(where, "individual");
+      await fillProposal(where, input);
+      await completeProposal();
+    },
+    chooseProponentOrganization: async (input) => {
+      const where = `${PCWU_CREATE}.choose_proponent_organization`;
+      if (!(await openProposalFields(where))) return;
+      await chooseProponent(where, "organization");
+      const named = typeof input === "string" ? input : given(input, PROPOSAL_ORG_KEYS);
+      if (named !== undefined) await chooseProposalOrg(where, named);
+      const rest = Object.fromEntries(Object.entries(record(input)).filter(([key]) => !PROPOSAL_ORG_KEYS.map(squash).includes(squash(key))));
+      await fillProposal(where, rest);
+    },
+    addAttachment: async (input) => {
+      const where = `${PCWU_CREATE}.add_attachment`;
+      await closeDialog();
+      if (!(await openProposalFields(where))) return;
+      await addAttachmentFile(where, input);
+    },
+    saveDraft: async (input) => {
+      const where = `${PCWU_CREATE}.save_draft`;
+      if (!(await enterProposal(where, input))) return;
+      await closeDialog();
+      const save = seen(proposalMain().getByRole("button", { name: /^\s*(save draft|save changes)\s*$/i })).first();
+      if (!(await save.count())) {
+        noteRefusal(`${where} — ${page.url()} offers no "Save draft" (its actions: ${(await proposalActionNames()) || "none"})`);
+        return;
+      }
+      if (await isDisabled(save)) throw new Error(`${where} — "Save draft" is disabled on ${page.url()}`);
+      await save.click();
+      await landOnProposal();
+    },
+    submitProposal: (input) => proposalSubmit(`${PCWU_CREATE}.submit_proposal`, input),
+    acceptProgramTerms: async (input) => {
+      const where = `${PCWU_CREATE}.accept_program_terms`;
+      if (!(await enterProposal(where, input))) return;
+      await agreeToTerms(where, "program");
+    },
+    acceptAppTerms: async (input) => {
+      const where = `${PCWU_CREATE}.accept_app_terms`;
+      if (!(await enterProposal(where, input))) return;
+      await agreeToTerms(where, "app");
+    },
+    cancel: async () => {
+      const where = `${PCWU_CREATE}.cancel`;
+      await closeDialog();
+      if (!(await onProposal(where))) return;
+      const group = (await proposalActions().count()) ? proposalActions() : saveChoices();
+      await press(where, /^\s*cancel\s*$/i, group);
+    },
+    fieldError: () => proposalFieldMessages(),
+    // Each refusal as "<Field>: <message>", the way the form's alert lists them.
+    fieldErrorsByField: async () => {
+      if (!(await proposalShown())) return "";
+      const found = (await proposalAlertLines()).filter((line) => /^[^:]{1,60}:\s+\S/.test(line));
+      for (const line of proposalRefusal) if (/^[^:]{1,60}:\s+\S/.test(line) && !found.includes(line)) found.push(line);
+      return found.join("\n");
+    },
+    // The form's "The opportunity" region: the opportunity, its reward and its deadline.
+    opportunitySummary: async () => {
+      if (!(await proposalShown())) return "";
+      const region = seen(proposalMain().getByRole("region", { name: /^\s*the opportunity\s*$/i })).first();
+      if (!(await region.count())) {
+        unbound(`${PCWU_CREATE}.opportunity_summary`, `no "The opportunity" part on ${page.url()}; it offers ${await offered()}`);
+      }
+      return lined(await region.innerText()).join("\n");
+    },
+    termsModal: async () => {
+      const where = `${PCWU_CREATE}.terms_modal`;
+      if (!(await openProposalTerms(where))) {
+        unbound(where, `the form on ${page.url()} refused to submit, so no terms dialog could be opened: ${proposalRefusal.join(" | ") || "it raised none"}`);
+      }
+      return (await openDialog().first().innerText()).trim();
+    },
+    submitDisabledUntilTermsAccepted: async () => {
+      const where = `${PCWU_CREATE}.submit_disabled_until_terms_accepted`;
+      if (!(await openProposalTerms(where))) {
+        unbound(where, `the form on ${page.url()} refused to submit, so no terms dialog could be opened: ${proposalRefusal.join(" | ") || "it raised none"}`);
+      }
+      const confirm = seen(openDialog().first().getByRole("button", { name: /^\s*submit( proposal)?\s*$/i })).first();
+      if (!(await confirm.count())) return "absent";
+      return (await isDisabled(confirm)) ? "disabled" : "enabled";
+    },
+  };
+
+  const proposalCwuEdit: S.ProposalCwuEditPage = {
+    open: async (params) => {
+      forgetProposalForm();
+      await go("/opportunities/code-with-us/:opportunityId/proposals/:proposalId/edit", params as unknown as Record<string, string>);
+      await ready();
+    },
+    startEditing: async () => {
+      await openProposalFields(`${PCWU_EDIT}.start_editing`);
+    },
+    saveChanges: async (input) => {
+      const where = `${PCWU_EDIT}.save_changes`;
+      if (!(await openProposalFields(where))) return;
+      await fillProposal(where, input);
+      await press(where, /^\s*save changes\s*$/i, saveChoices());
+      await landOnProposal();
+    },
+    saveChangesAndSubmit: async (input) => {
+      const where = `${PCWU_EDIT}.save_changes_and_submit`;
+      if (!(await openProposalFields(where))) return;
+      await fillProposal(where, input);
+      // Saving and submitting accepts both sets of terms in the dialog it raises.
+      proposalTermsAgreed.add("program");
+      proposalTermsAgreed.add("app");
+      if (!(await openProposalTerms(where))) return;
+      await confirmProposalSubmit(where);
+    },
+    submitProposal: async () => {
+      const where = `${PCWU_EDIT}.submit_proposal`;
+      if (!(await onProposal(where))) return;
+      if (!(await proposalFieldsOpen()) && !(await seen(proposalActions().getByRole("button", { name: /^\s*submit proposal\s*$/i })).count())) {
+        noteRefusal(`${where} — ${page.url()} (Status: ${(await proposalTerm(/^status$/i)) || "not shown"}) does not offer "Submit proposal"; its actions: ${(await proposalActionNames()) || "none"}`);
+        return;
+      }
+      proposalTermsAgreed.add("program");
+      proposalTermsAgreed.add("app");
+      if (!(await openProposalTerms(where))) return;
+      await confirmProposalSubmit(where);
+    },
+    withdrawProposal: async () => {
+      await proposalAction(`${PCWU_EDIT}.withdraw_proposal`, /^\s*withdraw\s*$/i, /^\s*withdraw( proposal)?\s*$/i);
+    },
+    deleteProposal: async () => {
+      await proposalAction(`${PCWU_EDIT}.delete_proposal`, /^\s*delete\s*$/i, /^\s*delete( proposal)?\s*$/i);
+    },
+    addAttachment: async (input) => {
+      const where = `${PCWU_EDIT}.add_attachment`;
+      if (!(await openProposalFields(where))) return;
+      await addAttachmentFile(where, input);
+    },
+    // "Remove <name>" beside an attachment, with the fields open; kept once the form is saved.
+    removeAttachment: async (input) => {
+      const where = `${PCWU_EDIT}.remove_attachment`;
+      if (!(await openProposalFields(where))) return;
+      const region = attachmentRegion();
+      const row = await rowNamed(region, input, () => true);
+      if (!row) {
+        unbound(where, `no attachment on ${page.url()} matches ${JSON.stringify(input)}; the list reads: ${(await rowLines(await itemsMatching(region, () => true))) || "nothing"}`);
+      }
+      await press(where, /^\s*remove\b/i, row);
+    },
+    proposalIdentifier: async () => ((await proposalShown()) ? (await proposalTerm(/^proposal id$/i)) || proposalPathId() : ""),
+    opportunityIdentifier: async () =>
+      ((await proposalShown()) ? (await proposalTerm(/^opportunity id$/i)) || opportunityPathId() : ""),
+    // The "Proposal" section: the proponent, the proposal's text, comments and attachments,
+    // with what each box holds while the fields are open.
+    proposalTab: async () => {
+      if (!(await proposalShown())) return "";
+      const link = seen(proposalMain().getByRole("navigation", { name: /proposal sections/i }).getByRole("link", { name: /^\s*proposal\s*$/i })).first();
+      if ((await link.count()) && /tab=(?!proposal)/.test(new URL(page.url()).search)) {
+        await link.click();
+        await ready();
+      }
+      const region = seen(proposalMain().getByRole("region", { name: /^\s*proposal\s*$/i })).first();
+      if (!(await region.count())) {
+        unbound(`${PCWU_EDIT}.proposal_tab`, `no "Proposal" section on ${page.url()}; it offers ${await offered()}`);
+      }
+      const lines = lined(await region.innerText());
+      const boxes = seen(region.getByRole("textbox"));
+      for (let i = 0; i < (await boxes.count()); i++) {
+        const value = (await boxes.nth(i).inputValue().catch(() => "")).trim();
+        if (value && !lines.includes(value)) lines.push(value);
+      }
+      return lines.join("\n");
+    },
+    status: () => proposalTerm(/^status$/i),
+    submittedAt: () => proposalTerm(/^submitted( on| at)?$/i),
+    // The vendor's screen shows no score or rank in any state walked (draft, submitted,
+    // withdrawn); none shown reads as nothing.
+    score: () => proposalTerm(/^(total )?score$/i),
+    rank: () => proposalTerm(/^rank(ing)?$/i),
+    availableActions: async () => ((await proposalShown()) ? proposalActionNames() : ""),
+  };
+
   const surface: S.Surface = {
     signIn,
     signOut,
@@ -8871,56 +9519,9 @@ export default function create(
 
     scheduledTransitionTrigger,
 
-    proposalCwuCreate: {
-      ...unboundMembers(
-        "proposal-cwu-create",
-        behindSignIn("the Code With Us proposal form", 'shows the "Not Found" screen (tried with the seeded published Code With Us opportunity)'),
-        ["field_errors_by_field"],
-      ),
-      ...absent<S.ProposalCwuCreatePage>(
-      "proposal-cwu-create",
-      "/opportunities/code-with-us/:opportunityId/proposals/create",
-      `${behindSession("/opportunities/code-with-us/:opportunityId/proposals/create")}; looked for once more signed in as a vendor through the identity provider: the seeded published Code With Us opportunity's public page (proposal deadline June 1, 2030) shows its details, skills, key dates and addenda, and its only control is a "Watch this opportunity" tick box, with no link or button to start a proposal; the vendor's header offers only Dashboard, My profile and Sign out, the dashboard shows only a greeting, the profile's tabs (Profile, Capabilities, Organizations, Notifications, Legal, where the Code With Us terms are a link to read with nothing to accept) start nothing, and /opportunities/code-with-us/:opportunityId/proposals/create, .../proposals, .../proposals/new, .../apply, /opportunities/:opportunityId/proposals/create, /proposals, /proposals/create?opportunityId=<id> and /proposals/code-with-us/create?opportunityId=<id> all answer "Page not found" for that opportunity; rechecked on the current build signed in as the seeded vendor through the identity provider: the form's route still answers "Page not found" for that opportunity, its public page still offers only the "Watch this opportunity" tick box, the /opportunities list (now with a "New opportunity emails" panel) offers each opportunity only a title link and a Watch tick box, and the open Sprint With Us opportunity "with a submitted proposal" answers "Page not found" too; looked for again on the build this contract was bound against, signed in as the seeded vendor (test-vendor-1) through the identity provider: /opportunities/code-with-us/<seeded published id>/proposals/create still answers "Page not found / The page you are looking for does not exist.", and that opportunity's public page carries no button and no link in its main content, only the one "Watch this opportunity" tick box, under a header of Dashboard, My profile and Sign out`,
-      [
-        "choose_proponent_individual",
-        "choose_proponent_organization",
-        "add_attachment",
-        "save_draft",
-        "submit_proposal",
-        "accept_program_terms",
-        "accept_app_terms",
-        "cancel",
-        "field_error",
-        "opportunity_summary",
-        "terms_modal",
-        "submit_disabled_until_terms_accepted",
-      ],
-    ),
-    } as S.ProposalCwuCreatePage,
+    proposalCwuCreate,
 
-    proposalCwuEdit: absent<S.ProposalCwuEditPage>(
-      "proposal-cwu-edit",
-      "/opportunities/code-with-us/:opportunityId/proposals/:proposalId/edit",
-      behindSession("/opportunities/code-with-us/:opportunityId/proposals/:proposalId/edit"),
-      [
-        "start_editing",
-        "save_changes",
-        "save_changes_and_submit",
-        "submit_proposal",
-        "withdraw_proposal",
-        "delete_proposal",
-        "add_attachment",
-        "remove_attachment",
-        "proposal_identifier",
-        "opportunity_identifier",
-        "proposal_tab",
-        "status",
-        "submitted_at",
-        "score",
-        "rank",
-        "available_actions",
-      ],
-    ),
+    proposalCwuEdit,
 
     proposalCwuView: absent<S.ProposalCwuViewPage>(
       "proposal-cwu-view",

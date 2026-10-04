@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does the new-target adapter bind the surface on the Code With Us proposal form and proposal screen, and nothing else? Approve. The runner's own typecheck of this revision is clean, nothing under tests/acceptance or a protected path changed, and the new bindings only navigate and read: fields are matched by label, a key with no matching field throws unbound, readers return what the screen shows and the action-state reader has the same return shape as the old adapter's. Required fields the test did not name get placeholder values only when the form refuses a submit. Fields a test names, even as empty, are left alone, which keeps R-2.13's refusal observable. Edit-screen submits tick both terms because that screen offers no separate accept action. The remaining unbound reasons name specific addresses and what they answer. Not blocking but worth knowing: R-2.3 asserts toBeTruthy on a reading that always returns a non-empty string, so it cannot fail (a test defect, not this adapter's), and the withdrawn proposal the author left for test-vendor-1 on the seeded published Code With Us opportunity redirects that vendor's create address until the target is reseeded. Would change: evidence that an adapter member decides an outcome, or that an unbound reason is contradicted by a page the build serves.
+conditions: []
+cost: 0.99546
+turns: 8
+session: "d3129fb9-ba5b-4e50-a415-be2866258bd2"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T01:29:19.270Z
