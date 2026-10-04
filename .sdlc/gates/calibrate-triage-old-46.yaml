@@ -1,0 +1,16 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: did this project's adapter for the old target cause R-2.36's withdrawal failure? Ruling: approve, sorted as a product question. The adapter reads blind copies from Mailpit's per-message Bcc field (tests/adapters/old/index.ts:9917), the field the criterion depends on, and the awarding test in the same file passed through that same Bcc path. The withdrawal itself was driven through: the vendor's notice arrived after the catcher was emptied. The failure lists the two administrator addresses as absent from every message addressed to the service, which is an observation of what the old app sent, not an empty or misread answer. One doubt remains: the vendor check could be satisfied by a late-arriving submission confirmation. Nothing in the evidence shows that, and an unclear case goes to the product owner. The product owner should also note that the test requires administrators specifically as blind copies under the service address, which comes from R-6.15; R-2.36 itself only says administrators receive a notice. Evidence that the withdrawal never took effect, or that Mailpit drops these blind copies, would change this to adapter-wrong.
+conditions:
+  - "product-question R-2.36"
+cost: 0.42347260000000003
+turns: 7
+session: "8dd11a40-1919-42ea-9b7f-b4caa5a0560d"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T22:41:41.706Z
