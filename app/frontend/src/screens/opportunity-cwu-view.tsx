@@ -2,7 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { Checkbox, Heading, Link, Text } from "@bcgov/design-system-react-components";
 import { Program, mayManageOpportunity } from "@rules/opportunities";
 import { mayWatch } from "@rules/opportunity-list";
+import { isAcceptingProposals } from "@rules/proposals";
 import { CwuOpportunity, fetchCwuOpportunity } from "../api/opportunities";
+import { listCwuProposals } from "../api/proposals";
 import { countView, setWatching } from "../api/watching";
 import { AttachmentList } from "../app/attachments";
 import { Loading } from "../app/loading";
@@ -113,6 +115,9 @@ export function OpportunityCwuViewScreen({ opportunityId }: { opportunityId: str
       {mayWatch(viewer, { createdBy: opportunity.createdBy?.id ?? null }) ? (
         <WatchControl key={opportunity.id} opportunity={opportunity} />
       ) : null}
+      {viewer?.type === "VENDOR" && isAcceptingProposals(opportunity, new Date()) ? (
+        <StartProposal key={`${opportunity.id}-${viewer.id}`} opportunityId={opportunity.id} vendorId={viewer.id} />
+      ) : null}
       {manages ? (
         <div>
           <Link href={`/opportunities/code-with-us/${opportunity.id}/edit`} isButton buttonVariant="secondary">
@@ -158,6 +163,37 @@ export function OpportunityCwuViewScreen({ opportunityId }: { opportunityId: str
         <AddendaList addenda={opportunity.addenda} showAuthor={false} />
       </Stack>
     </Stack>
+  );
+}
+
+/**
+ * Start a proposal (`opportunity-start-proposal`), for a vendor while the opportunity accepts
+ * proposals. A vendor who already holds one is taken to it instead of a new one (R-2.2).
+ */
+function StartProposal({ opportunityId, vendorId }: { opportunityId: string; vendorId: string }) {
+  const [held, setHeld] = useState<string | null>(null);
+  useEffect(() => {
+    let current = true;
+    void listCwuProposals(opportunityId).then((answer) => {
+      const mine = answer.kind === "listed" ? answer.proposals.find((proposal) => proposal.createdBy?.id === vendorId) : undefined;
+      if (current && mine) setHeld(mine.id);
+    });
+    return () => {
+      current = false;
+    };
+  }, [opportunityId, vendorId]);
+  const base = `/opportunities/code-with-us/${opportunityId}/proposals`;
+  return (
+    <div>
+      <Link
+        href={held ? `${base}/${held}/edit` : `${base}/create`}
+        isButton
+        buttonVariant="primary"
+        data-testid="opportunity-start-proposal"
+      >
+        {held ? "View your proposal" : "Start a proposal"}
+      </Link>
+    </div>
   );
 }
 

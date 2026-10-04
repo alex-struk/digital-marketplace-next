@@ -1,0 +1,558 @@
+{
+  "slice": 14,
+  "proposal": "build-slice-14-3",
+  "app_tree": "2bf1e3def6c4019318e9d97d03250964601c7605",
+  "at": "2026-10-04T04:49:42.817Z",
+  "verdict": "pass",
+  "adapter": "22f1f4c354ee32456a8199f92c37817fde7176b1",
+  "rechecked": [
+    "R-7.1",
+    "R-7.2",
+    "R-7.3",
+    "R-7.4",
+    "R-7.18",
+    "R-7.19",
+    "R-4.1",
+    "R-4.2",
+    "R-4.3",
+    "R-4.17",
+    "R-4.24",
+    "R-8.1",
+    "R-8.2",
+    "R-8.5",
+    "R-8.6",
+    "R-8.7",
+    "R-8.10",
+    "R-8.11",
+    "R-8.12",
+    "R-8.18",
+    "R-8.23",
+    "R-8.24",
+    "R-6.7",
+    "R-4.5",
+    "R-4.6",
+    "R-4.8",
+    "R-4.9",
+    "R-4.18",
+    "R-4.25",
+    "R-4.26",
+    "R-4.27",
+    "R-4.28",
+    "R-4.29",
+    "R-4.34",
+    "R-4.4",
+    "R-4.12",
+    "R-4.14",
+    "R-4.19",
+    "R-4.20",
+    "R-4.21",
+    "R-4.30",
+    "R-4.31",
+    "R-4.32",
+    "R-7.5",
+    "R-7.6",
+    "R-7.7",
+    "R-7.8",
+    "R-7.9",
+    "R-7.10",
+    "R-7.12",
+    "R-7.16",
+    "R-7.20",
+    "R-7.21",
+    "R-7.22",
+    "R-7.23",
+    "R-7.24",
+    "R-7.25",
+    "R-7.26",
+    "R-7.27",
+    "R-7.28",
+    "R-8.29",
+    "R-7.13",
+    "R-6.18",
+    "R-6.23",
+    "R-6.24",
+    "R-6.28",
+    "R-4.16",
+    "R-4.33",
+    "R-8.17",
+    "R-8.27",
+    "R-6.8",
+    "R-1.4",
+    "R-1.7",
+    "R-1.10",
+    "R-1.11",
+    "R-1.12",
+    "R-1.14",
+    "R-1.21",
+    "R-1.22",
+    "R-1.23",
+    "R-1.29",
+    "R-1.34",
+    "R-1.37",
+    "R-6.20",
+    "R-6.21",
+    "R-6.27",
+    "R-1.2",
+    "R-1.3",
+    "R-1.5",
+    "R-1.6",
+    "R-1.38",
+    "R-4.22",
+    "R-6.17",
+    "R-1.20",
+    "R-1.28",
+    "R-1.30",
+    "R-1.32",
+    "R-7.17",
+    "R-5.1",
+    "R-5.9",
+    "R-5.17",
+    "R-5.18",
+    "R-5.37",
+    "R-1.8",
+    "R-1.9",
+    "R-1.13",
+    "R-1.15",
+    "R-1.16",
+    "R-1.17",
+    "R-1.18",
+    "R-1.39",
+    "R-1.43",
+    "R-1.48",
+    "R-1.53",
+    "R-1.55",
+    "R-1.56",
+    "R-8.13",
+    "R-8.21",
+    "R-8.28",
+    "R-8.30",
+    "R-3.1",
+    "R-3.2",
+    "R-3.3",
+    "R-3.18",
+    "R-3.19",
+    "R-3.20",
+    "R-3.21",
+    "R-3.22",
+    "R-3.24",
+    "R-6.16",
+    "R-3.6",
+    "R-3.7",
+    "R-3.8",
+    "R-3.9",
+    "R-3.10",
+    "R-3.11",
+    "R-3.12",
+    "R-3.13",
+    "R-3.14",
+    "R-3.15",
+    "R-3.17",
+    "R-3.23",
+    "R-3.30",
+    "R-3.31",
+    "R-3.32",
+    "R-3.33",
+    "R-3.34",
+    "R-3.35",
+    "R-3.25",
+    "R-3.26",
+    "R-3.27",
+    "R-3.28"
+  ],
+  "rows": [
+    {
+      "id": "R-8.22",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.22.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a file may be attached to an opportunity only by someone who is permitted to read that file: someone who may not read it is refused",
+          "status": "passed"
+        },
+        {
+          "title": "a file may be attached to an opportunity only by someone who is permitted to read that file: someone who may read it is allowed",
+          "status": "passed"
+        },
+        {
+          "title": "a file may be attached to a proposal only by someone who is permitted to read that file: someone who may not read it is refused",
+          "status": "passed"
+        },
+        {
+          "title": "a file may be attached to a proposal only by someone who is permitted to read that file: someone who may read it is allowed",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "1cd3bf318a0e03f83c1b33a1dd4423b791149876",
+      "adapter": "22f1f4c354ee32456a8199f92c37817fde7176b1"
+    },
+    {
+      "id": "R-8.31",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.31.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "removing an attachment from an opportunity withdraws the read path the file held through that opportunity",
+          "status": "passed"
+        },
+        {
+          "title": "deleting the opportunity an attachment hangs on withdraws the read path the file held through that opportunity",
+          "status": "passed"
+        },
+        {
+          "title": "removing an attachment from a proposal withdraws the read path the file held through that proposal",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "a72499e5b6e5c7fd4a8c8935e2980ec8f980d6bc",
+      "adapter": "22f1f4c354ee32456a8199f92c37817fde7176b1"
+    },
+    {
+      "id": "R-6.2",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.2.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "When a message cannot be composed or cannot be delivered, the action that triggered it still succeeds, nobody is told, and no further attempt is made.",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "bc7fd3047214cd83d2a0f47d16c4d1d677798aef",
+      "adapter": "22f1f4c354ee32456a8199f92c37817fde7176b1"
+    },
+    {
+      "id": "R-6.3",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.3.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "When an environment is marked as a test environment, every message it sends is marked as a test in its subject line and carries a test variant of the service's logo.",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "d1a9745fa3e8ac6d8d2ec1730c2f5bd86b3bf00d",
+      "adapter": "22f1f4c354ee32456a8199f92c37817fde7176b1"
+    },
+    {
+      "id": "R-6.4",
+      "version": 2,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.4.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "Every message the service sends comes from a single configured sender — a display name followed by one do-not-reply address, the same for every kind of message — and carries no reply-to address distinct from that sender.",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "2f9d29bf00cac9bef57bdd64e71c81dfb0608d11",
+      "adapter": "22f1f4c354ee32456a8199f92c37817fde7176b1"
+    },
+    {
+      "id": "R-6.5",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.5.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "Every message is sent in both a formatted and a plain-text form, the plain text being a rendering of the formatted version rather than separately written copy.",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "0b80488201f94a0446679a23a43672088208f6e2",
+      "adapter": "22f1f4c354ee32456a8199f92c37817fde7176b1"
+    },
+    {
+      "id": "R-1.35",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.35.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "Changing or adding an addendum to an opportunity that is neither a draft nor cancelled notifies everyone watching it, everyone who has submitted a proposal to it, and its author. — an administrator edits it",
+          "status": "passed"
+        },
+        {
+          "title": "Changing or adding an addendum to an opportunity that is neither a draft nor cancelled notifies everyone watching it, everyone who has submitted a proposal to it, and its author. — an administrator adds an addendum",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "e6dea9ec6387c2e0a40fd665a1dceb82f6e10ddf",
+      "adapter": "22f1f4c354ee32456a8199f92c37817fde7176b1"
+    },
+    {
+      "id": "R-1.36",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.36.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "Cancelling an opportunity notifies everyone watching it and everyone who has submitted a proposal to it, and separately notifies its author. — everyone watching it and everyone who has submitted a proposal to it is told it has been cancelled",
+          "status": "passed"
+        },
+        {
+          "title": "Cancelling an opportunity notifies everyone watching it and everyone who has submitted a proposal to it, and separately notifies its author. — its author is told separately that the cancellation was actioned",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "3b8bfd870e423c27d9a3a8c9dcc1b9abda0b5bd3",
+      "adapter": "22f1f4c354ee32456a8199f92c37817fde7176b1"
+    },
+    {
+      "id": "R-2.1",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.1.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a signed-in vendor who has accepted the service's terms may start a proposal",
+          "status": "passed"
+        },
+        {
+          "title": "a request to start a proposal from public sector staff, an administrator or an anonymous visitor is refused",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "91834b89fae4d3fb621e22741d276c03cb29235c",
+      "adapter": "22f1f4c354ee32456a8199f92c37817fde7176b1"
+    },
+    {
+      "id": "R-2.2",
+      "version": 2,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.2.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a vendor who starts a second proposal against an opportunity they already have a proposal for is taken to the proposal they already hold instead of a new one, and no second proposal is created",
+          "status": "passed"
+        },
+        {
+          "title": "a request to create a second proposal against an opportunity the vendor already has a proposal for is refused with a message saying they already have one, and no second proposal is created",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "11f650b703e94ce610f533101d5c4d3b23cb71ff",
+      "adapter": "22f1f4c354ee32456a8199f92c37817fde7176b1"
+    },
+    {
+      "id": "R-2.3",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.3.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "submitting a proposal requires the vendor to accept both the program's terms and the service's current terms",
+          "status": "passed"
+        },
+        {
+          "title": "the act of submitting a proposal records the vendor's acceptance of the terms",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "b93da3a1fa37299d9c0324cf90416ad898db5769",
+      "adapter": "22f1f4c354ee32456a8199f92c37817fde7176b1"
+    },
+    {
+      "id": "R-2.4",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.4.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a proposal that has been submitted cannot be deleted",
+          "status": "passed"
+        },
+        {
+          "title": "only a draft proposal can be deleted, and deleting it removes it permanently",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "f3cef92d98945df2b3a0fc916b3c580e29fc8201",
+      "adapter": "22f1f4c354ee32456a8199f92c37817fde7176b1"
+    },
+    {
+      "id": "R-2.12",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.12.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a proposal saved as a draft is accepted however incomplete it is",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "d4f2f3baafe26b5b9ad49e6dbb8cf536bdae561e",
+      "adapter": "22f1f4c354ee32456a8199f92c37817fde7176b1"
+    },
+    {
+      "id": "R-2.13",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.13.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "A Code With Us proposal that is not a draft is rejected unless it carries proposal text of 1 to 10,000 characters, additional comments of at most 10,000 characters, and a complete proponent. (when the proposal text is empty)",
+          "status": "passed"
+        },
+        {
+          "title": "A Code With Us proposal that is not a draft is rejected unless it carries proposal text of 1 to 10,000 characters, additional comments of at most 10,000 characters, and a complete proponent. (when the proposal text is longer than 10,000 characters)",
+          "status": "passed"
+        },
+        {
+          "title": "A Code With Us proposal that is not a draft is rejected unless it carries proposal text of 1 to 10,000 characters, additional comments of at most 10,000 characters, and a complete proponent. (when the additional comments are longer than 10,000 characters)",
+          "status": "passed"
+        },
+        {
+          "title": "A Code With Us proposal that is not a draft is rejected unless it carries proposal text of 1 to 10,000 characters, additional comments of at most 10,000 characters, and a complete proponent. (when it carries no complete proponent)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "690f7d3494c94086f97d18f9a149b48d25a3ed8f",
+      "adapter": "22f1f4c354ee32456a8199f92c37817fde7176b1"
+    },
+    {
+      "id": "R-2.14",
+      "version": 2,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.14.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "A Code With Us proponent is either a named individual carrying a legal name, an email address and a full postal address, each field validated in turn, or an organization identified by id and checked only for existence and active status, since the service does not verify that the vendor belongs to the organization they name. (an individual with the legal name missing is refused against that field)",
+          "status": "passed"
+        },
+        {
+          "title": "A Code With Us proponent is either a named individual carrying a legal name, an email address and a full postal address, each field validated in turn, or an organization identified by id and checked only for existence and active status, since the service does not verify that the vendor belongs to the organization they name. (an individual with the email address missing is refused against that field)",
+          "status": "passed"
+        },
+        {
+          "title": "A Code With Us proponent is either a named individual carrying a legal name, an email address and a full postal address, each field validated in turn, or an organization identified by id and checked only for existence and active status, since the service does not verify that the vendor belongs to the organization they name. (an individual with the street address missing is refused against that field)",
+          "status": "passed"
+        },
+        {
+          "title": "A Code With Us proponent is either a named individual carrying a legal name, an email address and a full postal address, each field validated in turn, or an organization identified by id and checked only for existence and active status, since the service does not verify that the vendor belongs to the organization they name. (an individual with the city missing is refused against that field)",
+          "status": "passed"
+        },
+        {
+          "title": "A Code With Us proponent is either a named individual carrying a legal name, an email address and a full postal address, each field validated in turn, or an organization identified by id and checked only for existence and active status, since the service does not verify that the vendor belongs to the organization they name. (an individual with the province missing is refused against that field)",
+          "status": "passed"
+        },
+        {
+          "title": "A Code With Us proponent is either a named individual carrying a legal name, an email address and a full postal address, each field validated in turn, or an organization identified by id and checked only for existence and active status, since the service does not verify that the vendor belongs to the organization they name. (an individual with the postal code missing is refused against that field)",
+          "status": "passed"
+        },
+        {
+          "title": "A Code With Us proponent is either a named individual carrying a legal name, an email address and a full postal address, each field validated in turn, or an organization identified by id and checked only for existence and active status, since the service does not verify that the vendor belongs to the organization they name. (an individual with the country missing is refused against that field)",
+          "status": "passed"
+        },
+        {
+          "title": "A Code With Us proponent is either a named individual carrying a legal name, an email address and a full postal address, each field validated in turn, or an organization identified by id and checked only for existence and active status, since the service does not verify that the vendor belongs to the organization they name. (an individual with the email address malformed is refused against that field)",
+          "status": "passed"
+        },
+        {
+          "title": "A Code With Us proponent is either a named individual carrying a legal name, an email address and a full postal address, each field validated in turn, or an organization identified by id and checked only for existence and active status, since the service does not verify that the vendor belongs to the organization they name. (an individual with the phone number malformed is refused against that field)",
+          "status": "passed"
+        },
+        {
+          "title": "A Code With Us proponent is either a named individual carrying a legal name, an email address and a full postal address, each field validated in turn, or an organization identified by id and checked only for existence and active status, since the service does not verify that the vendor belongs to the organization they name. (an individual carrying every field is accepted)",
+          "status": "passed"
+        },
+        {
+          "title": "A Code With Us proponent is either a named individual carrying a legal name, an email address and a full postal address, each field validated in turn, or an organization identified by id and checked only for existence and active status, since the service does not verify that the vendor belongs to the organization they name. (an organization that does not exist is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "A Code With Us proponent is either a named individual carrying a legal name, an email address and a full postal address, each field validated in turn, or an organization identified by id and checked only for existence and active status, since the service does not verify that the vendor belongs to the organization they name. (an organization that is not active is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "A Code With Us proponent is either a named individual carrying a legal name, an email address and a full postal address, each field validated in turn, or an organization identified by id and checked only for existence and active status, since the service does not verify that the vendor belongs to the organization they name. (an active organization the vendor does not belong to is accepted)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "3bd57faf5d891a5729a9aa93c2e956f149357f06",
+      "adapter": "22f1f4c354ee32456a8199f92c37817fde7176b1"
+    },
+    {
+      "id": "R-2.15",
+      "version": 2,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.15.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "A proposal cannot move from draft to submitted once the opportunity's proposal deadline has passed, and a Code With Us proposal cannot be created already marked as submitted after that deadline, which is refused with \"This opportunity is no longer accepting proposals.\"; the equivalent guard is absent from Sprint With Us and Team With Us creation, where the only barrier is that a closed opportunity is no longer visible to a vendor. (a draft submitted after the deadline)",
+          "status": "passed"
+        },
+        {
+          "title": "A proposal cannot move from draft to submitted once the opportunity's proposal deadline has passed, and a Code With Us proposal cannot be created already marked as submitted after that deadline, which is refused with \"This opportunity is no longer accepting proposals.\"; the equivalent guard is absent from Sprint With Us and Team With Us creation, where the only barrier is that a closed opportunity is no longer visible to a vendor. (a proposal created already submitted after the deadline)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "5d3c92ab83b337dde63f42f4edda3d2a9b23b390",
+      "adapter": "22f1f4c354ee32456a8199f92c37817fde7176b1"
+    },
+    {
+      "id": "R-2.23",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.23.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a vendor may withdraw a submitted proposal",
+          "status": "passed"
+        },
+        {
+          "title": "a vendor may put a withdrawn proposal back in while the opportunity is still accepting proposals",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "e06645c23c1c22bc8eae8cd8b51d2e89fd0560ae",
+      "adapter": "22f1f4c354ee32456a8199f92c37817fde7176b1"
+    },
+    {
+      "id": "R-4.23",
+      "version": 2,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.23.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the profile-completion page is offered to a vendor who has not yet agreed to the terms",
+          "status": "passed"
+        },
+        {
+          "title": "a vendor who has agreed before is sent to their dashboard instead of the profile-completion page",
+          "status": "passed"
+        },
+        {
+          "title": "any signed-in person who is not a vendor is sent to their dashboard instead of the profile-completion page",
+          "status": "passed"
+        },
+        {
+          "title": "a visitor who is not signed in is sent to sign in instead of the profile-completion page",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "7fb7cbbf9cb22742dfe5b7054c84049c53341886",
+      "adapter": "22f1f4c354ee32456a8199f92c37817fde7176b1"
+    }
+  ]
+}

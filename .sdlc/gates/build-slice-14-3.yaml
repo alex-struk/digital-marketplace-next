@@ -1,0 +1,19 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The question is whether slice 14 (a vendor can propose on a Code With Us opportunity) does what its criteria say. Approve. Verify's result is current for build-slice-14-3 (application tree 2bf1e3d) and all 18 criteria the slice claims pass. That includes R-2.2 at version 2, where both of its tests ran: being taken to the proposal the vendor already holds, and a direct request for a second proposal being refused with 'You already have a proposal for this opportunity.' All three conditions from the build-slice-14-2 ruling were carried out. The read-only proposal page is routed at app/frontend/src/router.tsx and drawn by proposal-cwu-view.tsx; the service lets the proposal's author and its organization's owners or administrators read it and gives any other vendor the missing page. The Proposals tab is in opportunity-cwu-proposals-tab.tsx: before the opportunity closes it shows a message instead of proposals, and after it closes it lists only proposals that are not drafts. The store's organizationOf() now writes null for an organization proponent left unpicked, and an end-to-end test saves such a draft, picks an organization, removes it and reopens it. The diff stays inside slice 14: scoring, awarding and disqualifying are not built, and neither are the Sprint With Us or Team With Us screens. Database access goes through bound parameters and fixed table names, and no secrets are added. The R-2.2 missing-test entry is withdrawn because the request it said could not be sent is now sent by tests/acceptance/proposals/R-2.2.spec.ts, which ran and passed at version 2. This ruling would change if any criterion the slice claims stopped passing, or if verify's result were recorded against an earlier version of the application.
+conditions:
+  - "condition-met build-slice-14-2#1: the read-only proposal page is routed at /opportunities/code-with-us/$opportunityId/proposals/$proposalId (app/frontend/src/router.tsx:191) and drawn by app/frontend/src/screens/proposal-cwu-view.tsx; CwuProposalsService.readable gives any other vendor, or a different opportunity's address, the missing page; the frontend unit tests in app/frontend/tests/proposals.test.tsx cover both"
+  - "condition-met build-slice-14-2#2: app/frontend/src/screens/opportunity-cwu-proposals-tab.tsx (?tab=proposals) uses GET /api/proposals/code-with-us?opportunity=; before the opportunity closes it shows opportunity-proposals-withheld-message instead of proposals, after it closes it lists submitted proposals and filters out drafts (putForward), and with none it says so in words"
+  - "condition-met build-slice-14-2#3: organizationOf() in app/backend/src/proposals/prisma-cwu-proposal.store.ts writes null for an organization proponent with no organization picked, in both create and update; app/backend/tests/code-with-us-proposals-end-to-end.test.ts 'keeps a draft with an organization chosen but none picked' saves, reopens, picks, removes and reopens it"
+  - "condition-withdrawn missing-test/R-2.2: the clause it named (a direct create request for an opportunity the vendor already holds a proposal on is refused with a message) is now asserted by tests/acceptance/proposals/R-2.2.spec.ts 'a request to create a second proposal ... is refused', which ran and passed at version 2 in tests/results/new/slice-14.json"
+cost: 0.9240092
+turns: 8
+session: "c0806873-dd53-4d55-846b-7de4d39b6ce1"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T04:51:03.486Z

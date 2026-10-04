@@ -7,6 +7,7 @@ import { NotificationsModule } from "./notifications/notifications.module";
 import { OpportunitiesModule } from "./opportunities/opportunities.module";
 import { OrganizationsModule } from "./organizations/organizations.module";
 import { PrismaModule } from "./prisma/prisma.module";
+import { ProposalsModule } from "./proposals/proposals.module";
 import { StatusController } from "./status/status.controller";
 import { UsersModule } from "./users/users.module";
 import { WatchingModule } from "./watching/watching.module";
@@ -23,6 +24,7 @@ import { CountersModule } from "./counters/counters.module";
     NotificationsModule,
     OpportunitiesModule,
     OrganizationsModule,
+    ProposalsModule,
     WatchingModule,
     CountersModule,
   ],

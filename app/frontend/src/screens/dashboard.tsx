@@ -10,30 +10,24 @@ import { useScreenTitle } from "../app/screen-title";
 import { TitledAlert } from "../app/titled-alert";
 import { readDate } from "../lib/dates";
 import { StatusBadge } from "./opportunity-parts";
+import { VendorDashboard } from "./vendor-dashboard";
 
 /**
- * The dashboard, where a returning person lands after signing in (R-4.22).
+ * The dashboard, where a returning person lands after signing in (R-4.22), and where the
+ * profile-completion page sends a vendor who has agreed to the terms before and every public
+ * sector employee (R-4.23).
  *
  * A member of public sector staff sees the opportunities they created, and an administrator every
  * opportunity with who created it (opportunity-dashboard; R-1.3). Each row names the opportunity,
- * links to its manage page, and shows its state, in all three programs. What a vendor or an
- * evaluation panel member sees here
- * belongs to the slices that make proposals and evaluations.
+ * links to its manage page, and shows its state, in all three programs. A vendor sees their own
+ * proposals and their organizations' (proposal-vendor-dashboard; R-2.24). What an evaluation panel
+ * member sees here belongs to the slice that makes evaluations.
  */
 export function DashboardScreen() {
   useScreenTitle("Dashboard");
   return (
     <RequireSignIn title="Dashboard">
-      {(account) =>
-        account.type === "VENDOR" ? (
-          <Stack gap="large">
-            <Heading level={1}>Dashboard</Heading>
-            <Text elementType="p">{`You are signed in as ${account.name}.`}</Text>
-          </Stack>
-        ) : (
-          <OpportunityDashboard account={account} />
-        )
-      }
+      {(account) => (account.type === "VENDOR" ? <VendorDashboard account={account} /> : <OpportunityDashboard account={account} />)}
     </RequireSignIn>
   );
 }

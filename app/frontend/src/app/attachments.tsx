@@ -256,8 +256,31 @@ function DownloadLink({ attachment }: { attachment: Attachment }) {
   );
 }
 
-/** The editable control, as the last card section of an opportunity form. */
-export function AttachmentControl({ state, headingLevel }: { state: AttachmentsState; headingLevel: 2 | 3 }) {
+/** What the control is attached to: an opportunity, or a Code With Us proposal. */
+export type AttachmentHost = "opportunity" | "proposal";
+
+/** The sentence at the top of the control, as each host's stories word it. */
+export function attachmentIntro(host: AttachmentHost, saved: boolean): string {
+  if (host === "opportunity") {
+    return "Attach any documents proponents need. Anyone who can read this opportunity can read its attachments. Removing an attachment stops it being readable through this opportunity once you save.";
+  }
+  const intro = "Anyone who can read this proposal can read its attachments. Attachments are checked even when you save a draft.";
+  return saved ? `${intro} Removing an attachment stops it being readable through this proposal once you save.` : intro;
+}
+
+/** The editable control, as the last card section of an opportunity or proposal form. */
+export function AttachmentControl({
+  state,
+  headingLevel,
+  host = "opportunity",
+  saved = true,
+}: {
+  state: AttachmentsState;
+  headingLevel: 2 | 3;
+  host?: AttachmentHost;
+  /** Whether the host has been saved before, so that removing something takes a way of reading it away. */
+  saved?: boolean;
+}) {
   const input = useRef<HTMLInputElement>(null);
   const { kept, fresh } = state;
   const empty = kept.length === 0 && fresh.length === 0;
@@ -267,10 +290,7 @@ export function AttachmentControl({ state, headingLevel }: { state: AttachmentsS
         <Heading level={headingLevel} id="form-attachments">
           Attachments
         </Heading>
-        <Text elementType="p">
-          Attach any documents proponents need. Anyone who can read this opportunity can read its attachments. Removing an
-          attachment stops it being readable through this opportunity once you save.
-        </Text>
+        <Text elementType="p">{attachmentIntro(host, saved)}</Text>
         {empty ? (
           <Text elementType="p">No attachments have been added.</Text>
         ) : (
@@ -301,7 +321,7 @@ export function AttachmentControl({ state, headingLevel }: { state: AttachmentsS
               </li>
             ))}
             {fresh.map((attachment) => (
-              <NewAttachmentRow key={attachment.key} attachment={attachment} state={state} />
+              <NewAttachmentRow key={attachment.key} attachment={attachment} state={state} host={host} />
             ))}
           </Stack>
         )}
@@ -343,7 +363,7 @@ export function AttachmentControl({ state, headingLevel }: { state: AttachmentsS
   );
 }
 
-function NewAttachmentRow({ attachment, state }: { attachment: NewAttachment; state: AttachmentsState }) {
+function NewAttachmentRow({ attachment, state, host }: { attachment: NewAttachment; state: AttachmentsState; host: AttachmentHost }) {
   const { file } = attachment;
   const resultId = `${attachment.key}-result`;
   const tooLarge = file.size > FILE_SIZE_LIMIT_BYTES;
@@ -351,7 +371,7 @@ function NewAttachmentRow({ attachment, state }: { attachment: NewAttachment; st
     <li style={item} data-testid="attachment-new-row">
       <Stack gap="small">
         <div role="status">
-          <Text elementType="p">{`New: ${file.name}, ${readableSize(file.size)}.${progress(attachment, state.attachesAtOnce)}`}</Text>
+          <Text elementType="p">{`New: ${file.name}, ${readableSize(file.size)}.${progress(attachment, state.attachesAtOnce, host)}`}</Text>
         </div>
         {attachment.stored && !attachment.refusal ? (
           <div>
@@ -404,13 +424,17 @@ function NewAttachmentRow({ attachment, state }: { attachment: NewAttachment; st
 }
 
 /** Where a new attachment has got to, said after its name and size. */
-export function progress(attachment: Pick<NewAttachment, "refusal" | "stored" | "uploading">, attachesAtOnce: boolean): string {
+export function progress(
+  attachment: Pick<NewAttachment, "refusal" | "stored" | "uploading">,
+  attachesAtOnce: boolean,
+  host: AttachmentHost = "opportunity",
+): string {
   if (attachment.refusal) return "";
   if (attachment.uploading) return " Uploading…";
   if (!attachment.stored) return " It is uploaded when you save.";
   return attachesAtOnce
-    ? " Uploaded and attached to this opportunity. A name typed here is given to it when you save."
-    : " Uploaded. It is attached to the opportunity when you save it.";
+    ? ` Uploaded and attached to this ${host}. A name typed here is given to it when you save.`
+    : ` Uploaded. It is attached to the ${host} when you save it.`;
 }
 
 function describeRename(original: string): string {

@@ -98,4 +98,27 @@ export class PrismaFileStore implements FileStore {
     const row = await this.prisma.fileBlobs.findUnique({ where: { hash: fileBlob } });
     return row ? Buffer.from(row.blob) : null;
   }
+
+  /**
+   * A file is detached when nothing refers to it: no current version of a Code With Us opportunity
+   * carries it (an earlier version keeps no way of reading it), no proposal or history note does,
+   * no account or organization shows it as a picture or logo, and no page of prose embeds it.
+   */
+  async detached(): Promise<StoredFile[]> {
+    const rows = await this.prisma.$queryRaw<FileRow[]>`
+      SELECT f."id", f."name", f."createdAt", f."createdBy", f."fileBlob" FROM "files" f
+      WHERE NOT EXISTS (
+          SELECT 1 FROM "cwuOpportunityAttachments" a JOIN "cwuOpportunityVersions" v ON v."id" = a."opportunityVersion"
+          WHERE a."file" = f."id" AND v."id" = (
+            SELECT c."id" FROM "cwuOpportunityVersions" c WHERE c."opportunity" = v."opportunity" ORDER BY c."createdAt" DESC LIMIT 1))
+        AND NOT EXISTS (SELECT 1 FROM "cwuProposalAttachments" a WHERE a."file" = f."id")
+        AND NOT EXISTS (SELECT 1 FROM "twuProposalAttachments" a WHERE a."file" = f."id")
+        AND NOT EXISTS (SELECT 1 FROM "cwuOpportunityNoteAttachments" a WHERE a."file" = f."id")
+        AND NOT EXISTS (SELECT 1 FROM "swuOpportunityNoteAttachments" a WHERE a."file" = f."id")
+        AND NOT EXISTS (SELECT 1 FROM "users" u WHERE u."avatarImageFile" = f."id")
+        AND NOT EXISTS (SELECT 1 FROM "organizations" o WHERE o."logoImageFile" = f."id")
+        AND NOT EXISTS (SELECT 1 FROM "contentVersions" c WHERE strpos(c."body", '@file/' || f."id"::text) > 0)
+      ORDER BY f."createdAt" ASC`;
+    return rows.map(asStoredFile);
+  }
 }

@@ -401,7 +401,9 @@ describe("Complete Your Profile (user-sign-up-complete)", () => {
     fireEvent.click(screen.getByTestId("sign-up-complete-button"));
 
     await waitFor(() => expect(where(router)).toBe("/dashboard"));
-    expect(requests.map(({ method, path, body }) => ({ method, path, body }))).toEqual([
+    // The changes made, in order; the dashboard landed on then reads the vendor's proposals.
+    const changes = requests.filter(({ method }) => method === "PUT");
+    expect(changes.map(({ method, path, body }) => ({ method, path, body }))).toEqual([
       {
         method: "PUT",
         path: `/api/users/${unfinishedVendor.id}`,
@@ -422,8 +424,8 @@ describe("Complete Your Profile (user-sign-up-complete)", () => {
     await waitFor(() => expect(screen.getByTestId("sign-up-complete-button").hasAttribute("disabled")).toBe(false));
     fireEvent.click(screen.getByTestId("sign-up-complete-button"));
 
-    await waitFor(() => expect(requests).toHaveLength(2));
-    expect(requests.map((request) => (request.body as { tag: string }).tag)).toEqual([
+    await waitFor(() => expect(requests.filter((request) => request.method === "PUT")).toHaveLength(2));
+    expect(requests.filter((request) => request.method === "PUT").map((request) => (request.body as { tag: string }).tag)).toEqual([
       "updateProfile",
       "acceptTerms",
     ]);

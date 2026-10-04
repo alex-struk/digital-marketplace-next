@@ -24,6 +24,9 @@ import { OpportunityCwuCreateScreen } from "./screens/opportunity-cwu-create";
 import { OpportunityCwuViewScreen } from "./screens/opportunity-cwu-view";
 import { OpportunityCwuEditScreen } from "./screens/opportunity-cwu-edit";
 import { OpportunityOtherCreateScreen } from "./screens/opportunity-other-create";
+import { ProposalCwuCreateScreen } from "./screens/proposal-cwu-create";
+import { ProposalCwuEditScreen } from "./screens/proposal-cwu-edit";
+import { ProposalCwuViewScreen } from "./screens/proposal-cwu-view";
 import { OpportunityOtherManageScreen } from "./screens/opportunity-other-manage";
 import { OpportunityOtherViewScreen } from "./screens/opportunity-other-view";
 import { OrganizationListScreen } from "./screens/organization-list";
@@ -172,6 +175,35 @@ const opportunityCwuEditRoute = createRoute({
   },
 });
 
+// A Code With Us proposal: started from its opportunity, and managed by the vendor who wrote it or
+// who owns or administers its organization.
+const proposalCwuCreateRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/code-with-us/$opportunityId/proposals/create",
+  component: function ProposalCwuCreateRoute() {
+    const { opportunityId } = proposalCwuCreateRoute.useParams();
+    return <ProposalCwuCreateScreen key={opportunityId} opportunityId={opportunityId} />;
+  },
+});
+
+const proposalCwuViewRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/code-with-us/$opportunityId/proposals/$proposalId",
+  component: function ProposalCwuViewRoute() {
+    const { opportunityId, proposalId } = proposalCwuViewRoute.useParams();
+    return <ProposalCwuViewScreen key={proposalId} opportunityId={opportunityId} proposalId={proposalId} />;
+  },
+});
+
+const proposalCwuEditRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/code-with-us/$opportunityId/proposals/$proposalId/edit",
+  component: function ProposalCwuEditRoute() {
+    const { opportunityId, proposalId } = proposalCwuEditRoute.useParams();
+    return <ProposalCwuEditScreen key={proposalId} opportunityId={opportunityId} proposalId={proposalId} />;
+  },
+});
+
 // Sprint With Us and Team With Us: created, read by anyone once published, and managed by their
 // author and administrators (decision record 0045).
 const opportunitySwuCreateRoute = createRoute({
@@ -296,6 +328,9 @@ export const routeTree = rootRoute.addChildren([
   opportunityCwuCreateRoute,
   opportunityCwuViewRoute,
   opportunityCwuEditRoute,
+  proposalCwuCreateRoute,
+  proposalCwuViewRoute,
+  proposalCwuEditRoute,
   opportunitySwuCreateRoute,
   opportunityTwuCreateRoute,
   opportunitySwuViewRoute,
