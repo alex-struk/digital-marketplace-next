@@ -1740,3 +1740,18 @@ requests:
     at: 2026-10-04T14:14:40.270Z
     taken: 2026-10-04T14:15:59.915Z
     taken_by: bind-adapter-new-84
+  - stage: contract
+    why: spec/contract/observables.yaml, mail notes (lines 152-154), says 'A message
+      is addressed to one person and every other recipient is a blind copy'.
+      R-6.15 requires a multi-recipient notice to show the service's own address
+      as its only visible recipient and carry every reader as a blind copy. The
+      R-5.31 and R-5.33 tests cite this note as the reason they search by
+      visible recipient, and they fail against an application that meets R-6.15
+      (verify of build-slice-18-3, slice 18). Restate the note so it agrees with
+      R-6.15, and say that to find who a multi-recipient notice reached you open
+      it and read its blind-copy list, because searching by a reader's address
+      finds nothing.
+    from: build-slice-18-3
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-04T14:30:17.717Z
