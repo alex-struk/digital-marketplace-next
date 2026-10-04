@@ -2615,3 +2615,42 @@ conditions:
         assertions in app/frontend/tests/qualification.test.tsx.
       by: agent:reviewer
       at: 2026-10-03T19:47:45.169Z
+  - ref: build-slice-14-2#1
+    text: Add the read-only Code With Us proposal page at
+      /opportunities/code-with-us/:opportunityId/proposals/:proposalId
+      (app/frontend/src/router.tsx and a proposal-cwu-view screen). Its author,
+      and anyone who owns or administers its organization, can read it; any
+      other vendor is refused. Verify reported proposal-cwu-view.open unbound
+      for R-2.24.
+    from: build-slice-14-2
+    family: build-slice-14
+    gate: G3
+    stage: build
+    by: agent:reviewer
+    at: 2026-10-04T04:10:30.451Z
+  - ref: build-slice-14-2#2
+    text: Add a Proposals tab to the Code With Us opportunity management screen
+      (/opportunities/code-with-us/:id/edit?tab=proposals). It refuses staff and
+      administrators until the opportunity has closed, then lists the submitted
+      proposals and never a draft, using the existing GET
+      /api/proposals/code-with-us?opportunity=. Verify reported
+      opportunity-cwu-edit.proposals_tab unbound for R-1.31 and R-2.25.
+    from: build-slice-14-2
+    family: build-slice-14
+    gate: G3
+    stage: build
+    by: agent:reviewer
+    at: 2026-10-04T04:10:30.451Z
+  - ref: build-slice-14-2#3
+    text: "app/backend/src/proposals/prisma-cwu-proposal.store.ts: in create and
+      update, write null to proponentOrganization when the organization
+      proponent's value is \"\". Today a draft saved with 'An organization'
+      chosen but none picked writes an empty string into a uuid foreign-key
+      column, which goes against R-2.12 (a draft is kept however incomplete).
+      Add a unit or end-to-end test that saves that draft and reopens it."
+    from: build-slice-14-2
+    family: build-slice-14
+    gate: G3
+    stage: build
+    by: agent:reviewer
+    at: 2026-10-04T04:10:30.451Z
