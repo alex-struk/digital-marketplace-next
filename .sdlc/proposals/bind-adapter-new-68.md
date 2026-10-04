@@ -40,3 +40,23 @@ I added these findings to the reason text the adapter reports at run time.
 - A vendor sees "My proposals" and "My organizations' proposals".
 
 Several unbound reasons in `bindings.yaml` still describe the old page, notably `proposal-vendor-dashboard.show_org_proposals` and the `evaluation-panel-dashboard` members. I did not rebind them because this run was limited to the criteria listed. They should be revisited.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Question: does this adapter bind every surface action and observation on `new`, and nothing else? Approve. The diff changes only tests/adapters/new/index.ts and bindings.yaml (plus .sdlc records), nothing under tests/acceptance, and the runner's typecheck passed with no diagnostics under adapters/new. Both new bindings are navigation and locators only. start_proposal (R-2.2) clicks 'Start a proposal' and falls back to 'View your proposal' only when that is the only control offered, the same as the old target's binding at tests/adapters/old/index.ts:3497. Because 'Start' is tried first, the fallback cannot hide an app that offers a second-proposal route, and the disabled-control throw is a navigation failure, not an assertion. attachment_address (R-8.31) reads a proposal screen's 'Download <name>' links, or nothing when there are none, and reports unbound when the screen did not open. The remaining unbound reasons name real gaps on the target: no proposals section on the Code With Us or Sprint With Us management screens, with ?tab=proposals falling back to the Summary (R-1.31, R-2.25); 'Page not found' for the Sprint With Us and Team With Us proposal forms and the proposal view (R-2.7, R-2.9, R-2.11, R-2.24); and the app's own statement that Sprint and Team With Us opportunities take no attachments (R-8.20). Those are gaps in what was built, not binding faults. Separately, the R-2.2 test leaves the refusal-message clause unasserted, with no clause entry, because the surface has no create-request action; that is recorded below as owed by contract. This would change to a return on evidence that the 'View your proposal' fallback fires while the page also offers a real way to start a second proposal.
+
+**Conditions:**
+- missing-test R-2.2: a request to create a second proposal is refused with "You already have a proposal for this opportunity." and no second proposal is created — owed by contract: proposal-cwu-create names no action that sends a create request for an opportunity the vendor already holds a proposal on, so no test can put that request to the service and read the refusal
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `0697a9a34b38f0a4650c338eaa8975138869617d`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
