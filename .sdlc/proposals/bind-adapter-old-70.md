@@ -31,3 +31,27 @@ I added the four members the new contract declared for `evaluation-individual-su
 The workspace would not let me run the type-check (`tsc`) without approval, so it was never run. I compared the new code by hand against the helpers and types the file already uses, but the first real compile will be calibration.
 
 The route `/api/opportunities/sprint-with-us/:opportunityId` resolved on the target. No route in this change failed to resolve. I did not need to change anything outside `tests/adapters/old/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Question: does the adapter bind every surface action and observation of evaluation-individual-submission-request-swu on old, and nothing else? Approve. The four members (submit_scores_for_consensus_naming, request_accepted, refusal_messages, stored_status) match spec/contract/surface.yaml and the generated page type. They only send the documented PUT, read the latest answer through the existing accepted/lastRefusal helpers, and re-read the opportunity's status as the signed-in person, as the contract asks. None of them asserts anything or decides a pass. Nothing under tests/acceptance changed and no member is marked unbound. The runner typecheck reports no diagnostics under adapters/old/; its failure is confined to adapters/new/, which this proposal does not answer for. The refusal path was exercised on the running target. The accepted path was not, because sending it would have consumed the shared seed, so calibration is its first real exercise. The target's refusal wording differs from the contract comment, which is a product question; the adapter passes through whatever text the target sends. The existing R-5.27 missing-test, owed by derive-tests, already records the unasserted clause, so no new condition is added. This would become a return if diagnostics appeared under adapters/old/, if any tests/acceptance file changed, or if calibration showed the accepted request shape is wrong.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `5725ae605d775cceed2df68cf6684867b1c28dea`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 1 diagnostic
