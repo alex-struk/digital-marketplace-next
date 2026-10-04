@@ -1579,6 +1579,8 @@ requests:
     gate: G3
     by: agent:tech-lead
     at: 2026-10-04T09:43:32.233Z
+    taken: 2026-10-04T09:48:36.425Z
+    taken_by: bind-adapter-new-79
   - stage: bind-adapter
     target: new
     why: tests/adapters/new/bindings.yaml marks scoresheet_tab unbound on
@@ -1595,3 +1597,5 @@ requests:
     gate: G3
     by: agent:tech-lead
     at: 2026-10-04T09:43:32.233Z
+    taken: 2026-10-04T09:48:36.425Z
+    taken_by: bind-adapter-new-79
