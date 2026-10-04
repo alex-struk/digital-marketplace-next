@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does this adapter bind every surface action and observation on old, and nothing else? Ruling: approve. The contract declares `set_hourly_rate` under `proposal-twu-edit` (`spec/contract/surface.yaml:780`), and this proposal adds the binding the adapter was missing. `proposalTwuEdit.setHourlyRate` uses the existing `editingControl` wrapper to start editing, then runs the same `setTwuHourlyRate` the create page uses (`tests/adapters/old/index.ts:5458`). That function goes to the Team Members step, waits for the "Hourly Rate" box and fills it for the chosen resource, so it only navigates and finds fields: it checks nothing and decides no outcome. `bindings.yaml` gains only `set_hourly_rate: bound`, and nothing under `tests/acceptance` changed. The runner's own typecheck on this commit shows no errors under `adapters/old/`; the failing exit code comes from the one error under `adapters/new/`, which this proposal is not responsible for. The author couldn't run `tsc` themselves and said so, and the runner's check covers that. The two items the earlier rulings left open are not settled by this proposal and stay open. build-slice-15-2#1 asks build to add a Company box to the new app's Sprint With Us references. The missing-test on R-2.10 (the check must run on the edit path too) waits for a derive-tests test that uses this binding. The records the binding check left on the old target ("Binding check TWU opportunity" and a vendor draft proposal on it) would change any exact count of open Team With Us opportunities. That matters to whoever reads calibration results; it doesn't make the binding wrong. The ruling would change if a calibration showed this binding failing to reach the edit form's Hourly Rate box, or if the contract dropped the action.
+conditions: []
+cost: 0.2970974
+turns: 3
+session: "df23d8f0-d14b-4993-af18-19aec48d7296"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T07:00:49.111Z

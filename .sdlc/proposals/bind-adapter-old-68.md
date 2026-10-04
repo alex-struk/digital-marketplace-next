@@ -32,3 +32,27 @@ That step shows an "Hourly Rate*" number box for the resource, already holding 1
 - The draft I created used organization …0301 ("Northern Pines Digital Ltd."). The running page warns that this organization "has been archived", while the vendor's current memberships list only "Cedar Hollow Systems Inc.". That does not affect the hourly-rate field, but it may matter to criteria about which organizations can be chosen.
 - Every route in `surface.yaml` that I touched resolved, apart from the Not Found answer described above, which is the application gating editing during evaluation and not a missing page.
 - Nothing outside `tests/adapters/old/` was changed.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Question: does this adapter bind every surface action and observation on old, and nothing else? Ruling: approve. The contract declares `set_hourly_rate` under `proposal-twu-edit` (`spec/contract/surface.yaml:780`), and this proposal adds the binding the adapter was missing. `proposalTwuEdit.setHourlyRate` uses the existing `editingControl` wrapper to start editing, then runs the same `setTwuHourlyRate` the create page uses (`tests/adapters/old/index.ts:5458`). That function goes to the Team Members step, waits for the "Hourly Rate" box and fills it for the chosen resource, so it only navigates and finds fields: it checks nothing and decides no outcome. `bindings.yaml` gains only `set_hourly_rate: bound`, and nothing under `tests/acceptance` changed. The runner's own typecheck on this commit shows no errors under `adapters/old/`; the failing exit code comes from the one error under `adapters/new/`, which this proposal is not responsible for. The author couldn't run `tsc` themselves and said so, and the runner's check covers that. The two items the earlier rulings left open are not settled by this proposal and stay open. build-slice-15-2#1 asks build to add a Company box to the new app's Sprint With Us references. The missing-test on R-2.10 (the check must run on the edit path too) waits for a derive-tests test that uses this binding. The records the binding check left on the old target ("Binding check TWU opportunity" and a vendor draft proposal on it) would change any exact count of open Team With Us opportunities. That matters to whoever reads calibration results; it doesn't make the binding wrong. The ruling would change if a calibration showed this binding failing to reach the edit form's Hourly Rate box, or if the contract dropped the action.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `3901f10f8295cf542f0e6ac8d4d2498e87a9c350`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 1 diagnostic
