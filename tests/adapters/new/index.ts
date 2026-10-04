@@ -10311,13 +10311,72 @@ export default function create(
   }
 
   // The proposal's terms (Status, Proposal ID, …): the words of the definition beside one.
+  // A submit lands on the proposal's screen ("Status" / "Submitted" as a pill, "Submitted",
+  // "Proposal ID", "Opportunity ID" under the heading) as the client draws it, so the terms
+  // are read until the one asked for is there, or until the screen's terms have held still
+  // for a moment without it — that screen does not carry the term, and reads as nothing.
   async function proposalTerm(label: RegExp): Promise<string> {
     if (!(await proposalShown())) return "";
-    // Every term on these screens carries exactly one definition, so they pair by position.
-    const names = (await seen(proposalMain().getByRole("term")).allInnerTexts()).map((one) => one.trim());
-    const values = (await seen(proposalMain().getByRole("definition")).allInnerTexts()).map((one) => one.trim());
-    const at = names.findIndex((name) => label.test(name));
-    return at >= 0 && names.length === values.length ? values[at] : "";
+    const deadline = Date.now() + 10000;
+    const started = Date.now();
+    let last = "";
+    for (;;) {
+      const names = (await seen(proposalMain().getByRole("term")).allInnerTexts().catch(() => [] as string[])).map((one) => one.trim());
+      const values = (await seen(proposalMain().getByRole("definition")).allInnerTexts().catch(() => [] as string[])).map((one) => one.trim());
+      const at = names.findIndex((name) => label.test(name));
+      if (at >= 0) {
+        // Every term on these screens carries exactly one definition, so they pair by position;
+        // while they do not, the definition is the one drawn straight after the term.
+        if (names.length === values.length && values[at]) return values[at];
+        const paired = await definitionAfterTerm(label);
+        if (paired) return paired;
+      }
+      const now = JSON.stringify([names, values]);
+      const still = now === last && names.length > 0 && names.length === values.length;
+      if (Date.now() > deadline || (still && Date.now() - started > 1500)) return at >= 0 && names.length === values.length ? values[at] : "";
+      last = now;
+      await page.waitForTimeout(250);
+    }
+  }
+
+  // The definition that directly follows the term named by label, in the order main draws
+  // them: "" when the term has none.
+  async function definitionAfterTerm(label: RegExp): Promise<string> {
+    const drawn = await proposalMain().first().ariaSnapshot().catch(() => "");
+    const rows = drawn.split("\n");
+    const unquote = (words: string): string => {
+      const trimmed = words.trim();
+      if (/^".*"$/.test(trimmed)) {
+        try {
+          return String(JSON.parse(trimmed));
+        } catch {
+          return trimmed.slice(1, -1);
+        }
+      }
+      return trimmed;
+    };
+    const depth = (row: string): number => /^\s*/.exec(row)![0].length;
+    // What one entry says: its own text, or the names and text of what it holds.
+    const said = (from: number): string => {
+      const own = /^\s*- \w+(?: "[^"]*")?(?: \[[^\]]*\])*:?\s*(.*)$/.exec(rows[from])?.[1] ?? "";
+      if (own.trim()) return unquote(own);
+      const words: string[] = [];
+      for (let i = from + 1; i < rows.length && depth(rows[i]) > depth(rows[from]); i++) {
+        const child = /^\s*- (?:text: (.*)|\w+ "((?:[^"\\]|\\.)*)"|\w+: (.*))$/.exec(rows[i]);
+        const text = child?.[1] ?? child?.[2] ?? child?.[3];
+        if (text && !/^\s*- \/url:/.test(rows[i])) words.push(unquote(text));
+      }
+      return words.join(" ").trim();
+    };
+    const entries = rows
+      .map((row, i) => ({ i, kind: /^\s*- (term|definition)\b/.exec(row)?.[1] }))
+      .filter((one): one is { i: number; kind: string } => one.kind !== undefined);
+    for (let k = 0; k < entries.length; k++) {
+      if (entries[k].kind !== "term" || !label.test(said(entries[k].i))) continue;
+      const next = entries[k + 1];
+      return next?.kind === "definition" ? said(next.i) : "";
+    }
+    return "";
   }
 
   const proposalPathId = (): string => /\/proposals\/([0-9a-f-]{36})(?:\/|$)/i.exec(new URL(page.url()).pathname)?.[1] ?? "";
