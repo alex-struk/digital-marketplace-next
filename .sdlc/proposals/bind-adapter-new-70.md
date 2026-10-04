@@ -40,3 +40,23 @@ The adapter already handles both cases with a reason built from the page:
 `file-attachment-control.add_attachment` stays "bound" in `bindings.yaml`, because it works on Code With Us forms. On the other two programs it throws `unbound:` as described.
 
 Every route I opened loaded the app on this target. The missing screens come back as the app's own "Page not found" page. These are things this build does not offer, not something hidden behind a step or another persona. Binding them needs a change to the target, not to the adapter. I changed nothing outside `tests/adapters/new/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Question: does the new adapter bind every surface action and observation the target offers, and nothing else? Approve. The proposal changes nothing under tests/acceptance, tests/adapters or app/; it rechecks the seven criteria (R-2.7, R-2.9, R-2.11, R-2.24, R-1.31, R-2.25, R-8.20) on the running target and leaves the adapter unchanged because each remains unbound for a reason that names what the surface lacks. The existing reasons in bindings.yaml record that the Sprint With Us and Team With Us proposal-create routes and /proposals answer 'Page not found' when walked signed in as the administrator, public sector staff and a vendor with seeded identifiers. index.ts throws unbound for attachments by quoting the target's own disabled 'Add attachment' note on the Sprint With Us and Team With Us create forms, or by naming the edit form that has no Attachments part. The management screens offer no Proposals section, and ?tab=proposals falls back to the summary. None of these is a capability behind another step or persona; each is absent from the build, so binding it needs a change to the target, not to the adapter. The bindings stay navigation and locators only, typecheck passed with no diagnostics under adapters/new/, the tier is STANDARD and no residual risk is marked unaccepted. What would change the ruling: evidence that the target serves any of these screens under another route, label or persona, which would make the adapter wrong and the proposal a return.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `35be3b290f4fd76b5fc82a4ef7ccfafec2f76c38`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.

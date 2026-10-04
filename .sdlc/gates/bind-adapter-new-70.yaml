@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does the new adapter bind every surface action and observation the target offers, and nothing else? Approve. The proposal changes nothing under tests/acceptance, tests/adapters or app/; it rechecks the seven criteria (R-2.7, R-2.9, R-2.11, R-2.24, R-1.31, R-2.25, R-8.20) on the running target and leaves the adapter unchanged because each remains unbound for a reason that names what the surface lacks. The existing reasons in bindings.yaml record that the Sprint With Us and Team With Us proposal-create routes and /proposals answer 'Page not found' when walked signed in as the administrator, public sector staff and a vendor with seeded identifiers. index.ts throws unbound for attachments by quoting the target's own disabled 'Add attachment' note on the Sprint With Us and Team With Us create forms, or by naming the edit form that has no Attachments part. The management screens offer no Proposals section, and ?tab=proposals falls back to the summary. None of these is a capability behind another step or persona; each is absent from the build, so binding it needs a change to the target, not to the adapter. The bindings stay navigation and locators only, typecheck passed with no diagnostics under adapters/new/, the tier is STANDARD and no residual risk is marked unaccepted. What would change the ruling: evidence that the target serves any of these screens under another route, label or persona, which would make the adapter wrong and the proposal a return.
+conditions: []
+cost: 0.3144916
+turns: 2
+session: "5d272cdf-59c8-413f-97db-8fc4dda62f86"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T02:38:35.206Z
