@@ -225,6 +225,63 @@ test("counted against the panel and the questions of the opportunity's most rece
   expect((await surface.opportunityTwuView.status()).toLowerCase()).not.toContain("consensus");
 });
 
+// Counted only over the proponents named in the submission that triggers the check.
+// opportunities.swuSubmissionNamesTwoOfThree is in individual evaluation with three
+// proponents and four questions, and its panel is users.staffOne and users.administratorOne
+// (the chair); users.staffOne is also the owner. The administrator's scores for
+// proposals.swuNamedOne and proposals.swuNamedTwo are already submitted, users.staffOne holds
+// complete drafts of the same two, and nobody has begun proposals.swuLeftOut. The government
+// account sends a submission naming only the first two. Counted over those two the scores
+// are complete; counted over all three they would not be, so the opportunity moving to
+// consensus, and the chair and the owner being told, shows the count was taken over the
+// named proponents only.
+
+const namedOpportunityId = seed.opportunities.swuSubmissionNamesTwoOfThree.id;
+
+function isYes(value: string): boolean {
+  return !["", "false", "no", "0"].includes(value.trim().toLowerCase());
+}
+
+test("but only over the proponents named in the submission that triggers the check: a submission naming two of three proponents, completing the scores of those two, moves the opportunity to consensus and the chair and the owner are told, although the third has no scores at all", async ({
+  surface,
+  mail,
+}) => {
+  test.slow();
+  await surface.signIn(persona.evaluationPanelEvaluator);
+
+  const submission = surface.evaluationIndividualSubmissionRequestSwu;
+  await submission.open({ opportunityId: namedOpportunityId });
+  expect((await readOrEmpty(() => submission.storedStatus())).toUpperCase()).toBe("EVAL_QUESTIONS_INDIVIDUAL");
+
+  await emptyCatcher(surface, mail);
+
+  await submission.open({ opportunityId: namedOpportunityId });
+  await submission.submitScoresForConsensusNaming({
+    proposals: [seed.proposals.swuNamedOne.id, seed.proposals.swuNamedTwo.id],
+  });
+  expect(
+    isYes(await readOrEmpty(() => submission.requestAccepted())),
+    `the submission naming two proponents should be accepted (refusal: ${await readOrEmpty(() => submission.refusalMessages())})`,
+  ).toBe(true);
+
+  await expect
+    .poll(async () => {
+      await submission.open({ opportunityId: namedOpportunityId });
+      return (await readOrEmpty(() => submission.storedStatus())).toUpperCase();
+    }, settle)
+    .toBe("EVAL_QUESTIONS_CONSENSUS");
+
+  const chairAndOwner = [seed.users.administratorOne.email, seed.users.staffOne.email].map((address) =>
+    address.toLowerCase(),
+  );
+  await expect
+    .poll(async () => {
+      const reached = await everyoneReached(surface, mail);
+      return chairAndOwner.filter((address) => !reached.has(address));
+    }, { ...settle, message: "the chair or owner not told the opportunity is ready for consensus" })
+    .toEqual([]);
+});
+
 // The most recent version decides the count, seen through to the move itself.
 // opportunities.swuNewestVersionSeatsThirdEvaluator is in individual evaluation with three
 // proponents and four questions. Its first version seats users.staffOne and
