@@ -1,0 +1,22 @@
+gate: G3
+verdict: return
+by: runner:verify
+held_by: runner
+rationale: Slice 14 does not yet do what 1 of its criteria say. Each condition
+  is the criterion and what the running application did.
+conditions:
+  - 'R-2.13, in the case "when it carries no complete proponent": Error:
+    expect(received).not.toContain(expected) // indexOf — Expected substring:
+    not "R-2.13 opportunity bid on with no proponent" — Received
+    string:        "R-2.13 opportunity bid on with no proponent | Code With Us |
+    Submitted | October 3, 2026" — at
+    tests/acceptance/proposals/R-2.13.spec.ts:82 — its last steps:
+    proposalCwuCreate.submitProposal({proposalText}) at
+    /opportunities/code-with-us/1be0b898-dbd9-4233-baaf-607398f57cd3/proposals/187e685a-7f27-4f5b-bb36-37da6cc7cc71/edit
+    → proposalVendorDashboard.open() at /dashboard →
+    proposalVendorDashboard.showMyProposals() at /dashboard →
+    proposalVendorDashboard.myProposalsTable() at /dashboard read "R-2.13
+    opportunity bid on with no proponent | Code With Us | Submitted | October 3,
+    2026" — the page as it failed: .sdlc/evidence/slice-14/R-2.13.png,
+    .sdlc/evidence/slice-14/R-2.13.txt'
+at: 2026-10-04T01:34:32.785Z
