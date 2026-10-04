@@ -1367,3 +1367,28 @@ requests:
     at: 2026-10-03T19:21:38.556Z
     taken: 2026-10-03T19:22:56.096Z
     taken_by: bind-adapter-new-66
+  - stage: plan
+    why: slice 14 builds only Code With Us proposals (Sprint With Us and Team With
+      Us proposals arrive in slice 15), yet it claims R-2.7, R-2.9, R-2.11,
+      R-2.24 and the Sprint With Us and Team With Us cases of R-1.31 and R-2.25,
+      whose tests open proposal-swu-create, proposal-twu-create and
+      opportunity-swu-edit.proposals_tab. Verify reported all of these unbound
+      because those screens belong to a later slice. Move these criteria, or
+      their non-Code With Us cases, to the slice that builds Sprint With Us and
+      Team With Us proposals.
+    from: build-slice-14-2
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-04T04:10:30.196Z
+  - stage: plan
+    why: slice 14 claims R-8.20, whose test cases attach files to Sprint With Us and
+      Team With Us opportunities. The new app has no attachments on those
+      opportunities ('Files cannot be attached to a Sprint With Us opportunity
+      in this version of the service'), and slice 14 does not build them. Verify
+      reported file-attachment-control.add_attachment unbound for both cases.
+      Assign R-8.20 to a slice that builds attachments on Sprint With Us and
+      Team With Us opportunities, or add that work to a slice explicitly.
+    from: build-slice-14-2
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-04T04:10:30.196Z
