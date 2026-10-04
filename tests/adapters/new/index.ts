@@ -39,11 +39,11 @@
 // Team With Us ones reached from the proponent links of the opportunity's Proposals
 // section). It still answers "Page not found", to everybody walked, at /proposals, at
 // every program's printable copies (.../proposals/:proposalId/export,
-// .../proposals/export) and .../complete, and at the consensus score sheets
-// (.../team-questions/consensus/..., .../resource-questions/consensus/...), to the panel's
-// chair too. Since 2026-10-04 it serves the panel's members the management screens'
-// Instructions, Evaluation and Consensus sections, the individual score sheets, and the
-// dashboard's Evaluations section; and
+// .../proposals/export) and .../complete. Since 2026-10-04 it serves the panel's members the
+// management screens' Instructions, Evaluation and Consensus sections, the individual score
+// sheets, the consensus score sheets (.../team-questions/consensus/...,
+// .../resource-questions/consensus/..., while the opportunity is at consensus or past it),
+// and the dashboard's Evaluations section; and
 // /admin/email-notification-reference is not a screen at all (the service answers it 404
 // "Cannot GET", to the administrator too). Those screens' open() reports "unbound:
 // <page>.open — <reason>" only when the address really answers with that refusal, and
@@ -1852,10 +1852,11 @@ export default function create(
   //     2 | Not started | Start evaluation", once consensus has begun "Submitted | View
   //     evaluation"), each action a link to that proponent's score sheet, and under it the
   //     button "Submit scores for consensus", disabled until every evaluation is complete;
-  //   "Consensus" — a region of that name with one sentence ("The consensus stage begins
-  //     once every evaluator on the panel has submitted their scores.", at consensus "Every
-  //     evaluator on the panel has submitted their scores. The panel's chair agrees one
-  //     consensus score for each proponent.") and nothing else, to the chair too.
+  //   "Consensus" — a region of that name: before consensus, and to the owner not on the
+  //     panel, one sentence ("The consensus stage begins once every evaluator on the panel
+  //     has submitted their scores."); to the chair at consensus a sentence, the table
+  //     "Agreed scores, by anonymous proponent name" and the button "Submit final consensus
+  //     scores" (see evaluationConsensusListPage).
   // The owner who is not on the panel is offered only "Consensus"; ?tab=evaluation and
   // ?tab=instructions answer them "Page not found", as the screen does a public sector
   // employee with no part in the opportunity, and a vendor.
@@ -1877,8 +1878,8 @@ export default function create(
   // changed." over each question's "Your score" and "Your comment", and a "Next proponent"
   // link. A sheet the reader may not have answers "Page not found".
   //
-  // The consensus sheets (".../consensus/create", ".../consensus/:userId/edit") answer
-  // "Page not found" to the chair too, and nothing leads to them.
+  // The consensus sheets (".../consensus/create", ".../consensus/:userId/edit") are walked
+  // where they are bound, at consensusSheetPage.
 
   const SWU_TABS = "/opportunities/sprint-with-us/:opportunityId/edit";
   const TWU_TABS = "/opportunities/team-with-us/:opportunityId/edit";
@@ -2054,9 +2055,17 @@ export default function create(
     } as unknown as T;
   }
 
-  // The consensus section: drawn, at consensus, as one sentence to the chair too, with no
-  // table of proponents and no control. A control or table a later build draws is used where
-  // it appears; until then each is unbound, saying what the section does show.
+  // The consensus section, rewalked 2026-10-04 as the administrator who chairs the seeded
+  // panels (opportunities.swuConsensusOneOutstanding, swuConsensusSixProponents,
+  // twuConsensusFiveProponents). To the chair at consensus it draws a sentence, then the
+  // table "Agreed scores, by anonymous proponent name" (Proponent | Consensus | Action:
+  // "Proponent 1 | Submitted | Edit consensus", "Proponent 3 | Not started | Start
+  // consensus", each action a link to the proponent's consensus sheet), then the button
+  // "Submit final consensus scores" — disabled, under "You can submit once every proponent
+  // has a complete consensus …", while any consensus is incomplete. Pressing it opens the
+  // dialog "Submit the final consensus scores?" with "Cancel" and "Submit consensus scores";
+  // confirming draws, in the section's status, the note "The consensus scores have been
+  // submitted" / "The opportunity's owner and every administrator are being told."
   function evaluationConsensusListPage<T>(pageId: string, route: string): T {
     const tab = evaluationTab(pageId, route, "Consensus");
     const shows = async (): Promise<string> => `the "Consensus" section on ${page.url()} shows ${actingId()} only: ${(await tab.words()).replace(/\n+/g, " | ") || "nothing"}`;
@@ -2079,13 +2088,63 @@ export default function create(
       if (!(await seen(tab.region().getByRole("table")).count())) unbound(tab.where(member), `no table of proponents: ${await shows()}`);
       return (await proponentRows(tab.region())).join("\n");
     }
-    // The confirmations and the refusals below follow pressing one of the section's controls.
-    // A section offering no control at all has nothing that could raise them, and is
-    // unbound rather than read as a quiet "nothing shown".
+    // "Finalize consensus scores" sits in the screen's "Opportunity actions" bar (beside
+    // "Edit" and "Cancel opportunity"), offered to the owner and the administrators while the
+    // opportunity is at consensus. It opens a dialog "Finalize the consensus scores?" whose
+    // own "Finalize consensus scores" sends it; a refusal is the alert "The consensus scores
+    // could not be finalized" above the sections ("Not all consensuses have been
+    // submitted.", "You must have at least one proponent that can be screened into the Code
+    // Challenge/Challenge.").
+    const FINALIZE = /^\s*finali[sz]e( consensus)?( scores)?\s*$/i;
+    const actionBar = (): Locator => seen(page.getByRole("group", { name: /opportunity actions/i })).first();
+    // The refusal the last finalize drew, kept for the error readers.
+    let finalizeRefusal = "";
+    async function finalizeControl(member: string): Promise<void> {
+      await tab.mustReach(member);
+      const found = await findControl(actionBar(), FINALIZE);
+      const bar = (await actionBar().innerText().catch(() => "")).replace(/\s*\n\s*/g, " | ") || "nothing";
+      const status = await labelledValue(["Status"]);
+      if (!found) {
+        // At consensus and not offered: the page withholding it from this reader.
+        if (/consensus/i.test(status)) throw new Error(`${tab.where(member)} — refused: the opportunity is at "${status}" but the "Opportunity actions" bar of ${page.url()} offers ${actingId()} no "Finalize consensus scores" (it shows: ${bar})`);
+        unbound(tab.where(member), `no control named ${FINALIZE} in the "Opportunity actions" bar of ${page.url()} (it shows: ${bar}; status: ${status || "not shown"})`);
+      }
+      if (await isDisabled(found)) throw new Error(`${tab.where(member)} — refused: "Finalize consensus scores" is disabled on ${page.url()}`);
+      await found.click();
+      await settle();
+    }
+    async function confirmFinalize(member: string): Promise<void> {
+      await tab.mustReach(member);
+      await dialog().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+      if (!(await dialog().count())) unbound(tab.where(member), `no confirmation dialog is open on ${page.url()}; ${await shows()}`);
+      const alertsNow = async (): Promise<string[]> => seen(page.getByRole("alert")).allInnerTexts().catch(() => [] as string[]);
+      const before = new Set(await alertsNow());
+      finalizeRefusal = "";
+      await press(tab.where(member), FINALIZE, dialog());
+      const deadline = Date.now() + 15000;
+      while (Date.now() < deadline) {
+        const fresh = (await alertsNow()).filter((words) => !before.has(words));
+        const failed = fresh.find((words) => /could not|unable|not all|must have/i.test(words));
+        if (failed) {
+          finalizeRefusal = lined(failed).join("\n");
+          throw new Error(`${tab.where(member)} — refused: the page shows "${lined(failed).join(" — ")}" on ${page.url()}`);
+        }
+        if (fresh.length) break;
+        if (!(await dialog().count()) && !(await findControl(actionBar(), FINALIZE))) break;
+        await page.waitForTimeout(250);
+      }
+      await settle();
+    }
+
+    // The confirmations and the refusals below follow pressing one of the section's controls
+    // or "Finalize consensus scores". A screen offering none of them has nothing that could
+    // raise them, and is unbound rather than read as a quiet "nothing shown".
     async function afterAControl(member: string): Promise<boolean> {
       if (!(await tab.reached(member))) return false;
       if (await dialog().count()) return true;
+      if (finalizeRefusal) return true;
       if (await seen(tab.region().getByRole("button")).count()) return true;
+      if (await findControl(actionBar(), FINALIZE)) return true;
       return unbound(tab.where(member), `nothing on the section raises it: ${await shows()}`);
     }
     const dialogWords = async (member: string, only?: RegExp): Promise<string> => {
@@ -2096,7 +2155,8 @@ export default function create(
     };
     const alertsAbout = async (member: string, about: RegExp): Promise<string> => {
       if (!(await afterAControl(member))) return "";
-      return [...new Set(lined((await seen(page.getByRole("alert")).allInnerTexts().catch(() => [] as string[])).join("\n")).filter((line) => about.test(line)))].join("\n");
+      const shown = lined((await seen(page.getByRole("alert")).allInnerTexts().catch(() => [] as string[])).join("\n"));
+      return [...new Set([...shown, ...lined(finalizeRefusal)].filter((line) => about.test(line)))].join("\n");
     };
     return {
       open: (params?: Record<string, string>) => tab.screen.open(params),
@@ -2109,9 +2169,26 @@ export default function create(
         await settle();
       },
       submitFinalConsensusScores: () => control("submit_final_consensus_scores", /^\s*submit (final )?consensus( scores)?\s*$/i),
-      confirmSubmitConsensus: () => inOpenDialog("confirm_submit_consensus", /^\s*submit (final )?consensus( scores)?\s*$|^\s*submit\s*$/i),
-      finalizeConsensusScores: () => control("finalize_consensus_scores", /^\s*finali[sz]e( consensus)?( scores)?\s*$/i),
-      confirmFinalizeConsensus: () => inOpenDialog("confirm_finalize_consensus", /^\s*finali[sz]e( consensus)?( scores)?\s*$/i),
+      // Presses the dialog's "Submit consensus scores" and waits for the answer: the note in
+      // the section's status, or an alert, which a refusal is reported from.
+      confirmSubmitConsensus: async (): Promise<void> => {
+        const member = "confirm_submit_consensus";
+        const alertsNow = async (): Promise<string[]> => seen(page.getByRole("alert")).allInnerTexts().catch(() => [] as string[]);
+        const before = new Set(await alertsNow());
+        await inOpenDialog(member, /^\s*submit (final )?consensus( scores)?\s*$|^\s*submit\s*$/i);
+        const deadline = Date.now() + 15000;
+        while (Date.now() < deadline) {
+          const fresh = (await alertsNow()).filter((words) => !before.has(words));
+          const failed = fresh.find((words) => /could not|unable|not all|must/i.test(words));
+          if (failed) throw new Error(`${tab.where(member)} — refused: the page shows "${lined(failed).join(" — ")}" on ${page.url()}`);
+          if (fresh.length) break;
+          if (await seen(tab.region().getByRole("status").filter({ hasText: /submitted/i })).count()) break;
+          await page.waitForTimeout(250);
+        }
+        await settle();
+      },
+      finalizeConsensusScores: () => finalizeControl("finalize_consensus_scores"),
+      confirmFinalizeConsensus: () => confirmFinalize("confirm_finalize_consensus"),
       cancelModal: () => inOpenDialog("cancel_modal", /^\s*cancel\s*$/i),
       proponentRow: () => table("proponent_row"),
       consensusStatus: () => table("consensus_status"),
@@ -2301,33 +2378,153 @@ export default function create(
     } as unknown as T;
   }
 
-  // A page the application does not serve: its address answers "Page not found" and
-  // nothing leads to it. Decided when the method runs: absent while the address still
-  // answers that, unbound once it answers anything else, because then the page has been
-  // built since it was looked at and nobody has seen its controls yet.
-  function notServed<T>(pageId: string, route: string, walked: string, members: readonly string[]): T {
-    let lastRoute = "";
-    const verdict = async (member: string): Promise<never> => {
+  // The consensus sheets (".../consensus/create", ".../consensus/:userId/edit"), walked
+  // 2026-10-04 as the administrator who chairs the seeded panels and as the public sector
+  // employee who evaluates on them, on the seeded opportunities at consensus, past it, and
+  // at individual evaluation. Headed by the proponent ("Proponent 3", "Proponent 3 of 3"),
+  // then, on the edit sheet, "Status: Submitted" (or a draft). Each question group carries
+  // the question, the proponent's response, the table "Evaluators' scores for question N"
+  // (Evaluator | Score | Comment: "Robin Placeholder | 4 out of 5 | Seeded note on question
+  // 1."), and for the chair the boxes "Agreed score for question N" and "Agreed comment for
+  // question N"; then the group "Consensus actions": "Save draft" (create) or "Save changes"
+  // (edit), and "Save and go to next proponent". A second consensus for the same proposal
+  // is refused with the alert "This consensus was not started" / "You already have a team
+  // question consensus for this proposal." To an evaluator who is not the chair the sheet
+  // shows the note "Only the chair records the consensus" and the agreed values as text,
+  // with no box and no action; once the scores are finalized the chair too reads the note
+  // "The consensus scores have been finalized" / "The agreed scores can be read but no
+  // longer changed." and no action. While the opportunity is not at consensus (the seeded
+  // Sprint With Us opportunity at individual evaluation, ...0701) both routes answer "Page
+  // not found", to the chair too: the application's refusal to record a consensus before
+  // consensus (R-5.29), read here as that refusal rather than as a missing page.
+  function consensusSheetPage<T>(pageId: string, route: string, kind: "create" | "edit"): T {
+    const where = (member: string): string => `${pageId}.${member}`;
+    const actions = (): Locator => seen(page.getByRole("group", { name: /consensus actions/i })).first();
+    const withheldNote = (): Locator =>
+      seen(page.getByRole("note").filter({ hasText: /only the chair|have been finali[sz]ed|no longer changed/i })).first();
+
+    // Why the sheet is not open to this reader: "Page not found" (no consensus may be
+    // recorded here, or not by this reader) or the sign-in screen. A hand-off elsewhere is
+    // the sheet never reached.
+    async function refused(member: string): Promise<string> {
       await ready();
-      if (await notFoundShown()) {
-        throw new Error(`absent: ${pageId}.${member} — ${walked}; this time ${lastRoute || page.url()} answered "Page not found" to ${actingId()}`);
+      const why = await whyNotHere();
+      if (!why) return "";
+      if (/^handed off/.test(why)) unbound(where(member), `${route} did not open as a consensus sheet for ${actingId()} at ${page.url()}: ${why}`);
+      noteRefusal(`${where(member)} — the consensus sheet answered ${actingId()} with ${why.replace(/\n+/g, " ")} at ${page.url()}`);
+      return why;
+    }
+    async function onSheet(member: string): Promise<void> {
+      const why = await refused(member);
+      if (why) throw new Error(`${where(member)} — refused: the consensus sheet answered ${actingId()} with ${why.replace(/\n+/g, " ")} at ${page.url()}`);
+    }
+    const noteWords = async (): Promise<string> =>
+      (await withheldNote().count()) ? lined(await withheldNote().innerText()).join("\n") : "";
+
+    async function box(member: string, which: "score" | "comment", input: unknown): Promise<Locator> {
+      await onSheet(member);
+      const n = questionNumber(input);
+      const name = new RegExp(`^\\s*(agreed )?${which} for question ${n}\\b`, "i");
+      const found = seen(page.getByRole("textbox", { name })).or(seen(page.getByRole("spinbutton", { name }))).first();
+      if (await found.count()) return found;
+      const note = await noteWords();
+      if (note) throw new Error(`${where(member)} — refused: the sheet on ${page.url()} says "${note.replace(/\n/g, " ")}" and offers no box to change`);
+      const boxes = (await seen(page.getByRole("main").getByRole("textbox")).evaluateAll((all) =>
+        all.map((one) => (one.getAttribute("aria-label") || (one as HTMLInputElement).labels?.[0]?.innerText || "").trim()),
+      )).filter(Boolean);
+      return unbound(where(member), `no box labelled "Agreed ${which} for question ${n}" on ${page.url()}; it offers ${boxes.map((one) => `"${one}"`).join(", ") || "no boxes"}`);
+    }
+
+    async function enterIn(member: string, which: "score" | "comment", input: unknown): Promise<void> {
+      const value = which === "score" ? given(input, ["score", "value"]) : given(input, ["notes", "note", "comment", "comments", "value"]);
+      const text = value !== undefined ? textOf(value) : typeof input === "object" && input !== null ? "" : textOf(input);
+      const target = await box(member, which, input);
+      if (await isDisabled(target)) throw new Error(`${where(member)} — refused: the "Agreed ${which} for question ${questionNumber(input)}" box is disabled on ${page.url()}`);
+      await target.fill(text);
+      await target.blur().catch(() => undefined);
+      await settle();
+    }
+
+    async function save(member: string, names: RegExp[]): Promise<void> {
+      await onSheet(member);
+      let control: Locator | null = null;
+      for (const name of names) {
+        control = await findControl(actions(), name);
+        if (control) break;
       }
-      throw new Error(`unbound: ${pageId}.${member} — ${page.url()} now answers ${actingId()} with something other than "Page not found" ("${await firstHeading()}"), so the page has been built since it was walked and its controls have not been seen yet`);
-    };
+      if (!control) {
+        const note = await noteWords();
+        if (note) throw new Error(`${where(member)} — refused: the sheet on ${page.url()} says "${note.replace(/\n/g, " ")}" and offers no action`);
+        unbound(where(member), `no control named ${names.join(" or ")} under "Consensus actions" on ${page.url()}`);
+      }
+      if (await isDisabled(control)) throw new Error(`${where(member)} — refused: "${(await control.innerText()).trim()}" is disabled on ${page.url()}`);
+      const before = page.url();
+      const alertsBefore = await seen(page.getByRole("alert")).count();
+      await control.click();
+      const deadline = Date.now() + 10000;
+      while (Date.now() < deadline) {
+        if (page.url() !== before) break;
+        if ((await seen(page.getByRole("alert")).count()) > alertsBefore) break;
+        if (await seen(page.getByRole("status").filter({ hasText: /saved/i })).count()) break;
+        await page.waitForTimeout(250);
+      }
+      await settle();
+      await ready();
+    }
+
+    // The sheet as read, with every evaluator's score and comment on it; nothing to a
+    // reader it is withheld from.
+    const sheetText = async (member: string): Promise<string> => ((await refused(member)) ? "" : mainText());
+
     const built: Record<string, unknown> = {
-      open: async (params?: Record<string, string>): Promise<void> => {
-        lastRoute = leniently(route, params);
-        await page.goto(lastRoute, { waitUntil: "domcontentloaded" }).catch(() => undefined);
-        await settle();
-        await verdict("open");
-      },
+      // Opening never decides anything: a sheet answered with "Page not found" is read by
+      // the member that follows as the refusal it is.
+      open: (params?: Record<string, string>) => go(route, params),
+      enterQuestionScore: (input?: unknown) => enterIn("enter_question_score", "score", input),
+      enterQuestionNotes: (input?: unknown) => enterIn("enter_question_notes", "comment", input),
+      saveAndGoToNextProponent: () => save("save_and_go_to_next_proponent", [/^\s*save and go to next proponent\s*$/i, /^\s*next proponent\b/i]),
+      panelMemberScore: () => sheetText("panel_member_score"),
+      panelMemberNotes: () => sheetText("panel_member_notes"),
     };
-    for (const member of members) built[camel(member)] = () => verdict(member);
+    if (kind === "create") {
+      Object.assign(built, {
+        saveDraft: () => save("save_draft", [/^\s*save draft\s*$/i, /^\s*save changes\s*$/i]),
+        anonymousProponentName: () => sheetProponent(),
+        // Nothing while the sheet offers the chair its boxes; the note that only the chair
+        // records the consensus, or the "Page not found" answer, to a reader refused it.
+        chairOnly: async (): Promise<string> => {
+          await ready();
+          const why = await whyNotHere();
+          if (why) return why;
+          if (await seen(page.getByRole("textbox", { name: /^\s*agreed score for question/i })).count()) return "";
+          return noteWords();
+        },
+        duplicateConsensusError: async (): Promise<string> => {
+          await ready();
+          if (await whyNotHere()) return "";
+          return lined(await formMessages()).filter((line) => /already|duplicate|exists/i.test(line)).join("\n");
+        },
+      });
+    } else {
+      Object.assign(built, {
+        saveChanges: () => save("save_changes", [/^\s*save changes\s*$/i]),
+        // "Submitted", or the draft's state, from "Status: …"; nothing when withheld.
+        consensusStatus: async (): Promise<string> =>
+          (await refused("consensus_status")) ? "" : labelledValue(["Status", "Consensus status"]),
+        // As the old binding reads it: "enabled" while "Save changes" may be pressed,
+        // "disabled" when it is drawn but may not, "absent" when the sheet offers no save
+        // (finalized, not the chair, or refused).
+        editableAfterSubmitted: async (): Promise<string> => {
+          await ready();
+          if (await whyNotHere()) return "absent";
+          const control = await findControl(actions(), /^\s*save changes\s*$/i);
+          if (!control) return "absent";
+          return (await isDisabled(control)) ? "disabled" : "enabled";
+        },
+      });
+    }
     return built as unknown as T;
   }
-
-  const consensusSheetWalked = (program: string, base: string): string =>
-    `${base} answers the "Page not found" screen and nothing in the application leads to it: walked on the current build signed in as the administrator, who chairs the seeded ${program} panels, with the seeded opportunities at consensus and their proposals' identifiers (and the chair's own identifier for :userId), and as the public sector employee who evaluates on them — the management screen's "Consensus" section shows only "Every evaluator on the panel has submitted their scores. The panel's chair agrees one consensus score for each proponent." with no proponent, link or control, and the "Evaluation" section's links lead only to each evaluator's own sheets`;
 
   // ---------------------------------------------------------------- the mail catcher
 
@@ -11728,43 +11925,16 @@ export default function create(
       "/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/evaluations/:userId/edit",
     ),
 
-    evaluationConsensusCreateSwu: notServed<S.EvaluationConsensusCreateSwuPage>(
+    evaluationConsensusCreateSwu: consensusSheetPage<S.EvaluationConsensusCreateSwuPage>(
       "evaluation-consensus-create-swu",
       "/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/create",
-      consensusSheetWalked(
-        "Sprint With Us",
-        "/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/create",
-      ),
-      [
-        "enter_question_score",
-        "enter_question_notes",
-        "save_draft",
-        "save_and_go_to_next_proponent",
-        "anonymous_proponent_name",
-        "panel_member_score",
-        "panel_member_notes",
-        "chair_only",
-        "duplicate_consensus_error",
-      ],
+      "create",
     ),
 
-    evaluationConsensusEditSwu: notServed<S.EvaluationConsensusEditSwuPage>(
+    evaluationConsensusEditSwu: consensusSheetPage<S.EvaluationConsensusEditSwuPage>(
       "evaluation-consensus-edit-swu",
       "/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/:userId/edit",
-      consensusSheetWalked(
-        "Sprint With Us",
-        "/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/:userId/edit",
-      ),
-      [
-        "enter_question_score",
-        "enter_question_notes",
-        "save_changes",
-        "save_and_go_to_next_proponent",
-        "consensus_status",
-        "editable_after_submitted",
-        "panel_member_score",
-        "panel_member_notes",
-      ],
+      "edit",
     ),
 
     evaluationIndividualCreateTwu: evaluationCreatePage<S.EvaluationIndividualCreateTwuPage>(
@@ -11777,43 +11947,16 @@ export default function create(
       "/opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/evaluations/:userId/edit",
     ),
 
-    evaluationConsensusCreateTwu: notServed<S.EvaluationConsensusCreateTwuPage>(
+    evaluationConsensusCreateTwu: consensusSheetPage<S.EvaluationConsensusCreateTwuPage>(
       "evaluation-consensus-create-twu",
       "/opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/consensus/create",
-      consensusSheetWalked(
-        "Team With Us",
-        "/opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/consensus/create",
-      ),
-      [
-        "enter_question_score",
-        "enter_question_notes",
-        "save_draft",
-        "save_and_go_to_next_proponent",
-        "anonymous_proponent_name",
-        "panel_member_score",
-        "panel_member_notes",
-        "chair_only",
-        "duplicate_consensus_error",
-      ],
+      "create",
     ),
 
-    evaluationConsensusEditTwu: notServed<S.EvaluationConsensusEditTwuPage>(
+    evaluationConsensusEditTwu: consensusSheetPage<S.EvaluationConsensusEditTwuPage>(
       "evaluation-consensus-edit-twu",
       "/opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/consensus/:userId/edit",
-      consensusSheetWalked(
-        "Team With Us",
-        "/opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/consensus/:userId/edit",
-      ),
-      [
-        "enter_question_score",
-        "enter_question_notes",
-        "save_changes",
-        "save_and_go_to_next_proponent",
-        "consensus_status",
-        "editable_after_submitted",
-        "panel_member_score",
-        "panel_member_notes",
-      ],
+      "edit",
     ),
 
     notificationUnsubscribeLanding: unsubscribeLanding(),

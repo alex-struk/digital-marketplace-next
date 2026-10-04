@@ -1327,29 +1327,42 @@ pages:
       incomplete_evaluation_error: bound
       own_evaluations_only: bound
 
-  # The "Consensus" section opens, but holds one sentence and nothing else, to the chair
-  # too: walked as the administrator who chairs the seeded panels on the Sprint With Us
-  # opportunities at consensus (one consensus outstanding, every consensus agreed, nobody
-  # screenable) and the Team With Us ones, it reads "Every evaluator on the panel has
-  # submitted their scores. The panel's chair agrees one consensus score for each proponent."
-  # with no table, link or button; before consensus "The consensus stage begins once every
-  # evaluator on the panel has submitted their scores." The adapter uses a control or table
-  # wherever a later build draws one.
+  # Rewalked 2026-10-04 as the administrator who chairs the seeded panels: to the chair at
+  # consensus the "Consensus" section draws a sentence, the table "Agreed scores, by
+  # anonymous proponent name" (Proponent | Consensus | Action: "Proponent 1 | Submitted |
+  # Edit consensus", "Proponent 3 | Not started | Start consensus", each action a link to
+  # the proponent's consensus sheet), and the button "Submit final consensus scores" —
+  # disabled under "You can submit once every proponent has a complete consensus …" on
+  # opportunities.swuConsensusOneOutstanding, offered on swuConsensusSixProponents and
+  # twuConsensusFiveProponents. It opens the dialog "Submit the final consensus scores?"
+  # with "Cancel" and "Submit consensus scores"; confirming drew, in the section's status,
+  # "The consensus scores have been submitted". proponent_row and consensus_status read the
+  # table, one row a line, cells joined by " | ". To the owner not on the panel the section
+  # reads "The consensus stage begins once every evaluator on the panel has submitted their
+  # scores."
   evaluation-consensus-list-swu:
     actions:
-      open_proponent_consensus: "unbound: the Consensus section lists no proponent to open: signed in as the administrator who chairs the seeded panel, on /opportunities/sprint-with-us/<opportunities.swuConsensusOneOutstanding>/edit?tab=consensus (and the other seeded opportunities at consensus) it shows only \"Every evaluator on the panel has submitted their scores. The panel's chair agrees one consensus score for each proponent.\" — no table, link or button"
-      submit_final_consensus_scores: "unbound: the Consensus section offers no control to submit consensus scores: signed in as the administrator who chairs the seeded panel, on the seeded Sprint With Us opportunities at consensus it shows only one sentence, with no button; the screen's actions are \"Edit\" and \"Cancel opportunity\""
-      confirm_submit_consensus: "unbound: nothing raises a submit confirmation: the Consensus section, walked as the chair on the seeded Sprint With Us opportunities at consensus, offers no button"
-      finalize_consensus_scores: "unbound: the Consensus section offers no control to finalize consensus scores: signed in as the administrator who chairs the seeded panel, on the seeded Sprint With Us opportunities at consensus (every consensus agreed, nobody screenable) it shows only one sentence, with no button; the screen's actions are \"Edit\" and \"Cancel opportunity\""
-      confirm_finalize_consensus: "unbound: nothing raises a finalize confirmation: the Consensus section, walked as the chair on the seeded Sprint With Us opportunities at consensus, offers no button"
-      cancel_modal: "unbound: nothing on the Consensus section raises a dialog to cancel: walked as the chair on the seeded Sprint With Us opportunities at consensus, it offers no button"
+      open_proponent_consensus: bound
+      submit_final_consensus_scores: bound
+      confirm_submit_consensus: bound
+      # Rewalked 2026-10-04 as the administrator who chairs the seeded panel, on
+      # opportunities.swuConsensusOneOutstanding: "Finalize consensus scores" sits in the
+      # screen's "Opportunity actions" bar beside "Edit" and "Cancel opportunity" while the
+      # opportunity is at consensus, and opens the dialog "Finalize the consensus scores?"
+      # with "Cancel" and its own "Finalize consensus scores".
+      finalize_consensus_scores: bound
+      confirm_finalize_consensus: bound
+      cancel_modal: bound
     observations:
-      proponent_row: "unbound: the Consensus section draws no table of proponents: signed in as the administrator who chairs the seeded panel, on the seeded Sprint With Us opportunities at consensus it shows only \"Every evaluator on the panel has submitted their scores. The panel's chair agrees one consensus score for each proponent.\""
-      consensus_status: "unbound: the Consensus section draws no proponent and no consensus status: signed in as the administrator who chairs the seeded panel, on the seeded Sprint With Us opportunities at consensus it shows only one sentence"
-      submit_confirmation_modal: "unbound: nothing on the Consensus section raises a submit confirmation: walked as the chair on the seeded Sprint With Us opportunities at consensus, it offers no button"
-      finalize_confirmation_modal: "unbound: nothing on the Consensus section raises a finalize confirmation: walked as the chair on the seeded Sprint With Us opportunities at consensus, it offers no button"
-      not_all_consensuses_submitted_error: "unbound: the refusal follows submitting or finalizing, which the Consensus section offers no control for: walked as the chair on opportunities.swuConsensusOneOutstanding, it shows only one sentence"
-      no_screenable_proponent_error: "unbound: the refusal follows finalizing, which the Consensus section offers no control for: walked as the chair on opportunities.swuConsensusNobodyScreenable, it shows only one sentence"
+      proponent_row: bound
+      consensus_status: bound
+      submit_confirmation_modal: bound
+      finalize_confirmation_modal: bound
+      # Confirming the finalize on opportunities.swuConsensusOneOutstanding drew the alert
+      # "The consensus scores could not be finalized" / "Not all consensuses have been
+      # submitted." above the sections; the no-screenable refusal is the same alert.
+      not_all_consensuses_submitted_error: bound
+      no_screenable_proponent_error: bound
       # What the section tells the reader, its heading left off: to the owner who is not on
       # the panel, "The consensus stage begins once every evaluator on the panel has submitted
       # their scores." (seen on opportunities.swuLapsedOwnerOffPanel).
@@ -1357,19 +1370,22 @@ pages:
 
   evaluation-consensus-list-twu:
     actions:
-      open_proponent_consensus: "unbound: the Consensus section lists no proponent to open: signed in as the administrator who chairs the seeded panel, on the seeded Team With Us opportunities at consensus (five proponents, every consensus agreed) it shows only \"Every evaluator on the panel has submitted their scores. The panel's chair agrees one consensus score for each proponent.\" — no table, link or button"
-      submit_final_consensus_scores: "unbound: the Consensus section offers no control to submit consensus scores: signed in as the administrator who chairs the seeded panel, on the seeded Team With Us opportunities at consensus it shows only one sentence, with no button; the screen's actions are \"Edit\" and \"Cancel opportunity\""
-      confirm_submit_consensus: "unbound: nothing raises a submit confirmation: the Consensus section, walked as the chair on the seeded Team With Us opportunities at consensus, offers no button"
-      finalize_consensus_scores: "unbound: the Consensus section offers no control to finalize consensus scores: signed in as the administrator who chairs the seeded panel, on the seeded Team With Us opportunities at consensus it shows only one sentence, with no button; the screen's actions are \"Edit\" and \"Cancel opportunity\""
-      confirm_finalize_consensus: "unbound: nothing raises a finalize confirmation: the Consensus section, walked as the chair on the seeded Team With Us opportunities at consensus, offers no button"
-      cancel_modal: "unbound: nothing on the Consensus section raises a dialog to cancel: walked as the chair on the seeded Team With Us opportunities at consensus, it offers no button"
+      # As for Sprint With Us (seen on opportunities.twuConsensusFiveProponents).
+      open_proponent_consensus: bound
+      submit_final_consensus_scores: bound
+      confirm_submit_consensus: bound
+      # As for Sprint With Us: "Finalize consensus scores" in the "Opportunity actions" bar,
+      # then the dialog's own "Finalize consensus scores".
+      finalize_consensus_scores: bound
+      confirm_finalize_consensus: bound
+      cancel_modal: bound
     observations:
-      proponent_row: "unbound: the Consensus section draws no table of proponents: signed in as the administrator who chairs the seeded panel, on the seeded Team With Us opportunities at consensus it shows only \"Every evaluator on the panel has submitted their scores. The panel's chair agrees one consensus score for each proponent.\""
-      consensus_status: "unbound: the Consensus section draws no proponent and no consensus status: signed in as the administrator who chairs the seeded panel, on the seeded Team With Us opportunities at consensus it shows only one sentence"
-      submit_confirmation_modal: "unbound: nothing on the Consensus section raises a submit confirmation: walked as the chair on the seeded Team With Us opportunities at consensus, it offers no button"
-      finalize_confirmation_modal: "unbound: nothing on the Consensus section raises a finalize confirmation: walked as the chair on the seeded Team With Us opportunities at consensus, it offers no button"
-      not_all_consensuses_submitted_error: "unbound: the refusal follows submitting or finalizing, which the Consensus section offers no control for: walked as the chair on the seeded Team With Us opportunities at consensus, it shows only one sentence"
-      no_screenable_proponent_error: "unbound: the refusal follows finalizing, which the Consensus section offers no control for: walked as the chair on the seeded Team With Us opportunities at consensus, it shows only one sentence"
+      proponent_row: bound
+      consensus_status: bound
+      submit_confirmation_modal: bound
+      finalize_confirmation_modal: bound
+      not_all_consensuses_submitted_error: bound
+      no_screenable_proponent_error: bound
       empty_for_owner_not_on_panel: bound
 
   # The individual score sheets, reached from the Evaluation section's "Start evaluation" /
@@ -1411,31 +1427,44 @@ pages:
       empty_notes_error: bound
       refused_when_not_permitted: bound
 
-  # The consensus sheets answer "Page not found" to the chair too, and nothing leads to them.
+  # The consensus sheets, rewalked 2026-10-04 as the administrator who chairs the seeded
+  # panels and as the evaluator who does not (opportunities.swuConsensusOneOutstanding's third
+  # proposal for create, swuConsensusAllAgreed's first with the chair's identifier for edit,
+  # swuPastConsensus for a finalized sheet). The chair is shown each question's evaluators'
+  # scores table, the boxes "Agreed score for question N" and "Agreed comment for question
+  # N", and "Consensus actions" ("Save draft" or "Save changes", "Save and go to next
+  # proponent"); a second consensus is refused with "You already have a team question
+  # consensus for this proposal."; the evaluator reads the note "Only the chair records the
+  # consensus"; a finalized sheet reads "The consensus scores have been finalized" and offers
+  # no action. On an opportunity not yet at consensus (00000000-0000-4000-8000-000000000701)
+  # both routes answer "Page not found" to the chair too, which the members read as the
+  # refusal to record a consensus before consensus (R-5.29); opening never throws.
   evaluation-consensus-create-swu:
     actions:
-      enter_question_score: "absent: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/create answers the \"Page not found\" screen and nothing in the application leads to it: walked on the current build signed in as the administrator who chairs the seeded Sprint With Us panels, with opportunities.swuConsensusOneOutstanding and its third proposal (whose consensus is not begun), and as the public sector employee who evaluates on them; the Consensus section shows one sentence with no proponent, link or control"
-      enter_question_notes: "absent: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/create answers \"Page not found\" to the chair and to the evaluator on the seeded Sprint With Us opportunities at consensus, and nothing leads to it"
-      save_draft: "absent: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/create answers \"Page not found\" to the chair and to the evaluator on the seeded Sprint With Us opportunities at consensus, and nothing leads to it"
-      save_and_go_to_next_proponent: "absent: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/create answers \"Page not found\" to the chair and to the evaluator on the seeded Sprint With Us opportunities at consensus, and nothing leads to it"
+      enter_question_score: bound
+      enter_question_notes: bound
+      save_draft: bound
+      save_and_go_to_next_proponent: bound
     observations:
-      anonymous_proponent_name: "absent: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/create answers \"Page not found\" to the chair and to the evaluator on the seeded Sprint With Us opportunities at consensus, and nothing leads to it"
-      panel_member_score: "absent: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/create answers \"Page not found\" to the chair and to the evaluator on the seeded Sprint With Us opportunities at consensus, and nothing leads to it"
-      panel_member_notes: "absent: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/create answers \"Page not found\" to the chair and to the evaluator on the seeded Sprint With Us opportunities at consensus, and nothing leads to it"
-      chair_only: "absent: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/create answers \"Page not found\" to the chair as well as to the evaluator, so no refusal particular to non-chairs can be told from the page not existing; nothing leads to it"
-      duplicate_consensus_error: "absent: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/create answers \"Page not found\" to the chair and to the evaluator on the seeded Sprint With Us opportunities at consensus, and nothing leads to it"
+      anonymous_proponent_name: bound
+      panel_member_score: bound
+      panel_member_notes: bound
+      chair_only: bound
+      duplicate_consensus_error: bound
 
   evaluation-consensus-edit-swu:
     actions:
-      enter_question_score: "absent: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/:userId/edit answers the \"Page not found\" screen and nothing in the application leads to it: walked on the current build signed in as the administrator who chairs the seeded Sprint With Us panels, with opportunities.swuConsensusOneOutstanding, its first proposal (whose consensus is submitted) and the chair's own identifier, and as the evaluator; the Consensus section shows one sentence with no proponent, link or control"
-      enter_question_notes: "absent: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/:userId/edit answers \"Page not found\" to the chair on the seeded Sprint With Us opportunities at consensus, and nothing leads to it"
-      save_changes: "absent: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/:userId/edit answers \"Page not found\" to the chair on the seeded Sprint With Us opportunities at consensus, and nothing leads to it"
-      save_and_go_to_next_proponent: "absent: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/:userId/edit answers \"Page not found\" to the chair on the seeded Sprint With Us opportunities at consensus, and nothing leads to it"
+      enter_question_score: bound
+      enter_question_notes: bound
+      save_changes: bound
+      save_and_go_to_next_proponent: bound
     observations:
-      consensus_status: "absent: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/:userId/edit answers \"Page not found\" to the chair on the seeded Sprint With Us opportunities at consensus, and nothing leads to it"
-      editable_after_submitted: "absent: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/:userId/edit answers \"Page not found\" to the chair on the seeded Sprint With Us opportunities at consensus, and nothing leads to it"
-      panel_member_score: "absent: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/:userId/edit answers \"Page not found\" to the chair on the seeded Sprint With Us opportunities at consensus, and nothing leads to it"
-      panel_member_notes: "absent: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/:userId/edit answers \"Page not found\" to the chair on the seeded Sprint With Us opportunities at consensus, and nothing leads to it"
+      # "Submitted" from "Status: Submitted".
+      consensus_status: bound
+      # "enabled", "disabled" or "absent", as the old binding reads "Save changes".
+      editable_after_submitted: bound
+      panel_member_score: bound
+      panel_member_notes: bound
 
   evaluation-individual-create-twu:
     actions:
@@ -1465,30 +1494,34 @@ pages:
       empty_notes_error: bound
       refused_when_not_permitted: bound
 
+  # As for Sprint With Us, under .../resource-questions/consensus/... (rewalked on
+  # opportunities.twuConsensusAllAgreed as the evaluator who is not the chair: "Only the chair
+  # records the consensus", each question's evaluators' table and "Agreed score" / "Agreed
+  # comment" as text).
   evaluation-consensus-create-twu:
     actions:
-      enter_question_score: "absent: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/consensus/create answers the \"Page not found\" screen and nothing in the application leads to it: walked on the current build signed in as the administrator who chairs the seeded Team With Us panels, on the seeded Team With Us opportunities at consensus with their proposals' identifiers, and as the public sector employee who evaluates on them; the Consensus section shows one sentence with no proponent, link or control"
-      enter_question_notes: "absent: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/consensus/create answers \"Page not found\" to the chair and to the evaluator on the seeded Team With Us opportunities at consensus, and nothing leads to it"
-      save_draft: "absent: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/consensus/create answers \"Page not found\" to the chair and to the evaluator on the seeded Team With Us opportunities at consensus, and nothing leads to it"
-      save_and_go_to_next_proponent: "absent: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/consensus/create answers \"Page not found\" to the chair and to the evaluator on the seeded Team With Us opportunities at consensus, and nothing leads to it"
+      enter_question_score: bound
+      enter_question_notes: bound
+      save_draft: bound
+      save_and_go_to_next_proponent: bound
     observations:
-      anonymous_proponent_name: "absent: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/consensus/create answers \"Page not found\" to the chair and to the evaluator on the seeded Team With Us opportunities at consensus, and nothing leads to it"
-      panel_member_score: "absent: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/consensus/create answers \"Page not found\" to the chair and to the evaluator on the seeded Team With Us opportunities at consensus, and nothing leads to it"
-      panel_member_notes: "absent: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/consensus/create answers \"Page not found\" to the chair and to the evaluator on the seeded Team With Us opportunities at consensus, and nothing leads to it"
-      chair_only: "absent: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/consensus/create answers \"Page not found\" to the chair as well as to the evaluator, so no refusal particular to non-chairs can be told from the page not existing; nothing leads to it"
-      duplicate_consensus_error: "absent: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/consensus/create answers \"Page not found\" to the chair and to the evaluator on the seeded Team With Us opportunities at consensus, and nothing leads to it"
+      anonymous_proponent_name: bound
+      panel_member_score: bound
+      panel_member_notes: bound
+      chair_only: bound
+      duplicate_consensus_error: bound
 
   evaluation-consensus-edit-twu:
     actions:
-      enter_question_score: "absent: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/consensus/:userId/edit answers the \"Page not found\" screen and nothing in the application leads to it: walked on the current build signed in as the administrator who chairs the seeded Team With Us panels, on the seeded Team With Us opportunities at consensus with the chair's own identifier, and as the evaluator; the Consensus section shows one sentence with no proponent, link or control"
-      enter_question_notes: "absent: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/consensus/:userId/edit answers \"Page not found\" to the chair on the seeded Team With Us opportunities at consensus, and nothing leads to it"
-      save_changes: "absent: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/consensus/:userId/edit answers \"Page not found\" to the chair on the seeded Team With Us opportunities at consensus, and nothing leads to it"
-      save_and_go_to_next_proponent: "absent: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/consensus/:userId/edit answers \"Page not found\" to the chair on the seeded Team With Us opportunities at consensus, and nothing leads to it"
+      enter_question_score: bound
+      enter_question_notes: bound
+      save_changes: bound
+      save_and_go_to_next_proponent: bound
     observations:
-      consensus_status: "absent: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/consensus/:userId/edit answers \"Page not found\" to the chair on the seeded Team With Us opportunities at consensus, and nothing leads to it"
-      editable_after_submitted: "absent: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/consensus/:userId/edit answers \"Page not found\" to the chair on the seeded Team With Us opportunities at consensus, and nothing leads to it"
-      panel_member_score: "absent: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/consensus/:userId/edit answers \"Page not found\" to the chair on the seeded Team With Us opportunities at consensus, and nothing leads to it"
-      panel_member_notes: "absent: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/consensus/:userId/edit answers \"Page not found\" to the chair on the seeded Team With Us opportunities at consensus, and nothing leads to it"
+      consensus_status: bound
+      editable_after_submitted: bound
+      panel_member_score: bound
+      panel_member_notes: bound
 
   notification-unsubscribe-landing:
     actions:

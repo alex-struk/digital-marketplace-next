@@ -268,6 +268,14 @@
 - 06:52:04 run verify: regenerated 4 files in .sdlc, site, tests
 - 06:53:00 drive: step 30: `sdlc run bind-adapter --target new --revise` — 3 revision requests for target new owed by bind-adapter; requests request/build-slice-18#1, request/build-slice-18#2, request/build-slice-18#3
 - 06:53:01 run bind-adapter: pre-checks failed
+- 07:00:18 drive: step 32: `sdlc run bind-adapter --target new --revise` — bind-adapter-new-82 was returned at G3 by agent:reviewer
+- 07:00:18 run bind-adapter: pre-checks failed
+- 07:00:18 drive: step 32 recovery: the new target's sandbox was not up; starting it from proposal/build-slice-18 (sdlc sandbox up --target new --from proposal/build-slice-18), running the step once more, and taking it down after (sdlc sandbox down --target new --from proposal/build-slice-18)
+- 07:04:02 run bind-adapter: ok, cost 1.5287680000000001, turns 50, on claude claude-opus-5-5 (2.1.288 (Claude Code))
+- 07:04:02 propose bind-adapter-new-83 at G3
+- 07:04:02 drive: step 32 recovery: taking the new target's sandbox down (sdlc sandbox down --target new --from proposal/build-slice-18)
+- 07:04:21 drive: step 33: `sdlc rule bind-adapter-new-83 --by agent:reviewer` — bind-adapter-new-83 is open at G3, held by agent:reviewer
+- 07:05:08 rule bind-adapter-new-83 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.288 (Claude Code))
 
 # Run record 2026-10-03
 

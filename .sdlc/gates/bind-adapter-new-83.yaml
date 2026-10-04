@@ -1,0 +1,16 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The question is whether bind-adapter-new-83 binds every surface action and observation on new and nothing else. It does: on evaluation-consensus-list-swu/-twu every member now reads `bound`, matching what was rewalked as the chair (the 'Agreed scores, by anonymous proponent name' table read one row per line with cells joined by ' | ', 'Submit final consensus scores' and its dialog, 'Finalize consensus scores' in the 'Opportunity actions' bar, and the refusal alert), and the four consensus sheets move off the notServed stub onto consensusSheetPage, which fills the 'Agreed score/comment for question N' boxes, presses the 'Consensus actions' controls, and returns what the page shows ('Page not found', the 'Only the chair records the consensus' note, the duplicate alert) without deciding a verdict. Read against tests/acceptance/evaluation/R-5.29.spec.ts, the bindings fit what the test reads: consensusStatus returns empty where the sheet is refused, which is what the before-consensus and non-chair cases read back, and proponentRow names each proponent once per line for the duplicate count. Nothing under tests/acceptance changed, and the runner-owned typecheck on f5b5c05 passed with no diagnostics under adapters/new/. The ruling would change on a run showing a chair-reachable sheet reported as refused, or on any stale unbound/absent reason left on these pages.
+conditions:
+  - "condition-met bind-adapter-new-82#1: every member of evaluation-consensus-list-swu and evaluation-consensus-list-twu in tests/adapters/new/bindings.yaml now reads `bound` against the rewalked Consensus section (table 'Agreed scores, by anonymous proponent name', 'Submit final consensus scores' and its dialog, 'Finalize consensus scores' in the 'Opportunity actions' bar), implemented in evaluationConsensusListPage in tests/adapters/new/index.ts"
+cost: 0.5547412
+turns: 4
+session: "6eaf959e-079b-40da-9ba0-fa6ddc300adb"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T14:05:08.621Z
