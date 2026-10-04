@@ -4853,6 +4853,42 @@ export default function create(
       const end = given(input, ["completionDate", "endDate", "completion", "end"]);
       if (start !== undefined && start !== null) await fillBox(member, group, /^\s*start date\b/i, "startDate", start);
       if (end !== undefined && end !== null) await fillBox(member, group, /^\s*completion date\b/i, "completionDate", end);
+      // A phase's own maximum budget and required capabilities, looked up inside its group
+      // by label each time this runs. Walked as the administrator with all three phases
+      // added, each group offered only "Start date" and "Completion date" (and "Remove …"),
+      // so a budget or capability given for a phase is reported unbound, naming what the
+      // group does offer, rather than dropped; a form that labels them later is filled.
+      const offeredHere = async (): Promise<string> => {
+        const names = await group
+          .locator("input, textarea, select, [role=combobox], [role=checkbox], [role=spinbutton]")
+          .evaluateAll((boxes) =>
+            boxes.map((box) => ((box as HTMLInputElement).labels?.[0]?.innerText ?? box.getAttribute("aria-label") ?? "").replace(/\s+/g, " ").trim()),
+          )
+          .catch(() => [] as string[]);
+        return names.filter(Boolean).map((one) => `"${one}"`).join(", ") || "no fields";
+      };
+      const budget = given(input, ["maxBudget", "maximumBudget", "budget", "phaseBudget"]);
+      if (budget !== undefined && budget !== null) {
+        const label = /^\s*(phase\s+)?max(imum)?\s+budget\b/i;
+        const box = seen(group.getByRole("spinbutton", { name: label }).or(group.getByRole("textbox", { name: label }))).first();
+        if (!(await box.count())) {
+          unbound(where(member), `the ${phase} phase group on ${page.url()} has no maximum budget field to take "maxBudget" (${textOf(budget)}); it offers ${await offeredHere()}`);
+        }
+        await enter(where(member), "maxBudget", box, budget);
+      }
+      const capabilities = given(input, ["capabilities", "requiredCapabilities", "capability"]);
+      if (capabilities !== undefined && capabilities !== null) {
+        for (const item of [capabilities].flat()) {
+          const name = (typeof item === "string" ? item : givenText(item, ["capability", "name"])).trim();
+          if (!name) continue;
+          const tick = seen(group.getByRole("checkbox", { name: new RegExp(`^\\s*${escapeRx(name)}\\s*$`, "i") })).first();
+          if (!(await tick.count())) {
+            unbound(where(member), `the ${phase} phase group on ${page.url()} has no box to tick the required capability "${name}"; it offers ${await offeredHere()}`);
+          }
+          if (await isDisabled(tick)) throw new Error(`${where(member)} — the box for the required capability "${name}" is disabled on ${page.url()}`);
+          if (!(await tick.isChecked())) await tick.click();
+        }
+      }
     }
 
     async function addResource(member: string, input: unknown): Promise<void> {
