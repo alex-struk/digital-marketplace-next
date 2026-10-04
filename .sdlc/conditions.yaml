@@ -2628,6 +2628,17 @@ conditions:
     stage: build
     by: agent:reviewer
     at: 2026-10-04T04:10:30.451Z
+    closed:
+      outcome: met
+      why: the read-only proposal page is routed at
+        /opportunities/code-with-us/$opportunityId/proposals/$proposalId
+        (app/frontend/src/router.tsx:191) and drawn by
+        app/frontend/src/screens/proposal-cwu-view.tsx;
+        CwuProposalsService.readable gives any other vendor, or a different
+        opportunity's address, the missing page; the frontend unit tests in
+        app/frontend/tests/proposals.test.tsx cover both
+      by: agent:reviewer
+      at: 2026-10-04T04:51:03.585Z
   - ref: build-slice-14-2#2
     text: Add a Proposals tab to the Code With Us opportunity management screen
       (/opportunities/code-with-us/:id/edit?tab=proposals). It refuses staff and
@@ -2641,6 +2652,15 @@ conditions:
     stage: build
     by: agent:reviewer
     at: 2026-10-04T04:10:30.451Z
+    closed:
+      outcome: met
+      why: app/frontend/src/screens/opportunity-cwu-proposals-tab.tsx (?tab=proposals)
+        uses GET /api/proposals/code-with-us?opportunity=; before the
+        opportunity closes it shows opportunity-proposals-withheld-message
+        instead of proposals, after it closes it lists submitted proposals and
+        filters out drafts (putForward), and with none it says so in words
+      by: agent:reviewer
+      at: 2026-10-04T04:51:03.609Z
   - ref: build-slice-14-2#3
     text: "app/backend/src/proposals/prisma-cwu-proposal.store.ts: in create and
       update, write null to proponentOrganization when the organization
@@ -2654,6 +2674,16 @@ conditions:
     stage: build
     by: agent:reviewer
     at: 2026-10-04T04:10:30.451Z
+    closed:
+      outcome: met
+      why: organizationOf() in app/backend/src/proposals/prisma-cwu-proposal.store.ts
+        writes null for an organization proponent with no organization picked,
+        in both create and update;
+        app/backend/tests/code-with-us-proposals-end-to-end.test.ts 'keeps a
+        draft with an organization chosen but none picked' saves, reopens,
+        picks, removes and reopens it
+      by: agent:reviewer
+      at: 2026-10-04T04:51:03.629Z
   - ref: plan-21#1
     text: "docs/decisions/0002: add rows to its migration table for the Code With Us
       opportunity attachment table restored under 0029 and the two Sprint With
