@@ -28,6 +28,7 @@ import {
 } from "../src/mail/notifications/team";
 import { termsUpdated } from "../src/mail/notifications/terms-updated";
 import { readyForEvaluationToAuthor, readyForEvaluationToEvaluators } from "../src/mail/notifications/closing";
+import { readyForConsensus } from "../src/mail/notifications/evaluation";
 import {
   proposalAwarded,
   proposalNotAwarded,
@@ -97,6 +98,8 @@ const EVERY_MESSAGE: readonly Envelope[] = [
   invitationDeclinedToOwner(person, person, organization, look),
   to(readyForEvaluationToAuthor(running, origin)),
   to(readyForEvaluationToEvaluators({ program: "sprint-with-us", id: swu.id, title: swu.title }, origin)),
+  to(readyForConsensus({ program: "sprint-with-us", id: swu.id, title: swu.title }, origin)),
+  to(readyForConsensus({ program: "team-with-us", id: "00000000-0000-4000-8000-000000000801", title: "A team" }, origin)),
   to(proposalSubmitted(proposalSubject, origin)),
   to(proposalWithdrawnToVendor(proposalSubject, origin)),
   to(proposalWithdrawnToAdministrators(proposalSubject, organization.legalName, origin)),

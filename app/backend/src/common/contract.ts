@@ -233,6 +233,33 @@ export function withContactListsAsWritten(document: ContractDocument): ContractD
   return { ...document, paths };
 }
 
+/**
+ * The two single-evaluation routes, whose change accepts only the tag `edit`. Every other tag,
+ * a request to submit that one evaluation alone among them, is refused as an unrecognised
+ * request (R-5.26) — in the service's words, which say so, rather than in the validator's,
+ * which only list the allowed values. So the boundary still requires a tagged body here but
+ * leaves the tag's value to the handler. Nothing else about the routes is relaxed.
+ */
+export const SINGLE_EVALUATION_ROUTES = [
+  "/api/proposal/sprint-with-us/{proposalId}/team-questions/evaluations/{id}",
+  "/api/proposal/team-with-us/{proposalId}/resource-questions/evaluations/{id}",
+] as const;
+
+export function withAnyEvaluationTag(document: ContractDocument): ContractDocument {
+  const paths = { ...((document.paths as Record<string, unknown>) ?? {}) };
+  for (const route of SINGLE_EVALUATION_ROUTES) {
+    const evaluation = paths[route] as Record<string, Record<string, unknown>> | undefined;
+    const change = evaluation?.put;
+    if (!evaluation || !change) continue;
+    const requestBody = {
+      required: true,
+      content: { "application/json": { schema: { $ref: "#/components/schemas/TaggedRequestBody" } } },
+    };
+    paths[route] = { ...evaluation, put: { ...change, requestBody } };
+  }
+  return { ...document, paths };
+}
+
 export function withoutTestOnlyRoutes(
   document: ContractDocument,
 ): ContractDocument {

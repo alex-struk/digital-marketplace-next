@@ -37,6 +37,7 @@ import { OrganizationListScreen } from "./screens/organization-list";
 import { OrganizationCreateScreen } from "./screens/organization-create";
 import { OrganizationEditScreen } from "./screens/organization-edit";
 import { OrganizationTermsScreen } from "./screens/organization-terms";
+import { EvaluationIndividualScreen } from "./screens/evaluation-individual-form";
 
 /**
  * The addresses in `spec/contract/surface.yaml`, and nothing else. Every other address is the
@@ -327,6 +328,61 @@ const proposalTwuEditRoute = createRoute({
   },
 });
 
+// One proponent's individual evaluation by a panel evaluator, reached from the Evaluation tab
+// (decision record 0062): started at ".../evaluations/create", and the evaluator's own at
+// ".../evaluations/<their account>/edit".
+const evaluationSwuCreateRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/sprint-with-us/$opportunityId/proposals/$proposalId/team-questions/evaluations/create",
+  component: function EvaluationSwuCreateRoute() {
+    const { opportunityId, proposalId } = evaluationSwuCreateRoute.useParams();
+    return <EvaluationIndividualScreen key={proposalId} program="sprint-with-us" opportunityId={opportunityId} proposalId={proposalId} evaluatorId={null} />;
+  },
+});
+
+const evaluationSwuEditRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/sprint-with-us/$opportunityId/proposals/$proposalId/team-questions/evaluations/$userId/edit",
+  component: function EvaluationSwuEditRoute() {
+    const { opportunityId, proposalId, userId } = evaluationSwuEditRoute.useParams();
+    return (
+      <EvaluationIndividualScreen
+        key={`${proposalId}/${userId}`}
+        program="sprint-with-us"
+        opportunityId={opportunityId}
+        proposalId={proposalId}
+        evaluatorId={userId}
+      />
+    );
+  },
+});
+
+const evaluationTwuCreateRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/team-with-us/$opportunityId/proposals/$proposalId/resource-questions/evaluations/create",
+  component: function EvaluationTwuCreateRoute() {
+    const { opportunityId, proposalId } = evaluationTwuCreateRoute.useParams();
+    return <EvaluationIndividualScreen key={proposalId} program="team-with-us" opportunityId={opportunityId} proposalId={proposalId} evaluatorId={null} />;
+  },
+});
+
+const evaluationTwuEditRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/team-with-us/$opportunityId/proposals/$proposalId/resource-questions/evaluations/$userId/edit",
+  component: function EvaluationTwuEditRoute() {
+    const { opportunityId, proposalId, userId } = evaluationTwuEditRoute.useParams();
+    return (
+      <EvaluationIndividualScreen
+        key={`${proposalId}/${userId}`}
+        program="team-with-us"
+        opportunityId={opportunityId}
+        proposalId={proposalId}
+        evaluatorId={userId}
+      />
+    );
+  },
+});
+
 // Organizations. "/organizations/create" is a fixed address, matched before an organization's own.
 const organizationListRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -413,6 +469,10 @@ export const routeTree = rootRoute.addChildren([
   proposalTwuViewRoute,
   proposalSwuEditRoute,
   proposalTwuEditRoute,
+  evaluationSwuCreateRoute,
+  evaluationSwuEditRoute,
+  evaluationTwuCreateRoute,
+  evaluationTwuEditRoute,
   organizationListRoute,
   organizationCreateRoute,
   organizationEditRoute,

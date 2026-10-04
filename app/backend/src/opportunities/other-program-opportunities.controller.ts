@@ -9,8 +9,9 @@ type TaggedBody = { tag?: unknown; value?: unknown };
 /**
  * Creating, reading, changing and deleting one Sprint With Us or Team With Us opportunity
  * (decision record 0045). `PUT` takes one tagged change: `edit`, `submitForReview`, `publish`,
- * `editEvaluationPanel`, `cancel`, `addAddendum` and, for Sprint With Us, `addNote`; the
- * evaluation stages' changes are later slices'.
+ * `editEvaluationPanel`, `cancel`, `addAddendum`, `submitIndividualQuestionEvaluations` (an
+ * evaluator's whole set of scores, decision record 0062) and, for Sprint With Us, `addNote`; the
+ * later evaluation stages' changes are not yet taken.
  */
 @Controller("api/opportunities")
 export class OtherProgramOpportunitiesController {

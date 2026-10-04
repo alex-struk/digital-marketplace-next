@@ -17,6 +17,7 @@ import {
   maySubmitForReview,
 } from "@rules/opportunities";
 import type { OtherProgram } from "@rules/other-program-drafts";
+import { EvaluatedOpportunity, EvaluationTab, evaluationTabsFor } from "@rules/individual-evaluation";
 import type { Account } from "../api/accounts";
 import type { RunningAction } from "../api/opportunities";
 import {
@@ -35,6 +36,7 @@ import { Stack } from "../app/page-layout";
 import { RequireSignIn } from "../app/require-sign-in";
 import { useScreenTitle } from "../app/screen-title";
 import { EvaluationPanelTab } from "./evaluation-panel-tab";
+import { ConsensusTab, EvaluationListTab, InstructionsTab } from "./evaluation-tabs";
 import { ProposalsTab } from "./opportunity-cwu-proposals-tab";
 import { PublishDialog } from "./opportunity-cwu-form";
 import { DeleteDialog, Notice, NoticeArea, refusalNotice } from "./opportunity-cwu-edit";
@@ -49,15 +51,18 @@ import { AddendaTab, CancelDialog, HistoryTable, ReportingSection, Sent } from "
  * reporting figures (R-1.30), its details in their form (R-1.4, R-1.56), its addenda once it is no
  * longer a draft (R-1.32), its history, with any private notes but no way to add one (R-1.33), and
  * its evaluation panel (evaluation-panel-swu, evaluation-panel-twu; R-5.16, R-5.18). Each tab has
- * its own address (`?tab=…`). Only its author and administrators see it; anybody else, a panel
- * member included, is shown the missing page (R-1.30, R-5.18).
+ * its own address (`?tab=…`). Its author and administrators see those; a member of its panel sees
+ * only the evaluation tools their place on it gives them — the instructions and their own
+ * evaluations to an evaluator, the consensus to the chair (R-5.19, R-5.34) — and the panel tab
+ * stays its author's and administrators' (R-5.18). Anybody offered no tab is shown the missing page.
  *
  * The action bar offers only what the person may do in the opportunity's state, as on the Code
  * With Us manage page (R-1.20, R-1.22, R-1.28, R-1.53, R-1.56).
  */
 type Loaded = { readonly kind: "loading" } | { readonly kind: "missing" } | { readonly kind: "found"; readonly opportunity: OtherProgramOpportunity };
 
-type Tab = "summary" | "opportunity" | "addenda" | "history" | "proposals" | "evaluationPanel";
+type ManagerTab = "summary" | "opportunity" | "addenda" | "history" | "proposals" | "evaluationPanel";
+type Tab = ManagerTab | EvaluationTab;
 
 const TAB_NAMES: Readonly<Record<Tab, string>> = {
   summary: "Summary",
@@ -66,6 +71,9 @@ const TAB_NAMES: Readonly<Record<Tab, string>> = {
   history: "History",
   proposals: "Proposals",
   evaluationPanel: "Evaluation panel",
+  instructions: "Instructions",
+  evaluation: "Evaluation",
+  consensus: "Consensus",
 };
 
 const TAB_TEST_IDS: Readonly<Record<Tab, string>> = {
@@ -75,7 +83,19 @@ const TAB_TEST_IDS: Readonly<Record<Tab, string>> = {
   history: "opportunity-tab-history",
   proposals: "opportunity-tab-proposals",
   evaluationPanel: "opportunity-tab-evaluation-panel",
+  instructions: "opportunity-tab-instructions",
+  evaluation: "opportunity-tab-evaluation",
+  consensus: "opportunity-tab-consensus",
 };
+
+/** The surface title of each evaluation tab, which is a surface of its own. */
+const EVALUATION_TAB_TITLES: Readonly<Record<EvaluationTab, string>> = {
+  instructions: "Instructions",
+  evaluation: "Evaluation",
+  consensus: "Consensus",
+};
+
+const isEvaluationTab = (tab: unknown): tab is EvaluationTab => tab === "instructions" || tab === "evaluation" || tab === "consensus";
 
 const TITLES: Readonly<Record<OtherProgram, string>> = {
   "sprint-with-us": "Manage a Sprint With Us opportunity",
@@ -98,10 +118,42 @@ const DONE: Readonly<Record<"submit" | "publish" | "save" | RunningAction["tag"]
  * and only one that has been put forward can have proposals; the Proposals tab itself says when
  * they can be read (R-1.31, R-2.25).
  */
-export function otherTabsFor(status: OpportunityStatus): readonly Tab[] {
+export function otherTabsFor(status: OpportunityStatus): readonly ManagerTab[] {
   return status === "DRAFT"
     ? ["summary", "opportunity", "history", "evaluationPanel"]
     : ["summary", "opportunity", "addenda", "history", "proposals", "evaluationPanel"];
+}
+
+/** What the evaluation rules turn on, read from the opportunity as the service answered with it. */
+export function evaluatedFrom(opportunity: OtherProgramOpportunity): EvaluatedOpportunity {
+  return {
+    status: opportunity.status,
+    createdBy: opportunity.createdBy?.id ?? null,
+    panel: (opportunity.evaluationPanel ?? []).map((member) => ({ user: member.user.id, evaluator: member.evaluator, chair: member.chair })),
+  };
+}
+
+/**
+ * Every tab the person is offered: the manage page's own to its author and administrators, then
+ * the evaluation tools their place on the panel gives them (R-5.34). Somebody offered none is shown
+ * the missing page.
+ */
+export function manageTabsFor(account: Account, opportunity: OtherProgramOpportunity): readonly Tab[] {
+  const manager = mayManageOpportunity(account, { status: opportunity.status, createdBy: opportunity.createdBy?.id ?? null });
+  return [...(manager ? otherTabsFor(opportunity.status) : []), ...evaluationTabsFor(account, evaluatedFrom(opportunity))];
+}
+
+/**
+ * The tab an address asks for, among those offered: the first offered when it asks for none; to the
+ * author or an administrator, the Summary for any other name, as before; and nothing — the missing
+ * page — for an evaluation tab not offered to this person, or for anything but their evaluation
+ * tabs to a panel member who does not manage it (design gap 5, following R-5.18).
+ */
+export function chosenTab(offered: readonly Tab[], asked: unknown): Tab | null {
+  if (offered.includes(asked as Tab)) return asked as Tab;
+  if (asked === undefined || asked === null || asked === "") return offered[0] ?? null;
+  if (isEvaluationTab(asked) || !offered.includes("summary")) return null;
+  return "summary";
 }
 
 export function OpportunityOtherManageScreen({ program, opportunityId }: { program: OtherProgram; opportunityId: string }) {
@@ -134,9 +186,7 @@ function ManageLoader({ program, account, opportunityId }: { program: OtherProgr
     );
   }
   const opportunity = loaded.kind === "found" ? loaded.opportunity : null;
-  if (!opportunity || !mayManageOpportunity(account, { status: opportunity.status, createdBy: opportunity.createdBy?.id ?? null })) {
-    return <NotFound />;
-  }
+  if (!opportunity || manageTabsFor(account, opportunity).length === 0) return <NotFound />;
   return <Manage program={program} account={account} initial={opportunity} />;
 }
 
@@ -158,10 +208,11 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
 
   const standing = { status: opportunity.status, createdBy: opportunity.createdBy?.id ?? null };
   const draft = opportunity.status === "DRAFT";
-  const offered = otherTabsFor(opportunity.status);
-  const tab: Tab = offered.includes(search.tab as Tab) ? (search.tab as Tab) : "summary";
-  // The document title is the surface title, and the panel tab is a surface of its own.
-  useScreenTitle(tab === "evaluationPanel" ? PANEL_TITLE : TITLES[program]);
+  const offered = manageTabsFor(account, opportunity);
+  const chosen = chosenTab(offered, search.tab);
+  const tab: Tab = chosen ?? "summary";
+  // The document title is the surface title, and the panel and evaluation tabs are surfaces of their own.
+  useScreenTitle(tab === "evaluationPanel" ? PANEL_TITLE : isEvaluationTab(tab) ? EVALUATION_TAB_TITLES[tab] : TITLES[program]);
   const base = `/opportunities/${program}/${opportunity.id}/edit`;
   const mayEdit = mayEditOpportunity(account, standing);
   const administrator = account.type === "ADMIN";
@@ -228,6 +279,8 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
     }
     setNotice({ kind: "refused", text: answer.kind === "refused" ? answer.reasons.join(" ") : "The opportunity could not be deleted. Try again." });
   }
+
+  if (chosen === null) return <NotFound />;
 
   return (
     <Stack gap="large">
@@ -374,6 +427,11 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
             }}
           />
         ) : null}
+        {tab === "instructions" ? <InstructionsTab program={program} /> : null}
+        {tab === "evaluation" ? (
+          <EvaluationListTab program={program} account={account} opportunity={opportunity} onSubmitted={setOpportunity} />
+        ) : null}
+        {tab === "consensus" ? <ConsensusTab opportunity={opportunity} /> : null}
       </Stack>
       <CancelDialog
         key={dialog === "cancel" ? "open" : "closed"}
