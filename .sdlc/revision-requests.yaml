@@ -1680,6 +1680,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-04T13:52:53.849Z
+    taken: 2026-10-04T13:59:14.203Z
+    taken_by: bind-adapter-new-82
   - stage: bind-adapter
     target: new
     why: "R-5.32, R-2.29, R-1.41: evaluation-consensus-list-swu and -twu (the
@@ -1698,6 +1700,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-04T13:52:53.849Z
+    taken: 2026-10-04T13:59:14.203Z
+    taken_by: bind-adapter-new-82
   - stage: bind-adapter
     target: new
     why: "R-5.29: for the case 'the chair tries to record a consensus before the
@@ -1712,3 +1716,5 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-04T13:52:53.849Z
+    taken: 2026-10-04T13:59:14.203Z
+    taken_by: bind-adapter-new-82
