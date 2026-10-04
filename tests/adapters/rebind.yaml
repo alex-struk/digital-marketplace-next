@@ -14142,3 +14142,8 @@ rebind:
     adapter: fddfbcd67b408d8e120d4412b47a34c0e6a4c75a
     by: runner:calibrate
     at: 2026-10-04T22:40:34.826Z
+    closed:
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-10-04T22:43:38.517Z
