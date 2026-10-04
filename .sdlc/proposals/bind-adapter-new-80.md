@@ -29,3 +29,23 @@ Each wait gives up quietly on timeout rather than failing the action itself. If 
 **What I did not do.** I did not open the browser this time. Checking the fix live would have meant deactivating or reactivating a seeded account, which changes the target's data. I also didn't need it to bind anything new: the wording I wait for comes from the failure outline the ruling cites. If the target's wording for deactivation differs from "has been deactivated", the dialog-closed and page-settled waits still apply, so that path is weaker but not broken.
 
 `bindings.yaml` is unchanged: both members were already `bound` and still are. I touched nothing outside `tests/adapters/new/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:tech-lead
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+The question is whether this revision binds the profile activation-change confirmation so that a reading taken after it reflects the change, without moving anything else in the adapter. Approve. The escalation says bind-adapter went past policy.loops.request on build-slice-16's requests. Of the five sends it lists, only #5 (request/build-slice-16-5#1, the confirmActivationChange race) is still flagged as untaken by the conditions check, so this revision is answerable for that one alone. That part of the account decided the ruling. The diff is 9 lines inside userProfile.confirmActivationChange (tests/adapters/new/index.ts:6278-6290). After the confirm click it waits for the dialog to close, then for the 'has been (de|re)activated' status message (the wording in the R-4.20 failure outline), then settles the same way toggleAdminPermission does. Each wait gives up quietly on timeout, so a refused change shows up in the test's next reading rather than as a timeout in the action. userProfileSelf spreads the same selfProfile builder (line 6668), so it picks up the fix too. bindings.yaml is unchanged and nothing outside tests/adapters/new/ moved. The runner's typecheck on d2a4440ff passed with no diagnostics. The fix has not been run against the target, so the deactivation wording is unconfirmed; where it differs, the dialog-hidden and settle waits still hold. What would change this: R-4.20 or the other dependent tests still reading the pre-change status after this step, or the change reaching beyond the confirmation step.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `d2a4440ff32e358ef7fe238502ce38da1b8b8bf6`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.

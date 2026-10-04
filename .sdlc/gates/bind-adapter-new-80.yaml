@@ -1,18 +1,15 @@
 gate: G3
-verdict: escalated
-by: runner:bind-adapter
-held_by: runner
-escalate_to: tech-lead
-rationale: >-
-  bind-adapter was handed owed work sent back to it more times than the
-  project's policy allows, so this proposal is ruled by tech-lead rather than
-  put to G3's holder for another round.
-
-  - requests from build-slice-16: sent to bind-adapter 3 times, past the limit
-  of 2 that policy.loops.request sets. What each send asked for:
-    1. R-1.27: opportunityCwuView.successfulProponent (tests/adapters/new/index.ts, the Code With Us view member near line 7378) looks only for an 'Awarded to <name>' line or a 'Successful proponent' definition term, so it read ''. On /opportunities/code-with-us/00000000-0000-4000-a008-000000000001 the page draws a region named 'Successful proponent' (heading level 2) whose paragraph is 'Northern Pines Digital Ltd.' (.sdlc/evidence/slice-16/R-1.27.txt line 34). Read the name from that region, on the Sprint With Us and Team With Us views as well. Also correct the bindings.yaml comment saying the awarded page names no winner.
-    2. R-6.25, R-1.26, R-2.26, R-2.27, R-2.33, R-2.34: verify reports the read-only proposal pages now offer controls this binding has not seen: on proposal-cwu-view 'Enter score', 'Disqualify' and 'Award' for the administrator and the opportunity's author; on proposal-swu-view 'Award'; on proposal-twu-view 'Disqualify'. Bind enter_score, disqualify_proposal and award_proposal on those screens, including the dialogs each opens.
-    3. tests/adapters/new/bindings.yaml records proposal-swu-view observations total_score (line 593) and rank (line 595), and questions_score, challenge_score, scenario_score and price_score, as unbound because 'the screen shows no score of any kind'. That was walked on an earlier build. On the current build, signed in as the administrator, /opportunities/sprint-with-us/00000000-0000-4000-a018-000000000001/proposals/00000000-0000-4000-a018-000000000101 has a 'Scores' region with Team questions 100%, Code challenge 80%, Team scenario 70%, Price 100%, Total score 87.5% and Rank 1 of 2, and the total carries the contract test id proposal-total-score (page outline .sdlc/evidence/slice-16/R-2.32.txt lines 36-49). The unbound total_score fails R-2.32 at tests/acceptance/proposals/R-2.32.spec.ts:51 and the Sprint With Us score check of R-1.27 at tests/acceptance/opportunities/R-1.27.spec.ts:100. Bind these observations against the current build, and walk proposal-twu-view's matching score observations again, since the same screen serves Team With Us.
-    4. tests/adapters/new/bindings.yaml marks scoresheet_tab unbound on proposal-swu-edit (line 554) and proposal-twu-edit (line 650) because 'the vendor's proposal screen offers only Proposal and History'. The current build says that once a proposal is awarded or not awarded, the vendor's manage page has a Scoresheet tab with each stage's score, the weighted total and the rank. R-2.32 then reads the vendor's score and rank through proposalSwuEdit.totalScore and rank. Check these against the current build on a decided Sprint With Us proposal, for example 00000000-0000-4000-a020-000000000101 as the organization owner, so R-2.32's vendor half reads the screen as it now is.
-    5. in tests/adapters/new/index.ts, userProfile.confirmActivationChange (line 6278) clicks the confirmation dialog's button and returns without waiting for the activation change to reach the page. toggleAdminPermission on the same screen settles after its click; this one does not. tests/acceptance/users/R-4.20.spec.ts:40 then reads userProfile.statusBadge() straight away and got 'Inactive', while the page outline taken at that failure (.sdlc/evidence/slice-16/R-4.20.txt) shows the profile of 00000000-0000-4000-8000-000000000205 with 'Status: Active' and the status message 'Ellis Placeholder's account has been reactivated. They have been told by email.'. The race became visible once every /api request began waiting for the deadline-closing hook. Make confirmActivationChange (and the same action on userProfileSelf) wait until the dialog has closed and the change has been answered, for example by settling or by waiting for the status message, so that a reading taken after it reflects the change. The same steps are used by R-4.14, R-4.30, R-4.31, R-3.7, R-3.8, R-3.27 and R-3.32.
-at: 2026-10-04T11:01:31.482Z
+verdict: approve
+by: agent:tech-lead
+held_by: agent
+rationale: |2-
+  The question is whether this revision binds the profile activation-change confirmation so that a reading taken after it reflects the change, without moving anything else in the adapter. Approve. The escalation says bind-adapter went past policy.loops.request on build-slice-16's requests. Of the five sends it lists, only #5 (request/build-slice-16-5#1, the confirmActivationChange race) is still flagged as untaken by the conditions check, so this revision is answerable for that one alone. That part of the account decided the ruling. The diff is 9 lines inside userProfile.confirmActivationChange (tests/adapters/new/index.ts:6278-6290). After the confirm click it waits for the dialog to close, then for the 'has been (de|re)activated' status message (the wording in the R-4.20 failure outline), then settles the same way toggleAdminPermission does. Each wait gives up quietly on timeout, so a refused change shows up in the test's next reading rather than as a timeout in the action. userProfileSelf spreads the same selfProfile builder (line 6668), so it picks up the fix too. bindings.yaml is unchanged and nothing outside tests/adapters/new/ moved. The runner's typecheck on d2a4440ff passed with no diagnostics. The fix has not been run against the target, so the deactivation wording is unconfirmed; where it differs, the dialog-hidden and settle waits still hold. What would change this: R-4.20 or the other dependent tests still reading the pre-change status after this step, or the change reaching beyond the confirmation step.
+conditions: []
+cost: 0.3525784
+turns: 5
+session: "29eac785-8e46-476f-a397-4032e5eb6fa9"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T11:02:22.175Z
