@@ -35,8 +35,23 @@
 		reverse_proxy {$BACKEND_ORIGIN:backend:3001}
 	}
 
+	# /admin/email-notification-reference is the service's: it answers the samples to an
+	# administrator (R-6.13). A browser opening it as a page is given the screen, which asks the
+	# service for them, as /status is (decision record 0067). The page is never kept by a browser,
+	# and varies by Accept, so the screen's own request for the samples at this address is never
+	# answered with the page from the browser's cache (decision record 0068).
 	handle /admin/* {
-		reverse_proxy {$BACKEND_ORIGIN:backend:3001}
+		header Vary Accept
+		@page header Accept *text/html*
+		handle @page {
+			header Cache-Control no-store
+			root * /srv
+			rewrite * /index.html
+			file_server
+		}
+		handle {
+			reverse_proxy {$BACKEND_ORIGIN:backend:3001}
+		}
 	}
 
 	# Every other address is a screen. The single-page app's router answers it, and shows

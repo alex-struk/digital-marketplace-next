@@ -77,9 +77,10 @@ export async function createApplication(): Promise<INestApplication> {
 
   // Every request under /api has its bearer token checked before a handler sees it (decision
   // record 0004), or, when it carries none, its service session cookie (decision record 0017);
-  // what the person may then do is their account's business.
+  // what the person may then do is their account's business. The administrator's notification
+  // reference, under /admin, is asked for the same way (R-6.13).
   app.use(
-    "/api",
+    ["/api", "/admin"],
     bearerTokenCheck(
       app.get<TokenVerifier>(TOKEN_VERIFIER),
       app.get(SignedOutSessions),

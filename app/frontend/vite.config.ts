@@ -30,7 +30,12 @@ export default defineConfig({
         bypass: (request) => ((request.headers.accept ?? "").includes("text/html") ? "/index.html" : undefined),
       },
       "/auth": { target: BACKEND, changeOrigin: false },
-      "/admin": { target: BACKEND, changeOrigin: false },
+      // Likewise the notification reference (decision record 0067).
+      "/admin": {
+        target: BACKEND,
+        changeOrigin: false,
+        bypass: (request) => ((request.headers.accept ?? "").includes("text/html") ? "/index.html" : undefined),
+      },
     },
   },
   preview: {

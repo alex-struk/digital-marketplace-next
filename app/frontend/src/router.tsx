@@ -17,6 +17,7 @@ import { SignOutScreen } from "./screens/sign-out";
 import { NoticeScreen } from "./screens/notice";
 import { DashboardScreen } from "./screens/dashboard";
 import { ServiceStatusScreen } from "./screens/service-status";
+import { EmailNotificationReferenceScreen } from "./screens/email-notification-reference";
 import { UserListScreen } from "./screens/user-list";
 import { UserProfileScreen } from "./screens/user-profile";
 import { OpportunityListScreen } from "./screens/opportunity-list";
@@ -138,6 +139,14 @@ const serviceStatusRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/status",
   component: ServiceStatusScreen,
+});
+
+// notification-email-reference: a browser's page request for it is the screen's; the service
+// answers the samples (decision record 0067).
+const emailReferenceRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/admin/email-notification-reference",
+  component: EmailNotificationReferenceScreen,
 });
 
 const dashboardRoute = createRoute({
@@ -572,6 +581,7 @@ export const routeTree = rootRoute.addChildren([
   signOutRoute,
   noticeRoute,
   serviceStatusRoute,
+  emailReferenceRoute,
   dashboardRoute,
   userListRoute,
   userProfileRoute,
