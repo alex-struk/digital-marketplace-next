@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-85 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">629</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">623</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">506</span></a></li><li><a href="../runs.html">Run log <span class="count">22</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-85</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-04 15:40</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.288 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I added <code>start_editing</code> to both evaluation panel pages, <code>evaluation-panel-swu</code> and <code>evaluation-panel-twu</code>, in <code>tests/adapters/new/index.ts</code>, and named it as <code>bound</code> for both in `tests/adapters/new/bin…</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.288 (Claude Code))</p>
+<p>I added <code>start_editing</code> to both evaluation panel pages, <code>evaluation-panel-swu</code> and <code>evaluation-panel-twu</code>, in <code>tests/adapters/new/index.ts</code>, and named it as <code>bound</code> for both in <code>tests/adapters/new/bindings.yaml</code>. I couldn&#39;t type-check the adapter: running <code>npx tsc --noEmit</code> was refused for lack of approval, so I only checked by reading that the helpers it calls exist with the expected signatures. Nothing has been run against the target yet.</p>
+<p><strong>What the target shows.</strong> Signed in as the administrator, I opened the Evaluation panel tab on the seeded closed Sprint With Us opportunity (status &quot;Team questions: individual evaluation&quot;) and on the seeded closed Team With Us opportunity. Both tabs open ready to change straight away: each evaluator has a chooser, a &quot;Chair&quot; box and a &quot;Remove&quot; button, and the section also has &quot;Add an evaluator&quot;, the &quot;Chair (required)&quot; chooser and &quot;Save evaluation panel&quot;. Unlike the old target, the tab is never read-only first and has no &quot;Edit&quot; step of its own. There is an &quot;Edit&quot; button under &quot;Opportunity actions&quot;, but it belongs to the opportunity: pressing it sent me to <code>?tab=opportunity</code>. So that button is not the panel&#39;s start-editing control.</p>
+<p><strong>How the action works.</strong> <code>start_editing</code> opens the panel tab and treats it as editable if &quot;Add an evaluator&quot; or &quot;Save evaluation panel&quot; is there. It never presses the &quot;Opportunity actions&quot; Edit. If a later build shows the panel read-only first and puts an &quot;Edit&quot; button inside the panel section itself, the action presses that. If the panel shows its &quot;can no longer be changed&quot; note, the action records the refusal and returns rather than failing, the same way the other panel actions already do, so the test&#39;s own check of <code>panel_locked_after_consensus</code> decides the outcome. If the section has no lock note and none of those controls, it throws <code>unbound:</code> and lists the buttons the section does offer.</p>
+<p><strong>Compared with the old target.</strong> The old adapter&#39;s version presses the &quot;Edit&quot; in the top bar and then goes to the wizard&#39;s &quot;Evaluation Panel&quot; step. On the new target the action does not change the page; it only confirms the panel is editable. Tests that call it before changing the panel get an editable panel either way.</p>
+<p>Every route I opened worked, and nothing outside <code>tests/adapters/new/</code> was changed.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-04 15:41.</p>
+<div class="body"><p>Question: does bind-adapter-new-85 bind the surface&#39;s start_editing action on evaluation-panel-swu and evaluation-panel-twu for the new target, and nothing else? Ruling: approve. The new startEditing (tests/adapters/new/index.ts) only navigates and locates. It reaches the tab through the existing reached/editable helpers. If the panel shows its lock note, editable records the refusal and returns, the same way every other panel action does, so the test&#39;s own reading of panel_locked_after_consensus decides the outcome. It returns as soon as &quot;Add an evaluator&quot; or &quot;Save evaluation panel&quot; is in the section. It presses an &quot;Edit&quot; only when one is drawn inside the &quot;Evaluation panel&quot; section itself (section() is scoped to that named region), so it never presses the opportunity&#39;s own &quot;Edit&quot; under &quot;Opportunity actions&quot;, which the receipt reports leaves for ?tab=opportunity. It throws unbound only when the section has no lock note and none of those controls, and it lists the buttons the section does offer, which is a genuine absence and not a convenience. No assertion and no pass/fail logic. Both pages are marked bound in bindings.yaml, with a comment saying how the binding was walked. Nothing under tests/acceptance or any protected path changed. Every changed file is inside tests/adapters/new/, apart from the pipeline&#39;s own journal, proposal and run records. The authoring agent could not run tsc, but the runner&#39;s typecheck on revision 8fc1c7eab passed with no diagnostics under adapters/new/, which closes that gap. The receipt states plainly that nothing has been run against the target yet. Whether the binding behaves at runtime is for verify and calibrate to show, and the receipt does not claim otherwise. The open missing-test warning on R-5.27 is already owed by derive-tests and is not this adapter&#39;s to discharge. The ruling would change if the binding asserted or decided an outcome, if it pressed the opportunity-level Edit, or if the typecheck result were stale for this revision.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

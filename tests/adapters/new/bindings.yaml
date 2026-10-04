@@ -1248,6 +1248,11 @@ pages:
   # only public sector people are offered, so a vendor named as a member is refused (thrown).
   evaluation-panel-swu:
     actions:
+      # Walked as the administrator on the seeded closed opportunity: the tab opens already
+      # changeable (choosers, "Add an evaluator", "Save evaluation panel"); the "Edit" under
+      # "Opportunity actions" leaves for ?tab=opportunity, so start_editing reaches the
+      # changeable panel and presses an "Edit" only if the section itself draws one.
+      start_editing: bound
       add_panel_member: bound
       remove_panel_member: bound
       choose_panel_chair: bound
@@ -1264,6 +1269,8 @@ pages:
 
   evaluation-panel-twu:
     actions:
+      # As evaluation-panel-swu, walked on the seeded closed Team With Us opportunity.
+      start_editing: bound
       add_panel_member: bound
       remove_panel_member: bound
       choose_panel_chair: bound

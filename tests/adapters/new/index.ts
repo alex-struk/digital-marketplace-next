@@ -5033,6 +5033,36 @@ export default function create(
 
     const built = {
       open: (params?: Record<string, string>) => screen.open(params),
+      // Walked as the administrator on the seeded closed Sprint With Us and Team With Us
+      // opportunities (at "Team questions: individual evaluation" / its Team With Us
+      // counterpart): the tab opens already changeable, its choosers, "Add an evaluator" and
+      // "Save evaluation panel" drawn without any step first. The "Edit" under "Opportunity
+      // actions" is not the panel's: it leaves for ?tab=opportunity to edit the opportunity
+      // itself, so it is never pressed here. Starting to edit is reaching the changeable
+      // panel; an "Edit" drawn inside the section itself is pressed should a build draw the
+      // panel read-only first. A locked panel is noted, as every change to it is, for
+      // panel_locked_after_consensus to report.
+      startEditing: async (): Promise<void> => {
+        const member = "start_editing";
+        if (!(await editable(member))) return;
+        const controls = (): Locator =>
+          seen(section().getByRole("button", { name: /^\s*(add an evaluator|save evaluation panel)\s*$/i }));
+        if (await controls().count()) return;
+        const edit = seen(section().getByRole("button", { name: /^\s*edit( (the )?(evaluation )?panel)?\s*$/i })).first();
+        if (await edit.count()) {
+          await edit.click();
+          await settle();
+          if (await controls().count()) return;
+        }
+        const offered = (await seen(section().getByRole("button")).allInnerTexts().catch(() => [] as string[]))
+          .map((one) => `"${one.trim()}"`)
+          .filter((one) => one !== '""')
+          .join(", ");
+        unbound(
+          where(member),
+          `the "Evaluation panel" section on ${page.url()} shows no lock note and neither "Add an evaluator" nor "Save evaluation panel"; its buttons are ${offered || "none"}`,
+        );
+      },
       // Each person named joins the first member still reading "Select an item", or a new
       // one "Add an evaluator" makes; a chair flag ticks their Chair box.
       addPanelMember: async (input?: unknown): Promise<void> => {
