@@ -1,0 +1,422 @@
+{
+  "slice": 20,
+  "proposal": "build-slice-20",
+  "app_tree": "16902bebe2d721b0a2458887bbddeb24235da6be",
+  "at": "2026-10-04T19:15:29.496Z",
+  "verdict": "unbound",
+  "unbound": [
+    {
+      "id": "R-1.40",
+      "reason": "opportunity-cwu-complete.open — /opportunities/code-with-us/:opportunityId/complete is offered only to a signed-in person, and walked signed in on the current build (as the administrator, as the public sector employee who owns the seeded opportunities and sits on their panels, and as vendors — the seeded organization owner, who wrote the seeded proposals, and a vendor with none — with the seeded records' identifiers), the running build serves a signed-in person /dashboard (to staff \"Create an opportunity\" over \"My opportunities\", to the administrator every opportunity, to a vendor \"My proposals\" and \"My organizations' proposals\"), /opportunities and every program's public opportunity page (with \"Watch this opportunity\", and \"Start a proposal\" while it takes proposals), the account screens under /users, /organizations, /organizations/create, /organizations/:orgId/edit (its Sprint With Us and Team With Us qualification sections drawing the requirements and \"Read the … terms and conditions\") and /organizations/:orgId/{sprint,team}-with-us-terms-and-conditions, to the administrator the content-management screens under /content, to a vendor the three programs' proposal forms .../proposals/create and their own proposal's screen .../proposals/:proposalId/edit, and to the administrator and public sector staff /opportunities/create, the three programs' forms, their management screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (sections Summary, Opportunity, Addenda, History, Proposals — proponents in plain text with no link onward — and, on Sprint With Us and Team With Us, Evaluation panel and, since 2026-10-04, to the panel's members Instructions, Evaluation and Consensus) and the Code With Us proposal's screen /opportunities/code-with-us/:opportunityId/proposals/:proposalId (proponent, Status, Submitted, Proposal ID, Score, \"Printable copy\", and the sections Proposal and History, with no button); the Sprint With Us and Team With Us proposal's screen /opportunities/{sprint,team}-with-us/:opportunityId/proposals/:proposalId (proponent, Opportunity, Status, Submitted, Proposal ID, \"Printable copy\", and the sections Proposal and History, with no button); walked the same way it still answers \"Page not found\" at /proposals, at every program's .../proposals/:proposalId/export (where the Code With Us screen's \"Printable copy\" lands, to the proposal's own author too) and .../proposals/export, at every program's .../complete, and at the consensus score sheets under .../team-questions/consensus/ and .../resource-questions/consensus/ (the individual score sheets under .../evaluations/ open, since 2026-10-04, to the panel's evaluators); opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/code-with-us/00000000-0000-4000-a008-000000000001/complete)"
+    },
+    {
+      "id": "R-2.37",
+      "reason": "proposal-cwu-export-one.exported_proposal — /opportunities/code-with-us/:opportunityId/proposals/:proposalId/export no longer answers \"Page not found\" (it shows \"R-2.37 opportunity whose proposal is taken away as a printable copy\" at http://localhost:4400/opportunities/code-with-us/91c534d4-081a-460c-9ce3-b62f04e056e2/proposals/172ab1e5-25a7-4bd7-84cc-db29ba1554e9/export); the page has been built since this binding was written and nothing on it has been seen, so the next binding run binds it"
+    },
+    {
+      "id": "R-2.38",
+      "reason": "proposal-cwu-export-one.exported_proposal — /opportunities/code-with-us/:opportunityId/proposals/:proposalId/export no longer answers \"Page not found\" (it shows \"R-2.38 opportunity whose vendor asks for every proposal at once\" at http://localhost:4500/opportunities/code-with-us/88c8f325-15d6-4c76-ac8e-34054fbda56a/proposals/88278141-21e1-42ad-a2b8-9bd0ff81d51b/export); the page has been built since this binding was written and nothing on it has been seen, so the next binding run binds it"
+    }
+  ],
+  "adapter": "d44ea8519aeeda3c286127e83558725e565b8b96",
+  "rows": [
+    {
+      "id": "R-1.40",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.40.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "Only an administrator can open the full report of a completed opportunity, which shows the opportunity, its addenda, its history and every proposal in one continuous document. (a member of public sector staff who is not an administrator is refused)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-complete.open — /opportunities/code-with-us/:opportunityId/complete is offered only to a signed-in person, and walked signed in on the current build (as the administrator, as the public sector employee who owns the seeded opportunities and sits on their panels, and as vendors — the seeded organization owner, who wrote the seeded proposals, and a vendor with none — with the seeded records' identifiers), the running build serves a signed-in person /dashboard (to staff \"Create an opportunity\" over \"My opportunities\", to the administrator every opportunity, to a vendor \"My proposals\" and \"My organizations' proposals\"), /opportunities and every program's public opportunity page (with \"Watch this opportunity\", and \"Start a proposal\" while it takes proposals), the account screens under /users, /organizations, /organizations/create, /organizations/:orgId/edit (its Sprint With Us and Team With Us qualification sections drawing the requirements and \"Read the … terms and conditions\") and /organizations/:orgId/{sprint,team}-with-us-terms-and-conditions, to the administrator the content-management screens under /content, to a vendor the three programs' proposal forms .../proposals/create and their own proposal's screen .../proposals/:proposalId/edit, and to the administrator and public sector staff /opportunities/create, the three programs' forms, their management screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (sections Summary, Opportunity, Addenda, History, Proposals — proponents in plain text with no link onward — and, on Sprint With Us and Team With Us, Evaluation panel and, since 2026-10-04, to the panel's members Instructions, Evaluation and Consensus) and the Code With Us proposal's screen /opportunities/code-with-us/:opportunityId/proposals/:proposalId (proponent, Status, Submitted, Proposal ID, Score, \"Printable copy\", and the sections Proposal and History, with no button); the Sprint With Us and Team With Us proposal's screen /opportunities/{sprint,team}-with-us/:opportunityId/proposals/:proposalId (proponent, Opportunity, Status, Submitted, Proposal ID, \"Printable copy\", and the sections Proposal and History, with no button); walked the same way it still answers \"Page not found\" at /proposals, at every program's .../proposals/:proposalId/export (where the Code With Us screen's \"Printable copy\" lands, to the proposal's own author too) and .../proposals/export, at every program's .../complete, and at the consensus score sheets under .../team-questions/consensus/ and .../resource-questions/consensus/ (the individual score sheets under .../evaluations/ open, since 2026-10-04, to the panel's evaluators); opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/code-with-us/00000000-0000-4000-a008-000000000001/complete)",
+          "line": 35,
+          "steps": [
+            {
+              "step": "signIn",
+              "given": "persona public-sector-staff",
+              "at": "/dashboard"
+            },
+            {
+              "step": "userProfileSelf.open",
+              "at": "/users/me"
+            },
+            {
+              "step": "userProfileSelf.accountType",
+              "at": "/users/me",
+              "read": "\"Public sector employee\""
+            },
+            {
+              "step": "opportunityCwuComplete.open",
+              "given": "{opportunityId}",
+              "at": "/opportunities/code-with-us/00000000-0000-4000-a008-000000000001/complete",
+              "threw": "unbound: opportunity-cwu-complete.open — /opportunities/code-with-us/:opportunityId/complete is offered only to a signed-in person, and walked signed in on the current build (as the administrator, as…"
+            }
+          ],
+          "screen": ".sdlc/evidence/slice-20/R-1.40.png",
+          "outline": ".sdlc/evidence/slice-20/R-1.40.txt"
+        },
+        {
+          "title": "Only an administrator can open the full report of a completed opportunity, which shows the opportunity, its addenda, its history and every proposal in one continuous document. (an administrator is shown the whole record in one document)",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate",
+          "line": 51,
+          "steps": [
+            {
+              "step": "opportunityCwuComplete.fullReport",
+              "at": "/opportunities/code-with-us/00000000-0000-4000-a008-000000000001/complete",
+              "threw": "unbound: opportunity-cwu-complete.full_report — /opportunities/code-with-us/:opportunityId/complete is offered only to a signed-in person, and walked signed in on the current build (as the administra…"
+            },
+            {
+              "step": "opportunityCwuComplete.fullReport",
+              "at": "/opportunities/code-with-us/00000000-0000-4000-a008-000000000001/complete",
+              "threw": "unbound: opportunity-cwu-complete.full_report — /opportunities/code-with-us/:opportunityId/complete is offered only to a signed-in person, and walked signed in on the current build (as the administra…"
+            },
+            {
+              "step": "opportunityCwuComplete.fullReport",
+              "at": "/opportunities/code-with-us/00000000-0000-4000-a008-000000000001/complete",
+              "threw": "unbound: opportunity-cwu-complete.full_report — /opportunities/code-with-us/:opportunityId/complete is offered only to a signed-in person, and walked signed in on the current build (as the administra…"
+            },
+            {
+              "step": "opportunityCwuComplete.fullReport",
+              "at": "/opportunities/code-with-us/00000000-0000-4000-a008-000000000001/complete",
+              "threw": "unbound: opportunity-cwu-complete.full_report — /opportunities/code-with-us/:opportunityId/complete is offered only to a signed-in person, and walked signed in on the current build (as the administra…"
+            },
+            {
+              "step": "opportunityCwuComplete.fullReport",
+              "at": "/opportunities/code-with-us/00000000-0000-4000-a008-000000000001/complete",
+              "threw": "unbound: opportunity-cwu-complete.full_report — /opportunities/code-with-us/:opportunityId/complete is offered only to a signed-in person, and walked signed in on the current build (as the administra…"
+            },
+            {
+              "step": "opportunityCwuComplete.fullReport",
+              "at": "/opportunities/code-with-us/00000000-0000-4000-a008-000000000001/complete",
+              "threw": "unbound: opportunity-cwu-complete.full_report — /opportunities/code-with-us/:opportunityId/complete is offered only to a signed-in person, and walked signed in on the current build (as the administra…"
+            },
+            {
+              "step": "opportunityCwuComplete.fullReport",
+              "at": "/opportunities/code-with-us/00000000-0000-4000-a008-000000000001/complete",
+              "threw": "unbound: opportunity-cwu-complete.full_report — /opportunities/code-with-us/:opportunityId/complete is offered only to a signed-in person, and walked signed in on the current build (as the administra…"
+            },
+            {
+              "step": "opportunityCwuComplete.fullReport",
+              "at": "/opportunities/code-with-us/00000000-0000-4000-a008-000000000001/complete",
+              "threw": "unbound: opportunity-cwu-complete.full_report — /opportunities/code-with-us/:opportunityId/complete is offered only to a signed-in person, and walked signed in on the current build (as the administra…"
+            },
+            {
+              "step": "opportunityCwuComplete.fullReport",
+              "at": "/opportunities/code-with-us/00000000-0000-4000-a008-000000000001/complete",
+              "threw": "unbound: opportunity-cwu-complete.full_report — /opportunities/code-with-us/:opportunityId/complete is offered only to a signed-in person, and walked signed in on the current build (as the administra…"
+            },
+            {
+              "step": "opportunityCwuComplete.fullReport",
+              "at": "/opportunities/code-with-us/00000000-0000-4000-a008-000000000001/complete",
+              "threw": "unbound: opportunity-cwu-complete.full_report — /opportunities/code-with-us/:opportunityId/complete is offered only to a signed-in person, and walked signed in on the current build (as the administra…"
+            },
+            {
+              "step": "opportunityCwuComplete.fullReport",
+              "at": "/opportunities/code-with-us/00000000-0000-4000-a008-000000000001/complete",
+              "threw": "unbound: opportunity-cwu-complete.full_report — /opportunities/code-with-us/:opportunityId/complete is offered only to a signed-in person, and walked signed in on the current build (as the administra…"
+            },
+            {
+              "step": "opportunityCwuComplete.fullReport",
+              "at": "/opportunities/code-with-us/00000000-0000-4000-a008-000000000001/complete",
+              "threw": "unbound: opportunity-cwu-complete.full_report — /opportunities/code-with-us/:opportunityId/complete is offered only to a signed-in person, and walked signed in on the current build (as the administra…"
+            }
+          ],
+          "screen": ".sdlc/evidence/slice-20/R-1.40-2.png",
+          "outline": ".sdlc/evidence/slice-20/R-1.40-2.txt"
+        }
+      ],
+      "file_sha": "d909587610283cc0a7c1ec85e6ac669847c23272",
+      "adapter": "d44ea8519aeeda3c286127e83558725e565b8b96"
+    },
+    {
+      "id": "R-2.37",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.37.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "anyone entitled to read a proposal can take away a printable copy of it",
+          "status": "failed",
+          "error": "Error: unbound: proposal-cwu-export-one.exported_proposal — /opportunities/code-with-us/:opportunityId/proposals/:proposalId/export no longer answers \"Page not found\" (it shows \"R-2.37 opportunity whose proposal is taken away as a printable copy\" at http://localhost:4400/opportunities/code-with-us/91c534d4-081a-460c-9ce3-b62f04e056e2/proposals/172ab1e5-25a7-4bd7-84cc-db29ba1554e9/export); the page has been built since this binding was written and nothing on it has been seen, so the next binding run binds it",
+          "line": 139,
+          "steps": [
+            {
+              "step": "opportunityCwuCreate.publish",
+              "given": "{teaser, location, description, remoteOk, remoteDescription, proposalDeadline, …}",
+              "at": "/opportunities/code-with-us/91c534d4-081a-460c-9ce3-b62f04e056e2/edit"
+            },
+            {
+              "step": "opportunityCwuEdit.opportunityIdentifier",
+              "at": "/opportunities/code-with-us/91c534d4-081a-460c-9ce3-b62f04e056e2/edit",
+              "read": "\"91c534d4-081a-460c-9ce3-b62f04e056e2\""
+            },
+            {
+              "step": "signOut",
+              "at": "/sign-out"
+            },
+            {
+              "step": "signIn",
+              "given": "persona vendor",
+              "at": "/dashboard"
+            },
+            {
+              "step": "proposalCwuCreate.open",
+              "given": "{opportunityId}",
+              "at": "/opportunities/code-with-us/91c534d4-081a-460c-9ce3-b62f04e056e2/proposals/create"
+            },
+            {
+              "step": "proposalCwuCreate.chooseProponentIndividual",
+              "at": "/opportunities/code-with-us/91c534d4-081a-460c-9ce3-b62f04e056e2/proposals/create"
+            },
+            {
+              "step": "proposalCwuCreate.acceptProgramTerms",
+              "at": "/opportunities/code-with-us/91c534d4-081a-460c-9ce3-b62f04e056e2/proposals/create"
+            },
+            {
+              "step": "proposalCwuCreate.acceptAppTerms",
+              "at": "/opportunities/code-with-us/91c534d4-081a-460c-9ce3-b62f04e056e2/proposals/create"
+            },
+            {
+              "step": "proposalCwuCreate.submitProposal",
+              "given": "{proposalText}",
+              "at": "/opportunities/code-with-us/91c534d4-081a-460c-9ce3-b62f04e056e2/proposals/172ab1e5-25a7-4bd7-84cc-db29ba1554e9/edit"
+            },
+            {
+              "step": "proposalCwuEdit.proposalIdentifier",
+              "at": "/opportunities/code-with-us/91c534d4-081a-460c-9ce3-b62f04e056e2/proposals/172ab1e5-25a7-4bd7-84cc-db29ba1554e9/edit",
+              "read": "\"172ab1e5-25a7-4bd7-84cc-db29ba1554e9\""
+            },
+            {
+              "step": "proposalCwuExportOne.open",
+              "given": "{opportunityId, proposalId}",
+              "at": "/opportunities/code-with-us/91c534d4-081a-460c-9ce3-b62f04e056e2/proposals/172ab1e5-25a7-4bd7-84cc-db29ba1554e9/export"
+            },
+            {
+              "step": "proposalCwuExportOne.exportedProposal",
+              "at": "/opportunities/code-with-us/91c534d4-081a-460c-9ce3-b62f04e056e2/proposals/172ab1e5-25a7-4bd7-84cc-db29ba1554e9/export",
+              "threw": "unbound: proposal-cwu-export-one.exported_proposal — /opportunities/code-with-us/:opportunityId/proposals/:proposalId/export no longer answers \"Page not found\" (it shows \"R-2.37 opportunity whose pro…"
+            }
+          ],
+          "screen": ".sdlc/evidence/slice-20/R-2.37.png",
+          "outline": ".sdlc/evidence/slice-20/R-2.37.txt"
+        },
+        {
+          "title": "the vendor's own copy of a Sprint With Us proposal names the organization",
+          "status": "failed",
+          "error": "Error: unbound: proposal-swu-export-one.exported_proposal — /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/export no longer answers \"Page not found\" (it shows \"R-2.37 Sprint With Us opportunity whose vendor reads their own copy\" at http://localhost:4400/opportunities/sprint-with-us/af0b7cb0-432e-45c5-a116-eefba894f5d6/proposals/b7d634db-f5d0-4b7c-b139-c06a75e7343b/export); the page has been built since this binding was written and nothing on it has been seen, so the next binding run binds it",
+          "line": 152,
+          "steps": [
+            {
+              "step": "proposalSwuCreate.setScrumMaster",
+              "given": "{phase, member}",
+              "at": "/opportunities/sprint-with-us/af0b7cb0-432e-45c5-a116-eefba894f5d6/proposals/create"
+            },
+            {
+              "step": "proposalSwuCreate.setPhaseProposedCost",
+              "given": "{phase, cost}",
+              "at": "/opportunities/sprint-with-us/af0b7cb0-432e-45c5-a116-eefba894f5d6/proposals/create"
+            },
+            {
+              "step": "proposalSwuCreate.answerTeamQuestion",
+              "given": "{order, response}",
+              "at": "/opportunities/sprint-with-us/af0b7cb0-432e-45c5-a116-eefba894f5d6/proposals/create"
+            },
+            {
+              "step": "proposalSwuCreate.addReference",
+              "given": "{order, name, company, phone, email}",
+              "at": "/opportunities/sprint-with-us/af0b7cb0-432e-45c5-a116-eefba894f5d6/proposals/create"
+            },
+            {
+              "step": "proposalSwuCreate.addReference",
+              "given": "{order, name, company, phone, email}",
+              "at": "/opportunities/sprint-with-us/af0b7cb0-432e-45c5-a116-eefba894f5d6/proposals/create"
+            },
+            {
+              "step": "proposalSwuCreate.addReference",
+              "given": "{order, name, company, phone, email}",
+              "at": "/opportunities/sprint-with-us/af0b7cb0-432e-45c5-a116-eefba894f5d6/proposals/create"
+            },
+            {
+              "step": "proposalSwuCreate.acceptProgramTerms",
+              "at": "/opportunities/sprint-with-us/af0b7cb0-432e-45c5-a116-eefba894f5d6/proposals/create"
+            },
+            {
+              "step": "proposalSwuCreate.acceptAppTerms",
+              "at": "/opportunities/sprint-with-us/af0b7cb0-432e-45c5-a116-eefba894f5d6/proposals/create"
+            },
+            {
+              "step": "proposalSwuCreate.submitProposal",
+              "at": "/opportunities/sprint-with-us/af0b7cb0-432e-45c5-a116-eefba894f5d6/proposals/b7d634db-f5d0-4b7c-b139-c06a75e7343b/edit"
+            },
+            {
+              "step": "proposalSwuEdit.proposalIdentifier",
+              "at": "/opportunities/sprint-with-us/af0b7cb0-432e-45c5-a116-eefba894f5d6/proposals/b7d634db-f5d0-4b7c-b139-c06a75e7343b/edit",
+              "read": "\"b7d634db-f5d0-4b7c-b139-c06a75e7343b\""
+            },
+            {
+              "step": "proposalSwuExportOne.open",
+              "given": "{opportunityId, proposalId}",
+              "at": "/opportunities/sprint-with-us/af0b7cb0-432e-45c5-a116-eefba894f5d6/proposals/b7d634db-f5d0-4b7c-b139-c06a75e7343b/export"
+            },
+            {
+              "step": "proposalSwuExportOne.exportedProposal",
+              "at": "/opportunities/sprint-with-us/af0b7cb0-432e-45c5-a116-eefba894f5d6/proposals/b7d634db-f5d0-4b7c-b139-c06a75e7343b/export",
+              "threw": "unbound: proposal-swu-export-one.exported_proposal — /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/export no longer answers \"Page not found\" (it shows \"R-2.37 Sprint With Us oppo…"
+            }
+          ],
+          "screen": ".sdlc/evidence/slice-20/R-2.37-2.png",
+          "outline": ".sdlc/evidence/slice-20/R-2.37-2.txt"
+        },
+        {
+          "title": "staff reading a Sprint With Us copy see the anonymous proponent name before the challenge stage",
+          "status": "failed",
+          "error": "Error: unbound: proposal-swu-export-one.anonymous_proponent_name — /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/export no longer answers \"Page not found\" (it shows \"Seeded closed Sprint With Us opportunity\" at http://localhost:4400/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/proposals/00000000-0000-4000-8000-000000000741/export); the page has been built since this binding was written and nothing on it has been seen, so the next binding run binds it",
+          "line": 169,
+          "steps": [
+            {
+              "step": "scheduledTransitionTrigger.open",
+              "at": "/status"
+            },
+            {
+              "step": "scheduledTransitionTrigger.runPendingTransitions",
+              "at": "/status"
+            },
+            {
+              "step": "signIn",
+              "given": "persona public-sector-staff",
+              "at": "/dashboard"
+            },
+            {
+              "step": "proposalSwuExportOne.open",
+              "given": "{opportunityId, proposalId}",
+              "at": "/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/proposals/00000000-0000-4000-8000-000000000741/export"
+            },
+            {
+              "step": "proposalSwuExportOne.anonymousProponentName",
+              "at": "/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/proposals/00000000-0000-4000-8000-000000000741/export",
+              "threw": "unbound: proposal-swu-export-one.anonymous_proponent_name — /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/export no longer answers \"Page not found\" (it shows \"Seeded closed Sprin…"
+            }
+          ],
+          "screen": ".sdlc/evidence/slice-20/R-2.37-3.png",
+          "outline": ".sdlc/evidence/slice-20/R-2.37-3.txt"
+        }
+      ],
+      "file_sha": "c611d0eb966ccfa12c6be589493dccdb6e675734",
+      "adapter": "d44ea8519aeeda3c286127e83558725e565b8b96"
+    },
+    {
+      "id": "R-2.38",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.38.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "a vendor may not take away every proposal of an opportunity in one document",
+          "status": "failed",
+          "error": "Error: unbound: proposal-cwu-export-one.exported_proposal — /opportunities/code-with-us/:opportunityId/proposals/:proposalId/export no longer answers \"Page not found\" (it shows \"R-2.38 opportunity whose vendor asks for every proposal at once\" at http://localhost:4500/opportunities/code-with-us/88c8f325-15d6-4c76-ac8e-34054fbda56a/proposals/88278141-21e1-42ad-a2b8-9bd0ff81d51b/export); the page has been built since this binding was written and nothing on it has been seen, so the next binding run binds it",
+          "line": 73,
+          "steps": [
+            {
+              "step": "opportunityCwuCreate.publish",
+              "given": "{teaser, location, description, remoteOk, remoteDescription, reward, …}",
+              "at": "/opportunities/code-with-us/88c8f325-15d6-4c76-ac8e-34054fbda56a/edit"
+            },
+            {
+              "step": "opportunityCwuEdit.opportunityIdentifier",
+              "at": "/opportunities/code-with-us/88c8f325-15d6-4c76-ac8e-34054fbda56a/edit",
+              "read": "\"88c8f325-15d6-4c76-ac8e-34054fbda56a\""
+            },
+            {
+              "step": "signOut",
+              "at": "/sign-out"
+            },
+            {
+              "step": "signIn",
+              "given": "persona vendor",
+              "at": "/dashboard"
+            },
+            {
+              "step": "proposalCwuCreate.open",
+              "given": "{opportunityId}",
+              "at": "/opportunities/code-with-us/88c8f325-15d6-4c76-ac8e-34054fbda56a/proposals/create"
+            },
+            {
+              "step": "proposalCwuCreate.chooseProponentIndividual",
+              "at": "/opportunities/code-with-us/88c8f325-15d6-4c76-ac8e-34054fbda56a/proposals/create"
+            },
+            {
+              "step": "proposalCwuCreate.acceptProgramTerms",
+              "at": "/opportunities/code-with-us/88c8f325-15d6-4c76-ac8e-34054fbda56a/proposals/create"
+            },
+            {
+              "step": "proposalCwuCreate.acceptAppTerms",
+              "at": "/opportunities/code-with-us/88c8f325-15d6-4c76-ac8e-34054fbda56a/proposals/create"
+            },
+            {
+              "step": "proposalCwuCreate.submitProposal",
+              "given": "{proposalText}",
+              "at": "/opportunities/code-with-us/88c8f325-15d6-4c76-ac8e-34054fbda56a/proposals/88278141-21e1-42ad-a2b8-9bd0ff81d51b/edit"
+            },
+            {
+              "step": "proposalCwuEdit.proposalIdentifier",
+              "at": "/opportunities/code-with-us/88c8f325-15d6-4c76-ac8e-34054fbda56a/proposals/88278141-21e1-42ad-a2b8-9bd0ff81d51b/edit",
+              "read": "\"88278141-21e1-42ad-a2b8-9bd0ff81d51b\""
+            },
+            {
+              "step": "proposalCwuExportOne.open",
+              "given": "{opportunityId, proposalId}",
+              "at": "/opportunities/code-with-us/88c8f325-15d6-4c76-ac8e-34054fbda56a/proposals/88278141-21e1-42ad-a2b8-9bd0ff81d51b/export"
+            },
+            {
+              "step": "proposalCwuExportOne.exportedProposal",
+              "at": "/opportunities/code-with-us/88c8f325-15d6-4c76-ac8e-34054fbda56a/proposals/88278141-21e1-42ad-a2b8-9bd0ff81d51b/export",
+              "threw": "unbound: proposal-cwu-export-one.exported_proposal — /opportunities/code-with-us/:opportunityId/proposals/:proposalId/export no longer answers \"Page not found\" (it shows \"R-2.38 opportunity whose ven…"
+            }
+          ],
+          "screen": ".sdlc/evidence/slice-20/R-2.38.png",
+          "outline": ".sdlc/evidence/slice-20/R-2.38.txt"
+        },
+        {
+          "title": "public sector staff and administrators may take away every proposal of a closed opportunity in one document",
+          "status": "failed",
+          "error": "Error: unbound: proposal-swu-export-all.exported_proposal — /opportunities/sprint-with-us/:opportunityId/proposals/export no longer answers \"Page not found\" (it shows \"Seeded closed Sprint With Us opportunity\" at http://localhost:4500/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/proposals/export); the page has been built since this binding was written and nothing on it has been seen, so the next binding run binds it",
+          "line": 88,
+          "steps": [
+            {
+              "step": "scheduledTransitionTrigger.open",
+              "at": "/status"
+            },
+            {
+              "step": "scheduledTransitionTrigger.runPendingTransitions",
+              "at": "/status"
+            },
+            {
+              "step": "signIn",
+              "given": "persona public-sector-staff",
+              "at": "/dashboard"
+            },
+            {
+              "step": "proposalSwuExportAll.open",
+              "given": "{opportunityId}",
+              "at": "/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/proposals/export"
+            },
+            {
+              "step": "proposalSwuExportAll.exportedProposal",
+              "at": "/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/proposals/export",
+              "threw": "unbound: proposal-swu-export-all.exported_proposal — /opportunities/sprint-with-us/:opportunityId/proposals/export no longer answers \"Page not found\" (it shows \"Seeded closed Sprint With Us opportuni…"
+            }
+          ],
+          "screen": ".sdlc/evidence/slice-20/R-2.38-2.png",
+          "outline": ".sdlc/evidence/slice-20/R-2.38-2.txt"
+        }
+      ],
+      "file_sha": "e9bbf78d155ae2eb8ee9028e9a3c742f73740d7c",
+      "adapter": "d44ea8519aeeda3c286127e83558725e565b8b96"
+    }
+  ]
+}
