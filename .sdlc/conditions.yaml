@@ -3359,3 +3359,17 @@ conditions:
     stage: build
     by: agent:tech-lead
     at: 2026-10-04T17:00:24.089Z
+    closed:
+      outcome: met
+      why: submitAll in app/backend/src/evaluations/individual-evaluations.service.ts
+        reads value.proposals via readNamedProposals
+        (app/backend/src/rules/individual-evaluation.ts). It checks and submits
+        only the signed-in evaluator's evaluations of the named proposals, all
+        or none, and counts toward consensus over the named proposals (R-5.27
+        v2). The notice is still one blind-copied message (R-6.15). Covered by
+        app/backend/tests/individual-evaluation-end-to-end.test.ts ('checks and
+        submits only the proposals a submission names', and the move to
+        consensus naming two of three proponents), and recorded in
+        docs/decisions/0064-an-individual-submission-covers-the-proposals-it-names.md.
+      by: agent:reviewer
+      at: 2026-10-04T17:41:46.399Z
