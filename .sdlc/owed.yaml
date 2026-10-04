@@ -5401,7 +5401,7 @@ owed:
     id: R-1.1
     version: 3
     domain: opportunities
-    stage: contract
+    stage: derive-tests
     why: a status observation on proposal-swu-view and proposal-twu-view that staff
       can read for any proposal on the opportunity, or a persona that signs in
       as users.proponentThree
@@ -5409,12 +5409,23 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-10-04T15:17:46.297Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: added persona third-proponent (session-route /auth/createsessionvendor/12,
+          sandbox-idp test-vendor-12) for users.proponentThree, who reads the
+          status of proposals.sprintWithUsThree and proposals.teamWithUsThree on
+          proposal-swu-edit and proposal-twu-edit
+        by: contract-v45
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-10-04T15:32:45.576Z
   - kind: missing-test
     item: R-5.27
     id: R-5.27
     version: 2
     domain: evaluation
-    stage: contract
+    stage: derive-tests
     why: a surface action that changes an opportunity's evaluation panel or its
       questions (publishing a new version) while it is in individual evaluation,
       so a test can show that the most recent version's panel and questions
@@ -5425,3 +5436,15 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-10-04T15:22:43.411Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: added start_editing to evaluation-panel-swu and evaluation-panel-twu and
+          documented that the panel can be changed in individual evaluation,
+          saved as a new version, with users.staffPanelEvaluator as the third
+          evaluator to seat; questions cannot change at that stage, so changing
+          the panel is the version change a test makes
+        by: contract-v45
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-10-04T15:32:45.576Z

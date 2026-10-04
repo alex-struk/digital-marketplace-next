@@ -1285,11 +1285,34 @@ pages:
       opportunity_status: { test_id: opportunity-status }
       empty_panel_opportunities_message: { test_id: dashboard-empty-panel-message }
 
+  # The panel can be changed, by the opportunity's owner or an administrator, while the
+  # opportunity is a draft, under review, published, or in individual evaluation of its
+  # questions (team questions for Sprint With Us, resource questions for Team With Us); at
+  # every later stage the tab offers no actions and panel_locked_after_consensus reads.
+  # The opportunity's questions are not editable once it leaves Published, so changing
+  # the panel is the one change that can be made to an opportunity in individual
+  # evaluation. Saving the panel publishes a new version of the opportunity (the screen
+  # confirms "Opportunity Changes Published"), and that newest version's panel decides how many
+  # individual submissions the move to consensus waits for (R-5.27): seating a third
+  # evaluator on the seeded closed opportunity (opportunities.closedSprintWithUs or
+  # opportunities.closedTeamWithUs, once the application has closed it) means the two
+  # seeded evaluators' twenty-four submissions no longer move it on. users.staffPanelEvaluator
+  # is a public sector account seated on no panel, for exactly that.
+  #
+  # add_panel_member takes the person to seat, chosen from the list of public sector
+  # accounts the tab offers, each shown as their name followed by their email address in
+  # brackets ("Name (email)"); a test names the person by the email address the manifest
+  # gives them. A newly seated member is an evaluator and not the chair. A panel needs at
+  # least two members and exactly one chair, refused through minimum_members_error and
+  # missing_chair_error. Nothing is sent until save_evaluation_panel.
   - id: evaluation-panel-swu
     domain: evaluation
     route: /opportunities/sprint-with-us/:opportunityId/edit?tab=evaluationPanel
     title: "Evaluation Panel"
     actions:
+      # The tab opens read-only; Edit makes the panel changeable. It is offered only at
+      # the stages listed above.
+      start_editing: { test_id: null }
       add_panel_member: { test_id: evaluation-panel-add-member }
       remove_panel_member: { test_id: evaluation-panel-remove-member }
       choose_panel_chair: { test_id: evaluation-panel-chair-field }
@@ -1304,11 +1327,14 @@ pages:
       missing_chair_error: { test_id: evaluation-panel-missing-chair-error }
       panel_locked_after_consensus: { test_id: evaluation-panel-locked-message }
 
+  # As evaluation-panel-swu, for Team With Us: changeable through individual evaluation of
+  # the resource questions, saved as a new version whose panel decides the count.
   - id: evaluation-panel-twu
     domain: evaluation
     route: /opportunities/team-with-us/:opportunityId/edit?tab=evaluationPanel
     title: "Evaluation Panel"
     actions:
+      start_editing: { test_id: null }
       add_panel_member: { test_id: evaluation-panel-add-member }
       remove_panel_member: { test_id: evaluation-panel-remove-member }
       choose_panel_chair: { test_id: evaluation-panel-chair-field }

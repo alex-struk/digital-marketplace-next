@@ -146,6 +146,7 @@ export const seed = {
     },
     "proponentThree": {
       "id": "00000000-0000-4000-8000-000000000212",
+      "persona": "third-proponent",
       "idp_id": "test-vendor-12",
       "email": "proponent.three@example.test",
       "account_type": "VENDOR",
@@ -156,7 +157,7 @@ export const seed = {
         "Technical Architecture"
       ],
       "owns": "organizations.proponentThree",
-      "note": "No persona of its own. It is the third proponent, which several evaluation criteria need in order to describe a second of three or a consensus recorded for two of three. It is reachable at /auth/createsessionvendor/12 if a test ever needs to act as it."
+      "note": "The third proponent, which several evaluation criteria need in order to describe a second of three or a consensus recorded for two of three, and which R-1.1 needs to act as so that the status of every proposal on the closed Sprint With Us and Team With Us opportunities can be read by its own proponent."
     },
     "vendorReturning": {
       "id": "00000000-0000-4000-8000-000000000213",
@@ -230,7 +231,7 @@ export const seed = {
       "idp_id": "gov-panel-evaluator",
       "email": "panel.evaluator@example.test",
       "account_type": "GOV",
-      "note": "The persona signs in as users.staffOne on both targets; this account sits on no seeded panel. Seating it would make a third evaluator, and the seeded panels hold two because consensus waits on every evaluator (R-5.27)."
+      "note": "The persona signs in as users.staffOne on both targets; this account sits on no seeded panel. Seating it would make a third evaluator, and the seeded panels hold two because consensus waits on every evaluator (R-5.27). That is also its use: a test seats it on a closed opportunity in individual evaluation through evaluation-panel-swu or evaluation-panel-twu to show that the newest version's panel decides how many submissions the move to consensus waits for."
     },
     "staffPanelChair": {
       "id": "00000000-0000-4000-8000-000000000105",
