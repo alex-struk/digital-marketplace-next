@@ -32,3 +32,23 @@ I rewrote the test for the one criterion I was given, R-4.2 v1, in `tests/accept
 **Not testable:** nothing. I made no changes to `not-testable.yaml`.
 
 **Missing surface:** the one gap is that purpose observation; no other surface actions or observations were missing. Nothing asked me to change any read-only path, and I did not touch any.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Question: do the rewritten R-4.2 tests follow from the users criterion and from nothing else? Approve. The positive test reads the new account's address from its own profile, waits for a message to it whose subject welcomes the person, and checks that message offers a link back to sign in, which asserts every clause of the criterion's then-line for a person with an address. The withheld test confirms the account exists and then checks that no message in the catcher welcomes anyone, which asserts that no welcome is attempted. It no longer requires an empty catcher, which was the overreach the test-overreaches ruling named, because R-1.1 and R-5.20 make the same sign-in send closing notices. The word 'welcome' is the criterion's own, not an implementation detail. The oracle's welcome subject is 'Welcome to the Digital Marketplace' (sources/old/src/back-end/lib/mailer/notifications/user.tsx:12), so the subject heuristic matches the reference behaviour. messageSubjects() is declared Promise<string>, so toMatch is well-typed, and the runner's typecheck passed. Dropping the sign-in-required and empty-email-field checks removes assertions the criterion never made. No selector, route, table or status code leaks in, and nothing was marked not-testable. The ruling would change if a target's welcome message carried no 'welcome' in its subject or another notice's subject did. That would call for a contract observation of a message's purpose, which the proposal correctly names as the missing surface. This proposal does not touch build-slice-16-4#1, which is owed by build and stays open.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `099159be1609c53e441ed5473206f4124ebebf39`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/users/`, which this proposal answers for.
+
+    No diagnostics.
