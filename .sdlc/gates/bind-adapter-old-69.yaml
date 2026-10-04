@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The question is whether the old adapter binds the surface's new start_editing action on evaluation-panel-swu and evaluation-panel-twu, and nothing else. Approved. start_editing just calls the existing editingPanel helper (tests/adapters/old/index.ts:7671). That helper presses the top-bar "Edit", moves to the "Evaluation Panel" step if the wizard reopens, does nothing when the panel is already open for changes, and leaves a locked panel (evaluators shown, no "Edit") unchanged and unthrown, so panel_locked_after_consensus can report it. That is navigation only, with no assertion or pass/fail logic. It reports unbound only when the tab shows neither evaluators nor "Edit", where there is genuinely nothing to bind. The diff stays inside tests/adapters/old/, touches nothing under tests/acceptance or any protected path, and both pages are marked bound in bindings.yaml. The authoring agent could not run tsc, but the runner's typecheck on revision 5904bb81d passed with no diagnostics under adapters/old/, which settles the gap the receipt admitted. The ruling would change if the binding asserted or decided an outcome, or if the typecheck result were stale. The missing-test warning for R-5.27 is already owed by derive-tests and is not this proposal's to discharge.
+conditions: []
+cost: 0.270095
+turns: 2
+session: "5e086dbc-f3d2-44c6-8b06-f2e1fb964431"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T15:37:38.908Z
