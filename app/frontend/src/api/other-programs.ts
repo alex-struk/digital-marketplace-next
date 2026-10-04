@@ -8,10 +8,12 @@ import {
   Person,
   Reporting,
   RunningAction,
+  SuccessfulProponent,
   readAddenda,
   readAttachment,
   readHistory,
   readReporting,
+  readSuccessfulProponent,
   reasonsIn,
   runningBody,
 } from "./opportunities";
@@ -48,6 +50,8 @@ export interface OtherProgramOpportunity extends ListedOpportunity {
   readonly history?: readonly HistoryEntry[];
   /** The author and administrators only, once it has been published (R-1.30). */
   readonly reporting?: Reporting;
+  /** Once awarded (R-1.27). */
+  readonly successfulProponent?: SuccessfulProponent;
 }
 
 export interface StoredPhase {
@@ -220,6 +224,9 @@ export function readOtherProgramOpportunity(program: OtherProgram, value: unknow
     addenda: readAddenda(record.addenda),
     ...("history" in record ? { history: readHistory(record.history) } : {}),
     ...(readReporting(record.reporting) ? { reporting: readReporting(record.reporting)! } : {}),
+    ...(readSuccessfulProponent(record.successfulProponent)
+      ? { successfulProponent: readSuccessfulProponent(record.successfulProponent)! }
+      : {}),
   };
 }
 

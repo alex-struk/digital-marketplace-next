@@ -27,6 +27,14 @@ import {
   invitedToTeam,
 } from "../src/mail/notifications/team";
 import { termsUpdated } from "../src/mail/notifications/terms-updated";
+import { readyForEvaluationToAuthor, readyForEvaluationToEvaluators } from "../src/mail/notifications/closing";
+import {
+  proposalAwarded,
+  proposalNotAwarded,
+  proposalSubmitted,
+  proposalWithdrawnToAdministrators,
+  proposalWithdrawnToVendor,
+} from "../src/mail/notifications/proposal";
 import { welcome } from "../src/mail/notifications/welcome";
 
 /**
@@ -54,6 +62,12 @@ const cwu = { id: "00000000-0000-4000-8000-000000000601", title: "Build a tracke
 const swu = { program: "sprint-with-us" as const, id: "00000000-0000-4000-8000-000000000701", title: "A sprint", budget: 500000, proposalDeadline: "2030-06-01" };
 const running = { program: "code-with-us" as const, id: cwu.id, title: cwu.title };
 const to = (message: Message): Envelope => ({ to: [person.email], message });
+const proposalSubject = {
+  program: "code-with-us" as const,
+  opportunityId: cwu.id,
+  opportunityTitle: cwu.title,
+  proposalId: "00000000-0000-4000-a006-000000000101",
+};
 
 const EVERY_MESSAGE: readonly Envelope[] = [
   welcome(person, origin),
@@ -81,6 +95,13 @@ const EVERY_MESSAGE: readonly Envelope[] = [
   invitationAcceptedToOwner(person, person, organization, look),
   invitationAcceptedToMember(person, organization, look),
   invitationDeclinedToOwner(person, person, organization, look),
+  to(readyForEvaluationToAuthor(running, origin)),
+  to(readyForEvaluationToEvaluators({ program: "sprint-with-us", id: swu.id, title: swu.title }, origin)),
+  to(proposalSubmitted(proposalSubject, origin)),
+  to(proposalWithdrawnToVendor(proposalSubject, origin)),
+  to(proposalWithdrawnToAdministrators(proposalSubject, organization.legalName, origin)),
+  to(proposalAwarded(proposalSubject, origin)),
+  to(proposalNotAwarded(proposalSubject, organization.legalName, origin)),
 ];
 
 class RecordingTransport implements MailTransport {

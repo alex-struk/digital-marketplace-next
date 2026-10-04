@@ -9,6 +9,7 @@ import { CwuProposalsController } from "./cwu-proposals.controller";
 import { CwuProposalsService } from "./cwu-proposals.service";
 import { PrismaCwuProposalStore } from "./prisma-cwu-proposal.store";
 import { PrismaTeamProposalStore } from "./prisma-team-proposal.store";
+import { PROPOSAL_RECIPIENTS, PrismaProposalRecipients, ProposalNotices } from "./proposal-notices";
 import { TEAM_PROPOSAL_STORE } from "./team-proposal";
 import { SwuProposalsController, TwuProposalsController } from "./team-proposals.controller";
 import { TeamProposalsService } from "./team-proposals.service";
@@ -20,6 +21,8 @@ import { TeamProposalsService } from "./team-proposals.service";
   providers: [
     CwuProposalsService,
     TeamProposalsService,
+    ProposalNotices,
+    { provide: PROPOSAL_RECIPIENTS, useClass: PrismaProposalRecipients },
     { provide: CWU_PROPOSAL_STORE, useClass: PrismaCwuProposalStore },
     { provide: TEAM_PROPOSAL_STORE, useClass: PrismaTeamProposalStore },
     // A file may be attached only by someone who may read it (R-8.22).

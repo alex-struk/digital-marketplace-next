@@ -80,6 +80,10 @@ services:
       # tell the person to write to (R-4.20, R-4.30). Invented, like the sender.
       CONTACT_EMAIL: digitalmarketplace@example.test
       DISABLE_NOTIFICATIONS: ${SDLC_ORACLE_DISABLE_NOTIFICATIONS:-0}
+      # How often each program's deadline hook may start, in milliseconds (decision record 0005).
+      # Zero on a builder's machine, so the first request after a deadline closes the opportunity
+      # (R-1.1); the service's own default, once a minute, is for everywhere else.
+      DEADLINE_HOOK_INTERVAL_MS: "0"
       # Where an upload is written before it is stored, and removed from once it has been
       # answered (R-8.16). In a sandbox namespace it is the backend's emptyDir volume; here a
       # tmpfs plays that part, writable by the image's unprivileged user.

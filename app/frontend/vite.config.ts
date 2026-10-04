@@ -23,7 +23,12 @@ export default defineConfig({
     port: Number(process.env.PORT ?? 4300),
     proxy: {
       "/api": { target: BACKEND, changeOrigin: false },
-      "/status": { target: BACKEND, changeOrigin: false },
+      // A browser's page request for /status is the screen's; anything else the service's (decision record 0060).
+      "/status": {
+        target: BACKEND,
+        changeOrigin: false,
+        bypass: (request) => ((request.headers.accept ?? "").includes("text/html") ? "/index.html" : undefined),
+      },
       "/auth": { target: BACKEND, changeOrigin: false },
       "/admin": { target: BACKEND, changeOrigin: false },
     },

@@ -8,6 +8,7 @@ import { bearerTokenCheck } from "./auth/bearer-token";
 import { ServiceSessions } from "./auth/service-sessions";
 import { SignedOutSessions } from "./auth/signed-out-sessions";
 import { TOKEN_VERIFIER, TokenVerifier } from "./auth/token-verifier";
+import { DeadlineClosing } from "./closing/deadline-closing.service";
 import { JsonLogger } from "./common/logging";
 import { RefusalFilter } from "./common/refusals";
 import {
@@ -31,6 +32,15 @@ export async function createApplication(): Promise<INestApplication> {
   // A request's body is read before the boundary looks at it, so that what is checked is what
   // the handler will be given.
   app.use(json({ limit: "1mb" }));
+
+  // The deadline hook (decision record 0005): before anything under /api or /status is answered,
+  // the published opportunities whose proposal deadline has passed are closed, at most once per
+  // configured interval in each program (R-1.1). The request waits for the run it started or
+  // joined, and is answered as usual whatever became of it.
+  const closing = app.get(DeadlineClosing);
+  app.use(["/api", "/status"], (_request: Request, _response: Response, next: NextFunction) => {
+    void closing.runDue().then(() => next());
+  });
 
   // One boundary layer, reading the contract itself (the stack profile). Every request is
   // checked against spec/contract/openapi.yaml before it reaches a handler: an address the

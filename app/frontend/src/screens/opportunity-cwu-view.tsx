@@ -13,7 +13,15 @@ import { Stack } from "../app/page-layout";
 import { useScreenTitle } from "../app/screen-title";
 import { useSession } from "../auth/session";
 import { FormattedText } from "../lib/formatted-text/formatted-text";
-import { Fact, StatusBadge, dayLabel, deadlineLabel, publishedLabel, rewardLabel } from "./opportunity-parts";
+import {
+  Fact,
+  StatusBadge,
+  SuccessfulProponentSection,
+  dayLabel,
+  deadlineLabel,
+  publishedLabel,
+  rewardLabel,
+} from "./opportunity-parts";
 import { AddendaList } from "./opportunity-running";
 
 /**
@@ -112,6 +120,7 @@ export function OpportunityCwuViewScreen({ opportunityId }: { opportunityId: str
       <Text elementType="p" size="small" color="secondary">
         Opportunity ID: <span data-testid="opportunity-identifier">{opportunity.id}</span>
       </Text>
+      {opportunity.successfulProponent ? <SuccessfulProponentSection proponent={opportunity.successfulProponent} /> : null}
       {mayWatch(viewer, { createdBy: opportunity.createdBy?.id ?? null }) ? (
         <WatchControl key={opportunity.id} opportunity={opportunity} />
       ) : null}

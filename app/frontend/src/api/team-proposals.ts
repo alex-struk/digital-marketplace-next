@@ -1,9 +1,11 @@
 import type { SwuPhase } from "@rules/other-program-drafts";
 import { PHASE_KEYS, ReferenceInput, ResponseInput, TeamProgram, TeamProposalStatus, isTeamProposalStatus } from "@rules/team-proposals";
 import { SWU_PHASES } from "@rules/other-program-drafts";
+import type { Scoresheet } from "@rules/proposal-evaluation";
 import { api } from "./client";
 import { Attachment, Person, readAttachment, reasonsIn } from "./opportunities";
-import type { ProposalHistoryEntry, ProposalListAnswer as CwuListAnswer } from "./proposals";
+import { readContact } from "./proposals";
+import type { ProponentContact, ProposalHistoryEntry, ProposalListAnswer as CwuListAnswer } from "./proposals";
 
 /**
  * Sprint With Us and Team With Us proposals, through the contract's list, create, read, update and
@@ -37,7 +39,8 @@ export interface TeamProposal {
     readonly proposalDeadline: string;
     readonly budget: number;
   };
-  readonly organization: { readonly id: string; readonly legalName: string } | null;
+  /** With its contact person to whoever may see the score (R-1.27). */
+  readonly organization: { readonly id: string; readonly legalName: string; readonly contact?: ProponentContact } | null;
   readonly totalProposedCost: number | null;
   /** Sprint With Us: a team for each phase given. */
   readonly phases: Readonly<Partial<Record<SwuPhase, PhaseTeam>>>;
@@ -46,8 +49,28 @@ export interface TeamProposal {
   readonly team: readonly TwuTeamMember[];
   readonly responses: readonly ResponseInput[];
   readonly attachments: readonly Attachment[];
+  /** The name evaluators saw it under, once its opportunity closed (R-2.5). */
+  readonly anonymousProponentName: string;
+  /** Each stage's score, the total and the rank: to staff, and to the vendor once decided (R-2.32). */
+  readonly scoresheet?: Scoresheet;
   /** Newest first (R-2.9). */
   readonly history: readonly ProposalHistoryEntry[];
+}
+
+function readScoresheet(value: unknown): Scoresheet | null {
+  if (!isRecord(value)) return null;
+  const score = (key: string) => (typeof value[key] === "number" ? (value[key] as number) : null);
+  const rank = isRecord(value.rank) && typeof value.rank.rank === "number" && typeof value.rank.of === "number"
+    ? { rank: value.rank.rank, of: value.rank.of }
+    : null;
+  return {
+    questions: score("questions"),
+    challenge: score("challenge"),
+    scenario: score("scenario"),
+    price: score("price"),
+    total: score("total"),
+    rank,
+  };
 }
 
 type Record_ = Record<string, unknown>;
@@ -99,7 +122,13 @@ export function readTeamProposal(program: TeamProgram, value: unknown): TeamProp
       proposalDeadline: text(opportunity.proposalDeadline),
       budget: num(sprint ? opportunity.totalMaxBudget : opportunity.maxBudget),
     },
-    organization: organization ? { id: organization.id as string, legalName: text(organization.legalName) } : null,
+    organization: organization
+      ? {
+          id: organization.id as string,
+          legalName: text(organization.legalName),
+          ...(readContact(organization.contact) ? { contact: readContact(organization.contact)! } : {}),
+        }
+      : null,
     totalProposedCost: typeof value.totalProposedCost === "number" ? value.totalProposedCost : null,
     phases,
     references: list(value.references).map((reference) => ({
@@ -127,6 +156,8 @@ export function readTeamProposal(program: TeamProgram, value: unknown): TeamProp
     }),
     responses: readResponses(sprint ? value.teamQuestionResponses : value.resourceQuestionResponses),
     attachments: Array.isArray(value.attachments) ? value.attachments.map(readAttachment).filter((file): file is Attachment => file !== null) : [],
+    anonymousProponentName: text(value.anonymousProponentName),
+    ...(readScoresheet(value.scoresheet) ? { scoresheet: readScoresheet(value.scoresheet)! } : {}),
     history: list(value.history).map((entry) => ({
       createdAt: text(entry.createdAt),
       createdBy: readPerson(entry.createdBy),
@@ -223,12 +254,16 @@ export async function createTeamProposal(
   }
 }
 
-/** One tagged change: new content, a submission, or a withdrawal (R-2.22, R-2.23). */
+/**
+ * One tagged change: new content, a submission, or a withdrawal (R-2.22, R-2.23); or, by the
+ * opportunity's author or an administrator, an award or a disqualification with its reason (R-1.26,
+ * R-2.34).
+ */
 export async function changeTeamProposal(
   program: TeamProgram,
   id: string,
-  tag: "edit" | "submit" | "withdraw",
-  content?: Record<string, unknown>,
+  tag: "edit" | "submit" | "withdraw" | "award" | "disqualify",
+  content?: Record<string, unknown> | string,
 ): Promise<TeamProposalSaveAnswer> {
   try {
     const request = { params: { path: { id } }, body: (content === undefined ? { tag } : { tag, value: content }) as never };

@@ -306,6 +306,7 @@ export function CwuProposalForm({
   onSaved,
   onCancel,
   refusalTitle,
+  accepting = true,
 }: {
   readonly purpose: "create" | "edit";
   readonly opportunityId: string;
@@ -319,6 +320,8 @@ export function CwuProposalForm({
   readonly onSaved: (proposal: CwuProposal, action: ProposalFormAction) => void;
   readonly onCancel: () => void;
   readonly refusalTitle: string;
+  /** Whether the opportunity still takes proposals; when it does not, a submission goes unchecked to the service. */
+  readonly accepting?: boolean;
 }) {
   const [values, setValues] = useState<ProposalFormValues>(initial);
   const [problems, setProblems] = useState<readonly ProposalProblem[]>([]);
@@ -386,8 +389,9 @@ export function CwuProposalForm({
       void send("save");
       return;
     }
-    // Everything a submission needs is checked here first; the terms are asked for only then.
-    const found = submissionProblems(values);
+    // Everything a submission needs is checked here first; the terms are asked for only then. Once
+    // the opportunity has closed nothing is worth completing: the service's refusal says why (R-2.15).
+    const found = accepting ? submissionProblems(values) : [];
     setProblems(found);
     setRefusal(null);
     if (found.length === 0) setAsking(true);

@@ -15,6 +15,7 @@ import {
   TwuOpportunityForProposal,
   TwuProposalInput,
 } from "../rules/team-proposals";
+import { TeamProposalScores, TeamWeights } from "../rules/proposal-evaluation";
 import { Person, ProposalOrganization } from "./cwu-proposal";
 
 /** The opportunity a Sprint With Us or Team With Us proposal answers, as far as proposals are concerned. */
@@ -117,6 +118,17 @@ export interface TeamProposalStore {
   /** The Team With Us resources held at these identifiers, in any opportunity. */
   resources(ids: readonly string[]): Promise<ResourceForProposal[]>;
   managedOrganizations(accountId: string): Promise<string[]>;
+  /** What is stored towards the result of every proposal on an opportunity, and its weights (R-2.32). */
+  scoring(
+    program: TeamProgram,
+    opportunityId: string,
+  ): Promise<{ readonly weights: TeamWeights; readonly proposals: readonly TeamProposalScores[] } | null>;
+  /**
+   * Awards one proposal, as one change: it becomes awarded, every other proposal still in
+   * contention becomes not awarded, and the opportunity becomes awarded (R-1.26, R-2.33). Answers
+   * with the proposals marked not awarded.
+   */
+  award(program: TeamProgram, id: string, by: string): Promise<string[]>;
 }
 
 export const TEAM_PROPOSAL_STORE = Symbol("TeamProposalStore");

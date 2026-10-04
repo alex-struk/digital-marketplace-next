@@ -12,6 +12,7 @@ import {
   HistoryEntry,
   Recipient,
   StoredCwuOpportunity,
+  SuccessfulProponent,
 } from "../src/opportunities/cwu-opportunity";
 import {
   CwuContent,
@@ -118,6 +119,11 @@ class OpportunitiesInMemory implements CwuOpportunityStore {
 
   async recipient(accountId: string) {
     return { email: `${accountId}@example.test` };
+  }
+
+  winner: SuccessfulProponent | null = null;
+  async successfulProponent() {
+    return this.winner;
   }
 }
 

@@ -16,6 +16,7 @@ import { SignUpCompleteScreen } from "./screens/sign-up-complete";
 import { SignOutScreen } from "./screens/sign-out";
 import { NoticeScreen } from "./screens/notice";
 import { DashboardScreen } from "./screens/dashboard";
+import { ServiceStatusScreen } from "./screens/service-status";
 import { UserListScreen } from "./screens/user-list";
 import { UserProfileScreen } from "./screens/user-profile";
 import { OpportunityListScreen } from "./screens/opportunity-list";
@@ -126,6 +127,13 @@ const noticeRoute = createRoute({
     const { noticeId } = noticeRoute.useParams();
     return <NoticeScreen noticeId={noticeId} />;
   },
+});
+
+// scheduled-transition-trigger: a browser's page request for /status (decision record 0060).
+const serviceStatusRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/status",
+  component: ServiceStatusScreen,
 });
 
 const dashboardRoute = createRoute({
@@ -381,6 +389,7 @@ export const routeTree = rootRoute.addChildren([
   signUpCompleteRoute,
   signOutRoute,
   noticeRoute,
+  serviceStatusRoute,
   dashboardRoute,
   userListRoute,
   userProfileRoute,

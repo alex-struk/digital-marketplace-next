@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-16-6 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">609</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">603</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">492</span></a></li><li><a href="../runs.html">Run log <span class="count">22</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-16-6</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-04 11:05</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.288 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 16 (Opportunities close at their deadline, and a Code With Us one is scored and awarded) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> I made no change to the application in this revision.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.288 (Claude Code))</p>
+<p>I made no change to the application in this revision. The ruling sent the proposal back to the adapter-binding stage and says the build stage owes nothing further, so <code>app/</code> and <code>docs/decisions/</code> are exactly as they were in tree bff4988.</p>
+<p><strong>Where things stand:</strong> the ruling confirms that all twelve criteria this slice answers for pass: R-1.1, R-1.19, R-1.26, R-1.27, R-2.26, R-2.27, R-2.32, R-2.33, R-2.34, R-2.36, R-5.20 and R-6.25. The R-2.15 regression from earlier builds is cleared, and R-4.2 passes now that its test was regenerated.</p>
+<p><strong>The one failure left, R-4.20, is not the application&#39;s fault.</strong> The page captured at the failure shows the account reactivated and the confirmation message on screen. The test reads the status badge too early. The adapter step that confirms an activation change clicks the dialog&#39;s button and returns without waiting for the server to answer. This slice&#39;s deadline hook makes every <code>/api</code> request first run the closing check across all three programs (compose sets <code>DEADLINE_HOOK_INTERVAL_MS</code> to 0), which made each request slower and exposed that race. The ruling calls this correct behaviour for R-1.1.</p>
+<p><strong>What I considered and decided against:</strong> I could have made requests faster, for example by raising that interval in compose so the hook doesn&#39;t run its queries on every request. That would only hide the race in the adapter, and nothing in the ruling asks for it. It would also mean a lapsed opportunity could stay open past its deadline for one interval, which is weaker than what R-1.1 asks. The fix is the adapter&#39;s, already filed with that stage, and that step lives under <code>tests/adapters</code>, which this stage can&#39;t write.</p>
+<p><strong>Check:</strong> with dependencies installed, <code>npm --prefix app run check</code> passed: typecheck clean, all unit tests in every package green. An earlier run in this workspace failed only because the packages weren&#39;t installed yet (<code>tsc</code> not found); after <code>npm ci</code> it passed. The error lines in the output are logged by tests that deliberately exercise failure paths, such as a closing run that hits a database error or mail that can&#39;t be delivered. They are not failures.</p>
+<p><strong>For the next stage:</strong> if R-4.20 still reads &quot;Inactive&quot; once the adapter waits for the activation change to land, the fault is in the application and should come back here. Otherwise, by the ruling&#39;s own terms, the proposal can be approved as it stands. The next slice will find nothing missing from this one.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-04 11:36.</p>
+<div class="body"><p>Question: does slice 16 (opportunities close at their deadline; a Code With Us one is scored and awarded) do what its criteria say? Ruling: approve. The verify result is current for this proposal (app tree bff4988 matches the branch) and every one of the 12 claimed criteria (R-1.1, R-1.19, R-1.26, R-1.27, R-2.26, R-2.27, R-2.32, R-2.33, R-2.34, R-2.36, R-5.20, R-6.25) passes. No re-checked criterion has a failing or unbound row; R-4.20, the failure in the last round, passes now that its binding waits for the activation change, and R-2.15 and R-4.2 pass. Reading the code against the criteria: the deadline hook runs in front of /api and /status, closes each lapsed published opportunity under a row lock so two runs close it once, records the note &#39;This opportunity has closed.&#39;, moves submitted proposals to review (with Proponent N names for SWU/TWU only), notifies the CWU author or only the panel&#39;s evaluators, skips inactive accounts, and logs failures without failing the request. CWU scoring enforces 0-100 with at most two decimal places and records the exact history note. The move to processing ignores draft, withdrawn and disqualified proposals. A disqualification needs a reason of 1-5,000 characters. Awarding runs in one transaction, marks only the proposals still in contention as not awarded, and the award and decision notices name the winner or an em dash. The winner&#39;s contact details and score, and a vendor&#39;s own score and rank, are gated as the criteria say. Raw SQL builds table names from constants only and passes ids as parameters; logs carry only event names and error types, with no personal data or credentials. Unit and end-to-end tests cover the new seams (the closing hook, the evaluation rules, the notices, the full close-score-award flow). What would change the ruling: a stale or failing verify result for this code, or a regression in an earlier slice&#39;s criterion.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

@@ -1,5 +1,21 @@
 # Journal
 
+## 492 · build · 2026-10-04
+
+cost $0.2058736 · turns 5 · claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+I made no change to the application in this revision. The ruling sent the proposal back to the adapter-binding stage and says the build stage owes nothing further, so `app/` and `docs/decisions/` are exactly as they were in tree bff4988.
+
+**Where things stand:** the ruling confirms that all twelve criteria this slice answers for pass: R-1.1, R-1.19, R-1.26, R-1.27, R-2.26, R-2.27, R-2.32, R-2.33, R-2.34, R-2.36, R-5.20 and R-6.25. The R-2.15 regression from earlier builds is cleared, and R-4.2 passes now that its test was regenerated.
+
+**The one failure left, R-4.20, is not the application's fault.** The page captured at the failure shows the account reactivated and the confirmation message on screen. The test reads the status badge too early. The adapter step that confirms an activation change clicks the dialog's button and returns without waiting for the server to answer. This slice's deadline hook makes every `/api` request first run the closing check across all three programs (compose sets `DEADLINE_HOOK_INTERVAL_MS` to 0), which made each request slower and exposed that race. The ruling calls this correct behaviour for R-1.1.
+
+**What I considered and decided against:** I could have made requests faster, for example by raising that interval in compose so the hook doesn't run its queries on every request. That would only hide the race in the adapter, and nothing in the ruling asks for it. It would also mean a lapsed opportunity could stay open past its deadline for one interval, which is weaker than what R-1.1 asks. The fix is the adapter's, already filed with that stage, and that step lives under `tests/adapters`, which this stage can't write.
+
+**Check:** with dependencies installed, `npm --prefix app run check` passed: typecheck clean, all unit tests in every package green. An earlier run in this workspace failed only because the packages weren't installed yet (`tsc` not found); after `npm ci` it passed. The error lines in the output are logged by tests that deliberately exercise failure paths, such as a closing run that hits a database error or mail that can't be delivered. They are not failures.
+
+**For the next stage:** if R-4.20 still reads "Inactive" once the adapter waits for the activation change to land, the fault is in the application and should come back here. Otherwise, by the ruling's own terms, the proposal can be approved as it stands. The next slice will find nothing missing from this one.
+
 ## 491 · bind-adapter · 2026-10-04
 
 cost $0.308717 · turns 9 · claude claude-opus-5-5 (2.1.288 (Claude Code))

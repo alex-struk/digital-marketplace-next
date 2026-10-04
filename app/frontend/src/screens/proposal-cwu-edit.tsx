@@ -8,6 +8,7 @@ import {
   offeredProposalActions,
   proposalHistoryLabel,
 } from "@rules/proposals";
+import { rankLabel } from "@rules/proposal-evaluation";
 import { Account, changeOwnAccount } from "../api/accounts";
 import { downloadFile } from "../api/files";
 import {
@@ -25,7 +26,7 @@ import { Stack } from "../app/page-layout";
 import { RequireSignIn } from "../app/require-sign-in";
 import { useScreenTitle } from "../app/screen-title";
 import { TitledAlert } from "../app/titled-alert";
-import { Fact, deadlineLabel, momentLabel } from "./opportunity-parts";
+import { ContactFacts, Fact, deadlineLabel, momentLabel } from "./opportunity-parts";
 import { CwuProposalForm, ProblemSummary, ProposalStatusBadge, TermsDialog, submissionProblems, valuesFrom } from "./proposal-cwu-form";
 
 /**
@@ -327,7 +328,7 @@ function Manage({ account, initial, organizations }: { account: Account; initial
           <Text elementType="p">
             {`It will no longer be considered. You can submit it again only while the opportunity is accepting proposals, until ${deadlineLabel(
               proposal.opportunity.proposalDeadline,
-            )}.`}
+            )}. You and the administrators will be sent a withdrawal notice.`}
           </Text>
         </AlertDialog>
       </Modal>
@@ -410,6 +411,11 @@ export function ProposalDetails({ proposal, showResult = true }: { proposal: Cwu
           </Heading>
           <Stack as="dl" direction="row" gap="medium">
             <Fact label="Score" testId="proposal-score">{`${proposal.score}%`}</Fact>
+            {proposal.rank ? (
+              <Fact label="Rank" testId="proposal-rank">
+                {rankLabel(proposal.rank)}
+              </Fact>
+            ) : null}
           </Stack>
         </Stack>
       ) : null}
@@ -421,6 +427,7 @@ export function ProposalDetails({ proposal, showResult = true }: { proposal: Cwu
           <Stack as="dl" direction="row" gap="medium">
             <Fact label="Proponent type">Organization</Fact>
             <Fact label="Organization">{proponent.value.legalName}</Fact>
+            {proponent.value.contact ? <ContactFacts contact={proponent.value.contact} /> : null}
           </Stack>
         ) : (
           <Stack as="dl" direction="row" gap="medium">

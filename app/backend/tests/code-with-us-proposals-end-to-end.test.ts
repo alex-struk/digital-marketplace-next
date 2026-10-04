@@ -452,6 +452,10 @@ describe("telling proponents about an opportunity (R-1.35, R-1.36)", () => {
     expect((await ask("POST", BASE, await tokens.proponentThree(), complete(id))).status).toBe(201);
     // A draft's author is not a proponent.
     expect((await ask("POST", BASE, await tokens.proponentTwo(), complete(id, { status: "DRAFT" }))).status).toBe(201);
+    // The submission is confirmed to its vendor (R-2.36); a draft is not.
+    await expect.poll(() => catcher.caught.length).toBe(1);
+    expect(catcher.caught[0]!.recipients).toEqual(["proponent.three@example.test"]);
+    catcher.caught.length = 0;
 
     expect((await ask("PUT", `${OPPORTUNITIES}/${id}`, await tokens.admin(), { tag: "addAddendum", value: "By video." })).status).toBe(200);
     await expect.poll(() => catcher.caught.length).toBe(1);

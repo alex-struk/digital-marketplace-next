@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { Heading, Link, Text } from "@bcgov/design-system-react-components";
 import { useSearch } from "@tanstack/react-router";
 import type { Account } from "../api/accounts";
-import { CwuProposal, fetchCwuProposal } from "../api/proposals";
+import { offeredEvaluationActions, rankLabel } from "@rules/proposal-evaluation";
+import { CwuProposal, changeCwuProposal, fetchCwuProposal } from "../api/proposals";
 import { Loading } from "../app/loading";
 import { NotFound } from "../app/not-found";
 import { Stack } from "../app/page-layout";
@@ -11,6 +12,7 @@ import { useScreenTitle } from "../app/screen-title";
 import { Fact, momentLabel } from "./opportunity-parts";
 import { ProposalDetails, ProposalHistory } from "./proposal-cwu-edit";
 import { ProposalStatusBadge } from "./proposal-cwu-form";
+import { EvaluationActions } from "./proposal-evaluation-actions";
 
 /**
  * A Code With Us proposal, read-only, at
@@ -21,7 +23,8 @@ import { ProposalStatusBadge } from "./proposal-cwu-form";
  * it and a vendor who owns or administers its organization, never another vendor (R-2.24); the
  * opportunity's author and administrators once the opportunity has closed, and never a draft
  * (R-2.25). Anybody else, and a proposal on another opportunity's address, is shown the missing
- * page. Entering a score, awarding and disqualifying are the evaluation's, and are not offered here.
+ * page. The opportunity's author and administrators enter its score, disqualify it and award it here
+ * (R-2.26, R-2.33, R-2.34); its rank among the scored proposals is shown beside the score (R-2.32).
  */
 
 type Tab = "proposal" | "history";
@@ -70,7 +73,9 @@ export function proponentName(proposal: CwuProposal): string {
   return name.trim() === "" ? "Proponent not named yet" : name;
 }
 
-function View({ account, proposal }: { account: Account; proposal: CwuProposal }) {
+function View({ account, proposal: initial }: { account: Account; proposal: CwuProposal }) {
+  const [proposal, setProposal] = useState(initial);
+  const [done, setDone] = useState<string | null>(null);
   const search = useSearch({ strict: false }) as Record<string, unknown>;
   const tab: Tab = TABS.includes(search.tab as Tab) ? (search.tab as Tab) : "proposal";
   const opportunityId = proposal.opportunity.id;
@@ -115,6 +120,11 @@ function View({ account, proposal }: { account: Account; proposal: CwuProposal }
             <Fact label="Score" testId="proposal-score">
               {typeof proposal.score === "number" ? `${proposal.score}%` : "Not yet scored"}
             </Fact>
+            {proposal.rank ? (
+              <Fact label="Rank" testId="proposal-rank">
+                {rankLabel(proposal.rank)}
+              </Fact>
+            ) : null}
           </Stack>
         </Stack>
       ) : null}
@@ -124,6 +134,18 @@ function View({ account, proposal }: { account: Account; proposal: CwuProposal }
           Printable copy
         </Link>
       </Stack>
+      {/* Staff read a proposal only as the opportunity's author or an administrator, once it has closed. */}
+      {!vendor ? (
+        <EvaluationActions
+          offers={offeredEvaluationActions(proposal.status, proposal.opportunity.status)}
+          change={(tag, value) => changeCwuProposal(proposal.id, tag, value)}
+          onChanged={(changed, text) => {
+            setProposal(changed);
+            setDone(text);
+          }}
+        />
+      ) : null}
+      <div role="status">{done ? <Text elementType="p">{done}</Text> : null}</div>
       <nav aria-label="Proposal sections">
         <Stack as="ul" direction="row" gap="medium">
           {TABS.map((name) => (

@@ -6,7 +6,7 @@ import { PrismaService } from "../prisma/prisma.service";
 import { OpportunityStatus, isStatusOf, pacificDayOf, recordedInstantOf } from "../rules/opportunities";
 import { CreationState, OtherProgramDraft, PanelMemberDraft, SWU_PHASES, SwuPhase } from "../rules/other-program-drafts";
 import { Person } from "./cwu-opportunity";
-import { OtherProgram, OtherProgramsStore, PanelAccount, StoredDetails, StoredSummary } from "./other-programs";
+import { OtherProgram, OtherProgramsStore, PanelAccount, StoredDetails, StoredSummary, SuccessfulProponent } from "./other-programs";
 
 const person = { select: { id: true, name: true } } as const;
 
@@ -152,6 +152,38 @@ export class PrismaOtherProgramsStore implements OtherProgramsStore {
     const valid = ids.filter((id) => IDENTIFIER.test(id));
     if (valid.length === 0) return [];
     return this.prisma.users.findMany({ where: { id: { in: valid } }, select: { id: true, name: true, type: true, status: true } });
+  }
+
+  async successfulProponent(program: OtherProgram, id: string): Promise<SuccessfulProponent | null> {
+    const query = {
+      where: { opportunity: id },
+      select: {
+        organizations: { select: { legalName: true, contactEmail: true, contactPhone: true } },
+        statuses: { where: { status: { not: null } }, orderBy: { createdAt: "desc" }, take: 1, select: { status: true } },
+      },
+    } as const;
+    const rows =
+      program === "sprint-with-us"
+        ? (
+            await this.prisma.swuProposals.findMany({
+              where: query.where,
+              select: { organizations: query.select.organizations, swuProposalStatuses: query.select.statuses },
+            })
+          ).map((row) => ({ organization: row.organizations, status: row.swuProposalStatuses[0]?.status }))
+        : (
+            await this.prisma.twuProposals.findMany({
+              where: query.where,
+              select: { organizations: query.select.organizations, twuProposalStatuses: query.select.statuses },
+            })
+          ).map((row) => ({ organization: row.organizations, status: row.twuProposalStatuses[0]?.status }));
+    const winner = rows.find((row) => row.status === "AWARDED");
+    if (!winner) return null;
+    return {
+      name: winner.organization?.legalName ?? "",
+      email: winner.organization?.contactEmail ?? null,
+      phone: winner.organization?.contactPhone ?? null,
+      score: null,
+    };
   }
 }
 

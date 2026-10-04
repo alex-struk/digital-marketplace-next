@@ -3,9 +3,22 @@ import {
   Inject,
   Injectable,
   NotFoundException,
+  Optional,
   ServiceUnavailableException,
   UnauthorizedException,
 } from "@nestjs/common";
+import { NoticeProposal, ProposalNotices } from "./proposal-notices";
+import {
+  CANNOT_AWARD_NOW,
+  CANNOT_DISQUALIFY_NOW,
+  NOT_PERMITTED_TO_EVALUATE,
+  Scoresheet,
+  disqualificationReasonProblem,
+  mayAwardTeamProposalInState,
+  mayDisqualifyTeamProposalInState,
+  mayEvaluateProposal,
+  teamScoresheet,
+} from "../rules/proposal-evaluation";
 import { DetailedRefusal } from "../common/refusals";
 import { FileRecord } from "../files/file";
 import { ATTACHMENT_ACCESS, AttachmentAccess } from "../opportunities/attachment-access";
@@ -69,7 +82,7 @@ import {
   twuContractCost,
   twuProposalProblems,
 } from "../rules/team-proposals";
-import { Person } from "./cwu-proposal";
+import { Person, ProponentContact } from "./cwu-proposal";
 import { ATTACHMENT_NOT_READABLE, ProposalAsker, TaggedChange } from "./cwu-proposals.service";
 import {
   StoredTeamProposal,
@@ -106,7 +119,7 @@ export interface TeamProposalAnswer {
     readonly totalMaxBudget?: number;
     readonly maxBudget?: number;
   };
-  readonly organization: { readonly id: string; readonly legalName: string } | null;
+  readonly organization: { readonly id: string; readonly legalName: string; readonly contact?: ProponentContact } | null;
   readonly totalProposedCost: number | null;
   /** Sprint With Us. */
   readonly inceptionPhase?: PhaseTeamAnswer | null;
@@ -123,6 +136,8 @@ export interface TeamProposalAnswer {
   readonly resourceQuestionResponses?: readonly ResponseInput[];
   readonly attachments: readonly FileRecord[];
   readonly anonymousProponentName: string;
+  /** Each stage's score, the total and the rank: to staff, and to the vendor once decided (R-2.32). */
+  readonly scoresheet?: Scoresheet | null;
   /** Newest first, to everyone who may read the proposal (R-2.9, R-2.35). */
   readonly history: readonly {
     readonly createdAt: string;
@@ -156,6 +171,7 @@ export class TeamProposalsService {
     @Inject(TEAM_PROPOSAL_STORE) private readonly store: TeamProposalStore,
     @Inject(ATTACHMENT_ACCESS) private readonly files: AttachmentAccess,
     @Inject(CLOCK) private readonly clock: Clock,
+    @Optional() private readonly notices?: ProposalNotices,
   ) {}
 
   async list(asker: ProposalAsker | null, program: TeamProgram, opportunityId?: string): Promise<TeamProposalAnswer[]> {
@@ -181,7 +197,56 @@ export class TeamProposalsService {
 
   async read(asker: ProposalAsker | null, program: TeamProgram, id: string): Promise<TeamProposalAnswer> {
     const { proposal } = await this.readable(asker, program, id);
-    return answerFor(proposal);
+    return this.answerWithScoresheet(asker, proposal);
+  }
+
+  /**
+   * A proposal with its scoresheet, to staff, and to its vendor only once it has been awarded or
+   * passed over (R-2.32).
+   */
+  private async answerWithScoresheet(asker: ProposalAsker | null, proposal: StoredTeamProposal): Promise<TeamProposalAnswer> {
+    const plain = answerFor(proposal);
+    const decided = proposal.status === "AWARDED" || proposal.status === "NOT_AWARDED";
+    if (!asker || (asker.type === "VENDOR" && !decided)) return plain;
+    // Who to reach at the organization, to whoever may see the score (R-1.27).
+    const contact = proposal.organization?.contact;
+    const answer = plain.organization && contact ? { ...plain, organization: { ...plain.organization, contact } } : plain;
+    const scoring = await this.store.scoring(proposal.program, proposal.opportunity.id);
+    if (!scoring) return answer;
+    return { ...answer, scoresheet: teamScoresheet(proposal.program, proposal.id, scoring.proposals, scoring.weights) };
+  }
+
+  /**
+   * A disqualification, by an administrator or the opportunity's author, at any stage after the
+   * opportunity has closed, with a reason of 1 to 5,000 characters kept in the history (R-2.34).
+   * Moving the opportunity on once the rest are evaluated is each stage's, and comes with the stages.
+   */
+  private async disqualify(asker: ProposalAsker | null, proposal: StoredTeamProposal, value: unknown): Promise<void> {
+    if (!asker || !mayEvaluateProposal(asker, proposal.opportunity)) throw new UnauthorizedException(NOT_PERMITTED_TO_EVALUATE);
+    const problem = disqualificationReasonProblem(value);
+    if (problem) throw new BadRequestException([`disqualificationReason: ${problem}`]);
+    if (!mayDisqualifyTeamProposalInState(proposal.status, proposal.opportunity.status)) {
+      throw new BadRequestException([CANNOT_DISQUALIFY_NOW]);
+    }
+    await this.store.changeStatus(proposal.program, proposal.id, "DISQUALIFIED", asker.id, (value as string).trim());
+  }
+
+  /**
+   * An award, by an administrator or the opportunity's author, of a fully evaluated proposal or one
+   * passed over (R-1.26, R-2.33). The winner and every proponent passed over are told (R-2.36).
+   */
+  private async award(asker: ProposalAsker | null, proposal: StoredTeamProposal): Promise<void> {
+    if (!asker || !mayEvaluateProposal(asker, proposal.opportunity)) throw new UnauthorizedException(NOT_PERMITTED_TO_EVALUATE);
+    if (!mayAwardTeamProposalInState(proposal.program, proposal.status, proposal.opportunity.status)) {
+      throw new BadRequestException([CANNOT_AWARD_NOW]);
+    }
+    const all = await this.store.forOpportunity(proposal.program, proposal.opportunity.id);
+    const passedOver = await this.store.award(proposal.program, proposal.id, asker.id);
+    this.notices?.awarded(
+      noticeOf(proposal, proposal.createdBy?.id ?? null),
+      proposal.organization?.legalName ?? null,
+      all.filter((other) => passedOver.includes(other.id)).map((other) => noticeOf(other, other.createdBy?.id ?? null)),
+    );
   }
 
   /** A new proposal, as a draft or as a submission (R-2.1, R-2.7). */
@@ -205,12 +270,20 @@ export class TeamProposalsService {
     const input = inputFrom(program, given);
     await this.checkContent(asker, opportunity, input, requested === "SUBMITTED", null);
     const id = await this.store.create(opportunity.id, input, requested, asker.id);
-    return answerFor(await this.mustFind(program, id));
+    const created = await this.mustFind(program, id);
+    // The vendor who puts a proposal forward is sent a confirmation (R-2.36).
+    if (requested === "SUBMITTED") this.notices?.submitted(noticeOf(created, asker.id));
+    return answerFor(created);
   }
 
   /** One tagged change: an edit, a submission or a withdrawal. Evaluation's changes come later. */
   async change(asker: ProposalAsker | null, program: TeamProgram, id: string, change: TaggedChange): Promise<TeamProposalAnswer> {
     const { proposal, managed } = await this.readable(asker, program, id);
+    if (change?.tag === "award" || change?.tag === "disqualify") {
+      if (change.tag === "award") await this.award(asker, proposal);
+      else await this.disqualify(asker, proposal, change.value);
+      return this.answerWithScoresheet(asker, await this.mustFind(program, proposal.id));
+    }
     if (!asker || !mayManageProposal(asker, this.standingOf(proposal), managesOrganization(proposal, managed))) {
       if (["edit", "submit", "withdraw"].includes(change?.tag as string)) throw new UnauthorizedException(NOT_PERMITTED_TO_CHANGE_PROPOSAL);
       throw new BadRequestException([PROPOSAL_ACTION_NOT_AVAILABLE]);
@@ -225,6 +298,8 @@ export class TeamProposalsService {
       case "withdraw":
         if (!mayWithdrawTeamProposalFrom(proposal.status)) throw new BadRequestException([CANNOT_WITHDRAW_NOW]);
         await this.store.changeStatus(program, proposal.id, "WITHDRAWN", asker.id, noteFrom(change.value));
+        // The vendor and every administrator are told (R-2.36).
+        this.notices?.withdrawn(noticeOf(proposal, asker.id), proposal.organization?.legalName ?? "A vendor");
         break;
       default:
         throw new BadRequestException([PROPOSAL_ACTION_NOT_AVAILABLE]);
@@ -272,6 +347,7 @@ export class TeamProposalsService {
     // The organization's qualification is checked again now, whatever it was when it was named (R-2.16).
     await this.checkContent(asker, proposal.opportunity, storedInput(proposal), true, proposal.id);
     await this.store.changeStatus(proposal.program, proposal.id, "SUBMITTED", asker.id, noteFrom(value));
+    this.notices?.submitted(noticeOf(proposal, asker.id));
   }
 
   // ---------------------------------------------------------------------- checks
@@ -402,6 +478,19 @@ function unknownPeople(
 }
 
 const noteFrom = (value: unknown): string | null => (typeof value === "string" && value.trim() !== "" ? value.trim() : null);
+
+/** A proposal as its notices name it, with the vendor they go to (R-2.36). */
+function noticeOf(proposal: StoredTeamProposal, vendor: string | null): NoticeProposal {
+  return {
+    subject: {
+      program: proposal.program,
+      opportunityId: proposal.opportunity.id,
+      opportunityTitle: proposal.opportunity.title,
+      proposalId: proposal.id,
+    },
+    vendor,
+  };
+}
 
 function managesOrganization(proposal: StoredTeamProposal, managed: readonly string[]): boolean {
   return proposal.organization !== null && managed.includes(proposal.organization.id);

@@ -14,7 +14,9 @@ import {
   TeamProposalStatus,
   isTeamProposalStatus,
 } from "../rules/team-proposals";
+import { TeamProposalScores, TeamWeights, isInContention } from "../rules/proposal-evaluation";
 import { Person, ProposalOrganization } from "./cwu-proposal";
+import { organizationOfRow } from "./prisma-cwu-proposal.store";
 import {
   StoredPhaseTeam,
   StoredTeamProposal,
@@ -27,7 +29,7 @@ import {
 const person = { select: { id: true, name: true } } as const;
 const latestStatus = { where: { status: { not: null } }, orderBy: { createdAt: "desc" }, take: 1, select: { status: true } } as const;
 const questions = { orderBy: { order: "asc" }, select: { order: true, question: true, wordLimit: true } } as const;
-const organization = { select: { id: true, legalName: true, active: true } } as const;
+const organization = { select: { id: true, legalName: true, active: true, contactName: true, contactEmail: true, contactPhone: true } } as const;
 const history = { orderBy: { createdAt: "desc" }, include: { users: person } } as const;
 
 const swuOpportunityParts = {
@@ -99,6 +101,14 @@ type SwuOpportunityRow = Prisma.swuOpportunitiesGetPayload<typeof swuOpportunity
 type TwuOpportunityRow = Prisma.twuOpportunitiesGetPayload<typeof twuOpportunityParts>;
 
 const isPhase = (value: string): value is SwuPhase => (SWU_PHASES as readonly string[]).includes(value);
+
+/** The chair's agreed score of each question, in question order; none when there is no consensus. */
+function consensusOf(rows: readonly { questionOrder: number; score: number }[]): number[] | null {
+  if (rows.length === 0) return null;
+  const byQuestion = new Map<number, number>();
+  for (const row of rows) byQuestion.set(row.questionOrder, row.score);
+  return [...byQuestion.entries()].sort(([a], [b]) => a - b).map(([, score]) => score);
+}
 
 /**
  * Sprint With Us and Team With Us proposals as the kept schema holds them: for Sprint With Us the
@@ -261,6 +271,136 @@ export class PrismaTeamProposalStore implements TeamProposalStore {
     return [...new Set(rows.map((row) => row.organization))];
   }
 
+  /**
+   * The stored scores of every proposal on an opportunity, and its current version's weights. The
+   * questions' score is the chair's consensus, the sum of the agreed score of each question.
+   */
+  async scoring(
+    program: TeamProgram,
+    opportunityId: string,
+  ): Promise<{ weights: TeamWeights; proposals: TeamProposalScores[] } | null> {
+    if (program === "sprint-with-us") {
+      const version = await this.prisma.swuOpportunityVersions.findFirst({
+        where: { opportunity: opportunityId },
+        orderBy: { createdAt: "desc" },
+        select: {
+          questionsWeight: true,
+          codeChallengeWeight: true,
+          scenarioWeight: true,
+          priceWeight: true,
+          swuTeamQuestions: { select: { score: true } },
+        },
+      });
+      if (!version) return null;
+      const rows = await this.prisma.swuProposals.findMany({
+        where: { opportunity: opportunityId },
+        select: {
+          id: true,
+          challengeScore: true,
+          scenarioScore: true,
+          priceScore: true,
+          swuProposalStatuses: latestStatus,
+          swuTeamQuestionResponseChairEvaluations: { select: { questionOrder: true, score: true } },
+        },
+      });
+      return {
+        weights: {
+          questions: version.questionsWeight,
+          challenge: version.codeChallengeWeight,
+          scenario: version.scenarioWeight,
+          price: version.priceWeight,
+          questionsMax: version.swuTeamQuestions.reduce((sum, question) => sum + question.score, 0),
+        },
+        proposals: rows.map((row) => ({
+          id: row.id,
+          status: row.swuProposalStatuses[0]?.status ?? "",
+          consensus: consensusOf(row.swuTeamQuestionResponseChairEvaluations),
+          challenge: row.challengeScore,
+          scenario: row.scenarioScore,
+          price: row.priceScore,
+        })),
+      };
+    }
+    const version = await this.prisma.twuOpportunityVersions.findFirst({
+      where: { opportunity: opportunityId },
+      orderBy: { createdAt: "desc" },
+      select: { questionsWeight: true, challengeWeight: true, priceWeight: true, twuResourceQuestions: { select: { score: true } } },
+    });
+    if (!version) return null;
+    const rows = await this.prisma.twuProposals.findMany({
+      where: { opportunity: opportunityId },
+      select: {
+        id: true,
+        challengeScore: true,
+        priceScore: true,
+        twuProposalStatuses: latestStatus,
+        twuResourceQuestionResponseChairEvaluations: { select: { questionOrder: true, score: true } },
+      },
+    });
+    return {
+      weights: {
+        questions: version.questionsWeight,
+        challenge: version.challengeWeight,
+        scenario: 0,
+        price: version.priceWeight,
+        questionsMax: version.twuResourceQuestions.reduce((sum, question) => sum + question.score, 0),
+      },
+      proposals: rows.map((row) => ({
+        id: row.id,
+        status: row.twuProposalStatuses[0]?.status ?? "",
+        consensus: consensusOf(row.twuResourceQuestionResponseChairEvaluations),
+        challenge: row.challengeScore,
+        scenario: null,
+        price: row.priceScore,
+      })),
+    };
+  }
+
+  async award(program: TeamProgram, id: string, by: string): Promise<string[]> {
+    const now = new Date();
+    const entry = (proposal: string, status: TeamProposalStatus) => ({
+      id: randomUUID(),
+      createdAt: now,
+      createdBy: by,
+      proposal,
+      status,
+      event: null,
+      note: null,
+    });
+    return this.prisma.$transaction(async (tx) => {
+      if (program === "sprint-with-us") {
+        const winner = await tx.swuProposals.findUniqueOrThrow({ where: { id }, select: { opportunity: true } });
+        const others = await tx.swuProposals.findMany({
+          where: { opportunity: winner.opportunity, id: { not: id } },
+          select: { id: true, swuProposalStatuses: latestStatus },
+        });
+        const passedOver = others.filter((other) => isInContention(other.swuProposalStatuses[0]?.status ?? "")).map((other) => other.id);
+        await tx.swuProposalStatuses.createMany({
+          data: [entry(id, "AWARDED"), ...passedOver.map((other) => entry(other, "NOT_AWARDED"))],
+        });
+        await tx.swuProposals.updateMany({ where: { id: { in: [id, ...passedOver] } }, data: { updatedAt: now, updatedBy: by } });
+        await tx.swuOpportunityStatuses.create({
+          data: { id: randomUUID(), createdAt: now, createdBy: by, opportunity: winner.opportunity, status: "AWARDED", event: null, note: null },
+        });
+        return passedOver;
+      }
+      const winner = await tx.twuProposals.findUniqueOrThrow({ where: { id }, select: { opportunity: true } });
+      const others = await tx.twuProposals.findMany({
+        where: { opportunity: winner.opportunity, id: { not: id } },
+        select: { id: true, twuProposalStatuses: latestStatus },
+      });
+      const passedOver = others.filter((other) => isInContention(other.twuProposalStatuses[0]?.status ?? "")).map((other) => other.id);
+      await tx.twuProposalStatuses.createMany({
+        data: [entry(id, "AWARDED"), ...passedOver.map((other) => entry(other, "NOT_AWARDED"))],
+      });
+      await tx.twuProposals.updateMany({ where: { id: { in: [id, ...passedOver] } }, data: { updatedAt: now, updatedBy: by } });
+      await tx.twuOpportunityStatuses.create({
+        data: { id: randomUUID(), createdAt: now, createdBy: by, opportunity: winner.opportunity, status: "AWARDED", event: null, note: null },
+      });
+      return passedOver;
+    });
+  }
+
   private async findMany(
     program: TeamProgram,
     where: Prisma.swuProposalsWhereInput & Prisma.twuProposalsWhereInput,
@@ -409,7 +549,7 @@ function swuProposalOf(row: SwuRow): StoredTeamProposal | null {
     updatedBy: row.users_swuProposals_updatedByTousers,
     status,
     submittedAt,
-    organization: row.organizations,
+    organization: row.organizations ? organizationOfRow(row.organizations) : null,
     phases,
     references: row.swuProposalReferences.map((reference) => ({
       name: reference.name,
@@ -440,7 +580,7 @@ function twuProposalOf(row: TwuRow): StoredTeamProposal | null {
     updatedBy: row.users_twuProposals_updatedByTousers,
     status,
     submittedAt,
-    organization: row.organizations,
+    organization: row.organizations ? organizationOfRow(row.organizations) : null,
     phases: {},
     references: [],
     team: row.twuProposalMember

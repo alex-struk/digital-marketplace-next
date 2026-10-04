@@ -12,6 +12,7 @@ import { StatusController } from "./status/status.controller";
 import { UsersModule } from "./users/users.module";
 import { WatchingModule } from "./watching/watching.module";
 import { CountersModule } from "./counters/counters.module";
+import { ClosingModule } from "./closing/closing.module";
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { CountersModule } from "./counters/counters.module";
     ProposalsModule,
     WatchingModule,
     CountersModule,
+    ClosingModule,
   ],
   controllers: [StatusController],
 })

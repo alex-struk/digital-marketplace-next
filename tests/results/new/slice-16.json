@@ -1,0 +1,459 @@
+{
+  "slice": 16,
+  "proposal": "build-slice-16-6",
+  "app_tree": "bff49886ee935857ba056cb9be03aac07820f2b6",
+  "at": "2026-10-04T11:34:24.574Z",
+  "verdict": "pass",
+  "adapter": "b7c0195825d1cab1e29397414dbafc57ef238839",
+  "rechecked": [
+    "R-7.1",
+    "R-7.2",
+    "R-7.3",
+    "R-7.4",
+    "R-7.18",
+    "R-7.19",
+    "R-4.1",
+    "R-4.2",
+    "R-4.3",
+    "R-4.17",
+    "R-4.24",
+    "R-8.1",
+    "R-8.2",
+    "R-8.5",
+    "R-8.6",
+    "R-8.7",
+    "R-8.10",
+    "R-8.11",
+    "R-8.12",
+    "R-8.18",
+    "R-8.23",
+    "R-8.24",
+    "R-6.7",
+    "R-4.5",
+    "R-4.6",
+    "R-4.8",
+    "R-4.9",
+    "R-4.18",
+    "R-4.25",
+    "R-4.26",
+    "R-4.27",
+    "R-4.28",
+    "R-4.29",
+    "R-4.34",
+    "R-4.4",
+    "R-4.12",
+    "R-4.14",
+    "R-4.19",
+    "R-4.20",
+    "R-4.21",
+    "R-4.30",
+    "R-4.31",
+    "R-4.32",
+    "R-7.5",
+    "R-7.6",
+    "R-7.7",
+    "R-7.8",
+    "R-7.9",
+    "R-7.10",
+    "R-7.12",
+    "R-7.16",
+    "R-7.20",
+    "R-7.21",
+    "R-7.22",
+    "R-7.23",
+    "R-7.24",
+    "R-7.25",
+    "R-7.26",
+    "R-7.27",
+    "R-7.28",
+    "R-8.29",
+    "R-7.13",
+    "R-6.18",
+    "R-6.23",
+    "R-6.24",
+    "R-6.28",
+    "R-4.16",
+    "R-4.33",
+    "R-8.17",
+    "R-8.27",
+    "R-6.8",
+    "R-1.4",
+    "R-1.7",
+    "R-1.10",
+    "R-1.11",
+    "R-1.12",
+    "R-1.14",
+    "R-1.21",
+    "R-1.22",
+    "R-1.23",
+    "R-1.29",
+    "R-1.34",
+    "R-1.37",
+    "R-6.20",
+    "R-6.21",
+    "R-6.27",
+    "R-1.2",
+    "R-1.3",
+    "R-1.5",
+    "R-1.6",
+    "R-1.38",
+    "R-4.22",
+    "R-6.17",
+    "R-1.20",
+    "R-1.28",
+    "R-1.30",
+    "R-1.32",
+    "R-7.17",
+    "R-5.1",
+    "R-5.9",
+    "R-5.17",
+    "R-5.18",
+    "R-5.37",
+    "R-1.8",
+    "R-1.9",
+    "R-1.13",
+    "R-1.15",
+    "R-1.16",
+    "R-1.17",
+    "R-1.18",
+    "R-1.39",
+    "R-1.43",
+    "R-1.48",
+    "R-1.53",
+    "R-1.55",
+    "R-1.56",
+    "R-8.13",
+    "R-8.21",
+    "R-8.28",
+    "R-8.30",
+    "R-3.1",
+    "R-3.2",
+    "R-3.3",
+    "R-3.18",
+    "R-3.19",
+    "R-3.20",
+    "R-3.21",
+    "R-3.22",
+    "R-3.24",
+    "R-6.16",
+    "R-3.6",
+    "R-3.7",
+    "R-3.8",
+    "R-3.9",
+    "R-3.10",
+    "R-3.11",
+    "R-3.12",
+    "R-3.13",
+    "R-3.14",
+    "R-3.15",
+    "R-3.17",
+    "R-3.23",
+    "R-3.30",
+    "R-3.31",
+    "R-3.32",
+    "R-3.33",
+    "R-3.34",
+    "R-3.35",
+    "R-3.25",
+    "R-3.26",
+    "R-3.27",
+    "R-3.28",
+    "R-8.22",
+    "R-8.31",
+    "R-6.2",
+    "R-6.3",
+    "R-6.4",
+    "R-6.5",
+    "R-1.35",
+    "R-1.36",
+    "R-2.1",
+    "R-2.2",
+    "R-2.3",
+    "R-2.4",
+    "R-2.12",
+    "R-2.13",
+    "R-2.14",
+    "R-2.15",
+    "R-2.23",
+    "R-4.23",
+    "R-8.19",
+    "R-8.20",
+    "R-8.25",
+    "R-1.31",
+    "R-2.7",
+    "R-2.9",
+    "R-2.10",
+    "R-2.11",
+    "R-2.16",
+    "R-2.17",
+    "R-2.18",
+    "R-2.19",
+    "R-2.20",
+    "R-2.21",
+    "R-2.22",
+    "R-2.24",
+    "R-2.25"
+  ],
+  "rows": [
+    {
+      "id": "R-5.20",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.20.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "when an opportunity closes it enters individual question evaluation and its evaluators are told",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "f7d3aa6c33537c081b664ca93ce0da048364899a",
+      "adapter": "b7c0195825d1cab1e29397414dbafc57ef238839"
+    },
+    {
+      "id": "R-6.25",
+      "version": 2,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.25.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "The message telling a vendor that an opportunity they proposed on has been awarded to somebody else leads with the opportunity's title and the name of the winning proponent — the winning organization for Sprint With Us and Team With Us, and for Code With Us the legal name of the winning organization or individual, or an em dash where no successful proponent is recorded — and offers the reader a way to sign in and see their own score.",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "69f382b61b8033d4541fc64ce04d448320bf3e4e",
+      "adapter": "b7c0195825d1cab1e29397414dbafc57ef238839"
+    },
+    {
+      "id": "R-1.1",
+      "version": 3,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.1.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "A published opportunity whose proposal deadline has passed closes on its own at the next request the service handles under /api or /status: it moves to the first evaluation stage of its program, every proposal submitted against it moves to review, and it is announced as ready for evaluation, to its author for a Code With Us opportunity and to the evaluators on its evaluation panel for a Sprint With Us or Team With Us opportunity. (it moves to the first evaluation stage of its program)",
+          "status": "passed"
+        },
+        {
+          "title": "A published opportunity whose proposal deadline has passed closes on its own at the next request the service handles under /api or /status: it moves to the first evaluation stage of its program, every proposal submitted against it moves to review, and it is announced as ready for evaluation, to its author for a Code With Us opportunity and to the evaluators on its evaluation panel for a Sprint With Us or Team With Us opportunity. (every proposal submitted against it moves to review)",
+          "status": "passed"
+        },
+        {
+          "title": "A published opportunity whose proposal deadline has passed closes on its own at the next request the service handles under /api or /status: it moves to the first evaluation stage of its program, every proposal submitted against it moves to review, and it is announced as ready for evaluation, to its author for a Code With Us opportunity and to the evaluators on its evaluation panel for a Sprint With Us or Team With Us opportunity. (a Sprint With Us or Team With Us opportunity is announced as ready for evaluation to the evaluators on its panel)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "e578a5959f3b2e9ced33c820d4867a43a54c2796",
+      "adapter": "b7c0195825d1cab1e29397414dbafc57ef238839"
+    },
+    {
+      "id": "R-1.19",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.19.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "an opportunity moves through the states draft, under review and published",
+          "status": "passed"
+        },
+        {
+          "title": "an opportunity moves on to a program-specific evaluation stage",
+          "status": "passed"
+        },
+        {
+          "title": "an opportunity finally reaches cancelled",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "572b44c8d33cf78d69084bf0d363c08265c2ec79",
+      "adapter": "b7c0195825d1cab1e29397414dbafc57ef238839"
+    },
+    {
+      "id": "R-1.26",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.26.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "Awarding a proposal moves its opportunity to awarded and records the winning proponent against it; every other proposal still in contention is marked not awarded. (Code With Us)",
+          "status": "passed"
+        },
+        {
+          "title": "Awarding a proposal moves its opportunity to awarded and records the winning proponent against it; every other proposal still in contention is marked not awarded. (Sprint With Us)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "d8f87b87521de83f1f3f36bb5fc18739e7d9a15a",
+      "adapter": "b7c0195825d1cab1e29397414dbafc57ef238839"
+    },
+    {
+      "id": "R-1.27",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.27.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "An awarded opportunity shows its successful proponent's name to everyone, and shows the proponent's contact details and score only to those permitted to see the proposal's score. (Code With Us: a visitor who may not see proposal scores)",
+          "status": "passed"
+        },
+        {
+          "title": "An awarded opportunity shows its successful proponent's name to everyone, and shows the proponent's contact details and score only to those permitted to see the proposal's score. (Code With Us: a reader permitted to see proposal scores)",
+          "status": "passed"
+        },
+        {
+          "title": "An awarded opportunity shows its successful proponent's name to everyone, and shows the proponent's contact details and score only to those permitted to see the proposal's score. (Sprint With Us: a visitor who may not see proposal scores)",
+          "status": "passed"
+        },
+        {
+          "title": "An awarded opportunity shows its successful proponent's name to everyone, and shows the proponent's contact details and score only to those permitted to see the proposal's score. (Sprint With Us: a reader permitted to see proposal scores)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "9d35c7a048ed3f9224156ae134e9cb5f4d13d546",
+      "adapter": "b7c0195825d1cab1e29397414dbafc57ef238839"
+    },
+    {
+      "id": "R-2.26",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.26.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "A Code With Us proposal is scored once out of 100 to two decimal places, and entering that score moves the proposal from review to evaluated. (a score of 87)",
+          "status": "passed"
+        },
+        {
+          "title": "A Code With Us proposal is scored once out of 100 to two decimal places, and entering that score moves the proposal from review to evaluated. (a score above 100, below zero or with more than two decimal places)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "9a2378df8d253a287e49d620b4654adf50c5342b",
+      "adapter": "b7c0195825d1cab1e29397414dbafc57ef238839"
+    },
+    {
+      "id": "R-2.27",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.27.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "When every proposal still in contention on an opportunity has been evaluated, the opportunity moves to processing on its own.",
+          "status": "passed"
+        },
+        {
+          "title": "When every proposal still in contention on an opportunity has been evaluated, the opportunity moves to processing on its own. (a withdrawn proposal is not counted)",
+          "status": "passed"
+        },
+        {
+          "title": "When every proposal still in contention on an opportunity has been evaluated, the opportunity moves to processing on its own. (a draft proposal is not counted)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "6c24f4db40ddad28ec079100dd830e0d3bd7682c",
+      "adapter": "b7c0195825d1cab1e29397414dbafc57ef238839"
+    },
+    {
+      "id": "R-2.32",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.32.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "A vendor sees the scores and rank of their own proposal only after the opportunity has been awarded or their proposal has been passed over. (their proposal awarded)",
+          "status": "passed"
+        },
+        {
+          "title": "A vendor sees the scores and rank of their own proposal only after the opportunity has been awarded or their proposal has been passed over. (their proposal passed over)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "63786badf2abda007467b16f473c14b637fda84a",
+      "adapter": "b7c0195825d1cab1e29397414dbafc57ef238839"
+    },
+    {
+      "id": "R-2.33",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.33.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "Awarding a proposal marks every other proposal still in contention on that opportunity as not awarded and awards the opportunity itself.",
+          "status": "passed"
+        },
+        {
+          "title": "Awarding a proposal marks every other proposal still in contention on that opportunity as not awarded and awards the opportunity itself. (the other proposal still in contention)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "4f5ef4151faf419495d21169bc3cb5493c676341",
+      "adapter": "b7c0195825d1cab1e29397414dbafc57ef238839"
+    },
+    {
+      "id": "R-2.34",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.34.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "A proposal may be disqualified at any stage of evaluation, and doing so requires a written reason of 1 to 5,000 characters. (without a reason, the request is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "A proposal may be disqualified at any stage of evaluation, and doing so requires a written reason of 1 to 5,000 characters. (a reason of more than 5,000 characters is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "A proposal may be disqualified at any stage of evaluation, and doing so requires a written reason of 1 to 5,000 characters. (with a reason, the proposal becomes disqualified and the reason is kept)",
+          "status": "passed"
+        },
+        {
+          "title": "A proposal may be disqualified at any stage of evaluation, and doing so requires a written reason of 1 to 5,000 characters. (a reason of 1 character is accepted)",
+          "status": "passed"
+        },
+        {
+          "title": "A proposal may be disqualified at any stage of evaluation, and doing so requires a written reason of 1 to 5,000 characters. (a reason of 5,000 characters is accepted)",
+          "status": "passed"
+        },
+        {
+          "title": "A proposal may be disqualified at any stage of evaluation, and doing so requires a written reason of 1 to 5,000 characters. (at review of the questions on a Team With Us opportunity)",
+          "status": "passed"
+        },
+        {
+          "title": "A proposal may be disqualified at any stage of evaluation, and doing so requires a written reason of 1 to 5,000 characters. (the opportunity is re-checked for whether every remaining proposal is now evaluated)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "361733e04822255c8f1bf144b6b98755e5b2491c",
+      "adapter": "b7c0195825d1cab1e29397414dbafc57ef238839"
+    },
+    {
+      "id": "R-2.36",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.36.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "submitting a proposal sends a confirmation to the submitting vendor",
+          "status": "passed"
+        },
+        {
+          "title": "withdrawing a proposal sends a notice to the vendor and to every administrator",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "d67c784d79fa7c00348b521616f7a4492e251708",
+      "adapter": "b7c0195825d1cab1e29397414dbafc57ef238839"
+    }
+  ]
+}
