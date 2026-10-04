@@ -34,3 +34,22 @@ The criterion does not say where the score appears, so no single page is require
 The proposal's history is read before and after through `proposalSwuView.historyEntries`, falling back to `historyTab`. Afterwards it must mention the price score more often than before and have one more "evaluated" entry, which covers the "recorded in history" and "fully evaluated" parts of the expected outcome. Every part of the criterion is asserted, so no partial entry was needed and `not-testable.yaml` is unchanged.
 
 Nothing was missing from the surface. One gap worth closing in the contract: `proposalSwuView.priceScore` has no note saying who is shown it or when during evaluation. A test could rely on that one observation alone, instead of searching several tabs, if the contract stated it. I made no changes to the spec, seed, fixtures or config files.
+
+## Ruling
+
+**Verdict:** approve
+**By:** runner:checks
+
+Approved by the runner's checks, which policy.gates.G3.auto_approve lets settle derive-tests proposals: the acceptance typecheck of 19632a1e5 is clean; no condition is open against it; no escalation stands on it; no test file was deleted, no changed test asserts less than before and no new test asserts nothing.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `19632a1e5400f62217d238745c1dd8afbf3cc475`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/proposals/`, which this proposal answers for.
+
+    No diagnostics.
