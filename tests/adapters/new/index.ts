@@ -37,9 +37,10 @@
 // and form, attachments included) and every program's proposal screen
 // (/opportunities/<program>/:opportunityId/proposals/:proposalId, the Sprint With Us and
 // Team With Us ones reached from the proponent links of the opportunity's Proposals
-// section). It still answers "Page not found", to everybody walked, at /proposals, at
-// every program's printable copies (.../proposals/:proposalId/export,
-// .../proposals/export) and .../complete. Since 2026-10-04 it serves the panel's members the
+// section). It still answers "Page not found", to everybody walked, at /proposals. Since
+// 2026-10-04 it serves the administrator every program's report (.../complete) and printable
+// copies (.../proposals/:proposalId/export, .../proposals/export), and a vendor the printable
+// copy of their own proposal. Since 2026-10-04 it also serves the panel's members the
 // management screens' Instructions, Evaluation and Consensus sections, the individual score
 // sheets, the consensus score sheets (.../team-questions/consensus/...,
 // .../resource-questions/consensus/..., while the opportunity is at consensus or past it),
@@ -321,21 +322,7 @@ export default function create(
   // every printable copy, every
   // .../complete and the evaluation and consensus screens.
   const NOBODY_SIGNS_IN =
-    'walked signed in on the current build (as the administrator, as the public sector employee who owns the seeded opportunities and sits on their panels, and as vendors — the seeded organization owner, who wrote the seeded proposals, and a vendor with none — with the seeded records\' identifiers), the running build serves a signed-in person /dashboard (to staff "Create an opportunity" over "My opportunities", to the administrator every opportunity, to a vendor "My proposals" and "My organizations\' proposals"), /opportunities and every program\'s public opportunity page (with "Watch this opportunity", and "Start a proposal" while it takes proposals), the account screens under /users, /organizations, /organizations/create, /organizations/:orgId/edit (its Sprint With Us and Team With Us qualification sections drawing the requirements and "Read the … terms and conditions") and /organizations/:orgId/{sprint,team}-with-us-terms-and-conditions, to the administrator the content-management screens under /content, to a vendor the three programs\' proposal forms .../proposals/create and their own proposal\'s screen .../proposals/:proposalId/edit, and to the administrator and public sector staff /opportunities/create, the three programs\' forms, their management screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (sections Summary, Opportunity, Addenda, History, Proposals — proponents in plain text with no link onward — and, on Sprint With Us and Team With Us, Evaluation panel and, since 2026-10-04, to the panel\'s members Instructions, Evaluation and Consensus) and the Code With Us proposal\'s screen /opportunities/code-with-us/:opportunityId/proposals/:proposalId (proponent, Status, Submitted, Proposal ID, Score, "Printable copy", and the sections Proposal and History, with no button); the Sprint With Us and Team With Us proposal\'s screen /opportunities/{sprint,team}-with-us/:opportunityId/proposals/:proposalId (proponent, Opportunity, Status, Submitted, Proposal ID, "Printable copy", and the sections Proposal and History, with no button); walked the same way it still answers "Page not found" at /proposals, at every program\'s .../proposals/:proposalId/export (where the Code With Us screen\'s "Printable copy" lands, to the proposal\'s own author too) and .../proposals/export, at every program\'s .../complete, and at the consensus score sheets under .../team-questions/consensus/ and .../resource-questions/consensus/ (the individual score sheets under .../evaluations/ open, since 2026-10-04, to the panel\'s evaluators)';
-
-  // What each such address answered a signed-out visitor when it was last opened: /dashboard
-  // and /sign-up/complete send them to /sign-in?redirectOnSuccess=…, and everything else
-  // (/users/me, /users/:userId, /organizations/:orgId/edit, the create screens) shows the
-  // client's "Page not found" screen.
-  function signedOutAnswer(route: string): string {
-    if (/^\/(dashboard|sign-up\/complete)(\?|$)/.test(route)) {
-      return "redirects to /sign-in";
-    }
-    return 'shows the "Page not found" screen';
-  }
-
-  const behindSession = (route: string): string =>
-    `${route} is offered only to a signed-in person, and ${NOBODY_SIGNS_IN}; opened signed out (with the seeded record's identifier where it takes one) it ${signedOutAnswer(route)}`;
+    'walked signed in on the current build (as the administrator, as the public sector employee who owns the seeded opportunities and sits on their panels, and as vendors — the seeded organization owner, who wrote the seeded proposals, and a vendor with none — with the seeded records\' identifiers), the running build serves a signed-in person /dashboard (to staff "Create an opportunity" over "My opportunities", to the administrator every opportunity, to a vendor "My proposals" and "My organizations\' proposals"), /opportunities and every program\'s public opportunity page (with "Watch this opportunity", and "Start a proposal" while it takes proposals), the account screens under /users, /organizations, /organizations/create, /organizations/:orgId/edit (its Sprint With Us and Team With Us qualification sections drawing the requirements and "Read the … terms and conditions") and /organizations/:orgId/{sprint,team}-with-us-terms-and-conditions, to the administrator the content-management screens under /content, to a vendor the three programs\' proposal forms .../proposals/create and their own proposal\'s screen .../proposals/:proposalId/edit, and to the administrator and public sector staff /opportunities/create, the three programs\' forms, their management screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (sections Summary, Opportunity, Addenda, History, Proposals — proponents in plain text with no link onward — and, on Sprint With Us and Team With Us, Evaluation panel and, since 2026-10-04, to the panel\'s members Instructions, Evaluation and Consensus) and the Code With Us proposal\'s screen /opportunities/code-with-us/:opportunityId/proposals/:proposalId (proponent, Status, Submitted, Proposal ID, Score, "Printable copy", and the sections Proposal and History, with no button); the Sprint With Us and Team With Us proposal\'s screen /opportunities/{sprint,team}-with-us/:opportunityId/proposals/:proposalId (proponent, Opportunity, Status, Submitted, Proposal ID, "Printable copy", and the sections Proposal and History, with no button); since 2026-10-04 it serves every program\'s report .../complete and printable copies .../proposals/:proposalId/export and .../proposals/export to the administrator (and a proposal\'s own copy to its vendor); walked the same way it still answers "Page not found" at /proposals and at the consensus score sheets under .../team-questions/consensus/ and .../resource-questions/consensus/ (the individual score sheets under .../evaluations/ open, since 2026-10-04, to the panel\'s evaluators)';
 
   function absent<T>(
     pageId: string,
@@ -375,32 +362,48 @@ export default function create(
     return built as unknown as T;
   }
 
-  // A page the application does not build: its route answers the client's own "Page not
-  // found" screen, and the one way into it the application offers lands on that same screen.
-  // Decided when it runs: absent while the address answers "Page not found", unbound when it
-  // answers anything else — sign-in, or a screen built since, whose controls nobody has seen.
-  function unserved<T>(pageId: string, route: string, walked: string, members: readonly string[]): T {
-    const decide = async (member: string): Promise<void> => {
-      const where = `${pageId}.${member}`;
-      if (await notFoundShown()) {
-        throw new Error(`absent: ${where} — ${route} answered ${actingId()} the application's "Page not found" screen at ${page.url()}; ${walked}`);
-      }
-      const why = await whyNotHere().catch(() => "");
-      if (why) unbound(where, `${route} did not open for ${actingId()} at ${page.url()}: ${why.replace(/\n+/g, " ")}; ${walked}`);
-      unbound(where, `${route} no longer answers "Page not found" (it shows "${await firstHeading().catch(() => "")}" at ${page.url()}); the page has been built since this binding was written and nothing on it has been seen, so the next binding run binds it`);
-    };
-    const built: Record<string, unknown> = {
-      open: async (params?: Record<string, string>): Promise<void> => {
-        await page.goto(leniently(route, params), { waitUntil: "domcontentloaded" }).catch(() => undefined);
-        await settle();
-        if (await notFoundShown()) await decide("open");
-      },
-    };
-    for (const member of members) built[camel(member)] = () => decide(member);
-    return built as unknown as T;
+  // ---------------------------------------------------------------- reports and printable copies
+  //
+  // Seen 2026-10-04. Each program's .../complete is the "<program> opportunity report": the
+  // opportunity's title under "<program> opportunity report", then the sections Opportunity
+  // (Status, budget or reward, Proposal deadline, Published, Created by, Opportunity ID and
+  // the description), Addenda, History and Proposals, every proposal written out in full.
+  // The administrator is shown it; a vendor is shown the "Page not found" screen.
+  //
+  // .../proposals/:proposalId/export is "<program> proposal" over the opportunity's title,
+  // with "Back to the proposal" and "Print" above it, and the terms Proponent, Status,
+  // Submitted and Proposal ID before the proposal's own sections. The administrator and the
+  // proposal's own vendor are shown it; the Proponent term reads "Proponent N" to staff while
+  // the proposal is still under review ("The proponent's name is withheld from evaluators
+  // until …") and the organization's own name to the vendor who wrote it. Another vendor's
+  // proposal answers "Page not found".
+  //
+  // .../proposals/export is "Export all <program> proposals" over the opportunity's title,
+  // "Every submitted proposal you are entitled to see, in one document. Drafts are never
+  // included.", a "Name proponents anonymously" box and "Print", then each submitted proposal
+  // under its proponent's name. The administrator is shown it; a vendor, the proposals' author
+  // included, is shown "Page not found".
+  //
+  // A reader refused the page is shown "Page not found" (or sent to sign in), which is no
+  // report or copy: the reading is empty, as the old target's is.
+  async function documentText(): Promise<string> {
+    await ready();
+    if (await whyNotHere().catch(() => "")) return "";
+    return mainText();
   }
-  const exportWalked = (program: string, one: boolean): string =>
-    `walked on the current build as the administrator with the seeded ${program} records' identifiers${one ? `, by address and by following the proposal screen's own "Printable copy" link (which lands on this same "Page not found" screen)` : ""}, and on earlier runs as the public sector employee who owns the seeded opportunities, as the seeded organization owner who wrote the seeded proposals and as a vendor with none, it answers the same; no link, tab, menu or button in the application reaches a screen that serves it`;
+
+  // The anonymised name the copy gives its proponent ("Proponent 1"), or nothing where the
+  // copy names the organization itself (the vendor's own copy) or is withheld.
+  async function anonymousProponentName(): Promise<string> {
+    if (!(await documentText())) return "";
+    const named = await valueAfter(["Proponent"]);
+    if (/Proponent\s+\d+/.test(named)) return named.trim();
+    return (await linesMatching(/^Proponent\s+\d+$/)).split("\n")[0] ?? "";
+  }
+
+  const documentAt = (route: string): { open(params?: Record<string, string>): Promise<void> } => ({
+    open: (params) => go(route, params),
+  });
 
   // ---------------------------------------------------------------- sign in and out
 
@@ -11940,12 +11943,10 @@ export default function create(
 
     opportunityCwuEdit,
 
-    opportunityCwuComplete: absent<S.OpportunityCwuCompletePage>(
-      "opportunity-cwu-complete",
-      "/opportunities/code-with-us/:opportunityId/complete",
-      behindSession("/opportunities/code-with-us/:opportunityId/complete"),
-      ["full_report"],
-    ),
+    opportunityCwuComplete: {
+      ...documentAt("/opportunities/code-with-us/:opportunityId/complete"),
+      fullReport: documentText,
+    },
 
     opportunitySwuCreate,
 
@@ -11969,12 +11970,10 @@ export default function create(
 
     opportunitySwuEdit,
 
-    opportunitySwuComplete: absent<S.OpportunitySwuCompletePage>(
-      "opportunity-swu-complete",
-      "/opportunities/sprint-with-us/:opportunityId/complete",
-      behindSession("/opportunities/sprint-with-us/:opportunityId/complete"),
-      ["full_report"],
-    ),
+    opportunitySwuComplete: {
+      ...documentAt("/opportunities/sprint-with-us/:opportunityId/complete"),
+      fullReport: documentText,
+    },
 
     opportunityTwuCreate,
 
@@ -12004,12 +12003,10 @@ export default function create(
 
     opportunityTwuEdit,
 
-    opportunityTwuComplete: absent<S.OpportunityTwuCompletePage>(
-      "opportunity-twu-complete",
-      "/opportunities/team-with-us/:opportunityId/complete",
-      behindSession("/opportunities/team-with-us/:opportunityId/complete"),
-      ["full_report"],
-    ),
+    opportunityTwuComplete: {
+      ...documentAt("/opportunities/team-with-us/:opportunityId/complete"),
+      fullReport: documentText,
+    },
 
     scheduledTransitionTrigger,
 
@@ -12019,19 +12016,15 @@ export default function create(
 
     proposalCwuView,
 
-    proposalCwuExportOne: unserved<S.ProposalCwuExportOnePage>(
-      "proposal-cwu-export-one",
-      "/opportunities/code-with-us/:opportunityId/proposals/:proposalId/export",
-      exportWalked("Code With Us", true),
-      ["exported_proposal"],
-    ),
+    proposalCwuExportOne: {
+      ...documentAt("/opportunities/code-with-us/:opportunityId/proposals/:proposalId/export"),
+      exportedProposal: documentText,
+    },
 
-    proposalCwuExportAll: unserved<S.ProposalCwuExportAllPage>(
-      "proposal-cwu-export-all",
-      "/opportunities/code-with-us/:opportunityId/proposals/export",
-      exportWalked("Code With Us", false),
-      ["exported_proposal"],
-    ),
+    proposalCwuExportAll: {
+      ...documentAt("/opportunities/code-with-us/:opportunityId/proposals/export"),
+      exportedProposal: documentText,
+    },
 
     proposalSwuCreate,
 
@@ -12039,19 +12032,16 @@ export default function create(
 
     proposalSwuView: proposalSwuViewBound,
 
-    proposalSwuExportOne: unserved<S.ProposalSwuExportOnePage>(
-      "proposal-swu-export-one",
-      "/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/export",
-      exportWalked("Sprint With Us", true),
-      ["exported_proposal", "anonymous_proponent_name"],
-    ),
+    proposalSwuExportOne: {
+      ...documentAt("/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/export"),
+      exportedProposal: documentText,
+      anonymousProponentName,
+    },
 
-    proposalSwuExportAll: unserved<S.ProposalSwuExportAllPage>(
-      "proposal-swu-export-all",
-      "/opportunities/sprint-with-us/:opportunityId/proposals/export",
-      exportWalked("Sprint With Us", false),
-      ["exported_proposal"],
-    ),
+    proposalSwuExportAll: {
+      ...documentAt("/opportunities/sprint-with-us/:opportunityId/proposals/export"),
+      exportedProposal: documentText,
+    },
 
     proposalTwuCreate,
 
@@ -12059,19 +12049,15 @@ export default function create(
 
     proposalTwuView: proposalTwuViewBound,
 
-    proposalTwuExportOne: unserved<S.ProposalTwuExportOnePage>(
-      "proposal-twu-export-one",
-      "/opportunities/team-with-us/:opportunityId/proposals/:proposalId/export",
-      exportWalked("Team With Us", true),
-      ["exported_proposal"],
-    ),
+    proposalTwuExportOne: {
+      ...documentAt("/opportunities/team-with-us/:opportunityId/proposals/:proposalId/export"),
+      exportedProposal: documentText,
+    },
 
-    proposalTwuExportAll: unserved<S.ProposalTwuExportAllPage>(
-      "proposal-twu-export-all",
-      "/opportunities/team-with-us/:opportunityId/proposals/export",
-      exportWalked("Team With Us", false),
-      ["exported_proposal"],
-    ),
+    proposalTwuExportAll: {
+      ...documentAt("/opportunities/team-with-us/:opportunityId/proposals/export"),
+      exportedProposal: documentText,
+    },
 
     proposalVendorDashboard,
 
