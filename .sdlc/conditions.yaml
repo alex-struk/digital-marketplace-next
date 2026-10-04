@@ -2952,3 +2952,97 @@ conditions:
         passes R-2.19.
       by: agent:reviewer
       at: 2026-10-04T08:21:15.747Z
+  - ref: build-slice-16#1
+    text: 'R-1.1, in the case "a Sprint With Us or Team With Us opportunity is
+      announced as ready for evaluation to the evaluators on its panel": Error:
+      expect(received).toBe(expected) // Object.is equality — Expected: true —
+      Received: false — at tests/acceptance/opportunities/R-1.1.spec.ts:132 —
+      its last steps: scheduledTransitionTrigger.open() at /status →
+      scheduledTransitionTrigger.runPendingTransitions() at /status — the page
+      as it failed: .sdlc/evidence/slice-16/R-1.1.png,
+      .sdlc/evidence/slice-16/R-1.1.txt'
+    from: build-slice-16
+    family: build-slice-16
+    gate: G3
+    stage: build
+    by: agent:reviewer
+    at: 2026-10-04T09:05:56.668Z
+  - ref: build-slice-16#2
+    text: "app/backend/src/closing/deadline-closing.service.ts: the
+      ready-for-evaluation notice reaches each panel evaluator only as a blind
+      copy (blindCopiedBatches), so no evaluator is a visible recipient of any
+      message. Send each active evaluator their own message addressed to them
+      alone, and name the opportunity's title in the subject or the opening
+      line. Keep the chair who does not evaluate excluded (R-5.20)."
+    from: build-slice-16
+    family: build-slice-16
+    gate: G3
+    stage: build
+    by: agent:reviewer
+    at: 2026-10-04T09:05:56.668Z
+  - ref: build-slice-16#3
+    text: 'R-2.36, in the case "withdrawing a proposal sends a notice to the vendor
+      and to every administrator": Error:
+      expect(received).toBeGreaterThan(expected) — Expected: > 0 — Received:   0
+      — at tests/acceptance/proposals/R-2.36.spec.ts:97 — its last steps:
+      proposalCwuCreate.acceptProgramTerms() at
+      /opportunities/code-with-us/9f709fc5-8057-410e-a330-e077b3e8290b/proposals/create
+      → proposalCwuCreate.acceptAppTerms() at
+      /opportunities/code-with-us/9f709fc5-8057-410e-a330-e077b3e8290b/proposals/create
+      → proposalCwuCreate.submitProposal({proposalText}) at
+      /opportunities/code-with-us/9f709fc5-8057-410e-a330-e077b3e8290b/proposals/a0a178df-bb36-4a5c-918e-702d5140c69e/edit
+      → proposalCwuEdit.withdrawProposal() at
+      /opportunities/code-with-us/9f709fc5-8057-410e-a330-e077b3e8290b/proposals/a0a178df-bb36-4a5c-918e-702d5140c69e/edit
+      — the page as it failed: .sdlc/evidence/slice-16/R-2.36.png,
+      .sdlc/evidence/slice-16/R-2.36.txt'
+    from: build-slice-16
+    family: build-slice-16
+    gate: G3
+    stage: build
+    by: agent:reviewer
+    at: 2026-10-04T09:05:56.668Z
+  - ref: build-slice-16#4
+    text: "app/backend/src/proposals/proposal-notices.ts: ProposalNotices.withdrawn
+      sends the administrators' notice only as blind-copy batches, so no
+      administrator is a visible recipient. Send each active administrator their
+      own message addressed to them alone, in every program."
+    from: build-slice-16
+    family: build-slice-16
+    gate: G3
+    stage: build
+    by: agent:reviewer
+    at: 2026-10-04T09:05:56.668Z
+  - ref: build-slice-16#5
+    text: "R-2.32, in the cases \"their proposal awarded\" and \"their proposal
+      passed over\": Error: the proposal carries no score — Expected pattern:
+      /\\d/ — Received string:  \"\" — at
+      tests/acceptance/proposals/R-2.32.spec.ts:51 — its last steps:
+      signIn(persona administrator) at /dashboard →
+      proposalSwuView.open({opportunityId, proposalId}) at
+      /opportunities/sprint-with-us/00000000-0000-4000-a018-000000000001/propos\
+      als/00000000-0000-4000-a018-000000000101 → proposalSwuView.totalScore() at
+      /opportunities/sprint-with-us/00000000-0000-4000-a018-000000000001/propos\
+      als/00000000-0000-4000-a018-000000000101 threw \"unbound:
+      proposal-swu-view.total_score — the proposal's screen offers no total
+      score: walked on the current build as the administrator, from the
+      proponent links of the opportunity's Proposals section…\" — the page as it
+      failed: .sdlc/evidence/slice-16/R-2.32.png,
+      .sdlc/evidence/slice-16/R-2.32.txt"
+    from: build-slice-16
+    family: build-slice-16
+    gate: G3
+    stage: build
+    by: agent:reviewer
+    at: 2026-10-04T09:05:56.668Z
+  - ref: build-slice-16#6
+    text: "app/frontend/src/screens/proposal-team-view.tsx: the read-only Sprint
+      With Us and Team With Us proposal page shows staff no total score. Draw
+      the weighted total (and rank) from the scoresheet the service already
+      returns to the administrator and the opportunity's author, labelled as the
+      proposal's total score."
+    from: build-slice-16
+    family: build-slice-16
+    gate: G3
+    stage: build
+    by: agent:reviewer
+    at: 2026-10-04T09:05:56.668Z
