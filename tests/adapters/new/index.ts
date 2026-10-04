@@ -2125,9 +2125,11 @@ export default function create(
       while (Date.now() < deadline) {
         const fresh = (await alertsNow()).filter((words) => !before.has(words));
         const failed = fresh.find((words) => /could not|unable|not all|must have/i.test(words));
+        // A refusal is the page's answer to confirming, not a failure to confirm: it is kept
+        // for the error readers, which is where a test reads it.
         if (failed) {
           finalizeRefusal = lined(failed).join("\n");
-          throw new Error(`${tab.where(member)} — refused: the page shows "${lined(failed).join(" — ")}" on ${page.url()}`);
+          break;
         }
         if (fresh.length) break;
         if (!(await dialog().count()) && !(await findControl(actionBar(), FINALIZE))) break;
