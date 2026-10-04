@@ -308,6 +308,22 @@ reader's attention.
 - **R-1.1 (Slice 16)** is one sentence about three programs. Its Code With Us half is demonstrated
   in the same slice as the rest of Code With Us evaluation; its Sprint With Us and Team With Us
   half (the evaluators being told) is why Slice 16 waits for Slice 15.
+- **R-1.24 and R-2.5 (Slice 17)** say that closing a Sprint With Us or Team With Us opportunity
+  moves each submitted proposal to the first review stage and names it "Proponent 1", "Proponent
+  2" and so on. The deadline hook that does both is built in Slice 16, and the criteria were first
+  placed there. A G3 ruling on the build of Slice 16 found both unbound, because their tests read
+  the names on the individual evaluation section of the manage page
+  (`evaluation-individual-list-swu`, `evaluation-individual-list-twu`), which Slice 17 delivers.
+  They therefore sit in Slice 17, as R-5.16 does for the same reason; the hook stays built in
+  Slice 16, so for one slice the naming is in force but answered for by no slice.
+- **R-2.35 (Slice 19)** says every state change and every score entered against a proposal is
+  recorded in its history. Slice 16 builds proposal history with the Code With Us proposal view,
+  and the criterion was first placed there. A G3 ruling on the build of Slice 16 found it unbound,
+  because its test enters a code challenge score on the Sprint With Us proposal view
+  (`proposal-swu-view.score_code_challenge`), and code challenge scoring is Slice 19's. It
+  therefore sits in Slice 19, the first slice that offers that score; the history is still built
+  in Slice 16 and written by every stage from then on, so for three slices it is in force but
+  answered for by no slice.
 - **R-1.25 (Slice 19)** is generic — "every proposal in contention scored at its program's final
   stage" — but for Code With Us the equivalent is R-2.27, which Slice 16 delivers. R-1.25 sits
   where the last program's final stage exists.
