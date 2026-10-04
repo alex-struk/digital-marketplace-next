@@ -33,3 +33,24 @@ The test does not require both to be on the same message, because the criterion 
 - **Unchecked counting rule:** the rule as the criterion states it is not checked from outside. That covers counting against the most recent version's panel and questions, and counting only over the proponents named in the triggering submission. Through the surface a test can only complete the count or leave it short, and leaving it short is R-5.25's subject. I don't treat this as an untested clause. It is how the move is computed, and the observable result is the move and the notice, which this test asserts. Separately testing that a change to the panel changes the count would need a surface action to edit the panel during individual evaluation, and I did not find one.
 
 **What the contract lacks:** no surface action or observation that this criterion needs was missing. Nothing outside `tests/acceptance` was changed or asked to be changed.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Do these tests follow from the evaluation criteria and nothing else? Approve. The rewritten R-5.27 test does what the redo asked: it no longer finds the notice by searching the visible To line for the chair's and the owner's addresses. It collects every caught message (the caught-message list plus a search on the service's own address), opens each one, and counts the chair (administratorOne) and the owner (staffOne) as told when their address is among the blind copies or the visible recipients. That agrees with R-6.15 and with the approved R-5.31 and R-5.33 tests. Its assertions are the criterion's given/when/then and nothing more: the status names consensus, and both people were reached after the catcher was emptied just before the submission that brings the count to twenty-four. Its title quotes the criterion, and the runner's typecheck passed with no diagnostics. Two clauses of the statement are asserted by no test and have no not-testable entry: counting against the panel and questions of the most recent version, and counting only over the proponents named in the triggering submission. The writer could not assert either because the surface offers no action that would make them observable, not because they were skipped, so they are recorded as owed by contract rather than returned. A weakness I accept: the test does not identify the notice as the ready-for-consensus one, only that a message caught after the triggering submission reached each person. The approved siblings share that limitation. The ruling would change to a return if the surface already offered a way to change the panel or questions, or the set of proponents, during individual evaluation, or if the old application sends the submitting chair some other message on submission that would satisfy this check without the ready notice.
+
+**Conditions:**
+- missing-test R-5.27: the count is taken against the panel and the questions of the opportunity's most recent version — owed by contract: a surface action that changes an opportunity's evaluation panel or its questions (publishing a new version) while it is in individual evaluation, so a test can show that the most recent version's panel and questions decide when the move happens
+- missing-test R-5.27: the count is taken only over the proponents named in the submission that triggers the check — owed by contract: a surface action or seeded state in which the proponents named in the triggering submission differ from the opportunity's full set of proponents (for example a proposal withdrawn or disqualified between evaluators' submissions), so a test can show that the count is taken over the named proponents only
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `603ecc74d8f58e493d78133662cbba4d52e710cd`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/evaluation/`, which this proposal answers for.
+
+    No diagnostics.
