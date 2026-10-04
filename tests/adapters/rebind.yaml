@@ -10829,3 +10829,276 @@ rebind:
     by: runner:verify
     at: 2026-10-04T07:19:30.601Z
     closed: *a46
+  - id: R-6.25
+    target: new
+    why: "unbound: proposal-cwu-view.enter_score —
+      http://localhost:4400/opportunities/code-with-us/00000000-0000-4000-a006-\
+      000000000001/proposals/00000000-0000-4000-a006-000000000101 now offers
+      administrator a control named /^\\s*(enter|edit) score\\s*$/i, which this
+      binding has not seen; the next binding run binds it (walked on the current
+      build as the administrator on the seeded Code With Us proposals submitted
+      (...a002...101, ...a003...101, ...a004...101, ...a005...101), withdrawn
+      (...a005...103), evaluated in processing (...a007...101 at 82%,
+      ...a007...102 at 74%) and awarded / not awarded (...a008...101 at 91%,
+      ...a008...102 at 77%), and as the public sector employee on ...a007...101:
+      the screen draws the terms Opportunity, Status, Submitted and Proposal ID,
+      the Score region, \"Printable copy\" and the sections Proposal and
+      History, and no button of any kind; the opportunity's management screen
+      offers, in its \"Proposals\" section, only the table Proponent | Status |
+      Submitted)"
+    found: unbound
+    adapter: 21e983249d2d6b2394c66d72c7fa2016c41b703b
+    slice: 16
+    app_tree: 442e56645028251f6c7cdd62a406022fe123ebc1
+    by: runner:verify
+    at: 2026-10-04T09:03:46.735Z
+  - id: R-1.26
+    target: new
+    why: "unbound: proposal-cwu-view.award_proposal —
+      http://localhost:4800/opportunities/code-with-us/00000000-0000-4000-a007-\
+      000000000001/proposals/00000000-0000-4000-a007-000000000101 now offers
+      administrator a control named /^\\s*award( proposal| opportunity)?\\s*$/i,
+      which this binding has not seen; the next binding run binds it (walked on
+      the current build as the administrator on the seeded Code With Us
+      proposals submitted (...a002...101, ...a003...101, ...a004...101,
+      ...a005...101), withdrawn (...a005...103), evaluated in processing
+      (...a007...101 at 82%, ...a007...102 at 74%) and awarded / not awarded
+      (...a008...101 at 91%, ...a008...102 at 77%), and as the public sector
+      employee on ...a007...101: the screen draws the terms Opportunity, Status,
+      Submitted and Proposal ID, the Score region, \"Printable copy\" and the
+      sections Proposal and History, and no button of any kind; the
+      opportunity's management screen offers, in its \"Proposals\" section, only
+      the table Proponent | Status | Submitted); unbound:
+      proposal-swu-view.award_proposal —
+      http://localhost:4800/opportunities/sprint-with-us/00000000-0000-4000-a01\
+      9-000000000001/proposals/00000000-0000-4000-a019-000000000101 now offers
+      administrator something named /^\\s*award( proposal)?\\s*$/i, which this
+      binding has not seen; the next binding run binds it (walked on the current
+      build as the administrator, from the proponent links of the opportunity's
+      Proposals section, on the seeded sprint-with-us proposal(s) ...a016...101
+      (scored on the code challenge and the team scenario): the screen draws the
+      terms Opportunity, Status, Submitted and Proposal ID, \"Printable copy\",
+      the sections Proposal and History, and no button, stage tab, score or
+      rank)"
+    found: unbound
+    adapter: 21e983249d2d6b2394c66d72c7fa2016c41b703b
+    slice: 16
+    app_tree: 442e56645028251f6c7cdd62a406022fe123ebc1
+    by: runner:verify
+    at: 2026-10-04T09:03:46.735Z
+  - id: R-2.5
+    target: new
+    why: 'unbound: evaluation-individual-list-swu.open — the management screen
+      /opportunities/sprint-with-us/:opportunityId/edit opens, signed in, to the
+      administrator and to the public sector employee who owns the seeded
+      opportunities and sits on their panels, but offers no instructions,
+      evaluation or consensus section: walked on the current build on the seeded
+      Sprint With Us opportunities at individual evaluation (with an evaluation
+      already begun), at consensus and at the code challenge, its sections are
+      Summary, Opportunity, Addenda, History, Proposals and Evaluation panel,
+      and ?tab=evaluation draws the Summary; opened signed out the screen shows
+      the "Page not found" screen (it shows "Page not found" at
+      http://localhost:4300/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=evaluation)'
+    found: unbound
+    adapter: 21e983249d2d6b2394c66d72c7fa2016c41b703b
+    slice: 16
+    app_tree: 442e56645028251f6c7cdd62a406022fe123ebc1
+    by: runner:verify
+    at: 2026-10-04T09:03:46.735Z
+  - id: R-2.26
+    target: new
+    why: "unbound: proposal-cwu-view.enter_score —
+      http://localhost:4300/opportunities/code-with-us/00000000-0000-4000-a002-\
+      000000000001/proposals/00000000-0000-4000-a002-000000000101 now offers
+      public-sector-staff a control named /^\\s*(enter|edit) score\\s*$/i, which
+      this binding has not seen; the next binding run binds it (walked on the
+      current build as the administrator on the seeded Code With Us proposals
+      submitted (...a002...101, ...a003...101, ...a004...101, ...a005...101),
+      withdrawn (...a005...103), evaluated in processing (...a007...101 at 82%,
+      ...a007...102 at 74%) and awarded / not awarded (...a008...101 at 91%,
+      ...a008...102 at 77%), and as the public sector employee on ...a007...101:
+      the screen draws the terms Opportunity, Status, Submitted and Proposal ID,
+      the Score region, \"Printable copy\" and the sections Proposal and
+      History, and no button of any kind; the opportunity's management screen
+      offers, in its \"Proposals\" section, only the table Proponent | Status |
+      Submitted)"
+    found: unbound
+    adapter: 21e983249d2d6b2394c66d72c7fa2016c41b703b
+    slice: 16
+    app_tree: 442e56645028251f6c7cdd62a406022fe123ebc1
+    by: runner:verify
+    at: 2026-10-04T09:03:46.735Z
+  - id: R-2.27
+    target: new
+    why: "unbound: proposal-cwu-view.disqualify_proposal —
+      http://localhost:4800/opportunities/code-with-us/00000000-0000-4000-a003-\
+      000000000001/proposals/00000000-0000-4000-a003-000000000101 now offers
+      administrator a control named /^\\s*disqualify( proposal)?\\s*$/i, which
+      this binding has not seen; the next binding run binds it (walked on the
+      current build as the administrator on the seeded Code With Us proposals
+      submitted (...a002...101, ...a003...101, ...a004...101, ...a005...101),
+      withdrawn (...a005...103), evaluated in processing (...a007...101 at 82%,
+      ...a007...102 at 74%) and awarded / not awarded (...a008...101 at 91%,
+      ...a008...102 at 77%), and as the public sector employee on ...a007...101:
+      the screen draws the terms Opportunity, Status, Submitted and Proposal ID,
+      the Score region, \"Printable copy\" and the sections Proposal and
+      History, and no button of any kind; the opportunity's management screen
+      offers, in its \"Proposals\" section, only the table Proponent | Status |
+      Submitted); unbound: proposal-cwu-view.enter_score —
+      http://localhost:4800/opportunities/code-with-us/00000000-0000-4000-a005-\
+      000000000001/proposals/00000000-0000-4000-a005-000000000101 now offers
+      administrator a control named /^\\s*(enter|edit) score\\s*$/i, which this
+      binding has not seen; the next binding run binds it (walked on the current
+      build as the administrator on the seeded Code With Us proposals submitted
+      (...a002...101, ...a003...101, ...a004...101, ...a005...101), withdrawn
+      (...a005...103), evaluated in processing (...a007...101 at 82%,
+      ...a007...102 at 74%) and awarded / not awarded (...a008...101 at 91%,
+      ...a008...102 at 77%), and as the public sector employee on ...a007...101:
+      the screen draws the terms Opportunity, Status, Submitted and Proposal ID,
+      the Score region, \"Printable copy\" and the sections Proposal and
+      History, and no button of any kind; the opportunity's management screen
+      offers, in its \"Proposals\" section, only the table Proponent | Status |
+      Submitted); unbound: proposal-cwu-view.enter_score —
+      http://localhost:4800/opportunities/code-with-us/00000000-0000-4000-a009-\
+      000000000001/proposals/00000000-0000-4000-a009-000000000101 now offers
+      administrator a control named /^\\s*(enter|edit) score\\s*$/i, which this
+      binding has not seen; the next binding run binds it (walked on the current
+      build as the administrator on the seeded Code With Us proposals submitted
+      (...a002...101, ...a003...101, ...a004...101, ...a005...101), withdrawn
+      (...a005...103), evaluated in processing (...a007...101 at 82%,
+      ...a007...102 at 74%) and awarded / not awarded (...a008...101 at 91%,
+      ...a008...102 at 77%), and as the public sector employee on ...a007...101:
+      the screen draws the terms Opportunity, Status, Submitted and Proposal ID,
+      the Score region, \"Printable copy\" and the sections Proposal and
+      History, and no button of any kind; the opportunity's management screen
+      offers, in its \"Proposals\" section, only the table Proponent | Status |
+      Submitted)"
+    found: unbound
+    adapter: 21e983249d2d6b2394c66d72c7fa2016c41b703b
+    slice: 16
+    app_tree: 442e56645028251f6c7cdd62a406022fe123ebc1
+    by: runner:verify
+    at: 2026-10-04T09:03:46.735Z
+  - id: R-2.33
+    target: new
+    why: "unbound: proposal-cwu-view.disqualify_proposal —
+      http://localhost:4300/opportunities/code-with-us/00000000-0000-4000-a005-\
+      000000000001/proposals/00000000-0000-4000-a005-000000000102 now offers
+      administrator a control named /^\\s*disqualify( proposal)?\\s*$/i, which
+      this binding has not seen; the next binding run binds it (walked on the
+      current build as the administrator on the seeded Code With Us proposals
+      submitted (...a002...101, ...a003...101, ...a004...101, ...a005...101),
+      withdrawn (...a005...103), evaluated in processing (...a007...101 at 82%,
+      ...a007...102 at 74%) and awarded / not awarded (...a008...101 at 91%,
+      ...a008...102 at 77%), and as the public sector employee on ...a007...101:
+      the screen draws the terms Opportunity, Status, Submitted and Proposal ID,
+      the Score region, \"Printable copy\" and the sections Proposal and
+      History, and no button of any kind; the opportunity's management screen
+      offers, in its \"Proposals\" section, only the table Proponent | Status |
+      Submitted); unbound: proposal-cwu-view.enter_score —
+      http://localhost:4300/opportunities/code-with-us/00000000-0000-4000-a004-\
+      000000000001/proposals/00000000-0000-4000-a004-000000000101 now offers
+      administrator a control named /^\\s*(enter|edit) score\\s*$/i, which this
+      binding has not seen; the next binding run binds it (walked on the current
+      build as the administrator on the seeded Code With Us proposals submitted
+      (...a002...101, ...a003...101, ...a004...101, ...a005...101), withdrawn
+      (...a005...103), evaluated in processing (...a007...101 at 82%,
+      ...a007...102 at 74%) and awarded / not awarded (...a008...101 at 91%,
+      ...a008...102 at 77%), and as the public sector employee on ...a007...101:
+      the screen draws the terms Opportunity, Status, Submitted and Proposal ID,
+      the Score region, \"Printable copy\" and the sections Proposal and
+      History, and no button of any kind; the opportunity's management screen
+      offers, in its \"Proposals\" section, only the table Proponent | Status |
+      Submitted)"
+    found: unbound
+    adapter: 21e983249d2d6b2394c66d72c7fa2016c41b703b
+    slice: 16
+    app_tree: 442e56645028251f6c7cdd62a406022fe123ebc1
+    by: runner:verify
+    at: 2026-10-04T09:03:46.735Z
+  - id: R-2.34
+    target: new
+    why: "unbound: proposal-cwu-view.disqualify_proposal —
+      http://localhost:4600/opportunities/code-with-us/00000000-0000-4000-a002-\
+      000000000001/proposals/00000000-0000-4000-a002-000000000101 now offers
+      administrator a control named /^\\s*disqualify( proposal)?\\s*$/i, which
+      this binding has not seen; the next binding run binds it (walked on the
+      current build as the administrator on the seeded Code With Us proposals
+      submitted (...a002...101, ...a003...101, ...a004...101, ...a005...101),
+      withdrawn (...a005...103), evaluated in processing (...a007...101 at 82%,
+      ...a007...102 at 74%) and awarded / not awarded (...a008...101 at 91%,
+      ...a008...102 at 77%), and as the public sector employee on ...a007...101:
+      the screen draws the terms Opportunity, Status, Submitted and Proposal ID,
+      the Score region, \"Printable copy\" and the sections Proposal and
+      History, and no button of any kind; the opportunity's management screen
+      offers, in its \"Proposals\" section, only the table Proponent | Status |
+      Submitted); unbound: proposal-cwu-view.disqualify_proposal —
+      http://localhost:4300/opportunities/code-with-us/00000000-0000-4000-a002-\
+      000000000001/proposals/00000000-0000-4000-a002-000000000101 now offers
+      administrator a control named /^\\s*disqualify( proposal)?\\s*$/i, which
+      this binding has not seen; the next binding run binds it (walked on the
+      current build as the administrator on the seeded Code With Us proposals
+      submitted (...a002...101, ...a003...101, ...a004...101, ...a005...101),
+      withdrawn (...a005...103), evaluated in processing (...a007...101 at 82%,
+      ...a007...102 at 74%) and awarded / not awarded (...a008...101 at 91%,
+      ...a008...102 at 77%), and as the public sector employee on ...a007...101:
+      the screen draws the terms Opportunity, Status, Submitted and Proposal ID,
+      the Score region, \"Printable copy\" and the sections Proposal and
+      History, and no button of any kind; the opportunity's management screen
+      offers, in its \"Proposals\" section, only the table Proponent | Status |
+      Submitted); unbound: proposal-twu-view.disqualify_proposal —
+      http://localhost:4300/opportunities/team-with-us/00000000-0000-4000-8000-\
+      000000000801/proposals/00000000-0000-4000-8000-000000000841 now offers
+      administrator something named /^\\s*disqualify( proposal)?\\s*$/i, which
+      this binding has not seen; the next binding run binds it (walked on the
+      current build as the administrator, from the proponent links of the
+      opportunity's Proposals section, on the seeded team-with-us proposal(s)
+      ...a032...101 (scored on the challenge) and ...a032...102: the screen
+      draws the terms Opportunity, Status, Submitted and Proposal ID,
+      \"Printable copy\", the sections Proposal and History, and no button,
+      stage tab, score or rank); unbound: proposal-cwu-view.enter_score —
+      http://localhost:4300/opportunities/code-with-us/00000000-0000-4000-a003-\
+      000000000001/proposals/00000000-0000-4000-a003-000000000101 now offers
+      administrator a control named /^\\s*(enter|edit) score\\s*$/i, which this
+      binding has not seen; the next binding run binds it (walked on the current
+      build as the administrator on the seeded Code With Us proposals submitted
+      (...a002...101, ...a003...101, ...a004...101, ...a005...101), withdrawn
+      (...a005...103), evaluated in processing (...a007...101 at 82%,
+      ...a007...102 at 74%) and awarded / not awarded (...a008...101 at 91%,
+      ...a008...102 at 77%), and as the public sector employee on ...a007...101:
+      the screen draws the terms Opportunity, Status, Submitted and Proposal ID,
+      the Score region, \"Printable copy\" and the sections Proposal and
+      History, and no button of any kind; the opportunity's management screen
+      offers, in its \"Proposals\" section, only the table Proponent | Status |
+      Submitted)"
+    found: unbound
+    adapter: 21e983249d2d6b2394c66d72c7fa2016c41b703b
+    slice: 16
+    app_tree: 442e56645028251f6c7cdd62a406022fe123ebc1
+    by: runner:verify
+    at: 2026-10-04T09:03:46.735Z
+  - id: R-2.35
+    target: new
+    why: "unbound: proposal-swu-view.score_code_challenge — the proposal's screen
+      offers no control to enter a code challenge score: walked on the current
+      build as the administrator, from the proponent links of the opportunity's
+      Proposals section, on the seeded sprint-with-us proposal(s) ...a016...101
+      (scored on the code challenge and the team scenario): the screen draws the
+      terms Opportunity, Status, Submitted and Proposal ID, \"Printable copy\",
+      the sections Proposal and History, and no button, stage tab, score or
+      rank; on
+      http://localhost:4800/opportunities/sprint-with-us/00000000-0000-4000-a02\
+      7-000000000001/proposals/00000000-0000-4000-a027-000000000101 as
+      administrator it offers button \"Disqualify\", link \"Skip to main
+      content\", link \"Dashboard\", link \"Users\", link \"Content\", link \"My
+      profile\", link \"Sign out\", link \"Seeded Sprint With Us opportunity
+      past consensus at the code\", link \"Printable copy\", link \"Proposal\",
+      link \"History\", link \"Call, email or text us\", link \"find a service
+      centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link
+      \"Accessibility\", link \"Copyright\""
+    found: unbound
+    adapter: 21e983249d2d6b2394c66d72c7fa2016c41b703b
+    slice: 16
+    app_tree: 442e56645028251f6c7cdd62a406022fe123ebc1
+    by: runner:verify
+    at: 2026-10-04T09:03:46.735Z
