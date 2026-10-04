@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-71 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">579</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">573</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">473</span></a></li><li><a href="../runs.html">Run log <span class="count">22</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-71</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-04 02:41</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.288 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I rechecked all seven criteria on the running build at <a href="http://localhost:4300">http://localhost:4300</a> and changed nothing.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.288 (Claude Code))</p>
+<p>I rechecked all seven criteria on the running build at <a href="http://localhost:4300">http://localhost:4300</a> and changed nothing. On this build every one of them is still unbound for the reason the adapter already gives, so <code>tests/adapters/new/index.ts</code> and <code>tests/adapters/new/bindings.yaml</code> are as I found them. I could not run the type-checker: this session&#39;s shell refused the command. Since nothing was edited, that check still reflects the last run that did compile it.</p>
+<p><strong>How I signed in.</strong> I signed in through the sandbox identity provider on the target&#39;s own &quot;Sign in&quot; page: first as the administrator (<code>test-admin</code>), then as a vendor (<code>test-vendor-2</code>). The password was typed by variable name only.</p>
+<p><strong>R-1.31, R-2.25 (the <code>proposals_tab</code> observation on the Code With Us and Sprint With Us management screens).</strong></p>
+<ul><li>As the administrator I opened the management screen of the seeded Code With Us opportunity with three proposals (…a003…0001). Its sections are only Summary, Opportunity, Addenda and History, and <code>?tab=proposals</code> falls back to the Summary. The Summary shows &quot;Proposals submitted 3&quot; as a number; it does not list the proposals. The status still reads &quot;Published&quot; even though the deadline has passed.</li><li>The seeded Code With Us opportunities in processing (…a007…) and awarded (…a008…) show the same four sections.</li><li>The seeded Sprint With Us opportunity at consensus with six proponents (…a013…) offers Summary, Opportunity, Addenda, History and Evaluation panel. The Evaluation panel lists only the panel&#39;s members and roles, not the proposals.</li><li>Opening a seeded proposal directly answers &quot;Page not found&quot;, both the Code With Us one (…a003…0101) and the Sprint With Us one (…a013…0101). So does <code>/proposals</code>.</li></ul>
+<p><strong>R-8.20 (the <code>add_attachment</code> action for Sprint With Us and Team With Us opportunities).</strong> Both create forms have an &quot;Attachments&quot; part, but its &quot;Add attachment&quot; button is disabled. Beside it the page says &quot;Files cannot be attached to a … opportunity in this version of the service. Code With Us opportunities take attachments.&quot; The adapter already detects the disabled button and throws <code>unbound:</code> with that text right away, rather than waiting on it.</p>
+<p><strong>R-2.7, R-2.9, R-2.11, R-2.24 (the Sprint With Us and Team With Us proposal forms and the Code With Us proposal view).</strong> As a vendor I opened the seeded Sprint With Us opportunity that is still open for proposals (…a025…0001, deadline November 2, 2026). It offers only &quot;Watch this opportunity&quot; and no way to start a proposal. Its <code>/proposals/create</code> answers &quot;Page not found&quot;, and so does the same form on the seeded Team With Us opportunity (…0801). The Code With Us proposal view answers &quot;Page not found&quot; to the administrator, as noted above.</p>
+<p><strong>What this means.</strong> The target does not yet offer proposals screens for staff, the Sprint With Us and Team With Us proposal forms, or attachments outside Code With Us. These are missing features of the new service, not gaps in how the adapter reaches the pages. Every route in the contract still resolves on the target (where the feature is missing it answers &quot;Page not found&quot;), so no page is unresolved.</p>
+<p>I did not touch any path outside <code>tests/adapters/new/</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-04 04:01.</p>
+<div class="body"><p>The question is whether the <code>new</code> adapter binds every surface action and observation it can reach on the target, and nothing else, for R-1.31, R-2.25, R-8.20, R-2.7, R-2.9, R-2.11 and R-2.24. I approve. The proposal changes neither tests/adapters/new/index.ts nor bindings.yaml, and nothing under tests/acceptance. The diff is only the journal, the proposal page and the run record, so the adapter is still made of navigation and locators only. Each criterion stays unbound for a reason that names what the surface lacks, checked on the running build at <a href="http://localhost:4300.">http://localhost:4300.</a> Signed in as the administrator, the Code With Us and Sprint With Us management screens offer no Proposals section in published, processing, awarded or consensus states, and ?tab=proposals falls back to the Summary. A seeded proposal opened directly, and /proposals itself, answer &#39;Page not found&#39;. The Sprint With Us and Team With Us create forms render &#39;Add attachment&#39; disabled, with the service&#39;s own text saying files cannot be attached outside Code With Us. Signed in as a vendor, the open Sprint With Us opportunity offers no way to start a proposal, and the Sprint With Us and Team With Us proposal forms answer &#39;Page not found&#39;. These are features the service has not built, not places the adapter failed to reach, so reporting them unbound is right. Treating an absent proposals screen as a refusal would falsely pass R-1.31 and R-2.25. The runner&#39;s typecheck on revision 198646d3 passed with no diagnostics under adapters/new, which covers the type-check the agent could not run. Two things would change this ruling: evidence that the target does expose a proposals list, a proposal form or an enabled attachment control under another label, step or persona; or any edit to tests/acceptance.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

@@ -9177,6 +9177,15 @@ rebind:
     app_tree: 80f368e0af4c87e7f8c6b9571358bd7e2cf2ca83
     by: runner:verify
     at: 2026-10-04T02:34:11.195Z
+    closed: &a43
+      outcome: met
+      why: "bind-adapter-new-71 was approved and left tests/adapters/new as it was:
+        the binding run found nothing on new to bind this to"
+      by: bind-adapter-new-71
+      at: 2026-10-04T04:01:21.046Z
+      answered_by: bind-adapter-new-71
+      gate: G3
+      approved_by: agent:reviewer
   - id: R-1.31
     target: new
     why: 'unbound: opportunity-cwu-edit.proposals_tab — the management screen at
@@ -9209,6 +9218,7 @@ rebind:
     app_tree: 80f368e0af4c87e7f8c6b9571358bd7e2cf2ca83
     by: runner:verify
     at: 2026-10-04T02:34:11.195Z
+    closed: *a43
   - id: R-2.7
     target: new
     why: "unbound: proposal-swu-create.open —
@@ -9318,6 +9328,7 @@ rebind:
     app_tree: 80f368e0af4c87e7f8c6b9571358bd7e2cf2ca83
     by: runner:verify
     at: 2026-10-04T02:34:11.195Z
+    closed: *a43
   - id: R-2.9
     target: new
     why: "unbound: proposal-swu-create.open —
@@ -9427,6 +9438,7 @@ rebind:
     app_tree: 80f368e0af4c87e7f8c6b9571358bd7e2cf2ca83
     by: runner:verify
     at: 2026-10-04T02:34:11.195Z
+    closed: *a43
   - id: R-2.11
     target: new
     why: "unbound: proposal-swu-create.open —
@@ -9486,6 +9498,7 @@ rebind:
     app_tree: 80f368e0af4c87e7f8c6b9571358bd7e2cf2ca83
     by: runner:verify
     at: 2026-10-04T02:34:11.195Z
+    closed: *a43
   - id: R-2.24
     target: new
     why: "unbound: proposal-twu-create.open —
@@ -9595,6 +9608,7 @@ rebind:
     app_tree: 80f368e0af4c87e7f8c6b9571358bd7e2cf2ca83
     by: runner:verify
     at: 2026-10-04T02:34:11.195Z
+    closed: *a43
   - id: R-2.25
     target: new
     why: 'unbound: opportunity-cwu-edit.proposals_tab — the management screen at
@@ -9627,3 +9641,4 @@ rebind:
     app_tree: 80f368e0af4c87e7f8c6b9571358bd7e2cf2ca83
     by: runner:verify
     at: 2026-10-04T02:34:11.195Z
+    closed: *a43

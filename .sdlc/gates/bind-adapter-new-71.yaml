@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The question is whether the `new` adapter binds every surface action and observation it can reach on the target, and nothing else, for R-1.31, R-2.25, R-8.20, R-2.7, R-2.9, R-2.11 and R-2.24. I approve. The proposal changes neither tests/adapters/new/index.ts nor bindings.yaml, and nothing under tests/acceptance. The diff is only the journal, the proposal page and the run record, so the adapter is still made of navigation and locators only. Each criterion stays unbound for a reason that names what the surface lacks, checked on the running build at http://localhost:4300. Signed in as the administrator, the Code With Us and Sprint With Us management screens offer no Proposals section in published, processing, awarded or consensus states, and ?tab=proposals falls back to the Summary. A seeded proposal opened directly, and /proposals itself, answer 'Page not found'. The Sprint With Us and Team With Us create forms render 'Add attachment' disabled, with the service's own text saying files cannot be attached outside Code With Us. Signed in as a vendor, the open Sprint With Us opportunity offers no way to start a proposal, and the Sprint With Us and Team With Us proposal forms answer 'Page not found'. These are features the service has not built, not places the adapter failed to reach, so reporting them unbound is right. Treating an absent proposals screen as a refusal would falsely pass R-1.31 and R-2.25. The runner's typecheck on revision 198646d3 passed with no diagnostics under adapters/new, which covers the type-check the agent could not run. Two things would change this ruling: evidence that the target does expose a proposals list, a proposal form or an enabled attachment control under another label, step or persona; or any edit to tests/acceptance.
+conditions: []
+cost: 0.6098056000000001
+turns: 6
+session: "84cb999c-13e1-42a5-883b-7a07fe3e8a3e"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T04:01:19.926Z
