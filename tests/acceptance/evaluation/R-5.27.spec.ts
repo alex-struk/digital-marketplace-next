@@ -152,3 +152,71 @@ test("An opportunity moves from individual evaluation to consensus by itself onc
     }, { ...settle, message: "the chair or owner not told the opportunity is ready for consensus" })
     .toEqual([]);
 });
+
+// The most recent version decides the count. The seeded closed Team With Us opportunity is
+// used here so this test and the one above do not share an opportunity. Once the application
+// has closed it, its owner (users.staffOne, signed in as persona.publicSectorStaff) seats
+// users.staffPanelEvaluator as a third evaluator through evaluation-panel-twu, which saves
+// the panel as a new version. Questions cannot change at this stage, so the panel is the
+// version change. The two seeded evaluators then score every proponent and submit, the
+// twenty-four submissions that moved the first version on, and the opportunity must still
+// be in individual evaluation because the newest panel is waiting on a third evaluator.
+
+const twuOpportunityId = seed.opportunities.closedTeamWithUs.id;
+const twuProposals = [
+  seed.proposals.teamWithUsOne.id,
+  seed.proposals.teamWithUsTwo.id,
+  seed.proposals.teamWithUsThree.id,
+];
+
+async function scoreAndSubmitEveryTwuProponent(surface: Surface): Promise<void> {
+  for (const proposalId of twuProposals) {
+    await surface.evaluationIndividualCreateTwu.open({ opportunityId: twuOpportunityId, proposalId });
+    for (const order of questions) {
+      await surface.evaluationIndividualCreateTwu.enterQuestionScore({ order, score: 4 });
+      await surface.evaluationIndividualCreateTwu.enterQuestionNotes({
+        order,
+        notes: "A complete reading of this answer.",
+      });
+    }
+    await surface.evaluationIndividualCreateTwu.saveDraft();
+  }
+  await surface.evaluationIndividualListTwu.open({ opportunityId: twuOpportunityId });
+  const whileDrafts = await readOrEmpty(() => surface.evaluationIndividualListTwu.evaluationStatus());
+  await surface.evaluationIndividualListTwu.submitScoresForConsensus();
+  // The submission must have gone through, or the opportunity staying put would prove nothing.
+  expect(await readOrEmpty(() => surface.evaluationIndividualListTwu.incompleteEvaluationError())).toBeFalsy();
+  await expect
+    .poll(async () => {
+      await surface.evaluationIndividualListTwu.open({ opportunityId: twuOpportunityId });
+      return readOrEmpty(() => surface.evaluationIndividualListTwu.evaluationStatus());
+    }, settle)
+    .not.toBe(whileDrafts);
+}
+
+test("counted against the panel and the questions of the opportunity's most recent version: changing the panel during individual evaluation changes how many submissions are awaited", async ({
+  surface,
+}) => {
+  test.slow();
+  await surface.scheduledTransitionTrigger.open();
+  await surface.scheduledTransitionTrigger.runPendingTransitions();
+
+  await surface.signIn(persona.publicSectorStaff);
+  await surface.evaluationPanelTwu.open({ opportunityId: twuOpportunityId });
+  await surface.evaluationPanelTwu.startEditing();
+  await surface.evaluationPanelTwu.addPanelMember({ member: seed.users.staffPanelEvaluator });
+  await surface.evaluationPanelTwu.saveEvaluationPanel();
+  expect(await readOrEmpty(() => surface.evaluationPanelTwu.minimumMembersError())).toBeFalsy();
+  expect(await readOrEmpty(() => surface.evaluationPanelTwu.missingChairError())).toBeFalsy();
+
+  await scoreAndSubmitEveryTwuProponent(surface);
+  await surface.signOut();
+
+  await surface.signIn(persona.administrator);
+  await scoreAndSubmitEveryTwuProponent(surface);
+
+  // Give an automatic move time to land before reading that it did not.
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+  await surface.opportunityTwuView.open({ opportunityId: twuOpportunityId });
+  expect((await surface.opportunityTwuView.status()).toLowerCase()).not.toContain("consensus");
+});

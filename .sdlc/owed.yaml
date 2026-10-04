@@ -5431,13 +5431,11 @@ owed:
     id: R-5.27
     version: 2
     domain: evaluation
-    stage: derive-tests
+    stage: contract
     why: a surface action that changes an opportunity's evaluation panel or its
       questions (publishing a new version) while it is in individual evaluation,
       so a test can show that the most recent version's panel and questions
       decide when the move happens
-    clause: the count is taken against the panel and the questions of the
-      opportunity's most recent version
     from: derive-tests-evaluation-stale-14
     gate: G3
     by: agent:reviewer
@@ -5454,3 +5452,28 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-10-04T15:32:45.576Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v2 exists and has not run
+        by: runner
+        at: 2026-10-04T15:48:20.411Z
+      - from: calibrate
+        to: contract
+        why: a persona or sign-in that reaches users.staffPanelEvaluator (or another
+          account seatable as a third evaluator), so that the added evaluator
+          can submit their scores
+        by: agent:reviewer
+        proposal: derive-tests-evaluation-stale-15
+        gate: G3
+        at: 2026-10-04T15:48:21.629Z
+    asserted:
+      - clause: the count is taken against the panel and the questions of the
+          opportunity's most recent version
+        by: derive-tests-evaluation-stale-15
+        gate: G3
+        at: 2026-10-04T15:48:20.411Z
+    target: old
+    clause: counted against the panel and the questions of the opportunity's most
+      recent version — that the move to consensus happens once the newer
+      version's larger count (three evaluators × three proponents × four
+      questions) is reached
