@@ -325,6 +325,22 @@ export const persona = {
       }
     }
   },
+  "evaluationPanelThirdEvaluator": {
+    "id": "evaluation-panel-third-evaluator",
+    "can": [
+      "see an opportunity they sit on the panel for before it is public",
+      "score every question of every proponent once the opportunity has closed",
+      "submit all of their own evaluations for consensus in one action"
+    ],
+    "signIn": {
+      "session-route": {
+        "unavailable": "The old application's government sign-in route (/auth/createsessiongov, src/back-end/lib/routers/auth.ts:198) takes no parameter and always signs in the account whose identity is test-gov (users.staffOne); the administrator route is likewise fixed to test-admin. No route reaches a second public sector account. The seeded opportunity swuNewestVersionSeatsThirdEvaluator carries this evaluator's submitted scores so that criteria needing a third evaluator are still reached through the other two."
+      },
+      "sandbox-idp": {
+        "username": "gov-panel-evaluator"
+      }
+    }
+  },
   "administratorOther": {
     "id": "administrator-other",
     "can": [

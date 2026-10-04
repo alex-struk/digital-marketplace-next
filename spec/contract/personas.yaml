@@ -293,7 +293,8 @@ personas:
   # account (users.staffOne), because that is the account every seeded panel seats as an
   # evaluator who is not the chair; a separate evaluator account would have to be a third
   # evaluator, and the seeded panels are two evaluators because consensus waits on every
-  # one of them (R-5.27). users.staffPanelEvaluator stays seeded but sits on no panel.
+  # one of them (R-5.27). users.staffPanelEvaluator is the third evaluator of one seeded
+  # panel only — see evaluation-panel-third-evaluator below.
   - id: evaluation-panel-evaluator
     domain: evaluation
     can:
@@ -322,6 +323,37 @@ personas:
     sign_in:
       session-route: { route: /auth/createsessionadmin }
       sandbox-idp: { username: gov-panel-chair }
+
+  # A third evaluator, beside the two the seeded panels hold: users.staffPanelEvaluator.
+  # The criterion that the move to consensus is counted against the newest version's panel
+  # (R-5.27) turns on a panel of three. On the oracle nobody can act as this account: the
+  # government sign-in route is fixed to the one account whose identity is test-gov, and
+  # the only other public sector route is the administrator's. So the seed carries this
+  # evaluator's work as a condition instead — on
+  # opportunities.swuNewestVersionSeatsThirdEvaluator their individual scores for every
+  # proponent are already submitted — and a test reaches the move to consensus through
+  # the two accounts the oracle does reach: public-sector-staff (or
+  # evaluation-panel-evaluator) and administrator, both evaluators on that panel. This
+  # persona is for acting as the third evaluator on the rebuilt target.
+  - id: evaluation-panel-third-evaluator
+    domain: evaluation
+    can:
+      [
+        see an opportunity they sit on the panel for before it is public,
+        score every question of every proponent once the opportunity has closed,
+        submit all of their own evaluations for consensus in one action
+      ]
+    sign_in:
+      session-route:
+        unavailable: >-
+          The old application's government sign-in route (/auth/createsessiongov,
+          src/back-end/lib/routers/auth.ts:198) takes no parameter and always signs in
+          the account whose identity is test-gov (users.staffOne); the administrator
+          route is likewise fixed to test-admin. No route reaches a second public sector
+          account. The seeded opportunity swuNewestVersionSeatsThirdEvaluator carries
+          this evaluator's submitted scores so that criteria needing a third evaluator
+          are still reached through the other two.
+      sandbox-idp: { username: gov-panel-evaluator }
 
   # A second administrator, needed wherever a criterion turns on one administrator's work
   # meeting another's — two of them holding the same page open, one saving over the

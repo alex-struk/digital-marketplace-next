@@ -5431,7 +5431,7 @@ owed:
     id: R-5.27
     version: 2
     domain: evaluation
-    stage: contract
+    stage: derive-tests
     why: a surface action that changes an opportunity's evaluation panel or its
       questions (publishing a new version) while it is in individual evaluation,
       so a test can show that the most recent version's panel and questions
@@ -5466,6 +5466,23 @@ owed:
         proposal: derive-tests-evaluation-stale-15
         gate: G3
         at: 2026-10-04T15:48:21.629Z
+      - from: contract
+        to: derive-tests
+        why: "tests/seed adds opportunities.swuNewestVersionSeatsThirdEvaluator
+          (evaluation_panels.sprintWithUsThreeEvaluators, proposals
+          swuThirdEvaluatorOne/Two/Three). Its newest version seats
+          users.staffPanelEvaluator as a third evaluator whose scores are
+          already submitted. Acting as public-sector-staff and then
+          administrator on evaluation-individual-list-swu, the first submission
+          leaves the status on opportunity-swu-view at individual evaluation (24
+          of 36) and the second moves it to consensus and sends the
+          ready-for-consensus notice. On the rebuilt target, personas.yaml also
+          adds evaluation-panel-third-evaluator (sandbox-idp:
+          gov-panel-evaluator); on the oracle it is marked unavailable."
+        by: contract-v46
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-10-04T15:59:43.070Z
     asserted:
       - clause: the count is taken against the panel and the questions of the
           opportunity's most recent version
