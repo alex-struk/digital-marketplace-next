@@ -72,6 +72,9 @@
 - 21:18:21 propose plan-22 at G2
 - 21:18:25 drive: step 6: `sdlc rule plan-22 --by agent:architect` — plan-22 is open at G2, held by agent:architect
 - 21:19:12 rule plan-22 approve at G2 by agent:architect (agent) on claude claude-opus-5-5 (2.1.288 (Claude Code))
+- 21:27:54 drive: step 8: `sdlc run verify --slice 14` — build-slice-14-3 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
+- 21:50:03 verify slice 14 verified: every claimed criterion passes against the application in build-slice-14-3. Ready for G3.
+- 21:50:05 run verify: regenerated 595 files in .sdlc, site
 
 # Run record 2026-10-03
 
