@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does bind-adapter-new-85 bind the surface's start_editing action on evaluation-panel-swu and evaluation-panel-twu for the new target, and nothing else? Ruling: approve. The new startEditing (tests/adapters/new/index.ts) only navigates and locates. It reaches the tab through the existing reached/editable helpers. If the panel shows its lock note, editable records the refusal and returns, the same way every other panel action does, so the test's own reading of panel_locked_after_consensus decides the outcome. It returns as soon as "Add an evaluator" or "Save evaluation panel" is in the section. It presses an "Edit" only when one is drawn inside the "Evaluation panel" section itself (section() is scoped to that named region), so it never presses the opportunity's own "Edit" under "Opportunity actions", which the receipt reports leaves for ?tab=opportunity. It throws unbound only when the section has no lock note and none of those controls, and it lists the buttons the section does offer, which is a genuine absence and not a convenience. No assertion and no pass/fail logic. Both pages are marked bound in bindings.yaml, with a comment saying how the binding was walked. Nothing under tests/acceptance or any protected path changed. Every changed file is inside tests/adapters/new/, apart from the pipeline's own journal, proposal and run records. The authoring agent could not run tsc, but the runner's typecheck on revision 8fc1c7eab passed with no diagnostics under adapters/new/, which closes that gap. The receipt states plainly that nothing has been run against the target yet. Whether the binding behaves at runtime is for verify and calibrate to show, and the receipt does not claim otherwise. The open missing-test warning on R-5.27 is already owed by derive-tests and is not this adapter's to discharge. The ruling would change if the binding asserted or decided an outcome, if it pressed the opportunity-level Edit, or if the typecheck result were stale for this revision.
+conditions: []
+cost: 0.3890592
+turns: 6
+session: "e1389607-eff4-4f35-a10a-78ab9a668edc"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T15:41:47.517Z

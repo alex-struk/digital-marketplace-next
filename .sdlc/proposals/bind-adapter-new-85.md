@@ -24,3 +24,23 @@ I added `start_editing` to both evaluation panel pages, `evaluation-panel-swu` a
 **Compared with the old target.** The old adapter's version presses the "Edit" in the top bar and then goes to the wizard's "Evaluation Panel" step. On the new target the action does not change the page; it only confirms the panel is editable. Tests that call it before changing the panel get an editable panel either way.
 
 Every route I opened worked, and nothing outside `tests/adapters/new/` was changed.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Question: does bind-adapter-new-85 bind the surface's start_editing action on evaluation-panel-swu and evaluation-panel-twu for the new target, and nothing else? Ruling: approve. The new startEditing (tests/adapters/new/index.ts) only navigates and locates. It reaches the tab through the existing reached/editable helpers. If the panel shows its lock note, editable records the refusal and returns, the same way every other panel action does, so the test's own reading of panel_locked_after_consensus decides the outcome. It returns as soon as "Add an evaluator" or "Save evaluation panel" is in the section. It presses an "Edit" only when one is drawn inside the "Evaluation panel" section itself (section() is scoped to that named region), so it never presses the opportunity's own "Edit" under "Opportunity actions", which the receipt reports leaves for ?tab=opportunity. It throws unbound only when the section has no lock note and none of those controls, and it lists the buttons the section does offer, which is a genuine absence and not a convenience. No assertion and no pass/fail logic. Both pages are marked bound in bindings.yaml, with a comment saying how the binding was walked. Nothing under tests/acceptance or any protected path changed. Every changed file is inside tests/adapters/new/, apart from the pipeline's own journal, proposal and run records. The authoring agent could not run tsc, but the runner's typecheck on revision 8fc1c7eab passed with no diagnostics under adapters/new/, which closes that gap. The receipt states plainly that nothing has been run against the target yet. Whether the binding behaves at runtime is for verify and calibrate to show, and the receipt does not claim otherwise. The open missing-test warning on R-5.27 is already owed by derive-tests and is not this adapter's to discharge. The ruling would change if the binding asserted or decided an outcome, if it pressed the opportunity-level Edit, or if the typecheck result were stale for this revision.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `8fc1c7eabe9ce51f29aea5866b8735acabe5680b`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
