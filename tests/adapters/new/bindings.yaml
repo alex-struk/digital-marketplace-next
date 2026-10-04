@@ -169,7 +169,7 @@ pages:
       opportunity_tab: bound
       addenda_tab: bound
       history_tab: bound
-      proposals_tab: "unbound: walked as the administrator on the seeded lapsed Code With Us opportunity with three proposals (00000000-0000-4000-a003-000000000001, rechecked on the current build) and on the published, awarded and draft ones: the 'Opportunity sections' navigation offers Summary, Opportunity, Addenda and History only, ?tab=proposals shows the Summary, and the proposals' own evaluation view .../proposals/:proposalId answers 'Page not found' to the administrator"
+      proposals_tab: "unbound: walked as the administrator on the seeded lapsed Code With Us opportunity with three proposals (00000000-0000-4000-a003-000000000001, rechecked on the current build) and on the published, awarded and draft ones: the 'Opportunity sections' navigation offers Summary, Opportunity, Addenda and History only, ?tab=proposals shows the Summary, and the proposals' own evaluation view .../proposals/:proposalId answers 'Page not found' to the administrator; rechecked again on this build as the administrator: nothing on the management screen or the public page links to the proposals, and the seeded proposal opens only to its own author, at .../proposals/:proposalId/edit"
       reporting_views: bound
       reporting_watchers: bound
       reporting_proposals: bound
@@ -268,7 +268,7 @@ pages:
       opportunity_tab: bound
       addenda_tab: bound
       history_tab: bound
-      proposals_tab: "unbound: the management screen offers no 'Proposals' section in any state walked (seeded published with a submitted proposal — 00000000-0000-4000-a025-000000000001, rechecked on the current build —, lapsed, at individual evaluation, at consensus, at the code challenge, at the team scenario, in processing and awarded) as the administrator or as the owning public sector employee; its sections are Summary, Opportunity, Addenda, History and Evaluation panel, its Summary counts 'Proposals submitted' only, and ?tab=proposals falls back to the Summary"
+      proposals_tab: "unbound: the management screen offers no 'Proposals' section in any state walked (seeded published with a submitted proposal — 00000000-0000-4000-a025-000000000001, rechecked on the current build —, lapsed, at individual evaluation, at consensus, at the code challenge, at the team scenario, in processing and awarded) as the administrator or as the owning public sector employee; its sections are Summary, Opportunity, Addenda, History and Evaluation panel, its Summary counts 'Proposals submitted' only, and ?tab=proposals falls back to the Summary (rechecked again on this build as the administrator on the seeded open one: the section links are still those five, and nothing links to its proposals)"
       team_questions_tab: bound
       code_challenge_tab: "unbound: the management screen offers no 'Code challenge' section, walked as the administrator on the seeded Sprint With Us opportunities at the code challenge, at the team scenario, in processing and awarded; its sections are Summary, Opportunity, Addenda, History and Evaluation panel"
       team_scenario_tab: "unbound: the management screen offers no 'Team scenario' section, walked as the administrator on the seeded Sprint With Us opportunities at the team scenario, in processing and awarded; its sections are Summary, Opportunity, Addenda, History and Evaluation panel"
