@@ -3211,3 +3211,20 @@ conditions:
         reader and never naming the other.
       by: agent:reviewer
       at: 2026-10-04T13:11:41.676Z
+  - ref: bind-adapter-new-82#1
+    text: In tests/adapters/new/bindings.yaml, on evaluation-consensus-list-swu and
+      evaluation-consensus-list-twu, the unbound reasons for
+      open_proponent_consensus, submit_final_consensus_scores,
+      confirm_submit_consensus, cancel_modal, proponent_row, consensus_status
+      and submit_confirmation_modal still say the Consensus section shows only
+      one sentence with no table, link or button; this proposal reports that the
+      section now renders a table of proponents and a submit control. Walk those
+      pages again as the chair and bind each member to what is rendered, or
+      replace its reason with a current, specific one naming what the page
+      actually lacks.
+    from: bind-adapter-new-82
+    family: bind-adapter-new
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-10-04T14:00:12.271Z
