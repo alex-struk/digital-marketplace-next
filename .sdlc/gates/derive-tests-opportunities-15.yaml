@@ -1,0 +1,17 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: do the revised R-1.1 v3 tests follow from the criterion and nothing else, and do they settle the two conditions derive-tests-opportunities-stale-22 left owed? Ruling: approve. The first-stage test now polls the History tab of the Code With Us, Sprint With Us and Team With Us edit pages for the note "This opportunity has closed.", which the criterion's then states. The stage check now asserts each program's first evaluation stage by its distinguishing words ('team question' for Sprint With Us, 'resource question' for Team With Us) and rules out every later stage and post-evaluation state, in line with the spec's stage list (opportunities.md: team questions individual / resource questions individual first). Code With Us has only one evaluation stage, so 'evaluat' is enough there. The added Code With Us checks follow from the criterion's own clauses: the one submitted proposal moves to review, read by its seeded vendor users.organizationOwner, and the author is announced to. The service address used to find the announcement is quoted from the contract's observables, not from an implementation. The third Sprint With Us and Team With Us proposal is named by a clause-scoped not-testable entry with a real surface gap and contract as its owner, and the ledger already carries it as a missing test owed by contract. The R-1.51 entry was moved, not changed. The runner's typecheck on this revision passed with no diagnostics. What would change this: evidence that the status reading presents the first stage without those distinguishing words, or that the History tab's text does not carry the note.
+conditions:
+  - "condition-met derive-tests-opportunities-stale-22#1: tests/acceptance/opportunities/R-1.1.spec.ts, in the 'moves to the first evaluation stage ... with the note' test, polls opportunityCwuEdit/opportunitySwuEdit/opportunityTwuEdit.historyTab() for \"This opportunity has closed.\" on the lapsed Code With Us, closed Sprint With Us and closed Team With Us opportunities, as an administrator"
+  - "condition-met derive-tests-opportunities-stale-22#2: tests/acceptance/opportunities/R-1.1.spec.ts now requires 'team question' for Sprint With Us and 'resource question' for Team With Us, and rejects /consensus|challenge|scenario|processing|award|cancel|publish/, so a later evaluation stage no longer passes"
+cost: 0.401986
+turns: 5
+session: "df1f8ad6-5261-4d6a-b311-c360763e349d"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T15:17:46.136Z
