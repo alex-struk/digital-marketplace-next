@@ -920,6 +920,7 @@ export interface EvaluationPanelDashboardPage {
 
 export interface EvaluationPanelSwuPage {
   open(params: { opportunityId: string }): Promise<void>;
+  startEditing(input?: unknown): Promise<void>;
   addPanelMember(input?: unknown): Promise<void>;
   removePanelMember(input?: unknown): Promise<void>;
   choosePanelChair(input?: unknown): Promise<void>;
@@ -936,6 +937,7 @@ export interface EvaluationPanelSwuPage {
 
 export interface EvaluationPanelTwuPage {
   open(params: { opportunityId: string }): Promise<void>;
+  startEditing(input?: unknown): Promise<void>;
   addPanelMember(input?: unknown): Promise<void>;
   removePanelMember(input?: unknown): Promise<void>;
   choosePanelChair(input?: unknown): Promise<void>;

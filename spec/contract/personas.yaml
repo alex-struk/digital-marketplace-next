@@ -254,6 +254,24 @@ personas:
       session-route: { route: /auth/createsessionvendor/11 }
       sandbox-idp: { username: test-vendor-11 }
 
+  # The third proponent on the seeded closed Sprint With Us and Team With Us opportunities
+  # (users.proponentThree, owner of organizations.proponentThree, whose proposals are
+  # proposals.sprintWithUsThree and proposals.teamWithUsThree). A relationship rather than
+  # a new kind of account: a Sprint With Us or Team With Us proposal's status is read only
+  # by its own proponent, on proposal-swu-edit and proposal-twu-edit, so a criterion about
+  # every proposal on those opportunities (R-1.1) needs to act as each of the three.
+  - id: third-proponent
+    domain: proposals
+    can:
+      [
+        view their own proposal,
+        read the status of their own proposal,
+        be refused another proponent's proposal
+      ]
+    sign_in:
+      session-route: { route: /auth/createsessionvendor/12 }
+      sandbox-idp: { username: test-vendor-12 }
+
   - id: evaluation-panel-member
     domain: proposals
     can:

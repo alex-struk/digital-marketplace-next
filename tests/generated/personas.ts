@@ -257,6 +257,22 @@ export const persona = {
       }
     }
   },
+  "thirdProponent": {
+    "id": "third-proponent",
+    "can": [
+      "view their own proposal",
+      "read the status of their own proposal",
+      "be refused another proponent's proposal"
+    ],
+    "signIn": {
+      "session-route": {
+        "route": "/auth/createsessionvendor/12"
+      },
+      "sandbox-idp": {
+        "username": "test-vendor-12"
+      }
+    }
+  },
   "evaluationPanelMember": {
     "id": "evaluation-panel-member",
     "can": [
