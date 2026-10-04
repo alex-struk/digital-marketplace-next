@@ -1,0 +1,19 @@
+gate: G3
+verdict: return
+by: agent:tech-lead
+held_by: agent
+rationale: |2-
+  Slice 18's fifteen claimed criteria all pass verify, but the escalated failure is R-5.27 (approved at slice 17), case 'only over the proponents named in the submission that triggers the check': a submission naming two of three proponents is refused as incomplete. That is the application's fault, not the test's. IndividualEvaluationsService.submitAll (app/backend/src/evaluations/individual-evaluations.service.ts:172-193) ignores the proposals the submission names: it checks completeness over every proponent under review of the questions, and counts toward the automatic move to consensus over all of them as well. R-5.25 v3 refuses only a submitted set containing an incomplete evaluation, and R-5.27 v2 counts only over the proponents named in the triggering submission. The proposal's account, that the failures come from tests reading the visible To line, does not hold for this case: the test stops at the refusal, before any mail is read. So the condition goes to build rather than derive-tests: the test asks for what the criterion says. Approvable once submitAll takes the named proposals and a verify passes every claimed and rechecked criterion.
+reprompt: |2-
+  You ruled return. "submitIndividualQuestionEvaluations must read value.proposals as the contract specifies (spec/contract/openapi.yaml:605-611). Check completeness and submit only the signed-in evaluator's evaluations of the proposals named, so that a submission naming two complete proponents is accepted even when a third proponent has no scores (R-5.25 v3: the service refuses only a submitted set that contains an incomplete evaluation). Count toward the automatic move to consensus over the proponents named in the triggering submission (R-5.27 v2), and keep the chair-and-owner notice as blind copies (R-6.15). The failing case is tests/acceptance/evaluation/R-5.27.spec.ts:245; the code at fault is IndividualEvaluationsService.submitAll in app/backend/src/evaluations/individual-evaluations.service.ts." asks for tests/acceptance/evaluation/R-5.27.spec.ts, which build cannot deliver — build delivers app, docs/decisions, and everything else its workspace carries is there to be read. A condition it cannot carry out is one it either fails at or finds a way round, and the second is reported as done. derive-tests delivers it. Address the condition there instead:
+    addressed-to derive-tests: <what that stage has to change, and what showed it>
+conditions:
+  - "submitIndividualQuestionEvaluations must read the proposals named in the request's value, as the contract's tagged change specifies. In IndividualEvaluationsService.submitAll (app/backend/src/evaluations/individual-evaluations.service.ts), check completeness over the signed-in evaluator's evaluations of the named proposals only, and submit only those, so that a submission naming two complete proponents is accepted even when a third proponent of the opportunity has no scores at all (R-5.25 v3: the service refuses only a submitted set that contains an incomplete evaluation). Count toward the automatic move to consensus over the proponents named in the triggering submission (R-5.27 v2), and keep the chair-and-owner notice as blind copies of one message visibly addressed to the service (R-6.15). What showed it: verify's R-5.27 recheck sent a submission naming two of three proponents and received the refusal 'This evaluation could not be submitted for review because it is incomplete…'. Record the reading in a decision record under docs/decisions/."
+cost: 1.8284158000000001
+turns: 16
+session: "b7be24ed-5bb7-49b3-8407-f99201e2f7c4"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T17:00:24.059Z
