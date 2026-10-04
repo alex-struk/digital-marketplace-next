@@ -1275,3 +1275,8 @@ redo:
       was missed. It should accept any withdrawal notice that reaches each
       administrator, as a visible or a blind-copied recipient, as the awarding
       case already does.
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on proposals
+      by: runner:derive-tests
+      at: 2026-10-04T22:49:22.579Z

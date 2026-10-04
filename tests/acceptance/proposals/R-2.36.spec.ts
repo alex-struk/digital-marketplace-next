@@ -6,22 +6,23 @@ import type { Surface } from "../../fixtures";
 // One test per act the criterion names. In each, the catcher is emptied immediately before the
 // act, so what turns up afterwards can only have been sent by it.
 //
+// The criterion says who each notice reaches and nothing about how it is addressed, so a person
+// counts as reached by any caught message naming them as a visible or a blind-copied recipient.
+// The candidates are every message in the catcher's listing, every message found by the
+// person's own address and every message found by the service's own address; each is opened and
+// kept only where the person is among its recipients.
+//
 // Submitting: an administrator publishes a Code With Us opportunity, users.vendorOne submits a
-// proposal to it, and the confirmation is found by that vendor's address on its To line — it is
-// a message for one person.
+// proposal to it, and a message must reach that vendor.
 //
 // Awarding: the seed's Code With Us opportunity already in processing
 // (opportunities.cwuInProcessing) holds two evaluated proposals, from users.organizationOwner
 // (proposals.cwuProcessingOne) and users.proponentTwo (proposals.cwuProcessingTwo). The
-// administrator awards the first. A notice that reaches more than one person carries its
-// readers as blind copies under the service's own address (R-6.15), so each reader's messages
-// are found both by their own address and by the service's, opened, and kept only where the
-// reader is a visible or a blind-copied recipient. The winner must be reached by a notice that
-// reaches none of the others, and every other proponent must be reached.
+// administrator awards the first. The winner must be reached by a notice that reaches none of
+// the others, and every other proponent must be reached.
 //
-// Withdrawing: the vendor withdraws the proposal it submitted. The vendor's notice is found by
-// its To line. The administrators' notice goes to more than one person, so it is found through
-// the service's own address and every administrator must be on its blind-copy list.
+// Withdrawing: the vendor withdraws the proposal it submitted, and the vendor and every
+// administrator must each be reached by a message.
 
 // email.configured_sender_address in spec/contract/observables.yaml.
 const serviceAddress = "donotreply@example.test";
@@ -43,6 +44,19 @@ async function readOrEmpty(read: () => Promise<string>): Promise<string> {
   }
 }
 
+function identifiersIn(listing: string): string[] {
+  try {
+    const parsed = JSON.parse(listing);
+    if (Array.isArray(parsed)) return parsed.map(String);
+  } catch {
+    // Not JSON; read as a plain list below.
+  }
+  return listing
+    .split(/[\s,;[\]"']+/)
+    .map((id) => id.trim())
+    .filter(Boolean);
+}
+
 function addressesIn(text: string): string[] {
   return [...new Set(text.toLowerCase().match(/[a-z0-9._%+-]+@[a-z0-9-]+(?:\.[a-z0-9-]+)+/g) ?? [])];
 }
@@ -61,6 +75,8 @@ async function readMessage(surface: Surface, messageId: string): Promise<Caught>
 // Every caught message that reached this address, visibly or as a blind copy.
 async function messagesReaching(surface: Surface, mail: Mail, address: string): Promise<Caught[]> {
   const ids = new Set<string>();
+  await surface.caughtMessageList.open();
+  for (const id of identifiersIn(await readOrEmpty(() => surface.caughtMessageList.messageIdentifiers()))) ids.add(id);
   for (const { ID } of await mail.messagesTo(address)) ids.add(ID);
   for (const { ID } of await mail.messagesTo(serviceAddress)) ids.add(ID);
   const wanted = address.toLowerCase();
@@ -123,7 +139,7 @@ test("Submitting a proposal, awarding one and withdrawing one each send notifica
   });
 
   await expect
-    .poll(async () => (await mail.messagesTo(seed.users.vendorOne.email)).length, {
+    .poll(async () => (await messagesReaching(surface, mail, seed.users.vendorOne.email)).length, {
       ...settle,
       message: "the confirmation reached the submitting vendor",
     })
@@ -177,23 +193,15 @@ test("Submitting a proposal, awarding one and withdrawing one each send notifica
   await mail.clear();
   await surface.proposalCwuEdit.withdrawProposal();
 
-  // The vendor's own notice has one recipient, so it shows the vendor on its To line.
-  await expect
-    .poll(async () => (await mail.messagesTo(seed.users.vendorOne.email)).length, {
-      ...settle,
-      message: "the withdrawal notice reached the vendor",
-    })
-    .toBeGreaterThan(0);
-
-  // The administrators' notice is addressed to the service's own address and carries them as
-  // blind copies; between them, the messages so addressed must carry every administrator.
+  // The vendor and every administrator must each be reached, as a visible or a blind-copied
+  // recipient of whatever message carries the notice.
   await expect
     .poll(async () => {
-      const copied = new Set<string>();
-      for (const { ID } of await mail.messagesTo(serviceAddress)) {
-        for (const address of (await readMessage(surface, ID)).copied) copied.add(address);
+      const unreached: string[] = [];
+      for (const address of [seed.users.vendorOne.email, ...administrators]) {
+        if ((await messagesReaching(surface, mail, address)).length === 0) unreached.push(address);
       }
-      return administrators.filter((address) => !copied.has(address.toLowerCase()));
-    }, { ...settle, message: "administrators missing from the blind-copy list of the withdrawal notice" })
+      return unreached;
+    }, { ...settle, message: "the vendor and administrators no withdrawal notice reached" })
     .toEqual([]);
 });
