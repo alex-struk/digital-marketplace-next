@@ -476,6 +476,9 @@
 - 13:59:33 drive: step 26 recovery: taking the new target's sandbox down (sdlc sandbox down --target new --from proposal/build-slice-21-2)
 - 13:59:51 drive: step 27: `sdlc rule bind-adapter-new-90 --by agent:reviewer` — bind-adapter-new-90 is open at G3, held by agent:reviewer
 - 13:59:58 rule bind-adapter-new-90 approve at G3 by runner:checks (agent)
+- 14:12:37 drive: step 29: `sdlc run verify --slice 21` — build-slice-21-3 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
+- 14:44:00 verify slice 21 verified: every claimed criterion passes against the application in build-slice-21-3. Ready for G3.
+- 14:44:02 run verify: regenerated 663 files in .sdlc, site
 
 # Run record 2026-10-03
 
