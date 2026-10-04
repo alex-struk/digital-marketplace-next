@@ -5306,12 +5306,10 @@ owed:
     id: R-2.2
     version: 2
     domain: proposals
-    stage: derive-tests
+    stage: calibrate
     why: proposal-cwu-create names no action that sends a create request for an
       opportunity the vendor already holds a proposal on, so no test can put
       that request to the service and read the refusal
-    clause: a request to create a second proposal is refused with "You already have
-      a proposal for this opportunity." and no second proposal is created
     from: bind-adapter-new-68
     gate: G3
     by: agent:reviewer
@@ -5329,3 +5327,15 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-10-04T01:52:57.703Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v2 exists and has not run
+        by: runner
+        at: 2026-10-04T01:55:06.146Z
+    asserted:
+      - clause: a request to create a second proposal is refused with "You already have
+          a proposal for this opportunity." and no second proposal is created
+        by: derive-tests-proposals-stale-17
+        gate: G3
+        at: 2026-10-04T01:55:06.146Z
+    target: old

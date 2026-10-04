@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The question is whether the rewritten R-2.2 test follows from R-2.2 v2 and from nothing else. Approve. The criterion has three clauses: (1) a vendor who starts a second proposal is taken to the one they already hold; (2) a request to create a second one is refused with "You already have a proposal for this opportunity."; (3) no second proposal is created. The first test covers clause 1. It starts a proposal through the opportunity page and checks that the screen it lands on shows the identifier and text of the proposal already held. The second test covers clause 2. It sends a create request through proposal-cwu-request and checks that the request was refused, was not accepted, and that the refusal messages contain the criterion's exact sentence. Both tests cover clause 3 by checking that the vendor's dashboard lists the opportunity once. The contract names that dashboard as the place to read it. In both tests the proposal already held is a draft. That follows the criterion's 'in any state' rather than adding anything new. Every other choice in the setup is one the contract's proposal-cwu-request note tells the writer to make: a newly published opportunity that is still open, an individual proponent so the organization check does not refuse the request first, and a Draft status so the status check does not refuse it first. The tests assert no status code, no field-level placement and no other message. They use no selector, route or storage name, only contract surface names. Every assertion is something 'refused with a message' or 'no second proposal is created' states. The runner's typecheck passed with no diagnostics under acceptance/proposals. Nothing was recorded as not-testable, and no clause is left without a test, so nothing new is owed. The open missing-test/R-2.2 entry closes when this test runs, which a ruling cannot record ahead of time. The writer flagged a mismatch in the contract. The action's comment says 'Sent as a submission, not a draft' and its input list has no status, but the note above it says to send a Draft status. This does not change the outcome: if the adapter drops the status, the request goes out as a submission against an opportunity that is still open, and the contract says it then reaches the same refusal. A note about it on an approval would bind nobody, and returning this test so the contract can be fixed would leave the criterion unverified for no gain. What would change the ruling: a first run where the second request is refused for its status or its opportunity rather than for the duplicate. That would show the status ambiguity matters, and the fix would then belong to the contract stage.
+conditions: []
+cost: 0.388521
+turns: 5
+session: "e4c31c1d-0b02-4311-8a30-c9fc2845ea7a"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T01:55:06.095Z

@@ -29,6 +29,11 @@
 - 18:52:20 propose contract-v41 at G1
 - 18:52:24 drive: step 7: `sdlc rule contract-v41 --by agent:product-owner` — contract-v41 is open at G1, held by agent:product-owner
 - 18:52:56 rule contract-v41 approve at G1 by agent:product-owner (agent) on claude claude-opus-5-5 (2.1.288 (Claude Code))
+- 18:53:03 drive: step 8: `sdlc run derive-tests --domain proposals --stale` — 1 missing test in proposals owed by derive-tests
+- 18:54:27 run derive-tests: ok, cost 0.5111844, turns 12, on claude claude-opus-5-5 (2.1.288 (Claude Code))
+- 18:54:27 propose derive-tests-proposals-stale-17 at G3
+- 18:54:31 drive: step 9: `sdlc rule derive-tests-proposals-stale-17 --by agent:reviewer` — derive-tests-proposals-stale-17 is open at G3, held by agent:reviewer
+- 18:55:06 rule derive-tests-proposals-stale-17 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.288 (Claude Code))
 
 # Run record 2026-10-03
 
