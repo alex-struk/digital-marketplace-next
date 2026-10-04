@@ -1019,3 +1019,8 @@ redo:
       through the service's address and check that both the chair and the owner
       are in its blind-copy list, as the rewritten R-5.31 and R-5.33 tests do."
     verb: test-overreaches
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on evaluation
+      by: runner:derive-tests
+      at: 2026-10-04T15:21:47.394Z

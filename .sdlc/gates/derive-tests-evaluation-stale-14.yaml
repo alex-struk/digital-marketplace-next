@@ -1,0 +1,17 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Do these tests follow from the evaluation criteria and nothing else? Approve. The rewritten R-5.27 test does what the redo asked: it no longer finds the notice by searching the visible To line for the chair's and the owner's addresses. It collects every caught message (the caught-message list plus a search on the service's own address), opens each one, and counts the chair (administratorOne) and the owner (staffOne) as told when their address is among the blind copies or the visible recipients. That agrees with R-6.15 and with the approved R-5.31 and R-5.33 tests. Its assertions are the criterion's given/when/then and nothing more: the status names consensus, and both people were reached after the catcher was emptied just before the submission that brings the count to twenty-four. Its title quotes the criterion, and the runner's typecheck passed with no diagnostics. Two clauses of the statement are asserted by no test and have no not-testable entry: counting against the panel and questions of the most recent version, and counting only over the proponents named in the triggering submission. The writer could not assert either because the surface offers no action that would make them observable, not because they were skipped, so they are recorded as owed by contract rather than returned. A weakness I accept: the test does not identify the notice as the ready-for-consensus one, only that a message caught after the triggering submission reached each person. The approved siblings share that limitation. The ruling would change to a return if the surface already offered a way to change the panel or questions, or the set of proponents, during individual evaluation, or if the old application sends the submitting chair some other message on submission that would satisfy this check without the ready notice.
+conditions:
+  - "missing-test R-5.27: the count is taken against the panel and the questions of the opportunity's most recent version — owed by contract: a surface action that changes an opportunity's evaluation panel or its questions (publishing a new version) while it is in individual evaluation, so a test can show that the most recent version's panel and questions decide when the move happens"
+  - "missing-test R-5.27: the count is taken only over the proponents named in the submission that triggers the check — owed by contract: a surface action or seeded state in which the proponents named in the triggering submission differ from the opportunity's full set of proponents (for example a proposal withdrawn or disqualified between evaluators' submissions), so a test can show that the count is taken over the named proponents only"
+cost: 0.34944519999999996
+turns: 2
+session: "0a9f97b7-e398-4f24-85f9-4aa262488baa"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T15:22:42.220Z
