@@ -66,3 +66,14 @@ The ID is the criterion's own id exactly as `spec/criteria-index.json` spells it
 takes no text; the other two require a colon and text on the same line. A condition may not span
 more than one line.
 
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:product-owner
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+The question is whether R-2.36's withdrawal failure is the old application's fault, the criterion's, or the test's. Ruling: approve, with test-wrong on R-2.36. The criterion says only that a withdrawal sends a notice to the vendor and to every administrator; it says nothing about how that notice is addressed. The test (tests/acceptance/proposals/R-2.36.spec.ts, the withdrawing case) counts an administrator as reached only if they appear as a blind copy on a message addressed to the service's own address. It reasons from R-6.15, which covers notices that go to several people at once, and assumes the administrators' notice is one of those. Nothing in R-2.36 says that. The old source the criterion cites (handleCWUProposalWithdrawn in code-with-us.tsx, lines 100-152, and withdrawnCWUProposalSubmissionT at line 346) does notify every administrator, so the criterion is an accurate record and neither defect-in-old nor spec-wrong fits. The submitting and awarding cases passed and are left alone. The criterion's confidence and wording stay as they are. What would change this ruling: if the redone test still finds no withdrawal notice reaching an administrator by any route, visibly or as a blind copy, the next calibration should rule defect-in-old instead.
+
+**Conditions:**
+- test-wrong R-2.36: the criterion requires that every administrator is notified of a withdrawal and says nothing about how the notice is addressed; the test only counted administrators found as blind copies on messages addressed to the service's own address, so a notice reaching an administrator any other way was missed. It should accept any withdrawal notice that reaches each administrator, as a visible or a blind-copied recipient, as the awarding case already does.
