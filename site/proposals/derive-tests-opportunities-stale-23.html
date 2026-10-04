@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-opportunities-stale-23 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">630</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">624</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">507</span></a></li><li><a href="../runs.html">Run log <span class="count">22</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-opportunities-stale-23</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-04 15:43</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.288 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the opportunities criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> R-1.1 (v3) now has a test for every clause, and its entry is gone from <code>tests/acceptance/not-testable.yaml</code>.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.288 (Claude Code))</p>
+<p>R-1.1 (v3) now has a test for every clause, and its entry is gone from <code>tests/acceptance/not-testable.yaml</code>. I couldn&#39;t run the type-checker because the command needs an approval this session doesn&#39;t have, so nothing here has been compiled or run against a target.</p>
+<p><strong>Why it was open.</strong> The test in <code>tests/acceptance/opportunities/R-1.1.spec.ts</code> already covered most of the criterion:</p>
+<ul><li>The opportunity moves to the first evaluation stage of its program.</li><li>Closing leaves a note in each opportunity&#39;s history.</li><li>The author of a Code With Us opportunity is told it is ready for evaluation.</li><li>The evaluators on a Sprint With Us or Team With Us panel are told the same.</li></ul>
+<p>One part was missing: &quot;every proposal submitted against it moves to review.&quot; On each of the Sprint With Us and Team With Us opportunities the test checked two of the three submitted proposals. The third proposal on each (<code>seed.proposals.sprintWithUsThree</code> and <code>seed.proposals.teamWithUsThree</code>) belongs to <code>users.proponentThree</code>, and no persona could sign in as that user. The only place a proposal&#39;s status can be read is the proponent&#39;s own proposal edit page, so those two proposals went unchecked.</p>
+<p><strong>What changed.</strong> The contract has added the <code>third-proponent</code> persona (<code>persona.thirdProponent</code>), which signs in as <code>users.proponentThree</code>. I checked that the seed gives both proposals to that user, on <code>seed.opportunities.closedSprintWithUs</code> and <code>seed.opportunities.closedTeamWithUs</code>. In the &quot;every proposal submitted against it moves to review&quot; test I added a step that:</p>
+<ol><li>signs out the previous proponent;</li><li>signs in as the third proponent;</li><li>reads the status of both proposals on the Sprint With Us and Team With Us proposal edit pages;</li><li>waits for each to say &quot;review&quot;, the same way the other proposals are checked.</li></ol>
+<p>All three proposals on each of those opportunities, and the one on the lapsed Code With Us opportunity, are now checked. I also rewrote the file&#39;s header comment, which had said the third proposal could not be read.</p>
+<p><strong>Counts.</strong> One criterion was assigned, and it got a test. None remain untestable, and I found no surface action or observation still missing for this criterion. I changed nothing outside <code>tests/acceptance</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-04 15:44.</p>
+<div class="body"><p>Question: do the R-1.1 tests follow from the criterion and nothing else, and is every clause now asserted? Approve. The one clause previously recorded as untestable — every submitted proposal moves to review, for the third proposal on the Sprint With Us and Team With Us opportunities — is now asserted: the test signs in as persona.thirdProponent and polls both proposals&#39; status for &#39;review&#39;, the same observation already used for the other proposals. The branch confirms the seed assigns proposals.sprintWithUsThree and proposals.teamWithUsThree to users.proponentThree on the closed SWU and TWU opportunities, and tests/generated/personas.ts defines thirdProponent as able to read the status of their own proposal; the runner&#39;s typecheck passed with no diagnostics. The added assertions follow from the criterion&#39;s own words and leak no route, selector or status code. Removing the R-1.1 not-testable entry is correct since no clause is left unasserted, and the header comment now matches. The missing test for R-1.1 is not withdrawn: it closes when this test produces a result row at v3. R-5.27&#39;s owed test concerns another criterion and is unaffected. This would become a return if the test&#39;s first run reports the persona unbound or the status it reads is not the proposal&#39;s own.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

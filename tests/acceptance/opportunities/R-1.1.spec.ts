@@ -15,10 +15,9 @@ import type { Surface } from "../../fixtures";
 // Closure runs inside the service and a screen shows its result only once it has finished,
 // so every reading below is repeated until the new state appears rather than taken once. Each
 // is made by somebody entitled to see it: an administrator for the opportunity, and each
-// proposal's own proponent for that proposal. The third proposal on the Sprint With Us and
-// Team With Us opportunities belongs to a proponent no persona signs in as, and no page an
-// administrator reads shows a proposal's status, so the two proposals a proponent can read are
-// the ones checked there.
+// proposal's own proponent for that proposal: the organization owner, the competing vendor and
+// the third proponent between them own all three submitted proposals on the Sprint With Us and
+// Team With Us opportunities.
 //
 // A notice may name its readers on any line, and a notice to several people carries them as
 // blind copies behind the service's own address as its only visible recipient (R-6.15), so no
@@ -210,6 +209,15 @@ test(`${statement} (every proposal submitted against it moves to review)`, async
     .toContain("review");
   await expect
     .poll(() => teamProposalStatus(surface, seed.proposals.teamWithUsTwo.id), settle)
+    .toContain("review");
+  await surface.signOut();
+
+  await surface.signIn(persona.thirdProponent);
+  await expect
+    .poll(() => sprintProposalStatus(surface, seed.proposals.sprintWithUsThree.id), settle)
+    .toContain("review");
+  await expect
+    .poll(() => teamProposalStatus(surface, seed.proposals.teamWithUsThree.id), settle)
     .toContain("review");
 });
 
