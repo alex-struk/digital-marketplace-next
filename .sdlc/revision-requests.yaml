@@ -1464,6 +1464,8 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-04T06:37:43.659Z
+    taken: 2026-10-04T06:44:44.803Z
+    taken_by: bind-adapter-new-74
   - stage: bind-adapter
     target: new
     why: "R-2.25: proposal-swu-view (and proposal-twu-view) are reported unbound
@@ -1479,3 +1481,5 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-10-04T06:37:43.659Z
+    taken: 2026-10-04T06:44:44.803Z
+    taken_by: bind-adapter-new-74
