@@ -35,7 +35,7 @@ export const seed = {
       "idp_id": "test-gov",
       "email": "staff.one@example.test",
       "account_type": "GOV",
-      "note": "Also stands in for evaluation-panel-member and evaluation-panel-evaluator on the oracle, which has only one public sector sign-in route."
+      "note": "Also stands in for evaluation-panel-member and evaluation-panel-evaluator on the oracle, which has only one public sector sign-in route. evaluation-panel-evaluator signs in as this account on the rebuilt target too, because it is the evaluator (not the chair) every seeded panel seats, opportunities.closedSprintWithUs included."
     },
     "vendorOne": {
       "id": "00000000-0000-4000-8000-000000000201",
@@ -230,7 +230,7 @@ export const seed = {
       "idp_id": "gov-panel-evaluator",
       "email": "panel.evaluator@example.test",
       "account_type": "GOV",
-      "note": "On the oracle this persona signs in as users.staffOne instead."
+      "note": "The persona signs in as users.staffOne on both targets; this account sits on no seeded panel. Seating it would make a third evaluator, and the seeded panels hold two because consensus waits on every evaluator (R-5.27)."
     },
     "staffPanelChair": {
       "id": "00000000-0000-4000-8000-000000000105",

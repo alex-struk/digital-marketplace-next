@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>contract-v43 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">611</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">605</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">494</span></a></li><li><a href="../runs.html">Run log <span class="count">22</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>contract-v43</h1>
+<p class="lede">G1 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G1</td></tr><tr><th scope="row">opened</th><td>2026-10-04 12:31</td></tr><tr><th scope="row">holder</th><td>agent:product-owner</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.288 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Is this the contract the tests will act through?</h2>
+<p><strong>Recommendation.</strong> I closed the ruling on R-2.5 by changing who the panel-evaluator persona signs in as on the new target.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.288 (Claude Code))</p>
+<p>I closed the ruling on R-2.5 by changing who the panel-evaluator persona signs in as on the new target. It now signs in as the staff account that is already an evaluator on the closed Sprint With Us panel. I added no one to the panel. I could not bring the oracle up to confirm anything, because every attempt to run the pipeline CLI was refused.</p>
+<p><strong>What the ruling found.</strong> On the new target, the R-2.5 test signs in as the panel-evaluator persona. That persona used the dedicated account <code>users.staffPanelEvaluator</code> (<code>…0104</code>). No seeded panel includes that account, so the evaluation list for <code>opportunities.closedSprintWithUs</code> correctly answered &quot;Page not found&quot;.</p>
+<p><strong>Why I remapped the persona instead of seating the account.</strong> The ruling offered both, but seating the account cannot be done without breaking R-5.27:</p>
+<ul><li>The panel in <code>tests/seed/006-swu-evaluation.sql</code> has two evaluators: the government staff account (<code>users.staffOne</code>, also the opportunity&#39;s owner) and the administrator (also the chair).</li><li>R-5.27&#39;s test scores and submits as exactly those two. Consensus starts only once every evaluator has submitted, which is how the test reaches twenty-four scores.</li><li>Adding the dedicated account as a third evaluator would raise the count, and consensus would never start in that test.</li><li>Swapping it in for the staff account would remove the evaluator R-5.27 signs in as.</li></ul>
+<p>The staff account is the evaluator who is not the chair on every seeded panel. It is also who the persona already signs in as on the oracle, so both targets now act through the same account and no other test&#39;s panel changes.</p>
+<p><strong>What I changed.</strong></p>
+<ul><li><strong><code>spec/contract/personas.yaml</code>:</strong> the <code>evaluation-panel-evaluator</code> persona&#39;s <code>sandbox-idp</code> username is now <code>test-gov</code> (it was <code>gov-panel-evaluator</code>). The comment above the evaluation personas now says why. The persona&#39;s <code>session-route</code> sign-in on the oracle is unchanged.</li><li><strong><code>tests/seed/manifest.yaml</code>:</strong> the notes on <code>users.staffOne</code> and <code>users.staffPanelEvaluator</code> now say the persona signs in as the staff account on both targets, and that the dedicated account sits on no panel and why.</li><li>Nothing else changed: no SQL seed file, no other persona, no page in <code>surface.yaml</code>, nothing in <code>openapi.yaml</code> or <code>observables.yaml</code>, and not the oracle&#39;s Compose override.</li></ul>
+<p><strong>What I could not do.</strong></p>
+<ul><li><strong>Oracle start-up.</strong> I could not run <code>node $SDLC_BIN oracle up</code>. Neither that command nor <code>printenv SDLC_BIN</code> was allowed to run, so I did not prove the oracle starts this run. Since nothing came up, there was nothing to take down. The seed and override are unchanged, and the oracle&#39;s sign-in for this persona is the same route as before, so this run did not change what the oracle runs on.</li><li><strong>YAML parse check.</strong> I could not run a parser over the two edited files either; I checked the edited lines by reading them.</li></ul>
+<p><strong>One loose end for whoever runs tests on the new target.</strong> <code>users.staffPanelEvaluator</code> still has <code>persona: evaluation-panel-evaluator</code> in the manifest. I left that alone because the ruling asked for no more. The new target&#39;s adapter (<code>personOf</code> in <code>tests/adapters/new/index.ts</code>) can match a person argument by that field. A test that passes the persona&#39;s name as a person — for example to add someone to a panel — would get the unseated account, not the one that signs in. No current test does this, as far as I found.</p>
+<p>Two consequences of sharing the account:</p>
+<ul><li>On both targets, the persona is the same person as the staff persona and the opportunity&#39;s owner. A criterion that needs an evaluator who is neither the owner nor ordinary staff cannot be told apart from them.</li><li>The dedicated account stays seeded and can be observed, but no persona signs in as it.</li></ul></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:product-owner (persona agent · claude claude-opus-5-5) on 2026-10-04 12:32.</p>
+<div class="body"><p>Question: is this the contract the tests will act through, given the reviewer&#39;s request at G3 on build-slice-17 that the evaluation-panel-evaluator persona on the new target be an account seated on the closedSprintWithUs panel, without changing the two-evaluator count R-5.27 relies on? Ruling: approve. Reason: the R-2.5 failure was a test-identity mismatch, not a product question. The persona signed in on the sandbox IdP as gov-panel-evaluator (users.staffPanelEvaluator), which no seeded panel seats. Remapping its sandbox-idp username to test-gov (users.staffOne) satisfies the request: tests/seed/010-sprint-with-us-stages.sql seats test-gov as the non-chair evaluator, test-gov is already a working sandbox-idp username for two other personas, and the two-evaluator panel R-5.27 depends on is untouched. Both targets now act through the same account. The only other test that signs in as this persona is R-5.19, which seats both candidate accounts on its panel and leaves users.staffOne off its contrast panel, so it is unaffected. No criterion&#39;s statement, confidence or state changes. Neither target was run and the YAML was not machine-parsed, so the R-2.5 run on the new target is the confirmation still to come. That makes the change verified by reading, not by execution. This settles the contract revision request request/build-slice-17#1. It does not settle the build-owed failures build-slice-17#1 (R-5.19), #2 (R-5.26) or #3 (R-5.27), which remain open for the next ruling. Accepted cost: the persona can no longer be told apart from the staff persona and the owner of the seeded opportunities. Loose end for a later revision: tests/seed/manifest.yaml still tags users.staffPanelEvaluator with persona: evaluation-panel-evaluator, which could mislead a person-by-persona lookup in the new adapter. What would change the ruling: a criterion that needs an evaluator distinct from both the opportunity&#39;s owner and ordinary staff, or R-2.5 still failing on the new target for an identity reason after this change.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
