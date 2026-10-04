@@ -1,22 +1,23 @@
 // criterion: @R-2.10 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
+// provenance: blind, spec@658792c3c7c79540af12cf18a97a260fc2484f16, derived 2026-10-04
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
 // The opportunity carries one resource at full-time allocation over a contract period of
 // two months and a maximum budget of $50,000. An hourly rate of $5,000 exhausts that
 // budget many times over whatever working-day arithmetic the service uses, and a rate of
-// $100 stays well inside it however generous that arithmetic is, so neither test depends
-// on knowing how the total is worked out — only on the two rates falling on opposite sides
-// of the line by a wide margin.
+// $100 stays well inside it however generous that arithmetic is, so the test does not
+// depend on knowing how the total is worked out — only on the two rates falling on
+// opposite sides of the line by a wide margin.
 //
-// The create test carries the $100 proposal as a control on a second opportunity of the
-// same shape: without it a refusal could be the doing of anything on the form, and with it
-// the rate is the only thing that changed.
+// The $100 proposal is a control on a second opportunity of the same shape: without it a
+// refusal could be the doing of anything on the form, and with it the rate is the only
+// thing that changed.
 //
-// The edit path is reached by saving the over-budget proposal as a draft, which is always
-// accepted (R-2.12), and then submitting it from the proposal's own management screen. The
-// refusal is read as the proposal staying a draft, since that screen names no error.
+// The edit-path clause has no test here. It has to start from a proposal saved within
+// budget whose rates are then edited over it, and the Team With Us proposal management
+// screen offers no control for the hourly rate; that clause is recorded against this
+// criterion in not-testable.yaml.
 
 function inDays(days: number): string {
   const date = new Date();
@@ -111,24 +112,4 @@ test("a Team With Us proposal whose hourly rates come to more than the opportuni
   await fillTeamProposal(surface, overBudget, 5000);
   await surface.proposalTwuCreate.submitProposal();
   expect(await surface.proposalTwuCreate.fieldError()).toBeTruthy();
-});
-
-test("a Team With Us proposal whose hourly rates come to more than the opportunity's maximum budget is refused on the edit path", async ({
-  surface,
-}) => {
-  const opportunityId = await publishTeamOpportunity(
-    surface,
-    "R-2.10 Team With Us opportunity whose over-budget draft is submitted later",
-  );
-
-  await surface.signIn(persona.organizationAdmin);
-  await fillTeamProposal(surface, opportunityId, 5000);
-  await surface.proposalTwuCreate.saveDraft();
-  const proposalId = await surface.proposalTwuEdit.proposalIdentifier();
-
-  expect((await surface.proposalTwuEdit.status()).toLowerCase()).toContain("draft");
-  await surface.proposalTwuEdit.submitProposal();
-
-  await surface.proposalTwuEdit.open({ opportunityId, proposalId });
-  expect((await surface.proposalTwuEdit.status()).toLowerCase()).toContain("draft");
 });

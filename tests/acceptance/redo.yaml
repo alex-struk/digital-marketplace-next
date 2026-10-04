@@ -924,3 +924,8 @@ redo:
       ask for an over-budget draft to be kept. The edit path has to be reached
       from a proposal saved within budget and then edited over it.
     verb: test-overreaches
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on proposals
+      by: runner:derive-tests
+      at: 2026-10-04T06:47:45.525Z
