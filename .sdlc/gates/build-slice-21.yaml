@@ -1,0 +1,53 @@
+gate: G3
+verdict: return
+by: runner:verify
+held_by: runner
+rationale: Slice 21 does not yet do what 3 of its criteria say. Each condition
+  is the criterion and what the running application did.
+conditions:
+  - 'R-6.6: Error: notification-email-reference.message_body — opened
+    http://localhost:4500/admin/email-notification-reference as administrator:
+    the page shows "Email Notification Reference" and the alert "The sample
+    emails could not be loaded / Reload the page to try again." in place of its
+    samples, also after reloading as it advises; its own request for … — at
+    tests/acceptance/notifications/R-6.6.spec.ts:16 — its last steps:
+    signIn(persona administrator) at /dashboard →
+    notificationEmailReference.open() at /admin/email-notification-reference →
+    notificationEmailReference.messageBody() at
+    /admin/email-notification-reference threw
+    "notification-email-reference.message_body — opened
+    http://localhost:4500/admin/email-notification-reference as administrator:
+    the page shows \"Email Notification Reference\" and the alert \"The sample
+    e…" — the page as it failed: .sdlc/evidence/slice-21/R-6.6.png,
+    .sdlc/evidence/slice-21/R-6.6.txt'
+  - 'R-6.13: Error: notification-email-reference.message_group_title — opened
+    http://localhost:4300/admin/email-notification-reference as administrator:
+    the page shows "Email Notification Reference" and the alert "The sample
+    emails could not be loaded / Reload the page to try again." in place of its
+    samples, also after reloading as it advises; its own requ… — at
+    tests/acceptance/notifications/R-6.13.spec.ts:17 — its last steps:
+    signIn(persona administrator) at /dashboard →
+    notificationEmailReference.open() at /admin/email-notification-reference →
+    notificationEmailReference.messageGroupTitle() at
+    /admin/email-notification-reference threw
+    "notification-email-reference.message_group_title — opened
+    http://localhost:4300/admin/email-notification-reference as administrator:
+    the page shows \"Email Notification Reference\" and the alert \"The s…" —
+    the page as it failed: .sdlc/evidence/slice-21/R-6.13.png,
+    .sdlc/evidence/slice-21/R-6.13.txt'
+  - 'R-6.19: Error: notification-email-reference.message_group_title — opened
+    http://localhost:4400/admin/email-notification-reference as administrator:
+    the page shows "Email Notification Reference" and the alert "The sample
+    emails could not be loaded / Reload the page to try again." in place of its
+    samples, also after reloading as it advises; its own requ… — at
+    tests/acceptance/notifications/R-6.19.spec.ts:19 — its last steps:
+    signIn(persona administrator) at /dashboard →
+    notificationEmailReference.open() at /admin/email-notification-reference →
+    notificationEmailReference.messageGroupTitle() at
+    /admin/email-notification-reference threw
+    "notification-email-reference.message_group_title — opened
+    http://localhost:4400/admin/email-notification-reference as administrator:
+    the page shows \"Email Notification Reference\" and the alert \"The s…" —
+    the page as it failed: .sdlc/evidence/slice-21/R-6.19.png,
+    .sdlc/evidence/slice-21/R-6.19.txt'
+at: 2026-10-04T20:16:22.287Z
