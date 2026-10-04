@@ -38,3 +38,23 @@ The ruling also lists proponent name, status and export link as things on this s
 **Reference "company" field (R-2.7, 2.9, 2.11, 2.16, 2.18, 2.22).** I looked again as a vendor on the seeded open Sprint With Us opportunity's create form (…a025…). After "Add a reference", each reference still has only Name, Email address and Phone number (optional). There is still no company field, so the existing unbound reason stands unchanged.
 
 No route in the surface failed to resolve in what I walked this time. Nothing asked me to change paths outside this stage's own folder, and I touched none.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+The question is whether this adapter binds every surface action and observation on the new target and nothing else. It does: both revision requests from build-slice-15-2 are answered and the adapter stays an adapter. For R-2.19, refusalEntries now reports a service message prefixed with inceptionPhase, prototypePhase or implementationPhase against the phase's own name (Inception, Prototype, Implementation) without the prefix, and the structured-field names now use the same spelling as the old target's binding. This only translates how the surface phrases a refusal and decides nothing about passing. For R-2.25, proposal-swu-view and proposal-twu-view are now bound against the served screen /opportunities/{sprint,team}-with-us/:opportunityId/proposals/:proposalId for the four members it shows: proposal identifier, Proposal section, History table and history entries. bindings.yaml matches the code. Every remaining member (scoring, screening, award, disqualify, stage tabs, scores, rank, wrong-stage message, offered score actions) stays unbound with a real reason saying the screen offers no such control or reading, which is a missing surface and not convenience. The proponent name, status and export link the earlier request mentioned have no member in the contract for these pages, so there was nothing to bind them to. Nothing under tests/acceptance changed, and the runner's own type check passed with no errors under adapters/new. The Company-field instruction owed by build (build-slice-15-2#1) is not settled here: the reference form still has only Name, Email address and Phone number, so it stays open. The ruling would change on evidence that the screen does offer a control the adapter reports as missing, or that a bound reading reports something other than what its criterion names.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `4c7bebe7bc4d173b30bfed1ec0ebc87f4a221487`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
