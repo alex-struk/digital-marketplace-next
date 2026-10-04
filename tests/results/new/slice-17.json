@@ -1,0 +1,532 @@
+{
+  "slice": 17,
+  "proposal": "build-slice-17-2",
+  "app_tree": "46ed0a7bae84efef0cd7bde6483120febec54a0f",
+  "at": "2026-10-04T13:10:31.321Z",
+  "verdict": "pass",
+  "adapter": "36f7a1f4b5657b5e449f02125c01513906b5dd9f",
+  "rechecked": [
+    "R-7.1",
+    "R-7.2",
+    "R-7.3",
+    "R-7.4",
+    "R-7.18",
+    "R-7.19",
+    "R-4.1",
+    "R-4.2",
+    "R-4.3",
+    "R-4.17",
+    "R-4.24",
+    "R-8.1",
+    "R-8.2",
+    "R-8.5",
+    "R-8.6",
+    "R-8.7",
+    "R-8.10",
+    "R-8.11",
+    "R-8.12",
+    "R-8.18",
+    "R-8.23",
+    "R-8.24",
+    "R-6.7",
+    "R-4.5",
+    "R-4.6",
+    "R-4.8",
+    "R-4.9",
+    "R-4.18",
+    "R-4.25",
+    "R-4.26",
+    "R-4.27",
+    "R-4.28",
+    "R-4.29",
+    "R-4.34",
+    "R-4.4",
+    "R-4.12",
+    "R-4.14",
+    "R-4.19",
+    "R-4.20",
+    "R-4.21",
+    "R-4.30",
+    "R-4.31",
+    "R-4.32",
+    "R-7.5",
+    "R-7.6",
+    "R-7.7",
+    "R-7.8",
+    "R-7.9",
+    "R-7.10",
+    "R-7.12",
+    "R-7.16",
+    "R-7.20",
+    "R-7.21",
+    "R-7.22",
+    "R-7.23",
+    "R-7.24",
+    "R-7.25",
+    "R-7.26",
+    "R-7.27",
+    "R-7.28",
+    "R-8.29",
+    "R-7.13",
+    "R-6.18",
+    "R-6.23",
+    "R-6.24",
+    "R-6.28",
+    "R-4.16",
+    "R-4.33",
+    "R-8.17",
+    "R-8.27",
+    "R-6.8",
+    "R-1.4",
+    "R-1.7",
+    "R-1.10",
+    "R-1.11",
+    "R-1.12",
+    "R-1.14",
+    "R-1.21",
+    "R-1.22",
+    "R-1.23",
+    "R-1.29",
+    "R-1.34",
+    "R-1.37",
+    "R-6.20",
+    "R-6.21",
+    "R-6.27",
+    "R-1.2",
+    "R-1.3",
+    "R-1.5",
+    "R-1.6",
+    "R-1.38",
+    "R-4.22",
+    "R-6.17",
+    "R-1.20",
+    "R-1.28",
+    "R-1.30",
+    "R-1.32",
+    "R-7.17",
+    "R-5.1",
+    "R-5.9",
+    "R-5.17",
+    "R-5.18",
+    "R-5.37",
+    "R-1.8",
+    "R-1.9",
+    "R-1.13",
+    "R-1.15",
+    "R-1.16",
+    "R-1.17",
+    "R-1.18",
+    "R-1.39",
+    "R-1.43",
+    "R-1.48",
+    "R-1.53",
+    "R-1.55",
+    "R-1.56",
+    "R-8.13",
+    "R-8.21",
+    "R-8.28",
+    "R-8.30",
+    "R-3.1",
+    "R-3.2",
+    "R-3.3",
+    "R-3.18",
+    "R-3.19",
+    "R-3.20",
+    "R-3.21",
+    "R-3.22",
+    "R-3.24",
+    "R-6.16",
+    "R-3.6",
+    "R-3.7",
+    "R-3.8",
+    "R-3.9",
+    "R-3.10",
+    "R-3.11",
+    "R-3.12",
+    "R-3.13",
+    "R-3.14",
+    "R-3.15",
+    "R-3.17",
+    "R-3.23",
+    "R-3.30",
+    "R-3.31",
+    "R-3.32",
+    "R-3.33",
+    "R-3.34",
+    "R-3.35",
+    "R-3.25",
+    "R-3.26",
+    "R-3.27",
+    "R-3.28",
+    "R-8.22",
+    "R-8.31",
+    "R-6.2",
+    "R-6.3",
+    "R-6.4",
+    "R-6.5",
+    "R-1.35",
+    "R-1.36",
+    "R-2.1",
+    "R-2.2",
+    "R-2.3",
+    "R-2.4",
+    "R-2.12",
+    "R-2.13",
+    "R-2.14",
+    "R-2.15",
+    "R-2.23",
+    "R-4.23",
+    "R-8.19",
+    "R-8.20",
+    "R-8.25",
+    "R-1.31",
+    "R-2.7",
+    "R-2.9",
+    "R-2.10",
+    "R-2.11",
+    "R-2.16",
+    "R-2.17",
+    "R-2.18",
+    "R-2.19",
+    "R-2.20",
+    "R-2.21",
+    "R-2.22",
+    "R-2.24",
+    "R-2.25",
+    "R-5.20",
+    "R-6.25",
+    "R-1.1",
+    "R-1.19",
+    "R-1.26",
+    "R-1.27",
+    "R-2.26",
+    "R-2.27",
+    "R-2.32",
+    "R-2.33",
+    "R-2.34",
+    "R-2.36"
+  ],
+  "rows": [
+    {
+      "id": "R-5.3",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.3.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "An evaluator holds at most one evaluation per proponent, and a second attempt is refused with a message saying they already have one. (Sprint With Us)",
+          "status": "passed"
+        },
+        {
+          "title": "An evaluator holds at most one evaluation per proponent, and a second attempt is refused with a message saying they already have one. (Team With Us)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "f2dcfbaa0831f0faf0a3df16283bf4bade09aeac",
+      "adapter": "36f7a1f4b5657b5e449f02125c01513906b5dd9f"
+    },
+    {
+      "id": "R-5.11",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.11.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "An individual evaluation may be read only by an administrator, the opportunity's owner, and the members of that opportunity's evaluation panel, at every stage (an administrator reads it past the question stages)",
+          "status": "passed"
+        },
+        {
+          "title": "An individual evaluation may be read only by an administrator, the opportunity's owner, and the members of that opportunity's evaluation panel, at every stage; passing the question stages does not open it to public sector employees with no connection to the opportunity",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "5fa36f640e420c10d63815d48e338ce8b26cf258",
+      "adapter": "36f7a1f4b5657b5e449f02125c01513906b5dd9f"
+    },
+    {
+      "id": "R-5.16",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.16.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the evaluation panel may be set while an opportunity is a draft",
+          "status": "passed"
+        },
+        {
+          "title": "the evaluation panel may be changed while an opportunity is under review",
+          "status": "passed"
+        },
+        {
+          "title": "the evaluation panel may be changed while an opportunity is published",
+          "status": "passed"
+        },
+        {
+          "title": "the evaluation panel may be changed while an opportunity is in individual question evaluation",
+          "status": "passed"
+        },
+        {
+          "title": "the evaluation panel is fixed from the consensus stage onwards",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "2ffba7b158f6c666b26d1caa0ac846858a4a36c8",
+      "adapter": "36f7a1f4b5657b5e449f02125c01513906b5dd9f"
+    },
+    {
+      "id": "R-5.19",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.19.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "A panel member may open an opportunity they sit on the panel for even before it is public",
+          "status": "passed"
+        },
+        {
+          "title": "A panel member's opportunity is listed for them under a separate heading for work they are evaluating",
+          "status": "passed"
+        },
+        {
+          "title": "A draft opportunity is not seen at all by a public sector employee who neither created it nor sits on its panel",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "533b730dfdfb64222646acbf6b7b3da4228518a8",
+      "adapter": "36f7a1f4b5657b5e449f02125c01513906b5dd9f"
+    },
+    {
+      "id": "R-5.21",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.21.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "Only a person marked as an evaluator on the panel may record an individual evaluation, and only while the opportunity is in individual question evaluation (the chair who is not an evaluator is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "Only a person marked as an evaluator on the panel may record an individual evaluation, and only while the opportunity is in individual question evaluation (the opportunity's owner who is not on the panel is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "Only a person marked as an evaluator on the panel may record an individual evaluation, and only while the opportunity is in individual question evaluation (an evaluator on the panel is refused while the opportunity is not in individual question evaluation)",
+          "status": "passed"
+        },
+        {
+          "title": "Only a person marked as an evaluator on the panel may record an individual evaluation, and only while the opportunity is in individual question evaluation (an evaluator on the panel may score)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "699db2e3c602095fb46a5da1c6d09a45c912b72f",
+      "adapter": "36f7a1f4b5657b5e449f02125c01513906b5dd9f"
+    },
+    {
+      "id": "R-5.22",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.22.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "An evaluation carries one score and one comment per question, the score being between zero and that question's maximum with at most two decimal places, and the comment being at least one word. (Sprint With Us: six on a five-point question is rejected)",
+          "status": "passed"
+        },
+        {
+          "title": "An evaluation carries one score and one comment per question, the score being between zero and that question's maximum with at most two decimal places, and the comment being at least one word. (Sprint With Us: an empty comment is rejected)",
+          "status": "passed"
+        },
+        {
+          "title": "An evaluation carries one score and one comment per question, the score being between zero and that question's maximum with at most two decimal places, and the comment being at least one word. (Team With Us: six on a five-point question is rejected)",
+          "status": "passed"
+        },
+        {
+          "title": "An evaluation carries one score and one comment per question, the score being between zero and that question's maximum with at most two decimal places, and the comment being at least one word. (Team With Us: an empty comment is rejected)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "1d92c8879dddd044863d4741b4da7fc554d3d044",
+      "adapter": "36f7a1f4b5657b5e449f02125c01513906b5dd9f"
+    },
+    {
+      "id": "R-5.23",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.23.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "Scores and comments are checked when an evaluation is submitted, not when it is saved as a draft",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "2c825263f27844de6a8afaf4b8e6981dc34cd622",
+      "adapter": "36f7a1f4b5657b5e449f02125c01513906b5dd9f"
+    },
+    {
+      "id": "R-5.24",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.24.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "An evaluator may change their own evaluation while it is still a draft and the opportunity is still in individual question evaluation",
+          "status": "passed"
+        },
+        {
+          "title": "Once submitted an evaluation cannot be changed at all",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "e0fe8c34b4b58e2a0a107041a06243129b48873a",
+      "adapter": "36f7a1f4b5657b5e449f02125c01513906b5dd9f"
+    },
+    {
+      "id": "R-5.25",
+      "version": 3,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.25.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "An evaluator can submit their scores for consensus only once they hold a complete evaluation, an in-range score and a comment for every question, for every proponent of the opportunity; until then submission is not offered and nothing is submitted. (with complete evaluations for two of three proponents, submission is not offered)",
+          "status": "passed"
+        },
+        {
+          "title": "An evaluator can submit their scores for consensus only once they hold a complete evaluation, an in-range score and a comment for every question, for every proponent of the opportunity; until then submission is not offered and nothing is submitted. (with complete evaluations for two of three proponents, nothing is submitted)",
+          "status": "passed"
+        },
+        {
+          "title": "An evaluator can submit their scores for consensus only once they hold a complete evaluation, an in-range score and a comment for every question, for every proponent of the opportunity; until then submission is not offered and nothing is submitted. (once every proponent is complete, submission is offered and goes through)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "f50790b2d86b785d463efb75eff0e50f05b9fa31",
+      "adapter": "36f7a1f4b5657b5e449f02125c01513906b5dd9f"
+    },
+    {
+      "id": "R-5.26",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.26.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "A request to submit one evaluation on its own is refused; submission is only accepted as the whole set for the opportunity",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "5783cff0c95b074e2f864aab33dfa9ac4e17ca6d",
+      "adapter": "36f7a1f4b5657b5e449f02125c01513906b5dd9f"
+    },
+    {
+      "id": "R-5.27",
+      "version": 2,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.27.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "an opportunity moves to consensus once every evaluator has submitted, and the chair and the owner are told",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "6552f935fd968915f9c4817f5d8960b2d2bef72d",
+      "adapter": "36f7a1f4b5657b5e449f02125c01513906b5dd9f"
+    },
+    {
+      "id": "R-5.34",
+      "version": 2,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.34.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "The tools for evaluating an opportunity are split by role: an evaluator is offered the evaluation instructions and the individual evaluations, and not the consensus or the panel",
+          "status": "passed"
+        },
+        {
+          "title": "The tools for evaluating an opportunity are split by role: the chair is offered the consensus, and not the evaluation instructions, the individual evaluations or the panel",
+          "status": "passed"
+        },
+        {
+          "title": "The tools for evaluating an opportunity are split by role: the opportunity's owner is offered the consensus and the panel, and not the evaluation instructions or the individual evaluations",
+          "status": "passed"
+        },
+        {
+          "title": "The tools for evaluating an opportunity are split by role: an unrelated public sector employee is offered none of them",
+          "status": "passed"
+        },
+        {
+          "title": "The tools for evaluating an opportunity are split by role: an administrator sees the consensus list and the panel itself",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "c195369b90bc8ccf7c8408b0a294205b8d1bcd5c",
+      "adapter": "36f7a1f4b5657b5e449f02125c01513906b5dd9f"
+    },
+    {
+      "id": "R-5.35",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.35.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "an evaluator's scores are saved when they move to the next proponent",
+          "status": "passed"
+        },
+        {
+          "title": "an evaluator works through the proponents in anonymous-proponent order",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "a2db2580e9e549cfbe27e2582476b3afd9a76948",
+      "adapter": "36f7a1f4b5657b5e449f02125c01513906b5dd9f"
+    },
+    {
+      "id": "R-1.24",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.24.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "On closing a Sprint With Us or Team With Us opportunity, each submitted proposal is given an anonymous proponent name for use during evaluation. (Sprint With Us)",
+          "status": "passed"
+        },
+        {
+          "title": "On closing a Sprint With Us or Team With Us opportunity, each submitted proposal is given an anonymous proponent name for use during evaluation. (Team With Us)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "241db9c6ab74783cfeadad4fe4ff059ccd60c965",
+      "adapter": "36f7a1f4b5657b5e449f02125c01513906b5dd9f"
+    },
+    {
+      "id": "R-2.5",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.5.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "when an opportunity closes, every proposal submitted against it moves to the first review stage of that program",
+          "status": "passed"
+        },
+        {
+          "title": "when an opportunity closes, every proposal submitted against it is given an anonymous proponent name numbered from one",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "f734c974184fbfd11e9eea6bf695f3a496dfe70e",
+      "adapter": "36f7a1f4b5657b5e449f02125c01513906b5dd9f"
+    }
+  ]
+}

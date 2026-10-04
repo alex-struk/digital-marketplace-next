@@ -17,16 +17,28 @@ import { OtherProgramsService } from "./other-programs.service";
 import { PrismaCwuOpportunityStore } from "./prisma-cwu-opportunity.store";
 import { PrismaOtherProgramsStore } from "./prisma-other-programs.store";
 import { OtherProgramOpportunitiesController } from "./other-program-opportunities.controller";
+import { INDIVIDUAL_EVALUATION_STORE } from "../evaluations/individual-evaluation";
+import { IndividualEvaluationsController } from "../evaluations/individual-evaluations.controller";
+import { IndividualEvaluationsService } from "../evaluations/individual-evaluations.service";
+import { PrismaIndividualEvaluationStore } from "../evaluations/prisma-individual-evaluation.store";
 
-/** Opportunities in all three programs. */
+/** Opportunities in all three programs, and the individual evaluation of Sprint With Us and Team With Us ones. */
 @Module({
   imports: [UsersModule, FileStoreModule, WatchingModule],
-  controllers: [CwuOpportunitiesController, OtherProgramOpportunitiesController, OtherProgramListsController, MetricsController],
+  controllers: [
+    CwuOpportunitiesController,
+    OtherProgramOpportunitiesController,
+    OtherProgramListsController,
+    MetricsController,
+    IndividualEvaluationsController,
+  ],
   providers: [
     CwuOpportunitiesService,
     OtherProgramsService,
     MetricsService,
     OpportunityRunningService,
+    IndividualEvaluationsService,
+    { provide: INDIVIDUAL_EVALUATION_STORE, useClass: PrismaIndividualEvaluationStore },
     { provide: CWU_OPPORTUNITY_STORE, useClass: PrismaCwuOpportunityStore },
     { provide: OPPORTUNITY_RECORDS_STORE, useClass: PrismaOpportunityRecordsStore },
     { provide: OTHER_PROGRAMS_STORE, useClass: PrismaOtherProgramsStore },

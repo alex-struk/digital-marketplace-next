@@ -52,6 +52,34 @@ export interface OtherProgramOpportunity extends ListedOpportunity {
   readonly reporting?: Reporting;
   /** Once awarded (R-1.27). */
   readonly successfulProponent?: SuccessfulProponent;
+  /** To its panel's members, once it has closed: the proponents, by anonymous name and in that order (R-5.35). */
+  readonly proponents?: readonly Proponent[];
+}
+
+/** A proponent the panel evaluates, by anonymous name only, with its answers (R-5.35). */
+export interface Proponent {
+  readonly id: string;
+  readonly anonymousProponentName: string;
+  readonly status: string | null;
+  readonly responses: readonly { readonly order: number; readonly response: string }[];
+}
+
+export function readProponents(value: unknown): Proponent[] {
+  return list(value).flatMap((record) =>
+    typeof record.id === "string"
+      ? [
+          {
+            id: record.id,
+            anonymousProponentName: text(record.anonymousProponentName),
+            status: typeof record.status === "string" ? record.status : null,
+            responses: list(record.responses).map((response) => ({
+              order: typeof response.order === "number" ? response.order : 0,
+              response: text(response.response),
+            })),
+          },
+        ]
+      : [],
+  );
 }
 
 export interface StoredPhase {
@@ -227,6 +255,7 @@ export function readOtherProgramOpportunity(program: OtherProgram, value: unknow
     ...(readSuccessfulProponent(record.successfulProponent)
       ? { successfulProponent: readSuccessfulProponent(record.successfulProponent)! }
       : {}),
+    ...(Array.isArray(record.proponents) ? { proponents: readProponents(record.proponents) } : {}),
   };
 }
 

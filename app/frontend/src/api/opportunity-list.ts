@@ -18,6 +18,24 @@ export interface ListedOpportunity extends Listable {
   readonly value: { readonly term: string; readonly amount: number };
   /** Whether the reader watches it (R-1.5). */
   readonly subscribed: boolean;
+  /** Sprint With Us and Team With Us: its panel, to whoever may see it, so a member finds it (R-5.19). */
+  readonly evaluationPanel?: readonly ListedPanelSeat[];
+}
+
+/** One seat on an opportunity's evaluation panel, by the person in it. */
+export interface ListedPanelSeat {
+  readonly user: Person;
+  readonly evaluator: boolean;
+  readonly chair: boolean;
+}
+
+function readPanelSeats(value: unknown): ListedPanelSeat[] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((item) => {
+    const record = typeof item === "object" && item !== null ? (item as Record<string, unknown>) : {};
+    const user = readPerson(record.user);
+    return user ? [{ user, evaluator: record.evaluator === true, chair: record.chair === true }] : [];
+  });
 }
 
 const VALUE_TERMS: Readonly<Record<Program, string>> = {
@@ -59,6 +77,7 @@ export function readListedOpportunity(program: Program, value: unknown): ListedO
     ...("createdBy" in record ? { createdBy: readPerson(record.createdBy) } : {}),
     value: { term: VALUE_TERMS[program], amount: typeof amount === "number" ? amount : 0 },
     subscribed: record.subscribed === true,
+    ...(Array.isArray(record.evaluationPanel) ? { evaluationPanel: readPanelSeats(record.evaluationPanel) } : {}),
   };
 }
 

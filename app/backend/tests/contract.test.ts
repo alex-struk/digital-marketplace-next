@@ -2,6 +2,8 @@ import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   loadContract,
+  SINGLE_EVALUATION_ROUTES,
+  withAnyEvaluationTag,
   withCurrentSession,
   withIdentityProviderCallback,
   withLocalServer,
@@ -125,6 +127,22 @@ describe("the contract the boundary validates against", () => {
     expect((contract.paths as Record<string, any>)["/auth/sign-in"]).toEqual(
       (loadContract(CONTRACT).paths as Record<string, any>)["/auth/sign-in"],
     );
+  });
+
+  it("leaves the tag sent to one evaluation to the service, which refuses all but edit as unrecognised (R-5.26)", () => {
+    const original = loadContract(CONTRACT).paths as Record<string, any>;
+    const relaxed = withAnyEvaluationTag(loadContract(CONTRACT)).paths as Record<string, any>;
+    expect(SINGLE_EVALUATION_ROUTES).toHaveLength(2);
+    for (const route of SINGLE_EVALUATION_ROUTES) {
+      expect(original[route].put).toBeDefined();
+      expect(relaxed[route].put.requestBody).toEqual({
+        required: true,
+        content: { "application/json": { schema: { $ref: "#/components/schemas/TaggedRequestBody" } } },
+      });
+      // Reading the evaluation, and everything else about the change, is as the contract wrote it.
+      expect(relaxed[route].get).toEqual(original[route].get);
+      expect(relaxed[route].put.parameters).toEqual(original[route].put.parameters);
+    }
   });
 });
 

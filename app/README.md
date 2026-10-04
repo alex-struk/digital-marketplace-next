@@ -239,6 +239,30 @@ refusals. Sprint With Us and Team With Us proposals are awarded and disqualified
 their own read-only pages, and once decided the vendor's manage page shows a Scoresheet tab with
 each stage's score, the weighted total and the rank, read from what the evaluation stored.
 
+## Individual evaluation
+
+When a Sprint With Us or Team With Us opportunity closes, each evaluator on its panel scores every
+proponent on their own. A public sector employee's `/dashboard` lists the opportunities whose panel
+they sit on, drafts included, under "Evaluations". The list of opportunities carries each one's
+panel to whoever may see it. A row opens the manage page. There an evaluator is offered the program's
+instructions (`?tab=instructions`, the page `<program>-evaluation-instructions`) and their own list
+(`?tab=evaluation`). The chair, the owner and administrators are offered Consensus once the
+opportunity has closed. Nobody else is offered any of these, and asking for one by address shows the
+missing page.
+
+The list shows the proponents by anonymous name, in that order. They are read from the opportunity
+itself (`proponents`, given only to the panel). Each proponent is scored at
+`/opportunities/<program>/<id>/proposals/<proposalId>/<team-questions|resource-questions>/evaluations/create`,
+and the evaluator's own evaluation is at `.../evaluations/<their id>/edit`. Each question gets one
+score and one comment. Every save keeps what was entered, and the form lists what would stop it being
+submitted. The whole set is submitted from the list (`submitIndividualQuestionEvaluations` on the
+opportunity), only once every proponent's evaluation is complete. When the last evaluator submits,
+the opportunity moves to consensus by itself, and the chair and the owner are emailed. Who may read
+whose evaluation, and at which stage, is `mayReadIndividualEvaluation` in
+`backend/src/rules/individual-evaluation.ts`. The service is `backend/src/evaluations/` and the
+screens are `frontend/src/screens/evaluation-*.tsx`. Decision record 0062 has the answers and
+refusals.
+
 ## Organizations
 
 Anybody browses at `/organizations`: every organization not archived, by legal name, fifty to a

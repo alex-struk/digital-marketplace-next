@@ -11,6 +11,7 @@ import {
 } from "../rules/other-program-drafts";
 import { Person, SuccessfulProponent } from "./cwu-opportunity";
 import type { RunningAnswer } from "./opportunity-running.service";
+import type { ProponentAnswer } from "../evaluations/individual-evaluations.service";
 
 /** The two programs with an evaluation panel: Sprint With Us and Team With Us. */
 export type { OtherProgram } from "../rules/other-program-drafts";
@@ -41,6 +42,8 @@ export interface StoredSummary {
   readonly startDate: CalendarDay | null;
   readonly completionDate: CalendarDay | null;
   readonly budget: number;
+  /** Its current evaluation panel, read for the list and for one opportunity alike (R-5.19). */
+  readonly panel?: StoredDetails["panel"];
   /** What the program itself holds, read for one opportunity and not for the list. */
   readonly details?: StoredDetails;
 }
@@ -158,6 +161,11 @@ export interface SummaryAnswer {
   readonly evaluationPanel?: readonly { readonly user: Person; readonly evaluator: boolean; readonly chair: boolean; readonly order: number }[];
   /** The files it carries, readable by whoever may read it (R-8.20, R-8.25). */
   readonly attachments?: readonly FileRecord[];
+  /**
+   * On reading one opportunity, to the members of its panel once it has closed: the proponents being
+   * evaluated, by anonymous name and in that order, with their answers (R-5.35; decision record 0062).
+   */
+  readonly proponents?: readonly ProponentAnswer[];
   /** Once awarded: the winner's name to everyone, contact details to whoever may see scores (R-1.27). */
   readonly successfulProponent?: { readonly name: string; readonly email?: string | null; readonly phone?: string | null };
   // On reading one opportunity, what running it has gathered (decision record 0043).

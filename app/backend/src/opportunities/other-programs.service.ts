@@ -60,6 +60,7 @@ import {
 } from "../rules/other-program-drafts";
 import type { AccountKind } from "../rules/users";
 import { WatchingService } from "../watching/watching.service";
+import { IndividualEvaluationsService } from "../evaluations/individual-evaluations.service";
 import { CWU_OPPORTUNITY_STORE, CwuOpportunityStore } from "./cwu-opportunity";
 import { ATTACHMENT_ACCESS, AttachmentAccess } from "./attachment-access";
 import { ATTACHMENT_NOT_READABLE, CLOCK, Clock } from "./cwu-opportunities.service";
@@ -104,24 +105,27 @@ export class OtherProgramsService {
     private readonly mailer: Mailer,
     @Inject(MAIL_SETTINGS) private readonly mail: Pick<MailSettings, "serviceOrigin" | "batchSize">,
     @Inject(ATTACHMENT_ACCESS) private readonly files: AttachmentAccess,
+    private readonly evaluations: IndividualEvaluationsService,
   ) {}
 
   async list(viewer: OpportunityViewer | null, program: OtherProgram): Promise<SummaryAnswer[]> {
     const [all, watched] = await Promise.all([this.store.list(program), this.watching.watchedBy(viewer, program)]);
     return all
-      .filter((opportunity) => mayReadOpportunity(viewer, standingOf(opportunity)))
+      // A panel member finds a draft they sit on the panel of, as they may open it (R-5.19).
+      .filter((opportunity) => mayReadOther(viewer, opportunity))
       .map((opportunity) => summaryAnswerFor(opportunity, viewer, watched.has(opportunity.id)));
   }
 
   /** One opportunity, for someone who may read it; one they may not is answered as one not there (R-1.2). */
   async read(viewer: OpportunityViewer | null, program: OtherProgram, id: string): Promise<SummaryAnswer> {
     const found = await this.readable(viewer, program, id);
-    const [watched, running, winner] = await Promise.all([
+    const [watched, running, winner, proponents] = await Promise.all([
       this.watching.watchedBy(viewer, program),
       this.running.answerFor(viewer, subjectOf(found)),
       found.status === "AWARDED" ? this.store.successfulProponent(program, found.id) : Promise.resolve(null),
+      this.evaluations.proponentsFor(viewer, found),
     ]);
-    const answer = { ...summaryAnswerFor(found, viewer, watched.has(found.id)), ...running };
+    const answer = { ...summaryAnswerFor(found, viewer, watched.has(found.id)), ...running, ...(proponents ? { proponents } : {}) };
     if (!winner) return answer;
     // The winner's name to everyone; their contact details only to whoever may see scores (R-1.27).
     const seesScores = maySeeProposalScores(viewer, { createdBy: found.createdBy?.id ?? null });
@@ -162,7 +166,8 @@ export class OtherProgramsService {
   /**
    * One tagged change: an edit, a submission for review, publication, a new evaluation panel, or
    * running the opportunity under way — cancelling it (R-1.28), adding an addendum (R-1.32) or, for
-   * Sprint With Us, a private note (R-1.33). Moving it along its evaluation stages is later slices'.
+   * Sprint With Us, a private note (R-1.33) — or an evaluator submitting their scores, which may move
+   * it to consensus (R-5.25 to R-5.27). Its later evaluation stages are not yet taken.
    */
   async change(
     viewer: OpportunityViewer | null,
@@ -195,6 +200,10 @@ export class OtherProgramsService {
         break;
       case "addNote":
         await this.running.addNote(viewer, subject, change.value);
+        break;
+      case "submitIndividualQuestionEvaluations":
+        // An evaluator's whole set of scores, for consensus (R-5.25 to R-5.27).
+        await this.evaluations.submitAll(viewer, current);
         break;
       default:
         throw new BadRequestException([NOT_YET_AVAILABLE]);
@@ -417,7 +426,7 @@ function panelOf(opportunity: StoredSummary): PanelMemberDraft[] {
 
 const isStaff = (viewer: OpportunityViewer | null) => viewer?.type === "GOV" || viewer?.type === "ADMIN";
 const sitsOnPanel = (viewer: OpportunityViewer | null, opportunity: StoredSummary) =>
-  viewer !== null && (opportunity.details?.panel ?? []).some((member) => member.user.id === viewer.id);
+  viewer !== null && (opportunity.panel ?? opportunity.details?.panel ?? []).some((member) => member.user.id === viewer.id);
 
 /**
  * Who reads an opportunity: as in every program (R-1.2, R-1.3), and also a public sector employee
@@ -494,7 +503,12 @@ export function summaryAnswerFor(opportunity: StoredSummary, viewer: Opportunity
       ? { totalMaxBudget: opportunity.budget }
       : { startDate: opportunity.startDate ?? opportunity.assignmentDate, completionDate: opportunity.completionDate, maxBudget: opportunity.budget }),
     subscribed,
-    ...(opportunity.details ? programContentOf(opportunity.program, opportunity.details, maySeePanel(viewer, opportunity)) : {}),
+    ...(opportunity.details
+      ? programContentOf(opportunity.program, opportunity.details, maySeePanel(viewer, opportunity))
+      : // On the list, the panel alone, to whoever may see it, so a panel member finds what they evaluate (R-5.19).
+        opportunity.panel && maySeePanel(viewer, opportunity)
+        ? { evaluationPanel: opportunity.panel.map((member, order) => ({ ...member, order })) }
+        : {}),
   };
 }
 

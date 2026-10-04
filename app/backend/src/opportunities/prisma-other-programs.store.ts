@@ -21,8 +21,17 @@ const history = { where: { status: { not: null } }, orderBy: { createdAt: "desc"
 const panelMembers = { orderBy: { order: "asc" }, include: { users: person } } as const;
 const questions = { orderBy: { order: "asc" } } as const;
 
-const swuInclude = { users: person, swuOpportunityVersions: latestVersion, swuOpportunityStatuses: history } as const;
-const twuInclude = { users: person, twuOpportunityVersions: latestVersion, twuOpportunityStatuses: history } as const;
+// The list reads each opportunity's current panel too, so a panel member finds it (R-5.19).
+const swuInclude = {
+  users: person,
+  swuOpportunityVersions: { ...latestVersion, include: { users: person, swuEvaluationPanelMembers: panelMembers } },
+  swuOpportunityStatuses: history,
+} as const;
+const twuInclude = {
+  users: person,
+  twuOpportunityVersions: { ...latestVersion, include: { users: person, twuEvaluationPanelMembers: panelMembers } },
+  twuOpportunityStatuses: history,
+} as const;
 
 // One opportunity is read with what its program holds as well.
 const swuWithDetails = {
@@ -77,6 +86,7 @@ interface Row {
         budget: number;
       }
     | undefined;
+  panel?: StoredDetails["panel"];
   details?: StoredDetails;
 }
 
@@ -314,12 +324,17 @@ async function panelOf(tx: Prisma.TransactionClient, named: readonly PanelMember
   return kept.length > 0 ? kept : [{ user: by, evaluator: true, chair: true }];
 }
 
+type PanelRow = { users: Person; evaluator: boolean; chair: boolean };
+
 type SwuRecord = {
   id: string;
   createdAt: Date;
   users: Person | null;
   swuOpportunityStatuses: { status: string | null; createdAt: Date }[];
-  swuOpportunityVersions: (Omit<NonNullable<Row["version"]>, "budget" | "startDate" | "completionDate"> & { totalMaxBudget: number })[];
+  swuOpportunityVersions: (Omit<NonNullable<Row["version"]>, "budget" | "startDate" | "completionDate"> & {
+    totalMaxBudget: number;
+    swuEvaluationPanelMembers: PanelRow[];
+  })[];
 };
 
 type TwuRecord = {
@@ -327,7 +342,7 @@ type TwuRecord = {
   createdAt: Date;
   users: Person | null;
   twuOpportunityStatuses: { status: string | null; createdAt: Date }[];
-  twuOpportunityVersions: (Omit<NonNullable<Row["version"]>, "budget"> & { maxBudget: number })[];
+  twuOpportunityVersions: (Omit<NonNullable<Row["version"]>, "budget"> & { maxBudget: number; twuEvaluationPanelMembers: PanelRow[] })[];
 };
 
 function swuRow(row: SwuRecord): Row {
@@ -338,6 +353,7 @@ function swuRow(row: SwuRecord): Row {
     users: row.users,
     statuses: row.swuOpportunityStatuses,
     version: version && { ...version, budget: version.totalMaxBudget, startDate: null, completionDate: null },
+    panel: version?.swuEvaluationPanelMembers.map(panelMemberOf),
   };
 }
 
@@ -349,6 +365,7 @@ function twuRow(row: TwuRecord): Row {
     users: row.users,
     statuses: row.twuOpportunityStatuses,
     version: version && { ...version, budget: version.maxBudget },
+    panel: version?.twuEvaluationPanelMembers.map(panelMemberOf),
   };
 }
 
@@ -447,6 +464,7 @@ function asSummary(program: OtherProgram, row: Row): StoredSummary | null {
     startDate: version.startDate ? pacificDayOf(version.startDate) : null,
     completionDate: version.completionDate ? pacificDayOf(version.completionDate) : null,
     budget: version.budget,
+    ...(row.details ? { panel: row.details.panel } : row.panel ? { panel: row.panel } : {}),
     ...(row.details ? { details: row.details } : {}),
   };
 }
