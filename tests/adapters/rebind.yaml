@@ -11129,6 +11129,11 @@ rebind:
     app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
     by: runner:verify
     at: 2026-10-04T12:06:18.445Z
+    closed: &a49
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-04T12:27:42.750Z
   - id: R-5.16
     target: new
     why: "unbound: evaluation-individual-create-swu.enter_question_score —
@@ -11188,6 +11193,7 @@ rebind:
     app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
     by: runner:verify
     at: 2026-10-04T12:06:18.445Z
+    closed: *a49
   - id: R-5.19
     target: new
     why: "unbound: evaluation-panel-dashboard.evaluations_tab — walked on the
@@ -11199,6 +11205,7 @@ rebind:
     app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
     by: runner:verify
     at: 2026-10-04T12:06:18.445Z
+    closed: *a49
   - id: R-5.21
     target: new
     why: "unbound: evaluation-individual-create-swu.enter_question_score —
@@ -11210,6 +11217,7 @@ rebind:
     app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
     by: runner:verify
     at: 2026-10-04T12:06:18.445Z
+    closed: *a49
   - id: R-5.22
     target: new
     why: "unbound: evaluation-individual-create-swu.enter_question_score —
@@ -11320,6 +11328,7 @@ rebind:
     app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
     by: runner:verify
     at: 2026-10-04T12:06:18.445Z
+    closed: *a49
   - id: R-5.23
     target: new
     why: "unbound: evaluation-individual-create-swu.enter_question_score —
@@ -11379,6 +11388,7 @@ rebind:
     app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
     by: runner:verify
     at: 2026-10-04T12:06:18.445Z
+    closed: *a49
   - id: R-5.24
     target: new
     why: "unbound: evaluation-individual-create-swu.enter_question_score —
@@ -11438,6 +11448,7 @@ rebind:
     app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
     by: runner:verify
     at: 2026-10-04T12:06:18.445Z
+    closed: *a49
   - id: R-5.25
     target: new
     why: "unbound: evaluation-individual-create-swu.enter_question_score —
@@ -11497,6 +11508,7 @@ rebind:
     app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
     by: runner:verify
     at: 2026-10-04T12:06:18.445Z
+    closed: *a49
   - id: R-5.26
     target: new
     why: "unbound: evaluation-individual-create-swu.enter_question_score —
@@ -11556,6 +11568,7 @@ rebind:
     app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
     by: runner:verify
     at: 2026-10-04T12:06:18.445Z
+    closed: *a49
   - id: R-5.27
     target: new
     why: "unbound: evaluation-individual-create-swu.enter_question_score —
@@ -11615,6 +11628,7 @@ rebind:
     app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
     by: runner:verify
     at: 2026-10-04T12:06:18.445Z
+    closed: *a49
   - id: R-5.28
     target: new
     why: "unbound: evaluation-individual-create-swu.enter_question_score —
@@ -11674,6 +11688,7 @@ rebind:
     app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
     by: runner:verify
     at: 2026-10-04T12:06:18.445Z
+    closed: *a49
   - id: R-5.35
     target: new
     why: 'unbound: evaluation-individual-list-swu.evaluation_status — the management
@@ -11702,6 +11717,7 @@ rebind:
     app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
     by: runner:verify
     at: 2026-10-04T12:06:18.445Z
+    closed: *a49
   - id: R-5.36
     target: new
     why: "unbound: evaluation-individual-create-swu.enter_question_score —
@@ -11812,6 +11828,7 @@ rebind:
     app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
     by: runner:verify
     at: 2026-10-04T12:06:18.445Z
+    closed: *a49
   - id: R-1.24
     target: new
     why: "unbound: evaluation-individual-list-swu.anonymous_proponent_name — the
@@ -11826,6 +11843,7 @@ rebind:
     app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
     by: runner:verify
     at: 2026-10-04T12:06:18.445Z
+    closed: *a49
   - id: R-2.5
     target: new
     why: 'unbound: evaluation-individual-list-swu.open — the management screen
@@ -11845,3 +11863,4 @@ rebind:
     app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
     by: runner:verify
     at: 2026-10-04T12:06:18.445Z
+    closed: *a49
