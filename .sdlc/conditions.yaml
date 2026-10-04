@@ -3239,3 +3239,39 @@ conditions:
         tests/adapters/new/index.ts
       by: agent:reviewer
       at: 2026-10-04T14:05:08.656Z
+  - ref: build-slice-18-2#2
+    text: "R-6.15, in the case \"the notice sent to an opportunity's owner\": Error:
+      a notice that reached more than one of the people — Expected: > 0 —
+      Received:   0 — at tests/acceptance/notifications/R-6.15.spec.ts:96 — its
+      last steps: caughtMessage.copiedRecipients() at
+      /opportunities/team-with-us/00000000-0000-4000-8000-000000000801/edit?tab\
+      =consensus read \"\" → caughtMessage.open({messageId}) at
+      /opportunities/team-with-us/00000000-0000-4000-8000-000000000801/edit?tab\
+      =consensus → caughtMessage.visibleRecipients() at
+      /opportunities/team-with-us/00000000-0000-4000-8000-000000000801/edit?tab\
+      =consensus read \"donotreply@example.test staff.one@example.test\" →
+      caughtMessage.copiedRecipients() at
+      /opportunities/team-with-us/00000000-0000-4000-8000-000000000801/edit?tab\
+      =consensus read \"\" — the page as it failed:
+      .sdlc/evidence/slice-18/R-6.15.png, .sdlc/evidence/slice-18/R-6.15.txt"
+    from: build-slice-18-2
+    family: build-slice-18
+    gate: G3
+    stage: build
+    by: agent:reviewer
+    at: 2026-10-04T14:14:40.570Z
+  - ref: build-slice-18-2#3
+    text: "R-6.15: app/backend/src/mail/message.ts addressedToEach and
+      app/backend/src/mail/mailer.ts (alsoToService) send each reader a copy
+      where they are a visible recipient. The criterion requires a
+      multi-recipient notice, including the panel, chair and owner notices in
+      app/backend/src/evaluations/consensus.service.ts, to carry the batch as
+      blind copies with the service's own address as the only visible recipient.
+      Change the staff notices to that form, and update decision record 0063 so
+      it no longer records the one-copy-per-reader departure."
+    from: build-slice-18-2
+    family: build-slice-18
+    gate: G3
+    stage: build
+    by: agent:reviewer
+    at: 2026-10-04T14:14:40.570Z
