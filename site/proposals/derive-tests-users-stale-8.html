@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-users-stale-8 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">605</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">599</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">490</span></a></li><li><a href="../runs.html">Run log <span class="count">22</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-users-stale-8</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-04 10:24</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.288 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the users criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I rewrote the test for the one criterion I was given, R-4.2 v1, in <code>tests/acceptance/users/R-4.2.spec.ts</code>.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.288 (Claude Code))</p>
+<p>I rewrote the test for the one criterion I was given, R-4.2 v1, in <code>tests/acceptance/users/R-4.2.spec.ts</code>. It now has the new header (spec@658792c3…, derived 2026-10-04). I did not run it, and I could not type-check it because the workspace has no installed dependencies.</p>
+<p><strong>What the ruling found.</strong> The old test checked the &quot;no email address&quot; case by requiring the mail catcher to be completely empty after the first sign-in. The criterion only says no welcome message is attempted for that person. Other criteria (R-1.1 and R-5.20) make that same sign-in send closing notices, so a correct application would still fail the old test.</p>
+<p><strong>What the new test does.</strong> It has one test for each outcome. Both tests now look only for a welcome message, which they recognise by a subject containing &quot;welcome&quot;. Neither test counts messages, so other mail sent by the same sign-in no longer matters.</p>
+<ul><li><strong>Person with an email address:</strong> the test signs in as <code>persona.firstTimeVendor</code> and reads the shared address from the new account&#39;s own profile page, because the contract does not state it. It waits up to 10 seconds for a message with a welcoming subject to reach that address. It then opens that message and checks that it includes a link to sign in, which is what the criterion&#39;s given/when/then states.</li><li><strong>Person with no email address:</strong> the test signs in as <code>persona.firstTimeVendorWithoutEmail</code> and confirms the account exists because the profile shows a user identifier. It waits the same 10 seconds, then checks that no message subject in the catcher matches &quot;welcome&quot;. There is no address to search by, so it checks every subject in the catcher.</li></ul>
+<p><strong>Choices someone may want to revisit:</strong></p>
+<ul><li>The old positive test took the first message sent to the new address, which could have been one of the closing notices. It now picks a message with a welcoming subject.</li><li>I dropped the old test&#39;s check that the no-email person&#39;s profile shows a blank email field. The persona already promises that, and the criterion asks nothing about the profile.</li><li>Telling a welcome message apart by its subject is an assumption. The contract has no observation that labels a message&#39;s purpose. Something like <code>caughtMessage.kind()</code>, or a way to filter the catcher by notification type, would make the test exact.</li></ul>
+<p><strong>Not testable:</strong> nothing. I made no changes to <code>not-testable.yaml</code>.</p>
+<p><strong>Missing surface:</strong> the one gap is that purpose observation; no other surface actions or observations were missing. Nothing asked me to change any read-only path, and I did not touch any.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-04 10:25.</p>
+<div class="body"><p>Question: do the rewritten R-4.2 tests follow from the users criterion and from nothing else? Approve. The positive test reads the new account&#39;s address from its own profile, waits for a message to it whose subject welcomes the person, and checks that message offers a link back to sign in, which asserts every clause of the criterion&#39;s then-line for a person with an address. The withheld test confirms the account exists and then checks that no message in the catcher welcomes anyone, which asserts that no welcome is attempted. It no longer requires an empty catcher, which was the overreach the test-overreaches ruling named, because R-1.1 and R-5.20 make the same sign-in send closing notices. The word &#39;welcome&#39; is the criterion&#39;s own, not an implementation detail. The oracle&#39;s welcome subject is &#39;Welcome to the Digital Marketplace&#39; (sources/old/src/back-end/lib/mailer/notifications/user.tsx:12), so the subject heuristic matches the reference behaviour. messageSubjects() is declared Promise&lt;string&gt;, so toMatch is well-typed, and the runner&#39;s typecheck passed. Dropping the sign-in-required and empty-email-field checks removes assertions the criterion never made. No selector, route, table or status code leaks in, and nothing was marked not-testable. The ruling would change if a target&#39;s welcome message carried no &#39;welcome&#39; in its subject or another notice&#39;s subject did. That would call for a contract observation of a message&#39;s purpose, which the proposal correctly names as the missing surface. This proposal does not touch build-slice-16-4#1, which is owed by build and stays open.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

@@ -2,6 +2,7 @@
 
 | When | Proposal | Gate | Verdict | By | Made by | Cost | Sample |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-10-04T10:25:19.667Z | derive-tests-users-stale-8 | G3 | approve | agent:reviewer | persona agent · claude claude-opus-5-5 | $0.3145468 |  |
 | 2026-10-04T09:49:31.866Z | bind-adapter-new-79 | G3 | approve | agent:reviewer | persona agent · claude claude-opus-5-5 | $0.386883 |  |
 | 2026-10-04T09:43:32.211Z | build-slice-16-3 | G3 | return | agent:tech-lead | persona agent · claude claude-opus-5-5 | $1.2585042 |  |
 | 2026-10-04T09:27:47.239Z | build-slice-16-2 | G3 | return | runner:verify | the runner, automatically |  |  |
