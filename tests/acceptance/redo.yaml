@@ -1003,6 +1003,11 @@ redo:
       its blind-copy list. Keep the vendor's own message checked by its To line,
       since it has a single recipient."
     verb: test-overreaches
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on proposals
+      by: runner:derive-tests
+      at: 2026-10-04T15:19:43.542Z
   - id: R-5.27
     version: 2
     why: "the check polls mail.messagesTo for the chair and the owner, a Mailpit to:
