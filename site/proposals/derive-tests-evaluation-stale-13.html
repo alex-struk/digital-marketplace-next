@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-evaluation-stale-13 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">620</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">614</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">499</span></a></li><li><a href="../runs.html">Run log <span class="count">22</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-evaluation-stale-13</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-04 14:32</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.288 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the evaluation criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I rewrote the tests for both criteria (R-5.31 and R-5.33) in <code>tests/acceptance/evaluation/</code>, with the two header lines given at spec@658792c3.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.288 (Claude Code))</p>
+<p>I rewrote the tests for both criteria (R-5.31 and R-5.33) in <code>tests/acceptance/evaluation/</code>, with the two header lines given at spec@658792c3. Neither criterion went into <code>not-testable.yaml</code>. I could not type-check or run them: this session didn&#39;t allow the TypeScript check, and there is no target or mail catcher here.</p>
+<p><strong>What the ruling faulted, and what changed.</strong> Both earlier tests found the notice only by searching for messages addressed visibly to the owner, an administrator or the chair. That can&#39;t work when the visible recipient is meant to be the service&#39;s own address alone (R-6.15). The new tests don&#39;t search by any reader&#39;s address.</p>
+<ul><li><strong>How they find the notice:</strong> they take every message identifier from the full message list, plus a search on the service&#39;s own address. They open each message by its identifier and read both its visible recipients and its blind copies.</li><li><strong>What they count as told:</strong> a person counts when their address is on either of those lists.</li><li><strong>Why not blind copies alone:</strong> the criterion says only that the people are told, not how they are addressed. Requiring blind copies would also assert R-6.15, which this test is not answerable for.</li></ul>
+<p><strong>R-5.31.</strong> The test takes the seeded closed Team With Us opportunity into consensus: both panel members submit their evaluations, and the chair records agreed scores for all three proponents. It then empties the mail catcher and checks it stays empty for two seconds, so nothing left over from earlier steps is counted. Then the chair submits the consensus. The test passes once the owner and both seeded administrators have each been reached by some message caught after the submission.</p>
+<p><strong>R-5.33.</strong> Same route, with every agreed score at five so that finalising is accepted past the fourth question&#39;s minimum. The chair submits, the catcher is emptied and checked the same way, and the consensus is finalised. The test passes once the chair and the owner have each been reached.</p>
+<p><strong>Choices made:</strong></p>
+<ul><li>The walk through the opportunity is unchanged from the earlier tests; the ruling didn&#39;t fault it. I didn&#39;t use the seeded opportunities that are already at consensus, because none of them both has its agreed scores still unsubmitted (which R-5.31 needs) and names its owner and panel in the seed (which both tests need).</li><li>Each criterion has one condition and one outcome, so each got one test, titled with the criterion&#39;s own statement.</li><li>Neither test checks a subject line. Emptying the catcher right before the action is what ties the messages to it, and the contract gives no subject text to compare against.</li></ul>
+<p><strong>Gaps.</strong> Every page, action and observation I needed exists in the surface, so nothing is owed to the contract. One gap, which these tests work around rather than need closed: the mail helper can only search by visible recipient. Opening a message by its identifier and reading its blind copies is only possible through the surface&#39;s caught-message pages. A mail helper call that opens a message and returns its blind copies would be the natural addition, but that file belongs to another stage, so I left it alone.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-04 14:33.</p>
+<div class="body"><p>Question: do the rewritten R-5.31 and R-5.33 tests follow from their criteria and from nothing else? Approved. The earlier return faulted both tests for finding the notice only by searching for mail addressed visibly to the owner, an administrator or the chair, which cannot work when R-6.15 makes the service&#39;s own address the only visible recipient. Both tests now collect every message caught after the action, open each one, and count a person as told when their address is a visible recipient or a blind copy. Each test then asserts exactly its criterion&#39;s outcome: R-5.31, that the owner and both administrators are reached after the chair submits the consensus; R-5.33, that the chair and the owner are reached after the consensus is finalised. Neither test asserts how people are addressed, so neither asserts R-6.15, and neither checks subject text the contract does not give. The catcher is emptied and confirmed to stay empty just before the action, which ties the messages to the submission or finalising and covers the &#39;notified that the consensus has been submitted / finalised&#39; clause. Every name the tests use comes from the contract (seed records, the sender address in observables.yaml, the caught-message pages), so no implementation detail leaked in. There are no not-testable entries to justify, and the runner&#39;s typecheck passed on this revision. What would change the ruling: evidence that a test passes on mail the action did not send, meaning the timing tie is not enough and message content would have to be asserted.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

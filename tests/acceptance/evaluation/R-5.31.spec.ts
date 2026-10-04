@@ -1,20 +1,33 @@
 // criterion: @R-5.31 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-13
+// provenance: blind, spec@658792c3c7c79540af12cf18a97a260fc2484f16, derived 2026-10-04
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
-// The catcher is emptied immediately before the chair submits the agreed scores, so what is
-// found afterwards belongs to that submission and not to the closing of the opportunity or
-// to the move into consensus.
+// The seeded closed Team With Us opportunity is taken into consensus with its agreed scores
+// complete: both panel members submit their individual evaluations, and the chair
+// (users.administratorOne, evaluation_panels.teamWithUs) records an agreed score for every
+// proponent. The opportunity's owner is users.staffOne, who created it; the administrators
+// are users.administratorOne and users.administratorTwo.
 //
-// The people the criterion says are told are the opportunity's owner, who is the public
-// sector employee the seed names as its creator, and both administrators the seed holds.
-// Who was told is read by visible recipient, which is the only read mail offers, and
-// observables.yaml says a message is addressed to one person with every other recipient a
-// blind copy. A notice to all three is therefore found under one of their addresses and not
-// the others. The test asserts that the notice arrived addressed to one of the three; that
-// it reached every one of them is the blind-copy list, which mail cannot read; it needs a
-// mail call over read_one_message.
+// The catcher is emptied, and read back as empty and still empty a moment later, immediately
+// before the chair submits, so that what is caught afterwards follows the submission.
+//
+// A notice may name its readers on any line, and a notice to several people carries them as
+// blind copies behind the service's own address, so no search by visible recipient is used to
+// find it. Every caught message is found through caught-message-list (and through the
+// catcher's search on the service's own address), opened by its identifier, and a person
+// counts as told when their address is among that message's visible recipients or its blind
+// copies.
+
+// email.configured_sender_address in spec/contract/observables.yaml.
+const serviceAddress = "donotreply@example.test";
+
+const settle = { timeout: 30000 };
+
+type Mail = {
+  clear(): Promise<void>;
+  messagesTo(address: string): Promise<Array<{ ID: string }>>;
+};
 
 const opportunityId = seed.opportunities.closedTeamWithUs.id;
 const proposals = [
@@ -23,6 +36,68 @@ const proposals = [
   seed.proposals.teamWithUsThree.id,
 ];
 const questions = [0, 1, 2, 3];
+
+async function readOrEmpty(read: () => Promise<string>): Promise<string> {
+  try {
+    return (await read()) ?? "";
+  } catch {
+    return "";
+  }
+}
+
+function addressesIn(text: string): string[] {
+  return [...new Set(text.toLowerCase().match(/[a-z0-9._%+-]+@[a-z0-9-]+(?:\.[a-z0-9-]+)+/g) ?? [])];
+}
+
+function identifiersIn(listing: string): string[] {
+  try {
+    const parsed = JSON.parse(listing);
+    if (Array.isArray(parsed)) return parsed.map(String);
+  } catch {
+    // Not JSON; read as a plain list below.
+  }
+  return listing
+    .split(/[\s,;[\]"']+/)
+    .map((id) => id.trim())
+    .filter(Boolean);
+}
+
+async function caughtCount(surface: Surface): Promise<number> {
+  await surface.caughtMessageList.open();
+  const count = Number.parseInt((await readOrEmpty(() => surface.caughtMessageList.messageCount())).trim(), 10);
+  return Number.isNaN(count) ? -1 : count;
+}
+
+async function emptyCatcher(surface: Surface, mail: Mail): Promise<void> {
+  let last = -1;
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    await mail.clear();
+    await expect.poll(() => caughtCount(surface), settle).toBe(0);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    last = await caughtCount(surface);
+    if (last === 0) return;
+  }
+  throw new Error(`the catcher could not be read back as empty before the consensus was submitted; last count ${last}`);
+}
+
+// Every address any caught message reached, visibly or as a blind copy.
+async function everyoneReached(surface: Surface, mail: Mail): Promise<Set<string>> {
+  const ids = new Set<string>();
+  await surface.caughtMessageList.open();
+  for (const id of identifiersIn(await readOrEmpty(() => surface.caughtMessageList.messageIdentifiers()))) ids.add(id);
+  for (const { ID } of await mail.messagesTo(serviceAddress)) ids.add(ID);
+  const reached = new Set<string>();
+  for (const messageId of ids) {
+    try {
+      await surface.caughtMessage.open({ messageId });
+    } catch {
+      continue;
+    }
+    for (const address of addressesIn(await readOrEmpty(() => surface.caughtMessage.copiedRecipients()))) reached.add(address);
+    for (const address of addressesIn(await readOrEmpty(() => surface.caughtMessage.visibleRecipients()))) reached.add(address);
+  }
+  return reached;
+}
 
 async function scoreEveryProponent(surface: Surface): Promise<void> {
   for (const proposalId of proposals) {
@@ -40,10 +115,11 @@ async function scoreEveryProponent(surface: Surface): Promise<void> {
   await surface.evaluationIndividualListTwu.submitScoresForConsensus();
 }
 
-test("when the chair submits the consensus, the opportunity's owner and every administrator are told", async ({
+test("When the chair submits the consensus, the opportunity's owner and every administrator are told.", async ({
   surface,
   mail,
 }) => {
+  test.slow();
   await surface.scheduledTransitionTrigger.open();
   await surface.scheduledTransitionTrigger.runPendingTransitions();
 
@@ -66,7 +142,7 @@ test("when the chair submits the consensus, the opportunity's owner and every ad
     await surface.evaluationConsensusCreateTwu.saveDraft();
   }
 
-  await mail.clear();
+  await emptyCatcher(surface, mail);
 
   await surface.evaluationConsensusListTwu.open({ opportunityId });
   await surface.evaluationConsensusListTwu.submitFinalConsensusScores();
@@ -76,13 +152,11 @@ test("when the chair submits the consensus, the opportunity's owner and every ad
     seed.users.staffOne.email,
     seed.users.administratorOne.email,
     seed.users.administratorTwo.email,
-  ];
+  ].map((address) => address.toLowerCase());
   await expect
-    .poll(
-      async () =>
-        (await Promise.all(ownerAndAdministrators.map((address) => mail.messagesTo(address)))).flat()
-          .length,
-      { timeout: 10000 },
-    )
-    .toBeGreaterThan(0);
+    .poll(async () => {
+      const reached = await everyoneReached(surface, mail);
+      return ownerAndAdministrators.filter((address) => !reached.has(address));
+    }, { ...settle, message: "the owner or administrators not told of the submitted consensus" })
+    .toEqual([]);
 });
