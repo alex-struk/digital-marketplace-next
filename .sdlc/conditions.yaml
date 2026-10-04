@@ -3115,3 +3115,15 @@ conditions:
     stage: build
     by: agent:tech-lead
     at: 2026-10-04T10:23:28.478Z
+    closed:
+      outcome: met
+      why: app/frontend/src/screens/proposal-cwu-create.tsx no longer treats a closed
+        or past-deadline Code With Us opportunity as missing, and
+        proposal-cwu-form.tsx (accepting=false) sends the submission to the
+        service, which shows the refusal 'This opportunity is no longer
+        accepting proposals.'. R-2.15 is rechecked in
+        tests/results/new/slice-16.json for build-slice-16-5 and is not among
+        the regressions. The Sprint With Us and Team With Us create screens are
+        unchanged.
+      by: agent:tech-lead
+      at: 2026-10-04T11:00:09.488Z
