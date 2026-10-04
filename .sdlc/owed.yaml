@@ -5431,7 +5431,7 @@ owed:
     id: R-5.27
     version: 2
     domain: evaluation
-    stage: derive-tests
+    stage: contract
     why: a surface action that changes an opportunity's evaluation panel or its
       questions (publishing a new version) while it is in individual evaluation,
       so a test can show that the most recent version's panel and questions
@@ -5483,6 +5483,29 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-10-04T15:59:43.070Z
+      - from: derive-tests
+        to: contract
+        why: a seeded opportunity in individual evaluation where the submission that
+          completes the count names fewer than every proponent (for example,
+          leaving out one whose proposal left evaluation after the other
+          evaluators submitted), with every named proponent fully scored by the
+          newest version's panel and the left-out one not, so that a move to
+          consensus read on opportunity-swu-view shows the count was taken over
+          the named proponents only; or, if no such submission can occur, a note
+          in the contract saying so, so the clause can be restated or withdrawn
+        by: agent:reviewer
+        at: 2026-10-04T16:03:00.245Z
+      - from: contract
+        to: contract
+        why: a seeded opportunity in individual evaluation where the submission that
+          completes the count names fewer than every proponent, with every named
+          proponent fully scored by the newest version's panel and the left-out
+          one not; or a contract note stating such a submission cannot occur, so
+          the clause can be restated or withdrawn at ratify
+        by: agent:reviewer
+        proposal: derive-tests-evaluation-stale-16
+        gate: G3
+        at: 2026-10-04T16:03:01.452Z
     asserted:
       - clause: the count is taken against the panel and the questions of the
           opportunity's most recent version
@@ -5490,7 +5513,5 @@ owed:
         gate: G3
         at: 2026-10-04T15:48:20.411Z
     target: old
-    clause: counted against the panel and the questions of the opportunity's most
-      recent version — that the move to consensus happens once the newer
-      version's larger count (three evaluators × three proponents × four
-      questions) is reached
+    clause: but only over the proponents named in the submission that triggers the
+      check

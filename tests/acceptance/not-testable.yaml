@@ -174,3 +174,23 @@ criteria:
       property of the migration rather than of anything the running service
       answers with. No addition to the surface would help; this is a claim a
       human accepts about the rebuild rather than one a test can settle."
+  - id: R-5.27
+    version: 2
+    clause: but only over the proponents named in the submission that triggers the check
+    reason: "blocked: the only submission the surface offers, submit_scores_for_consensus
+      on evaluation-individual-list-swu (and -twu), names every proponent of the
+      opportunity at once, and submit_this_evaluation_alone on
+      evaluation-individual-request-swu is refused by design (R-5.26). With every
+      proponent named, a count taken only over the named proponents and a count taken
+      over all of them always agree, so no test can tell them apart. Whether a
+      submission naming fewer than every proponent can arise at all is not something
+      the contract says; if it cannot, the clause is unobservable and belongs with ratify."
+    missing: "a seeded opportunity in individual evaluation where the submission that
+      completes the count names fewer than every proponent (for example, leaving out
+      one whose proposal left evaluation after the other evaluators submitted), with
+      every named proponent fully scored by the newest version's panel and the
+      left-out one not, so that a move to consensus read on opportunity-swu-view shows
+      the count was taken over the named proponents only; or, if no such submission
+      can occur, a note in the contract saying so, so the clause can be restated or
+      withdrawn"
+    owner: contract

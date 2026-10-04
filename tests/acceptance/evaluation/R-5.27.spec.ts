@@ -103,9 +103,13 @@ async function everyoneReached(surface: Surface, mail: Mail): Promise<Set<string
   return reached;
 }
 
-async function scoreEveryProponent(surface: Surface): Promise<void> {
-  for (const proposalId of proposals) {
-    await surface.evaluationIndividualCreateSwu.open({ opportunityId, proposalId });
+async function scoreEveryProponent(
+  surface: Surface,
+  forOpportunity: string = opportunityId,
+  ofProposals: string[] = proposals,
+): Promise<void> {
+  for (const proposalId of ofProposals) {
+    await surface.evaluationIndividualCreateSwu.open({ opportunityId: forOpportunity, proposalId });
     for (const order of questions) {
       await surface.evaluationIndividualCreateSwu.enterQuestionScore({ order, score: 4 });
       await surface.evaluationIndividualCreateSwu.enterQuestionNotes({
@@ -219,4 +223,78 @@ test("counted against the panel and the questions of the opportunity's most rece
   await new Promise((resolve) => setTimeout(resolve, 3000));
   await surface.opportunityTwuView.open({ opportunityId: twuOpportunityId });
   expect((await surface.opportunityTwuView.status()).toLowerCase()).not.toContain("consensus");
+});
+
+// The most recent version decides the count, seen through to the move itself.
+// opportunities.swuNewestVersionSeatsThirdEvaluator is in individual evaluation with three
+// proponents and four questions. Its first version seats users.staffOne and
+// users.administratorOne (the chair) as evaluators; its newest version also seats
+// users.staffPanelEvaluator, whose scores for every proponent are already submitted. The
+// owner is users.staffOne. The government account scoring and submitting brings the count to
+// twenty-four, all that the first version would have needed, and the opportunity must stay
+// in individual evaluation; the administrator scoring and submitting brings it to the newest
+// version's thirty-six, and only then does it move to consensus and are the chair and the
+// owner told.
+
+const newestOpportunityId = seed.opportunities.swuNewestVersionSeatsThirdEvaluator.id;
+const newestProposals = [
+  seed.proposals.swuThirdEvaluatorOne.id,
+  seed.proposals.swuThirdEvaluatorTwo.id,
+  seed.proposals.swuThirdEvaluatorThree.id,
+];
+
+async function submitNewestAndConfirmAccepted(surface: Surface): Promise<void> {
+  await surface.evaluationIndividualListSwu.open({ opportunityId: newestOpportunityId });
+  const whileDrafts = await readOrEmpty(() => surface.evaluationIndividualListSwu.evaluationStatus());
+  await surface.evaluationIndividualListSwu.submitScoresForConsensus();
+  // The submission must have gone through, or the opportunity staying put would prove nothing.
+  expect(await readOrEmpty(() => surface.evaluationIndividualListSwu.incompleteEvaluationError())).toBeFalsy();
+  await expect
+    .poll(async () => {
+      await surface.evaluationIndividualListSwu.open({ opportunityId: newestOpportunityId });
+      return readOrEmpty(() => surface.evaluationIndividualListSwu.evaluationStatus());
+    }, settle)
+    .not.toBe(whileDrafts);
+}
+
+test("counted against the panel and the questions of the opportunity's most recent version: the opportunity moves to consensus, and the chair and the owner are told, only once the newest version's panel has submitted, not when the first version's would have", async ({
+  surface,
+  mail,
+}) => {
+  test.slow();
+  await surface.signIn(persona.publicSectorStaff);
+  await scoreEveryProponent(surface, newestOpportunityId, newestProposals);
+  await submitNewestAndConfirmAccepted(surface);
+
+  // Twenty-four of thirty-six: the first version's whole count, not the newest version's.
+  // Give an automatic move time to land before reading that it did not.
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+  await surface.opportunitySwuView.open({ opportunityId: newestOpportunityId });
+  expect((await surface.opportunitySwuView.status()).toLowerCase()).not.toContain("consensus");
+  await surface.signOut();
+
+  await surface.signIn(persona.administrator);
+  await scoreEveryProponent(surface, newestOpportunityId, newestProposals);
+
+  await emptyCatcher(surface, mail);
+
+  await surface.evaluationIndividualListSwu.open({ opportunityId: newestOpportunityId });
+  await surface.evaluationIndividualListSwu.submitScoresForConsensus();
+
+  await expect
+    .poll(async () => {
+      await surface.opportunitySwuView.open({ opportunityId: newestOpportunityId });
+      return (await surface.opportunitySwuView.status()).toLowerCase();
+    }, settle)
+    .toContain("consensus");
+
+  const chairAndOwner = [seed.users.administratorOne.email, seed.users.staffOne.email].map((address) =>
+    address.toLowerCase(),
+  );
+  await expect
+    .poll(async () => {
+      const reached = await everyoneReached(surface, mail);
+      return chairAndOwner.filter((address) => !reached.has(address));
+    }, { ...settle, message: "the chair or owner not told the opportunity is ready for consensus" })
+    .toEqual([]);
 });
