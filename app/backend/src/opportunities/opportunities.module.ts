@@ -25,6 +25,8 @@ import { CONSENSUS_STORE } from "../evaluations/consensus";
 import { ConsensusController } from "../evaluations/consensus.controller";
 import { ConsensusService } from "../evaluations/consensus.service";
 import { PrismaConsensusStore } from "../evaluations/prisma-consensus.store";
+import { TEAM_PROPOSAL_STORE } from "../proposals/team-proposal";
+import { PrismaTeamProposalStore } from "../proposals/prisma-team-proposal.store";
 
 /** Opportunities in all three programs, and the evaluation of Sprint With Us and Team With Us ones' questions. */
 @Module({
@@ -49,6 +51,8 @@ import { PrismaConsensusStore } from "../evaluations/prisma-consensus.store";
     { provide: CWU_OPPORTUNITY_STORE, useClass: PrismaCwuOpportunityStore },
     { provide: OPPORTUNITY_RECORDS_STORE, useClass: PrismaOpportunityRecordsStore },
     { provide: OTHER_PROGRAMS_STORE, useClass: PrismaOtherProgramsStore },
+    // Where the proponents of a Sprint With Us opportunity stand, for starting its team scenario (R-1.42).
+    { provide: TEAM_PROPOSAL_STORE, useClass: PrismaTeamProposalStore },
     // A file may be attached only by someone who may read it (R-8.22).
     { provide: ATTACHMENT_ACCESS, useExisting: FilesService },
     // What a person may do is their account's kind, while the account is active (decision record

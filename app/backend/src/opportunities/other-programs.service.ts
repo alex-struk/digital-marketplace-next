@@ -1,4 +1,6 @@
-import { BadRequestException, Inject, Injectable, Logger, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, Inject, Injectable, Logger, NotFoundException, Optional, UnauthorizedException } from "@nestjs/common";
+import { TEAM_PROPOSAL_STORE, TeamProposalStore } from "../proposals/team-proposal";
+import { TEAM_SCENARIO_STARTED_NOTE, teamScenarioStartProblem } from "../rules/team-evaluation";
 import { MAIL_SETTINGS, Mailer } from "../mail/mailer";
 import { Envelope, Message, blindCopiedBatches } from "../mail/message";
 import {
@@ -78,6 +80,7 @@ import {
 } from "./other-programs";
 
 export const NOT_YET_AVAILABLE = "That action is not yet available on this opportunity.";
+export const NOT_PERMITTED_TO_START_STAGE = "Only an administrator or the opportunity's author may move it to its next stage.";
 
 /**
  * Sprint With Us and Team With Us opportunities (decision record 0045): listing and reading them
@@ -109,6 +112,7 @@ export class OtherProgramsService {
     @Inject(ATTACHMENT_ACCESS) private readonly files: AttachmentAccess,
     private readonly evaluations: IndividualEvaluationsService,
     private readonly consensus: ConsensusService,
+    @Optional() @Inject(TEAM_PROPOSAL_STORE) private readonly proposals?: Pick<TeamProposalStore, "forOpportunity">,
   ) {}
 
   async list(viewer: OpportunityViewer | null, program: OtherProgram): Promise<SummaryAnswer[]> {
@@ -222,7 +226,12 @@ export class OtherProgramsService {
       case "startChallenge":
         // The older way on from the consensus is gone; the stage is left only by finalising it (R-1.50).
         if (current.status === "EVAL_QUESTIONS_CONSENSUS") throw new BadRequestException([ONLY_FINALIZING_LEAVES_CONSENSUS]);
+        // Anywhere else it is a change off the program's path (R-1.20).
+        this.mustBePermitted(current, change.tag === "startCodeChallenge" ? "EVAL_CC" : "EVAL_C");
         throw new BadRequestException([NOT_YET_AVAILABLE]);
+      case "startTeamScenario":
+        await this.startTeamScenario(viewer, current);
+        break;
       default:
         throw new BadRequestException([NOT_YET_AVAILABLE]);
     }
@@ -307,6 +316,22 @@ export class OtherProgramsService {
     await this.store.addVersion(current.program, current.id, { ...kept, panel }, panel, viewer.id);
     const before = kept.panel.map((member) => member.user);
     await this.tellPanel(current, newlyAddedMembers(current.status, before, panel.map((member) => member.user)));
+  }
+
+  /**
+   * A Sprint With Us opportunity moved from the code challenge to the team scenario, by its author or
+   * an administrator, only once every proponent in the code challenge has been scored or
+   * disqualified and at least one is screened in (R-1.42).
+   */
+  private async startTeamScenario(viewer: OpportunityViewer | null, current: StoredSummary): Promise<void> {
+    if (!viewer || !mayManageOpportunity(viewer, standingOf(current))) throw new UnauthorizedException(NOT_PERMITTED_TO_START_STAGE);
+    if (current.program !== "sprint-with-us") throw new BadRequestException([NOT_YET_AVAILABLE]);
+    if (current.status === "EVAL_QUESTIONS_CONSENSUS") throw new BadRequestException([ONLY_FINALIZING_LEAVES_CONSENSUS]);
+    this.mustBePermitted(current, "EVAL_SCENARIO");
+    const proposals = this.proposals ? await this.proposals.forOpportunity(current.program, current.id) : [];
+    const problem = teamScenarioStartProblem(proposals.map((proposal) => proposal.status));
+    if (problem) throw new BadRequestException([problem]);
+    await this.records.changeStatus(current.program, current.id, "EVAL_SCENARIO", viewer.id, TEAM_SCENARIO_STARTED_NOTE);
   }
 
   // ---------------------------------------------------------------------- checks

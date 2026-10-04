@@ -169,16 +169,26 @@ export function scoreFromField(typed: string): number | null {
   return cleaned === "" ? null : readScore(cleaned);
 }
 
-function ScoreDialog({
+/**
+ * The score dialog: a Code With Us proposal's one score, or a stage's score — "Enter code challenge
+ * score" and the like — with its own title and label (proposal-swu-view · score-dialog).
+ */
+export function ScoreDialog({
   isOpen,
   isSending,
   onCancel,
   onConfirm,
+  title = "Enter score",
+  label = "Score (%)",
+  explanation = "Entering a score moves this proposal from under review to evaluated. The score is recorded in its history.",
 }: {
   isOpen: boolean;
   isSending: boolean;
   onCancel: () => void;
   onConfirm: (score: number) => Promise<EvaluationAnswer<unknown>>;
+  title?: string;
+  label?: string;
+  explanation?: string;
 }) {
   const [value, setValue] = useState<number>(Number.NaN);
   const [problem, setProblem] = useState<string | null>(null);
@@ -214,14 +224,12 @@ function ScoreDialog({
           <Form validationBehavior="aria" onSubmit={(event) => void submit(event)}>
             <Stack gap="medium">
               <Heading level={2} slot="title">
-                Enter score
+                {title}
               </Heading>
-              <Text elementType="p">
-                Entering a score moves this proposal from under review to evaluated. The score is recorded in its history.
-              </Text>
+              <Text elementType="p">{explanation}</Text>
               <div ref={fieldRef}>
                 <NumberField
-                  label="Score (%)"
+                  label={label}
                   isRequired
                   description="Between 0 and 100, with up to two decimal places."
                   value={value}

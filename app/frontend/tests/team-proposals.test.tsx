@@ -638,7 +638,8 @@ describe("awarding and the vendor's scoresheet (R-1.26, R-2.32, R-2.34)", () => 
       expect(total.textContent).toBe("87.5%");
       expect(total.previousElementSibling?.textContent).toBe("Total score");
       expect(screen.getByTestId("proposal-scenario-score").textContent).toBe("70%");
-      expect(screen.getByTestId("proposal-rank").textContent).toBe("1 of 2");
+      // The read-only page names the place, "1st", among the fully evaluated (R-2.31).
+      expect(screen.getByTestId("proposal-rank").textContent).toBe("1st");
       view.unmount();
     }
   });
@@ -660,7 +661,7 @@ describe("awarding and the vendor's scoresheet (R-1.26, R-2.32, R-2.34)", () => 
     answering(vendor, { status: "AWARDED", opportunity: { ...inProcessing, status: "AWARDED" }, scoresheet }, () => json(500, {}));
     renderAt(VIEW);
     expect((await screen.findByTestId("proposal-total-score")).textContent).toBe("87.5%");
-    expect(screen.getByTestId("proposal-rank").textContent).toBe("1 of 2");
+    expect(screen.getByTestId("proposal-rank").textContent).toBe("1st");
   });
 
   it("shows staff the organization's contact person on the proposal tab when the service gives it (R-1.27)", async () => {

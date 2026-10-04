@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Button, ButtonGroup, Heading, Link, Text } from "@bcgov/design-system-react-components";
+import { Button, ButtonGroup, Heading, InlineAlert, Link, Text } from "@bcgov/design-system-react-components";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import {
   OpportunityStatus,
@@ -21,7 +21,7 @@ import { EvaluatedOpportunity, EvaluationTab, evaluationTabsFor } from "@rules/i
 import { offersFinalize } from "@rules/consensus";
 import type { Account } from "../api/accounts";
 import type { RunningAction } from "../api/opportunities";
-import { finalizeConsensus } from "../api/evaluations";
+import { finalizeConsensus, startTeamScenario } from "../api/evaluations";
 import {
   OtherProgramChange,
   OtherProgramOpportunity,
@@ -41,6 +41,7 @@ import { EvaluationPanelTab } from "./evaluation-panel-tab";
 import { EvaluationListTab, InstructionsTab } from "./evaluation-tabs";
 import { ConsensusTab, FinalizeDialog, FinalizeRefusal, finalizingWords } from "./evaluation-consensus-tab";
 import { ProposalsTab } from "./opportunity-cwu-proposals-tab";
+import { StageTab, StageTabName } from "./opportunity-stage-tab";
 import { PublishDialog } from "./opportunity-cwu-form";
 import { DeleteDialog, Notice, NoticeArea, refusalNotice } from "./opportunity-cwu-edit";
 import { usePanelCandidates } from "./opportunity-other-create";
@@ -64,7 +65,7 @@ import { AddendaTab, CancelDialog, HistoryTable, ReportingSection, Sent } from "
  */
 type Loaded = { readonly kind: "loading" } | { readonly kind: "missing" } | { readonly kind: "found"; readonly opportunity: OtherProgramOpportunity };
 
-type ManagerTab = "summary" | "opportunity" | "addenda" | "history" | "proposals" | "evaluationPanel";
+type ManagerTab = "summary" | "opportunity" | "addenda" | "history" | "proposals" | StageTabName | "evaluationPanel";
 type Tab = ManagerTab | EvaluationTab;
 
 const TAB_NAMES: Readonly<Record<Tab, string>> = {
@@ -73,6 +74,9 @@ const TAB_NAMES: Readonly<Record<Tab, string>> = {
   addenda: "Addenda",
   history: "History",
   proposals: "Proposals",
+  codeChallenge: "Code challenge",
+  teamScenario: "Team scenario",
+  challenge: "Challenge",
   evaluationPanel: "Evaluation panel",
   instructions: "Instructions",
   evaluation: "Evaluation",
@@ -85,6 +89,9 @@ const TAB_TEST_IDS: Readonly<Record<Tab, string>> = {
   addenda: "opportunity-tab-addenda",
   history: "opportunity-tab-history",
   proposals: "opportunity-tab-proposals",
+  codeChallenge: "opportunity-tab-code-challenge",
+  teamScenario: "opportunity-tab-team-scenario",
+  challenge: "opportunity-tab-challenge",
   evaluationPanel: "opportunity-tab-evaluation-panel",
   instructions: "opportunity-tab-instructions",
   evaluation: "opportunity-tab-evaluation",
@@ -108,24 +115,27 @@ const TITLES: Readonly<Record<OtherProgram, string>> = {
 /** The Evaluation panel tab's own surface title (evaluation-panel-swu, evaluation-panel-twu). */
 export const PANEL_TITLE = "Evaluation Panel";
 
-const DONE: Readonly<Record<"submit" | "publish" | "save" | "finalize" | RunningAction["tag"], string>> = {
+const DONE: Readonly<Record<"submit" | "publish" | "save" | "finalize" | "startTeamScenario" | RunningAction["tag"], string>> = {
   submit: "The opportunity has been submitted for review. Every administrator has been told.",
   publish: "The opportunity has been published.",
   save: "Your changes have been saved.",
   cancel: "The opportunity has been cancelled. Everyone watching it and everyone who submitted a proposal is being told.",
   addAddendum: "The addendum has been added.",
   finalize: "The consensus scores have been finalized. The chair and the opportunity's owner are being told.",
+  startTeamScenario: "The team scenario has started. Each proponent screened in can now be scored on it.",
 };
 
 /**
  * The tabs follow the stage: an addendum needs an opportunity that is no longer a draft (R-1.32),
  * and only one that has been put forward can have proposals; the Proposals tab itself says when
- * they can be read (R-1.31, R-2.25).
+ * they can be read (R-1.31, R-2.25). The stages after the questions have a tab each — the code
+ * challenge and team scenario, or the challenge — which says when the stage is reached (R-2.28).
  */
-export function otherTabsFor(status: OpportunityStatus): readonly ManagerTab[] {
+export function otherTabsFor(status: OpportunityStatus, program: OtherProgram = "sprint-with-us"): readonly ManagerTab[] {
+  const stages: readonly StageTabName[] = program === "sprint-with-us" ? ["codeChallenge", "teamScenario"] : ["challenge"];
   return status === "DRAFT"
     ? ["summary", "opportunity", "history", "evaluationPanel"]
-    : ["summary", "opportunity", "addenda", "history", "proposals", "evaluationPanel"];
+    : ["summary", "opportunity", "addenda", "history", "proposals", ...stages, "evaluationPanel"];
 }
 
 /** What the evaluation rules turn on, read from the opportunity as the service answered with it. */
@@ -144,7 +154,8 @@ export function evaluatedFrom(opportunity: OtherProgramOpportunity): EvaluatedOp
  */
 export function manageTabsFor(account: Account, opportunity: OtherProgramOpportunity): readonly Tab[] {
   const manager = mayManageOpportunity(account, { status: opportunity.status, createdBy: opportunity.createdBy?.id ?? null });
-  return [...(manager ? otherTabsFor(opportunity.status) : []), ...evaluationTabsFor(account, evaluatedFrom(opportunity))];
+  const program: OtherProgram = opportunity.program === "team-with-us" ? "team-with-us" : "sprint-with-us";
+  return [...(manager ? otherTabsFor(opportunity.status, program) : []), ...evaluationTabsFor(account, evaluatedFrom(opportunity))];
 }
 
 /**
@@ -203,6 +214,9 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
   // A refusal to finalise, named (R-1.41); shown above the tab, whichever tab is open.
   const [finalizeRefusal, setFinalizeRefusal] = useState<readonly string[] | null>(null);
   const finalizeRef = useRef<HTMLDivElement>(null);
+  // A refusal to start the team scenario (R-1.42), shown in the same place.
+  const [advanceRefusal, setAdvanceRefusal] = useState<readonly string[] | null>(null);
+  const advanceRef = useRef<HTMLDivElement>(null);
   const [busy, setBusy] = useState(false);
   // Bumped when the form is saved, so it starts again from what was saved.
   const [formVersion, setFormVersion] = useState(0);
@@ -216,6 +230,10 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
   useEffect(() => {
     if (finalizeRefusal) finalizeRef.current?.focus();
   }, [finalizeRefusal]);
+
+  useEffect(() => {
+    if (advanceRefusal) advanceRef.current?.focus();
+  }, [advanceRefusal]);
 
   const standing = { status: opportunity.status, createdBy: opportunity.createdBy?.id ?? null };
   const draft = opportunity.status === "DRAFT";
@@ -239,6 +257,10 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
     cancel: mayCancelOpportunity(account) && isPermittedTransition(program, opportunity.status, "CANCELED"),
     // The one way out of the consensus stage, for the owner and administrators alike (R-1.50, R-5.14).
     finalize: offersFinalize(account, evaluatedFrom(opportunity)),
+    // From the code challenge, by the owner or an administrator; the service says whether it may start yet (R-1.42).
+    startTeamScenario: program === "sprint-with-us" && opportunity.status === "EVAL_CC" && mayManageOpportunity(account, standing),
+    // In processing a proposal is awarded from its own page, reached through the Proposals tab (R-1.49).
+    award: opportunity.status === "PROCESSING" && mayManageOpportunity(account, standing),
   };
   const editing = tab === "opportunity" && mayEdit;
 
@@ -297,6 +319,22 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
     setFinalizeRefusal(answer.kind === "refused" ? answer.reasons : ["The consensus scores could not be finalized. Try again."]);
   }
 
+  /** Moves the opportunity on to the team scenario; a refusal says why, above the tab (R-1.42). */
+  async function beginTeamScenario() {
+    if (busy) return;
+    setBusy(true);
+    const answer = await startTeamScenario(opportunity.id);
+    setBusy(false);
+    if (answer.kind === "saved") {
+      setAdvanceRefusal(null);
+      setOpportunity(answer.opportunity);
+      setNotice({ kind: "done", text: DONE.startTeamScenario });
+      return;
+    }
+    setNotice(null);
+    setAdvanceRefusal(answer.kind === "refused" ? answer.reasons : ["The team scenario could not be started. Try again."]);
+  }
+
   async function remove() {
     if (busy) return;
     setBusy(true);
@@ -328,7 +366,7 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
           Opportunity ID: <span data-testid="opportunity-identifier">{opportunity.id}</span>
         </Text>
       </Stack>
-      {(offers.edit && !editing) || offers.submit || offers.publish || offers.delete || offers.cancel || offers.finalize ? (
+      {(offers.edit && !editing) || offers.submit || offers.publish || offers.delete || offers.cancel || offers.finalize || offers.startTeamScenario || offers.award ? (
         <ButtonGroup ariaLabel="Opportunity actions">
           {offers.edit && !editing ? (
             <Button variant="secondary" onPress={() => goToTab("opportunity")} data-testid="opportunity-edit-button">
@@ -348,6 +386,16 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
           {offers.finalize ? (
             <Button variant="primary" isDisabled={busy} onPress={() => setDialog("finalize")} data-testid="finalize-consensus-button">
               Finalize consensus scores
+            </Button>
+          ) : null}
+          {offers.startTeamScenario ? (
+            <Button variant="primary" isDisabled={busy} onPress={() => void beginTeamScenario()} data-testid="start-team-scenario-button">
+              Start team scenario
+            </Button>
+          ) : null}
+          {offers.award ? (
+            <Button variant="primary" onPress={() => goToTab("proposals")} data-testid="opportunity-award-button">
+              Award a proposal
             </Button>
           ) : null}
           {offers.delete ? (
@@ -374,6 +422,11 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
         </Stack>
       </nav>
       {finalizeRefusal ? <FinalizeRefusal reasons={finalizeRefusal} alertRef={finalizeRef} /> : null}
+      {advanceRefusal ? (
+        <div tabIndex={-1} ref={advanceRef} data-testid="advance-refused-message">
+          <InlineAlert variant="danger" role="alert" title="The team scenario could not be started" description={advanceRefusal.join(" ")} />
+        </div>
+      ) : null}
       <Stack as="section" gap="medium" aria-labelledby="tab-heading">
         <Heading level={2} id="tab-heading">
           {TAB_NAMES[tab]}
@@ -382,6 +435,18 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
         {tab === "summary" ? (
           <>
             {opportunity.status === "EVAL_QUESTIONS_CONSENSUS" && offers.finalize ? <Text elementType="p">{finalizingWords(program)}</Text> : null}
+            {offers.startTeamScenario ? (
+              <Text elementType="p">
+                The team scenario can start once every proponent in the code challenge has been scored or disqualified and at least one
+                remains screened in.
+              </Text>
+            ) : null}
+            {offers.award ? (
+              <Text elementType="p">
+                Every proponent still in contention has been evaluated. A proposal is awarded from its own page on the Proposals tab, and
+                the opportunity is awarded with it.
+              </Text>
+            ) : null}
             <Stack as="dl" direction="row" gap="medium">
               <Fact label="Program">{PROGRAM_NAMES[program]}</Fact>
               <Fact label="Proposal deadline">{deadlineLabel(opportunity.proposalDeadline)}</Fact>
@@ -451,6 +516,9 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
         {/* No screen adds a private note (R-1.33); the history shows the ones there are. */}
         {tab === "history" ? <HistoryTable history={opportunity.history ?? []} /> : null}
         {tab === "proposals" ? <ProposalsTab program={program} opportunity={opportunity} /> : null}
+        {tab === "codeChallenge" || tab === "teamScenario" || tab === "challenge" ? (
+          <StageTab program={program} tab={tab} opportunity={opportunity} />
+        ) : null}
         {tab === "evaluationPanel" ? (
           <EvaluationPanelTab
             program={program}

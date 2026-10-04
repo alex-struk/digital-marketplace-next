@@ -339,9 +339,9 @@ model swuProposals {
   createdBy                                          String?                                              @db.Uuid
   updatedAt                                          DateTime                                             @db.Timestamptz(6)
   updatedBy                                          String?                                              @db.Uuid
-  challengeScore                                     Int?
-  scenarioScore                                      Int?
-  priceScore                                         Int?
+  challengeScore                                     Float?
+  scenarioScore                                      Float?
+  priceScore                                         Float?
   opportunity                                        String                                               @db.Uuid
   organization                                       String?                                              @db.Uuid
   anonymousProponentName                             String                                               @default("")
@@ -488,8 +488,8 @@ model twuProposals {
   createdBy                                              String?                                                  @db.Uuid
   updatedAt                                              DateTime                                                 @db.Timestamptz(6)
   updatedBy                                              String?                                                  @db.Uuid
-  challengeScore                                         Int?
-  priceScore                                             Int?
+  challengeScore                                         Float?
+  priceScore                                             Float?
   opportunity                                            String                                                   @db.Uuid
   organization                                           String?                                                  @db.Uuid
   anonymousProponentName                                 String                                                   @default("")
