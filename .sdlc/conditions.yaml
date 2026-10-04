@@ -2939,3 +2939,16 @@ conditions:
     stage: build
     by: agent:tech-lead
     at: 2026-10-04T07:50:16.292Z
+    closed:
+      outcome: met
+      why: phaseProblems in app/backend/src/rules/other-program-content.ts no longer
+        refuses phase maximum budgets that add up to more than the total, and
+        keeps the whole-number check of at least $1. docs/decisions/0059 says
+        phase budgets are not held to the total.
+        app/backend/tests/other-program-content.test.ts expects the 200,000 +
+        300,000 against 400,000 opportunity to have no problems, and
+        app/backend/tests/team-proposal-rules.test.ts expects a 190,000 +
+        290,000 proposal to get exactly one error, against the total. Verify
+        passes R-2.19.
+      by: agent:reviewer
+      at: 2026-10-04T08:21:15.747Z

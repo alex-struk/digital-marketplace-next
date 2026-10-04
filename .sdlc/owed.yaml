@@ -5386,3 +5386,13 @@ owed:
         by: runner
         at: 2026-10-04T07:08:41.631Z
     target: old
+    closed:
+      outcome: withdrawn
+      why: "tests/acceptance/proposals/R-2.10.spec.ts now asserts the edit-path clause
+        ('...is refused on the edit path') as well as the create path, and both
+        tests ran and passed at v1 in this slice's verify
+        (tests/results/new/slice-15.json). A test that runs now exists for every
+        clause. The scheduled calibration run (scope: changed) will still run it
+        against the oracle."
+      by: agent:reviewer
+      at: 2026-10-04T08:21:15.775Z
