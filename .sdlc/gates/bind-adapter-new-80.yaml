@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:tech-lead
+held_by: agent
+rationale: |2-
+  The question is whether this revision binds the profile activation-change confirmation so that a reading taken after it reflects the change, without moving anything else in the adapter. Approve. The escalation says bind-adapter went past policy.loops.request on build-slice-16's requests. Of the five sends it lists, only #5 (request/build-slice-16-5#1, the confirmActivationChange race) is still flagged as untaken by the conditions check, so this revision is answerable for that one alone. That part of the account decided the ruling. The diff is 9 lines inside userProfile.confirmActivationChange (tests/adapters/new/index.ts:6278-6290). After the confirm click it waits for the dialog to close, then for the 'has been (de|re)activated' status message (the wording in the R-4.20 failure outline), then settles the same way toggleAdminPermission does. Each wait gives up quietly on timeout, so a refused change shows up in the test's next reading rather than as a timeout in the action. userProfileSelf spreads the same selfProfile builder (line 6668), so it picks up the fix too. bindings.yaml is unchanged and nothing outside tests/adapters/new/ moved. The runner's typecheck on d2a4440ff passed with no diagnostics. The fix has not been run against the target, so the deactivation wording is unconfirmed; where it differs, the dialog-hidden and settle waits still hold. What would change this: R-4.20 or the other dependent tests still reading the pre-change status after this step, or the change reaching beyond the confirmation step.
+conditions: []
+cost: 0.3525784
+turns: 5
+session: "29eac785-8e46-476f-a397-4032e5eb6fa9"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T11:02:22.175Z

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-80 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">607</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">601</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">491</span></a></li><li><a href="../runs.html">Run log <span class="count">22</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-80</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-04 11:01</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.288 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I fixed the race in the profile confirmation step.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.288 (Claude Code))</p>
+<p>I fixed the race in the profile confirmation step. Nothing else in the binding changed. I could not typecheck or run it: this session was not allowed to run the TypeScript compiler, and I did not run the affected tests against the target.</p>
+<p><strong>What was wrong.</strong> <code>userProfile.confirmActivationChange</code> pressed the confirm button in the dialog and returned straight away. It didn&#39;t wait for the change to reach the page. Once every <code>/api</code> request began waiting for the deadline-closing hook, a status reading taken right after it, as in R-4.20, still saw the old status (&quot;Inactive&quot;). The page then went on to show &quot;Status: Active&quot; and the reactivation message.</p>
+<p><strong>What I changed.</strong> In <code>tests/adapters/new/index.ts</code>, after it presses the confirm button the method now:</p>
+<ol><li>waits up to 20 seconds for the dialog to close;</li><li>waits up to 20 seconds for the message the profile shows once the change is done (text matching &quot;has been deactivated&quot; or &quot;has been reactivated&quot;, which is the wording the R-4.20 failure outline shows);</li><li>waits for the page to go quiet, the same way <code>toggleAdminPermission</code> does.</li></ol>
+<p>Each wait gives up quietly on timeout rather than failing the action itself. If the change is refused, the test&#39;s next reading reports what the page shows, not a timeout from this step. <code>userProfileSelf</code> gets the profile screen&#39;s members from the same builder (at <code>/users/me</code>), so the same fix covers it. That covers R-4.14, R-4.20, R-4.30, R-4.31, R-3.7, R-3.8, R-3.27 and R-3.32.</p>
+<p><strong>What I did not do.</strong> I did not open the browser this time. Checking the fix live would have meant deactivating or reactivating a seeded account, which changes the target&#39;s data. I also didn&#39;t need it to bind anything new: the wording I wait for comes from the failure outline the ruling cites. If the target&#39;s wording for deactivation differs from &quot;has been deactivated&quot;, the dialog-closed and page-settled waits still apply, so that path is weaker but not broken.</p>
+<p><code>bindings.yaml</code> is unchanged: both members were already <code>bound</code> and still are. I touched nothing outside <code>tests/adapters/new/</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:tech-lead (persona agent · claude claude-opus-5-5) on 2026-10-04 11:02.</p>
+<div class="body"><p>The question is whether this revision binds the profile activation-change confirmation so that a reading taken after it reflects the change, without moving anything else in the adapter. Approve. The escalation says bind-adapter went past policy.loops.request on build-slice-16&#39;s requests. Of the five sends it lists, only #5 (request/build-slice-16-5#1, the confirmActivationChange race) is still flagged as untaken by the conditions check, so this revision is answerable for that one alone. That part of the account decided the ruling. The diff is 9 lines inside userProfile.confirmActivationChange (tests/adapters/new/index.ts:6278-6290). After the confirm click it waits for the dialog to close, then for the &#39;has been (de|re)activated&#39; status message (the wording in the R-4.20 failure outline), then settles the same way toggleAdminPermission does. Each wait gives up quietly on timeout, so a refused change shows up in the test&#39;s next reading rather than as a timeout in the action. userProfileSelf spreads the same selfProfile builder (line 6668), so it picks up the fix too. bindings.yaml is unchanged and nothing outside tests/adapters/new/ moved. The runner&#39;s typecheck on d2a4440ff passed with no diagnostics. The fix has not been run against the target, so the deactivation wording is unconfirmed; where it differs, the dialog-hidden and settle waits still hold. What would change this: R-4.20 or the other dependent tests still reading the pre-change status after this step, or the change reaching beyond the confirmation step.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

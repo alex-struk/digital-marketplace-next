@@ -6278,6 +6278,15 @@ export default function create(
       confirmActivationChange: async () => {
         await screen.on("confirm_activation_change");
         await inDialog(w("confirm_activation_change"), /deactivate|reactivate|confirm|^\s*yes\s*$/i);
+        // The change is answered once the dialog has closed and the profile says so
+        // ("… account has been reactivated. They have been told by email."); a reading
+        // taken before then still shows the status the profile had.
+        await dialog().waitFor({ state: "hidden", timeout: 20000 }).catch(() => undefined);
+        await seen(page.getByText(/has been (de|re)activated/i))
+          .first()
+          .waitFor({ state: "visible", timeout: 20000 })
+          .catch(() => undefined);
+        await settle();
       },
       cancelActivationChange: async () => {
         await screen.on("cancel_activation_change");
