@@ -3306,6 +3306,16 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-10-04T15:15:16.820Z
+    closed:
+      outcome: met
+      why: tests/acceptance/opportunities/R-1.1.spec.ts, in the 'moves to the first
+        evaluation stage ... with the note' test, polls
+        opportunityCwuEdit/opportunitySwuEdit/opportunityTwuEdit.historyTab()
+        for "This opportunity has closed." on the lapsed Code With Us, closed
+        Sprint With Us and closed Team With Us opportunities, as an
+        administrator
+      by: agent:reviewer
+      at: 2026-10-04T15:17:46.170Z
   - ref: derive-tests-opportunities-stale-22#2
     text: "R-1.1 v3: the 'moves to the first evaluation stage of its program' test
       accepts /evaluat|question/ for Sprint With Us and Team With Us, which a
@@ -3318,3 +3328,11 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-10-04T15:15:16.820Z
+    closed:
+      outcome: met
+      why: tests/acceptance/opportunities/R-1.1.spec.ts now requires 'team question'
+        for Sprint With Us and 'resource question' for Team With Us, and rejects
+        /consensus|challenge|scenario|processing|award|cancel|publish/, so a
+        later evaluation stage no longer passes
+      by: agent:reviewer
+      at: 2026-10-04T15:17:46.194Z
