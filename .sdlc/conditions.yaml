@@ -3127,3 +3127,57 @@ conditions:
         unchanged.
       by: agent:tech-lead
       at: 2026-10-04T11:00:09.488Z
+  - ref: build-slice-17#1
+    text: "R-5.19, in the case \"A panel member's opportunity is listed for them
+      under a separate heading for work they are evaluating\": Error:
+      expect(received).toContain(expected) // indexOf — Expected substring:
+      \"R-5.19 draft opportunity listed for the people evaluating it\" —
+      Received string:    \"\" — at
+      tests/acceptance/evaluation/R-5.19.spec.ts:109 — its last steps:
+      evaluationPanelDashboard.panelOpportunitiesTable() at /dashboard read \"\"
+      → evaluationPanelDashboard.panelOpportunitiesTable() at /dashboard read
+      \"\" → evaluationPanelDashboard.panelOpportunitiesTable() at /dashboard
+      read \"\" → evaluationPanelDashboard.panelOpportunitiesTable() at
+      /dashboard read \"\" — the page as it failed:
+      .sdlc/evidence/slice-17/R-5.19.png, .sdlc/evidence/slice-17/R-5.19.txt"
+    from: build-slice-17
+    family: build-slice-17
+    gate: G3
+    stage: build
+    by: agent:reviewer
+    at: 2026-10-04T12:29:48.034Z
+  - ref: build-slice-17#2
+    text: 'R-5.26: Error: expect(received).toBeTruthy() — Received: "" — at
+      tests/acceptance/evaluation/R-5.26.spec.ts:51 — its last steps:
+      …evaluations/00000000-0000-4000-8000-000000000102/edit?saved=draft read ""
+      → evaluationIndividualRequestSwu.refusedAsUnrecognised() at
+      /opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/proposals/00000000-0000-4000-8000-000000000741/team-questions/evaluations/00000000-0000-4000-8000-000000000102/edit?saved=draft
+      read "" → evaluationIndividualRequestSwu.refusedAsUnrecognised() at
+      /opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/proposals/00000000-0000-4000-8000-000000000741/team-questions/evaluations/00000000-0000-4000-8000-000000000102/edit?saved=draft
+      read "" — the page as it failed: .sdlc/evidence/slice-17/R-5.26.png,
+      .sdlc/evidence/slice-17/R-5.26.txt'
+    from: build-slice-17
+    family: build-slice-17
+    gate: G3
+    stage: build
+    by: agent:reviewer
+    at: 2026-10-04T12:29:48.034Z
+  - ref: build-slice-17#3
+    text: 'R-5.27: Error: expect(received).toBeGreaterThan(expected) — Expected: > 0
+      — Received:   0 — at tests/acceptance/evaluation/R-5.27.spec.ts:80 — its
+      last steps: evaluationIndividualListSwu.open({opportunityId}) at
+      /opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=evaluation
+      → evaluationIndividualListSwu.submitScoresForConsensus() at
+      /opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=evaluation
+      → opportunitySwuView.open({opportunityId}) at
+      /opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701 →
+      opportunitySwuView.status() at
+      /opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701 read
+      "Team questions: consensus" — the page as it failed:
+      .sdlc/evidence/slice-17/R-5.27.png, .sdlc/evidence/slice-17/R-5.27.txt'
+    from: build-slice-17
+    family: build-slice-17
+    gate: G3
+    stage: build
+    by: agent:reviewer
+    at: 2026-10-04T12:29:48.034Z
