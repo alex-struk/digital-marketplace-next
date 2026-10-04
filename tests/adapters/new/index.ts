@@ -4527,8 +4527,18 @@ export default function create(
   // to attach", "<name> could not be attached").
   async function addAttachmentFile(where: string, input: unknown): Promise<void> {
     const control = /^\s*add attachment\s*$/i;
-    if (!(await findControl(page, control))) {
+    const adder = await findControl(page, control);
+    if (!adder) {
       unbound(where, `no "Add attachment" control on ${page.url()}; it offers ${await offered()}`);
+    }
+    // The Sprint With Us and Team With Us create forms draw "Attachments" with a disabled
+    // "Add attachment" and the note "Files cannot be attached to a <program> opportunity in
+    // this version of the service. Code With Us opportunities take attachments."
+    if (await isDisabled(adder!)) {
+      const note = lined(await attachmentRegion().innerText().catch(() => ""))
+        .filter((line) => !/^\s*(attachments|add attachment)\s*$/i.test(line))
+        .join(" ");
+      unbound(where, `"Add attachment" is disabled on ${page.url()}${note ? `, which says "${note}"` : ""}; walked as the administrator on the Sprint With Us and Team With Us create forms (disabled there) and on the seeded open Sprint With Us opportunity's form at ?tab=opportunity after "Edit" (no "Attachments" part at all)`);
     }
     const name = await offerFile(where, control, input);
     const region = attachmentRegion();
