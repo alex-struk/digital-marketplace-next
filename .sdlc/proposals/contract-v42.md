@@ -45,3 +45,14 @@ I did not run any YAML check on the new entry, because the permission layer refu
 **Nothing went unrecovered this run.**
 
 re-address missing-test/R-2.10 to derive-tests: added the set_hourly_rate action to proposal-twu-edit (spec/contract/surface.yaml), taking the resource by service area and the rate as proposal-twu-create's does, available after start_editing and sent by save_changes or save_changes_and_submit; the refusal is read through the page's existing field_error and submission_refusal, and proposal_identifier returns the id of a proposal saved from proposal-twu-create.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:product-owner
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+The question is whether proposal-twu-edit now gives the tests a way to exercise R-2.10's clause that the budget check also runs on the edit path. The ruling is approve. The new set_hourly_rate action matches the old application: its edit tab (edit/tab/proposal.tsx:780-781) renders the shared Form.view, with disabled={!state.isEditing || isLoading(state)}, and that form carries each team member's hourlyRate field (lib/components/team.tsx:389-393). So the field is on the edit screen and opens after start_editing, as the entry says. The entry takes the same input as proposal-twu-create's set_hourly_rate. It names only observations the page already defines (field_error, submission_refusal, proposal_identifier), so a test can be written against it without guessing. It was checked by reading against its neighbours rather than by a parser, and it matches their shape and indentation. The criteria named in the diff (R-2.10, R-2.8, R-6.1, R-7.29) are unchanged. An edit-path R-2.10 test is expected to fail against the old application, which never runs this check (R-2.8), and to pass only against the rebuild. That is the intended result, not a defect in the contract. Two owed items stay open. missing-test/R-2.10 stays open until derive-tests writes the edit-path test and it runs, so it is not marked met here. build-slice-15-2#1, the missing Company box on Sprint With Us references, is owed by build and is untouched by this proposal. The ruling would change to return if the old edit form turned out to keep rates read-only after editing starts, or if a test written against this entry could not reach a saved proposal on this page.
+
+**Conditions:**
+none
