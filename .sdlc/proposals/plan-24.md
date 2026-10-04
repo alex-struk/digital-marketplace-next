@@ -30,3 +30,14 @@ I've moved both criteria, R-5.28 and R-5.36, from Slice 17 to Slice 18 in `plan/
 **Checks.** By search, each of the two IDs now appears only in Slice 18's criteria line and its description, and no longer in Slice 17. I could not run the full script that checks every accepted criterion sits in exactly one slice, because running Python needed approval and none was available in this unattended session. Since the only change was moving these two IDs, I expect coverage to be the same as in the approved plan, but no full check was run.
 
 The constitution rules that bear on the plan, and how the plan meets each, are as before. I added no new assumptions about the stack or the platform. Neither condition was addressed to a person, and neither asked for changes outside `plan/` or `docs/decisions/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:architect
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Question: is this the right cut of the work, and does each slice stand on its own? Approve. The revision moves R-5.28 and R-5.36 from Slice 17 to Slice 18. That is exactly what both G3 revision requests from build-slice-17 asked for: R-5.28's test opens the chair's per-proponent consensus create page, and both of R-5.36's cases open the SWU and TWU consensus create pages and go on through finalising. Slice 18 delivers all of those. Slice 18 depends on everything from Slice 7 through Slice 17, so it holds every screen the two tests walk through. The plan records where the work is built and accepts that for one slice those rules are in force with no slice answering for them, the same note it already uses for R-1.24, R-2.5, R-5.16 and R-6.15. The proposal did not run the full coverage script. I searched every slice's criteria line in plan/tasks.md instead: no criterion is listed in two slices, and R-5.28 and R-5.36 each appear only in Slice 18. Only plan/plan.md and plan/tasks.md changed. There is no schema change, no new dependency, no stack departure and no new decision record. The tier is STANDARD, so nothing triggers escalation. The R-5.11 vs R-5.28 conflict is kept open: as written, both cannot hold for an administrator during individual evaluation. It is restated correctly across the two slices, with a direction to the Slice 17 builder not to settle it in a way Slice 18's test would refuse. The build-slice-17 conditions #1 to #3 are failing tests the build stage still owes. This plan change does not settle them, and they stay open. I would return the plan if a criterion were left in no slice or in two, or if a test walked a screen built in a later slice.
+
+**Conditions:**
+none
