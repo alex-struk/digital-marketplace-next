@@ -2776,3 +2776,46 @@ conditions:
     stage: build
     by: agent:reviewer
     at: 2026-10-04T05:42:27.726Z
+  - ref: bind-adapter-new-72#1
+    text: "proposal-cwu-view: bind proposal_identifier, proposal_tab, history_tab,
+      proponent, score, rank and export_link against
+      /opportunities/code-with-us/:opportunityId/proposals/:proposalId, which
+      the walk recorded as showing the administrator the proponent, Status,
+      Submitted, Proposal ID, Score, 'Printable copy' and the Proposal and
+      History sections. Leave a member unbound only with a reason that names
+      what that screen actually lacks for it (enter_score, award_proposal and
+      disqualify_proposal included). Update tests/adapters/new/bindings.yaml to
+      match."
+    from: bind-adapter-new-72
+    family: bind-adapter-new
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-10-04T06:01:33.627Z
+  - ref: bind-adapter-new-72#2
+    text: "tests/adapters/new/index.ts: rewrite the shared signed-in reason
+      (NOBODY_SIGNS_IN and its comment around line 300) and the comment near
+      line 8244, so they no longer say the Sprint With Us / Team With Us
+      proposal forms or the Code With Us proposal view answer 'Page not found'.
+      Re-walk every page whose unbound members quote that text (the Sprint With
+      Us / Team With Us proposal view and export pages, among others) and give
+      each member a reason that is true on the current build."
+    from: bind-adapter-new-72
+    family: bind-adapter-new
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-10-04T06:01:33.627Z
+  - ref: bind-adapter-new-72#3
+    text: "tests/adapters/new/bindings.yaml: on proposal-swu-create and
+      proposal-twu-create, record that submit_proposal and the terms actions
+      fill any empty 'Response to question N' with placeholder text, and that
+      the team actions choose the first offered organization when the test names
+      none. Those defaults change what is submitted and should be visible to
+      whoever reads the bindings."
+    from: bind-adapter-new-72
+    family: bind-adapter-new
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-10-04T06:01:33.627Z
