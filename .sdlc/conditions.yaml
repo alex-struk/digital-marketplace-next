@@ -2967,6 +2967,14 @@ conditions:
     stage: build
     by: agent:reviewer
     at: 2026-10-04T09:05:56.668Z
+    closed:
+      outcome: met
+      why: R-1.1 passes in the verify result for build-slice-16-3
+        (tests/results/new/slice-16.json). Each active evaluator gets their own
+        message from addressedToEach in
+        app/backend/src/closing/deadline-closing.service.ts.
+      by: agent:tech-lead
+      at: 2026-10-04T09:43:32.636Z
   - ref: build-slice-16#2
     text: "app/backend/src/closing/deadline-closing.service.ts: the
       ready-for-evaluation notice reaches each panel evaluator only as a blind
@@ -2980,6 +2988,17 @@ conditions:
     stage: build
     by: agent:reviewer
     at: 2026-10-04T09:05:56.668Z
+    closed:
+      outcome: met
+      why: "app/backend/src/closing/deadline-closing.service.ts sends the
+        ready-for-evaluation notice through addressedToEach
+        (app/backend/src/mail/message.ts), one message per active evaluator
+        addressed to them alone. The subject names the opportunity: 'A <program>
+        Opportunity is Ready to Be Evaluated: <title>'. Only panel members with
+        evaluator = TRUE are read (prisma-closing.store.ts), so a chair who does
+        not evaluate is still left out."
+      by: agent:tech-lead
+      at: 2026-10-04T09:43:32.660Z
   - ref: build-slice-16#3
     text: 'R-2.36, in the case "withdrawing a proposal sends a notice to the vendor
       and to every administrator": Error:
@@ -3001,6 +3020,12 @@ conditions:
     stage: build
     by: agent:reviewer
     at: 2026-10-04T09:05:56.668Z
+    closed:
+      outcome: met
+      why: R-2.36 passes in the verify result for build-slice-16-3
+        (tests/results/new/slice-16.json).
+      by: agent:tech-lead
+      at: 2026-10-04T09:43:32.682Z
   - ref: build-slice-16#4
     text: "app/backend/src/proposals/proposal-notices.ts: ProposalNotices.withdrawn
       sends the administrators' notice only as blind-copy batches, so no
@@ -3012,6 +3037,14 @@ conditions:
     stage: build
     by: agent:reviewer
     at: 2026-10-04T09:05:56.668Z
+    closed:
+      outcome: met
+      why: ProposalNotices.withdrawn in app/backend/src/proposals/proposal-notices.ts
+        sends the administrators' notice through addressedToEach, one addressed
+        message per active administrator. Code With Us and the two team programs
+        both call it.
+      by: agent:tech-lead
+      at: 2026-10-04T09:43:32.704Z
   - ref: build-slice-16#5
     text: "R-2.32, in the cases \"their proposal awarded\" and \"their proposal
       passed over\": Error: the proposal carries no score — Expected pattern:
@@ -3034,6 +3067,16 @@ conditions:
     stage: build
     by: agent:reviewer
     at: 2026-10-04T09:05:56.668Z
+    closed:
+      outcome: withdrawn
+      why: the R-2.32 failure is the new app's adapter binding for
+        proposal-swu-view.total_score, which was recorded as unbound against an
+        earlier build. The current page shows 'Total score 87.5%' under the test
+        id proposal-total-score (.sdlc/evidence/slice-16/R-2.32.txt lines
+        46-49). The build stage cannot change tests/adapters, so this ruling
+        sends the fix to bind-adapter.
+      by: agent:tech-lead
+      at: 2026-10-04T09:43:32.725Z
   - ref: build-slice-16#6
     text: "app/frontend/src/screens/proposal-team-view.tsx: the read-only Sprint
       With Us and Team With Us proposal page shows staff no total score. Draw
@@ -3046,3 +3089,12 @@ conditions:
     stage: build
     by: agent:reviewer
     at: 2026-10-04T09:05:56.668Z
+    closed:
+      outcome: met
+      why: app/frontend/src/screens/proposal-team-view.tsx shows staff a 'Scores'
+        region with the weighted 'Total score' and 'Rank', taken from the
+        scoresheet the service returns. The page outline when R-2.32 failed
+        shows 'Total score 87.5%' and 'Rank 1 of 2' for the administrator
+        (.sdlc/evidence/slice-16/R-2.32.txt lines 36-49).
+      by: agent:tech-lead
+      at: 2026-10-04T09:43:32.747Z
