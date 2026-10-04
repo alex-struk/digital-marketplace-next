@@ -1623,3 +1623,39 @@ requests:
     at: 2026-10-04T11:00:09.069Z
     taken: 2026-10-04T11:01:31.534Z
     taken_by: bind-adapter-new-80
+  - stage: contract
+    why: "R-2.5: the evaluation-panel-evaluator persona signs in on the new target
+      as users.staffPanelEvaluator (00000000-0000-4000-8000-000000000104, per
+      tests/seed/manifest.yaml), and no seeded panel includes that account, the
+      panel of opportunities.closedSprintWithUs included, so the evaluation list
+      the R-2.5 test opens for that persona on closedSprintWithUs correctly
+      answers 'Page not found' (.sdlc/evidence/slice-17/R-2.5.txt). Seat the
+      persona's account as an evaluator on that seeded panel, or map the persona
+      to an account already seated there, without changing the two-evaluator
+      count R-5.27's test relies on."
+    from: build-slice-17
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-04T12:29:47.932Z
+  - stage: plan
+    why: "R-5.28: its test opens the chair's per-proponent consensus create page
+      (/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-\
+      questions/consensus/create), and plan/tasks.md has Slice 18 make it ('the
+      consensus tab and per-proponent consensus screens for the chair'), while
+      Slice 17 claims R-5.28. Move R-5.28 to Slice 18, or say it is answered
+      there."
+    from: build-slice-17
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-04T12:29:47.932Z
+  - stage: plan
+    why: "R-5.36: both of its cases open the per-proponent consensus create pages
+      (sprint-with-us team-questions/consensus/create and team-with-us
+      resource-questions/consensus/create) and go on through finalising, which
+      plan/tasks.md gives to Slice 18 ('per-proponent consensus screens for the
+      chair' and 'the single finalise action'), while Slice 17 claims R-5.36.
+      Move R-5.36 to Slice 18, or say it is answered there."
+    from: build-slice-17
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-04T12:29:47.932Z
