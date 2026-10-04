@@ -11864,3 +11864,197 @@ rebind:
     by: runner:verify
     at: 2026-10-04T12:06:18.445Z
     closed: *a49
+  - id: R-5.10
+    target: new
+    why: 'unbound: evaluation-consensus-create-swu.open —
+      http://localhost:4300/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/proposals/00000000-0000-4000-8000-000000000741/team-questions/consensus/create
+      now answers administrator with something other than "Page not found"
+      ("Proponent 1"), so the page has been built since it was walked and its
+      controls have not been seen yet; unbound:
+      evaluation-consensus-create-twu.open —
+      http://localhost:4300/opportunities/team-with-us/00000000-0000-4000-8000-000000000801/proposals/00000000-0000-4000-8000-000000000841/resource-questions/consensus/create
+      now answers administrator with something other than "Page not found"
+      ("Proponent 1"), so the page has been built since it was walked and its
+      controls have not been seen yet'
+    found: unbound
+    adapter: 36f7a1f4b5657b5e449f02125c01513906b5dd9f
+    slice: 18
+    app_tree: 2af7c556e00ac8eafcf3bb5105c994e3ba9be61e
+    by: runner:verify
+    at: 2026-10-04T13:52:00.376Z
+  - id: R-5.14
+    target: new
+    why: 'unbound: evaluation-consensus-create-swu.open —
+      http://localhost:4600/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/proposals/00000000-0000-4000-8000-000000000741/team-questions/consensus/create
+      now answers administrator with something other than "Page not found"
+      ("Proponent 1"), so the page has been built since it was walked and its
+      controls have not been seen yet'
+    found: unbound
+    adapter: 36f7a1f4b5657b5e449f02125c01513906b5dd9f
+    slice: 18
+    app_tree: 2af7c556e00ac8eafcf3bb5105c994e3ba9be61e
+    by: runner:verify
+    at: 2026-10-04T13:52:00.376Z
+  - id: R-5.28
+    target: new
+    why: 'unbound: evaluation-consensus-create-swu.open —
+      http://localhost:4700/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/proposals/00000000-0000-4000-8000-000000000741/team-questions/consensus/create
+      now answers public-sector-staff with something other than "Page not found"
+      ("Proponent 1"), so the page has been built since it was walked and its
+      controls have not been seen yet'
+    found: unbound
+    adapter: 36f7a1f4b5657b5e449f02125c01513906b5dd9f
+    slice: 18
+    app_tree: 2af7c556e00ac8eafcf3bb5105c994e3ba9be61e
+    by: runner:verify
+    at: 2026-10-04T13:52:00.376Z
+  - id: R-5.30
+    target: new
+    why: 'unbound: evaluation-consensus-edit-swu.open —
+      http://localhost:4500/opportunities/sprint-with-us/00000000-0000-4000-a026-000000000001/proposals/00000000-0000-4000-a026-000000000101/team-questions/consensus/00000000-0000-4000-8000-000000000101/edit
+      now answers administrator with something other than "Page not found"
+      ("Proponent 1"), so the page has been built since it was walked and its
+      controls have not been seen yet; unbound:
+      evaluation-consensus-edit-twu.open —
+      http://localhost:4500/opportunities/team-with-us/00000000-0000-4000-a034-000000000001/proposals/00000000-0000-4000-a034-000000000101/resource-questions/consensus/00000000-0000-4000-8000-000000000101/edit
+      now answers administrator with something other than "Page not found"
+      ("Proponent 1"), so the page has been built since it was walked and its
+      controls have not been seen yet'
+    found: unbound
+    adapter: 36f7a1f4b5657b5e449f02125c01513906b5dd9f
+    slice: 18
+    app_tree: 2af7c556e00ac8eafcf3bb5105c994e3ba9be61e
+    by: runner:verify
+    at: 2026-10-04T13:52:00.376Z
+  - id: R-5.31
+    target: new
+    why: 'unbound: evaluation-consensus-create-twu.open —
+      http://localhost:4400/opportunities/team-with-us/00000000-0000-4000-8000-000000000801/proposals/00000000-0000-4000-8000-000000000841/resource-questions/consensus/create
+      now answers administrator with something other than "Page not found"
+      ("Proponent 1"), so the page has been built since it was walked and its
+      controls have not been seen yet'
+    found: unbound
+    adapter: 36f7a1f4b5657b5e449f02125c01513906b5dd9f
+    slice: 18
+    app_tree: 2af7c556e00ac8eafcf3bb5105c994e3ba9be61e
+    by: runner:verify
+    at: 2026-10-04T13:52:00.376Z
+  - id: R-5.32
+    target: new
+    why: "unbound: evaluation-consensus-list-swu.finalize_consensus_scores — no
+      control named /^\\s*finali[sz]e( consensus)?( scores)?\\s*$/i: the
+      \"Consensus\" section on
+      http://localhost:4600/opportunities/sprint-with-us/00000000-0000-4000-a02\
+      9-000000000001/edit?tab=consensus shows administrator only: You have
+      submitted the consensus scores. You can change a consensus until the
+      scores are finalized. If you do, submit the scores again. | Agreed scores,
+      by anonymous proponent name | Proponent\tConsensus\tAction | Proponent
+      1\tSubmitted\tEdit consensus | Proponent 2\tSubmitted\tEdit consensus |
+      Proponent 3\tSubmitted\tEdit consensus | Proponent 4\tSubmitted\tEdit
+      consensus | Proponent 5\tSubmitted\tEdit consensus | Proponent
+      6\tSubmitted\tEdit consensus | Every proponent has a complete consensus.
+      When you submit, the opportunity's owner and every administrator are told.
+      | Submit final consensus scores (status: Status: Team questions:
+      consensus); unbound:
+      evaluation-consensus-list-twu.finalize_consensus_scores — no control named
+      /^\\s*finali[sz]e( consensus)?( scores)?\\s*$/i: the \"Consensus\" section
+      on
+      http://localhost:4600/opportunities/team-with-us/00000000-0000-4000-a037-\
+      000000000001/edit?tab=consensus shows administrator only: You have
+      submitted the consensus scores. You can change a consensus until the
+      scores are finalized. If you do, submit the scores again. | Agreed scores,
+      by anonymous proponent name | Proponent\tConsensus\tAction | Proponent
+      1\tSubmitted\tEdit consensus | Proponent 2\tSubmitted\tEdit consensus |
+      Proponent 3\tSubmitted\tEdit consensus | Proponent 4\tSubmitted\tEdit
+      consensus | Proponent 5\tSubmitted\tEdit consensus | Every proponent has a
+      complete consensus. When you submit, the opportunity's owner and every
+      administrator are told. | Submit final consensus scores (status: Status:
+      Resource questions: consensus)"
+    found: unbound
+    adapter: 36f7a1f4b5657b5e449f02125c01513906b5dd9f
+    slice: 18
+    app_tree: 2af7c556e00ac8eafcf3bb5105c994e3ba9be61e
+    by: runner:verify
+    at: 2026-10-04T13:52:00.376Z
+  - id: R-5.33
+    target: new
+    why: 'unbound: evaluation-consensus-create-twu.open —
+      http://localhost:4700/opportunities/team-with-us/00000000-0000-4000-8000-000000000801/proposals/00000000-0000-4000-8000-000000000841/resource-questions/consensus/create
+      now answers administrator with something other than "Page not found"
+      ("Proponent 1"), so the page has been built since it was walked and its
+      controls have not been seen yet'
+    found: unbound
+    adapter: 36f7a1f4b5657b5e449f02125c01513906b5dd9f
+    slice: 18
+    app_tree: 2af7c556e00ac8eafcf3bb5105c994e3ba9be61e
+    by: runner:verify
+    at: 2026-10-04T13:52:00.376Z
+  - id: R-5.36
+    target: new
+    why: 'unbound: evaluation-consensus-create-swu.open —
+      http://localhost:4400/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/proposals/00000000-0000-4000-8000-000000000741/team-questions/consensus/create
+      now answers administrator with something other than "Page not found"
+      ("Proponent 1"), so the page has been built since it was walked and its
+      controls have not been seen yet; unbound:
+      evaluation-consensus-create-twu.open —
+      http://localhost:4400/opportunities/team-with-us/00000000-0000-4000-8000-000000000801/proposals/00000000-0000-4000-8000-000000000841/resource-questions/consensus/create
+      now answers administrator with something other than "Page not found"
+      ("Proponent 1"), so the page has been built since it was walked and its
+      controls have not been seen yet'
+    found: unbound
+    adapter: 36f7a1f4b5657b5e449f02125c01513906b5dd9f
+    slice: 18
+    app_tree: 2af7c556e00ac8eafcf3bb5105c994e3ba9be61e
+    by: runner:verify
+    at: 2026-10-04T13:52:00.376Z
+  - id: R-1.41
+    target: new
+    why: 'unbound: evaluation-consensus-list-swu.not_all_consensuses_submitted_error
+      — nothing on the section raises it: the "Consensus" section on
+      http://localhost:4700/opportunities/sprint-with-us/00000000-0…; unbound:
+      evaluation-consensus-list-swu.no_screenable_proponent_error — nothing on
+      the section raises it: the "Consensus" section on
+      http://localhost:4700/opportunities/sprint-with-us/00000000-0000-40…'
+    found: unbound
+    adapter: 36f7a1f4b5657b5e449f02125c01513906b5dd9f
+    slice: 18
+    app_tree: 2af7c556e00ac8eafcf3bb5105c994e3ba9be61e
+    by: runner:verify
+    at: 2026-10-04T13:52:00.376Z
+  - id: R-2.29
+    target: new
+    why: "unbound: evaluation-consensus-list-swu.finalize_consensus_scores — no
+      control named /^\\s*finali[sz]e( consensus)?( scores)?\\s*$/i: the
+      \"Consensus\" section on
+      http://localhost:4500/opportunities/sprint-with-us/00000000-0000-4000-a01\
+      3-000000000001/edit?tab=consensus shows administrator only: You have
+      submitted the consensus scores. You can change a consensus until the
+      scores are finalized. If you do, submit the scores again. | Agreed scores,
+      by anonymous proponent name | Proponent\tConsensus\tAction | Proponent
+      1\tSubmitted\tEdit consensus | Proponent 2\tSubmitted\tEdit consensus |
+      Proponent 3\tSubmitted\tEdit consensus | Proponent 4\tSubmitted\tEdit
+      consensus | Proponent 5\tSubmitted\tEdit consensus | Proponent
+      6\tSubmitted\tEdit consensus | Every proponent has a complete consensus.
+      When you submit, the opportunity's owner and every administrator are told.
+      | Submit final consensus scores (status: Status: Team questions:
+      consensus); unbound:
+      evaluation-consensus-list-twu.finalize_consensus_scores — no control named
+      /^\\s*finali[sz]e( consensus)?( scores)?\\s*$/i: the \"Consensus\" section
+      on
+      http://localhost:4300/opportunities/team-with-us/00000000-0000-4000-a031-\
+      000000000001/edit?tab=consensus shows administrator only: You have
+      submitted the consensus scores. You can change a consensus until the
+      scores are finalized. If you do, submit the scores again. | Agreed scores,
+      by anonymous proponent name | Proponent\tConsensus\tAction | Proponent
+      1\tSubmitted\tEdit consensus | Proponent 2\tSubmitted\tEdit consensus |
+      Proponent 3\tSubmitted\tEdit consensus | Proponent 4\tSubmitted\tEdit
+      consensus | Proponent 5\tSubmitted\tEdit consensus | Every proponent has a
+      complete consensus. When you submit, the opportunity's owner and every
+      administrator are told. | Submit final consensus scores (status: Status:
+      Resource questions: consensus)"
+    found: unbound
+    adapter: 36f7a1f4b5657b5e449f02125c01513906b5dd9f
+    slice: 18
+    app_tree: 2af7c556e00ac8eafcf3bb5105c994e3ba9be61e
+    by: runner:verify
+    at: 2026-10-04T13:52:00.376Z
