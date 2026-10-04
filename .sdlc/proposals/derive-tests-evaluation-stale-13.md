@@ -32,3 +32,23 @@ I rewrote the tests for both criteria (R-5.31 and R-5.33) in `tests/acceptance/e
 - Neither test checks a subject line. Emptying the catcher right before the action is what ties the messages to it, and the contract gives no subject text to compare against.
 
 **Gaps.** Every page, action and observation I needed exists in the surface, so nothing is owed to the contract. One gap, which these tests work around rather than need closed: the mail helper can only search by visible recipient. Opening a message by its identifier and reading its blind copies is only possible through the surface's caught-message pages. A mail helper call that opens a message and returns its blind copies would be the natural addition, but that file belongs to another stage, so I left it alone.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Question: do the rewritten R-5.31 and R-5.33 tests follow from their criteria and from nothing else? Approved. The earlier return faulted both tests for finding the notice only by searching for mail addressed visibly to the owner, an administrator or the chair, which cannot work when R-6.15 makes the service's own address the only visible recipient. Both tests now collect every message caught after the action, open each one, and count a person as told when their address is a visible recipient or a blind copy. Each test then asserts exactly its criterion's outcome: R-5.31, that the owner and both administrators are reached after the chair submits the consensus; R-5.33, that the chair and the owner are reached after the consensus is finalised. Neither test asserts how people are addressed, so neither asserts R-6.15, and neither checks subject text the contract does not give. The catcher is emptied and confirmed to stay empty just before the action, which ties the messages to the submission or finalising and covers the 'notified that the consensus has been submitted / finalised' clause. Every name the tests use comes from the contract (seed records, the sender address in observables.yaml, the caught-message pages), so no implementation detail leaked in. There are no not-testable entries to justify, and the runner's typecheck passed on this revision. What would change the ruling: evidence that a test passes on mail the action did not send, meaning the timing tie is not enough and message content would have to be asserted.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `374afac11c69221f156585da3fccfd3147547790`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/evaluation/`, which this proposal answers for.
+
+    No diagnostics.
