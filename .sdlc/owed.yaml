@@ -5431,7 +5431,7 @@ owed:
     id: R-5.27
     version: 2
     domain: evaluation
-    stage: derive-tests
+    stage: calibrate
     why: a surface action that changes an opportunity's evaluation panel or its
       questions (publishing a new version) while it is in individual evaluation,
       so a test can show that the most recent version's panel and questions
@@ -5520,12 +5520,20 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-10-04T16:11:24.347Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v2 exists and has not run
+        by: runner
+        at: 2026-10-04T16:24:32.830Z
     asserted:
       - clause: the count is taken against the panel and the questions of the
           opportunity's most recent version
         by: derive-tests-evaluation-stale-15
         gate: G3
         at: 2026-10-04T15:48:20.411Z
+      - clause: but only over the proponents named in the submission that triggers the
+          check
+        by: derive-tests-evaluation-stale-17
+        gate: G3
+        at: 2026-10-04T16:24:32.830Z
     target: old
-    clause: but only over the proponents named in the submission that triggers the
-      check
