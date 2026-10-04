@@ -50,3 +50,23 @@ How the actions behave:
 - **R-2.5:** the Sprint With Us management screen (…8000…701/edit) still offers only Summary, Opportunity, Addenda, History, Proposals and Evaluation panel, with no instructions, evaluation or consensus section.
 
 I did not walk these screens as the public sector employee who authored the opportunities. The actions don't depend on who is signed in: they press whatever the screen offers that person. Every route touched in this revision resolved on the target, and nothing was written outside `tests/adapters/new/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Question: does this adapter bind every surface action and observation on new, and nothing else? Approve. The revision answers both binding requests from the build-slice-16 ruling. successfulProponent now reads the 'Successful proponent' region (level-2 heading over the name) on the Code With Us view and the shared Sprint With Us / Team With Us view, falling back to the older 'awarded to <name>' wording, and the bindings.yaml comment saying the awarded page names no winner is corrected. enter_score (Code With Us), award_proposal and disqualify_proposal (all three programs) are bound to the 'Proposal actions' group and the dialogs each opens. The new code is navigation and locators only: it finds the control, fills the dialog's boxes by label from the test's input, presses confirm, and when the screen withholds the control or the dialog refuses its input it records a refusal (noteRefusal) or throws unbound, the way this binding already treats the vendor's proposal screen. It asserts no outcome and decides nothing about whether a test passes. Nothing under tests/acceptance changed; the only output is tests/adapters/new/. The runner's typecheck on f859d6a19 passed with no diagnostics under adapters/new/, which covers the author's inability to compile. The remaining unbound reasons are real and name what the surface lacks: Sprint With Us and Team With Us proposal screens offer only Award and Disqualify, with no score, screen-in/out or stage controls, and R-2.35's code challenge scoring and R-2.5's evaluation-list screen are already with plan (request/build-slice-16#3, #4), not this stage. The build-slice-16#1-#6 conditions are application changes under app/ that this proposal cannot touch, so they stay open. What would change the ruling: verify showing these bindings report a control missing that the page does render, or misread the proponent region (e.g. returning the heading text or an empty string on the seeded awarded opportunities).
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `f859d6a19a2c4e473cd26a57839779c13699a91b`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
