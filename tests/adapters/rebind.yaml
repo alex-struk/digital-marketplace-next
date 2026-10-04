@@ -9642,3 +9642,846 @@ rebind:
     by: runner:verify
     at: 2026-10-04T02:34:11.195Z
     closed: *a43
+  - id: R-2.7
+    target: new
+    why: "unbound: proposal-swu-create.choose_organization —
+      /opportunities/sprint-with-us/:opportunityId/proposals/create is offered
+      only to a signed-in person, and walked signed in (as the administrator, as
+      a public sector employee, and as a vendor for a vendor's screens — the
+      seeded organization owner, an organization member and the invited vendor
+      for the organization screens — with the seeded records' identifiers), the
+      running build serves a signed-in person /dashboard, /opportunities, the
+      account screens under /users (a vendor's Organizations section,
+      /users/me?tab=organizations, draws \"Organizations you own\" with \"Create
+      organization\" and the owned table, and \"Organizations you belong to\"),
+      /organizations (\"Create organization\", \"My organizations\" and the
+      list), /organizations/create, and to an organization's owner
+      /organizations/:orgId/edit (the \"Organization\" section with \"Edit
+      organization\", and \"Archive organization\"; its Team members section
+      draws the team table, its row actions and \"Add team members\", its
+      Changelog section the changes to administrator rights and ownership, and
+      its Sprint With Us qualification and Team With Us qualification sections
+      say only \"This section is not available yet.\"), to the administrator the
+      content-management screens under /content, and to the administrator and
+      public sector staff /opportunities/create, the three programs' forms and
+      their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (whose
+      sections on the seeded Sprint With Us and Team With Us opportunities are
+      Summary, Opportunity, Addenda, History and Evaluation panel, with no
+      evaluation, consensus or instructions section), and to a vendor the Code
+      With Us proposal form
+      /opportunities/code-with-us/:opportunityId/proposals/create (reached from
+      \"Start a proposal\" on the opportunity) and the vendor's own proposal's
+      screen .../proposals/:proposalId/edit; rechecked on the current build as
+      the vendor and as the organization owner, the Sprint With Us and Team With
+      Us proposal forms answer \"Page not found\" even on the seeded Sprint With
+      Us opportunity still open for proposals
+      (00000000-0000-4000-a025-000000000001, deadline November 2, 2026), whose
+      page offers those vendors only \"Watch\" and no way to start a proposal,
+      and the Code With Us proposal's evaluation view answers \"Page not found\"
+      to the administrator on the seeded opportunity with three proposals; the
+      other proposal and evaluation screens — /proposals, the Sprint With Us and
+      Team With Us proposal forms, the Code With Us proposal's evaluation view
+      .../proposals/:proposalId, its \"Printable copy\"
+      .../proposals/:proposalId/export (to its own author too) and
+      .../proposals/export (to the administrator too), and
+      /opportunities/code-with-us/:opportunityId/complete included — and
+      /organizations/:orgId/sprint-with-us-terms-and-conditions and
+      /organizations/:orgId/team-with-us-terms-and-conditions (opened as the
+      seeded qualified organization's owner) answer \"Page not found\", as
+      /organizations/:orgId/edit does to a member who does not own the
+      organization; opened signed out (with the seeded record's identifier where
+      it takes one) it shows the \"Page not found\" screen"
+    found: unbound
+    adapter: 22f1f4c354ee32456a8199f92c37817fde7176b1
+    slice: 15
+    app_tree: e5b1b2fb5b00e3f80055447f2f602803093c939c
+    by: runner:verify
+    at: 2026-10-04T05:40:51.520Z
+  - id: R-2.9
+    target: new
+    why: "unbound: proposal-swu-create.choose_organization —
+      /opportunities/sprint-with-us/:opportunityId/proposals/create is offered
+      only to a signed-in person, and walked signed in (as the administrator, as
+      a public sector employee, and as a vendor for a vendor's screens — the
+      seeded organization owner, an organization member and the invited vendor
+      for the organization screens — with the seeded records' identifiers), the
+      running build serves a signed-in person /dashboard, /opportunities, the
+      account screens under /users (a vendor's Organizations section,
+      /users/me?tab=organizations, draws \"Organizations you own\" with \"Create
+      organization\" and the owned table, and \"Organizations you belong to\"),
+      /organizations (\"Create organization\", \"My organizations\" and the
+      list), /organizations/create, and to an organization's owner
+      /organizations/:orgId/edit (the \"Organization\" section with \"Edit
+      organization\", and \"Archive organization\"; its Team members section
+      draws the team table, its row actions and \"Add team members\", its
+      Changelog section the changes to administrator rights and ownership, and
+      its Sprint With Us qualification and Team With Us qualification sections
+      say only \"This section is not available yet.\"), to the administrator the
+      content-management screens under /content, and to the administrator and
+      public sector staff /opportunities/create, the three programs' forms and
+      their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (whose
+      sections on the seeded Sprint With Us and Team With Us opportunities are
+      Summary, Opportunity, Addenda, History and Evaluation panel, with no
+      evaluation, consensus or instructions section), and to a vendor the Code
+      With Us proposal form
+      /opportunities/code-with-us/:opportunityId/proposals/create (reached from
+      \"Start a proposal\" on the opportunity) and the vendor's own proposal's
+      screen .../proposals/:proposalId/edit; rechecked on the current build as
+      the vendor and as the organization owner, the Sprint With Us and Team With
+      Us proposal forms answer \"Page not found\" even on the seeded Sprint With
+      Us opportunity still open for proposals
+      (00000000-0000-4000-a025-000000000001, deadline November 2, 2026), whose
+      page offers those vendors only \"Watch\" and no way to start a proposal,
+      and the Code With Us proposal's evaluation view answers \"Page not found\"
+      to the administrator on the seeded opportunity with three proposals; the
+      other proposal and evaluation screens — /proposals, the Sprint With Us and
+      Team With Us proposal forms, the Code With Us proposal's evaluation view
+      .../proposals/:proposalId, its \"Printable copy\"
+      .../proposals/:proposalId/export (to its own author too) and
+      .../proposals/export (to the administrator too), and
+      /opportunities/code-with-us/:opportunityId/complete included — and
+      /organizations/:orgId/sprint-with-us-terms-and-conditions and
+      /organizations/:orgId/team-with-us-terms-and-conditions (opened as the
+      seeded qualified organization's owner) answer \"Page not found\", as
+      /organizations/:orgId/edit does to a member who does not own the
+      organization; opened signed out (with the seeded record's identifier where
+      it takes one) it shows the \"Page not found\" screen"
+    found: unbound
+    adapter: 22f1f4c354ee32456a8199f92c37817fde7176b1
+    slice: 15
+    app_tree: e5b1b2fb5b00e3f80055447f2f602803093c939c
+    by: runner:verify
+    at: 2026-10-04T05:40:51.520Z
+  - id: R-2.10
+    target: new
+    why: "unbound: proposal-twu-create.choose_organization —
+      /opportunities/team-with-us/:opportunityId/proposals/create is offered
+      only to a signed-in person, and walked signed in (as the administrator, as
+      a public sector employee, and as a vendor for a vendor's screens — the
+      seeded organization owner, an organization member and the invited vendor
+      for the organization screens — with the seeded records' identifiers), the
+      running build serves a signed-in person /dashboard, /opportunities, the
+      account screens under /users (a vendor's Organizations section,
+      /users/me?tab=organizations, draws \"Organizations you own\" with \"Create
+      organization\" and the owned table, and \"Organizations you belong to\"),
+      /organizations (\"Create organization\", \"My organizations\" and the
+      list), /organizations/create, and to an organization's owner
+      /organizations/:orgId/edit (the \"Organization\" section with \"Edit
+      organization\", and \"Archive organization\"; its Team members section
+      draws the team table, its row actions and \"Add team members\", its
+      Changelog section the changes to administrator rights and ownership, and
+      its Sprint With Us qualification and Team With Us qualification sections
+      say only \"This section is not available yet.\"), to the administrator the
+      content-management screens under /content, and to the administrator and
+      public sector staff /opportunities/create, the three programs' forms and
+      their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (whose
+      sections on the seeded Sprint With Us and Team With Us opportunities are
+      Summary, Opportunity, Addenda, History and Evaluation panel, with no
+      evaluation, consensus or instructions section), and to a vendor the Code
+      With Us proposal form
+      /opportunities/code-with-us/:opportunityId/proposals/create (reached from
+      \"Start a proposal\" on the opportunity) and the vendor's own proposal's
+      screen .../proposals/:proposalId/edit; rechecked on the current build as
+      the vendor and as the organization owner, the Sprint With Us and Team With
+      Us proposal forms answer \"Page not found\" even on the seeded Sprint With
+      Us opportunity still open for proposals
+      (00000000-0000-4000-a025-000000000001, deadline November 2, 2026), whose
+      page offers those vendors only \"Watch\" and no way to start a proposal,
+      and the Code With Us proposal's evaluation view answers \"Page not found\"
+      to the administrator on the seeded opportunity with three proposals; the
+      other proposal and evaluation screens — /proposals, the Sprint With Us and
+      Team With Us proposal forms, the Code With Us proposal's evaluation view
+      .../proposals/:proposalId, its \"Printable copy\"
+      .../proposals/:proposalId/export (to its own author too) and
+      .../proposals/export (to the administrator too), and
+      /opportunities/code-with-us/:opportunityId/complete included — and
+      /organizations/:orgId/sprint-with-us-terms-and-conditions and
+      /organizations/:orgId/team-with-us-terms-and-conditions (opened as the
+      seeded qualified organization's owner) answer \"Page not found\", as
+      /organizations/:orgId/edit does to a member who does not own the
+      organization; opened signed out (with the seeded record's identifier where
+      it takes one) it shows the \"Page not found\" screen"
+    found: unbound
+    adapter: 22f1f4c354ee32456a8199f92c37817fde7176b1
+    slice: 15
+    app_tree: e5b1b2fb5b00e3f80055447f2f602803093c939c
+    by: runner:verify
+    at: 2026-10-04T05:40:51.520Z
+  - id: R-2.11
+    target: new
+    why: "unbound: proposal-swu-create.choose_organization —
+      /opportunities/sprint-with-us/:opportunityId/proposals/create is offered
+      only to a signed-in person, and walked signed in (as the administrator, as
+      a public sector employee, and as a vendor for a vendor's screens — the
+      seeded organization owner, an organization member and the invited vendor
+      for the organization screens — with the seeded records' identifiers), the
+      running build serves a signed-in person /dashboard, /opportunities, the
+      account screens under /users (a vendor's Organizations section,
+      /users/me?tab=organizations, draws \"Organizations you own\" with \"Create
+      organization\" and the owned table, and \"Organizations you belong to\"),
+      /organizations (\"Create organization\", \"My organizations\" and the
+      list), /organizations/create, and to an organization's owner
+      /organizations/:orgId/edit (the \"Organization\" section with \"Edit
+      organization\", and \"Archive organization\"; its Team members section
+      draws the team table, its row actions and \"Add team members\", its
+      Changelog section the changes to administrator rights and ownership, and
+      its Sprint With Us qualification and Team With Us qualification sections
+      say only \"This section is not available yet.\"), to the administrator the
+      content-management screens under /content, and to the administrator and
+      public sector staff /opportunities/create, the three programs' forms and
+      their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (whose
+      sections on the seeded Sprint With Us and Team With Us opportunities are
+      Summary, Opportunity, Addenda, History and Evaluation panel, with no
+      evaluation, consensus or instructions section), and to a vendor the Code
+      With Us proposal form
+      /opportunities/code-with-us/:opportunityId/proposals/create (reached from
+      \"Start a proposal\" on the opportunity) and the vendor's own proposal's
+      screen .../proposals/:proposalId/edit; rechecked on the current build as
+      the vendor and as the organization owner, the Sprint With Us and Team With
+      Us proposal forms answer \"Page not found\" even on the seeded Sprint With
+      Us opportunity still open for proposals
+      (00000000-0000-4000-a025-000000000001, deadline November 2, 2026), whose
+      page offers those vendors only \"Watch\" and no way to start a proposal,
+      and the Code With Us proposal's evaluation view answers \"Page not found\"
+      to the administrator on the seeded opportunity with three proposals; the
+      other proposal and evaluation screens — /proposals, the Sprint With Us and
+      Team With Us proposal forms, the Code With Us proposal's evaluation view
+      .../proposals/:proposalId, its \"Printable copy\"
+      .../proposals/:proposalId/export (to its own author too) and
+      .../proposals/export (to the administrator too), and
+      /opportunities/code-with-us/:opportunityId/complete included — and
+      /organizations/:orgId/sprint-with-us-terms-and-conditions and
+      /organizations/:orgId/team-with-us-terms-and-conditions (opened as the
+      seeded qualified organization's owner) answer \"Page not found\", as
+      /organizations/:orgId/edit does to a member who does not own the
+      organization; opened signed out (with the seeded record's identifier where
+      it takes one) it shows the \"Page not found\" screen"
+    found: unbound
+    adapter: 22f1f4c354ee32456a8199f92c37817fde7176b1
+    slice: 15
+    app_tree: e5b1b2fb5b00e3f80055447f2f602803093c939c
+    by: runner:verify
+    at: 2026-10-04T05:40:51.520Z
+  - id: R-2.16
+    target: new
+    why: "unbound: proposal-swu-create.choose_organization —
+      /opportunities/sprint-with-us/:opportunityId/proposals/create is offered
+      only to a signed-in person, and walked signed in (as the administrator, as
+      a public sector employee, and as a vendor for a vendor's screens — the
+      seeded organization owner, an organization member and the invited vendor
+      for the organization screens — with the seeded records' identifiers), the
+      running build serves a signed-in person /dashboard, /opportunities, the
+      account screens under /users (a vendor's Organizations section,
+      /users/me?tab=organizations, draws \"Organizations you own\" with \"Create
+      organization\" and the owned table, and \"Organizations you belong to\"),
+      /organizations (\"Create organization\", \"My organizations\" and the
+      list), /organizations/create, and to an organization's owner
+      /organizations/:orgId/edit (the \"Organization\" section with \"Edit
+      organization\", and \"Archive organization\"; its Team members section
+      draws the team table, its row actions and \"Add team members\", its
+      Changelog section the changes to administrator rights and ownership, and
+      its Sprint With Us qualification and Team With Us qualification sections
+      say only \"This section is not available yet.\"), to the administrator the
+      content-management screens under /content, and to the administrator and
+      public sector staff /opportunities/create, the three programs' forms and
+      their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (whose
+      sections on the seeded Sprint With Us and Team With Us opportunities are
+      Summary, Opportunity, Addenda, History and Evaluation panel, with no
+      evaluation, consensus or instructions section), and to a vendor the Code
+      With Us proposal form
+      /opportunities/code-with-us/:opportunityId/proposals/create (reached from
+      \"Start a proposal\" on the opportunity) and the vendor's own proposal's
+      screen .../proposals/:proposalId/edit; rechecked on the current build as
+      the vendor and as the organization owner, the Sprint With Us and Team With
+      Us proposal forms answer \"Page not found\" even on the seeded Sprint With
+      Us opportunity still open for proposals
+      (00000000-0000-4000-a025-000000000001, deadline November 2, 2026), whose
+      page offers those vendors only \"Watch\" and no way to start a proposal,
+      and the Code With Us proposal's evaluation view answers \"Page not found\"
+      to the administrator on the seeded opportunity with three proposals; the
+      other proposal and evaluation screens — /proposals, the Sprint With Us and
+      Team With Us proposal forms, the Code With Us proposal's evaluation view
+      .../proposals/:proposalId, its \"Printable copy\"
+      .../proposals/:proposalId/export (to its own author too) and
+      .../proposals/export (to the administrator too), and
+      /opportunities/code-with-us/:opportunityId/complete included — and
+      /organizations/:orgId/sprint-with-us-terms-and-conditions and
+      /organizations/:orgId/team-with-us-terms-and-conditions (opened as the
+      seeded qualified organization's owner) answer \"Page not found\", as
+      /organizations/:orgId/edit does to a member who does not own the
+      organization; opened signed out (with the seeded record's identifier where
+      it takes one) it shows the \"Page not found\" screen"
+    found: unbound
+    adapter: 22f1f4c354ee32456a8199f92c37817fde7176b1
+    slice: 15
+    app_tree: e5b1b2fb5b00e3f80055447f2f602803093c939c
+    by: runner:verify
+    at: 2026-10-04T05:40:51.520Z
+  - id: R-2.18
+    target: new
+    why: "unbound: proposal-twu-create.choose_organization —
+      /opportunities/team-with-us/:opportunityId/proposals/create is offered
+      only to a signed-in person, and walked signed in (as the administrator, as
+      a public sector employee, and as a vendor for a vendor's screens — the
+      seeded organization owner, an organization member and the invited vendor
+      for the organization screens — with the seeded records' identifiers), the
+      running build serves a signed-in person /dashboard, /opportunities, the
+      account screens under /users (a vendor's Organizations section,
+      /users/me?tab=organizations, draws \"Organizations you own\" with \"Create
+      organization\" and the owned table, and \"Organizations you belong to\"),
+      /organizations (\"Create organization\", \"My organizations\" and the
+      list), /organizations/create, and to an organization's owner
+      /organizations/:orgId/edit (the \"Organization\" section with \"Edit
+      organization\", and \"Archive organization\"; its Team members section
+      draws the team table, its row actions and \"Add team members\", its
+      Changelog section the changes to administrator rights and ownership, and
+      its Sprint With Us qualification and Team With Us qualification sections
+      say only \"This section is not available yet.\"), to the administrator the
+      content-management screens under /content, and to the administrator and
+      public sector staff /opportunities/create, the three programs' forms and
+      their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (whose
+      sections on the seeded Sprint With Us and Team With Us opportunities are
+      Summary, Opportunity, Addenda, History and Evaluation panel, with no
+      evaluation, consensus or instructions section), and to a vendor the Code
+      With Us proposal form
+      /opportunities/code-with-us/:opportunityId/proposals/create (reached from
+      \"Start a proposal\" on the opportunity) and the vendor's own proposal's
+      screen .../proposals/:proposalId/edit; rechecked on the current build as
+      the vendor and as the organization owner, the Sprint With Us and Team With
+      Us proposal forms answer \"Page not found\" even on the seeded Sprint With
+      Us opportunity still open for proposals
+      (00000000-0000-4000-a025-000000000001, deadline November 2, 2026), whose
+      page offers those vendors only \"Watch\" and no way to start a proposal,
+      and the Code With Us proposal's evaluation view answers \"Page not found\"
+      to the administrator on the seeded opportunity with three proposals; the
+      other proposal and evaluation screens — /proposals, the Sprint With Us and
+      Team With Us proposal forms, the Code With Us proposal's evaluation view
+      .../proposals/:proposalId, its \"Printable copy\"
+      .../proposals/:proposalId/export (to its own author too) and
+      .../proposals/export (to the administrator too), and
+      /opportunities/code-with-us/:opportunityId/complete included — and
+      /organizations/:orgId/sprint-with-us-terms-and-conditions and
+      /organizations/:orgId/team-with-us-terms-and-conditions (opened as the
+      seeded qualified organization's owner) answer \"Page not found\", as
+      /organizations/:orgId/edit does to a member who does not own the
+      organization; opened signed out (with the seeded record's identifier where
+      it takes one) it shows the \"Page not found\" screen; unbound:
+      proposal-swu-create.choose_organization —
+      /opportunities/sprint-with-us/:opportunityId/proposals/create is offered
+      only to a signed-in person, and walked signed in (as the administrator, as
+      a public sector employee, and as a vendor for a vendor's screens — the
+      seeded organization owner, an organization member and the invited vendor
+      for the organization screens — with the seeded records' identifiers), the
+      running build serves a signed-in person /dashboard, /opportunities, the
+      account screens under /users (a vendor's Organizations section,
+      /users/me?tab=organizations, draws \"Organizations you own\" with \"Create
+      organization\" and the owned table, and \"Organizations you belong to\"),
+      /organizations (\"Create organization\", \"My organizations\" and the
+      list), /organizations/create, and to an organization's owner
+      /organizations/:orgId/edit (the \"Organization\" section with \"Edit
+      organization\", and \"Archive organization\"; its Team members section
+      draws the team table, its row actions and \"Add team members\", its
+      Changelog section the changes to administrator rights and ownership, and
+      its Sprint With Us qualification and Team With Us qualification sections
+      say only \"This section is not available yet.\"), to the administrator the
+      content-management screens under /content, and to the administrator and
+      public sector staff /opportunities/create, the three programs' forms and
+      their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (whose
+      sections on the seeded Sprint With Us and Team With Us opportunities are
+      Summary, Opportunity, Addenda, History and Evaluation panel, with no
+      evaluation, consensus or instructions section), and to a vendor the Code
+      With Us proposal form
+      /opportunities/code-with-us/:opportunityId/proposals/create (reached from
+      \"Start a proposal\" on the opportunity) and the vendor's own proposal's
+      screen .../proposals/:proposalId/edit; rechecked on the current build as
+      the vendor and as the organization owner, the Sprint With Us and Team With
+      Us proposal forms answer \"Page not found\" even on the seeded Sprint With
+      Us opportunity still open for proposals
+      (00000000-0000-4000-a025-000000000001, deadline November 2, 2026), whose
+      page offers those vendors only \"Watch\" and no way to start a proposal,
+      and the Code With Us proposal's evaluation view answers \"Page not found\"
+      to the administrator on the seeded opportunity with three proposals; the
+      other proposal and evaluation screens — /proposals, the Sprint With Us and
+      Team With Us proposal forms, the Code With Us proposal's evaluation view
+      .../proposals/:proposalId, its \"Printable copy\"
+      .../proposals/:proposalId/export (to its own author too) and
+      .../proposals/export (to the administrator too), and
+      /opportunities/code-with-us/:opportunityId/complete included — and
+      /organizations/:orgId/sprint-with-us-terms-and-conditions and
+      /organizations/:orgId/team-with-us-terms-and-conditions (opened as the
+      seeded qualified organization's owner) answer \"Page not found\", as
+      /organizations/:orgId/edit does to a member who does not own the
+      organization; opened signed out (with the seeded record's identifier where
+      it takes one) it shows the \"Page not found\" screen"
+    found: unbound
+    adapter: 22f1f4c354ee32456a8199f92c37817fde7176b1
+    slice: 15
+    app_tree: e5b1b2fb5b00e3f80055447f2f602803093c939c
+    by: runner:verify
+    at: 2026-10-04T05:40:51.520Z
+  - id: R-2.20
+    target: new
+    why: "unbound: proposal-twu-create.choose_organization —
+      /opportunities/team-with-us/:opportunityId/proposals/create is offered
+      only to a signed-in person, and walked signed in (as the administrator, as
+      a public sector employee, and as a vendor for a vendor's screens — the
+      seeded organization owner, an organization member and the invited vendor
+      for the organization screens — with the seeded records' identifiers), the
+      running build serves a signed-in person /dashboard, /opportunities, the
+      account screens under /users (a vendor's Organizations section,
+      /users/me?tab=organizations, draws \"Organizations you own\" with \"Create
+      organization\" and the owned table, and \"Organizations you belong to\"),
+      /organizations (\"Create organization\", \"My organizations\" and the
+      list), /organizations/create, and to an organization's owner
+      /organizations/:orgId/edit (the \"Organization\" section with \"Edit
+      organization\", and \"Archive organization\"; its Team members section
+      draws the team table, its row actions and \"Add team members\", its
+      Changelog section the changes to administrator rights and ownership, and
+      its Sprint With Us qualification and Team With Us qualification sections
+      say only \"This section is not available yet.\"), to the administrator the
+      content-management screens under /content, and to the administrator and
+      public sector staff /opportunities/create, the three programs' forms and
+      their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (whose
+      sections on the seeded Sprint With Us and Team With Us opportunities are
+      Summary, Opportunity, Addenda, History and Evaluation panel, with no
+      evaluation, consensus or instructions section), and to a vendor the Code
+      With Us proposal form
+      /opportunities/code-with-us/:opportunityId/proposals/create (reached from
+      \"Start a proposal\" on the opportunity) and the vendor's own proposal's
+      screen .../proposals/:proposalId/edit; rechecked on the current build as
+      the vendor and as the organization owner, the Sprint With Us and Team With
+      Us proposal forms answer \"Page not found\" even on the seeded Sprint With
+      Us opportunity still open for proposals
+      (00000000-0000-4000-a025-000000000001, deadline November 2, 2026), whose
+      page offers those vendors only \"Watch\" and no way to start a proposal,
+      and the Code With Us proposal's evaluation view answers \"Page not found\"
+      to the administrator on the seeded opportunity with three proposals; the
+      other proposal and evaluation screens — /proposals, the Sprint With Us and
+      Team With Us proposal forms, the Code With Us proposal's evaluation view
+      .../proposals/:proposalId, its \"Printable copy\"
+      .../proposals/:proposalId/export (to its own author too) and
+      .../proposals/export (to the administrator too), and
+      /opportunities/code-with-us/:opportunityId/complete included — and
+      /organizations/:orgId/sprint-with-us-terms-and-conditions and
+      /organizations/:orgId/team-with-us-terms-and-conditions (opened as the
+      seeded qualified organization's owner) answer \"Page not found\", as
+      /organizations/:orgId/edit does to a member who does not own the
+      organization; opened signed out (with the seeded record's identifier where
+      it takes one) it shows the \"Page not found\" screen"
+    found: unbound
+    adapter: 22f1f4c354ee32456a8199f92c37817fde7176b1
+    slice: 15
+    app_tree: e5b1b2fb5b00e3f80055447f2f602803093c939c
+    by: runner:verify
+    at: 2026-10-04T05:40:51.520Z
+  - id: R-2.22
+    target: new
+    why: "unbound: proposal-twu-edit.start_editing —
+      /opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit is
+      offered only to a signed-in person, and walked signed in (as the
+      administrator, as a public sector employee, and as a vendor for a vendor's
+      screens — the seeded organization owner, an organization member and the
+      invited vendor for the organization screens — with the seeded records'
+      identifiers), the running build serves a signed-in person /dashboard,
+      /opportunities, the account screens under /users (a vendor's Organizations
+      section, /users/me?tab=organizations, draws \"Organizations you own\" with
+      \"Create organization\" and the owned table, and \"Organizations you
+      belong to\"), /organizations (\"Create organization\", \"My
+      organizations\" and the list), /organizations/create, and to an
+      organization's owner /organizations/:orgId/edit (the \"Organization\"
+      section with \"Edit organization\", and \"Archive organization\"; its Team
+      members section draws the team table, its row actions and \"Add team
+      members\", its Changelog section the changes to administrator rights and
+      ownership, and its Sprint With Us qualification and Team With Us
+      qualification sections say only \"This section is not available yet.\"),
+      to the administrator the content-management screens under /content, and to
+      the administrator and public sector staff /opportunities/create, the three
+      programs' forms and their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (whose
+      sections on the seeded Sprint With Us and Team With Us opportunities are
+      Summary, Opportunity, Addenda, History and Evaluation panel, with no
+      evaluation, consensus or instructions section), and to a vendor the Code
+      With Us proposal form
+      /opportunities/code-with-us/:opportunityId/proposals/create (reached from
+      \"Start a proposal\" on the opportunity) and the vendor's own proposal's
+      screen .../proposals/:proposalId/edit; rechecked on the current build as
+      the vendor and as the organization owner, the Sprint With Us and Team With
+      Us proposal forms answer \"Page not found\" even on the seeded Sprint With
+      Us opportunity still open for proposals
+      (00000000-0000-4000-a025-000000000001, deadline November 2, 2026), whose
+      page offers those vendors only \"Watch\" and no way to start a proposal,
+      and the Code With Us proposal's evaluation view answers \"Page not found\"
+      to the administrator on the seeded opportunity with three proposals; the
+      other proposal and evaluation screens — /proposals, the Sprint With Us and
+      Team With Us proposal forms, the Code With Us proposal's evaluation view
+      .../proposals/:proposalId, its \"Printable copy\"
+      .../proposals/:proposalId/export (to its own author too) and
+      .../proposals/export (to the administrator too), and
+      /opportunities/code-with-us/:opportunityId/complete included — and
+      /organizations/:orgId/sprint-with-us-terms-and-conditions and
+      /organizations/:orgId/team-with-us-terms-and-conditions (opened as the
+      seeded qualified organization's owner) answer \"Page not found\", as
+      /organizations/:orgId/edit does to a member who does not own the
+      organization; opened signed out (with the seeded record's identifier where
+      it takes one) it shows the \"Page not found\" screen; unbound:
+      proposal-twu-edit.withdraw_proposal —
+      /opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit is
+      offered only to a signed-in person, and walked signed in (as the
+      administrator, as a public sector employee, and as a vendor for a vendor's
+      screens — the seeded organization owner, an organization member and the
+      invited vendor for the organization screens — with the seeded records'
+      identifiers), the running build serves a signed-in person /dashboard,
+      /opportunities, the account screens under /users (a vendor's Organizations
+      section, /users/me?tab=organizations, draws \"Organizations you own\" with
+      \"Create organization\" and the owned table, and \"Organizations you
+      belong to\"), /organizations (\"Create organization\", \"My
+      organizations\" and the list), /organizations/create, and to an
+      organization's owner /organizations/:orgId/edit (the \"Organization\"
+      section with \"Edit organization\", and \"Archive organization\"; its Team
+      members section draws the team table, its row actions and \"Add team
+      members\", its Changelog section the changes to administrator rights and
+      ownership, and its Sprint With Us qualification and Team With Us
+      qualification sections say only \"This section is not available yet.\"),
+      to the administrator the content-management screens under /content, and to
+      the administrator and public sector staff /opportunities/create, the three
+      programs' forms and their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (whose
+      sections on the seeded Sprint With Us and Team With Us opportunities are
+      Summary, Opportunity, Addenda, History and Evaluation panel, with no
+      evaluation, consensus or instructions section), and to a vendor the Code
+      With Us proposal form
+      /opportunities/code-with-us/:opportunityId/proposals/create (reached from
+      \"Start a proposal\" on the opportunity) and the vendor's own proposal's
+      screen .../proposals/:proposalId/edit; rechecked on the current build as
+      the vendor and as the organization owner, the Sprint With Us and Team With
+      Us proposal forms answer \"Page not found\" even on the seeded Sprint With
+      Us opportunity still open for proposals
+      (00000000-0000-4000-a025-000000000001, deadline November 2, 2026), whose
+      page offers those vendors only \"Watch\" and no way to start a proposal,
+      and the Code With Us proposal's evaluation view answers \"Page not found\"
+      to the administrator on the seeded opportunity with three proposals; the
+      other proposal and evaluation screens — /proposals, the Sprint With Us and
+      Team With Us proposal forms, the Code With Us proposal's evaluation view
+      .../proposals/:proposalId, its \"Printable copy\"
+      .../proposals/:proposalId/export (to its own author too) and
+      .../proposals/export (to the administrator too), and
+      /opportunities/code-with-us/:opportunityId/complete included — and
+      /organizations/:orgId/sprint-with-us-terms-and-conditions and
+      /organizations/:orgId/team-with-us-terms-and-conditions (opened as the
+      seeded qualified organization's owner) answer \"Page not found\", as
+      /organizations/:orgId/edit does to a member who does not own the
+      organization; opened signed out (with the seeded record's identifier where
+      it takes one) it shows the \"Page not found\" screen; unbound:
+      proposal-twu-create.choose_organization —
+      /opportunities/team-with-us/:opportunityId/proposals/create is offered
+      only to a signed-in person, and walked signed in (as the administrator, as
+      a public sector employee, and as a vendor for a vendor's screens — the
+      seeded organization owner, an organization member and the invited vendor
+      for the organization screens — with the seeded records' identifiers), the
+      running build serves a signed-in person /dashboard, /opportunities, the
+      account screens under /users (a vendor's Organizations section,
+      /users/me?tab=organizations, draws \"Organizations you own\" with \"Create
+      organization\" and the owned table, and \"Organizations you belong to\"),
+      /organizations (\"Create organization\", \"My organizations\" and the
+      list), /organizations/create, and to an organization's owner
+      /organizations/:orgId/edit (the \"Organization\" section with \"Edit
+      organization\", and \"Archive organization\"; its Team members section
+      draws the team table, its row actions and \"Add team members\", its
+      Changelog section the changes to administrator rights and ownership, and
+      its Sprint With Us qualification and Team With Us qualification sections
+      say only \"This section is not available yet.\"), to the administrator the
+      content-management screens under /content, and to the administrator and
+      public sector staff /opportunities/create, the three programs' forms and
+      their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (whose
+      sections on the seeded Sprint With Us and Team With Us opportunities are
+      Summary, Opportunity, Addenda, History and Evaluation panel, with no
+      evaluation, consensus or instructions section), and to a vendor the Code
+      With Us proposal form
+      /opportunities/code-with-us/:opportunityId/proposals/create (reached from
+      \"Start a proposal\" on the opportunity) and the vendor's own proposal's
+      screen .../proposals/:proposalId/edit; rechecked on the current build as
+      the vendor and as the organization owner, the Sprint With Us and Team With
+      Us proposal forms answer \"Page not found\" even on the seeded Sprint With
+      Us opportunity still open for proposals
+      (00000000-0000-4000-a025-000000000001, deadline November 2, 2026), whose
+      page offers those vendors only \"Watch\" and no way to start a proposal,
+      and the Code With Us proposal's evaluation view answers \"Page not found\"
+      to the administrator on the seeded opportunity with three proposals; the
+      other proposal and evaluation screens — /proposals, the Sprint With Us and
+      Team With Us proposal forms, the Code With Us proposal's evaluation view
+      .../proposals/:proposalId, its \"Printable copy\"
+      .../proposals/:proposalId/export (to its own author too) and
+      .../proposals/export (to the administrator too), and
+      /opportunities/code-with-us/:opportunityId/complete included — and
+      /organizations/:orgId/sprint-with-us-terms-and-conditions and
+      /organizations/:orgId/team-with-us-terms-and-conditions (opened as the
+      seeded qualified organization's owner) answer \"Page not found\", as
+      /organizations/:orgId/edit does to a member who does not own the
+      organization; opened signed out (with the seeded record's identifier where
+      it takes one) it shows the \"Page not found\" screen; unbound:
+      proposal-swu-edit.start_editing —
+      /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit is
+      offered only to a signed-in person, and walked signed in (as the
+      administrator, as a public sector employee, and as a vendor for a vendor's
+      screens — the seeded organization owner, an organization member and the
+      invited vendor for the organization screens — with the seeded records'
+      identifiers), the running build serves a signed-in person /dashboard,
+      /opportunities, the account screens under /users (a vendor's Organizations
+      section, /users/me?tab=organizations, draws \"Organizations you own\" with
+      \"Create organization\" and the owned table, and \"Organizations you
+      belong to\"), /organizations (\"Create organization\", \"My
+      organizations\" and the list), /organizations/create, and to an
+      organization's owner /organizations/:orgId/edit (the \"Organization\"
+      section with \"Edit organization\", and \"Archive organization\"; its Team
+      members section draws the team table, its row actions and \"Add team
+      members\", its Changelog section the changes to administrator rights and
+      ownership, and its Sprint With Us qualification and Team With Us
+      qualification sections say only \"This section is not available yet.\"),
+      to the administrator the content-management screens under /content, and to
+      the administrator and public sector staff /opportunities/create, the three
+      programs' forms and their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (whose
+      sections on the seeded Sprint With Us and Team With Us opportunities are
+      Summary, Opportunity, Addenda, History and Evaluation panel, with no
+      evaluation, consensus or instructions section), and to a vendor the Code
+      With Us proposal form
+      /opportunities/code-with-us/:opportunityId/proposals/create (reached from
+      \"Start a proposal\" on the opportunity) and the vendor's own proposal's
+      screen .../proposals/:proposalId/edit; rechecked on the current build as
+      the vendor and as the organization owner, the Sprint With Us and Team With
+      Us proposal forms answer \"Page not found\" even on the seeded Sprint With
+      Us opportunity still open for proposals
+      (00000000-0000-4000-a025-000000000001, deadline November 2, 2026), whose
+      page offers those vendors only \"Watch\" and no way to start a proposal,
+      and the Code With Us proposal's evaluation view answers \"Page not found\"
+      to the administrator on the seeded opportunity with three proposals; the
+      other proposal and evaluation screens — /proposals, the Sprint With Us and
+      Team With Us proposal forms, the Code With Us proposal's evaluation view
+      .../proposals/:proposalId, its \"Printable copy\"
+      .../proposals/:proposalId/export (to its own author too) and
+      .../proposals/export (to the administrator too), and
+      /opportunities/code-with-us/:opportunityId/complete included — and
+      /organizations/:orgId/sprint-with-us-terms-and-conditions and
+      /organizations/:orgId/team-with-us-terms-and-conditions (opened as the
+      seeded qualified organization's owner) answer \"Page not found\", as
+      /organizations/:orgId/edit does to a member who does not own the
+      organization; opened signed out (with the seeded record's identifier where
+      it takes one) it shows the \"Page not found\" screen; unbound:
+      proposal-swu-edit.withdraw_proposal —
+      /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit is
+      offered only to a signed-in person, and walked signed in (as the
+      administrator, as a public sector employee, and as a vendor for a vendor's
+      screens — the seeded organization owner, an organization member and the
+      invited vendor for the organization screens — with the seeded records'
+      identifiers), the running build serves a signed-in person /dashboard,
+      /opportunities, the account screens under /users (a vendor's Organizations
+      section, /users/me?tab=organizations, draws \"Organizations you own\" with
+      \"Create organization\" and the owned table, and \"Organizations you
+      belong to\"), /organizations (\"Create organization\", \"My
+      organizations\" and the list), /organizations/create, and to an
+      organization's owner /organizations/:orgId/edit (the \"Organization\"
+      section with \"Edit organization\", and \"Archive organization\"; its Team
+      members section draws the team table, its row actions and \"Add team
+      members\", its Changelog section the changes to administrator rights and
+      ownership, and its Sprint With Us qualification and Team With Us
+      qualification sections say only \"This section is not available yet.\"),
+      to the administrator the content-management screens under /content, and to
+      the administrator and public sector staff /opportunities/create, the three
+      programs' forms and their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (whose
+      sections on the seeded Sprint With Us and Team With Us opportunities are
+      Summary, Opportunity, Addenda, History and Evaluation panel, with no
+      evaluation, consensus or instructions section), and to a vendor the Code
+      With Us proposal form
+      /opportunities/code-with-us/:opportunityId/proposals/create (reached from
+      \"Start a proposal\" on the opportunity) and the vendor's own proposal's
+      screen .../proposals/:proposalId/edit; rechecked on the current build as
+      the vendor and as the organization owner, the Sprint With Us and Team With
+      Us proposal forms answer \"Page not found\" even on the seeded Sprint With
+      Us opportunity still open for proposals
+      (00000000-0000-4000-a025-000000000001, deadline November 2, 2026), whose
+      page offers those vendors only \"Watch\" and no way to start a proposal,
+      and the Code With Us proposal's evaluation view answers \"Page not found\"
+      to the administrator on the seeded opportunity with three proposals; the
+      other proposal and evaluation screens — /proposals, the Sprint With Us and
+      Team With Us proposal forms, the Code With Us proposal's evaluation view
+      .../proposals/:proposalId, its \"Printable copy\"
+      .../proposals/:proposalId/export (to its own author too) and
+      .../proposals/export (to the administrator too), and
+      /opportunities/code-with-us/:opportunityId/complete included — and
+      /organizations/:orgId/sprint-with-us-terms-and-conditions and
+      /organizations/:orgId/team-with-us-terms-and-conditions (opened as the
+      seeded qualified organization's owner) answer \"Page not found\", as
+      /organizations/:orgId/edit does to a member who does not own the
+      organization; opened signed out (with the seeded record's identifier where
+      it takes one) it shows the \"Page not found\" screen; unbound:
+      proposal-swu-create.choose_organization —
+      /opportunities/sprint-with-us/:opportunityId/proposals/create is offered
+      only to a signed-in person, and walked signed in (as the administrator, as
+      a public sector employee, and as a vendor for a vendor's screens — the
+      seeded organization owner, an organization member and the invited vendor
+      for the organization screens — with the seeded records' identifiers), the
+      running build serves a signed-in person /dashboard, /opportunities, the
+      account screens under /users (a vendor's Organizations section,
+      /users/me?tab=organizations, draws \"Organizations you own\" with \"Create
+      organization\" and the owned table, and \"Organizations you belong to\"),
+      /organizations (\"Create organization\", \"My organizations\" and the
+      list), /organizations/create, and to an organization's owner
+      /organizations/:orgId/edit (the \"Organization\" section with \"Edit
+      organization\", and \"Archive organization\"; its Team members section
+      draws the team table, its row actions and \"Add team members\", its
+      Changelog section the changes to administrator rights and ownership, and
+      its Sprint With Us qualification and Team With Us qualification sections
+      say only \"This section is not available yet.\"), to the administrator the
+      content-management screens under /content, and to the administrator and
+      public sector staff /opportunities/create, the three programs' forms and
+      their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (whose
+      sections on the seeded Sprint With Us and Team With Us opportunities are
+      Summary, Opportunity, Addenda, History and Evaluation panel, with no
+      evaluation, consensus or instructions section), and to a vendor the Code
+      With Us proposal form
+      /opportunities/code-with-us/:opportunityId/proposals/create (reached from
+      \"Start a proposal\" on the opportunity) and the vendor's own proposal's
+      screen .../proposals/:proposalId/edit; rechecked on the current build as
+      the vendor and as the organization owner, the Sprint With Us and Team With
+      Us proposal forms answer \"Page not found\" even on the seeded Sprint With
+      Us opportunity still open for proposals
+      (00000000-0000-4000-a025-000000000001, deadline November 2, 2026), whose
+      page offers those vendors only \"Watch\" and no way to start a proposal,
+      and the Code With Us proposal's evaluation view answers \"Page not found\"
+      to the administrator on the seeded opportunity with three proposals; the
+      other proposal and evaluation screens — /proposals, the Sprint With Us and
+      Team With Us proposal forms, the Code With Us proposal's evaluation view
+      .../proposals/:proposalId, its \"Printable copy\"
+      .../proposals/:proposalId/export (to its own author too) and
+      .../proposals/export (to the administrator too), and
+      /opportunities/code-with-us/:opportunityId/complete included — and
+      /organizations/:orgId/sprint-with-us-terms-and-conditions and
+      /organizations/:orgId/team-with-us-terms-and-conditions (opened as the
+      seeded qualified organization's owner) answer \"Page not found\", as
+      /organizations/:orgId/edit does to a member who does not own the
+      organization; opened signed out (with the seeded record's identifier where
+      it takes one) it shows the \"Page not found\" screen"
+    found: unbound
+    adapter: 22f1f4c354ee32456a8199f92c37817fde7176b1
+    slice: 15
+    app_tree: e5b1b2fb5b00e3f80055447f2f602803093c939c
+    by: runner:verify
+    at: 2026-10-04T05:40:51.520Z
+  - id: R-2.24
+    target: new
+    why: "unbound: proposal-twu-create.choose_organization —
+      /opportunities/team-with-us/:opportunityId/proposals/create is offered
+      only to a signed-in person, and walked signed in (as the administrator, as
+      a public sector employee, and as a vendor for a vendor's screens — the
+      seeded organization owner, an organization member and the invited vendor
+      for the organization screens — with the seeded records' identifiers), the
+      running build serves a signed-in person /dashboard, /opportunities, the
+      account screens under /users (a vendor's Organizations section,
+      /users/me?tab=organizations, draws \"Organizations you own\" with \"Create
+      organization\" and the owned table, and \"Organizations you belong to\"),
+      /organizations (\"Create organization\", \"My organizations\" and the
+      list), /organizations/create, and to an organization's owner
+      /organizations/:orgId/edit (the \"Organization\" section with \"Edit
+      organization\", and \"Archive organization\"; its Team members section
+      draws the team table, its row actions and \"Add team members\", its
+      Changelog section the changes to administrator rights and ownership, and
+      its Sprint With Us qualification and Team With Us qualification sections
+      say only \"This section is not available yet.\"), to the administrator the
+      content-management screens under /content, and to the administrator and
+      public sector staff /opportunities/create, the three programs' forms and
+      their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (whose
+      sections on the seeded Sprint With Us and Team With Us opportunities are
+      Summary, Opportunity, Addenda, History and Evaluation panel, with no
+      evaluation, consensus or instructions section), and to a vendor the Code
+      With Us proposal form
+      /opportunities/code-with-us/:opportunityId/proposals/create (reached from
+      \"Start a proposal\" on the opportunity) and the vendor's own proposal's
+      screen .../proposals/:proposalId/edit; rechecked on the current build as
+      the vendor and as the organization owner, the Sprint With Us and Team With
+      Us proposal forms answer \"Page not found\" even on the seeded Sprint With
+      Us opportunity still open for proposals
+      (00000000-0000-4000-a025-000000000001, deadline November 2, 2026), whose
+      page offers those vendors only \"Watch\" and no way to start a proposal,
+      and the Code With Us proposal's evaluation view answers \"Page not found\"
+      to the administrator on the seeded opportunity with three proposals; the
+      other proposal and evaluation screens — /proposals, the Sprint With Us and
+      Team With Us proposal forms, the Code With Us proposal's evaluation view
+      .../proposals/:proposalId, its \"Printable copy\"
+      .../proposals/:proposalId/export (to its own author too) and
+      .../proposals/export (to the administrator too), and
+      /opportunities/code-with-us/:opportunityId/complete included — and
+      /organizations/:orgId/sprint-with-us-terms-and-conditions and
+      /organizations/:orgId/team-with-us-terms-and-conditions (opened as the
+      seeded qualified organization's owner) answer \"Page not found\", as
+      /organizations/:orgId/edit does to a member who does not own the
+      organization; opened signed out (with the seeded record's identifier where
+      it takes one) it shows the \"Page not found\" screen; unbound:
+      proposal-cwu-view.open —
+      /opportunities/code-with-us/:opportunityId/proposals/:proposalId is
+      offered only to a signed-in person, and walked signed in (as the
+      administrator, as a public sector employee, and as a vendor for a vendor's
+      screens — the seeded organization owner, an organization member and the
+      invited vendor for the organization screens — with the seeded records'
+      identifiers), the running build serves a signed-in person /dashboard,
+      /opportunities, the account screens under /users (a vendor's Organizations
+      section, /users/me?tab=organizations, draws \"Organizations you own\" with
+      \"Create organization\" and the owned table, and \"Organizations you
+      belong to\"), /organizations (\"Create organization\", \"My
+      organizations\" and the list), /organizations/create, and to an
+      organization's owner /organizations/:orgId/edit (the \"Organization\"
+      section with \"Edit organization\", and \"Archive organization\"; its Team
+      members section draws the team table, its row actions and \"Add team
+      members\", its Changelog section the changes to administrator rights and
+      ownership, and its Sprint With Us qualification and Team With Us
+      qualification sections say only \"This section is not available yet.\"),
+      to the administrator the content-management screens under /content, and to
+      the administrator and public sector staff /opportunities/create, the three
+      programs' forms and their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (whose
+      sections on the seeded Sprint With Us and Team With Us opportunities are
+      Summary, Opportunity, Addenda, History and Evaluation panel, with no
+      evaluation, consensus or instructions section), and to a vendor the Code
+      With Us proposal form
+      /opportunities/code-with-us/:opportunityId/proposals/create (reached from
+      \"Start a proposal\" on the opportunity) and the vendor's own proposal's
+      screen .../proposals/:proposalId/edit; rechecked on the current build as
+      the vendor and as the organization owner, the Sprint With Us and Team With
+      Us proposal forms answer \"Page not found\" even on the seeded Sprint With
+      Us opportunity still open for proposals
+      (00000000-0000-4000-a025-000000000001, deadline November 2, 2026), whose
+      page offers those vendors only \"Watch\" and no way to start a proposal,
+      and the Code With Us proposal's evaluation view answers \"Page not found\"
+      to the administrator on the seeded opportunity with three proposals; the
+      other proposal and evaluation screens — /proposals, the Sprint With Us and
+      Team With Us proposal forms, the Code With Us proposal's evaluation view
+      .../proposals/:proposalId, its \"Printable copy\"
+      .../proposals/:proposalId/export (to its own author too) and
+      .../proposals/export (to the administrator too), and
+      /opportunities/code-with-us/:opportunityId/complete included — and
+      /organizations/:orgId/sprint-with-us-terms-and-conditions and
+      /organizations/:orgId/team-with-us-terms-and-conditions (opened as the
+      seeded qualified organization's owner) answer \"Page not found\", as
+      /organizations/:orgId/edit does to a member who does not own the
+      organization; opened signed out (with the seeded record's identifier where
+      it takes one) it shows the \"Page not found\" screen (it shows \"Page not
+      found\" at
+      http://localhost:4800/opportunities/code-with-us/76f563be-ba0d-49e9-940f-\
+      14d36aea3868/proposals/a83b139d-1902-45d5-a991-090e0bce5bf0)"
+    found: unbound
+    adapter: 22f1f4c354ee32456a8199f92c37817fde7176b1
+    slice: 15
+    app_tree: e5b1b2fb5b00e3f80055447f2f602803093c939c
+    by: runner:verify
+    at: 2026-10-04T05:40:51.520Z
