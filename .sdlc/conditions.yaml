@@ -3228,3 +3228,14 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-10-04T14:00:12.271Z
+    closed:
+      outcome: met
+      why: every member of evaluation-consensus-list-swu and
+        evaluation-consensus-list-twu in tests/adapters/new/bindings.yaml now
+        reads `bound` against the rewalked Consensus section (table 'Agreed
+        scores, by anonymous proponent name', 'Submit final consensus scores'
+        and its dialog, 'Finalize consensus scores' in the 'Opportunity actions'
+        bar), implemented in evaluationConsensusListPage in
+        tests/adapters/new/index.ts
+      by: agent:reviewer
+      at: 2026-10-04T14:05:08.656Z
