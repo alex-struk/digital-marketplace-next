@@ -1599,3 +1599,25 @@ requests:
     at: 2026-10-04T09:43:32.233Z
     taken: 2026-10-04T09:48:36.425Z
     taken_by: bind-adapter-new-79
+  - stage: bind-adapter
+    target: new
+    why: "in tests/adapters/new/index.ts, userProfile.confirmActivationChange (line
+      6278) clicks the confirmation dialog's button and returns without waiting
+      for the activation change to reach the page. toggleAdminPermission on the
+      same screen settles after its click; this one does not.
+      tests/acceptance/users/R-4.20.spec.ts:40 then reads
+      userProfile.statusBadge() straight away and got 'Inactive', while the page
+      outline taken at that failure (.sdlc/evidence/slice-16/R-4.20.txt) shows
+      the profile of 00000000-0000-4000-8000-000000000205 with 'Status: Active'
+      and the status message 'Ellis Placeholder's account has been reactivated.
+      They have been told by email.'. The race became visible once every /api
+      request began waiting for the deadline-closing hook. Make
+      confirmActivationChange (and the same action on userProfileSelf) wait
+      until the dialog has closed and the change has been answered, for example
+      by settling or by waiting for the status message, so that a reading taken
+      after it reflects the change. The same steps are used by R-4.14, R-4.30,
+      R-4.31, R-3.7, R-3.8, R-3.27 and R-3.32."
+    from: build-slice-16-5
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-04T11:00:09.069Z
