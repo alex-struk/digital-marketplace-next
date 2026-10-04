@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>contract-v44 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">621</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">615</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">500</span></a></li><li><a href="../runs.html">Run log <span class="count">22</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>contract-v44</h1>
+<p class="lede">G1 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G1</td></tr><tr><th scope="row">opened</th><td>2026-10-04 14:34</td></tr><tr><th scope="row">holder</th><td>agent:product-owner</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.288 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Is this the contract the tests will act through?</h2>
+<p><strong>Recommendation.</strong> I rewrote the mail note in <code>spec/contract/observables.yaml</code> (now lines 152–167) so it agrees with R-6.15.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.288 (Claude Code))</p>
+<p>I rewrote the mail note in <code>spec/contract/observables.yaml</code> (now lines 152–167) so it agrees with R-6.15. Nothing else in the contract changed. The edit has not been through a YAML parser, and I could not bring the oracle up or take it down: this session refused every command that would have done so.</p>
+<p><strong>What the note now says.</strong> A notice sent to more than one person shows only the service&#39;s own address (<code>configured_sender_address</code>) as its visible recipient, and every reader is a blind copy. Searching the mail catcher by a reader&#39;s address, or reading the visible recipient in the message listing, finds nothing for such a notice. To learn who it reached, a test finds the notice by its subject, opens it by its identifier (<code>read_one_message</code>) and reads its blind-copy list. When a large group was split into several messages, the test does this for every message carrying the subject. A notice meant for one person still shows that person as its visible recipient and can be found by their address.</p>
+<p><strong>Why the note was wrong.</strong> It said a message &quot;is addressed to one person and every other recipient is a blind copy&quot;. The tests for R-5.31 and R-5.33 took that as their reason to search by a reader&#39;s visible address. Against a build that meets R-6.15, that search finds nothing, so those tests fail. This is what the slice 18 verify run showed.</p>
+<p><strong>A caveat I added, from reading the old code.</strong> The old application does not meet R-6.15 everywhere. In <code>sources/old/src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx</code> and <code>team-with-us.tsx</code>, it sends several Sprint With Us and Team With Us notices to an evaluation panel, an opportunity&#39;s author or the administrators with everyone as visible recipients. Those are the notices that a deadline was reached, that question consensus is ready, and that it was submitted or finalized. Its other group mailings, such as the new-opportunity announcement, already go to the service&#39;s address with readers as blind copies. So a test written to R-6.15 will fail against the old application on those notices. The criteria index already records that the old target fails R-6.15 and that the rebuild must pass it; the note now says which notices are involved, so a test writer does not mistake that failure for a fault in the test.</p>
+<p><strong>What I could not do.</strong></p>
+<ul><li><strong>Check the edit with a parser:</strong> the Python and Node commands I tried were refused before running. I re-read the region instead. It is an ordinary folded text block in the same list as the notes around it, and I expect it to parse.</li><li><strong>Run <code>node $SDLC_BIN oracle up</code> and <code>down</code>:</strong> the command was refused because the <code>$SDLC_BIN</code> variable could not be checked before running, and so was <code>echo &quot;$SDLC_BIN&quot;</code>. No containers were started, so none are left running. The Compose override is unchanged from the version already approved, so this run shows nothing new about whether the oracle starts.</li></ul>
+<p>There is one ruling request and I answered it, so there is no deferred-request line. The change to the note is all that needs to be on main before the R-5.31 and R-5.33 tests are rewritten to read blind-copy lists.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:product-owner (persona agent · claude claude-opus-5-5) on 2026-10-04 14:35.</p>
+<div class="body"><p>The question is whether the rewritten mail note in spec/contract/observables.yaml is the contract the R-5.31 and R-5.33 tests should act through. I approve. The previous note told test writers to search for a notice by a reader&#39;s visible address, which contradicts R-6.15 (several recipients means only the service&#39;s address is visible and every reader is a blind copy), and that is why those tests fail against a build that meets R-6.15. The new note states R-6.15 correctly. It tells a test to find a multi-recipient notice by subject, open it with read_one_message and read the blind-copy list, repeating this for every message when a batch was split. It keeps single-recipient notices findable by address. Both names it uses, configured_sender_address and read_one_message, are defined in the same contract. I checked the old-application caveat against the source. In sprint-with-us.tsx, the deadline-reached, question-consensus-ready, consensus-submitted and consensus-finalized notices use <code>to: batch.map(...)</code>, while the announcement and panel notices use <code>to: MAILER_REPLY, bcc: batch</code>. team-with-us.tsx matches, except that its deadline notice goes to the government author, which the note&#39;s &#39;panel, author or administrators&#39; wording already covers. So the caveat correctly tells test writers that failures on those notices are the old system&#39;s fault, not the test&#39;s, which agrees with what the criteria index already records against R-6.15. The new text is a well-indented folded block in the existing notes list. No criterion&#39;s wording or confidence changes. Two things would change this ruling: a YAML parse failure in the edited region, or old code showing any of the notices the caveat names using the blind-copy form after all.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
