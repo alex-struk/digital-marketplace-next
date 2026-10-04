@@ -129,4 +129,17 @@ describe("the addresses the application answers for", () => {
 
     await waitFor(() => expect(screen.getByTestId("not-found-page")).toBeTruthy());
   });
+
+  it("asks the service's /status, which runs the deadline hook, and says it is up (R-1.1)", async () => {
+    const asked = vi.fn(async (_input: unknown) => new Response("OK", { status: 200, headers: { "content-type": "text/plain" } }));
+    vi.stubGlobal("fetch", asked);
+
+    renderAt("/status");
+
+    await waitFor(() =>
+      expect(screen.getByTestId("service-status-message").textContent).toBe("The Digital Marketplace is up."),
+    );
+    expect(screen.getByTestId("service-status-page")).toBeTruthy();
+    expect(asked.mock.calls.some(([input]) => String(input instanceof Request ? input.url : input).endsWith("/status"))).toBe(true);
+  });
 });

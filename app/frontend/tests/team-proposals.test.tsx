@@ -584,3 +584,103 @@ describe("attachments on Sprint With Us and Team With Us opportunities (R-8.19, 
     expect((await screen.findByTestId("attachment-download-link")).textContent).toBe("Download brief.pdf");
   });
 });
+
+describe("awarding and the vendor's scoresheet (R-1.26, R-2.32, R-2.34)", () => {
+  const VIEW = `/opportunities/sprint-with-us/${OPPORTUNITY}/proposals/${PROPOSAL}`;
+  const inProcessing = { id: OPPORTUNITY, title: "Modernize the licence renewal service", status: "PROCESSING", proposalDeadline: "2026-09-02", totalMaxBudget: 500_000 };
+  const scoresheet = { questions: 100, challenge: 80, scenario: 70, price: 100, total: 87.5, rank: { rank: 1, of: 2 } };
+
+  function answering(who: Account, start: Record<string, unknown>, onChange: (body: { tag: string; value?: unknown }) => Response) {
+    serve((method, path, body) => {
+      if (path === `/api/proposals/sprint-with-us/${PROPOSAL}`) {
+        return method === "PUT" ? onChange(body as { tag: string }) : json(200, swuProposal(start));
+      }
+      if (path === `/api/opportunities/sprint-with-us/${OPPORTUNITY}`) return json(200, sprint({ status: "PROCESSING" }));
+      return json(200, []);
+    });
+    resetSessionForTests({ status: "signed-in", account: who }, fakeIdentity());
+  }
+
+  it("offers the author Award on a fully evaluated proposal, and awards it after asking", async () => {
+    answering(staff, { status: "EVALUATED_TEAM_SCENARIO", opportunity: inProcessing }, () =>
+      json(200, swuProposal({ status: "AWARDED", opportunity: { ...inProcessing, status: "AWARDED" } })),
+    );
+    renderAt(VIEW);
+    fireEvent.click(await screen.findByTestId("proposal-award-button"));
+    fireEvent.click(await screen.findByTestId("proposal-award-confirm"));
+    await waitFor(() => expect(screen.getByTestId("proposal-status").textContent).toBe("Awarded"));
+    expect(requests.filter((request) => request.method === "PUT").map((request) => request.body)).toEqual([{ tag: "award" }]);
+  });
+
+  it("offers no award before the last stage is evaluated, but still disqualification", async () => {
+    answering(staff, { status: "UNDER_REVIEW_CODE_CHALLENGE", opportunity: { ...inProcessing, status: "EVAL_CC" } }, () => json(500, {}));
+    renderAt(VIEW);
+    const actions = await screen.findByTestId("proposal-actions");
+    expect(within(actions).queryByTestId("proposal-award-button")).toBeNull();
+    expect(within(actions).getByTestId("proposal-disqualify-button")).toBeTruthy();
+  });
+
+  it("shows the vendor a Scoresheet tab once decided, with the anonymous name, the total and the rank", async () => {
+    answering(vendor, { status: "NOT_AWARDED", opportunity: { ...inProcessing, status: "AWARDED" }, anonymousProponentName: "Proponent 2", scoresheet }, () =>
+      json(500, {}),
+    );
+    renderAt(`${VIEW}/edit?tab=scoresheet`);
+    expect((await screen.findByTestId("proposal-total-score")).textContent).toBe("87.5%");
+    expect(screen.getByTestId("proposal-rank").textContent).toBe("1 of 2");
+    expect(screen.getByTestId("proposal-anonymous-name").textContent).toBe("Proponent 2");
+  });
+
+  it("shows staff the proposal's total score and rank on the read-only page, awarded or passed over (R-2.32)", async () => {
+    for (const status of ["AWARDED", "NOT_AWARDED"]) {
+      answering(staff, { status, opportunity: { ...inProcessing, status: "AWARDED" }, scoresheet }, () => json(500, {}));
+      const view = renderAt(VIEW);
+      const total = await screen.findByTestId("proposal-total-score");
+      expect(total.textContent).toBe("87.5%");
+      expect(total.previousElementSibling?.textContent).toBe("Total score");
+      expect(screen.getByTestId("proposal-scenario-score").textContent).toBe("70%");
+      expect(screen.getByTestId("proposal-rank").textContent).toBe("1 of 2");
+      view.unmount();
+    }
+  });
+
+  it("says a total not yet calculated, and shows the vendor no scores on the read-only page", async () => {
+    answering(staff, { status: "UNDER_REVIEW_CODE_CHALLENGE", opportunity: { ...inProcessing, status: "EVAL_CC" }, scoresheet: { ...scoresheet, challenge: null, scenario: null, price: null, total: null, rank: null } }, () => json(500, {}));
+    const view = renderAt(VIEW);
+    expect((await screen.findByTestId("proposal-total-score")).textContent).toBe("Not yet calculated");
+    expect(screen.queryByTestId("proposal-rank")).toBeNull();
+    view.unmount();
+
+    answering(vendor, { status: "EVALUATED_TEAM_SCENARIO", opportunity: inProcessing, scoresheet }, () => json(500, {}));
+    renderAt(VIEW);
+    await screen.findByTestId("proposal-identifier");
+    expect(screen.queryByTestId("proposal-total-score")).toBeNull();
+  });
+
+  it("shows the vendor their total and rank on the read-only page once decided (R-2.32)", async () => {
+    answering(vendor, { status: "AWARDED", opportunity: { ...inProcessing, status: "AWARDED" }, scoresheet }, () => json(500, {}));
+    renderAt(VIEW);
+    expect((await screen.findByTestId("proposal-total-score")).textContent).toBe("87.5%");
+    expect(screen.getByTestId("proposal-rank").textContent).toBe("1 of 2");
+  });
+
+  it("shows staff the organization's contact person on the proposal tab when the service gives it (R-1.27)", async () => {
+    const organization = {
+      id: "00000000-0000-4000-8000-000000000301",
+      legalName: "Northern Pines Digital Ltd.",
+      contact: { name: "Blake Placeholder", email: "org.owner@example.test", phone: "250-555-0101" },
+    };
+    answering(staff, { status: "AWARDED", opportunity: { ...inProcessing, status: "AWARDED" }, scoresheet, organization }, () => json(500, {}));
+    renderAt(`${VIEW}?tab=proposal`);
+    await screen.findByTestId("proposal-identifier");
+    expect(await screen.findByText("org.owner@example.test")).toBeTruthy();
+    expect(screen.getByText("250-555-0101")).toBeTruthy();
+  });
+
+  it("has no Scoresheet tab before a decision", async () => {
+    answering(vendor, { status: "EVALUATED_TEAM_SCENARIO", opportunity: inProcessing }, () => json(500, {}));
+    renderAt(`${VIEW}/edit`);
+    await screen.findByTestId("proposal-tab-proposal");
+    expect(screen.queryByTestId("proposal-tab-scoresheet")).toBeNull();
+    expect(screen.queryByTestId("proposal-total-score")).toBeNull();
+  });
+});

@@ -4,6 +4,7 @@ import { useNavigate, useSearch } from "@tanstack/react-router";
 import { fileContentAddress } from "@rules/files";
 import { SERVICE_AREAS, SWU_PHASES, SWU_PHASE_NAMES } from "@rules/other-program-drafts";
 import { isAcceptingProposals } from "@rules/proposals";
+import { Scoresheet, rankLabel } from "@rules/proposal-evaluation";
 import { TEAM_PROGRAM_NAMES, TeamProgram, offeredTeamProposalActions, organizationIsLocked } from "@rules/team-proposals";
 import { Account, changeOwnAccount } from "../api/accounts";
 import { downloadFile } from "../api/files";
@@ -16,7 +17,7 @@ import { Stack } from "../app/page-layout";
 import { RequireSignIn } from "../app/require-sign-in";
 import { useScreenTitle } from "../app/screen-title";
 import { TitledAlert } from "../app/titled-alert";
-import { Fact, deadlineLabel, momentLabel } from "./opportunity-parts";
+import { ContactFacts, Fact, deadlineLabel, momentLabel } from "./opportunity-parts";
 import { ProposalHistory } from "./proposal-cwu-edit";
 import { ProposalStatusBadge, TermsDialog } from "./proposal-cwu-form";
 import { TeamProposalForm, teamValuesFrom } from "./proposal-team-form";
@@ -36,9 +37,14 @@ import { TeamProposalForm, teamValuesFrom } from "./proposal-team-form";
  * everyone who may read the proposal (R-2.9).
  */
 
-type Tab = "proposal" | "history";
-const TABS: readonly Tab[] = ["proposal", "history"];
-const TAB_NAMES: Readonly<Record<Tab, string>> = { proposal: "Proposal", history: "History" };
+type Tab = "proposal" | "scoresheet" | "history";
+const TAB_NAMES: Readonly<Record<Tab, string>> = { proposal: "Proposal", scoresheet: "Scoresheet", history: "History" };
+
+/** The Scoresheet tab appears once a decision has been made and the service gives the result (R-2.32). */
+function tabsFor(proposal: TeamProposal): readonly Tab[] {
+  const decided = (proposal.status === "AWARDED" || proposal.status === "NOT_AWARDED") && proposal.scoresheet !== undefined;
+  return decided ? ["proposal", "scoresheet", "history"] : ["proposal", "history"];
+}
 
 const TITLES: Readonly<Record<TeamProgram, string>> = {
   "sprint-with-us": "Manage a Sprint With Us proposal",
@@ -130,7 +136,8 @@ function Manage({
     if (notice && notice.kind !== "done") noticeRef.current?.focus();
   }, [notice]);
 
-  const tab: Tab = TABS.includes(search.tab as Tab) ? (search.tab as Tab) : "proposal";
+  const tabs = tabsFor(proposal);
+  const tab: Tab = tabs.includes(search.tab as Tab) ? (search.tab as Tab) : "proposal";
   const base = `/opportunities/${program}/${opportunity.id}/proposals/${proposal.id}`;
   const offers = offeredTeamProposalActions(proposal.status);
   // The organization already named stays a choice even when the vendor no longer administers it.
@@ -265,7 +272,7 @@ function Manage({
       ) : null}
       <nav aria-label="Proposal sections">
         <Stack as="ul" direction="row" gap="medium">
-          {TABS.map((name) => (
+          {tabs.map((name) => (
             <li key={name}>
               <Link href={`${base}/edit?tab=${name}`} aria-current={name === tab ? "page" : undefined} data-testid={`proposal-tab-${name}`}>
                 {TAB_NAMES[name]}
@@ -316,6 +323,7 @@ function Manage({
           </>
         ) : null}
         {tab === "proposal" && !editing ? <TeamProposalDetails program={program} proposal={proposal} opportunity={opportunity} /> : null}
+        {tab === "scoresheet" && proposal.scoresheet ? <ScoresheetDetails program={program} proposal={proposal} scoresheet={proposal.scoresheet} /> : null}
         {tab === "history" ? <ProposalHistory proposal={proposal} /> : null}
       </Stack>
       <TermsDialog
@@ -344,8 +352,8 @@ function Manage({
         >
           <Text elementType="p">
             {isAcceptingProposals({ status: opportunity.status, proposalDeadline: opportunity.proposalDeadline }, new Date())
-              ? `It will no longer be considered. You can submit it again only while the opportunity is accepting proposals, until ${deadlineLabel(proposal.opportunity.proposalDeadline)}.`
-              : "It will no longer be considered, and the opportunity is no longer accepting proposals, so it cannot be submitted again."}
+              ? `It will no longer be considered. You can submit it again only while the opportunity is accepting proposals, until ${deadlineLabel(proposal.opportunity.proposalDeadline)}. You and the administrators will be sent a withdrawal notice.`
+              : "It will no longer be considered, and the opportunity is no longer accepting proposals, so it cannot be submitted again. You and the administrators will be sent a withdrawal notice."}
           </Text>
         </AlertDialog>
       </Modal>
@@ -414,6 +422,11 @@ export function TeamProposalDetails({ program, proposal, opportunity }: { progra
         <Text elementType="p" data-testid="proposal-organization">
           {proposal.organization?.legalName ?? "Not chosen yet"}
         </Text>
+        {proposal.organization?.contact ? (
+          <Stack as="dl" direction="row" gap="medium">
+            <ContactFacts contact={proposal.organization.contact} />
+          </Stack>
+        ) : null}
       </Stack>
       <Stack as="section" gap="medium" aria-labelledby="tab-team">
         <Heading level={3} id="tab-team">
@@ -571,6 +584,42 @@ export function TeamProposalDetails({ program, proposal, opportunity }: { progra
           </ul>
         )}
       </Stack>
+    </>
+  );
+}
+
+const percent = (value: number | null) => (value === null ? "Not scored" : `${value}%`);
+
+/**
+ * The vendor's result once a decision has been made (R-2.32): the anonymous name evaluators saw
+ * (R-2.5), each stage's score, the weighted total and the rank.
+ */
+function ScoresheetDetails({ program, proposal, scoresheet }: { program: TeamProgram; proposal: TeamProposal; scoresheet: Scoresheet }) {
+  const sprint = program === "sprint-with-us";
+  return (
+    <>
+      {proposal.anonymousProponentName ? (
+        <Text elementType="p">
+          During evaluation, evaluators saw this proposal as <span data-testid="proposal-anonymous-name">{proposal.anonymousProponentName}</span>.
+        </Text>
+      ) : null}
+      <Stack as="dl" direction="row" gap="medium">
+        <Fact label={sprint ? "Team questions" : "Resource questions"}>{percent(scoresheet.questions)}</Fact>
+        <Fact label={sprint ? "Code challenge" : "Challenge"}>{percent(scoresheet.challenge)}</Fact>
+        {sprint ? <Fact label="Team scenario">{percent(scoresheet.scenario)}</Fact> : null}
+        <Fact label="Price">{percent(scoresheet.price)}</Fact>
+        <Fact label="Total" testId="proposal-total-score">
+          {percent(scoresheet.total)}
+        </Fact>
+        {scoresheet.rank ? (
+          <Fact label="Rank" testId="proposal-rank">
+            {rankLabel(scoresheet.rank)}
+          </Fact>
+        ) : null}
+      </Stack>
+      <Text elementType="p" size="small" color="secondary">
+        The total combines each stage's score in the proportions the opportunity states.
+      </Text>
     </>
   );
 }

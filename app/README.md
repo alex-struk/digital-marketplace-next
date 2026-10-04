@@ -213,6 +213,32 @@ proposals as to the other two programs'. A file on an opportunity or a proposal 
 it hangs on, by one rule for every program (`OpportunityAttachmentReadPath`,
 `ProposalAttachmentReadPath`).
 
+## Closing, scoring and awarding
+
+There is no scheduler. A hook in front of every request under `/api` and `/status`
+(`backend/src/closing/`) closes each published opportunity whose deadline has passed, in all three
+programs: Code With Us to `EVALUATION`, the other two to `EVAL_QUESTIONS_INDIVIDUAL`, every submitted
+proposal to review, Sprint With Us and Team With Us proposals named "Proponent 1", "Proponent 2" and
+so on. The author of a Code With Us opportunity, or the evaluators on the other programs' panels, are
+then emailed. Each program's run starts at most once per `DEADLINE_HOOK_INTERVAL_MS` (a minute when
+unset, `0` in compose), and the request waits for it, so requesting `/status` and then reading shows
+the closure. A browser opening `/status` gets the "Service status" screen, which asks the service's
+`/status` in turn.
+
+Once a Code With Us opportunity has closed, its author and administrators open each proposal from
+the Proposals tab at `/opportunities/code-with-us/<id>/proposals/<proposalId>`, and there enter its
+one score out of 100, disqualify it with a reason, or award it once it is evaluated. The last score
+in contention moves the opportunity to processing by itself; an award marks the rest not awarded,
+awards the opportunity, names the winner on its public page (contact details and score only to its
+author and administrators), and emails the winner and each proponent passed over. Submitting and
+withdrawing a proposal in any program is confirmed by email, and a withdrawal also tells the
+administrators. A vendor sees their score and rank once their proposal is awarded or not awarded.
+The rules are `backend/src/rules/proposal-evaluation.ts`, the page's actions
+`frontend/src/screens/proposal-evaluation-actions.tsx`; decision record 0060 has the answers and
+refusals. Sprint With Us and Team With Us proposals are awarded and disqualified the same way from
+their own read-only pages, and once decided the vendor's manage page shows a Scoresheet tab with
+each stage's score, the weighted total and the rank, read from what the evaluation stored.
+
 ## Organizations
 
 Anybody browses at `/organizations`: every organization not archived, by legal name, fifty to a

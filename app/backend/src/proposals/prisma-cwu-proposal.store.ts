@@ -5,6 +5,7 @@ import { asFileRecord } from "../files/file";
 import { PrismaService } from "../prisma/prisma.service";
 import { CwuStatus, isStatusOf, pacificDayOf } from "../rules/opportunities";
 import { CwuProposalInput, CwuProposalStatus, IndividualProponent, isCwuProposalStatus } from "../rules/proposals";
+import { IN_CONTENTION, SCORE_ENTERED, scoreEnteredNote } from "../rules/proposal-evaluation";
 import {
   CwuProposalStore,
   OpportunityOfProposal,
@@ -37,7 +38,7 @@ const withEverything = {
   users_cwuProposals_createdByTousers: person,
   users_cwuProposals_updatedByTousers: person,
   cwuProponents: true,
-  organizations: { select: { id: true, legalName: true, active: true } },
+  organizations: { select: { id: true, legalName: true, active: true, contactName: true, contactEmail: true, contactPhone: true } },
   cwuProposalAttachments: { include: { files: true } },
   cwuProposalStatuses: { orderBy: { createdAt: "desc" }, include: { users: person } },
   cwuOpportunities: opportunityParts,
@@ -174,6 +175,66 @@ export class PrismaCwuProposalStore implements CwuProposalStore {
     return [...new Set(rows.map((row) => row.organization))];
   }
 
+  async score(id: string, score: number, by: string): Promise<void> {
+    const now = new Date();
+    // The score's entry follows the change of state, so newest first it reads above it.
+    const entered = new Date(now.getTime() + 1);
+    await this.prisma.$transaction([
+      this.prisma.cwuProposals.update({ where: { id }, data: { score, updatedAt: now, updatedBy: by } }),
+      this.prisma.cwuProposalStatuses.create({
+        data: { id: randomUUID(), createdAt: now, createdBy: by, proposal: id, status: "EVALUATED", event: null, note: null },
+      }),
+      this.prisma.cwuProposalStatuses.create({
+        data: {
+          id: randomUUID(),
+          createdAt: entered,
+          createdBy: by,
+          proposal: id,
+          status: null,
+          event: SCORE_ENTERED,
+          note: scoreEnteredNote(score),
+        },
+      }),
+    ]);
+  }
+
+  async changeOpportunityStatus(opportunityId: string, status: CwuStatus, by: string | null, note: string | null): Promise<void> {
+    await this.prisma.cwuOpportunityStatuses.create({
+      data: { id: randomUUID(), createdAt: new Date(), createdBy: by, opportunity: opportunityId, status, event: null, note },
+    });
+  }
+
+  async award(id: string, by: string, note: string | null): Promise<string[]> {
+    const now = new Date();
+    return this.prisma.$transaction(async (tx) => {
+      const winner = await tx.cwuProposals.findUniqueOrThrow({ where: { id }, select: { opportunity: true } });
+      const others = await tx.cwuProposals.findMany({
+        where: { opportunity: winner.opportunity, id: { not: id } },
+        select: { id: true, cwuProposalStatuses: latestStatus },
+      });
+      const passedOver = others
+        .filter((other) => IN_CONTENTION.includes(other.cwuProposalStatuses[0]?.status ?? ""))
+        .map((other) => other.id);
+      const entry = (proposal: string, status: CwuProposalStatus, entryNote: string | null) => ({
+        id: randomUUID(),
+        createdAt: now,
+        createdBy: by,
+        proposal,
+        status,
+        event: null,
+        note: entryNote,
+      });
+      await tx.cwuProposalStatuses.createMany({
+        data: [entry(id, "AWARDED", note), ...passedOver.map((other) => entry(other, "NOT_AWARDED", null))],
+      });
+      await tx.cwuProposals.updateMany({ where: { id: { in: [id, ...passedOver] } }, data: { updatedAt: now, updatedBy: by } });
+      await tx.cwuOpportunityStatuses.create({
+        data: { id: randomUUID(), createdAt: now, createdBy: by, opportunity: winner.opportunity, status: "AWARDED", event: null, note: null },
+      });
+      return passedOver;
+    });
+  }
+
   /** An individual's details: the record the proposal already has, changed, or a new one. */
   private async writeIndividual(
     tx: Prisma.TransactionClient,
@@ -232,8 +293,25 @@ export function organizationOf(content: CwuProposalInput): string | null {
   return content.proponent.tag === "organization" && content.proponent.value !== "" ? content.proponent.value : null;
 }
 
+/** An organization as a proposal names it, with the contact person it gives (R-1.27). */
+export function organizationOfRow(row: {
+  readonly id: string;
+  readonly legalName: string;
+  readonly active: boolean;
+  readonly contactName: string;
+  readonly contactEmail: string;
+  readonly contactPhone: string | null;
+}): ProposalOrganization {
+  return {
+    id: row.id,
+    legalName: row.legalName,
+    active: row.active,
+    contact: { name: row.contactName, email: row.contactEmail, phone: row.contactPhone },
+  };
+}
+
 function proponentOf(row: Row): StoredProponent {
-  if (row.organizations) return { tag: "organization", value: row.organizations };
+  if (row.organizations) return { tag: "organization", value: organizationOfRow(row.organizations) };
   const individual = row.cwuProponents;
   return {
     tag: "individual",

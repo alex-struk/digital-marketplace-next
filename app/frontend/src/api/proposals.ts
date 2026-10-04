@@ -6,6 +6,7 @@ import {
   isCwuProposalStatus,
   readIndividual,
 } from "@rules/proposals";
+import type { Rank } from "@rules/proposal-evaluation";
 import { api } from "./client";
 import { Attachment, Person, reasonsIn } from "./opportunities";
 
@@ -23,9 +24,19 @@ export interface ProposalHistoryEntry {
   readonly note: string | null;
 }
 
+/** The contact person an organization names, given to whoever may see the proposal's score (R-1.27). */
+export interface ProponentContact {
+  readonly name: string;
+  readonly email: string;
+  readonly phone: string | null;
+}
+
 export type Proponent =
   | { readonly tag: "individual"; readonly value: IndividualProponent }
-  | { readonly tag: "organization"; readonly value: { readonly id: string; readonly legalName: string } };
+  | {
+      readonly tag: "organization";
+      readonly value: { readonly id: string; readonly legalName: string; readonly contact?: ProponentContact };
+    };
 
 export interface CwuProposal {
   readonly id: string;
@@ -47,6 +58,8 @@ export interface CwuProposal {
   readonly attachments: readonly Attachment[];
   /** Present once the reader may see it (R-2.32). */
   readonly score?: number | null;
+  /** Where it stands among the scored proposals, beside the score (R-2.32). */
+  readonly rank?: Rank | null;
   /** Newest first (R-2.9). */
   readonly history: readonly ProposalHistoryEntry[];
 }
@@ -63,11 +76,22 @@ function readAttachment(value: unknown): Attachment | null {
   return isRecord(value) && typeof value.id === "string" && typeof value.name === "string" ? { id: value.id, name: value.name } : null;
 }
 
+/** An organization's contact, when the answer carries one. */
+export function readContact(value: unknown): ProponentContact | null {
+  if (!isRecord(value) || typeof value.name !== "string" || typeof value.email !== "string") return null;
+  return { name: value.name, email: value.email, phone: typeof value.phone === "string" && value.phone.trim() !== "" ? value.phone : null };
+}
+
 function readProponent(value: unknown): Proponent {
   if (isRecord(value) && value.tag === "organization" && isRecord(value.value) && typeof value.value.id === "string") {
-    return { tag: "organization", value: { id: value.value.id, legalName: text(value.value.legalName) } };
+    const contact = readContact(value.value.contact);
+    return { tag: "organization", value: { id: value.value.id, legalName: text(value.value.legalName), ...(contact ? { contact } : {}) } };
   }
   return { tag: "individual", value: isRecord(value) ? readIndividual(value.value) : blankIndividual() };
+}
+
+function readRank(value: unknown): Rank | null {
+  return isRecord(value) && typeof value.rank === "number" && typeof value.of === "number" ? { rank: value.rank, of: value.of } : null;
 }
 
 export function readCwuProposal(value: unknown): CwuProposal | null {
@@ -95,6 +119,7 @@ export function readCwuProposal(value: unknown): CwuProposal | null {
       ? value.attachments.map(readAttachment).filter((file): file is Attachment => file !== null)
       : [],
     ...("score" in value ? { score: typeof value.score === "number" ? value.score : null } : {}),
+    ...("rank" in value ? { rank: readRank(value.rank) } : {}),
     history: Array.isArray(value.history)
       ? value.history.filter(isRecord).map((entry) => ({
           createdAt: text(entry.createdAt),
@@ -200,11 +225,15 @@ export async function createCwuProposal(
   }
 }
 
-/** One tagged change: new content, a submission, or a withdrawal (R-2.23). */
+/**
+ * One tagged change: the vendor's new content, submission or withdrawal (R-2.23), or, once the
+ * opportunity has closed, a score out of 100, a disqualification with its reason, or an award
+ * (R-2.26, R-2.33, R-2.34).
+ */
 export async function changeCwuProposal(
   id: string,
-  tag: "edit" | "submit" | "withdraw",
-  value?: CwuProposalSubmission,
+  tag: "edit" | "submit" | "withdraw" | "score" | "disqualify" | "award",
+  value?: CwuProposalSubmission | number | string,
 ): Promise<ProposalSaveAnswer> {
   try {
     const { data, error, response } = await api.PUT("/api/proposals/code-with-us/{id}", {

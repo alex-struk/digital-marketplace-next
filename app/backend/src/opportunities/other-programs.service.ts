@@ -10,6 +10,7 @@ import {
   otherSubmittedForReviewToAuthor,
 } from "../mail/notifications/other-program-opportunity";
 import { DEFAULT_BATCH_SIZE, MailSettings } from "../mail/settings";
+import { maySeeProposalScores } from "../rules/proposal-evaluation";
 import {
   CalendarDay,
   NOT_PERMITTED_TO_CREATE,
@@ -115,11 +116,19 @@ export class OtherProgramsService {
   /** One opportunity, for someone who may read it; one they may not is answered as one not there (R-1.2). */
   async read(viewer: OpportunityViewer | null, program: OtherProgram, id: string): Promise<SummaryAnswer> {
     const found = await this.readable(viewer, program, id);
-    const [watched, running] = await Promise.all([
+    const [watched, running, winner] = await Promise.all([
       this.watching.watchedBy(viewer, program),
       this.running.answerFor(viewer, subjectOf(found)),
+      found.status === "AWARDED" ? this.store.successfulProponent(program, found.id) : Promise.resolve(null),
     ]);
-    return { ...summaryAnswerFor(found, viewer, watched.has(found.id)), ...running };
+    const answer = { ...summaryAnswerFor(found, viewer, watched.has(found.id)), ...running };
+    if (!winner) return answer;
+    // The winner's name to everyone; their contact details only to whoever may see scores (R-1.27).
+    const seesScores = maySeeProposalScores(viewer, { createdBy: found.createdBy?.id ?? null });
+    return {
+      ...answer,
+      successfulProponent: seesScores ? { name: winner.name, email: winner.email, phone: winner.phone } : { name: winner.name },
+    };
   }
 
   async create(viewer: OpportunityViewer | null, program: OtherProgram, body: unknown): Promise<SummaryAnswer> {

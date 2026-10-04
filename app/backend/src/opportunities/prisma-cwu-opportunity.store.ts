@@ -11,7 +11,14 @@ import {
   pacificDayOf,
   recordedInstantOf,
 } from "../rules/opportunities";
-import { CwuOpportunityStore, HistoryEntry, Person, Recipient, StoredCwuOpportunity } from "./cwu-opportunity";
+import {
+  CwuOpportunityStore,
+  HistoryEntry,
+  Person,
+  Recipient,
+  StoredCwuOpportunity,
+  SuccessfulProponent,
+} from "./cwu-opportunity";
 
 const person = { select: { id: true, name: true } } as const;
 
@@ -109,6 +116,28 @@ export class PrismaCwuOpportunityStore implements CwuOpportunityStore {
     const found = await this.prisma.users.findUnique({ where: { id: accountId }, select: { email: true, status: true } });
     // A deactivated account is sent nothing (R-6.17).
     return found && found.status === "ACTIVE" ? { email: found.email } : null;
+  }
+
+  async successfulProponent(opportunityId: string): Promise<SuccessfulProponent | null> {
+    const proposals = await this.prisma.cwuProposals.findMany({
+      where: { opportunity: opportunityId },
+      select: {
+        score: true,
+        cwuProposalStatuses: { where: { status: { not: null } }, orderBy: { createdAt: "desc" }, take: 1, select: { status: true } },
+        cwuProponents: { select: { legalName: true, email: true, phone: true } },
+        organizations: { select: { legalName: true, contactEmail: true, contactPhone: true } },
+      },
+    });
+    const winner = proposals.find((proposal) => proposal.cwuProposalStatuses[0]?.status === "AWARDED");
+    if (!winner) return null;
+    const organization = winner.organizations;
+    const individual = winner.cwuProponents;
+    return {
+      name: organization?.legalName ?? individual?.legalName ?? "",
+      email: organization ? organization.contactEmail : (individual?.email ?? null),
+      phone: organization ? (organization.contactPhone ?? null) : (individual?.phone ?? null),
+      score: winner.score,
+    };
   }
 
   private async writeVersion(

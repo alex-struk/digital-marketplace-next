@@ -15,8 +15,19 @@
 		reverse_proxy {$BACKEND_ORIGIN:backend:3001}
 	}
 
+	# /status is the service's: every request to it runs the deadline hook (decision record 0005).
+	# A browser opening it as a page is given the screen instead, which asks the service's /status
+	# itself (decision record 0060).
 	handle /status {
-		reverse_proxy {$BACKEND_ORIGIN:backend:3001}
+		@page header Accept *text/html*
+		handle @page {
+			root * /srv
+			rewrite * /index.html
+			file_server
+		}
+		handle {
+			reverse_proxy {$BACKEND_ORIGIN:backend:3001}
+		}
 	}
 
 	# Signing in begins and ends at the service, each with a redirect (decision record 0015).

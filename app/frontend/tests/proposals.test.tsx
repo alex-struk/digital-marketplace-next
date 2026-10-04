@@ -387,6 +387,40 @@ describe("the create page (R-2.3, R-2.12, R-2.13, R-2.14)", () => {
     const errors = await screen.findAllByTestId("field-error");
     expect(errors.map((error) => error.textContent)).toEqual(["Organization: Please select a different organization."]);
   });
+
+  it.each([
+    ["closed for evaluation", { status: "EVALUATION", proposalDeadline: "2026-01-01" }],
+    ["still published past its deadline", { status: "PUBLISHED", proposalDeadline: "2026-01-01" }],
+  ])("stays open on an opportunity %s, and shows the service's refusal of a submission (R-2.15)", async (_, closed) => {
+    serve((method, path) => {
+      if (method === "PUT" && path === `/api/users/${vendor.id}`) return json(200, vendor);
+      if (method === "POST") return json(400, { errors: [NOT_ACCEPTING_PROPOSALS] });
+      if (path === `/api/opportunities/code-with-us/${OPPORTUNITY}`) return json(200, opportunity(closed));
+      if (path === "/api/ownedOrganizations") return json(200, []);
+      return json(200, []);
+    });
+    resetSessionForTests({ status: "signed-in", account: vendor }, fakeIdentity());
+    renderAt(CREATE);
+    fireEvent.click(await screen.findByTestId("proposal-submit"));
+    // Nothing is worth completing once it has closed: the terms are asked for straight away.
+    await screen.findByTestId("proposal-terms-dialog");
+    fireEvent.click(within(screen.getByTestId("proposal-accept-program-terms")).getByRole("checkbox"));
+    fireEvent.click(within(screen.getByTestId("proposal-accept-app-terms")).getByRole("checkbox"));
+    await waitFor(() => expect(screen.getByTestId("proposal-submit-confirm").hasAttribute("disabled")).toBe(false));
+    fireEvent.click(screen.getByTestId("proposal-submit-confirm"));
+
+    const refused = await screen.findByTestId("proposal-refused-message");
+    expect(refused.textContent).toContain(NOT_ACCEPTING_PROPOSALS);
+    expect(screen.queryByText("Page not found")).toBeNull();
+    expect(requests.find((request) => request.method === "POST")?.body).toMatchObject({ status: "SUBMITTED" });
+  });
+
+  it("is the missing page for an opportunity the service does not show", async () => {
+    serve((method, path) => (path === `/api/opportunities/code-with-us/${OPPORTUNITY}` ? json(404, {}) : json(200, [])));
+    resetSessionForTests({ status: "signed-in", account: vendor }, fakeIdentity());
+    renderAt(CREATE);
+    expect(await screen.findByText("Page not found")).toBeTruthy();
+  });
 });
 
 describe("the manage page (R-2.4, R-2.9, R-2.15, R-2.23)", () => {

@@ -61,3 +61,20 @@ export function blindCopiedBatches(
   }
   return batches;
 }
+
+/**
+ * One message to each of several people, every copy visibly addressed to its reader alone, so each
+ * is told by name and still nobody sees who else was told. A recipient with no address is skipped
+ * (R-6.28). Used for the small, named groups a staff notice goes to — a panel's evaluators, the
+ * administrators — rather than the open-ended audiences `blindCopiedBatches` serves.
+ */
+export function addressedToEach(recipients: readonly (string | null | undefined)[], message: Message): Envelope[] {
+  const seen = new Set<string>();
+  const envelopes: Envelope[] = [];
+  for (const recipient of recipients) {
+    if (!recipient || seen.has(recipient.toLowerCase())) continue;
+    seen.add(recipient.toLowerCase());
+    envelopes.push({ to: [recipient], message });
+  }
+  return envelopes;
+}

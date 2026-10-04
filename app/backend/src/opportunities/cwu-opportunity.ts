@@ -66,6 +66,17 @@ export interface CwuOpportunityStore {
   activeAdministrators(): Promise<Recipient[]>;
   /** An account's address, for a confirmation to an opportunity's author. */
   recipient(accountId: string): Promise<Recipient | null>;
+  /** The proponent of the proposal awarded the opportunity, if one is (R-1.26, R-1.27). */
+  successfulProponent(opportunityId: string): Promise<SuccessfulProponent | null>;
+}
+
+/** Who an opportunity was awarded to: their name, and what only those who may see scores are shown (R-1.27). */
+export interface SuccessfulProponent {
+  /** The legal name of the winning organization or individual. */
+  readonly name: string;
+  readonly email: string | null;
+  readonly phone: string | null;
+  readonly score: number | null;
 }
 
 export const CWU_OPPORTUNITY_STORE = Symbol("CwuOpportunityStore");
@@ -119,4 +130,14 @@ export interface CwuOpportunityAnswer {
   }[];
   /** Present only for the author and administrators, once it has been published (R-1.30). */
   readonly reporting?: ReportingFigures;
+  /**
+   * Present once it has been awarded: the winner's name to everyone, their contact details and
+   * score only to those who may see proposal scores (R-1.27).
+   */
+  readonly successfulProponent?: {
+    readonly name: string;
+    readonly email?: string | null;
+    readonly phone?: string | null;
+    readonly score?: number | null;
+  };
 }

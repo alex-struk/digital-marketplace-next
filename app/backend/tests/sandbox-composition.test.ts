@@ -355,6 +355,17 @@ describe("completing sign-in at the service (decision record 0015)", () => {
     const caddyfile = readFileSync(path.resolve(composeDir, "../frontend/Caddyfile"), "utf8");
     expect(caddyfile).toMatch(/handle \/auth\/\* \{\s*reverse_proxy/);
   });
+
+  it("forwards /status to the service, except a browser's page request, which the screen answers", () => {
+    const caddyfile = readFileSync(path.resolve(composeDir, "../frontend/Caddyfile"), "utf8");
+    expect(caddyfile).toMatch(/handle \/status \{\s*@page header Accept \*text\/html\*/);
+    expect(caddyfile).toMatch(/handle \{\s*reverse_proxy \{\$BACKEND_ORIGIN:backend:3001\}\s*\}\s*\}/);
+  });
+
+  it("closes a lapsed opportunity at the first request after its deadline (R-1.1)", () => {
+    const backend = compose.services.backend as Service & { environment: Env };
+    expect(backend.environment.DEADLINE_HOOK_INTERVAL_MS).toBe("0");
+  });
 });
 
 describe("the addresses the sandbox publishes", () => {

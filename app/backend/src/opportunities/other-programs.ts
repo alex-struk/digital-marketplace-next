@@ -9,7 +9,7 @@ import {
   SwuPhase,
   WeightsDraft,
 } from "../rules/other-program-drafts";
-import { Person } from "./cwu-opportunity";
+import { Person, SuccessfulProponent } from "./cwu-opportunity";
 import type { RunningAnswer } from "./opportunity-running.service";
 
 /** The two programs with an evaluation panel: Sprint With Us and Team With Us. */
@@ -91,6 +91,12 @@ export interface OtherProgramsStore {
   remove(program: OtherProgram, id: string): Promise<void>;
   /** The accounts held at these identifiers, for judging a panel that names them (R-5.1). */
   accounts(ids: readonly string[]): Promise<PanelAccount[]>;
+  /**
+   * The organization whose proposal was awarded the opportunity, if one was (R-1.27). Its score is
+   * the weighted total the challenge stages produce, which these programs do not yet compute, so
+   * none is given.
+   */
+  successfulProponent(program: OtherProgram, id: string): Promise<SuccessfulProponent | null>;
 }
 
 /** An account a panel names, as the panel's rules need it. */
@@ -102,6 +108,8 @@ export interface PanelAccount {
 }
 
 export const OTHER_PROGRAMS_STORE = Symbol("OtherProgramsStore");
+
+export type { SuccessfulProponent };
 
 /** How a Sprint With Us or Team With Us opportunity is answered with (decision records 0034, 0035). */
 export interface SummaryAnswer {
@@ -150,6 +158,8 @@ export interface SummaryAnswer {
   readonly evaluationPanel?: readonly { readonly user: Person; readonly evaluator: boolean; readonly chair: boolean; readonly order: number }[];
   /** The files it carries, readable by whoever may read it (R-8.20, R-8.25). */
   readonly attachments?: readonly FileRecord[];
+  /** Once awarded: the winner's name to everyone, contact details to whoever may see scores (R-1.27). */
+  readonly successfulProponent?: { readonly name: string; readonly email?: string | null; readonly phone?: string | null };
   // On reading one opportunity, what running it has gathered (decision record 0043).
   /** Every addendum, oldest first (R-1.32). */
   readonly addenda?: RunningAnswer["addenda"];

@@ -59,6 +59,7 @@ import {
   CwuOpportunityStore,
   StoredCwuOpportunity,
 } from "./cwu-opportunity";
+import { maySeeProposalScores } from "../rules/proposal-evaluation";
 import { ATTACHMENT_ACCESS, AttachmentAccess } from "./attachment-access";
 import { OpportunityRunningService, RunningAnswer, RunningSubject } from "./opportunity-running.service";
 
@@ -192,11 +193,21 @@ export class CwuOpportunitiesService {
 
   /** One opportunity, with its addenda, and its history and reporting figures as R-1.30 allows. */
   private async answer(opportunity: StoredCwuOpportunity, viewer: OpportunityViewer | null): Promise<CwuOpportunityAnswer> {
-    const [watched, running] = await Promise.all([
+    const [watched, running, winner] = await Promise.all([
       this.watchedBy(viewer),
       this.running ? this.running.answerFor(viewer, subjectOf(opportunity)) : Promise.resolve(undefined),
+      opportunity.status === "AWARDED" ? this.store.successfulProponent(opportunity.id) : Promise.resolve(null),
     ]);
-    return answerFor(opportunity, viewer, watched.has(opportunity.id), running);
+    const answer = answerFor(opportunity, viewer, watched.has(opportunity.id), running);
+    if (!winner) return answer;
+    // The winner's name to everyone; their contact details and score only to whoever may see scores (R-1.27).
+    const seesScores = maySeeProposalScores(viewer, { createdBy: opportunity.createdBy?.id ?? null });
+    return {
+      ...answer,
+      successfulProponent: seesScores
+        ? { name: winner.name, email: winner.email, phone: winner.phone, score: winner.score }
+        : { name: winner.name },
+    };
   }
 
   private async watchedBy(viewer: OpportunityViewer | null): Promise<ReadonlySet<string>> {

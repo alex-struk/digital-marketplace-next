@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { Heading, Text } from "@bcgov/design-system-react-components";
 import { OpportunityStatus, Program, pacificDayOf, statusLabel } from "@rules/opportunities";
 import { badge, term } from "../app/layout";
 import { Stack } from "../app/page-layout";
@@ -66,4 +67,47 @@ export function momentLabel(iso: string): string {
     hour: "numeric",
     minute: "2-digit",
   }).format(date);
+}
+
+/**
+ * How to reach an organization's contact person, as key facts. A proposal's page gives them only to
+ * whoever the service sends them to: whoever may see the proposal's score (R-1.27).
+ */
+export function ContactFacts({ contact }: { contact: { readonly name: string; readonly email: string; readonly phone: string | null } }) {
+  return (
+    <>
+      <Fact label="Contact name">{contact.name.trim() === "" ? "Not entered" : contact.name}</Fact>
+      <Fact label="Contact email">{contact.email.trim() === "" ? "Not entered" : contact.email}</Fact>
+      {contact.phone ? <Fact label="Contact phone">{contact.phone}</Fact> : null}
+    </>
+  );
+}
+
+/**
+ * Who an awarded opportunity went to (`opportunity-successful-proponent`): the name to everyone,
+ * and the contact details and score beneath it only when the service gives them, to whoever may
+ * see proposal scores (R-1.27).
+ */
+export function SuccessfulProponentSection({
+  proponent,
+}: {
+  proponent: { readonly name: string; readonly email?: string | null; readonly phone?: string | null; readonly score?: number | null };
+}) {
+  const contact = [proponent.email, proponent.phone].filter((part): part is string => typeof part === "string" && part.trim() !== "");
+  return (
+    <Stack as="section" gap="medium" aria-labelledby="view-award">
+      <Heading level={2} id="view-award">
+        Successful proponent
+      </Heading>
+      <Text elementType="p" data-testid="opportunity-successful-proponent">
+        {proponent.name.trim() === "" ? "—" : proponent.name}
+      </Text>
+      {contact.length > 0 || typeof proponent.score === "number" ? (
+        <Stack as="dl" direction="row" gap="medium">
+          {contact.length > 0 ? <Fact label="Contact details">{contact.join(", ")}</Fact> : null}
+          {typeof proponent.score === "number" ? <Fact label="Score">{`${proponent.score}%`}</Fact> : null}
+        </Stack>
+      ) : null}
+    </Stack>
+  );
 }

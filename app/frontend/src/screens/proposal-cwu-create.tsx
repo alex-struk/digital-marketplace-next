@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Heading, Text } from "@bcgov/design-system-react-components";
 import { useNavigate } from "@tanstack/react-router";
-import { mayStartProposal } from "@rules/proposals";
+import { isUnpublished } from "@rules/opportunities";
+import { isAcceptingProposals, mayStartProposal } from "@rules/proposals";
 import { Account, changeOwnAccount } from "../api/accounts";
 import { CwuOpportunity, fetchCwuOpportunity } from "../api/opportunities";
 import { ActingFor, createCwuProposal, fetchOrganizationsActingFor, listCwuProposals } from "../api/proposals";
@@ -21,7 +22,10 @@ import { CwuProposalForm, OpportunitySummary, blankValues } from "./proposal-cwu
  * staff, an administrator, a visitor — is shown the missing page (R-2.1). A vendor who already
  * holds a proposal on the opportunity is taken to it instead of a new one (R-2.2). A draft is saved
  * whatever it holds (R-2.12); Submit proposal checks the form first and then asks for both sets of
- * terms, recording the acceptance as it submits (R-2.3, R-2.13, R-2.14).
+ * terms, recording the acceptance as it submits (R-2.3, R-2.13, R-2.14). An opportunity that has
+ * closed is still shown here, unlike in the other two programs: submitting is sent unchecked and the
+ * service's refusal, "This opportunity is no longer accepting proposals.", is what the vendor reads
+ * (R-2.15).
  */
 export function ProposalCwuCreateScreen({ opportunityId }: { opportunityId: string }) {
   useScreenTitle("Create a Code With Us proposal");
@@ -61,7 +65,9 @@ function CreateLoader({ account, opportunityId }: { account: Account; opportunit
           goTo(proposalAddress(opportunityId, existing.id));
           return;
         }
-        if (opportunity.kind !== "found" || opportunity.opportunity.status !== "PUBLISHED") {
+        // A Code With Us opportunity that has closed stays reachable here: its creation guard is the
+        // service's refusal, which the form shows when the proposal is put forward (R-2.15).
+        if (opportunity.kind !== "found" || isUnpublished(opportunity.opportunity.status)) {
           setLoaded({ kind: "missing" });
           return;
         }
@@ -105,6 +111,7 @@ function Create({
         opportunityId={opportunity.id}
         initial={blankValues()}
         organizations={organizations}
+        accepting={isAcceptingProposals(opportunity, new Date())}
         headingLevel={2}
         refusalTitle="Your proposal was not created"
         onSend={async (action, submission) => {

@@ -1,5 +1,24 @@
-import { BadRequestException, Inject, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, Inject, Injectable, NotFoundException, Optional, UnauthorizedException } from "@nestjs/common";
 import { DetailedRefusal } from "../common/refusals";
+import { ProposalSubject } from "../mail/notifications/proposal";
+import { ProposalNotices } from "./proposal-notices";
+import {
+  CANNOT_AWARD_NOW,
+  CANNOT_DISQUALIFY_NOW,
+  CANNOT_SCORE_NOW,
+  MOVED_TO_PROCESSING_NOTE,
+  NOT_PERMITTED_TO_EVALUATE,
+  Rank,
+  SCORE_MESSAGE,
+  allInContentionEvaluated,
+  disqualificationReasonProblem,
+  mayAwardInState,
+  mayDisqualifyInState,
+  mayEvaluateProposal,
+  mayScoreInState,
+  rankAmong,
+  readScore,
+} from "../rules/proposal-evaluation";
 import { ATTACHMENT_ACCESS, AttachmentAccess } from "../opportunities/attachment-access";
 import { CLOCK, Clock } from "../opportunities/cwu-opportunities.service";
 import {
@@ -77,6 +96,7 @@ export class CwuProposalsService {
     @Inject(CWU_PROPOSAL_STORE) private readonly store: CwuProposalStore,
     @Inject(ATTACHMENT_ACCESS) private readonly files: AttachmentAccess,
     @Inject(CLOCK) private readonly clock: Clock,
+    @Optional() private readonly notices?: ProposalNotices,
   ) {}
 
   /**
@@ -94,6 +114,7 @@ export class CwuProposalsService {
         .filter((proposal) => this.mayRead(asker, proposal, managed))
         .map((proposal) => this.answerFor(proposal, asker));
     }
+    // Staff are shown each proposal's rank among the others on the opportunity (R-2.32).
     if (opportunityId === undefined) return [];
     const opportunity = await this.store.opportunity(opportunityId.toLowerCase());
     if (!opportunity) throw new NotFoundException(NO_OPPORTUNITY_FOR_PROPOSAL);
@@ -102,13 +123,15 @@ export class CwuProposalsService {
       throw new UnauthorizedException(PROPOSALS_NOT_YET_VISIBLE);
     }
     const all = await this.store.forOpportunity(opportunity.id);
-    return all.filter((proposal) => this.mayRead(asker, proposal, managed)).map((proposal) => this.answerFor(proposal, asker));
+    return all
+      .filter((proposal) => this.mayRead(asker, proposal, managed))
+      .map((proposal) => this.answerFor(proposal, asker, rankAmong(proposal.id, all)));
   }
 
   /** One proposal, for someone who may read it; one they may not is answered as one that is not there. */
   async read(asker: ProposalAsker | null, id: string): Promise<CwuProposalAnswer> {
     const { proposal } = await this.readable(asker, id);
-    return this.answerFor(proposal, asker);
+    return this.answerWithRank(proposal, asker);
   }
 
   /** A new proposal, as a draft or as a submission (R-2.1, R-2.7). */
@@ -133,12 +156,21 @@ export class CwuProposalsService {
     const input = readCwuProposalInput(given);
     await this.checkContent(asker, opportunity, input, status === "SUBMITTED", null);
     const id = await this.store.create(opportunity.id, input, status, asker.id);
-    return this.answerFor(await this.mustFind(id), asker);
+    const created = await this.mustFind(id);
+    if (status === "SUBMITTED") this.tellOfSubmission(created, asker.id);
+    return this.answerFor(created, asker);
   }
 
-  /** One tagged change: an edit, a submission or a withdrawal. Scoring and awarding come later. */
+  /**
+   * One tagged change: the vendor's edit, submission or withdrawal, or, once the opportunity has
+   * closed, its author's or an administrator's score, disqualification or award.
+   */
   async change(asker: ProposalAsker | null, id: string, change: TaggedChange): Promise<CwuProposalAnswer> {
     const { proposal, managed } = await this.readable(asker, id);
+    if (EVALUATION_TAGS.includes(change?.tag as string)) {
+      await this.evaluate(asker, proposal, change);
+      return this.answerWithRank(await this.mustFind(proposal.id), asker);
+    }
     if (!asker || !mayManageProposal(asker, standingOf(proposal, this.clock()), managesOrganization(proposal, managed))) {
       if (["edit", "submit", "withdraw"].includes(change?.tag as string)) {
         throw new UnauthorizedException(NOT_PERMITTED_TO_CHANGE_PROPOSAL);
@@ -155,11 +187,78 @@ export class CwuProposalsService {
       case "withdraw":
         if (!mayWithdrawFrom(proposal.status)) throw new BadRequestException([CANNOT_WITHDRAW_NOW]);
         await this.store.changeStatus(proposal.id, "WITHDRAWN", asker.id, noteFrom(change.value));
+        this.tellOfWithdrawal(proposal, asker.id);
         break;
       default:
         throw new BadRequestException([PROPOSAL_ACTION_NOT_AVAILABLE]);
     }
-    return this.answerFor(await this.mustFind(proposal.id), asker);
+    return this.answerWithRank(await this.mustFind(proposal.id), asker);
+  }
+
+  // ---------------------------------------------------------------------- evaluation
+
+  /**
+   * A score, a disqualification or an award, by an administrator or the opportunity's author once
+   * it has closed (R-2.26, R-2.33, R-2.34). Who asks is checked before what they ask.
+   */
+  private async evaluate(asker: ProposalAsker | null, proposal: StoredCwuProposal, change: TaggedChange): Promise<void> {
+    if (!mayEvaluateProposal(asker, proposal.opportunity) || !asker) throw new UnauthorizedException(NOT_PERMITTED_TO_EVALUATE);
+    const opportunity = proposal.opportunity.status;
+    switch (change.tag) {
+      case "score": {
+        const score = readScore(change.value);
+        if (score === null) throw new BadRequestException([`score: ${SCORE_MESSAGE}`]);
+        if (!mayScoreInState(proposal.status, opportunity)) throw new BadRequestException([CANNOT_SCORE_NOW]);
+        await this.store.score(proposal.id, score, asker.id);
+        await this.moveOnIfAllEvaluated(proposal.opportunity);
+        return;
+      }
+      case "disqualify": {
+        const problem = disqualificationReasonProblem(change.value);
+        if (problem) throw new BadRequestException([`disqualificationReason: ${problem}`]);
+        if (!mayDisqualifyInState(proposal.status, opportunity)) throw new BadRequestException([CANNOT_DISQUALIFY_NOW]);
+        await this.store.changeStatus(proposal.id, "DISQUALIFIED", asker.id, (change.value as string).trim());
+        await this.moveOnIfAllEvaluated(proposal.opportunity);
+        return;
+      }
+      case "award": {
+        if (!mayAwardInState(proposal.status, opportunity)) throw new BadRequestException([CANNOT_AWARD_NOW]);
+        const all = await this.store.forOpportunity(proposal.opportunity.id);
+        const passedOver = await this.store.award(proposal.id, asker.id, noteFrom(change.value));
+        this.tellOfAward(proposal, all.filter((other) => passedOver.includes(other.id)));
+        return;
+      }
+    }
+  }
+
+  /**
+   * Once every proposal still in contention has been evaluated, the opportunity moves to processing
+   * on its own, with a note saying why (R-1.25, R-2.27).
+   */
+  private async moveOnIfAllEvaluated(opportunity: OpportunityOfProposal): Promise<void> {
+    if (opportunity.status !== "EVALUATION") return;
+    const all = await this.store.forOpportunity(opportunity.id);
+    if (!allInContentionEvaluated(all.map((proposal) => proposal.status))) return;
+    await this.store.changeOpportunityStatus(opportunity.id, "PROCESSING", null, MOVED_TO_PROCESSING_NOTE);
+  }
+
+  // ---------------------------------------------------------------------- telling people (R-2.36)
+
+  private tellOfSubmission(proposal: StoredCwuProposal, vendor: string): void {
+    this.notices?.submitted({ subject: subjectOf(proposal), vendor });
+  }
+
+  private tellOfWithdrawal(proposal: StoredCwuProposal, vendor: string): void {
+    this.notices?.withdrawn({ subject: subjectOf(proposal), vendor }, proponentNameOf(proposal) ?? "A vendor");
+  }
+
+  /** The winner is sent an award notice; each proponent passed over a decision notice naming the winner (R-6.25). */
+  private tellOfAward(winner: StoredCwuProposal, passedOver: readonly StoredCwuProposal[]): void {
+    this.notices?.awarded(
+      { subject: subjectOf(winner), vendor: winner.createdBy?.id ?? null },
+      proponentNameOf(winner),
+      passedOver.map((other) => ({ subject: subjectOf(other), vendor: other.createdBy?.id ?? null })),
+    );
   }
 
   /** Deletes a draft for good (R-2.4); anything put forward is refused. */
@@ -200,6 +299,7 @@ export class CwuProposalsService {
     if (!hasCurrentTerms(asker)) throw new UnauthorizedException(TERMS_NOT_ACCEPTED);
     await this.checkContent(asker, proposal.opportunity, storedInput(proposal), true, proposal.id);
     await this.store.changeStatus(proposal.id, "SUBMITTED", asker.id, noteFrom(value));
+    this.tellOfSubmission(proposal, asker.id);
   }
 
   // ---------------------------------------------------------------------- checks
@@ -267,11 +367,17 @@ export class CwuProposalsService {
     return found;
   }
 
+  /** A proposal with its rank among the others on its opportunity (R-2.32). */
+  private async answerWithRank(proposal: StoredCwuProposal, asker: ProposalAsker | null): Promise<CwuProposalAnswer> {
+    const all = await this.store.forOpportunity(proposal.opportunity.id);
+    return this.answerFor(proposal, asker, rankAmong(proposal.id, all));
+  }
+
   /**
-   * A proposal as the person asking is answered with it. Its score is shown to staff, and to the
-   * vendor only once a decision has been made (R-2.32).
+   * A proposal as the person asking is answered with it. Its score and rank are shown to staff, and
+   * to the vendor only once a decision has been made (R-2.32).
    */
-  private answerFor(proposal: StoredCwuProposal, asker: ProposalAsker | null): CwuProposalAnswer {
+  private answerFor(proposal: StoredCwuProposal, asker: ProposalAsker | null, rank: Rank | null = null): CwuProposalAnswer {
     const decided = proposal.status === "AWARDED" || proposal.status === "NOT_AWARDED";
     const showsScore = asker !== null && (asker.type !== "VENDOR" || decided);
     const { proponent, opportunity } = proposal;
@@ -295,11 +401,19 @@ export class CwuProposalsService {
       additionalComments: proposal.additionalComments,
       proponent:
         proponent.tag === "organization"
-          ? { tag: "organization", value: { id: proponent.value.id, legalName: proponent.value.legalName } }
+          ? {
+              tag: "organization",
+              value: {
+                id: proponent.value.id,
+                legalName: proponent.value.legalName,
+                // Who to reach at the organization, to whoever may see the score (R-1.27).
+                ...(showsScore && proponent.value.contact ? { contact: proponent.value.contact } : {}),
+              },
+            }
           : proponent,
       attachments: proposal.attachments,
       anonymousProponentName: proposal.anonymousProponentName,
-      ...(showsScore ? { score: proposal.score } : {}),
+      ...(showsScore ? { score: proposal.score, rank } : {}),
       history: proposal.history.map((entry) => ({
         createdAt: entry.createdAt.toISOString(),
         createdBy: entry.createdBy,
@@ -317,6 +431,24 @@ function NOT_ACCEPTING_OR_CANNOT_EDIT(proposal: StoredCwuProposal): string {
 }
 
 const noteFrom = (value: unknown): string | null => (typeof value === "string" && value.trim() !== "" ? value.trim() : null);
+
+/** The changes only an administrator or the opportunity's author makes, once it has closed. */
+const EVALUATION_TAGS: readonly string[] = ["score", "disqualify", "award"];
+
+function subjectOf(proposal: StoredCwuProposal): ProposalSubject {
+  return {
+    program: "code-with-us",
+    opportunityId: proposal.opportunity.id,
+    opportunityTitle: proposal.opportunity.title,
+    proposalId: proposal.id,
+  };
+}
+
+/** The legal name of the organization or individual a proposal is put forward by, if it has one. */
+export function proponentNameOf(proposal: StoredCwuProposal): string | null {
+  const name = proposal.proponent.value.legalName.trim();
+  return name === "" ? null : name;
+}
 
 export function standingOf(proposal: StoredCwuProposal, now: Date): ProposalStanding {
   return {

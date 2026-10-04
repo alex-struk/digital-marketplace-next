@@ -9,6 +9,7 @@
 
 import { CalendarDay, OpportunityStatus, isCalendarDay, recordedInstantOf } from "./opportunities";
 import { isPhoneNumber } from "./organizations";
+import { SCORE_ENTERED, scoreInNote } from "./proposal-evaluation";
 import { AccountKind, isEmailAddress } from "./users";
 
 // ------------------------------------------------------------------------ states
@@ -61,9 +62,17 @@ export function proposalStatusLabel(status: string): string {
 }
 
 /** One entry in a proposal's history in words: "Draft created" for its first state, the state otherwise. */
-export function proposalHistoryLabel(entry: { readonly status: string | null; readonly event: string | null }): string {
+export function proposalHistoryLabel(entry: {
+  readonly status: string | null;
+  readonly event: string | null;
+  readonly note?: string | null;
+}): string {
   if (entry.status === "DRAFT") return "Draft created";
   if (entry.status) return proposalStatusLabel(entry.status);
+  if (entry.event === SCORE_ENTERED) {
+    const score = scoreInNote(entry.note ?? null);
+    return score ? `Score entered: ${score}` : "Score entered";
+  }
   return entry.event ?? "";
 }
 

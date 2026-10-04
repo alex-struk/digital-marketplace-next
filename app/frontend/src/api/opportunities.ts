@@ -71,6 +71,8 @@ export interface CwuOpportunity {
   readonly history?: readonly HistoryEntry[];
   /** Absent unless the reader is the author or an administrator and it has been published (R-1.30). */
   readonly reporting?: Reporting;
+  /** Once awarded (R-1.27). */
+  readonly successfulProponent?: SuccessfulProponent;
   /** Whether the reader watches it (R-1.5). */
   readonly subscribed: boolean;
 }
@@ -120,6 +122,27 @@ export function readAddenda(value: unknown): Addendum[] {
     }));
 }
 
+/** Who an awarded opportunity went to; contact details and score only for whoever may see scores (R-1.27). */
+export interface SuccessfulProponent {
+  readonly name: string;
+  readonly email?: string | null;
+  readonly phone?: string | null;
+  readonly score?: number | null;
+}
+
+export function readSuccessfulProponent(value: unknown): SuccessfulProponent | null {
+  if (typeof value !== "object" || value === null) return null;
+  const record = value as Record<string, unknown>;
+  if (typeof record.name !== "string") return null;
+  const optional = (key: string) => (typeof record[key] === "string" ? (record[key] as string) : null);
+  return {
+    name: record.name,
+    ...("email" in record ? { email: optional("email") } : {}),
+    ...("phone" in record ? { phone: optional("phone") } : {}),
+    ...("score" in record ? { score: typeof record.score === "number" ? record.score : null } : {}),
+  };
+}
+
 export function readReporting(value: unknown): Reporting | null {
   if (typeof value !== "object" || value === null) return null;
   const record = value as Record<string, unknown>;
@@ -157,6 +180,9 @@ export function readCwuOpportunity(value: unknown): CwuOpportunity | null {
     addenda: readAddenda(record.addenda),
     ...("history" in record ? { history: readHistory(record.history) } : {}),
     ...(readReporting(record.reporting) ? { reporting: readReporting(record.reporting)! } : {}),
+    ...(readSuccessfulProponent(record.successfulProponent)
+      ? { successfulProponent: readSuccessfulProponent(record.successfulProponent)! }
+      : {}),
     subscribed: record.subscribed === true,
   };
 }
