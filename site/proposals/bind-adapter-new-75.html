@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-75 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">591</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">585</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">482</span></a></li><li><a href="../runs.html">Run log <span class="count">22</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-75</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-04 07:05</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.288 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I bound the one action this contract added, <code>proposal-twu-edit.set_hourly_rate</code>.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.288 (Claude Code))</p>
+<p>I bound the one action this contract added, <code>proposal-twu-edit.set_hourly_rate</code>. Of the two kinds of earlier &quot;unbound&quot; report, one is still a real gap in the application and the other was out of date. I could not run the TypeScript type check: both attempts to run <code>npx tsc</code> needed an approval that never came in this unattended session. The change is a single line written exactly like its neighbours, but it has not been compiled.</p>
+<p><strong>What I bound.</strong> I signed in through the sandbox identity provider as the organization-owner vendor (<code>test-vendor-2</code>). I opened the seeded closed Team With Us proposal&#39;s screen (<code>…/team-with-us/…0801/proposals/…0841/edit</code>) and pressed &quot;Edit&quot;. It opens the same form as the create screen: a &quot;Resource 1: Full stack developer…&quot; group with an &quot;Hourly rate for Blake Placeholder&quot; box holding &quot;$120&quot;. I tested the role-and-label lookup the create page already uses, and it filled that box, so <code>proposalTwuEdit.setHourlyRate</code> now opens the form and reuses the create page&#39;s <code>setResourceRate</code>. I then cancelled without saving. <code>bindings.yaml</code> now lists <code>set_hourly_rate: bound</code> under <code>proposal-twu-edit</code>.</p>
+<p><strong>Sprint With Us references (R-2.7, 2.9, 2.11, 2.16, 2.18, 2.22).</strong> These still fail as unbound, and the cause is in the application. Those tests give each reference a <code>company</code>, and the running form has no field for one. As the same vendor I checked two places:</p>
+<ul><li><strong>Create form</strong> for the seeded open Sprint With Us opportunity (<code>…a025…/proposals/create</code>): after pressing &quot;Add a reference&quot;, &quot;Reference 1&quot; has only Name, Email address and Phone number (optional). No label anywhere on the form mentions a company or employer.</li><li><strong>Seeded proposals&#39; edit screen</strong>: the References section shows name, email and phone only.</li></ul>
+<p>So <code>add_reference</code> stays <code>bound</code> for those three fields and still refuses a <code>company</code> key rather than dropping it silently. I only made the refusal message say where I looked. Whoever rules the build should decide whether the form gains a Company field or the criteria stop asking for one.</p>
+<p><strong>Sprint With Us proposal screen (R-2.25).</strong> The quoted reason is out of date. It came from an earlier binding, which said this proposal screen answered &quot;Page not found&quot;. Signed in as the administrator, I opened <code>/opportunities/sprint-with-us/…a016…/proposals/…a016…101</code> and it loads. It shows the proponent, Opportunity, Status, Submitted, Proposal ID, &quot;Printable copy&quot; and a &quot;Proposal sections&quot; navigation (Proposal, History), with a Proposal region holding Organization, Team, Team questions, References and Attachments. The current adapter already binds <code>proposal_tab</code> against this. The shared text still carried the old claim and is reused in other members&#39; messages, so I corrected it, and the matching code comment, to list these proposal screens as served. I did not re-walk the other routes that text still calls &quot;Page not found&quot; (/proposals, the printable copies, <code>…/complete</code>, and the evaluation and consensus screens), so those claims stand as the previous run left them.</p>
+<p><strong>Other findings.</strong> No route I opened failed to resolve. The seed has no Team With Us opportunity still taking proposals; every one listed has a past deadline. Even so, the closed one still offers its author &quot;Edit&quot; and &quot;Withdraw&quot;, which is how I reached the rate box.</p>
+<p>I changed only <code>tests/adapters/new/index.ts</code> and <code>tests/adapters/new/bindings.yaml</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-04 07:06.</p>
+<div class="body"><p>Question: does this adapter bind every surface action and observation on new, and nothing else? Ruling: approve. The one action the contract added, proposal-twu-edit.set_hourly_rate, is bound by wrapping the existing create-form setResourceRate in the same onTeamForm opener the other edit actions use. That helper resolves the resource group, reads the rate from the input and fills the &#39;Hourly rate for &lt;member&gt;&#39; box. It is navigation and locators only, with no assertion and no decision about pass or fail, and surface.yaml declares the action. The runner&#39;s typecheck on cf4c666 passed with no diagnostics under adapters/new/. Nothing under tests/acceptance, spec/ or app/ changed and no protected path is touched. The two text edits leave behaviour alone: the add_reference refusal still refuses a &#39;company&#39; key instead of dropping it, which is correct because the running Sprint With Us reference form has only Name, Email and Phone, and that gap is the application&#39;s, still owed by build under build-slice-15-2#1, which this proposal does not settle. The served-routes note now lists the Sprint With Us and Team With Us proposal screens, which fits the adapter already binding proposal_tab there. This would change to a return with an adapter-wrong condition if verify still reports set_hourly_rate unbound or shows it filling something other than the rate box.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

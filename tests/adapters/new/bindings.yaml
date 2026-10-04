@@ -633,6 +633,7 @@ pages:
       delete_proposal: bound
       choose_organization: bound
       add_team_member_for_resource: bound
+      set_hourly_rate: bound
     observations:
       proposal_identifier: bound
       opportunity_identifier: bound
