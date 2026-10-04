@@ -31,3 +31,15 @@ I made the one change the ruling asked for. A Sprint With Us opportunity whose p
 The proposal side needed no change. It already checks each phase cost only against a recorded phase budget, and checks the total cost against the opportunity's total separately.
 
 To run the check I first had to install the application's dependencies, because they were missing from this workspace. Nothing outside `app/` and `docs/decisions/` was touched, and nothing else in slice 15 changed. Nothing is outstanding from the ruling, and the next slice inherits nothing new from this fix.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Question: does slice 15 (a vendor can propose on Sprint With Us and Team With Us opportunities) do what its criteria say? Ruling: approve. The verify result is pass, current for build-slice-15-5 against application tree aa72129: all 17 claimed criteria were exercised and met, with nothing unasserted. The one instruction owed from build-slice-15-4 is carried out. phaseProblems in app/backend/src/rules/other-program-content.ts no longer refuses phase budgets that add up to more than the total, and it keeps the check that a phase budget is a whole number of at least $1. Decision record 0059 says phase budgets are not held to the total. other-program-content.test.ts now accepts the 200,000 + 300,000 against 400,000 opportunity, and team-proposal-rules.test.ts shows that a 190,000 + 290,000 proposal gets exactly one error, against the total. The rest of the diff stays within slice 15's criteria (R-2.7 to R-2.25, R-1.31, R-8.19/20/25). Raw SQL writes only fixed table names and binds every value, and no secret or personal data appears. The owed test for R-2.10 is satisfied: tests/acceptance/proposals/R-2.10.spec.ts now has an edit-path test, and both of its tests passed in this verify, so I withdraw it rather than letting it block. What would change this: a stale or failing verify, or a calibration run in which the R-2.10 edit-path test fails against the old application.
+
+**Conditions:**
+- condition-met build-slice-15-4#1: phaseProblems in app/backend/src/rules/other-program-content.ts no longer refuses phase maximum budgets that add up to more than the total, and keeps the whole-number check of at least $1. docs/decisions/0059 says phase budgets are not held to the total. app/backend/tests/other-program-content.test.ts expects the 200,000 + 300,000 against 400,000 opportunity to have no problems, and app/backend/tests/team-proposal-rules.test.ts expects a 190,000 + 290,000 proposal to get exactly one error, against the total. Verify passes R-2.19.
+- condition-withdrawn missing-test/R-2.10: tests/acceptance/proposals/R-2.10.spec.ts now asserts the edit-path clause ('...is refused on the edit path') as well as the create path, and both tests ran and passed at v1 in this slice's verify (tests/results/new/slice-15.json). A test that runs now exists for every clause. The scheduled calibration run (scope: changed) will still run it against the oracle.
