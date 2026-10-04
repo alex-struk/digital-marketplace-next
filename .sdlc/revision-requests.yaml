@@ -1396,3 +1396,49 @@ requests:
     at: 2026-10-04T04:10:30.196Z
     taken: 2026-10-04T04:13:36.204Z
     taken_by: plan-21
+  - stage: bind-adapter
+    target: new
+    why: 'R-1.31, R-2.25: opportunityCwuEdit.proposalsTab() returned the whole
+      Proposals section text, "Proposals Proposals are not shown until the
+      opportunity closes … can be read once it has closed to proposals, at …",
+      at /opportunities/code-with-us/<id>/edit?tab=proposals for public sector
+      staff and the administrator. The page shows the refusal and no proposals;
+      the binding must answer empty when the section withholds proposals and
+      lists none, not return the refusal message as content (evidence
+      .sdlc/evidence/slice-15/R-1.31.txt, R-2.25.txt).'
+    from: build-slice-15
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-04T05:42:27.643Z
+  - stage: bind-adapter
+    target: new
+    why: "R-2.19: opportunitySwuCreate.publish({ completionDate: inDays(90) })
+      filled the opportunity-level completion date into the first box labelled
+      'Completion date' on /opportunities/sprint-with-us/create, which is the
+      Prototype phase group's. The page outline shows the prototype completion
+      as 2027-01-02 where addPhase had set inDays(60), so the form refused with
+      'the implementation phase cannot start before the phase before it ends'
+      and opportunitySwuEdit.opportunityIdentifier() read \"\". Publish must not
+      write phase-group date boxes; a Sprint With Us form's dates belong to the
+      phase groups (evidence .sdlc/evidence/slice-15/R-2.19.txt)."
+    from: build-slice-15
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-04T05:42:27.643Z
+  - stage: bind-adapter
+    target: new
+    why: "R-2.7, R-2.9, R-2.10, R-2.11, R-2.16, R-2.18, R-2.20, R-2.22, R-2.24:
+      proposal-swu-create.*, proposal-twu-create.*, proposal-swu-edit.* and
+      proposal-twu-edit.* (choose_organization, start_editing, withdraw_proposal
+      and the rest) are reported unbound with the reason that the running build
+      serves only /dashboard, /opportunities and the account screens. This build
+      serves /opportunities/sprint-with-us/:opportunityId/proposals/create,
+      /opportunities/team-with-us/:opportunityId/proposals/create and both
+      programs' /proposals/:proposalId/edit (app/frontend/src/router.tsx), with
+      an organization chooser, team sections and submit/withdraw actions; bind
+      them against it. proposal-cwu-view.open, used by R-2.24, is also reported
+      unbound although that page was already served before this slice."
+    from: build-slice-15
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-04T05:42:27.643Z
