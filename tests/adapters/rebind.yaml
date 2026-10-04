@@ -14072,6 +14072,11 @@ rebind:
     app_tree: f5497623f69060a5c43604b276e86b002ae622f7
     by: runner:verify
     at: 2026-10-04T20:07:44.179Z
+    closed:
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-04T20:16:40.541Z
   - id: R-6.19
     target: new
     why: "unbound: notification-email-reference.message_group_title — signed in as
@@ -14124,3 +14129,8 @@ rebind:
     app_tree: f5497623f69060a5c43604b276e86b002ae622f7
     by: runner:verify
     at: 2026-10-04T20:07:44.179Z
+    closed:
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-04T20:16:40.541Z
