@@ -2756,3 +2756,23 @@ conditions:
         ruling confirms the per-slice counts and the total.
       by: agent:architect
       at: 2026-10-04T04:19:12.600Z
+  - ref: build-slice-15#4
+    text: "R-2.25, in the case \"once the opportunity has closed, its submitted
+      proposals are shown to the opportunity's author and to an administrator\":
+      Error: unbound: proposal-swu-view.open —
+      /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId is
+      offered only to a signed-in person, and walked signed in (as the
+      administrator, as a public sector employee, and as a vendor for a vendor's
+      screens — the seeded organization owner, an organization member and the
+      invited vendor for the or… — at
+      tests/acceptance/proposals/R-2.25.spec.ts:114. The slice claims R-2.25 but
+      deferred the read-only Sprint With Us and Team With Us proposal pages;
+      build them in app/frontend (the Proposals tab rows linking to them) so a
+      submitted proposal can be opened by the opportunity's author and an
+      administrator once the opportunity has closed, and never a draft."
+    from: build-slice-15
+    family: build-slice-15
+    gate: G3
+    stage: build
+    by: agent:reviewer
+    at: 2026-10-04T05:42:27.726Z
