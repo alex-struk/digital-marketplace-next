@@ -50,3 +50,23 @@ No page's route failed to resolve except those named above. The vendor dashboard
 I fixed the compile errors in `tests/adapters/new/index.ts`. I couldn't confirm it with the TypeScript compiler, though: every attempt to run `tsc` was turned down at the approval prompt, so the next stage's compile is the real test.
 
 **Journal addition:** All of the reported errors came from one place, line 306 of `tests/adapters/new/index.ts`. That line holds a long reason string in single quotes, explaining why a member is unbound. A recent edit had added three apostrophes to it without backslashes: "the vendor's own proposal's screen" and "the Code With Us proposal's evaluation view". The first of these, in "vendor's", ended the string early, and the rest of the line was read as code, which caused the whole run of errors starting at column 1648. I put a backslash before each of the three apostrophes, matching how the rest of the line already writes them, and changed nothing else: no binding, no reason text, and not `bindings.yaml`. Because I couldn't run the compiler, I checked by pattern search instead. Line 306 now reads as one complete quoted string from start to end, and no other single-quoted line in the file has a string that ends early in the middle of a word.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Question: does the new-target adapter bind the surface on the Code With Us proposal form and proposal screen, and nothing else? Approve. The runner's own typecheck of this revision is clean, nothing under tests/acceptance or a protected path changed, and the new bindings only navigate and read: fields are matched by label, a key with no matching field throws unbound, readers return what the screen shows and the action-state reader has the same return shape as the old adapter's. Required fields the test did not name get placeholder values only when the form refuses a submit. Fields a test names, even as empty, are left alone, which keeps R-2.13's refusal observable. Edit-screen submits tick both terms because that screen offers no separate accept action. The remaining unbound reasons name specific addresses and what they answer. Not blocking but worth knowing: R-2.3 asserts toBeTruthy on a reading that always returns a non-empty string, so it cannot fail (a test defect, not this adapter's), and the withdrawn proposal the author left for test-vendor-1 on the seeded published Code With Us opportunity redirects that vendor's create address until the target is reseeded. Would change: evidence that an adapter member decides an outcome, or that an unbound reason is contradicted by a page the build serves.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `3da2484336f5ef483063b6dca37c33108ff3c148`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
