@@ -5851,6 +5851,10 @@ export default function create(
       editingControl("proposal-twu-edit.add_team_member_for_resource", (where) =>
         addTwuResourceMember(where, input),
       )(),
+    // Editing opens the create screen's form: "2. Team Members" carries an "Hourly Rate*" box
+    // per resource, holding the rate the proposal was saved with, which this replaces.
+    setHourlyRate: (input) =>
+      editingControl("proposal-twu-edit.set_hourly_rate", (where) => setTwuHourlyRate(where, input))(),
     fieldError: () => proposalEditFieldErrors(),
     organization: () => proposalOrganization(),
     scoresheetTab: () => tabContent(["Scoresheet", "Scoring"]),

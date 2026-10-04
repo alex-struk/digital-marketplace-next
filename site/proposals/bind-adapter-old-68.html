@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-old-68 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">590</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">584</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">481</span></a></li><li><a href="../runs.html">Run log <span class="count">22</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-old-68</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-04 07:00</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.288 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on old, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I bound <code>proposal-twu-edit: set_hourly_rate</code>, the one action the contract declared that the old target&#39;s adapter did not yet name.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.288 (Claude Code))</p>
+<p>I bound <code>proposal-twu-edit: set_hourly_rate</code>, the one action the contract declared that the old target&#39;s adapter did not yet name. I couldn&#39;t run the type-checker: running <code>tsc</code> needed approval, and nobody was there to give it. The new code has the same shape as the create page&#39;s binding of this action, but it has not been compiled or run in a test.</p>
+<p><strong>How I reached the field.</strong> The seed has no Team With Us opportunity that is still open. Its only Team With Us proposals belong to closed opportunities that are already being evaluated. For their own vendor, the edit route for those proposals (for example the first seeded one) answers the application&#39;s &quot;Not Found&quot; page. To see the edit form in the state the contract describes, I did three things:</p>
+<ul><li>As the administrator, I published an opportunity through the service by copying the seeded closed Team With Us opportunity with future dates.</li><li>As the first seeded vendor, I created a draft proposal on it, with one team member at an hourly rate of 120.</li><li>On that draft&#39;s edit route I opened the Proposal tab, chose Edit from the Actions menu, and went to step &quot;2. Team Members&quot;.</li></ul>
+<p>That step shows an &quot;Hourly Rate*&quot; number box for the resource, already holding 120. The top bar then offers &quot;Submit Proposal&quot;, &quot;Save Changes&quot; and &quot;Cancel&quot;. The contract says the edit screen uses the create screen&#39;s form, and that is what the running page shows.</p>
+<p><strong>What the binding does.</strong> In <code>index.ts</code>, <code>proposalTwuEdit.setHourlyRate</code> first starts editing, then calls the same code the create page&#39;s <code>set_hourly_rate</code> already uses. It goes to &quot;Team Members&quot; and makes sure an organization is chosen. It picks the resource by number, order or service area, then fills the &quot;Hourly Rate&quot; number box from the input&#39;s <code>hourlyRate</code> / <code>hourly_rate</code> / <code>rate</code> / <code>value</code> / <code>amount</code>, or from the input itself if that is a bare value. So it accepts exactly the input spellings the create binding accepts. It sends nothing to the service on its own; the test&#39;s later Save Changes or Save Changes and Submit does that. In <code>bindings.yaml</code>, <code>set_hourly_rate</code> is listed as <code>bound</code> under <code>proposal-twu-edit</code>. Every other binding is unchanged.</p>
+<p><strong>Records left on the target.</strong> The opportunity &quot;Binding check TWU opportunity&quot; and the first vendor&#39;s draft proposal on it are still there. They show up in the opportunity list, so an exact count of open Team With Us opportunities would include them.</p>
+<p><strong>Notes for the reviewer:</strong></p>
+<ul><li>The draft I created used organization …0301 (&quot;Northern Pines Digital Ltd.&quot;). The running page warns that this organization &quot;has been archived&quot;, while the vendor&#39;s current memberships list only &quot;Cedar Hollow Systems Inc.&quot;. That does not affect the hourly-rate field, but it may matter to criteria about which organizations can be chosen.</li><li>Every route in <code>surface.yaml</code> that I touched resolved, apart from the Not Found answer described above, which is the application gating editing during evaluation and not a missing page.</li><li>Nothing outside <code>tests/adapters/old/</code> was changed.</li></ul></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-04 07:00.</p>
+<div class="body"><p>Question: does this adapter bind every surface action and observation on old, and nothing else? Ruling: approve. The contract declares <code>set_hourly_rate</code> under <code>proposal-twu-edit</code> (<code>spec/contract/surface.yaml:780</code>), and this proposal adds the binding the adapter was missing. <code>proposalTwuEdit.setHourlyRate</code> uses the existing <code>editingControl</code> wrapper to start editing, then runs the same <code>setTwuHourlyRate</code> the create page uses (<code>tests/adapters/old/index.ts:5458</code>). That function goes to the Team Members step, waits for the &quot;Hourly Rate&quot; box and fills it for the chosen resource, so it only navigates and finds fields: it checks nothing and decides no outcome. <code>bindings.yaml</code> gains only <code>set_hourly_rate: bound</code>, and nothing under <code>tests/acceptance</code> changed. The runner&#39;s own typecheck on this commit shows no errors under <code>adapters/old/</code>; the failing exit code comes from the one error under <code>adapters/new/</code>, which this proposal is not responsible for. The author couldn&#39;t run <code>tsc</code> themselves and said so, and the runner&#39;s check covers that. The two items the earlier rulings left open are not settled by this proposal and stay open. build-slice-15-2#1 asks build to add a Company box to the new app&#39;s Sprint With Us references. The missing-test on R-2.10 (the check must run on the edit path too) waits for a derive-tests test that uses this binding. The records the binding check left on the old target (&quot;Binding check TWU opportunity&quot; and a vendor draft proposal on it) would change any exact count of open Team With Us opportunities. That matters to whoever reads calibration results; it doesn&#39;t make the binding wrong. The ruling would change if a calibration showed this binding failing to reach the edit form&#39;s Hourly Rate box, or if the contract dropped the action.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
