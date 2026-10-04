@@ -539,6 +539,7 @@ export interface ProposalTwuEditPage {
   startEditing(input?: unknown): Promise<void>;
   chooseOrganization(input?: unknown): Promise<void>;
   addTeamMemberForResource(input?: unknown): Promise<void>;
+  setHourlyRate(input?: unknown): Promise<void>;
   saveChanges(input?: unknown): Promise<void>;
   saveChangesAndSubmit(input?: unknown): Promise<void>;
   submitProposal(input?: unknown): Promise<void>;

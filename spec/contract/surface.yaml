@@ -769,6 +769,15 @@ pages:
       # names again from the new organization's active members.
       choose_organization: { test_id: null }
       add_team_member_for_resource: { test_id: null }
+      # As on proposal-twu-create: takes the resource by its service area as the
+      # opportunity lists it and the hourly rate, replacing the rate the proposal held. The
+      # edit screen renders the same form as the create screen, so the field is the same
+      # one, open once start_editing has opened the form. Nothing is sent until
+      # save_changes or save_changes_and_submit; a refusal of either is read through
+      # field_error or submission_refusal. A proposal saved within budget from
+      # proposal-twu-create (save_draft or submit_proposal) lands on this page, where
+      # proposal_identifier returns its identifier.
+      set_hourly_rate: { test_id: null }
       save_changes: { test_id: proposal-save-changes }
       save_changes_and_submit: { test_id: proposal-save-and-submit }
       submit_proposal: { test_id: proposal-submit }
