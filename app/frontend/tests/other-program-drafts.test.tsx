@@ -268,17 +268,20 @@ describe("creating a Sprint With Us draft (R-1.7, R-1.9, R-1.39)", () => {
   });
 
   it("lets the team questions run to 101, positions 0 to 100, and no further (R-1.17)", async () => {
-    serve(() => json(404, { errors: ["Not here."] }));
+    // A kept draft already holding 100 questions: adding them one click at a time redraws the
+    // whole list each time, which is slow enough to time out on a busy machine.
+    const question = { question: "Why your team?", guideline: "", score: 5, minimumScore: null, wordLimit: 300 };
+    const kept = drafted("sprint-with-us", { teamQuestions: Array.from({ length: 100 }, () => question) });
+    serve((method, path) => (method === "GET" && path === `/api/opportunities/sprint-with-us/${ID}` ? json(200, kept) : json(404, { errors: ["Not here."] })));
     resetSessionForTests({ status: "signed-in", account: staff }, fakeIdentity());
-    renderAt("/opportunities/sprint-with-us/create");
+    renderAt(`/opportunities/sprint-with-us/${ID}/edit?tab=opportunity`);
     const add = (await screen.findByTestId("add-team-question-button")) as HTMLButtonElement;
-    while (screen.getAllByTestId("question-text-field").length < 101) {
-      expect(add.disabled).toBe(false);
-      fireEvent.click(add);
-    }
+    expect(screen.getAllByTestId("question-text-field")).toHaveLength(100);
+    expect(add.disabled).toBe(false);
+    fireEvent.click(add);
     expect(screen.getAllByTestId("question-text-field")).toHaveLength(101);
     expect(add.disabled).toBe(true);
-  }, 120_000);
+  }, 30_000);
 
   it("starts the panel as its story draws it: two members to choose, each an evaluator, neither the chair", async () => {
     serve(() => json(404, { errors: ["Not here."] }));

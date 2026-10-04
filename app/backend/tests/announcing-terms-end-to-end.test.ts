@@ -99,7 +99,11 @@ async function ask(method: string, address: string, token?: string, body?: unkno
     body: body === undefined ? undefined : JSON.stringify(body),
   });
   const text = await answer.text();
-  return { status: answer.status, body: text ? JSON.parse(text) : null };
+  const result = { status: answer.status, body: text ? JSON.parse(text) : null };
+  // Kept off the compared fields, so an answer can still be compared whole.
+  return Object.defineProperty(result, "headers", { value: answer.headers, enumerable: false }) as typeof result & {
+    readonly headers: Headers;
+  };
 }
 
 const AGREED = new Date("2026-09-01T17:30:00.000Z");
@@ -191,5 +195,27 @@ describe("accepting the new terms again (R-4.16)", () => {
 
     expect(answer.status).toBeGreaterThanOrEqual(400);
     expect((await acceptancesOf(VENDOR_ONE))?.acceptedTermsAt).toBeNull();
+  });
+});
+
+describe("the notification reference (R-6.13, R-6.19)", () => {
+  it("is shown to an administrator, every message with its subject and its closing line", async () => {
+    const answer = await ask("GET", "/admin/email-notification-reference", await tokens.admin());
+
+    expect(answer.status).toBe(200);
+    expect(answer.headers.get("cache-control")).toBe("no-store");
+    const messages = (answer.body.groups as { messages: { subject: string; footer: unknown }[] }[]).flatMap(
+      (group) => group.messages,
+    );
+    expect(messages.length).toBeGreaterThan(60);
+    expect(messages.every((message) => message.subject !== "" && Boolean(message.footer))).toBe(true);
+  });
+
+  it("is not there for anybody else, signed in or not", async () => {
+    for (const token of [undefined, await tokens.staff(), await tokens.vendor()]) {
+      const answer = await ask("GET", "/admin/email-notification-reference", token);
+      expect(answer.status).toBe(404);
+      expect(answer.body).not.toHaveProperty("groups");
+    }
   });
 });

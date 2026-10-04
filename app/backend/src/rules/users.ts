@@ -312,6 +312,14 @@ export function administers(viewer: Viewer | null): boolean {
   return viewer?.type === "ADMIN";
 }
 
+/**
+ * Only an administrator may open the notification reference; anybody else is shown nothing there
+ * (R-6.13 note).
+ */
+export function mayReadEmailReference(viewer: Pick<Viewer, "type"> | null | undefined): boolean {
+  return viewer?.type === "ADMIN";
+}
+
 /** The refusal of administrator rights to a vendor, in the words the profile shows (R-4.12). */
 export const VENDORS_CANNOT_BE_ADMINISTRATORS = "Vendors cannot be granted administrator permissions.";
 
