@@ -3293,3 +3293,28 @@ conditions:
         one-copy-per-reader departure and 0060 points to it.
       by: agent:tech-lead
       at: 2026-10-04T14:30:18.113Z
+  - ref: derive-tests-opportunities-stale-22#1
+    text: 'R-1.1 v3: restore an assertion that, after closure, the Sprint With Us
+      and the Team With Us opportunity each carry the note "This opportunity has
+      closed." (the then of R-1.1 v3 states it), and assert it for the lapsed
+      Code With Us opportunity too where the surface offers a reading of it.
+      Where no page reaches the note for a program, add a not-testable.yaml
+      entry with that clause and the program, saying what the surface lacks.'
+    from: derive-tests-opportunities-stale-22
+    family: derive-tests-opportunities-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-10-04T15:15:16.820Z
+  - ref: derive-tests-opportunities-stale-22#2
+    text: "R-1.1 v3: the 'moves to the first evaluation stage of its program' test
+      accepts /evaluat|question/ for Sprint With Us and Team With Us, which a
+      later evaluation stage also satisfies. Assert the stage the criterion
+      names, the first evaluation stage of each program, in the form the
+      surface's status reading presents it."
+    from: derive-tests-opportunities-stale-22
+    family: derive-tests-opportunities-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-10-04T15:15:16.820Z
