@@ -173,6 +173,24 @@ emailed. Only an administrator, the author and the panel's own members are told 
 names staff choose panel members from come on their own session (`GET /api/sessions/current`,
 `panelCandidates`), since the list of everyone stays an administrator's (decision record 0045).
 
+## Code With Us proposals
+
+A vendor who has accepted the terms at some point starts one from "Start a proposal" on a published
+opportunity's page, at `/opportunities/code-with-us/<id>/proposals/create`, as an individual or for
+an organization they own or administer. A draft keeps whatever it holds, though its attachments are
+checked; Submit proposal checks the form, asks for the Code With Us and the service's terms, records
+the service's on the account, and submits. Each proposal is managed at
+`/opportunities/code-with-us/<id>/proposals/<proposalId>/edit` (Proposal and History tabs): a draft
+is edited, submitted or deleted, a submitted one edited or withdrawn, a withdrawn one put back while
+the opportunity still takes proposals. One vendor and one organization have one proposal per
+opportunity. A vendor's `/dashboard` lists the proposals they wrote and, for an owner or
+administrator, their organizations'. Staff see none until the opportunity has closed — its deadline
+passed — and never a draft. A file attached to a proposal is readable by whoever may read the
+proposal, by one rule for every program (`mayReadProposal` in `backend/src/rules/proposals.ts`);
+`FileStore.detached()` names the files no record refers to any longer. The service is
+`backend/src/proposals/`, the screens `frontend/src/screens/proposal-cwu-*.tsx` and
+`vendor-dashboard.tsx`; the answers and refusals are decision record 0055.
+
 ## Organizations
 
 Anybody browses at `/organizations`: every organization not archived, by legal name, fifty to a

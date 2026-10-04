@@ -47,6 +47,12 @@ export interface FileStore {
   find(id: string): Promise<{ file: StoredFile; grants: FileGrants } | null>;
   /** The stored content a fingerprint names. */
   content(fileBlob: string): Promise<Buffer | null>;
+  /**
+   * The files no record refers to any longer, oldest first: attached to no current version of an
+   * opportunity, no proposal and no note, and nobody's picture or logo. Their content is kept
+   * until the records-retention rule for procurement attachments disposes of it (R-8.31).
+   */
+  detached(): Promise<StoredFile[]>;
 }
 
 export const FILE_STORE = Symbol("FileStore");

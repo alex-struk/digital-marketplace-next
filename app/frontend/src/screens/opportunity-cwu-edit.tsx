@@ -43,6 +43,7 @@ import {
   todayInPacific,
 } from "./opportunity-parts";
 import { AddendaTab, CancelDialog, HistoryTable, ReportingSection, Sent } from "./opportunity-running";
+import { ProposalsTab } from "./opportunity-cwu-proposals-tab";
 
 /**
  * Manage a Code With Us opportunity, at `/opportunities/code-with-us/:opportunityId/edit`
@@ -55,11 +56,12 @@ import { AddendaTab, CancelDialog, HistoryTable, ReportingSection, Sent } from "
  * submit it for review and delete it; an administrator may edit, publish and delete a draft or an
  * opportunity under review, and edit and cancel one that is published, at its evaluation stage or
  * in processing (R-1.20, R-1.22, R-1.28, R-1.53, R-1.56). Once it is no longer a draft, the Addenda
- * tab adds an addendum (R-1.32); the History tab takes a private note with files (R-1.33); and the
+ * tab adds an addendum (R-1.32) and the Proposals tab lists what was submitted once it has closed
+ * (R-1.31, R-2.25); the History tab takes a private note with files (R-1.33); and the
  * Summary tab reports its views, watchers and proposals once it is published (R-1.30).
  */
 
-type Tab = "summary" | "opportunity" | "addenda" | "history";
+type Tab = "summary" | "opportunity" | "addenda" | "history" | "proposals";
 
 type Loaded = { readonly kind: "loading" } | { readonly kind: "missing" } | { readonly kind: "found"; readonly opportunity: CwuOpportunity };
 
@@ -327,6 +329,8 @@ function Manage({ account, initial }: { account: Account; initial: CwuOpportunit
         ) : null}
         {/* No screen adds a private note (R-1.33); the history shows the ones there are. */}
         {tab === "history" ? <HistoryTable history={opportunity.history ?? []} /> : null}
+        {/* Withheld until the opportunity closes, and never a draft (R-1.31, R-2.25). */}
+        {tab === "proposals" ? <ProposalsTab opportunity={opportunity} /> : null}
       </Stack>
       <CancelDialog
         key={dialog === "cancel" ? "open" : "closed"}
@@ -386,11 +390,16 @@ const TAB_NAMES: Readonly<Record<Tab, string>> = {
   opportunity: "Opportunity",
   addenda: "Addenda",
   history: "History",
+  proposals: "Proposals",
 };
 
-/** The tabs follow the stage: an addendum needs an opportunity that is no longer a draft (R-1.32). */
+/**
+ * The tabs follow the stage: an addendum needs an opportunity that is no longer a draft (R-1.32),
+ * and only one that has been put forward can have proposals; the Proposals tab itself says when
+ * they are withheld (R-1.31).
+ */
 export function tabsFor(status: CwuStatus): readonly Tab[] {
-  return status === "DRAFT" ? ["summary", "opportunity", "history"] : ["summary", "opportunity", "addenda", "history"];
+  return status === "DRAFT" ? ["summary", "opportunity", "history"] : ["summary", "opportunity", "addenda", "history", "proposals"];
 }
 
 export function refusalNotice(

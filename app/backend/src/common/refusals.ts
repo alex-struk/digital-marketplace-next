@@ -34,6 +34,21 @@ export class NamedRefusal extends HttpException {
   }
 }
 
+/**
+ * A refusal in the usual shape, `{ "errors": [...] }`, with something more alongside the reasons
+ * that the person needs to act on it: a proposal refused because its organization already bid is
+ * answered with the identifier of the proposal that did (R-2.11).
+ */
+export class DetailedRefusal extends HttpException {
+  constructor(
+    status: number,
+    readonly messages: readonly string[],
+    readonly details: Readonly<Record<string, unknown>>,
+  ) {
+    super({ errors: messages, ...details }, status);
+  }
+}
+
 export type RefusalBody = Refusal | Readonly<Record<string, readonly string[]>>;
 
 interface ValidationLikeError {
@@ -49,6 +64,9 @@ export function refusalFor(exception: unknown): {
 } {
   if (exception instanceof NamedRefusal) {
     return { status: exception.getStatus(), body: { [exception.reason]: [...exception.messages] } };
+  }
+  if (exception instanceof DetailedRefusal) {
+    return { status: exception.getStatus(), body: { ...exception.details, errors: [...exception.messages] } };
   }
   if (exception instanceof HttpException) {
     const status = exception.getStatus();

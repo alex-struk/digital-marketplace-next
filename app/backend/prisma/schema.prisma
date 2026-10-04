@@ -8,7 +8,8 @@
 // pulled again after adding the Code With Us attachments and the opportunity state checks;
 // slice 8 pulled again after adding the three programs' watcher tables and the view counters;
 // slice 9 pulled again after adding the three programs' addenda and the note attachments;
-// slice 12 pulled again after adding the organizations' changelog, `affiliationEvents`.
+// slice 12 pulled again after adding the organizations' changelog, `affiliationEvents`;
+// slice 14 pulled again after adding the Code With Us proposal attachments.
 // The names below are Prisma's, not this project's. Nothing here is edited by hand except this
 // comment, which a pull replaces and which is put back afterwards.
 
@@ -122,6 +123,7 @@ model files {
   fileBlob                           String
   cwuOpportunityAttachments          cwuOpportunityAttachments[]
   cwuOpportunityNoteAttachments      cwuOpportunityNoteAttachments[]
+  cwuProposalAttachments             cwuProposalAttachments[]
   filePermissionsPublic              filePermissionsPublic?
   filePermissionsUser                filePermissionsUser[]
   filePermissionsUserType            filePermissionsUserType[]
@@ -649,24 +651,25 @@ model cwuProposalStatuses {
 }
 
 model cwuProposals {
-  id                                  String                @id @db.Uuid
-  createdAt                           DateTime              @db.Timestamptz(6)
-  createdBy                           String?               @db.Uuid
-  updatedAt                           DateTime              @db.Timestamptz(6)
-  updatedBy                           String?               @db.Uuid
-  proposalText                        String                @default("")
-  additionalComments                  String                @default("")
-  proponentIndividual                 String?               @db.Uuid
-  proponentOrganization               String?               @db.Uuid
-  score                               Float?                @db.Real
-  opportunity                         String                @db.Uuid
-  anonymousProponentName              String                @default("")
+  id                                  String                   @id @db.Uuid
+  createdAt                           DateTime                 @db.Timestamptz(6)
+  createdBy                           String?                  @db.Uuid
+  updatedAt                           DateTime                 @db.Timestamptz(6)
+  updatedBy                           String?                  @db.Uuid
+  proposalText                        String                   @default("")
+  additionalComments                  String                   @default("")
+  proponentIndividual                 String?                  @db.Uuid
+  proponentOrganization               String?                  @db.Uuid
+  score                               Float?                   @db.Real
+  opportunity                         String                   @db.Uuid
+  anonymousProponentName              String                   @default("")
+  cwuProposalAttachments              cwuProposalAttachments[]
   cwuProposalStatuses                 cwuProposalStatuses[]
-  users_cwuProposals_createdByTousers users?                @relation("cwuProposals_createdByTousers", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuproposals_createdby_foreign")
-  cwuOpportunities                    cwuOpportunities      @relation(fields: [opportunity], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cwuproposals_opportunity_foreign")
-  cwuProponents                       cwuProponents?        @relation(fields: [proponentIndividual], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuproposals_proponentindividual_foreign")
-  organizations                       organizations?        @relation(fields: [proponentOrganization], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuproposals_proponentorganization_foreign")
-  users_cwuProposals_updatedByTousers users?                @relation("cwuProposals_updatedByTousers", fields: [updatedBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuproposals_updatedby_foreign")
+  users_cwuProposals_createdByTousers users?                   @relation("cwuProposals_createdByTousers", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuproposals_createdby_foreign")
+  cwuOpportunities                    cwuOpportunities         @relation(fields: [opportunity], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cwuproposals_opportunity_foreign")
+  cwuProponents                       cwuProponents?           @relation(fields: [proponentIndividual], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuproposals_proponentindividual_foreign")
+  organizations                       organizations?           @relation(fields: [proponentOrganization], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuproposals_proponentorganization_foreign")
+  users_cwuProposals_updatedByTousers users?                   @relation("cwuProposals_updatedByTousers", fields: [updatedBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuproposals_updatedby_foreign")
 }
 
 model swuTeamQuestionResponseChairEvaluationStatuses {
@@ -907,3 +910,14 @@ model affiliationEvents {
   affiliations affiliations @relation(fields: [affiliation], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "affiliationevents_affiliation_foreign")
   users        users?       @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "affiliationevents_createdby_foreign")
 }
+
+model cwuProposalAttachments {
+  proposal     String       @db.Uuid
+  file         String       @db.Uuid
+  files        files        @relation(fields: [file], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuproposalattachments_file_foreign")
+  cwuProposals cwuProposals @relation(fields: [proposal], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cwuproposalattachments_proposal_foreign")
+
+  @@id([proposal, file])
+}
+
+
