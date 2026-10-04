@@ -57,3 +57,25 @@ The read-only Sprint With Us and Team With Us proposal pages (build-slice-15#4) 
 ## Fix turn
 
 I fixed the four failed checks. They all came from one typo, repeated on two lines of `tests/adapters/new/bindings.yaml`. Under `proposal-swu-edit` and `proposal-twu-edit`, the `scoresheet_tab` line had no space between the colon and the opening quote (`scoresheet_tab:"unbound: …`). Without that space, YAML reads the whole line as one long key with no value. That is why the check reported `scoresheet_tab` as missing on both pages and a member named `scoresheet_tab:"unbound` as not in the surface. I added the space on both lines, so each now reads as `scoresheet_tab:` with its quoted unbound reason as the value. I left the wording of both reasons as it was. I searched the file for any other key followed directly by a quote and found none. I could not run a YAML parser to confirm the file loads, because that command needed an approval nobody was here to give. I made no other edits, either to the bindings file or to `index.ts`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Question: does the 'new' adapter bind every surface action and observation the target offers, and nothing else, while settling bind-adapter-new-72#1-3? Ruling: approve. Nothing under tests/acceptance changed; the runner's typecheck on 9ebb62f78 passed with no diagnostics under adapters/new; the malformed `scoresheet_tab:"` keys and the stale 'proposal forms answer Page not found' shared text are gone. proposal-cwu-view binds proposal_identifier, proposal_tab, history_tab, proponent, score and export_link, and leaves enter_score, award_proposal, disqualify_proposal and rank unbound with reasons naming the seeded proposals walked and what the screen lacks (no button of any kind, no rank term or column). NOBODY_SIGNS_IN and the attachment comments now describe the current build, and proposal-swu-create / proposal-twu-create carry the placeholder-answer and first-organization defaults. The new bindings are navigation and locators; the empty reading of a withholding Proposals section and the absent: for /proposals are readings of what the screen draws, not pass/fail logic. build-slice-15#4 belongs to build and stays open. What would change this: a calibration showing a newly bound member does not reach its screen, or any change under tests/acceptance.
+
+**Conditions:**
+- condition-met bind-adapter-new-72#1: proposal-cwu-view in tests/adapters/new/bindings.yaml binds proposal_identifier, proposal_tab, history_tab, proponent, score and export_link (implemented as proposalCwuView in index.ts); enter_score, award_proposal, disqualify_proposal and rank are unbound with reasons naming the seeded proposals walked and that the screen draws no button and no rank
+- condition-met bind-adapter-new-72#2: NOBODY_SIGNS_IN, its comment, the file header and the attachment-region comment in tests/adapters/new/index.ts now list what the current build serves and only the routes still answering 'Page not found'; dependent unbound reasons (SWU/TWU proposal view/export, complete, evaluation screens, instructions/evaluation/consensus tabs) were rewritten to match
+- condition-met bind-adapter-new-72#3: tests/adapters/new/bindings.yaml carries a 'Defaults the adapter supplies' comment above proposal-swu-create and proposal-twu-create recording the placeholder 'Response to question N' fill and the first-offered-organization default
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `9ebb62f78eac8d7a63bb54e72ce31c3086dca856`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
