@@ -3483,6 +3483,67 @@ export default function create(
     return built as unknown as T;
   }
 
+  // ------------------------------------------------ a submission for consensus, by request
+
+  // An evaluator's submission naming the proposals it covers, sent as the opportunity's
+  // change PUT { tag: "submitIndividualQuestionEvaluations", value: { note, proposals } }.
+  // On this target, signed in as test-gov on the seeded opportunity at ...8000-...0701
+  // (EVAL_QUESTIONS_INDIVIDUAL), naming a proposal the evaluator holds no draft of was
+  // answered 400 {"errors":["This evaluation could not be submitted for review because it
+  // is incomplete. Please edit, complete and save ..."]} and the status stayed as it was.
+  const SUBMISSION_REQUEST = "evaluation-individual-submission-request-swu";
+  const submission = requests(SUBMISSION_REQUEST);
+  let submissionOpportunity = "";
+  const submissionAddress = (member: string): string =>
+    submissionOpportunity
+      ? `${baseURL}/api/opportunities/sprint-with-us/${encodeURIComponent(submissionOpportunity)}`
+      : unbound(`${SUBMISSION_REQUEST}.${member}`, "no opportunity has been opened");
+
+  // The proposals an input names: a list of them, a list under "proposals" (or a like key),
+  // or one per field; each a seed.proposals handle, an identifier, or a record with an id.
+  function proposalsNamed(input: unknown): string[] {
+    if (input === undefined || input === null) return [];
+    if (typeof input === "string") return input.split(/\s*,\s*/).filter(Boolean).map((each) => seededId(each, "proposals"));
+    if (Array.isArray(input)) return input.flatMap((each) => proposalsNamed(each));
+    if (typeof input !== "object") return [seededId(String(input), "proposals")];
+    const held = record(input);
+    for (const key of ["proposals", "proposalIds", "proponents", "named", "names"]) {
+      if (held[key] !== undefined) return proposalsNamed(held[key]);
+    }
+    if (typeof held.id === "string") return [held.id];
+    for (const key of ["proposal", "proposalId", "proponent"]) {
+      if (held[key] !== undefined) return proposalsNamed(held[key]);
+    }
+    return [];
+  }
+
+  const evaluationIndividualSubmissionRequestSwu: S.EvaluationIndividualSubmissionRequestSwuPage = {
+    open: async (params) => {
+      submissionOpportunity = seededId(params?.opportunityId, "opportunities");
+      if (!submissionOpportunity) unbound(`${SUBMISSION_REQUEST}.open`, "no opportunity was named");
+      await submission.send("open", "GET", submissionAddress("open"));
+    },
+    submitScoresForConsensusNaming: async (input?: unknown) => {
+      const member = "submit_scores_for_consensus_naming";
+      const target = submissionAddress(member);
+      const proposals = proposalsNamed(input);
+      if (!proposals.length) unbound(`${SUBMISSION_REQUEST}.${member}`, `the input names no proposals (${JSON.stringify(input)})`);
+      const held = input && typeof input === "object" && !Array.isArray(input) ? record(input) : {};
+      const note = textOf(held.note ?? held.notes ?? held.comment ?? "");
+      await submission.send(member, "PUT", target, {
+        tag: "submitIndividualQuestionEvaluations",
+        value: { note, proposals },
+      });
+    },
+    requestAccepted: async () => acceptedText(submission.last("request_accepted")),
+    refusalMessages: async () => messagesOf(submission.last("refusal_messages")),
+    // Read afresh as the signed-in person, not taken from the request's answer.
+    storedStatus: async () => {
+      const found = await peek(submissionAddress("stored_status"));
+      return found.status === 200 ? textOf(record(found.json).status) : "";
+    },
+  };
+
   // ------------------------------------------------ an evaluation panel, by request
 
   // Sent as the opportunity's "editEvaluationPanel" change, every member as { user, chair,
@@ -12054,6 +12115,7 @@ export default function create(
       "evaluation-consensus-request-twu",
       "/api/proposal/team-with-us/:proposalId/resource-questions/consensus/:userId",
     ),
+    evaluationIndividualSubmissionRequestSwu,
     evaluationPanelRequest,
     fileAttachByIdentifier,
     proposalCwuRequest,
