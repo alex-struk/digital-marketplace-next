@@ -1,3 +1,4 @@
+import type { FileRecord } from "../files/file";
 import { CalendarDay, OpportunityStatus } from "../rules/opportunities";
 import {
   CreationState,
@@ -52,9 +53,12 @@ export interface StoredDetails {
   readonly skills: readonly string[];
   readonly phases: readonly StoredPhase[];
   readonly questions: readonly QuestionDraft[];
-  readonly resources: readonly { readonly serviceArea: string; readonly targetAllocation: number }[];
+  /** Each resource with its identifier, which a Team With Us proposal names its team against (R-2.20). */
+  readonly resources: readonly { readonly id: string; readonly serviceArea: string; readonly targetAllocation: number }[];
   readonly weights: WeightsDraft;
   readonly panel: readonly { readonly user: Person; readonly evaluator: boolean; readonly chair: boolean }[];
+  /** The files the current version carries (decision record 0055). */
+  readonly attachments: readonly FileRecord[];
 }
 
 export interface StoredPhase {
@@ -62,6 +66,8 @@ export interface StoredPhase {
   readonly startDate: CalendarDay;
   readonly completionDate: CalendarDay;
   readonly maxBudget: number;
+  /** What the phase's team must hold between them (R-2.19); empty when none is recorded. */
+  readonly requiredCapabilities: readonly string[];
 }
 
 export interface OtherProgramsStore {
@@ -135,13 +141,15 @@ export interface SummaryAnswer {
   readonly codeChallengeWeight?: number;
   readonly scenarioWeight?: number;
   /** Team With Us. */
-  readonly resources?: readonly { readonly serviceArea: string; readonly targetAllocation: number; readonly order: number }[];
+  readonly resources?: readonly { readonly id: string; readonly serviceArea: string; readonly targetAllocation: number; readonly order: number }[];
   readonly resourceQuestions?: readonly (QuestionDraft & { readonly order: number })[];
   readonly challengeWeight?: number;
   /** Both. */
   readonly questionsWeight?: number;
   readonly priceWeight?: number;
   readonly evaluationPanel?: readonly { readonly user: Person; readonly evaluator: boolean; readonly chair: boolean; readonly order: number }[];
+  /** The files it carries, readable by whoever may read it (R-8.20, R-8.25). */
+  readonly attachments?: readonly FileRecord[];
   // On reading one opportunity, what running it has gathered (decision record 0043).
   /** Every addendum, oldest first (R-1.32). */
   readonly addenda?: RunningAnswer["addenda"];

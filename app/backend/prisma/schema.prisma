@@ -132,6 +132,9 @@ model files {
   organizations                      organizations[]
   swuOpportunityNoteAttachments      swuOpportunityNoteAttachments[]
   twuProposalAttachments             twuProposalAttachments[]
+  swuOpportunityAttachments          swuOpportunityAttachments[]
+  twuOpportunityAttachments          twuOpportunityAttachments[]
+  swuProposalAttachments             swuProposalAttachments[]
   users_users_avatarImageFileTofiles users[]                         @relation("users_avatarImageFileTofiles")
 }
 
@@ -272,6 +275,7 @@ model swuOpportunityVersions {
   users                     users?                      @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "swuopportunityversions_createdby_foreign")
   swuOpportunities          swuOpportunities            @relation(fields: [opportunity], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "swuopportunityversions_opportunity_foreign")
   swuTeamQuestions          swuTeamQuestions[]
+  swuOpportunityAttachments swuOpportunityAttachments[]
 }
 
 model swuPhaseCapabilities {
@@ -353,6 +357,7 @@ model swuProposals {
   swuTeamQuestionResponseEvaluatorEvaluationStatuses swuTeamQuestionResponseEvaluatorEvaluationStatuses[]
   swuTeamQuestionResponseEvaluatorEvaluations        swuTeamQuestionResponseEvaluatorEvaluations[]
   swuTeamQuestionResponses                           swuTeamQuestionResponses[]
+  swuProposalAttachments                             swuProposalAttachments[]
 }
 
 model swuTeamQuestionResponses {
@@ -441,6 +446,7 @@ model twuOpportunityVersions {
   twuOpportunities          twuOpportunities            @relation(fields: [opportunity], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "twuopportunityversions_opportunity_foreign")
   twuResourceQuestions      twuResourceQuestions[]
   twuResources              twuResources[]
+  twuOpportunityAttachments twuOpportunityAttachments[]
 }
 
 model twuOrganizationServiceAreas {
@@ -920,4 +926,29 @@ model cwuProposalAttachments {
   @@id([proposal, file])
 }
 
+model swuOpportunityAttachments {
+  opportunityVersion     String                 @db.Uuid
+  file                   String                 @db.Uuid
+  files                  files                  @relation(fields: [file], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "swuopportunityattachments_file_foreign")
+  swuOpportunityVersions swuOpportunityVersions @relation(fields: [opportunityVersion], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "swuopportunityattachments_opportunityversion_foreign")
 
+  @@id([opportunityVersion, file])
+}
+
+model twuOpportunityAttachments {
+  opportunityVersion     String                 @db.Uuid
+  file                   String                 @db.Uuid
+  files                  files                  @relation(fields: [file], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "twuopportunityattachments_file_foreign")
+  twuOpportunityVersions twuOpportunityVersions @relation(fields: [opportunityVersion], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "twuopportunityattachments_opportunityversion_foreign")
+
+  @@id([opportunityVersion, file])
+}
+
+model swuProposalAttachments {
+  proposal     String       @db.Uuid
+  file         String       @db.Uuid
+  files        files        @relation(fields: [file], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "swuproposalattachments_file_foreign")
+  swuProposals swuProposals @relation(fields: [proposal], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "swuproposalattachments_proposal_foreign")
+
+  @@id([proposal, file])
+}

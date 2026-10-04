@@ -93,6 +93,35 @@ describe("a Sprint With Us or Team With Us opportunity that is not a draft", () 
     ]);
   });
 
+  it("keeps each phase's maximum budget and required capabilities, refusing budgets that are not whole dollars but not phase budgets that together exceed the total (R-2.19)", () => {
+    const prototype = {
+      startDate: "2026-10-26",
+      completionDate: "2026-10-31",
+      maxBudget: 200_000,
+      requiredCapabilities: ["Frontend Development"],
+    };
+    const implementation = { ...SPRINT.implementationPhase, maxBudget: 300_000, requiredCapabilities: ["Backend Development"] };
+    const body = { ...SPRINT, prototypePhase: prototype, implementationPhase: implementation };
+    expect(sprintLines(body)).toEqual([]);
+    expect(draftOf("sprint-with-us", body, TODAY).phases).toMatchObject([
+      { phase: "PROTOTYPE", maxBudget: 200_000, requiredCapabilities: ["Frontend Development"] },
+      { phase: "IMPLEMENTATION", maxBudget: 300_000, requiredCapabilities: ["Backend Development"] },
+    ]);
+    expect(sprintLines({ ...body, prototypePhase: { ...prototype, maxBudget: 0 } })).toEqual([
+      "prototypePhase.maxBudget: Enter the prototype phase's maximum budget as a whole number of dollars, at least $1.",
+    ]);
+    // The old application accepts phase budgets (200,000 + 300,000) over a 400,000 total.
+    expect(sprintLines({ ...body, totalMaxBudget: 400_000 })).toEqual([]);
+    expect(draftOf("sprint-with-us", { ...body, totalMaxBudget: 400_000 }, TODAY).phases).toMatchObject([
+      { phase: "PROTOTYPE", maxBudget: 200_000 },
+      { phase: "IMPLEMENTATION", maxBudget: 300_000 },
+    ]);
+    // Left blank, the implementation phase holds what the other phases leave of the total.
+    const blank = { ...body, implementationPhase: { ...implementation, maxBudget: null } };
+    expect(sprintLines(blank)).toEqual([]);
+    expect(draftOf("sprint-with-us", blank, TODAY).phases[1]?.maxBudget).toBe(1_000_000);
+  });
+
   it("refuses a question outside its limits, naming the field, by its place in the list (R-1.17)", () => {
     const question = { question: "x".repeat(1001), guideline: "", score: 0, minimumScore: 0, wordLimit: 3001 };
     expect(sprintLines({ ...SPRINT, teamQuestions: [SPRINT.teamQuestions[0], question] })).toEqual([

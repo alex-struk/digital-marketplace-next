@@ -100,8 +100,8 @@ export class PrismaFileStore implements FileStore {
   }
 
   /**
-   * A file is detached when nothing refers to it: no current version of a Code With Us opportunity
-   * carries it (an earlier version keeps no way of reading it), no proposal or history note does,
+   * A file is detached when nothing refers to it: no current version of an opportunity in any
+   * program carries it (an earlier version keeps no way of reading it), no proposal or history note does,
    * no account or organization shows it as a picture or logo, and no page of prose embeds it.
    */
   async detached(): Promise<StoredFile[]> {
@@ -111,7 +111,16 @@ export class PrismaFileStore implements FileStore {
           SELECT 1 FROM "cwuOpportunityAttachments" a JOIN "cwuOpportunityVersions" v ON v."id" = a."opportunityVersion"
           WHERE a."file" = f."id" AND v."id" = (
             SELECT c."id" FROM "cwuOpportunityVersions" c WHERE c."opportunity" = v."opportunity" ORDER BY c."createdAt" DESC LIMIT 1))
+        AND NOT EXISTS (
+          SELECT 1 FROM "swuOpportunityAttachments" a JOIN "swuOpportunityVersions" v ON v."id" = a."opportunityVersion"
+          WHERE a."file" = f."id" AND v."id" = (
+            SELECT c."id" FROM "swuOpportunityVersions" c WHERE c."opportunity" = v."opportunity" ORDER BY c."createdAt" DESC LIMIT 1))
+        AND NOT EXISTS (
+          SELECT 1 FROM "twuOpportunityAttachments" a JOIN "twuOpportunityVersions" v ON v."id" = a."opportunityVersion"
+          WHERE a."file" = f."id" AND v."id" = (
+            SELECT c."id" FROM "twuOpportunityVersions" c WHERE c."opportunity" = v."opportunity" ORDER BY c."createdAt" DESC LIMIT 1))
         AND NOT EXISTS (SELECT 1 FROM "cwuProposalAttachments" a WHERE a."file" = f."id")
+        AND NOT EXISTS (SELECT 1 FROM "swuProposalAttachments" a WHERE a."file" = f."id")
         AND NOT EXISTS (SELECT 1 FROM "twuProposalAttachments" a WHERE a."file" = f."id")
         AND NOT EXISTS (SELECT 1 FROM "cwuOpportunityNoteAttachments" a WHERE a."file" = f."id")
         AND NOT EXISTS (SELECT 1 FROM "swuOpportunityNoteAttachments" a WHERE a."file" = f."id")

@@ -218,11 +218,16 @@ export function TermsDialog({
   isSending,
   onCancel,
   onConfirm,
+  programName = "Code With Us",
+  programTerms = "/content/code-with-us-terms-and-conditions",
 }: {
   readonly isOpen: boolean;
   readonly isSending: boolean;
   readonly onCancel: () => void;
   readonly onConfirm: () => void;
+  /** The program whose terms are asked for, and the page they are on. */
+  readonly programName?: string;
+  readonly programTerms?: string;
 }) {
   const [program, setProgram] = useState(false);
   const [service, setService] = useState(false);
@@ -241,15 +246,14 @@ export function TermsDialog({
               Submit your proposal
             </Heading>
             <Text elementType="p">
-              To submit, accept the Code With Us terms and conditions and the Digital Marketplace terms and conditions. Your
-              acceptance is recorded when you submit.
+              {`To submit, accept the ${programName} terms and conditions and the Digital Marketplace terms and conditions. Your acceptance is recorded when you submit.`}
             </Text>
             <Text elementType="p">
-              Read the <Link href="/content/code-with-us-terms-and-conditions">Code With Us terms and conditions</Link> and the{" "}
+              Read the <Link href={programTerms}>{`${programName} terms and conditions`}</Link> and the{" "}
               <Link href="/content/terms-and-conditions">Digital Marketplace terms and conditions</Link>.
             </Text>
             <Checkbox isRequired isSelected={program} onChange={setProgram} data-testid="proposal-accept-program-terms">
-              I accept the Code With Us terms and conditions
+              {`I accept the ${programName} terms and conditions`}
             </Checkbox>
             <Checkbox isRequired isSelected={service} onChange={setService} data-testid="proposal-accept-app-terms">
               I accept the Digital Marketplace terms and conditions

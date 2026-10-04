@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-15-5 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">598</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">592</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">486</span></a></li><li><a href="../runs.html">Run log <span class="count">22</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-15-5</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-04 07:54</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.288 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 15 (A vendor can propose on Sprint With Us and Team With Us opportunities) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> I made the one change the ruling asked for.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.288 (Claude Code))</p>
+<p>I made the one change the ruling asked for. A Sprint With Us opportunity whose phase budgets add up to more than its total budget can now be published. The application&#39;s check passes, with all unit tests green and no type errors.</p>
+<p><strong>The cause.</strong> The last build added its own rule in <code>app/backend/src/rules/other-program-content.ts</code> (the <code>phaseProblems</code> function). That rule refused any opportunity whose phase maximum budgets came to more than its total maximum budget. No criterion backs it, and the old application accepts such an opportunity. Verify&#39;s test for R-2.19 sets up phases of 200,000 and 300,000 against a 400,000 total. Because of that rule the opportunity could not be published, so the test stopped before it reached the proposal.</p>
+<p><strong>The change.</strong></p>
+<ul><li><strong>The refusal is gone.</strong> I removed the sum check and its now-unused <code>total</code> parameter, and left a short comment saying why phase budgets are not held to the total.</li><li><strong>The phase budget check stays.</strong> A phase budget, if given, must still be a whole number of at least $1, and this is still checked only when the opportunity goes for review or is published.</li><li><strong>The decision record is updated.</strong> <code>docs/decisions/0059</code> no longer contains the rule. It now says phase budgets are not held to the total, and that a proposal is checked against each phase&#39;s budget and against the total separately.</li></ul>
+<p><strong>Unit tests.</strong></p>
+<ul><li><strong>Opportunity test, changed.</strong> The existing test in <code>app/backend/tests/other-program-content.test.ts</code> now expects the 200,000 + 300,000 against 400,000 opportunity to have no problems. It also checks that both phase budgets are kept as given.</li><li><strong>Proposal test, new.</strong> I added a test in <code>app/backend/tests/team-proposal-rules.test.ts</code> for the outcome the ruling describes. A proposal costing 190,000 + 290,000 against that opportunity produces exactly one problem, against the total, reading &quot;The proposed cost exceeds the maximum budget for this opportunity.&quot; Neither phase gets an error.</li></ul>
+<p>The proposal side needed no change. It already checks each phase cost only against a recorded phase budget, and checks the total cost against the opportunity&#39;s total separately.</p>
+<p>To run the check I first had to install the application&#39;s dependencies, because they were missing from this workspace. Nothing outside <code>app/</code> and <code>docs/decisions/</code> was touched, and nothing else in slice 15 changed. Nothing is outstanding from the ruling, and the next slice inherits nothing new from this fix.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-04 08:21.</p>
+<div class="body"><p>Question: does slice 15 (a vendor can propose on Sprint With Us and Team With Us opportunities) do what its criteria say? Ruling: approve. The verify result is pass, current for build-slice-15-5 against application tree aa72129: all 17 claimed criteria were exercised and met, with nothing unasserted. The one instruction owed from build-slice-15-4 is carried out. phaseProblems in app/backend/src/rules/other-program-content.ts no longer refuses phase budgets that add up to more than the total, and it keeps the check that a phase budget is a whole number of at least $1. Decision record 0059 says phase budgets are not held to the total. other-program-content.test.ts now accepts the 200,000 + 300,000 against 400,000 opportunity, and team-proposal-rules.test.ts shows that a 190,000 + 290,000 proposal gets exactly one error, against the total. The rest of the diff stays within slice 15&#39;s criteria (R-2.7 to R-2.25, R-1.31, R-8.19/20/25). Raw SQL writes only fixed table names and binds every value, and no secret or personal data appears. The owed test for R-2.10 is satisfied: tests/acceptance/proposals/R-2.10.spec.ts now has an edit-path test, and both of its tests passed in this verify, so I withdraw it rather than letting it block. What would change this: a stale or failing verify, or a calibration run in which the R-2.10 edit-path test fails against the old application.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met build-slice-15-4#1: phaseProblems in app/backend/src/rules/other-program-content.ts no longer refuses phase maximum budgets that add up to more than the total, and keeps the whole-number check of at least $1. docs/decisions/0059 says phase budgets are not held to the total. app/backend/tests/other-program-content.test.ts expects the 200,000 + 300,000 against 400,000 opportunity to have no problems, and app/backend/tests/team-proposal-rules.test.ts expects a 190,000 + 290,000 proposal to get exactly one error, against the total. Verify passes R-2.19.</li><li>condition-withdrawn missing-test/R-2.10: tests/acceptance/proposals/R-2.10.spec.ts now asserts the edit-path clause (&#39;...is refused on the edit path&#39;) as well as the create path, and both tests ran and passed at v1 in this slice&#39;s verify (tests/results/new/slice-15.json). A test that runs now exists for every clause. The scheduled calibration run (scope: changed) will still run it against the oracle.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

@@ -22,6 +22,7 @@ import type { RunningAction } from "../api/opportunities";
 import {
   OtherProgramChange,
   OtherProgramOpportunity,
+  attachToOtherProgramOpportunity,
   changeOtherProgramOpportunity,
   deleteOtherProgramOpportunity,
   fetchOtherProgramOpportunity,
@@ -34,6 +35,7 @@ import { Stack } from "../app/page-layout";
 import { RequireSignIn } from "../app/require-sign-in";
 import { useScreenTitle } from "../app/screen-title";
 import { EvaluationPanelTab } from "./evaluation-panel-tab";
+import { ProposalsTab } from "./opportunity-cwu-proposals-tab";
 import { PublishDialog } from "./opportunity-cwu-form";
 import { DeleteDialog, Notice, NoticeArea, refusalNotice } from "./opportunity-cwu-edit";
 import { usePanelCandidates } from "./opportunity-other-create";
@@ -55,13 +57,14 @@ import { AddendaTab, CancelDialog, HistoryTable, ReportingSection, Sent } from "
  */
 type Loaded = { readonly kind: "loading" } | { readonly kind: "missing" } | { readonly kind: "found"; readonly opportunity: OtherProgramOpportunity };
 
-type Tab = "summary" | "opportunity" | "addenda" | "history" | "evaluationPanel";
+type Tab = "summary" | "opportunity" | "addenda" | "history" | "proposals" | "evaluationPanel";
 
 const TAB_NAMES: Readonly<Record<Tab, string>> = {
   summary: "Summary",
   opportunity: "Opportunity",
   addenda: "Addenda",
   history: "History",
+  proposals: "Proposals",
   evaluationPanel: "Evaluation panel",
 };
 
@@ -70,6 +73,7 @@ const TAB_TEST_IDS: Readonly<Record<Tab, string>> = {
   opportunity: "opportunity-tab-opportunity",
   addenda: "opportunity-tab-addenda",
   history: "opportunity-tab-history",
+  proposals: "opportunity-tab-proposals",
   evaluationPanel: "opportunity-tab-evaluation-panel",
 };
 
@@ -89,11 +93,15 @@ const DONE: Readonly<Record<"submit" | "publish" | "save" | RunningAction["tag"]
   addAddendum: "The addendum has been added.",
 };
 
-/** The tabs follow the stage: an addendum needs an opportunity that is no longer a draft (R-1.32). */
+/**
+ * The tabs follow the stage: an addendum needs an opportunity that is no longer a draft (R-1.32),
+ * and only one that has been put forward can have proposals; the Proposals tab itself says when
+ * they can be read (R-1.31, R-2.25).
+ */
 export function otherTabsFor(status: OpportunityStatus): readonly Tab[] {
   return status === "DRAFT"
     ? ["summary", "opportunity", "history", "evaluationPanel"]
-    : ["summary", "opportunity", "addenda", "history", "evaluationPanel"];
+    : ["summary", "opportunity", "addenda", "history", "proposals", "evaluationPanel"];
 }
 
 export function OpportunityOtherManageScreen({ program, opportunityId }: { program: OtherProgram; opportunityId: string }) {
@@ -324,6 +332,15 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
                   : "Saving records a new version. Everyone watching this opportunity, everyone who has submitted a proposal, and its author will be emailed."}
               </Text>
             }
+            initialAttachments={opportunity.attachments}
+            attachNow={async (fileIds) => {
+              const answer = await attachToOtherProgramOpportunity(program, opportunity.id, fileIds);
+              if (answer.kind === "saved") {
+                setOpportunity(answer.opportunity);
+                return null;
+              }
+              return answer.kind === "refused" && answer.reasons.length > 0 ? answer.reasons.join(" ") : "The file could not be attached. Try again.";
+            }}
             onSend={(_action, submission) => changeOtherProgramOpportunity(program, opportunity.id, { tag: "edit", submission })}
             onSaved={(saved) => {
               setOpportunity(saved);
@@ -343,6 +360,7 @@ function Manage({ program, account, initial }: { program: OtherProgram; account:
         ) : null}
         {/* No screen adds a private note (R-1.33); the history shows the ones there are. */}
         {tab === "history" ? <HistoryTable history={opportunity.history ?? []} /> : null}
+        {tab === "proposals" ? <ProposalsTab program={program} opportunity={opportunity} /> : null}
         {tab === "evaluationPanel" ? (
           <EvaluationPanelTab
             program={program}

@@ -3,11 +3,13 @@ import { ListedOpportunity, readListedOpportunity } from "./opportunity-list";
 import { api } from "./client";
 import {
   Addendum,
+  Attachment,
   HistoryEntry,
   Person,
   Reporting,
   RunningAction,
   readAddenda,
+  readAttachment,
   readHistory,
   readReporting,
   reasonsIn,
@@ -33,9 +35,11 @@ export interface OtherProgramOpportunity extends ListedOpportunity {
   readonly skills: readonly string[];
   readonly phases: readonly StoredPhase[];
   readonly questions: readonly StoredQuestion[];
-  /** Team With Us. */
-  readonly resources: readonly { readonly serviceArea: string; readonly targetAllocation: number }[];
+  /** Team With Us; each with the identifier a proposal names its team against. */
+  readonly resources: readonly StoredResource[];
   readonly weights: Readonly<Record<string, number>>;
+  /** The files it carries, readable by whoever may read it (R-8.20, R-8.25). */
+  readonly attachments: readonly Attachment[];
   /** Absent unless the reader may see it (R-5.18). */
   readonly evaluationPanel?: readonly PanelMember[];
   /** Every addendum, oldest first (R-1.32). */
@@ -50,6 +54,16 @@ export interface StoredPhase {
   readonly phase: SwuPhase;
   readonly startDate: string;
   readonly completionDate: string;
+  /** 0 where no phase maximum is recorded. */
+  readonly maxBudget: number;
+  /** What the phase's team must hold between them (R-2.19). */
+  readonly requiredCapabilities: readonly string[];
+}
+
+export interface StoredResource {
+  readonly id: string;
+  readonly serviceArea: string;
+  readonly targetAllocation: number;
 }
 
 export interface StoredQuestion {
@@ -66,11 +80,17 @@ export interface PanelMember {
   readonly chair: boolean;
 }
 
-/** A phase's dates as entered; Sprint With Us. */
+/** A phase as entered; Sprint With Us. */
 export interface PhaseEntry {
   readonly startDate: string;
   readonly completionDate: string;
+  /** The phase's maximum budget; NaN while nothing is entered. */
+  readonly maxBudget: number;
+  /** The capabilities the phase's team must hold between them (R-2.19). */
+  readonly requiredCapabilities: readonly string[];
 }
+
+export const BLANK_PHASE: PhaseEntry = { startDate: "", completionDate: "", maxBudget: Number.NaN, requiredCapabilities: [] };
 
 /** One evaluation question as entered; a number is NaN while nothing is entered. */
 export interface QuestionEntry {
@@ -119,6 +139,8 @@ export interface OtherProgramSubmission {
   /** Whole percentages by the program's own weight names (questions, codeChallenge, scenario, challenge, price). */
   readonly weights: Readonly<Record<string, number>>;
   readonly panel: readonly PanelEntry[];
+  /** Stored files, by identifier (decision record 0055). */
+  readonly attachments: readonly string[];
 }
 
 const text = (value: unknown): string => (typeof value === "string" ? value : "");
@@ -129,7 +151,15 @@ const list = (value: unknown): Record<string, unknown>[] =>
 function readPhase(value: unknown, phase: SwuPhase): StoredPhase | null {
   if (typeof value !== "object" || value === null) return null;
   const record = value as Record<string, unknown>;
-  return { phase, startDate: text(record.startDate), completionDate: text(record.completionDate) };
+  return {
+    phase,
+    startDate: text(record.startDate),
+    completionDate: text(record.completionDate),
+    maxBudget: num(record.maxBudget),
+    requiredCapabilities: Array.isArray(record.requiredCapabilities)
+      ? record.requiredCapabilities.filter((capability): capability is string => typeof capability === "string")
+      : [],
+  };
 }
 
 export function readOtherProgramOpportunity(program: OtherProgram, value: unknown): OtherProgramOpportunity | null {
@@ -168,8 +198,15 @@ export function readOtherProgramOpportunity(program: OtherProgram, value: unknow
       minimumScore: typeof question.minimumScore === "number" ? question.minimumScore : null,
       wordLimit: num(question.wordLimit),
     })),
-    resources: list(record.resources).map((resource) => ({ serviceArea: text(resource.serviceArea), targetAllocation: num(resource.targetAllocation) })),
+    resources: list(record.resources).map((resource) => ({
+      id: text(resource.id),
+      serviceArea: text(resource.serviceArea),
+      targetAllocation: num(resource.targetAllocation),
+    })),
     weights,
+    attachments: Array.isArray(record.attachments)
+      ? record.attachments.map(readAttachment).filter((file): file is Attachment => file !== null)
+      : [],
     ...(Array.isArray(record.evaluationPanel)
       ? {
           evaluationPanel: list(record.evaluationPanel).flatMap((member) => {
@@ -189,7 +226,14 @@ export function readOtherProgramOpportunity(program: OtherProgram, value: unknow
 /** What the form starts from, for an opportunity already kept. */
 export function submissionFrom(opportunity: OtherProgramOpportunity): OtherProgramSubmission {
   const phases: Partial<Record<SwuPhase, PhaseEntry>> = {};
-  for (const phase of opportunity.phases) phases[phase.phase] = { startDate: phase.startDate, completionDate: phase.completionDate };
+  for (const phase of opportunity.phases) {
+    phases[phase.phase] = {
+      startDate: phase.startDate,
+      completionDate: phase.completionDate,
+      maxBudget: phase.maxBudget > 0 ? phase.maxBudget : Number.NaN,
+      requiredCapabilities: phase.requiredCapabilities,
+    };
+  }
   return {
     title: opportunity.title,
     teaser: opportunity.teaser,
@@ -203,11 +247,12 @@ export function submissionFrom(opportunity: OtherProgramOpportunity): OtherProgr
     startDate: opportunity.startDate,
     completionDate: opportunity.completionDate ?? "",
     skills: opportunity.skills,
-    phases: opportunity.program === "sprint-with-us" && !phases.IMPLEMENTATION ? { ...phases, IMPLEMENTATION: { startDate: "", completionDate: "" } } : phases,
+    phases: opportunity.program === "sprint-with-us" && !phases.IMPLEMENTATION ? { ...phases, IMPLEMENTATION: BLANK_PHASE } : phases,
     questions: opportunity.questions.map((question) => ({ ...question, minimumScore: question.minimumScore ?? Number.NaN })),
-    resources: opportunity.resources,
+    resources: opportunity.resources.map((resource) => ({ serviceArea: resource.serviceArea, targetAllocation: resource.targetAllocation })),
     weights: opportunity.weights,
     panel: (opportunity.evaluationPanel ?? []).map((member) => ({ user: member.user.id, evaluator: member.evaluator, chair: member.chair })),
+    attachments: opportunity.attachments.map((attachment) => attachment.id),
   };
 }
 
@@ -240,16 +285,23 @@ export function contentOf(program: OtherProgram, submission: OtherProgramSubmiss
     assignmentDate: submission.assignmentDate,
     questionsWeight: weight("questions"),
     priceWeight: weight("price"),
+    attachments: [...submission.attachments],
   };
   if (program === "sprint-with-us") {
     const { INCEPTION, PROTOTYPE, IMPLEMENTATION } = submission.phases;
+    const phaseOf = (entry: PhaseEntry) => ({
+      startDate: entry.startDate,
+      completionDate: entry.completionDate,
+      maxBudget: numberOrNull(entry.maxBudget),
+      requiredCapabilities: [...entry.requiredCapabilities],
+    });
     return {
       ...common,
       totalMaxBudget: budget,
       mandatorySkills: submission.skills,
-      inceptionPhase: INCEPTION ?? null,
-      prototypePhase: PROTOTYPE ?? null,
-      implementationPhase: IMPLEMENTATION ?? { startDate: "", completionDate: "" },
+      inceptionPhase: INCEPTION ? phaseOf(INCEPTION) : null,
+      prototypePhase: PROTOTYPE ? phaseOf(PROTOTYPE) : null,
+      implementationPhase: phaseOf(IMPLEMENTATION ?? BLANK_PHASE),
       teamQuestions: questions,
       codeChallengeWeight: weight("codeChallenge"),
       scenarioWeight: weight("scenario"),
@@ -329,6 +381,20 @@ function changeBody(program: OtherProgram, change: OtherProgramChange): { tag: s
 
 export function changeOtherProgramOpportunity(program: OtherProgram, id: string, change: OtherProgramChange): Promise<OtherProgramSaveAnswer> {
   const request = { params: { path: { id } }, body: changeBody(program, change) as never };
+  return answered(
+    program,
+    program === "sprint-with-us"
+      ? api.PUT("/api/opportunities/sprint-with-us/{id}", request)
+      : api.PUT("/api/opportunities/team-with-us/{id}", request),
+  );
+}
+
+/**
+ * Makes a saved opportunity carry exactly these files, the rest as it stands, so a file is attached
+ * as soon as it is chosen (decision record 0033).
+ */
+export function attachToOtherProgramOpportunity(program: OtherProgram, id: string, fileIds: readonly string[]): Promise<OtherProgramSaveAnswer> {
+  const request = { params: { path: { id } }, body: { tag: "edit", value: { attachments: [...fileIds] } } as never };
   return answered(
     program,
     program === "sprint-with-us"

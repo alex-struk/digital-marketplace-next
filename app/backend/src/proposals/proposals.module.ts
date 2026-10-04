@@ -8,14 +8,20 @@ import { CWU_PROPOSAL_STORE } from "./cwu-proposal";
 import { CwuProposalsController } from "./cwu-proposals.controller";
 import { CwuProposalsService } from "./cwu-proposals.service";
 import { PrismaCwuProposalStore } from "./prisma-cwu-proposal.store";
+import { PrismaTeamProposalStore } from "./prisma-team-proposal.store";
+import { TEAM_PROPOSAL_STORE } from "./team-proposal";
+import { SwuProposalsController, TwuProposalsController } from "./team-proposals.controller";
+import { TeamProposalsService } from "./team-proposals.service";
 
-/** Proposals. Code With Us so far; Sprint With Us and Team With Us arrive in slice 15. */
+/** Proposals in all three programs. */
 @Module({
   imports: [UsersModule, FileStoreModule],
-  controllers: [CwuProposalsController],
+  controllers: [CwuProposalsController, SwuProposalsController, TwuProposalsController],
   providers: [
     CwuProposalsService,
+    TeamProposalsService,
     { provide: CWU_PROPOSAL_STORE, useClass: PrismaCwuProposalStore },
+    { provide: TEAM_PROPOSAL_STORE, useClass: PrismaTeamProposalStore },
     // A file may be attached only by someone who may read it (R-8.22).
     { provide: ATTACHMENT_ACCESS, useExisting: FilesService },
     { provide: CLOCK, useValue: () => new Date() },

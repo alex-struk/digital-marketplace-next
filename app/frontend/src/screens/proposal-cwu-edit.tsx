@@ -485,8 +485,8 @@ const cell = {
   borderBottom: "var(--layout-border-width-small) solid var(--surface-color-border-default)",
 } as const;
 
-/** Every change of state, newest first, with who made it and any note (R-2.9, R-2.35). */
-export function ProposalHistory({ proposal }: { proposal: CwuProposal }) {
+/** Every change of state, newest first, with who made it and any note (R-2.9, R-2.35), in every program. */
+export function ProposalHistory({ proposal }: { proposal: Pick<CwuProposal, "history"> }) {
   return (
     <div role="region" aria-labelledby="history-caption" tabIndex={0} style={{ overflowX: "auto" }}>
       <table style={{ borderCollapse: "collapse", width: "100%" }} data-testid="proposal-history-table">

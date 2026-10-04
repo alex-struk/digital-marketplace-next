@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { Heading, Link, Text } from "@bcgov/design-system-react-components";
 import { mayManageOpportunity } from "@rules/opportunities";
+import { isAcceptingProposals } from "@rules/proposals";
 import { mayWatch } from "@rules/opportunity-list";
 import { OtherProgram, SERVICE_AREAS, SWU_PHASE_NAMES } from "@rules/other-program-drafts";
 import { Page, fetchPage } from "../api/content";
 import { OtherProgramOpportunity, fetchOtherProgramOpportunity } from "../api/other-programs";
+import { listTeamProposals } from "../api/team-proposals";
 import { countView } from "../api/watching";
+import { AttachmentList } from "../app/attachments";
 import { Loading } from "../app/loading";
 import { NotFound } from "../app/not-found";
 import { Stack } from "../app/page-layout";
@@ -141,6 +144,9 @@ export function OpportunityOtherViewScreen({ program, opportunityId }: { program
       {mayWatch(viewer, { createdBy: opportunity.createdBy?.id ?? null }) ? (
         <WatchControl key={opportunity.id} opportunity={opportunity} program={program} />
       ) : null}
+      {viewer?.type === "VENDOR" && isAcceptingProposals(opportunity, new Date()) ? (
+        <StartTeamProposal key={`${opportunity.id}-${viewer.id}`} program={program} opportunityId={opportunity.id} vendorId={viewer.id} />
+      ) : null}
       {manages ? (
         <div>
           <Link href={`/opportunities/${program}/${opportunity.id}/edit`} isButton buttonVariant="secondary">
@@ -153,6 +159,7 @@ export function OpportunityOtherViewScreen({ program, opportunityId }: { program
           Description
         </Heading>
         <FormattedText markup={opportunity.description} />
+        <AttachmentList attachments={opportunity.attachments} />
       </Stack>
       {sprint ? (
         <>
@@ -221,6 +228,32 @@ export function OpportunityOtherViewScreen({ program, opportunityId }: { program
         <AddendaList addenda={opportunity.addenda} showAuthor={false} />
       </Stack>
     </Stack>
+  );
+}
+
+/**
+ * Start a proposal (`opportunity-start-proposal`), for a vendor while the opportunity accepts
+ * proposals. A vendor who already holds one is taken to it instead of a new one (R-2.2).
+ */
+function StartTeamProposal({ program, opportunityId, vendorId }: { program: OtherProgram; opportunityId: string; vendorId: string }) {
+  const [held, setHeld] = useState<string | null>(null);
+  useEffect(() => {
+    let current = true;
+    void listTeamProposals(program, opportunityId).then((answer) => {
+      const mine = answer.kind === "listed" ? answer.proposals.find((proposal) => proposal.createdBy?.id === vendorId) : undefined;
+      if (current && mine) setHeld(mine.id);
+    });
+    return () => {
+      current = false;
+    };
+  }, [program, opportunityId, vendorId]);
+  const base = `/opportunities/${program}/${opportunityId}/proposals`;
+  return (
+    <div>
+      <Link href={held ? `${base}/${held}/edit` : `${base}/create`} isButton buttonVariant="primary" data-testid="opportunity-start-proposal">
+        {held ? "View your proposal" : "Start a proposal"}
+      </Link>
+    </div>
   );
 }
 

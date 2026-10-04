@@ -79,6 +79,7 @@ describe("what a new opportunity keeps (R-1.9 in the other two programs)", () =>
       resources: [],
       weights: { questions: 0, codeChallenge: 0, scenario: 0, challenge: 0, price: 0 },
       panel: [],
+      attachments: [],
     });
   });
 

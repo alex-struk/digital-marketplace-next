@@ -60,7 +60,8 @@ import {
 import type { AccountKind } from "../rules/users";
 import { WatchingService } from "../watching/watching.service";
 import { CWU_OPPORTUNITY_STORE, CwuOpportunityStore } from "./cwu-opportunity";
-import { CLOCK, Clock } from "./cwu-opportunities.service";
+import { ATTACHMENT_ACCESS, AttachmentAccess } from "./attachment-access";
+import { ATTACHMENT_NOT_READABLE, CLOCK, Clock } from "./cwu-opportunities.service";
 import { OPPORTUNITY_RECORDS_STORE, OpportunityRecordsStore } from "./opportunity-records";
 import { OpportunityRunningService, RunningSubject } from "./opportunity-running.service";
 import {
@@ -101,6 +102,7 @@ export class OtherProgramsService {
     @Inject(CWU_OPPORTUNITY_STORE) private readonly people: Pick<CwuOpportunityStore, "activeAdministrators" | "newOpportunityNoticeRecipients">,
     private readonly mailer: Mailer,
     @Inject(MAIL_SETTINGS) private readonly mail: Pick<MailSettings, "serviceOrigin" | "batchSize">,
+    @Inject(ATTACHMENT_ACCESS) private readonly files: AttachmentAccess,
   ) {}
 
   async list(viewer: OpportunityViewer | null, program: OtherProgram): Promise<SummaryAnswer[]> {
@@ -137,7 +139,9 @@ export class OtherProgramsService {
       ];
       if (problems.length > 0) throw new BadRequestException(problems.map(otherRefusalLine));
     }
-    const id = await this.store.create(program, draftOf(program, body, today), decision, author.id);
+    const content = draftOf(program, body, today);
+    await this.checkAttachments(author, content.attachments);
+    const id = await this.store.create(program, content, decision, author.id);
     const created = await this.mustFind(program, id);
     if (decision === "UNDER_REVIEW") await this.tellOfReview(created);
     if (decision === "PUBLISHED") await this.tellOfPublication(created);
@@ -217,7 +221,19 @@ export class OtherProgramsService {
       if (problems.length > 0) throw new BadRequestException(problems.map(otherRefusalLine));
     }
     const content = { ...draftOf(program, merged, today, earliest), panel: kept.panel };
+    await this.checkAttachments(viewer, content.attachments.filter((file) => !kept.attachments.includes(file)));
     await this.store.addVersion(program, current.id, content, kept.panel, viewer.id);
+  }
+
+  /**
+   * A file is attached only by someone who may read it (R-8.22); one the opportunity already
+   * carries stays. What was uploaded for it records no read access of its own, so it is read
+   * through the opportunity (R-8.19, R-8.25).
+   */
+  private async checkAttachments(viewer: OpportunityViewer, added: readonly string[]): Promise<void> {
+    for (const fileId of added) {
+      if (!(await this.files.mayRead(fileId, viewer))) throw new BadRequestException([ATTACHMENT_NOT_READABLE]);
+    }
   }
 
   /** A complete draft goes for review; every administrator and the author are told (R-1.21). */
@@ -416,6 +432,7 @@ export function draftFromStored(opportunity: StoredSummary): OtherProgramDraft {
     resources: [],
     weights: { questions: 0, codeChallenge: 0, scenario: 0, challenge: 0, price: 0 },
     panel: [],
+    attachments: [],
   };
   return {
     title: opportunity.title,
@@ -435,6 +452,7 @@ export function draftFromStored(opportunity: StoredSummary): OtherProgramDraft {
     resources: details.resources.map((resource) => ({ serviceArea: resource.serviceArea as ServiceArea, targetAllocation: resource.targetAllocation })),
     weights: details.weights,
     panel: details.panel.map((member) => ({ user: member.user.id, evaluator: member.evaluator, chair: member.chair })),
+    attachments: details.attachments.map((file) => file.id),
   };
 }
 
@@ -479,6 +497,7 @@ function programContentOf(program: OtherProgram, details: StoredDetails, panelSh
     questionsWeight: details.weights.questions,
     priceWeight: details.weights.price,
     ...(panelShown ? { evaluationPanel: numbered(details.panel) } : {}),
+    attachments: details.attachments,
   };
   return program === "sprint-with-us"
     ? {

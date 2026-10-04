@@ -103,6 +103,8 @@ export interface PhaseInput {
   readonly phase: SwuPhase;
   readonly startDate: string | null;
   readonly completionDate: string | null;
+  /** The phase's maximum budget, or null where none was entered. */
+  readonly maxBudget: number | null;
 }
 
 export interface ResourceInput {
@@ -181,7 +183,12 @@ export function readOtherInput(program: OtherProgram, body: unknown): OtherInput
       const value = given[PHASE_KEYS[phase]];
       if (typeof value !== "object" || value === null) continue;
       const entry = record(value);
-      phases.push({ phase, startDate: dateText(entry.startDate), completionDate: dateText(entry.completionDate) });
+      phases.push({
+        phase,
+        startDate: dateText(entry.startDate),
+        completionDate: dateText(entry.completionDate),
+        maxBudget: numberFrom(entry.maxBudget),
+      });
     }
   }
   const skills = Array.isArray(given.mandatorySkills ?? given.skills)
@@ -249,13 +256,19 @@ export function bodyOfDraft(program: OtherProgram, draft: OtherProgramDraft): Re
   if (sprint) {
     body.mandatorySkills = [...draft.skills];
     for (const phase of draft.phases) {
-      body[PHASE_KEYS[phase.phase]] = { startDate: phase.startDate, completionDate: phase.completionDate, maxBudget: phase.maxBudget };
+      body[PHASE_KEYS[phase.phase]] = {
+        startDate: phase.startDate,
+        completionDate: phase.completionDate,
+        maxBudget: phase.maxBudget,
+        ...(phase.requiredCapabilities ? { requiredCapabilities: [...phase.requiredCapabilities] } : {}),
+      };
     }
   } else {
     body.startDate = draft.startDate;
     body.completionDate = draft.completionDate;
     body.resources = draft.resources.map((resource) => ({ ...resource }));
   }
+  body.attachments = [...draft.attachments];
   return body;
 }
 
@@ -268,12 +281,21 @@ export function mergedBody(program: OtherProgram, kept: OtherProgramDraft, chang
   for (const [key, value] of Object.entries(record(change))) {
     if (key === "evaluationPanel" || key === "status") continue;
     if (value === null && key in PHASE_KEY_SET) delete merged[key];
+    else if (key in PHASE_KEY_SET) merged[key] = keepingCapabilities(merged[key], value);
     else merged[key] = value;
   }
   return merged;
 }
 
 const PHASE_KEY_SET: Readonly<Record<string, true>> = { inceptionPhase: true, prototypePhase: true, implementationPhase: true };
+
+/** A phase changed by a form that does not ask for its capabilities keeps the ones it had (R-2.19). */
+function keepingCapabilities(kept: unknown, changed: unknown): unknown {
+  const given = record(changed);
+  const before = record(kept);
+  if ("requiredCapabilities" in given || !("requiredCapabilities" in before)) return changed;
+  return { ...given, requiredCapabilities: before.requiredCapabilities };
+}
 
 // ------------------------------------------------------------------------ judging it
 
@@ -426,7 +448,11 @@ export function otherProblems(program: OtherProgram, input: OtherInput, earliest
  * with a prototype phase. Each runs from no earlier than the end of the one before it (the first
  * from the assignment date) to no earlier than its own start.
  */
-function phaseProblems(phases: readonly PhaseInput[], assignment: CalendarDay | null, add: (field: string, message: string) => void): void {
+function phaseProblems(
+  phases: readonly PhaseInput[],
+  assignment: CalendarDay | null,
+  add:(field: string, message: string) => void,
+): void {
   const has = (phase: SwuPhase) => phases.some((entry) => entry.phase === phase);
   if (!has("IMPLEMENTATION")) add("phases", "Add an implementation phase. Every Sprint With Us opportunity has one.");
   if (has("INCEPTION") && !has("PROTOTYPE")) add("phases", "A prototype phase must follow an inception phase.");
@@ -443,7 +469,12 @@ function phaseProblems(phases: readonly PhaseInput[], assignment: CalendarDay | 
     if (!completion) add(`${key}.completionDate`, `Choose the ${name} phase's completion date.`);
     else if (start && completion < start) add(`${key}.completionDate`, `The ${name} phase cannot end before it starts.`);
     earliest = completion ?? start ?? earliest;
+    if (entry.maxBudget !== null && (!Number.isInteger(entry.maxBudget) || entry.maxBudget < 1)) {
+      add(`${key}.maxBudget`, `Enter the ${name} phase's maximum budget as a whole number of dollars, at least $1.`);
+    }
   }
+  // The phases' budgets are not held to the total maximum budget: the old application accepts
+  // phase budgets that together exceed it, and a proposal is held to both (R-2.19, record 0059).
 }
 
 /** Whether a kept opportunity is complete enough to go for review or be published (R-1.21). */
@@ -593,7 +624,10 @@ export function otherFieldLabel(program: OtherProgram, field: string): string {
   if (field in simple) return simple[field] as string;
   const [head, second, third] = field.split(".");
   const phase = (Object.keys(PHASE_KEYS) as SwuPhase[]).find((key) => PHASE_KEYS[key] === head);
-  if (phase && second) return `${SWU_PHASE_NAMES[phase]} phase, ${second === "startDate" ? "start date" : "completion date"}`;
+  if (phase && second) {
+    const part: Record<string, string> = { startDate: "start date", maxBudget: "maximum budget", requiredCapabilities: "required capabilities" };
+    return `${SWU_PHASE_NAMES[phase]} phase, ${part[second] ?? "completion date"}`;
+  }
   const parts: Record<string, string> = {
     question: "question",
     guideline: "guideline",
