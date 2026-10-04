@@ -149,9 +149,22 @@ email:
           that deactivates someone itself should judge only messages sent afterwards.
   batch_size: 50
   notes:
-    - A message is addressed to one person and every other recipient is a blind copy, so
-      a test that reads only the visible recipient of a batch sees one address and not
-      the group. Read the blind-copy list to count who a batch reached.
+    - >-
+      A notice sent to more than one person shows the service's own address
+      (configured_sender_address) as its only visible recipient and carries every reader
+      as a blind copy (R-6.15). Searching the catcher by a reader's address, or reading
+      the visible recipient in the listing, therefore finds nothing for such a notice. To
+      learn who a multi-recipient notice reached, find it by its subject, open it by its
+      identifier (read_one_message) and read its blind-copy list; where a batch was split,
+      do so for every message carrying the subject. A notice meant for one person alone
+      shows that person as its visible recipient and can be found by their address. The
+      old application does not meet R-6.15 everywhere: its Sprint With Us and Team With
+      Us notices that a deadline was reached, that question consensus is ready, and that
+      it was submitted or finalized go to an evaluation panel, an opportunity's author or
+      the administrators with the whole batch as visible recipients
+      (src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx and
+      team-with-us.tsx), so a test written to R-6.15 fails against the oracle on those
+      notices, and that failure is the old target's.
     - The application never fails a request because a message could not be sent; a mail
       server that is unreachable produces a logged error and nothing in the catcher.
       Absence of a message is therefore evidence of what the application decided, not of
