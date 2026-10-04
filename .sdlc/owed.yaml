@@ -5353,7 +5353,7 @@ owed:
     id: R-2.10
     version: 1
     domain: proposals
-    stage: contract
+    stage: derive-tests
     why: a set_hourly_rate action on proposal-twu-edit, offered once start_editing
       has opened the form (taking the resource by service area and the rate, as
       proposal-twu-create's set_hourly_rate does), so that a proposal saved
@@ -5366,3 +5366,17 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-10-04T06:48:29.572Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: added the set_hourly_rate action to proposal-twu-edit
+          (spec/contract/surface.yaml), taking the resource by service area and
+          the rate as proposal-twu-create's does, available after start_editing
+          and sent by save_changes or save_changes_and_submit; the refusal is
+          read through the page's existing field_error and submission_refusal,
+          and proposal_identifier returns the id of a proposal saved from
+          proposal-twu-create.
+        by: contract-v42
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-10-04T06:54:47.446Z

@@ -362,6 +362,7 @@ Profile: rebuild
 - [contract-v4](proposals/contract-v4.md)
 - [contract-v40](proposals/contract-v40.md)
 - [contract-v41](proposals/contract-v41.md)
+- [contract-v42](proposals/contract-v42.md)
 - [contract-v5](proposals/contract-v5.md)
 - [contract-v6](proposals/contract-v6.md)
 - [contract-v7](proposals/contract-v7.md)
@@ -618,10 +619,10 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $948.340469
-- Rulings cost: $502.193322
-- Total cost: $1450.533791
-- Agent-held rulings: 530
+- Journal cost: $949.327862
+- Rulings cost: $502.539464
+- Total cost: $1451.867326
+- Agent-held rulings: 531
 - Runner rulings (automatic, no seat held): 33
 - Human rulings: 25
 - Rulings whose seat this page does not recognise: 0

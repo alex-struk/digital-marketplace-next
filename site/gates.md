@@ -2,6 +2,7 @@
 
 | When | Proposal | Gate | Verdict | By | Made by | Cost | Sample |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-10-04T06:54:46.352Z | contract-v42 | G1 | approve | agent:product-owner | persona agent · claude claude-opus-5-5 | $0.3461418 |  |
 | 2026-10-04T06:48:29.514Z | derive-tests-proposals-stale-18 | G3 | approve | agent:reviewer | persona agent · claude claude-opus-5-5 | $0.3743238 |  |
 | 2026-10-04T06:45:45.855Z | bind-adapter-new-74 | G3 | approve | agent:reviewer | persona agent · claude claude-opus-5-5 | $0.4726882 |  |
 | 2026-10-04T06:22:59.528Z | bind-adapter-new-73 | G3 | approve | agent:reviewer | persona agent · claude claude-opus-5-5 | $0.7532443999999999 |  |
