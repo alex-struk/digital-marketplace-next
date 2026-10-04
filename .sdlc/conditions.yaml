@@ -2654,3 +2654,45 @@ conditions:
     stage: build
     by: agent:reviewer
     at: 2026-10-04T04:10:30.451Z
+  - ref: plan-21#1
+    text: "docs/decisions/0002: add rows to its migration table for the Code With Us
+      opportunity attachment table restored under 0029 and the two Sprint With
+      Us and Team With Us opportunity attachment tables restored under 0055.
+      Reword 'No table or column is added' to say that no table or column the
+      old application did not have is added, and that restoring the old
+      application's own tables where the reconstructed baseline lacks them is
+      within J5 by tech-lead ruling. Update the J5 paragraph in plan/plan.md,
+      which still says 'The only migrations are the three named in 0002', to
+      match."
+    from: plan-21
+    family: plan
+    gate: G2
+    stage: plan
+    by: agent:tech-lead
+    at: 2026-10-04T04:16:04.131Z
+  - ref: plan-21#2
+    text: "docs/decisions/0055: replace the instruction that the builder take the
+      table and column names 'from the old application's migration history'.
+      0007 records that the old repository is not in this workspace, and neither
+      table name appears in the seed records or anywhere else here, so build
+      cannot follow it. Name the two tables and their columns in 0055 itself,
+      modelled on 0029's cwuOpportunityAttachments (opportunity version, file).
+      Say they are the rebuild's own names under 0007's rule for names the seed
+      does not fix, to be reconciled if the old repository becomes available."
+    from: plan-21
+    family: plan
+    gate: G2
+    stage: plan
+    by: agent:tech-lead
+    at: 2026-10-04T04:16:04.131Z
+  - ref: plan-21#3
+    text: "plan/plan.md: run `node plan/check-coverage.mjs .` and record its result
+      in the coverage-check section. If it cannot be run, say so there, and
+      state the hand count of 248 placed criteria with Slice 14 at 18 and Slice
+      15 at 17 as the evidence relied on."
+    from: plan-21
+    family: plan
+    gate: G2
+    stage: plan
+    by: agent:tech-lead
+    at: 2026-10-04T04:16:04.131Z
