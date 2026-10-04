@@ -26,3 +26,23 @@ Nothing else changed. `notAllConsensusesSubmittedError()` reads the same saved t
 **Not checked.** The edit only swaps a `throw` for a `break` inside the same loop and adds a comment, so I don't expect a type error.
 
 Every route the contract names was already handled in the approved binding, and I found no new page whose route fails to load. Nothing was deferred.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Question: does the new adapter bind every surface action and observation on new, and nothing else? Approve. The diff changes one line in confirmFinalize (tests/adapters/new/index.ts:2130-2133). When the finalize confirmation is refused, the routine now stores the alert text in finalizeRefusal and breaks out of its wait loop instead of throwing. Both evaluation-consensus-list-swu.confirm_finalize_consensus and evaluation-consensus-list-twu.confirm_finalize_consensus therefore complete when the page answers with the refusal. noScreenableProponentError (through afterAControl, which accepts a stored finalizeRefusal) can then return the lines naming the Code Challenge or the Challenge, which is what R-5.10's test reads. The binding remains navigation and locating only. It contains no assertion and does not decide the outcome, nothing under tests/acceptance changed, and the runner-owned typecheck of the proposal revision passed with no diagnostics under adapters/new. The open conditions build-slice-18-2#2 and #3 concern R-6.15 mail recipients, are owed by build, and are not settled here, so they remain open. The ruling would change if a verify run showed the refusal text still not reaching noScreenableProponentError, or if the break swallowed a refusal on a path where the test expects finalizing to succeed.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `e9112987f021fecd3395cf98cf540b9464a4e56c`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.

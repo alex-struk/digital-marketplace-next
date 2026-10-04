@@ -1,0 +1,17 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does the new adapter bind every surface action and observation on new, and nothing else? Approve. The diff changes one line in confirmFinalize (tests/adapters/new/index.ts:2130-2133). When the finalize confirmation is refused, the routine now stores the alert text in finalizeRefusal and breaks out of its wait loop instead of throwing. Both evaluation-consensus-list-swu.confirm_finalize_consensus and evaluation-consensus-list-twu.confirm_finalize_consensus therefore complete when the page answers with the refusal. noScreenableProponentError (through afterAControl, which accepts a stored finalizeRefusal) can then return the lines naming the Code Challenge or the Challenge, which is what R-5.10's test reads. The binding remains navigation and locating only. It contains no assertion and does not decide the outcome, nothing under tests/acceptance changed, and the runner-owned typecheck of the proposal revision passed with no diagnostics under adapters/new. The open conditions build-slice-18-2#2 and #3 concern R-6.15 mail recipients, are owed by build, and are not settled here, so they remain open. The ruling would change if a verify run showed the refusal text still not reaching noScreenableProponentError, or if the break swallowed a refusal on a path where the test expects finalizing to succeed.
+reprompt: |2-
+  You ruled approve. "build-slice-18-2#1" is not an open condition. The conditions still open are: build-slice-18-2#2 ("R-6.15, in the case \"the notice sent to an opportunity's owner\": Error: a notice that reached more than one of the people — Expected: > 0 — Received: 0 — at tests/acceptance/notifications/R-6.15.spec.ts:96 — its last steps: caughtMessage.copiedRecipients() at /opportunities/team-with-us/00000000-0000-4000-8000-000000000801/edit?tab=consensus read \"\" → caughtMessage.open({messageId}) at /opportunities/team-with-us/00000000-0000-4000-8000-000000000801/edit?tab=consensus → caughtMessage.visibleRecipients() at /opportunities/team-with-us/00000000-0000-4000-8000-000000000801/edit?tab=consensus read \"donotreply@example.test staff.one@example.test\" → caughtMessage.copiedRecipients() at /opportunities/team-with-us/00000000-0000-4000-8000-000000000801/edit?tab=consensus read \"\" — the page as it failed: .sdlc/evidence/slice-18/R-6.15.png, .sdlc/evidence/slice-18/R-6.15.txt"); build-slice-18-2#3 ("R-6.15: app/backend/src/mail/message.ts addressedToEach and app/backend/src/mail/mailer.ts (alsoToService) send each reader a copy where they are a visible recipient. The criterion requires a multi-recipient notice, including the panel, chair and owner notices in app/backend/src/evaluations/consensus.service.ts, to carry the batch as blind copies with the service's own address as the only visible recipient. Change the staff notices to that form, and update decision record 0063 so it no longer records the one-copy-per-reader departure.").
+conditions: []
+cost: 0.614488
+turns: 5
+session: "e4cf94bf-9d22-4fa9-8336-d688ddc46149"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T14:17:10.722Z
