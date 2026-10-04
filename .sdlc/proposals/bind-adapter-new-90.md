@@ -33,3 +33,22 @@ I changed one thing: how the adapter reads a term's definition on the proposal s
 - I couldn't run the TypeScript type check: running `tsc` needed approval this session doesn't have, so the code was reviewed by eye only.
 - The failure evidence the ruling cites (`.sdlc/evidence/slice-21/R-2.3.png` and `.txt`) is not in this workspace, so I worked from the ruling's description of it.
 - The two submissions I made while walking the flow are still on the target, as submitted proposals by test-vendor-1 and test-vendor-2 on the seeded open Code With Us opportunity.
+
+## Ruling
+
+**Verdict:** approve
+**By:** runner:checks
+
+Approved by the runner's checks, which policy.gates.G3.auto_approve lets settle bind-adapter proposals: the acceptance typecheck of 44ca8c9f5 is clean; no condition is open against it; no escalation stands on it; nothing outside tests/adapters changed.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `44ca8c9f5ddacd90f5f681dd6f9693f0d10f2b78`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
