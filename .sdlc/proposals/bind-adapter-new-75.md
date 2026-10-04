@@ -30,3 +30,23 @@ So `add_reference` stays `bound` for those three fields and still refuses a `com
 **Other findings.** No route I opened failed to resolve. The seed has no Team With Us opportunity still taking proposals; every one listed has a past deadline. Even so, the closed one still offers its author "Edit" and "Withdraw", which is how I reached the rate box.
 
 I changed only `tests/adapters/new/index.ts` and `tests/adapters/new/bindings.yaml`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Question: does this adapter bind every surface action and observation on new, and nothing else? Ruling: approve. The one action the contract added, proposal-twu-edit.set_hourly_rate, is bound by wrapping the existing create-form setResourceRate in the same onTeamForm opener the other edit actions use. That helper resolves the resource group, reads the rate from the input and fills the 'Hourly rate for <member>' box. It is navigation and locators only, with no assertion and no decision about pass or fail, and surface.yaml declares the action. The runner's typecheck on cf4c666 passed with no diagnostics under adapters/new/. Nothing under tests/acceptance, spec/ or app/ changed and no protected path is touched. The two text edits leave behaviour alone: the add_reference refusal still refuses a 'company' key instead of dropping it, which is correct because the running Sprint With Us reference form has only Name, Email and Phone, and that gap is the application's, still owed by build under build-slice-15-2#1, which this proposal does not settle. The served-routes note now lists the Sprint With Us and Team With Us proposal screens, which fits the adapter already binding proposal_tab there. This would change to a return with an adapter-wrong condition if verify still reports set_hourly_rate unbound or shows it filling something other than the rate box.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `cf4c666c49feee7f7ce3d83c3be0e9c10e597c4d`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
