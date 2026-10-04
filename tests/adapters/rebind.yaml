@@ -10514,6 +10514,11 @@ rebind:
     app_tree: 962d040f64740e435858a4cd9d499410faa30d93
     by: runner:verify
     at: 2026-10-04T06:35:55.118Z
+    closed: &a45
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-04T07:19:30.601Z
   - id: R-2.9
     target: new
     why: 'unbound: proposal-swu-create.add_reference — no box on "Reference N" takes
@@ -10530,6 +10535,7 @@ rebind:
     app_tree: 962d040f64740e435858a4cd9d499410faa30d93
     by: runner:verify
     at: 2026-10-04T06:35:55.118Z
+    closed: *a45
   - id: R-2.11
     target: new
     why: 'unbound: proposal-swu-create.add_reference — no box on "Reference N" takes
@@ -10542,6 +10548,7 @@ rebind:
     app_tree: 962d040f64740e435858a4cd9d499410faa30d93
     by: runner:verify
     at: 2026-10-04T06:35:55.118Z
+    closed: *a45
   - id: R-2.16
     target: new
     why: 'unbound: proposal-swu-create.add_reference — no box on "Reference N" takes
@@ -10554,6 +10561,7 @@ rebind:
     app_tree: 962d040f64740e435858a4cd9d499410faa30d93
     by: runner:verify
     at: 2026-10-04T06:35:55.118Z
+    closed: *a45
   - id: R-2.18
     target: new
     why: 'unbound: proposal-swu-create.add_reference — no box on "Reference N" takes
@@ -10566,6 +10574,7 @@ rebind:
     app_tree: 962d040f64740e435858a4cd9d499410faa30d93
     by: runner:verify
     at: 2026-10-04T06:35:55.118Z
+    closed: *a45
   - id: R-2.22
     target: new
     why: 'unbound: proposal-swu-create.add_reference — no box on "Reference N" takes
@@ -10578,6 +10587,7 @@ rebind:
     app_tree: 962d040f64740e435858a4cd9d499410faa30d93
     by: runner:verify
     at: 2026-10-04T06:35:55.118Z
+    closed: *a45
   - id: R-2.25
     target: new
     why: "unbound: proposal-swu-view.proposal_tab —
@@ -10625,3 +10635,186 @@ rebind:
     app_tree: 962d040f64740e435858a4cd9d499410faa30d93
     by: runner:verify
     at: 2026-10-04T06:35:55.118Z
+    closed: *a45
+  - id: R-2.7
+    target: new
+    why: "unbound: proposal-swu-create.add_reference — no box on \"Reference N\"
+      takes \"company\" (each reference has Name, Email address and Phone number
+      (optional)) on
+      http://localhost:4600/opportunities/sprint-with-us/294dafa8-5a9f-47e9-888\
+      1-534425e5e74f/proposals/create; walked as the organization-owner vendor
+      on the seeded open Sprint With Us opportunity's create form (pressing
+      \"Add a reference\") and on the seeded Sprint With Us proposals' edit
+      forms, and neither the form nor a saved proposal's References section
+      holds a company, employer or organization for a reference; unbound:
+      proposal-swu-create.add_reference — no box on \"Reference N\" takes
+      \"company\" (each reference has Name, Email address and Phone number
+      (optional)) on
+      http://localhost:4600/opportunities/sprint-with-us/598f35c7-ad80-4317-80f\
+      c-60933211da3d/proposals/create; walked as the organization-owner vendor
+      on the seeded open Sprint With Us opportunity's create form (pressing
+      \"Add a reference\") and on the seeded Sprint With Us proposals' edit
+      forms, and neither the form nor a saved proposal's References section
+      holds a company, employer or organization for a reference"
+    found: unbound
+    adapter: c8a8af6fe3d6b6928da9010bb851f9253eeb98d6
+    slice: 15
+    app_tree: efb4b213507a18da80330c95ca4e97ed141cc512
+    by: runner:verify
+    at: 2026-10-04T07:19:30.601Z
+  - id: R-2.9
+    target: new
+    why: "unbound: proposal-swu-create.add_reference — no box on \"Reference N\"
+      takes \"company\" (each reference has Name, Email address and Phone number
+      (optional)) on
+      http://localhost:4800/opportunities/sprint-with-us/9cc5f131-1ee5-48d1-942\
+      5-0031396f5b6c/proposals/create; walked as the organization-owner vendor
+      on the seeded open Sprint With Us opportunity's create form (pressing
+      \"Add a reference\") and on the seeded Sprint With Us proposals' edit
+      forms, and neither the form nor a saved proposal's References section
+      holds a company, employer or organization for a reference; unbound:
+      proposal-swu-create.add_reference — no box on \"Reference N\" takes
+      \"company\" (each reference has Name, Email address and Phone number
+      (optional)) on
+      http://localhost:4500/opportunities/sprint-with-us/3281995e-6bc7-453d-962\
+      e-3c4040040266/proposals/create; walked as the organization-owner vendor
+      on the seeded open Sprint With Us opportunity's create form (pressing
+      \"Add a reference\") and on the seeded Sprint With Us proposals' edit
+      forms, and neither the form nor a saved proposal's References section
+      holds a company, employer or organization for a reference"
+    found: unbound
+    adapter: c8a8af6fe3d6b6928da9010bb851f9253eeb98d6
+    slice: 15
+    app_tree: efb4b213507a18da80330c95ca4e97ed141cc512
+    by: runner:verify
+    at: 2026-10-04T07:19:30.601Z
+  - id: R-2.11
+    target: new
+    why: "unbound: proposal-swu-create.add_reference — no box on \"Reference N\"
+      takes \"company\" (each reference has Name, Email address and Phone number
+      (optional)) on
+      http://localhost:4800/opportunities/sprint-with-us/f9b4dd9e-8b61-4c20-b00\
+      4-4ba99e2bf278/proposals/create; walked as the organization-owner vendor
+      on the seeded open Sprint With Us opportunity's create form (pressing
+      \"Add a reference\") and on the seeded Sprint With Us proposals' edit
+      forms, and neither the form nor a saved proposal's References section
+      holds a company, employer or organization for a reference"
+    found: unbound
+    adapter: c8a8af6fe3d6b6928da9010bb851f9253eeb98d6
+    slice: 15
+    app_tree: efb4b213507a18da80330c95ca4e97ed141cc512
+    by: runner:verify
+    at: 2026-10-04T07:19:30.601Z
+  - id: R-2.16
+    target: new
+    why: "unbound: proposal-swu-create.add_reference — no box on \"Reference N\"
+      takes \"company\" (each reference has Name, Email address and Phone number
+      (optional)) on
+      http://localhost:4800/opportunities/sprint-with-us/c823f156-bd38-4db0-a12\
+      4-58fe22324c27/proposals/create; walked as the organization-owner vendor
+      on the seeded open Sprint With Us opportunity's create form (pressing
+      \"Add a reference\") and on the seeded Sprint With Us proposals' edit
+      forms, and neither the form nor a saved proposal's References section
+      holds a company, employer or organization for a reference"
+    found: unbound
+    adapter: c8a8af6fe3d6b6928da9010bb851f9253eeb98d6
+    slice: 15
+    app_tree: efb4b213507a18da80330c95ca4e97ed141cc512
+    by: runner:verify
+    at: 2026-10-04T07:19:30.601Z
+  - id: R-2.18
+    target: new
+    why: "unbound: proposal-swu-create.add_reference — no box on \"Reference N\"
+      takes \"company\" (each reference has Name, Email address and Phone number
+      (optional)) on
+      http://localhost:4300/opportunities/sprint-with-us/b161e1a4-aaaa-4da8-857\
+      4-69c85445cf3c/proposals/create; walked as the organization-owner vendor
+      on the seeded open Sprint With Us opportunity's create form (pressing
+      \"Add a reference\") and on the seeded Sprint With Us proposals' edit
+      forms, and neither the form nor a saved proposal's References section
+      holds a company, employer or organization for a reference"
+    found: unbound
+    adapter: c8a8af6fe3d6b6928da9010bb851f9253eeb98d6
+    slice: 15
+    app_tree: efb4b213507a18da80330c95ca4e97ed141cc512
+    by: runner:verify
+    at: 2026-10-04T07:19:30.601Z
+  - id: R-2.19
+    target: new
+    why: "unbound: proposal-swu-create.add_reference — no box on \"Reference N\"
+      takes \"company\" (each reference has Name, Email address and Phone number
+      (optional)) on
+      http://localhost:4700/opportunities/sprint-with-us/998f65e7-5253-4721-b5e\
+      4-a60a730bce07/proposals/create; walked as the organization-owner vendor
+      on the seeded open Sprint With Us opportunity's create form (pressing
+      \"Add a reference\") and on the seeded Sprint With Us proposals' edit
+      forms, and neither the form nor a saved proposal's References section
+      holds a company, employer or organization for a reference; unbound:
+      proposal-swu-create.add_reference — no box on \"Reference N\" takes
+      \"company\" (each reference has Name, Email address and Phone number
+      (optional)) on
+      http://localhost:4700/opportunities/sprint-with-us/7b9018fb-3c0e-4eea-a1c\
+      7-1cab2495d27a/proposals/create; walked as the organization-owner vendor
+      on the seeded open Sprint With Us opportunity's create form (pressing
+      \"Add a reference\") and on the seeded Sprint With Us proposals' edit
+      forms, and neither the form nor a saved proposal's References section
+      holds a company, employer or organization for a reference; unbound:
+      proposal-swu-create.add_reference — no box on \"Reference N\" takes
+      \"company\" (each reference has Name, Email address and Phone number
+      (optional)) on
+      http://localhost:4700/opportunities/sprint-with-us/a34feeff-200d-4d0b-88a\
+      f-cd90503e64b4/proposals/create; walked as the organization-owner vendor
+      on the seeded open Sprint With Us opportunity's create form (pressing
+      \"Add a reference\") and on the seeded Sprint With Us proposals' edit
+      forms, and neither the form nor a saved proposal's References section
+      holds a company, employer or organization for a reference; unbound:
+      proposal-swu-create.add_reference — no box on \"Reference N\" takes
+      \"company\" (each reference has Name, Email address and Phone number
+      (optional)) on
+      http://localhost:4700/opportunities/sprint-with-us/64259b13-4125-4e80-814\
+      1-3a7054aca3dd/proposals/create; walked as the organization-owner vendor
+      on the seeded open Sprint With Us opportunity's create form (pressing
+      \"Add a reference\") and on the seeded Sprint With Us proposals' edit
+      forms, and neither the form nor a saved proposal's References section
+      holds a company, employer or organization for a reference; unbound:
+      proposal-swu-create.add_reference — no box on \"Reference N\" takes
+      \"company\" (each reference has Name, Email address and Phone number
+      (optional)) on
+      http://localhost:4500/opportunities/sprint-with-us/d28d2213-e0dd-46ee-a8e\
+      7-e95caa94f3c5/proposals/create; walked as the organization-owner vendor
+      on the seeded open Sprint With Us opportunity's create form (pressing
+      \"Add a reference\") and on the seeded Sprint With Us proposals' edit
+      forms, and neither the form nor a saved proposal's References section
+      holds a company, employer or organization for a reference; unbound:
+      proposal-swu-create.add_reference — no box on \"Reference N\" takes
+      \"company\" (each reference has Name, Email address and Phone number
+      (optional)) on
+      http://localhost:4300/opportunities/sprint-with-us/8ab4ff41-b945-447b-a0b\
+      d-87f70d2a14ca/proposals/create; walked as the organization-owner vendor
+      on the seeded open Sprint With Us opportunity's create form (pressing
+      \"Add a reference\") and on the seeded Sprint With Us proposals' edit
+      forms, and neither the form nor a saved proposal's References section
+      holds a company, employer or organization for a reference"
+    found: unbound
+    adapter: c8a8af6fe3d6b6928da9010bb851f9253eeb98d6
+    slice: 15
+    app_tree: efb4b213507a18da80330c95ca4e97ed141cc512
+    by: runner:verify
+    at: 2026-10-04T07:19:30.601Z
+  - id: R-2.22
+    target: new
+    why: "unbound: proposal-swu-create.add_reference — no box on \"Reference N\"
+      takes \"company\" (each reference has Name, Email address and Phone number
+      (optional)) on
+      http://localhost:4400/opportunities/sprint-with-us/4d42fce6-bf92-45d8-b8a\
+      f-d711b5305deb/proposals/create; walked as the organization-owner vendor
+      on the seeded open Sprint With Us opportunity's create form (pressing
+      \"Add a reference\") and on the seeded Sprint With Us proposals' edit
+      forms, and neither the form nor a saved proposal's References section
+      holds a company, employer or organization for a reference"
+    found: unbound
+    adapter: c8a8af6fe3d6b6928da9010bb851f9253eeb98d6
+    slice: 15
+    app_tree: efb4b213507a18da80330c95ca4e97ed141cc512
+    by: runner:verify
+    at: 2026-10-04T07:19:30.601Z
