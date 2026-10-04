@@ -40,7 +40,7 @@
 | R-2.34 | acceptance/proposals/R-2.34.spec.ts |  | pass (carried from 2026-10-04) |
 | D-proposals-35 | — |  |  |
 | R-2.35 | acceptance/proposals/R-2.35.spec.ts |  | pass (carried from 2026-10-04) |
-| R-2.36 | acceptance/proposals/R-2.36.spec.ts |  | fail |
+| R-2.36 | acceptance/proposals/R-2.36.spec.ts |  | fail (ruled: test-wrong) |
 | D-proposals-37 | — |  |  |
 | R-2.37 | acceptance/proposals/R-2.37.spec.ts |  | pass (carried from 2026-10-04) |
 | R-2.38 | acceptance/proposals/R-2.38.spec.ts |  | pass (carried from 2026-10-04) |

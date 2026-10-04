@@ -507,6 +507,8 @@
 - 15:45:22 propose calibrate-old-29 at G1
 - 15:45:28 drive: step 6: `sdlc rule calibrate-old-29 --by agent:product-owner` — calibrate-old-29 is open at G1, held by agent:product-owner
 - 15:46:08 rule calibrate-old-29 approve at G1 by agent:product-owner (agent) on claude claude-opus-5-5 (2.1.288 (Claude Code))
+- 15:46:19 drive: step 7: `sdlc run calibrate --target old` — phase 2 Tests is not complete (exit: the contract approved, every domain's tests approved, and every calibration row pass or ruled, all measured by the last run), and calibrate for target old is next in it
+- 15:47:59 run calibrate: ok, cost 0, turns 0
 
 # Run record 2026-10-03
 
