@@ -32,3 +32,23 @@ I rewrote the test for R-2.36 (v1) in `tests/acceptance/proposals/R-2.36.spec.ts
 **Missing from the surface.** I found no surface action or observation that I needed and could not reach.
 
 **Outside this stage.** Nothing asked me to change paths outside `tests/acceptance` or `tests/generated`, and I touched none.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Question: do the R-2.36 tests follow from the criterion and from nothing else? Ruling: approve. All five clauses are asserted, one test per act. (1) Submitting: the vendor's confirmation is found by its To line. (2) Awarding: the winner must be reached by a notice that reaches no other proponent, and every other proponent must be reached, so the award notice and the decision notice are told apart without reading their wording. (3) Withdrawing: the vendor's notice is found by its To line, and every seeded administrator must be on the blind-copy list of the notice sent to the service's own address. That last check is what the earlier test-overreaches ruling asked for. It rests on the blind-copy observation in spec/contract/observables.yaml and on R-6.15, not on anything about how the app is built. No assertion touches wording, subject lines, links, selectors, routes or status codes. The award test uses an opportunity with two proponents where the criterion's given has three. That is a smaller instance of 'everyone else', not a different claim. The award clause, which the old test skipped without a not-testable entry, is now asserted against seed data that exists (opportunities.cwuInProcessing with two EVALUATED proposals in tests/seed/manifest.yaml). The runner's typecheck on this revision passed with no diagnostics. I would return the proposal if a run showed the seeded opportunity can't be awarded because R-1.26 awarded it first. That would make the award test depend on shared seed state.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `3feb771a810eaa5f1b1a63c708eaa96f90a2882c`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/proposals/`, which this proposal answers for.
+
+    No diagnostics.
