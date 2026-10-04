@@ -3098,3 +3098,20 @@ conditions:
         (.sdlc/evidence/slice-16/R-2.32.txt lines 36-49).
       by: agent:tech-lead
       at: 2026-10-04T09:43:32.747Z
+  - ref: build-slice-16-4#1
+    text: "R-2.15 regressed: now that the deadline hook closes a lapsed Code With Us
+      opportunity on the first /api request, the vendor's create page at
+      /opportunities/code-with-us/<id>/proposals/create renders \"Page not
+      found\" (proposal-cwu-create.tsx:64 treats any status other than PUBLISHED
+      as missing), so the refusal the criterion quotes is never shown. Let a
+      vendor reach the Code With Us create screen for an opportunity that is
+      closed or past its deadline, and show the service's refusal \"This
+      opportunity is no longer accepting proposals.\" when they submit it, as
+      the backend already answers. Leave the Sprint With Us and Team With Us
+      create screens hiding a closed opportunity, as the criterion says."
+    from: build-slice-16-4
+    family: build-slice-16
+    gate: G3
+    stage: build
+    by: agent:tech-lead
+    at: 2026-10-04T10:23:28.478Z
