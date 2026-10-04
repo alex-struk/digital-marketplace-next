@@ -14020,3 +14020,107 @@ rebind:
       why: tests/adapters/new has changed since this was found
       by: runner:verify
       at: 2026-10-04T19:54:02.009Z
+  - id: R-6.13
+    target: new
+    why: "unbound: notification-email-reference.message_group_title — signed in as
+      the administrator (test-admin) and opened
+      /admin/email-notification-reference: the service answers it 404
+      {\"errors\":[\"Cannot GET /admin/email-notification-reference\"]} rather
+      than drawing a screen, the same addresses under /api answer 404 \"not
+      found\", and no link on the administrator's dashboard or profile leads to
+      an email reference; walked signed in on the current build (as the
+      administrator, as the public sector employee who owns the seeded
+      opportunities and sits on their panels, and as vendors — the seeded
+      organization owner, who wrote the seeded proposals, and a vendor with none
+      — with the seeded records' identifiers), the running build serves a
+      signed-in person /dashboard (to staff \"Create an opportunity\" over \"My
+      opportunities\", to the administrator every opportunity, to a vendor \"My
+      proposals\" and \"My organizations' proposals\"), /opportunities and every
+      program's public opportunity page (with \"Watch this opportunity\", and
+      \"Start a proposal\" while it takes proposals), the account screens under
+      /users, /organizations, /organizations/create, /organizations/:orgId/edit
+      (its Sprint With Us and Team With Us qualification sections drawing the
+      requirements and \"Read the … terms and conditions\") and
+      /organizations/:orgId/{sprint,team}-with-us-terms-and-conditions, to the
+      administrator the content-management screens under /content, to a vendor
+      the three programs' proposal forms .../proposals/create and their own
+      proposal's screen .../proposals/:proposalId/edit, and to the administrator
+      and public sector staff /opportunities/create, the three programs' forms,
+      their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (sections
+      Summary, Opportunity, Addenda, History, Proposals — proponents in plain
+      text with no link onward — and, on Sprint With Us and Team With Us,
+      Evaluation panel and, since 2026-10-04, to the panel's members
+      Instructions, Evaluation and Consensus) and the Code With Us proposal's
+      screen /opportunities/code-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Status, Submitted, Proposal ID, Score, \"Printable copy\", and
+      the sections Proposal and History, with no button); the Sprint With Us and
+      Team With Us proposal's screen
+      /opportunities/{sprint,team}-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Opportunity, Status, Submitted, Proposal ID, \"Printable
+      copy\", and the sections Proposal and History, with no button); since
+      2026-10-04 it serves every program's report .../complete and printable
+      copies .../proposals/:proposalId/export and .../proposals/export to the
+      administrator (and a proposal's own copy to its vendor); walked the same
+      way it still answers \"Page not found\" at /proposals and at the consensus
+      score sheets under .../team-questions/consensus/ and
+      .../resource-questions/consensus/ (the individual score sheets under
+      .../evaluations/ open, since 2026-10-04, to the panel's evaluators)"
+    found: unbound
+    adapter: 8252036caaec29ab77ee6df8c176ba4a53a2e962
+    slice: 21
+    app_tree: f5497623f69060a5c43604b276e86b002ae622f7
+    by: runner:verify
+    at: 2026-10-04T20:07:44.179Z
+  - id: R-6.19
+    target: new
+    why: "unbound: notification-email-reference.message_group_title — signed in as
+      the administrator (test-admin) and opened
+      /admin/email-notification-reference: the service answers it 404
+      {\"errors\":[\"Cannot GET /admin/email-notification-reference\"]} rather
+      than drawing a screen, the same addresses under /api answer 404 \"not
+      found\", and no link on the administrator's dashboard or profile leads to
+      an email reference; walked signed in on the current build (as the
+      administrator, as the public sector employee who owns the seeded
+      opportunities and sits on their panels, and as vendors — the seeded
+      organization owner, who wrote the seeded proposals, and a vendor with none
+      — with the seeded records' identifiers), the running build serves a
+      signed-in person /dashboard (to staff \"Create an opportunity\" over \"My
+      opportunities\", to the administrator every opportunity, to a vendor \"My
+      proposals\" and \"My organizations' proposals\"), /opportunities and every
+      program's public opportunity page (with \"Watch this opportunity\", and
+      \"Start a proposal\" while it takes proposals), the account screens under
+      /users, /organizations, /organizations/create, /organizations/:orgId/edit
+      (its Sprint With Us and Team With Us qualification sections drawing the
+      requirements and \"Read the … terms and conditions\") and
+      /organizations/:orgId/{sprint,team}-with-us-terms-and-conditions, to the
+      administrator the content-management screens under /content, to a vendor
+      the three programs' proposal forms .../proposals/create and their own
+      proposal's screen .../proposals/:proposalId/edit, and to the administrator
+      and public sector staff /opportunities/create, the three programs' forms,
+      their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (sections
+      Summary, Opportunity, Addenda, History, Proposals — proponents in plain
+      text with no link onward — and, on Sprint With Us and Team With Us,
+      Evaluation panel and, since 2026-10-04, to the panel's members
+      Instructions, Evaluation and Consensus) and the Code With Us proposal's
+      screen /opportunities/code-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Status, Submitted, Proposal ID, Score, \"Printable copy\", and
+      the sections Proposal and History, with no button); the Sprint With Us and
+      Team With Us proposal's screen
+      /opportunities/{sprint,team}-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Opportunity, Status, Submitted, Proposal ID, \"Printable
+      copy\", and the sections Proposal and History, with no button); since
+      2026-10-04 it serves every program's report .../complete and printable
+      copies .../proposals/:proposalId/export and .../proposals/export to the
+      administrator (and a proposal's own copy to its vendor); walked the same
+      way it still answers \"Page not found\" at /proposals and at the consensus
+      score sheets under .../team-questions/consensus/ and
+      .../resource-questions/consensus/ (the individual score sheets under
+      .../evaluations/ open, since 2026-10-04, to the panel's evaluators)"
+    found: unbound
+    adapter: 8252036caaec29ab77ee6df8c176ba4a53a2e962
+    slice: 21
+    app_tree: f5497623f69060a5c43604b276e86b002ae622f7
+    by: runner:verify
+    at: 2026-10-04T20:07:44.179Z

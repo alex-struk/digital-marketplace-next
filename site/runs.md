@@ -451,6 +451,9 @@
 - 12:54:04 run verify: regenerated 4 files in .sdlc, site, tests
 - 12:54:12 drive: step 17: `sdlc rule build-slice-20 --by agent:reviewer` — build-slice-20 is open at G3, held by agent:reviewer
 - 12:54:45 rule build-slice-20 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.288 (Claude Code))
+- 13:05:05 drive: step 19: `sdlc run verify --slice 21` — build-slice-21 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
+- 13:07:44 verify slice 21: 3 of the 3 criteria this slice claims could not be exercised at all — R-6.6, R-6.13, R-6.19.
+- 13:07:46 run verify: regenerated 4 files in .sdlc, site, tests
 
 # Run record 2026-10-03
 
