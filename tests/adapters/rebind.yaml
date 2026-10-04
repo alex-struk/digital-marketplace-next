@@ -9698,6 +9698,11 @@ rebind:
     app_tree: e5b1b2fb5b00e3f80055447f2f602803093c939c
     by: runner:verify
     at: 2026-10-04T05:40:51.520Z
+    closed: &a44
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-04T06:35:55.118Z
   - id: R-2.9
     target: new
     why: "unbound: proposal-swu-create.choose_organization —
@@ -9754,6 +9759,7 @@ rebind:
     app_tree: e5b1b2fb5b00e3f80055447f2f602803093c939c
     by: runner:verify
     at: 2026-10-04T05:40:51.520Z
+    closed: *a44
   - id: R-2.10
     target: new
     why: "unbound: proposal-twu-create.choose_organization —
@@ -9810,6 +9816,7 @@ rebind:
     app_tree: e5b1b2fb5b00e3f80055447f2f602803093c939c
     by: runner:verify
     at: 2026-10-04T05:40:51.520Z
+    closed: *a44
   - id: R-2.11
     target: new
     why: "unbound: proposal-swu-create.choose_organization —
@@ -9866,6 +9873,7 @@ rebind:
     app_tree: e5b1b2fb5b00e3f80055447f2f602803093c939c
     by: runner:verify
     at: 2026-10-04T05:40:51.520Z
+    closed: *a44
   - id: R-2.16
     target: new
     why: "unbound: proposal-swu-create.choose_organization —
@@ -9922,6 +9930,7 @@ rebind:
     app_tree: e5b1b2fb5b00e3f80055447f2f602803093c939c
     by: runner:verify
     at: 2026-10-04T05:40:51.520Z
+    closed: *a44
   - id: R-2.18
     target: new
     why: "unbound: proposal-twu-create.choose_organization —
@@ -10026,6 +10035,7 @@ rebind:
     app_tree: e5b1b2fb5b00e3f80055447f2f602803093c939c
     by: runner:verify
     at: 2026-10-04T05:40:51.520Z
+    closed: *a44
   - id: R-2.20
     target: new
     why: "unbound: proposal-twu-create.choose_organization —
@@ -10082,6 +10092,7 @@ rebind:
     app_tree: e5b1b2fb5b00e3f80055447f2f602803093c939c
     by: runner:verify
     at: 2026-10-04T05:40:51.520Z
+    closed: *a44
   - id: R-2.22
     target: new
     why: "unbound: proposal-twu-edit.start_editing —
@@ -10378,6 +10389,7 @@ rebind:
     app_tree: e5b1b2fb5b00e3f80055447f2f602803093c939c
     by: runner:verify
     at: 2026-10-04T05:40:51.520Z
+    closed: *a44
   - id: R-2.24
     target: new
     why: "unbound: proposal-twu-create.choose_organization —
@@ -10485,3 +10497,131 @@ rebind:
     app_tree: e5b1b2fb5b00e3f80055447f2f602803093c939c
     by: runner:verify
     at: 2026-10-04T05:40:51.520Z
+    closed: *a44
+  - id: R-2.7
+    target: new
+    why: 'unbound: proposal-swu-create.add_reference — no box on "Reference N" takes
+      "company" (each reference has Name, Email address and Phone number
+      (optional)) on
+      http://localhost:4600/opportunities/sprint-with-us/635b8726-c62f-4f0f-ae9f-61419440b024/proposals/create;
+      unbound: proposal-swu-create.add_reference — no box on "Reference N" takes
+      "company" (each reference has Name, Email address and Phone number
+      (optional)) on
+      http://localhost:4600/opportunities/sprint-with-us/59c88bc2-6748-44bf-be14-9d453732f685/proposals/create'
+    found: unbound
+    adapter: 1213f3a314e74c636eff7f1c5e49785fb6664f5a
+    slice: 15
+    app_tree: 962d040f64740e435858a4cd9d499410faa30d93
+    by: runner:verify
+    at: 2026-10-04T06:35:55.118Z
+  - id: R-2.9
+    target: new
+    why: 'unbound: proposal-swu-create.add_reference — no box on "Reference N" takes
+      "company" (each reference has Name, Email address and Phone number
+      (optional)) on
+      http://localhost:4800/opportunities/sprint-with-us/fa34c8ac-c6c7-42f1-9866-726801399412/proposals/create;
+      unbound: proposal-swu-create.add_reference — no box on "Reference N" takes
+      "company" (each reference has Name, Email address and Phone number
+      (optional)) on
+      http://localhost:4500/opportunities/sprint-with-us/a4673784-ebdb-4233-9014-6526dec62817/proposals/create'
+    found: unbound
+    adapter: 1213f3a314e74c636eff7f1c5e49785fb6664f5a
+    slice: 15
+    app_tree: 962d040f64740e435858a4cd9d499410faa30d93
+    by: runner:verify
+    at: 2026-10-04T06:35:55.118Z
+  - id: R-2.11
+    target: new
+    why: 'unbound: proposal-swu-create.add_reference — no box on "Reference N" takes
+      "company" (each reference has Name, Email address and Phone number
+      (optional)) on
+      http://localhost:4800/opportunities/sprint-with-us/60849861-fcf2-41ef-a2fd-cd370b88e323/proposals/create'
+    found: unbound
+    adapter: 1213f3a314e74c636eff7f1c5e49785fb6664f5a
+    slice: 15
+    app_tree: 962d040f64740e435858a4cd9d499410faa30d93
+    by: runner:verify
+    at: 2026-10-04T06:35:55.118Z
+  - id: R-2.16
+    target: new
+    why: 'unbound: proposal-swu-create.add_reference — no box on "Reference N" takes
+      "company" (each reference has Name, Email address and Phone number
+      (optional)) on
+      http://localhost:4800/opportunities/sprint-with-us/c58027b5-597a-4679-859c-456e2e5d4160/proposals/create'
+    found: unbound
+    adapter: 1213f3a314e74c636eff7f1c5e49785fb6664f5a
+    slice: 15
+    app_tree: 962d040f64740e435858a4cd9d499410faa30d93
+    by: runner:verify
+    at: 2026-10-04T06:35:55.118Z
+  - id: R-2.18
+    target: new
+    why: 'unbound: proposal-swu-create.add_reference — no box on "Reference N" takes
+      "company" (each reference has Name, Email address and Phone number
+      (optional)) on
+      http://localhost:4700/opportunities/sprint-with-us/d887046a-1d3c-4e7f-9fe1-775c69504869/proposals/create'
+    found: unbound
+    adapter: 1213f3a314e74c636eff7f1c5e49785fb6664f5a
+    slice: 15
+    app_tree: 962d040f64740e435858a4cd9d499410faa30d93
+    by: runner:verify
+    at: 2026-10-04T06:35:55.118Z
+  - id: R-2.22
+    target: new
+    why: 'unbound: proposal-swu-create.add_reference — no box on "Reference N" takes
+      "company" (each reference has Name, Email address and Phone number
+      (optional)) on
+      http://localhost:4400/opportunities/sprint-with-us/71df30ef-6291-4331-88cc-20c7f7cdb816/proposals/create'
+    found: unbound
+    adapter: 1213f3a314e74c636eff7f1c5e49785fb6664f5a
+    slice: 15
+    app_tree: 962d040f64740e435858a4cd9d499410faa30d93
+    by: runner:verify
+    at: 2026-10-04T06:35:55.118Z
+  - id: R-2.25
+    target: new
+    why: "unbound: proposal-swu-view.proposal_tab —
+      /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId is
+      offered only to a signed-in person, and walked signed in on the current
+      build (as the administrator, as the public sector employee who owns the
+      seeded opportunities and sits on their panels, and as vendors — the seeded
+      organization owner, who wrote the seeded proposals, and a vendor with none
+      — with the seeded records' identifiers), the running build serves a
+      signed-in person /dashboard (to staff \"Create an opportunity\" over \"My
+      opportunities\", to the administrator every opportunity, to a vendor \"My
+      proposals\" and \"My organizations' proposals\"), /opportunities and every
+      program's public opportunity page (with \"Watch this opportunity\", and
+      \"Start a proposal\" while it takes proposals), the account screens under
+      /users, /organizations, /organizations/create, /organizations/:orgId/edit
+      (its Sprint With Us and Team With Us qualification sections drawing the
+      requirements and \"Read the … terms and conditions\") and
+      /organizations/:orgId/{sprint,team}-with-us-terms-and-conditions, to the
+      administrator the content-management screens under /content, to a vendor
+      the three programs' proposal forms .../proposals/create and their own
+      proposal's screen .../proposals/:proposalId/edit, and to the administrator
+      and public sector staff /opportunities/create, the three programs' forms,
+      their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (sections
+      Summary, Opportunity, Addenda, History, Proposals — proponents in plain
+      text with no link onward — and, on Sprint With Us and Team With Us,
+      Evaluation panel; no instructions, evaluation or consensus section,
+      ?tab=instructions, ?tab=evaluation and ?tab=consensus drawing the Summary)
+      and the Code With Us proposal's screen
+      /opportunities/code-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Status, Submitted, Proposal ID, Score, \"Printable copy\", and
+      the sections Proposal and History, with no button); walked the same way it
+      still answers \"Page not found\" at /proposals, at a Sprint With Us or
+      Team With Us proposal's screen .../proposals/:proposalId (to the
+      administrator and to the panel's public sector employee), at every
+      program's .../proposals/:proposalId/export (where the Code With Us
+      screen's \"Printable copy\" lands, to the proposal's own author too) and
+      .../proposals/export, at every program's .../complete, and at the
+      evaluation and consensus screens under .../team-questions/ and
+      .../resource-questions/; opened signed out (with the seeded record's
+      identifier where it takes one) it shows the \"Page not found\" screen"
+    found: unbound
+    adapter: 1213f3a314e74c636eff7f1c5e49785fb6664f5a
+    slice: 15
+    app_tree: 962d040f64740e435858a4cd9d499410faa30d93
+    by: runner:verify
+    at: 2026-10-04T06:35:55.118Z
