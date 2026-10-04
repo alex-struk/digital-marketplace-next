@@ -55,3 +55,23 @@ What the readers hand back:
 **Not checked.** I didn't see what a second "create" for an already-drafted proponent shows: the create address just redrew a blank form. So the duplicate-evaluation reader returns any alert line containing "already", "duplicate" or "exists".
 
 No route in the contract failed to resolve apart from the consensus sheets above. I changed nothing outside `tests/adapters/new/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Question: does the bind-adapter-new-81 adapter bind every surface action and observation on new, and nothing else? Approve. The diff touches only tests/adapters/new (bindings.yaml, index.ts) plus pipeline records; nothing under tests/acceptance or app/ changed. The new bindings for the dashboard Evaluations section, the SWU/TWU Instructions, Evaluation and Consensus sections, and the individual score sheets (create and edit) are navigation and locators only: readers return page text, refused non-admin readers read nothing with the refusal logged, and an administrator refused or a section missing reports unbound rather than deciding a result. The remaining unbound and absent reasons are real and name what the surface lacks: the Consensus section draws one sentence with no table, link or control even to the chair, and the four consensus score sheets answer 'Page not found' with nothing linking to them, re-checked at run time so they turn unbound once served. The section-switching fix (whole ?tab= value, so 'evaluationPanel' no longer matches 'evaluation') and confining the opportunity-dashboard readers to their own section are correct. The runner's typecheck on this revision passed with no diagnostics under adapters/new. The author's walk wrote a draft evaluation into the shared environment's seed (swuEvaluationAlreadyBegun, second proponent), which is environment state, not part of the diff; the seed should be reapplied before calibration. A compile failure at calibration, or evidence that the application offers a consensus control or link the adapter missed, would change this ruling.
+
+**Conditions:**
+- Reapply the seed before calibrating the 'new' target: during this binding run a 'Save draft' as test-gov stored an incomplete draft (question 1 score 9, no comments) for the second proponent of the seeded already-begun Sprint With Us opportunity, so that proponent reads 'Draft: incomplete' instead of 'Not started' until the seed is restored.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `2877c335d00d7b1e28b1789414741f8485d94858`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
