@@ -1,5 +1,11 @@
 # Run log
 
+# Run record 2026-10-04
+
+- 18:05:16 drive: step 1: `sdlc run verify --slice 14` — build-slice-14 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
+- 18:11:38 verify slice 14: 19 of the 25 criteria this slice claims could not be exercised at all — R-1.31, R-1.35, R-1.36, R-2.1, R-2.2, R-2.3, R-2.4, R-2.7, R-2.9, R-2.11, R-2.12, R-2.13, R-2.15, R-2.23, R-2.24, R-2.25, R-8.20, R-8.22, R-8.31.
+- 18:11:40 run verify: regenerated 581 files in .sdlc, site, tests
+
 # Run record 2026-10-03
 
 - 2026-10-02 16:58:02 drive: step 29: `sdlc run contract` — 1 missing test owed by contract
@@ -325,6 +331,9 @@
 - 12:26:34 propose build-slice-13-4 at G3
 - 12:47:11 drive: step 25: `sdlc rule build-slice-13-4 --by agent:reviewer` — build-slice-13-4 is open at G3, held by agent:reviewer
 - 12:47:45 rule build-slice-13-4 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.288 (Claude Code))
+- 13:16:24 drive: step 27: `sdlc run verify --slice 14` — build-slice-14 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
+- 13:16:38 verify slice 14: the sandbox did not start, so nothing was verified.
+- 13:16:38 drive: stopped after 27 steps — step 27 (`sdlc run verify --slice 14`) failed
 
 # Run record 2026-10-02
 
