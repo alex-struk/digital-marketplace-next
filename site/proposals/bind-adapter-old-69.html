@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-old-69 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">628</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">622</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">505</span></a></li><li><a href="../runs.html">Run log <span class="count">22</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-old-69</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-04 15:37</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.288 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on old, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I added <code>start_editing</code> to both evaluation panel pages, Sprint With Us and Team With Us, in the old adapter, and both are listed as <code>bound</code> in <code>tests/adapters/old/bindings.yaml</code>.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.288 (Claude Code))</p>
+<p>I added <code>start_editing</code> to both evaluation panel pages, Sprint With Us and Team With Us, in the old adapter, and both are listed as <code>bound</code> in <code>tests/adapters/old/bindings.yaml</code>. I couldn&#39;t run the type check: the <code>tsc</code> command needed approval this session couldn&#39;t give, so the change is untested beyond what I saw in the browser.</p>
+<p><strong>What the page does.</strong> I signed in as the administrator and opened the Evaluation Panel tab of the seeded closed Sprint With Us opportunity, which is at Team Questions Evaluation. The tab opens read-only. Each evaluator is shown as &quot;Evaluator N&quot;, with their name and email beside &quot;Panel Member&quot; and a &quot;Panel Chair&quot; checkbox that can&#39;t be clicked. Below them is a &quot;Chair&quot; line naming who chairs. The top bar carries an &quot;Edit&quot; control. I pressed it, and the panel became changeable:</p>
+<ul><li>a &quot;Panel Member*&quot; chooser for each evaluator</li><li>&quot;Add an evaluator&quot;</li><li>a &quot;Chair*&quot; chooser</li><li>&quot;Save Changes&quot; and &quot;Cancel&quot; in the top bar</li></ul>
+<p>I saved nothing, so the seeded panel is unchanged. I did not open the Team With Us tab. Its route has the same form, and the old binding already serves both programs with one set of code.</p>
+<p><strong>How it is bound.</strong> <code>startEditing</code> reuses the existing <code>editingPanel</code> helper, which the adapter already ran before every change to the panel. If the panel is already open for changes, it does nothing. Otherwise it presses &quot;Edit&quot; in the top bar and goes to the &quot;Evaluation Panel&quot; step if editing reopens the opportunity&#39;s wizard. If the tab shows evaluators but no &quot;Edit&quot;, as it does at consensus, the action makes no change and throws nothing. That leaves the locked state for <code>panel_locked_after_consensus</code> to report, which is how the other panel actions already behave. It throws <code>unbound:</code> only when the tab shows neither evaluators nor &quot;Edit&quot;.</p>
+<p>Every route these pages use resolved on the target. Nothing else in the adapter or bindings changed, and I wrote nothing outside <code>tests/adapters/old/</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-04 15:37.</p>
+<div class="body"><p>The question is whether the old adapter binds the surface&#39;s new start_editing action on evaluation-panel-swu and evaluation-panel-twu, and nothing else. Approved. start_editing just calls the existing editingPanel helper (tests/adapters/old/index.ts:7671). That helper presses the top-bar &quot;Edit&quot;, moves to the &quot;Evaluation Panel&quot; step if the wizard reopens, does nothing when the panel is already open for changes, and leaves a locked panel (evaluators shown, no &quot;Edit&quot;) unchanged and unthrown, so panel_locked_after_consensus can report it. That is navigation only, with no assertion or pass/fail logic. It reports unbound only when the tab shows neither evaluators nor &quot;Edit&quot;, where there is genuinely nothing to bind. The diff stays inside tests/adapters/old/, touches nothing under tests/acceptance or any protected path, and both pages are marked bound in bindings.yaml. The authoring agent could not run tsc, but the runner&#39;s typecheck on revision 5904bb81d passed with no diagnostics under adapters/old/, which settles the gap the receipt admitted. The ruling would change if the binding asserted or decided an outcome, or if the typecheck result were stale. The missing-test warning for R-5.27 is already owed by derive-tests and is not this proposal&#39;s to discharge.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

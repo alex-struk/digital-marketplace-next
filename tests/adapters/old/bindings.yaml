@@ -803,6 +803,7 @@ pages:
 
   evaluation-panel-swu:
     actions:
+      start_editing: bound
       add_panel_member: bound
       remove_panel_member: bound
       choose_panel_chair: bound
@@ -819,6 +820,7 @@ pages:
 
   evaluation-panel-twu:
     actions:
+      start_editing: bound
       add_panel_member: bound
       remove_panel_member: bound
       choose_panel_chair: bound
