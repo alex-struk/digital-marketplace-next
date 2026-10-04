@@ -395,5 +395,66 @@ BEGIN
   PERFORM pg_temp.seed_swu_opportunity(30, 'Seeded Sprint With Us opportunity at the code challenge with a proponent screened into the team scenario', staff, 'EVAL_CC', panel, admin);
   PERFORM pg_temp.seed_swu_proposal(30, 1, v[1], o[1], staff, 'UNDER_REVIEW_TEAM_SCENARIO', 420000, top, 'SUBMITTED', 'SUBMITTED', panel, admin, 80, NULL, NULL);
   PERFORM pg_temp.seed_swu_proposal(30, 2, v[2], o[2], staff, 'UNDER_REVIEW_CODE_CHALLENGE', 460000, good, 'SUBMITTED', 'SUBMITTED', panel, admin, NULL, NULL, NULL);
+
+  -- 41. At individual evaluation, with two versions. The first (K 2) seats the usual
+  --     panel: the government account as an evaluator and the administrator as chair and
+  --     evaluator. The second (K 4, with its phase at K 5), published a day after the
+  --     opportunity closed, is the same opportunity with a third evaluator seated: the
+  --     panel evaluator account (00000000-0000-4000-8000-000000000104), which no sign-in
+  --     route on the oracle reaches. That third evaluator has already scored all three
+  --     proponents and submitted; the other two have not begun. The move to consensus counts
+  --     evaluators and questions from the newest version, three × three × four = 36, and
+  --     counts submitted scores over the proposals named in the submission that triggers the
+  --     check, whoever wrote them. So the government account submitting brings the count to
+  --     24 — the whole of the first version's requirement — and the opportunity stays; the
+  --     administrator submitting brings it to 36 and the application moves it on (R-5.27).
+  --     The third evaluator's submission is the condition, written here because nobody can
+  --     act as them on the oracle; the move and the notice are left to the application.
+  PERFORM pg_temp.seed_swu_opportunity(41, 'Seeded Sprint With Us opportunity whose newest version seats a third evaluator', staff, 'EVAL_QUESTIONS_INDIVIDUAL', panel, admin);
+
+  INSERT INTO "swuOpportunityVersions"
+    ("id", "createdAt", "createdBy", "opportunity", "title", "teaser", "remoteOk",
+     "remoteDesc", "location", "totalMaxBudget", "minTeamMembers", "mandatorySkills",
+     "optionalSkills", "description", "proposalDeadline", "assignmentDate",
+     "questionsWeight", "codeChallengeWeight", "scenarioWeight", "priceWeight")
+  SELECT pg_temp.sid(41, 4), now() - INTERVAL '28 days', staff, "opportunity", "title",
+         "teaser", "remoteOk", "remoteDesc", "location", "totalMaxBudget", "minTeamMembers",
+         "mandatorySkills", "optionalSkills", "description", "proposalDeadline",
+         "assignmentDate", "questionsWeight", "codeChallengeWeight", "scenarioWeight",
+         "priceWeight"
+    FROM "swuOpportunityVersions" WHERE "id" = pg_temp.sid(41, 2);
+
+  INSERT INTO "swuOpportunityPhases"
+    ("id", "opportunityVersion", "phase", "startDate", "completionDate", "maxBudget",
+     "createdAt", "createdBy")
+  SELECT pg_temp.sid(41, 5), pg_temp.sid(41, 4), "phase", "startDate", "completionDate",
+         "maxBudget", now() - INTERVAL '28 days', staff
+    FROM "swuOpportunityPhases" WHERE "id" = pg_temp.sid(41, 3);
+
+  INSERT INTO "swuPhaseCapabilities" ("phase", "capability", "fullTime", "createdAt", "createdBy")
+  SELECT pg_temp.sid(41, 5), "capability", "fullTime", now() - INTERVAL '28 days', staff
+    FROM "swuPhaseCapabilities" WHERE "phase" = pg_temp.sid(41, 3);
+
+  INSERT INTO "swuTeamQuestions"
+    ("opportunityVersion", "question", "guideline", "score", "wordLimit", "order",
+     "createdAt", "createdBy", "minimumScore")
+  SELECT pg_temp.sid(41, 4), "question", "guideline", "score", "wordLimit", "order",
+         now() - INTERVAL '28 days', staff, "minimumScore"
+    FROM "swuTeamQuestions" WHERE "opportunityVersion" = pg_temp.sid(41, 2);
+
+  INSERT INTO "swuEvaluationPanelMembers" ("opportunityVersion", "user", "chair", "evaluator", "order")
+  VALUES
+    (pg_temp.sid(41, 4), staff, FALSE, TRUE, 0),
+    (pg_temp.sid(41, 4), admin, TRUE, TRUE, 1),
+    (pg_temp.sid(41, 4), '00000000-0000-4000-8000-000000000104', FALSE, TRUE, 2);
+
+  -- The change record the application writes beside every new version it publishes.
+  INSERT INTO "swuOpportunityStatuses" ("id", "createdAt", "createdBy", "opportunity", "status", "event", "note")
+  VALUES (pg_temp.sid(41, 1100), now() - INTERVAL '28 days', staff, pg_temp.sid(41, 1), NULL, 'EDITED', '');
+
+  FOR p IN 1..3 LOOP
+    PERFORM pg_temp.seed_swu_proposal(41, p, v[p], o[p], staff, 'UNDER_REVIEW_QUESTIONS', 400000 + p * 20000, good, 'SUBMITTED', NULL,
+      ARRAY['00000000-0000-4000-8000-000000000104']::uuid[], admin, NULL, NULL, NULL);
+  END LOOP;
 END
 $$;

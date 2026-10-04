@@ -1297,7 +1297,12 @@ pages:
   # evaluator on the seeded closed opportunity (opportunities.closedSprintWithUs or
   # opportunities.closedTeamWithUs, once the application has closed it) means the two
   # seeded evaluators' twenty-four submissions no longer move it on. users.staffPanelEvaluator
-  # is a public sector account seated on no panel, for exactly that.
+  # is the public sector account to seat for that, chosen by panel.evaluator@example.test.
+  # Because no oracle sign-in reaches that account, a test that needs the third evaluator's
+  # submissions as well uses opportunities.swuNewestVersionSeatsThirdEvaluator instead, whose
+  # newest version already seats them and whose seed already carries their submitted scores;
+  # the move is then read on opportunity-swu-view through status after the government
+  # account and the administrator each submit on evaluation-individual-list-swu.
   #
   # add_panel_member takes the person to seat, chosen from the list of public sector
   # accounts the tab offers, each shown as their name followed by their email address in

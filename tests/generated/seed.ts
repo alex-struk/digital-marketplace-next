@@ -231,7 +231,7 @@ export const seed = {
       "idp_id": "gov-panel-evaluator",
       "email": "panel.evaluator@example.test",
       "account_type": "GOV",
-      "note": "The persona signs in as users.staffOne on both targets; this account sits on no seeded panel. Seating it would make a third evaluator, and the seeded panels hold two because consensus waits on every evaluator (R-5.27). That is also its use: a test seats it on a closed opportunity in individual evaluation through evaluation-panel-swu or evaluation-panel-twu to show that the newest version's panel decides how many submissions the move to consensus waits for."
+      "note": "The persona signs in as users.staffOne on both targets, and no sign-in route on the oracle reaches this account. It sits on one seeded panel only: as the third evaluator of evaluation_panels.sprintWithUsThreeEvaluators, the newest version of opportunities.swuNewestVersionSeatsThirdEvaluator, where its individual scores for every proponent are already submitted so that the two accounts the oracle can sign in as decide when the 36 submissions the move to consensus waits for are reached (R-5.27). It can also be seated through evaluation-panel-swu or evaluation-panel-twu, chosen by its email address."
     },
     "staffPanelChair": {
       "id": "00000000-0000-4000-8000-000000000105",
@@ -1292,6 +1292,26 @@ export const seed = {
       ],
       "note": "Still at the code challenge. The first proponent is scored on it (80) and already screened into the team scenario, which the service allows only while the opportunity is at the code challenge; the second is screened in to the code challenge and not scored. A team scenario score for the first, sent through proposal-evaluation-request as the administrator, is a score for a stage the opportunity has not reached and is answered with the service's stage message. The same score for the second is answered with the general permission message instead, because that proposal has not itself reached the team scenario."
     },
+    "swuNewestVersionSeatsThirdEvaluator": {
+      "id": "00000000-0000-4000-a041-000000000001",
+      "version_id": "00000000-0000-4000-a041-000000000004",
+      "first_version_id": "00000000-0000-4000-a041-000000000002",
+      "program": "sprint-with-us",
+      "title": "Seeded Sprint With Us opportunity whose newest version seats a third evaluator",
+      "seeded_status": "EVAL_QUESTIONS_INDIVIDUAL",
+      "owner": "users.staffOne",
+      "proposals": [
+        "proposals.swuThirdEvaluatorOne",
+        "proposals.swuThirdEvaluatorTwo",
+        "proposals.swuThirdEvaluatorThree"
+      ],
+      "panel": "evaluation_panels.sprintWithUsThreeEvaluators",
+      "questions": 4,
+      "for": [
+        "R-5.27"
+      ],
+      "note": "In individual question evaluation with three proponents and four questions on both of its versions. The first version seats users.staffOne as an evaluator and users.administratorOne as chair and evaluator; the newest, published a day after the opportunity closed, adds users.staffPanelEvaluator as a third evaluator. That third evaluator has already scored all three proponents (4, 4, 4, 4) and submitted — twelve submitted scores — because no sign-in route on the oracle reaches them; neither users.staffOne nor users.administratorOne has begun. The move to consensus is counted against the newest version: three evaluators × three proponents × four questions = 36. users.staffOne (persona public-sector-staff or evaluation-panel-evaluator) scoring every proponent and submitting brings the count to 24, which is the whole of what the first version would have required, and the status stays at individual evaluation. users.administratorOne (persona administrator) then scoring and submitting brings it to 36, and the application moves the opportunity to consensus and tells the chair (users.administratorOne) and the owner (users.staffOne). Nothing here is in consensus; the move and the notice are the application's."
+    },
     "twuConsensusFiveProponents": {
       "id": "00000000-0000-4000-a031-000000000001",
       "version_id": "00000000-0000-4000-a031-000000000002",
@@ -1531,6 +1551,31 @@ export const seed = {
           "chair": true,
           "evaluator": true,
           "order": 1
+        }
+      ]
+    },
+    "sprintWithUsThreeEvaluators": {
+      "id": "00000000-0000-4000-a041-000000000004",
+      "opportunity": "opportunities.swuNewestVersionSeatsThirdEvaluator",
+      "members": [
+        {
+          "user": "users.staffOne",
+          "chair": false,
+          "evaluator": true,
+          "order": 0
+        },
+        {
+          "user": "users.administratorOne",
+          "chair": true,
+          "evaluator": true,
+          "order": 1
+        },
+        {
+          "user": "users.staffPanelEvaluator",
+          "chair": false,
+          "evaluator": true,
+          "order": 2,
+          "individual_evaluations": "SUBMITTED for every proponent"
         }
       ]
     }
@@ -2034,6 +2079,54 @@ export const seed = {
       "vendor": "users.proponentTwo",
       "organization": "organizations.proponentTwo",
       "seeded_status": "UNDER_REVIEW_CODE_CHALLENGE"
+    },
+    "swuThirdEvaluatorOne": {
+      "id": "00000000-0000-4000-a041-000000000101",
+      "opportunity": "opportunities.swuNewestVersionSeatsThirdEvaluator",
+      "vendor": "users.organizationOwner",
+      "organization": "organizations.qualified",
+      "seeded_status": "UNDER_REVIEW_QUESTIONS",
+      "evaluation_of_staffPanelEvaluator": {
+        "status": "SUBMITTED",
+        "scores": [
+          4,
+          4,
+          4,
+          4
+        ]
+      }
+    },
+    "swuThirdEvaluatorTwo": {
+      "id": "00000000-0000-4000-a041-000000000102",
+      "opportunity": "opportunities.swuNewestVersionSeatsThirdEvaluator",
+      "vendor": "users.proponentTwo",
+      "organization": "organizations.proponentTwo",
+      "seeded_status": "UNDER_REVIEW_QUESTIONS",
+      "evaluation_of_staffPanelEvaluator": {
+        "status": "SUBMITTED",
+        "scores": [
+          4,
+          4,
+          4,
+          4
+        ]
+      }
+    },
+    "swuThirdEvaluatorThree": {
+      "id": "00000000-0000-4000-a041-000000000103",
+      "opportunity": "opportunities.swuNewestVersionSeatsThirdEvaluator",
+      "vendor": "users.proponentThree",
+      "organization": "organizations.proponentThree",
+      "seeded_status": "UNDER_REVIEW_QUESTIONS",
+      "evaluation_of_staffPanelEvaluator": {
+        "status": "SUBMITTED",
+        "scores": [
+          4,
+          4,
+          4,
+          4
+        ]
+      }
     },
     "twuScreenedIntoChallengeEarly": {
       "id": "00000000-0000-4000-a038-000000000101",
