@@ -51,3 +51,22 @@ They behave like the old target's binding:
 **Other routes:** every route I opened resolved, except those export routes. I didn't re-check the "complete" pages and the other pages that still use the older `unbound:` helper.
 
 Both files are in `tests/adapters/new/`: `index.ts` and `bindings.yaml`. I changed nothing outside that folder. The bindings name only surface spellings, and no password or environment value is written anywhere.
+
+## Ruling
+
+**Verdict:** approve
+**By:** runner:checks
+
+Approved by the runner's checks, which policy.gates.G3.auto_approve lets settle bind-adapter proposals: the acceptance typecheck of cc0534291 is clean; no condition is open against it; no escalation stands on it; nothing outside tests/adapters changed.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `cc053429110580d8ffeb2b3047ea98c468687901`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.

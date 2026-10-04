@@ -1,0 +1,11 @@
+gate: G3
+verdict: approve
+by: runner:checks
+held_by: agent
+rationale: |2-
+  Approved by the runner's checks, which policy.gates.G3.auto_approve lets settle bind-adapter proposals: the acceptance typecheck of cc0534291 is clean; no condition is open against it; no escalation stands on it; nothing outside tests/adapters changed.
+conditions: []
+cost: 0
+turns: 0
+session: ""
+at: 2026-10-04T18:16:33.709Z
