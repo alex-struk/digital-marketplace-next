@@ -303,7 +303,7 @@ export default function create(
   // program chooser, the forms and the three programs' management screens; the proposal,
   // evaluation and organization terms screens answer "Page not found".
   const NOBODY_SIGNS_IN =
-    'walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor\'s screens — the seeded organization owner, an organization member and the invited vendor for the organization screens — with the seeded records\' identifiers), the running build serves a signed-in person /dashboard, /opportunities, the account screens under /users (a vendor\'s Organizations section, /users/me?tab=organizations, draws "Organizations you own" with "Create organization" and the owned table, and "Organizations you belong to"), /organizations ("Create organization", "My organizations" and the list), /organizations/create, and to an organization\'s owner /organizations/:orgId/edit (the "Organization" section with "Edit organization", and "Archive organization"; its Team members section draws the team table, its row actions and "Add team members", its Changelog section the changes to administrator rights and ownership, and its Sprint With Us qualification and Team With Us qualification sections say only "This section is not available yet."), to the administrator the content-management screens under /content, and to the administrator and public sector staff /opportunities/create, the three programs\' forms and their management screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (whose sections on the seeded Sprint With Us and Team With Us opportunities are Summary, Opportunity, Addenda, History and Evaluation panel, with no evaluation, consensus or instructions section), and to a vendor the Code With Us proposal form /opportunities/code-with-us/:opportunityId/proposals/create and the vendor\'s own proposal\'s screen .../proposals/:proposalId/edit (rechecked on the current build as test-vendor-1); the other proposal and evaluation screens — /proposals, the Sprint With Us and Team With Us proposal forms, the Code With Us proposal\'s evaluation view .../proposals/:proposalId, its "Printable copy" .../proposals/:proposalId/export (to its own author too) and .../proposals/export (to the administrator too), and /opportunities/code-with-us/:opportunityId/complete included — and /organizations/:orgId/sprint-with-us-terms-and-conditions and /organizations/:orgId/team-with-us-terms-and-conditions (opened as the seeded qualified organization\'s owner) answer "Page not found", as /organizations/:orgId/edit does to a member who does not own the organization';
+    'walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor\'s screens — the seeded organization owner, an organization member and the invited vendor for the organization screens — with the seeded records\' identifiers), the running build serves a signed-in person /dashboard, /opportunities, the account screens under /users (a vendor\'s Organizations section, /users/me?tab=organizations, draws "Organizations you own" with "Create organization" and the owned table, and "Organizations you belong to"), /organizations ("Create organization", "My organizations" and the list), /organizations/create, and to an organization\'s owner /organizations/:orgId/edit (the "Organization" section with "Edit organization", and "Archive organization"; its Team members section draws the team table, its row actions and "Add team members", its Changelog section the changes to administrator rights and ownership, and its Sprint With Us qualification and Team With Us qualification sections say only "This section is not available yet."), to the administrator the content-management screens under /content, and to the administrator and public sector staff /opportunities/create, the three programs\' forms and their management screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (whose sections on the seeded Sprint With Us and Team With Us opportunities are Summary, Opportunity, Addenda, History and Evaluation panel, with no evaluation, consensus or instructions section), and to a vendor the Code With Us proposal form /opportunities/code-with-us/:opportunityId/proposals/create (reached from "Start a proposal" on the opportunity) and the vendor\'s own proposal\'s screen .../proposals/:proposalId/edit; rechecked on the current build as the vendor and as the organization owner, the Sprint With Us and Team With Us proposal forms answer "Page not found" even on the seeded Sprint With Us opportunity still open for proposals (00000000-0000-4000-a025-000000000001, deadline November 2, 2026), whose page offers those vendors only "Watch" and no way to start a proposal, and the Code With Us proposal\'s evaluation view answers "Page not found" to the administrator on the seeded opportunity with three proposals; the other proposal and evaluation screens — /proposals, the Sprint With Us and Team With Us proposal forms, the Code With Us proposal\'s evaluation view .../proposals/:proposalId, its "Printable copy" .../proposals/:proposalId/export (to its own author too) and .../proposals/export (to the administrator too), and /opportunities/code-with-us/:opportunityId/complete included — and /organizations/:orgId/sprint-with-us-terms-and-conditions and /organizations/:orgId/team-with-us-terms-and-conditions (opened as the seeded qualified organization\'s owner) answer "Page not found", as /organizations/:orgId/edit does to a member who does not own the organization';
 
   // What each such address answered a signed-out visitor when it was last opened: /dashboard
   // and /sign-up/complete send them to /sign-in?redirectOnSuccess=…, and everything else
@@ -7186,11 +7186,20 @@ export default function create(
         .catch(() => undefined);
     },
     startProposal: async () => {
+      // "Start a proposal", a link to .../proposals/create, offered to a signed-in vendor while
+      // the opportunity takes proposals. A vendor who already holds a proposal on it is
+      // offered "View your proposal" in its place (the service keeps one per vendor), which
+      // is its one way on from here to that proposal; the old target's binding does the same.
+      const where = cwuView.where("start_proposal");
       await cwuViewShown("start_proposal");
-      const control = await findControl(page, /^\s*(start|create|submit|write)( a)? proposal\s*$/i);
-      if (!control) unbound(cwuView.where("start_proposal"), `${CWU_VIEW_WALKED}: signed in as a vendor on the seeded published opportunity (proposal deadline in 2030), the page offers only "Watch this opportunity" and no way to start a proposal, and /opportunities/code-with-us/:opportunityId/proposals/create answers "Page not found" to the vendor; on ${page.url()} it offers ${await offered()}`);
+      const control =
+        (await findControl(page, /^\s*(start|create|submit|write)( a)? proposal\s*$/i)) ??
+        (await findControl(page, /^\s*view (your|my)? ?proposal\s*$/i));
+      if (!control) unbound(where, `${CWU_VIEW_WALKED}: signed in as a vendor on the seeded published opportunity (proposal deadline in 2030) the page offers "Start a proposal" (or "View your proposal" once the vendor holds one), and on ${page.url()} as ${actingId()} it offers neither; it offers ${await offered()}`);
+      if (await isDisabled(control)) throw new Error(`${where} — "${(await control.innerText().catch(() => "")).trim()}" is disabled on ${page.url()}`);
       await control.click();
       await settle();
+      await ready();
     },
     opportunityIdentifier: async () => {
       if (!(await onCwuView("opportunity_identifier"))) return "";
@@ -8220,7 +8229,18 @@ export default function create(
       if (manage) await visit(`${manage}?tab=opportunity`);
     }
     const region = attachmentRegion();
-    if (!(await region.count())) unbound(where, `no "Attachments" part on the form at ${page.url()}; it offers ${await offered()}`);
+    if (!(await region.count())) {
+      // Rechecked as the administrator on the seeded open Sprint With Us and Team With Us
+      // opportunities: their forms at ?tab=opportunity carry no "Attachments" part, and the
+      // two programs' create forms say of theirs "Files cannot be attached to a <program>
+      // opportunity in this version of the service. Code With Us opportunities take
+      // attachments."
+      const program = /\/opportunities\/(sprint-with-us|team-with-us)\//.exec(new URL(page.url()).pathname)?.[1];
+      const said = program
+        ? `; walked as the administrator on the seeded ${PROGRAM_NAME[program] ?? program} opportunities, the form offers no attachments, and /opportunities/${program}/create says "Files cannot be attached to a ${PROGRAM_NAME[program] ?? program} opportunity in this version of the service. Code With Us opportunities take attachments."`
+        : "";
+      unbound(where, `no "Attachments" part on the form at ${page.url()}${said}; it offers ${await offered()}`);
+    }
     return region;
   }
   function attachmentItems(region: Locator): Locator {
@@ -8349,6 +8369,19 @@ export default function create(
     // The stored address of every attachment, saving a file only just added first.
     attachmentAddress: async () => {
       const where = `${ATTACH}.attachment_address`;
+      // On a Code With Us proposal's own screen (.../proposals/:proposalId/edit), where a
+      // test that attached a file to a proposal reads its address: the "Proposal" section
+      // draws an "Attachments" part listing each stored file as "Download <name>" to
+      // /api/files/<id>?type=blob (seen on a draft proposal given a file on this build). A
+      // proposal screen that opened is the place either way: without that part, the stored
+      // files are whatever "Download <name>" links it draws, and none is none.
+      await ready();
+      if (/\/proposals\/[^/]+/.test(new URL(page.url()).pathname)) {
+        const why = await whyNotHere();
+        if (why) unbound(where, `the proposal's screen at ${page.url()} did not open: ${why.replace(/\n+/g, " ")}`);
+        const part = attachmentRegion();
+        return (await storedLinks((await part.count()) ? part : page.getByRole("main"))).join("\n");
+      }
       let region = await onAttachments("attachment_address");
       if ((await itemsMatching(region, (words) => isNew(words) && !/too large/i.test(words))).length) {
         await saveAttachments(where);

@@ -16,6 +16,14 @@
 - 18:29:27 drive: step 1: `sdlc run verify --slice 14` — 18 unbound rows to check again now that their adapter has changed for slice 14 owed by verify
 - 18:35:55 verify slice 14: returned — R-2.13 fail. Next: sdlc run build --slice 14 --revise
 - 18:35:56 run verify: regenerated 4 files in .sdlc, site, tests
+- 18:36:04 drive: step 2: `sdlc run bind-adapter --target new` — 9 bindings the adapter reports unbound for target new owed by bind-adapter; the application it binds against is on proposal/build-slice-14 alone, so sdlc sandbox up --target new --from proposal/build-slice-14 first
+- 18:36:04 run bind-adapter: pre-checks failed
+- 18:36:04 drive: step 2 recovery: the new target's sandbox was not up; starting it from proposal/build-slice-14 (sdlc sandbox up --target new --from proposal/build-slice-14), running the step once more, and taking it down after (sdlc sandbox down --target new --from proposal/build-slice-14)
+- 18:42:59 run bind-adapter: ok, cost 3.2437172000000007, turns 81, on claude claude-opus-5-5 (2.1.288 (Claude Code))
+- 18:42:59 propose bind-adapter-new-68 at G3
+- 18:42:59 drive: step 2 recovery: taking the new target's sandbox down (sdlc sandbox down --target new --from proposal/build-slice-14)
+- 18:43:16 drive: step 3: `sdlc rule bind-adapter-new-68 --by agent:reviewer` — bind-adapter-new-68 is open at G3, held by agent:reviewer
+- 18:44:11 rule bind-adapter-new-68 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.288 (Claude Code))
 
 # Run record 2026-10-03
 

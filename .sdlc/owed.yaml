@@ -5301,3 +5301,18 @@ owed:
         administrator being refused
       by: agent:reviewer
       at: 2026-10-03T16:20:06.483Z
+  - kind: missing-test
+    item: R-2.2
+    id: R-2.2
+    version: 2
+    domain: proposals
+    stage: contract
+    why: proposal-cwu-create names no action that sends a create request for an
+      opportunity the vendor already holds a proposal on, so no test can put
+      that request to the service and read the refusal
+    clause: a request to create a second proposal is refused with "You already have
+      a proposal for this opportunity." and no second proposal is created
+    from: bind-adapter-new-68
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-04T01:44:12.433Z
