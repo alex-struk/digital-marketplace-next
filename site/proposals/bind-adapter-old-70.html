@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-old-70 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">635</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">629</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">512</span></a></li><li><a href="../runs.html">Run log <span class="count">22</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-old-70</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-04 16:16</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.288 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on old, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I added the four members the new contract declared for <code>evaluation-individual-submission-request-swu</code>, and they are all marked <code>bound</code> in <code>tests/adapters/old/index.ts</code> and `tests/adapters/old/bindings…</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.288 (Claude Code))</p>
+<p>I added the four members the new contract declared for <code>evaluation-individual-submission-request-swu</code>, and they are all marked <code>bound</code> in <code>tests/adapters/old/index.ts</code> and <code>tests/adapters/old/bindings.yaml</code>. Two limits: I could not compile the file, and I never sent a submission the target accepts. Nothing else in the existing adapter was changed.</p>
+<p><strong>How each member works.</strong> This page is a request to the service, not a screen. It is bound the same way as the adapter&#39;s other request pages: requests go out through the browser&#39;s signed-in session, and the observations read the latest answer.</p>
+<ul><li><strong><code>open</code></strong> takes the opportunity&#39;s seed handle (such as <code>swuSubmissionNamesTwoOfThree</code>) or a raw identifier, and remembers it. It does not navigate anywhere.</li><li><strong><code>submit_scores_for_consensus_naming</code></strong> sends a change to the Sprint With Us opportunity tagged <code>submitIndividualQuestionEvaluations</code>, carrying an optional note and the list of named proposals. The contract&#39;s API description gives this request shape. The input can name proposals as seed handles, identifiers or records with an <code>id</code>, either as a list or under a key such as <code>proposals</code>. It throws if no proposal is named.</li><li><strong><code>request_accepted</code></strong> returns the status and body of a successful answer, and nothing for a refusal.</li><li><strong><code>refusal_messages</code></strong> returns the refusal&#39;s messages, one per line in the service&#39;s order, using the reader the other request pages already use. It is empty when the request was accepted.</li><li><strong><code>stored_status</code></strong> reads the opportunity again as the signed-in person after the request, as the contract asks, rather than taking the status from the answer.</li></ul>
+<p><strong>What I checked on the running target.</strong> I signed in as the public sector employee through <code>/auth/createsessiongov</code>, the route the evaluator persona uses. The seeded opportunity read <code>EVAL_QUESTIONS_INDIVIDUAL</code>. I then sent the request naming only the proponent nobody has begun evaluating (<code>swuLeftOut</code>). The service recognised the tag and refused with 400 and the message &quot;The specified team question response evaluation was not found.&quot; The opportunity was still <code>EVAL_QUESTIONS_INDIVIDUAL</code> afterwards. The contract&#39;s comment quotes a different refusal message, about an incomplete evaluation, for a related case. This target uses different wording, and the adapter passes on whatever text the target sends.</p>
+<p><strong>What I did not do.</strong> I did not send the successful case, naming <code>swuNamedOne</code> and <code>swuNamedTwo</code>. That would have moved the shared seeded opportunity to consensus and spoiled it for the test that relies on it. So the accepted path and the move to <code>EVAL_QUESTIONS_CONSENSUS</code> have not been seen on this target. The bindings rest on the documented request shape and the confirmed refusal path.</p>
+<p>The workspace would not let me run the type-check (<code>tsc</code>) without approval, so it was never run. I compared the new code by hand against the helpers and types the file already uses, but the first real compile will be calibration.</p>
+<p>The route <code>/api/opportunities/sprint-with-us/:opportunityId</code> resolved on the target. No route in this change failed to resolve. I did not need to change anything outside <code>tests/adapters/old/</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-04 16:17.</p>
+<div class="body"><p>Question: does the adapter bind every surface action and observation of evaluation-individual-submission-request-swu on old, and nothing else? Approve. The four members (submit_scores_for_consensus_naming, request_accepted, refusal_messages, stored_status) match spec/contract/surface.yaml and the generated page type. They only send the documented PUT, read the latest answer through the existing accepted/lastRefusal helpers, and re-read the opportunity&#39;s status as the signed-in person, as the contract asks. None of them asserts anything or decides a pass. Nothing under tests/acceptance changed and no member is marked unbound. The runner typecheck reports no diagnostics under adapters/old/; its failure is confined to adapters/new/, which this proposal does not answer for. The refusal path was exercised on the running target. The accepted path was not, because sending it would have consumed the shared seed, so calibration is its first real exercise. The target&#39;s refusal wording differs from the contract comment, which is a product question; the adapter passes through whatever text the target sends. The existing R-5.27 missing-test, owed by derive-tests, already records the unasserted clause, so no new condition is added. This would become a return if diagnostics appeared under adapters/old/, if any tests/acceptance file changed, or if calibration showed the accepted request shape is wrong.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

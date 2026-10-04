@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does the adapter bind every surface action and observation of evaluation-individual-submission-request-swu on old, and nothing else? Approve. The four members (submit_scores_for_consensus_naming, request_accepted, refusal_messages, stored_status) match spec/contract/surface.yaml and the generated page type. They only send the documented PUT, read the latest answer through the existing accepted/lastRefusal helpers, and re-read the opportunity's status as the signed-in person, as the contract asks. None of them asserts anything or decides a pass. Nothing under tests/acceptance changed and no member is marked unbound. The runner typecheck reports no diagnostics under adapters/old/; its failure is confined to adapters/new/, which this proposal does not answer for. The refusal path was exercised on the running target. The accepted path was not, because sending it would have consumed the shared seed, so calibration is its first real exercise. The target's refusal wording differs from the contract comment, which is a product question; the adapter passes through whatever text the target sends. The existing R-5.27 missing-test, owed by derive-tests, already records the unasserted clause, so no new condition is added. This would become a return if diagnostics appeared under adapters/old/, if any tests/acceptance file changed, or if calibration showed the accepted request shape is wrong.
+conditions: []
+cost: 0.3364544
+turns: 5
+session: "4bd2af0e-08ed-4061-86f9-716981ea559b"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T16:17:15.211Z
