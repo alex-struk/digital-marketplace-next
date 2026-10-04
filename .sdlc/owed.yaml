@@ -5306,7 +5306,7 @@ owed:
     id: R-2.2
     version: 2
     domain: proposals
-    stage: contract
+    stage: derive-tests
     why: proposal-cwu-create names no action that sends a create request for an
       opportunity the vendor already holds a proposal on, so no test can put
       that request to the service and read the refusal
@@ -5316,3 +5316,16 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-10-04T01:44:12.433Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: proposal-cwu-request now says how to reach the refusal. Use
+          submit_with_individual_proponent to send a second create request with
+          a valid status (Draft) against a published opportunity still accepting
+          proposals, then read the "You already have a proposal for this
+          opportunity." refusal under conflict through refusal_messages. Read
+          "no second proposal" on proposal-vendor-dashboard.
+        by: contract-v41
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-10-04T01:52:57.703Z

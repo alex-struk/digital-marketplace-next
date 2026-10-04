@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>contract-v41 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">574</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">568</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">469</span></a></li><li><a href="../runs.html">Run log <span class="count">22</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>contract-v41</h1>
+<p class="lede">G1 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G1</td></tr><tr><th scope="row">opened</th><td>2026-10-04 01:52</td></tr><tr><th scope="row">holder</th><td>agent:product-owner</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.288 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Is this the contract the tests will act through?</h2>
+<p><strong>Recommendation.</strong> This run reopens the contract for G1 as contract-v41.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.288 (Claude Code))</p>
+<p>The permission guard in this session refuses any command that expands <code>$SDLC_BIN</code>, and it won&#39;t let me read the variable&#39;s value either. So I could not run <code>oracle up</code> or <code>oracle down</code>. Since nothing was started, no container was left running.</p>
+<h3>Journal</h3>
+<p>This run reopens the contract for G1 as contract-v41. It changes exactly one thing: the sentence that G1 returned in contract-v40.</p>
+<p><strong>What changed.</strong> The fix is in the block comment on the <code>proposal-cwu-request</code> page in <code>spec/contract/surface.yaml</code>. That comment tells the test writer how to reach R-2.2, the criterion that a second proposal request is refused with &quot;You already have a proposal for this opportunity.&quot; and that no second proposal gets created. The returned version said the service checks for an existing proposal &quot;before it looks at any field.&quot; That was wrong.</p>
+<p>I checked the old create handler (<code>sources/old/src/back-end/lib/resources/proposal/code-with-us.ts</code>). It checks things in this order:</p>
+<ol><li>The <code>status</code> field. If it is missing or invalid, the request is refused under <code>status</code> (lines 296–304).</li><li>The opportunity lookup (line 306).</li><li>If the status is Submitted and the opportunity is no longer accepting proposals, the request is refused with &quot;This opportunity is no longer accepting proposals.&quot; (lines 321–328).</li><li>An organization proponent that already has a proposal on the opportunity is refused with &quot;Please select a different organization.&quot; (lines 331–351).</li><li>Only then does it check for the vendor&#39;s own existing proposal. If one exists, the request is refused under <code>conflict</code> with the R-2.2 message (lines 355–369).</li></ol>
+<p>The new wording follows the ruler&#39;s direction. The second request must carry a valid status, with Draft the safest, and must name a published opportunity that is still accepting proposals. Once it does, the other fields don&#39;t change the outcome: the proposal text, the attachments and the individual proponent&#39;s details. The refusal comes back under <code>conflict</code>, and <code>refusal_messages</code> reads it.</p>
+<p>The rest of the comment stands as the ruler allowed:</p>
+<ul><li>Send the request with an individual proponent, so the organization refusal can&#39;t come first.</li><li>The proposal the vendor already holds may be in any state.</li><li>That no second proposal was made is read on <code>proposal-vendor-dashboard</code>, which lists the opportunity once.</li></ul>
+<p>The pointer comment on <code>proposal-cwu-create</code> is also unchanged. No pages, actions or observations were added or removed. Personas, OpenAPI, observables, the seed and the oracle override are all as the previous draft left them.</p>
+<p><strong>What I could not do.</strong> I did not run <code>oracle up</code> or <code>oracle down</code>. The command-permission guard in this session refuses any command that expands <code>$SDLC_BIN</code>, and it also refuses to print the variable. So this run gives no new evidence on whether the oracle starts. Since nothing was started, nothing was left running. This run edited only a YAML comment, which changes neither the override nor the seed, so whatever the last successful oracle run showed still applies. A later stage, or a person, should still run the start-up check where the CLI is reachable. I didn&#39;t run a YAML parse check either (that was blocked too). The edit only touches <code>#</code> lines inside an existing comment block.</p>
+<p><strong>Missing test.</strong> The guidance on <code>proposal-cwu-request</code> now tells the test writer exactly how to send the second create request and read its refusal. That supplies what R-2.2 lacked.</p>
+<p>re-address missing-test/R-2.2 to derive-tests: proposal-cwu-request now says how to reach the refusal. Use submit_with_individual_proponent to send a second create request with a valid status (Draft) against a published opportunity still accepting proposals, then read the &quot;You already have a proposal for this opportunity.&quot; refusal under conflict through refusal_messages. Read &quot;no second proposal&quot; on proposal-vendor-dashboard.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:product-owner (persona agent · claude claude-opus-5-5) on 2026-10-04 01:52.</p>
+<div class="body"><p>The question is whether contract-v41&#39;s corrected guidance on proposal-cwu-request is the contract a test should use to reach R-2.2 (a second create request is refused with &quot;You already have a proposal for this opportunity.&quot; and no second proposal is created). Approve. I read the old handler at sources/old/src/back-end/lib/resources/proposal/code-with-us.ts and the order the comment now describes is what the code does. The status check comes first (296-304, refused under status). Next is the opportunity lookup (306-315). Then the Submitted-on-a-closed-opportunity refusal (321-328). Then the organization-proponent refusal &quot;Please select a different organization.&quot; (331-351). Only then does the vendor&#39;s own existing proposal get refused under conflict with the R-2.2 message (355-369). Attachments are validated after that (371+), so the claim that the proposal text, attachments and individual proponent details do not change the outcome holds. So the guidance to send a valid status (Draft), name a published opportunity still accepting proposals, use an individual proponent, read the refusal through refusal_messages, and confirm on proposal-vendor-dashboard that no second proposal exists is sound and reaches the criterion. Two things are omitted but do not mislead. The permission check runs before status (287-294), which a signed-in vendor persona satisfies. An opportunity that does not exist or cannot be seen is refused under notFound, which the instruction to name a published opportunity already avoids. The change is comment-only. It adds no pages, actions or observations, and it changes neither the override nor the seed, so the oracle start-up check this run could not perform does not bear on this ruling, though it should still be run where the CLI is reachable. Tier is STANDARD and the intent has one reading, so there is no reason to escalate. The missing-test/R-2.2 condition stays open until derive-tests writes and runs the test, as it should. What would change the ruling: evidence that the deployed old target orders these checks differently from the cited source, or that proposal-vendor-dashboard cannot show the opportunity exactly once for a vendor holding a draft.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

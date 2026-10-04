@@ -24,6 +24,11 @@
 - 18:42:59 drive: step 2 recovery: taking the new target's sandbox down (sdlc sandbox down --target new --from proposal/build-slice-14)
 - 18:43:16 drive: step 3: `sdlc rule bind-adapter-new-68 --by agent:reviewer` — bind-adapter-new-68 is open at G3, held by agent:reviewer
 - 18:44:11 rule bind-adapter-new-68 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.288 (Claude Code))
+- 18:51:39 drive: step 6: `sdlc run contract` — contract-v40 was returned at G1 by agent:product-owner; contract is run again to take the ruling up
+- 18:52:20 run contract: ok, cost 0.31467, turns 8, on claude claude-opus-5-5 (2.1.288 (Claude Code))
+- 18:52:20 propose contract-v41 at G1
+- 18:52:24 drive: step 7: `sdlc rule contract-v41 --by agent:product-owner` — contract-v41 is open at G1, held by agent:product-owner
+- 18:52:56 rule contract-v41 approve at G1 by agent:product-owner (agent) on claude claude-opus-5-5 (2.1.288 (Claude Code))
 
 # Run record 2026-10-03
 
