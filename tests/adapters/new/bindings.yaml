@@ -1610,12 +1610,18 @@ pages:
 
   notification-email-reference:
     actions:
-      open_reference: "unbound: walked signed in as the administrator (test-admin) on 2026-09-30, /admin/email-notification-reference is no screen: the service answers it 404 {\"errors\":[\"Cannot GET /admin/email-notification-reference\"]}; /api/email-notification-reference, /api/admin/email-notification-reference and /admin (a 'Page not found' screen) offer nothing either, and neither the administrator's dashboard (a greeting only) nor profile links to an email reference"
+      # Seen 2026-10-04 as the administrator: "Email Notification Reference", one region per
+      # event under its level-2 heading, one article per message with "Subject" and "Who
+      # receives it and why". Opened by its address the page shows only the alert "The sample
+      # emails could not be loaded" (its request for its samples, to the same address, is
+      # answered with the page's HTML from the browser's cache); the readers report that as
+      # the page's own failure, not as unbound and not as an empty reading.
+      open_reference: bound
     observations:
-      message_group_title: "unbound: walked signed in as the administrator (test-admin) on 2026-09-30, /admin/email-notification-reference is no screen: the service answers it 404 {\"errors\":[\"Cannot GET /admin/email-notification-reference\"]}; /api/email-notification-reference, /api/admin/email-notification-reference and /admin (a 'Page not found' screen) offer nothing either, and neither the administrator's dashboard (a greeting only) nor profile links to an email reference"
-      message_subject: "unbound: walked signed in as the administrator (test-admin) on 2026-09-30, /admin/email-notification-reference is no screen: the service answers it 404 {\"errors\":[\"Cannot GET /admin/email-notification-reference\"]}; /api/email-notification-reference, /api/admin/email-notification-reference and /admin (a 'Page not found' screen) offer nothing either, and neither the administrator's dashboard (a greeting only) nor profile links to an email reference"
-      message_summary: "unbound: walked signed in as the administrator (test-admin) on 2026-09-30, /admin/email-notification-reference is no screen: the service answers it 404 {\"errors\":[\"Cannot GET /admin/email-notification-reference\"]}; /api/email-notification-reference, /api/admin/email-notification-reference and /admin (a 'Page not found' screen) offer nothing either, and neither the administrator's dashboard (a greeting only) nor profile links to an email reference"
-      message_body: "unbound: walked signed in as the administrator (test-admin) on 2026-09-30, /admin/email-notification-reference is no screen: the service answers it 404 {\"errors\":[\"Cannot GET /admin/email-notification-reference\"]}; /api/email-notification-reference, /api/admin/email-notification-reference and /admin (a 'Page not found' screen) offer nothing either, and neither the administrator's dashboard (a greeting only) nor profile links to an email reference"
+      message_group_title: bound
+      message_subject: bound
+      message_summary: bound
+      message_body: bound
       # Reads whatever refusal the address gives: the "Page not found" screen, a redirect to
       # sign-in, or the service's plain "You do not have permission" answer.
       refused_for_non_administrator: bound
