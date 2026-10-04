@@ -394,6 +394,9 @@
 - 09:23:46 propose derive-tests-evaluation-stale-17 at G3
 - 09:23:51 drive: step 4: `sdlc rule derive-tests-evaluation-stale-17 --by agent:reviewer` — derive-tests-evaluation-stale-17 is open at G3, held by agent:reviewer
 - 09:24:32 rule derive-tests-evaluation-stale-17 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.288 (Claude Code))
+- 09:28:27 drive: step 6: `sdlc run verify --slice 18` — build-slice-18-5 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
+- 09:58:25 verify slice 18: 1 criteria still fail after 3 builds; escalated to tech-lead.
+- 09:58:27 run verify: regenerated 651 files in .sdlc, site
 
 # Run record 2026-10-03
 
