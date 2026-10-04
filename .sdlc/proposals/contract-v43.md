@@ -41,3 +41,14 @@ The staff account is the evaluator who is not the chair on every seeded panel. I
 Two consequences of sharing the account:
 - On both targets, the persona is the same person as the staff persona and the opportunity's owner. A criterion that needs an evaluator who is neither the owner nor ordinary staff cannot be told apart from them.
 - The dedicated account stays seeded and can be observed, but no persona signs in as it.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:product-owner
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Question: is this the contract the tests will act through, given the reviewer's request at G3 on build-slice-17 that the evaluation-panel-evaluator persona on the new target be an account seated on the closedSprintWithUs panel, without changing the two-evaluator count R-5.27 relies on? Ruling: approve. Reason: the R-2.5 failure was a test-identity mismatch, not a product question. The persona signed in on the sandbox IdP as gov-panel-evaluator (users.staffPanelEvaluator), which no seeded panel seats. Remapping its sandbox-idp username to test-gov (users.staffOne) satisfies the request: tests/seed/010-sprint-with-us-stages.sql seats test-gov as the non-chair evaluator, test-gov is already a working sandbox-idp username for two other personas, and the two-evaluator panel R-5.27 depends on is untouched. Both targets now act through the same account. The only other test that signs in as this persona is R-5.19, which seats both candidate accounts on its panel and leaves users.staffOne off its contrast panel, so it is unaffected. No criterion's statement, confidence or state changes. Neither target was run and the YAML was not machine-parsed, so the R-2.5 run on the new target is the confirmation still to come. That makes the change verified by reading, not by execution. This settles the contract revision request request/build-slice-17#1. It does not settle the build-owed failures build-slice-17#1 (R-5.19), #2 (R-5.26) or #3 (R-5.27), which remain open for the next ruling. Accepted cost: the persona can no longer be told apart from the staff persona and the owner of the seeded opportunities. Loose end for a later revision: tests/seed/manifest.yaml still tags users.staffPanelEvaluator with persona: evaluation-panel-evaluator, which could mislead a person-by-persona lookup in the new adapter. What would change the ruling: a criterion that needs an evaluator distinct from both the opportunity's owner and ordinary staff, or R-2.5 still failing on the new target for an identity reason after this change.
+
+**Conditions:**
+none
