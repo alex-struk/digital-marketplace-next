@@ -223,6 +223,9 @@ function Manage({
       </Stack>
       <Stack direction="row" align="center" gap="medium">
         <Link href={`/opportunities/${program}/${opportunity.id}`}>View the opportunity</Link>
+        <Link href={`${base}/export`} data-testid="proposal-export-link">
+          Printable copy
+        </Link>
       </Stack>
       {!editing ? (
         <div data-testid="proposal-actions">

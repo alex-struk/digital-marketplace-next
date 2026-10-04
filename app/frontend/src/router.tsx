@@ -39,6 +39,8 @@ import { OrganizationEditScreen } from "./screens/organization-edit";
 import { OrganizationTermsScreen } from "./screens/organization-terms";
 import { EvaluationIndividualScreen } from "./screens/evaluation-individual-form";
 import { ConsensusScreen } from "./screens/evaluation-consensus-form";
+import { ProposalExportAllScreen, ProposalExportOneScreen } from "./screens/proposal-export";
+import { OpportunityReportScreen } from "./screens/opportunity-report";
 
 /**
  * The addresses in `spec/contract/surface.yaml`, and nothing else. Every other address is the
@@ -422,6 +424,91 @@ const consensusTwuEditRoute = createRoute({
   },
 });
 
+// Taking proposals away and reading an opportunity whole, in every program (decision record 0066):
+// the printable copy of one proposal, for whoever may read it (R-2.37); every proposal of an
+// opportunity in one document, for staff (R-2.38); and the full report, for an administrator
+// (R-1.40). ".../proposals/export" is a fixed address, matched before a proposal's own.
+const proposalCwuExportOneRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/code-with-us/$opportunityId/proposals/$proposalId/export",
+  component: function ProposalCwuExportOneRoute() {
+    const { opportunityId, proposalId } = proposalCwuExportOneRoute.useParams();
+    return <ProposalExportOneScreen key={proposalId} program="code-with-us" opportunityId={opportunityId} proposalId={proposalId} />;
+  },
+});
+
+const proposalSwuExportOneRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/sprint-with-us/$opportunityId/proposals/$proposalId/export",
+  component: function ProposalSwuExportOneRoute() {
+    const { opportunityId, proposalId } = proposalSwuExportOneRoute.useParams();
+    return <ProposalExportOneScreen key={proposalId} program="sprint-with-us" opportunityId={opportunityId} proposalId={proposalId} />;
+  },
+});
+
+const proposalTwuExportOneRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/team-with-us/$opportunityId/proposals/$proposalId/export",
+  component: function ProposalTwuExportOneRoute() {
+    const { opportunityId, proposalId } = proposalTwuExportOneRoute.useParams();
+    return <ProposalExportOneScreen key={proposalId} program="team-with-us" opportunityId={opportunityId} proposalId={proposalId} />;
+  },
+});
+
+const proposalCwuExportAllRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/code-with-us/$opportunityId/proposals/export",
+  component: function ProposalCwuExportAllRoute() {
+    const { opportunityId } = proposalCwuExportAllRoute.useParams();
+    return <ProposalExportAllScreen key={opportunityId} program="code-with-us" opportunityId={opportunityId} />;
+  },
+});
+
+const proposalSwuExportAllRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/sprint-with-us/$opportunityId/proposals/export",
+  component: function ProposalSwuExportAllRoute() {
+    const { opportunityId } = proposalSwuExportAllRoute.useParams();
+    return <ProposalExportAllScreen key={opportunityId} program="sprint-with-us" opportunityId={opportunityId} />;
+  },
+});
+
+const proposalTwuExportAllRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/team-with-us/$opportunityId/proposals/export",
+  component: function ProposalTwuExportAllRoute() {
+    const { opportunityId } = proposalTwuExportAllRoute.useParams();
+    return <ProposalExportAllScreen key={opportunityId} program="team-with-us" opportunityId={opportunityId} />;
+  },
+});
+
+const opportunityCwuCompleteRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/code-with-us/$opportunityId/complete",
+  component: function OpportunityCwuCompleteRoute() {
+    const { opportunityId } = opportunityCwuCompleteRoute.useParams();
+    return <OpportunityReportScreen key={opportunityId} program="code-with-us" opportunityId={opportunityId} />;
+  },
+});
+
+const opportunitySwuCompleteRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/sprint-with-us/$opportunityId/complete",
+  component: function OpportunitySwuCompleteRoute() {
+    const { opportunityId } = opportunitySwuCompleteRoute.useParams();
+    return <OpportunityReportScreen key={opportunityId} program="sprint-with-us" opportunityId={opportunityId} />;
+  },
+});
+
+const opportunityTwuCompleteRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/team-with-us/$opportunityId/complete",
+  component: function OpportunityTwuCompleteRoute() {
+    const { opportunityId } = opportunityTwuCompleteRoute.useParams();
+    return <OpportunityReportScreen key={opportunityId} program="team-with-us" opportunityId={opportunityId} />;
+  },
+});
+
 // Organizations. "/organizations/create" is a fixed address, matched before an organization's own.
 const organizationListRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -516,6 +603,15 @@ export const routeTree = rootRoute.addChildren([
   consensusSwuEditRoute,
   consensusTwuCreateRoute,
   consensusTwuEditRoute,
+  proposalCwuExportOneRoute,
+  proposalSwuExportOneRoute,
+  proposalTwuExportOneRoute,
+  proposalCwuExportAllRoute,
+  proposalSwuExportAllRoute,
+  proposalTwuExportAllRoute,
+  opportunityCwuCompleteRoute,
+  opportunitySwuCompleteRoute,
+  opportunityTwuCompleteRoute,
   organizationListRoute,
   organizationCreateRoute,
   organizationEditRoute,
