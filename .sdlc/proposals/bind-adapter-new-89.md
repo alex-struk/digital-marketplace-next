@@ -32,3 +32,22 @@ I've bound the Email Notification Reference page (`/admin/email-notification-ref
 - A non-administrator is refused with "Page not found". The readers return empty for that person, and `refused_for_non_administrator` still reads the refusal, as before.
 
 In `bindings.yaml` all six members of this page are now `bound`, with a comment describing the cache fault. In `index.ts` I removed the helper that used to report pages as absent, because nothing uses it any more. No other page's bindings changed, and every route in `surface.yaml` that I opened this run answered. I touched nothing outside `tests/adapters/new/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** runner:checks
+
+Approved by the runner's checks, which policy.gates.G3.auto_approve lets settle bind-adapter proposals: the acceptance typecheck of 85de353a4 is clean; no condition is open against it; no escalation stands on it; nothing outside tests/adapters changed.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `85de353a426634a9686e3d667fb1c7a12edfe4d6`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
