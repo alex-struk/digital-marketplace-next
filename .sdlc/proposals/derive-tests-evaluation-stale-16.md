@@ -38,3 +38,23 @@ What would unblock it is a seeded opportunity where the submission that complete
 **Totals:** one criterion with a test, partially covered. No criterion was wholly untestable. The one thing I needed and didn't find is that seeded state, or a submission action that names fewer than every proponent.
 
 **Not mine to change:** the existing R-1.51 entry in `not-testable.yaml` has no `missing` or `owner` field. I left it as it is, since it isn't part of this run.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+The question is whether the R-5.27 (v2) tests follow from the criterion and from nothing else. The two existing tests are unchanged. The new test on opportunities.swuNewestVersionSeatsThirdEvaluator asserts the clause about the most recent version: the opportunity stays out of consensus at 24 submitted scores (the first version's full count) and moves only at the newest version's 36, after which the chair and the owner are found among the message recipients. Every assertion follows from the criterion's text. The accepted-submission check is a precondition that makes the negative meaningful, not an extra claim about the product. No implementation detail leaks in, and the runner's typecheck passed. The clause 'only over the proponents named in the submission that triggers the check' cannot be asserted: the only submission on the surface names every proponent, and solo submission is refused by R-5.26, so the two counts never differ. Its not-testable entry names exactly what is missing and is correctly owned by contract, so it is kept owed rather than returned. The missing test for the newest-version clause remains open until this new test runs, which no ruling can record. The ruling would change if that test fails when run, or if contract supplies a partial-submission seed and no test follows.
+
+**Conditions:**
+- missing-test R-5.27: but only over the proponents named in the submission that triggers the check — owed by contract: a seeded opportunity in individual evaluation where the submission that completes the count names fewer than every proponent, with every named proponent fully scored by the newest version's panel and the left-out one not; or a contract note stating such a submission cannot occur, so the clause can be restated or withdrawn at ratify
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `c4f88cea272a383e4f753ba7ef1180465c1f2d60`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/evaluation/`, which this proposal answers for.
+
+    No diagnostics.
