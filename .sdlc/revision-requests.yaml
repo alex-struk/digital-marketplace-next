@@ -1757,3 +1757,19 @@ requests:
     at: 2026-10-04T14:30:17.717Z
     taken: 2026-10-04T14:34:54.983Z
     taken_by: contract-v44
+  - stage: bind-adapter
+    target: new
+    why: "R-2.3: after proposalCwuCreate.submitProposal lands on
+      /opportunities/code-with-us/<id>/proposals/<id>/edit,
+      proposalCwuEdit.status() (proposalTerm(/^status$/i) in
+      tests/adapters/new/index.ts) read \"\". The page as it failed
+      (.sdlc/evidence/slice-21/R-2.3.png and .txt) shows, in main, the
+      description-list term \"Status\" with the definition \"Submitted\"
+      (rendered as a pill), directly under the level-1 heading and beside
+      \"Submitted\", \"Proposal ID\" and \"Opportunity ID\". The adapter must
+      wait for and read that term's definition after the submit lands, rather
+      than reading before the page has rendered it or missing the term."
+    from: build-slice-21-2
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-04T20:54:42.054Z
