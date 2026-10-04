@@ -14,10 +14,12 @@ import type { Surface } from "../../fixtures";
 // refusal could be the doing of anything on the form, and with it the rate is the only
 // thing that changed.
 //
-// The edit-path clause has no test here. It has to start from a proposal saved within
-// budget whose rates are then edited over it, and the Team With Us proposal management
-// screen offers no control for the hourly rate; that clause is recorded against this
-// criterion in not-testable.yaml.
+// The edit path starts from a proposal saved as a draft at $50, well within budget, whose
+// rate is then raised to $5,000 on the management screen and sent with
+// save_changes_and_submit. The draft is never over budget when stored, so the test does not
+// depend on whether an over-budget draft would be kept. The control on the edit path is a
+// second $50 draft raised only to $80, still inside the budget even if every calendar day
+// of the contract period were counted, which goes through.
 
 function inDays(days: number): string {
   const date = new Date();
@@ -112,4 +114,61 @@ test("a Team With Us proposal whose hourly rates come to more than the opportuni
   await fillTeamProposal(surface, overBudget, 5000);
   await surface.proposalTwuCreate.submitProposal();
   expect(await surface.proposalTwuCreate.fieldError()).toBeTruthy();
+});
+
+async function saveWithinBudgetDraft(
+  surface: Surface,
+  opportunityId: string,
+): Promise<{ opportunityId: string; proposalId: string }> {
+  await fillTeamProposal(surface, opportunityId, 50);
+  await surface.proposalTwuCreate.saveDraft();
+  expect(await surface.proposalTwuCreate.fieldError()).toBeFalsy();
+  const proposalId = await surface.proposalTwuEdit.proposalIdentifier();
+  return { opportunityId, proposalId };
+}
+
+async function changeRateAndSubmit(
+  surface: Surface,
+  ids: { opportunityId: string; proposalId: string },
+  hourlyRate: number,
+): Promise<void> {
+  await surface.proposalTwuEdit.open(ids);
+  await surface.proposalTwuEdit.startEditing();
+  await surface.proposalTwuEdit.setHourlyRate({
+    resource: "Full Stack Developer",
+    rate: hourlyRate,
+  });
+  await surface.proposalTwuEdit.saveChangesAndSubmit();
+}
+
+test("a Team With Us proposal whose hourly rates come to more than the opportunity's maximum budget is refused on the edit path", async ({
+  surface,
+}) => {
+  const overBudget = await publishTeamOpportunity(
+    surface,
+    "R-2.10 Team With Us opportunity edited over its maximum budget",
+  );
+  const withinBudget = await publishTeamOpportunity(
+    surface,
+    "R-2.10 Team With Us opportunity edited within its maximum budget",
+  );
+
+  await surface.signIn(persona.organizationAdmin);
+
+  const control = await saveWithinBudgetDraft(surface, withinBudget);
+  const raised = await saveWithinBudgetDraft(surface, overBudget);
+
+  await changeRateAndSubmit(surface, control, 80);
+  expect(await surface.proposalTwuEdit.submissionRefusal()).toBeFalsy();
+  expect(await surface.proposalTwuEdit.fieldError()).toBeFalsy();
+  await surface.proposalTwuEdit.open(control);
+  expect((await surface.proposalTwuEdit.status()).toLowerCase()).toContain("submitted");
+
+  await changeRateAndSubmit(surface, raised, 5000);
+  const refusal =
+    (await surface.proposalTwuEdit.submissionRefusal()) ||
+    (await surface.proposalTwuEdit.fieldError());
+  expect(refusal).toBeTruthy();
+  await surface.proposalTwuEdit.open(raised);
+  expect((await surface.proposalTwuEdit.status()).toLowerCase()).not.toContain("submitted");
 });

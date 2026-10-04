@@ -174,24 +174,3 @@ criteria:
       failing that, a ruling that withdraws the clause as a property of the
       service's storage accepted without a test
     owner: ratify
-  - id: R-2.10
-    version: 1
-    clause: the check runs on both the create and the edit path
-    reason: "blocked: the edit path has to start from a Team With Us proposal saved
-      within budget whose hourly rates are then edited over the opportunity's
-      maximum budget. proposal-twu-edit offers start_editing, choose_organization,
-      add_team_member_for_resource and save_changes / save_changes_and_submit,
-      but no set_hourly_rate, so a stored proposal's rate cannot be changed
-      through it. proposal-team-request only creates and submits a new proposal
-      in one request; it has no update. Nothing else in the surface edits an
-      existing proposal's rates. The create-path half is asserted by
-      R-2.10.spec.ts."
-    missing: a set_hourly_rate action on proposal-twu-edit, offered once
-      start_editing has opened the form (taking the resource by service area
-      and the rate, as proposal-twu-create's set_hourly_rate does), so that a
-      proposal saved within budget can have its rate raised and then go through
-      save_changes or save_changes_and_submit; the existing field_error or
-      submission_refusal observations would then read the refusal. Or an update
-      action on proposal-team-request that sends new hourly rates for a proposal
-      by its identifier, with its refusal observations
-    owner: contract

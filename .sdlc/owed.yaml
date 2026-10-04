@@ -5353,7 +5353,7 @@ owed:
     id: R-2.10
     version: 1
     domain: proposals
-    stage: derive-tests
+    stage: calibrate
     why: a set_hourly_rate action on proposal-twu-edit, offered once start_editing
       has opened the form (taking the resource by service area and the rate, as
       proposal-twu-create's set_hourly_rate does), so that a proposal saved
@@ -5380,3 +5380,9 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-10-04T06:54:47.446Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-10-04T07:08:41.631Z
+    target: old
