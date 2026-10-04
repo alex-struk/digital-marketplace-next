@@ -174,20 +174,3 @@ criteria:
       property of the migration rather than of anything the running service
       answers with. No addition to the surface would help; this is a claim a
       human accepts about the rebuild rather than one a test can settle."
-  - id: R-1.1
-    version: 3
-    clause: every proposal submitted against it moves to review (for the third
-      submitted proposal on the Sprint With Us and on the Team With Us
-      opportunity)
-    reason: "blocked: the only observation of a Sprint With Us or Team With Us
-      proposal's status is status on proposal-swu-edit and proposal-twu-edit,
-      which only the proposal's own proponent can read.
-      proposals.sprintWithUsThree and proposals.teamWithUsThree belong to
-      users.proponentThree, whom no persona signs in as, and proposal-swu-view
-      and proposal-twu-view, which staff can open, carry no status observation.
-      The test asserts the clause for the other two proposals on each, and for
-      the one submitted proposal on the lapsed Code With Us opportunity."
-    missing: a status observation on proposal-swu-view and proposal-twu-view that
-      staff can read for any proposal on the opportunity, or a persona that
-      signs in as users.proponentThree
-    owner: contract
