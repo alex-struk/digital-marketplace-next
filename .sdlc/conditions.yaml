@@ -3260,6 +3260,14 @@ conditions:
     stage: build
     by: agent:reviewer
     at: 2026-10-04T14:14:40.570Z
+    closed:
+      outcome: met
+      why: R-6.15 passes in the verify of build-slice-18-3 against application tree
+        1520f67 (tests/results/new/slice-18.json); the owner's notice from the
+        Team With Us consensus tab now carries the readers as blind copies with
+        only the service visible.
+      by: agent:tech-lead
+      at: 2026-10-04T14:30:18.138Z
   - ref: build-slice-18-2#3
     text: "R-6.15: app/backend/src/mail/message.ts addressedToEach and
       app/backend/src/mail/mailer.ts (alsoToService) send each reader a copy
@@ -3275,3 +3283,13 @@ conditions:
     stage: build
     by: agent:reviewer
     at: 2026-10-04T14:14:40.570Z
+    closed:
+      outcome: met
+      why: addressedToEach and the mailer's per-reader visible recipient are removed;
+        the panel, ready-for-consensus, consensus-submitted, consensus-finalised
+        and withdrawal-to-administrators notices go through blindCopiedToStaff
+        (app/backend/src/mail/message.ts), visibly addressed to the service with
+        the readers as blind copies; decision record 0063 no longer records the
+        one-copy-per-reader departure and 0060 points to it.
+      by: agent:tech-lead
+      at: 2026-10-04T14:30:18.113Z
