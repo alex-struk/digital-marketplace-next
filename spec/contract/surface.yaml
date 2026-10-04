@@ -480,6 +480,10 @@ pages:
       opportunity_summary: { test_id: proposal-opportunity-summary }
       terms_modal: { test_id: proposal-terms-dialog }
       submit_disabled_until_terms_accepted: { test_id: proposal-submit-confirm }
+    # This screen never sends a create request for an opportunity the vendor already holds a
+    # proposal on: starting one sends the vendor to the proposal they hold
+    # (proposal-cwu-edit). The request itself, and the service's refusal of it, are on
+    # proposal-cwu-request.
 
   - id: proposal-cwu-edit
     domain: proposals
@@ -2314,6 +2318,22 @@ pages:
   # ("You already have a proposal for this opportunity."), and an accepted request leaves a
   # proposal behind, so each accepted request in a test needs its own opportunity or its
   # own vendor. A refused request leaves nothing behind.
+  #
+  # Sending a second create request is how a test reaches that refusal (R-2.2): the screens
+  # never send one, because proposal-cwu-create sends a vendor who already holds a proposal
+  # to it instead. The proposal already held may be in any state, a draft saved through
+  # proposal-cwu-create included. The service checks two things before it looks for that
+  # proposal: the request's status, where a missing or invalid one is refused under status,
+  # and the opportunity, where a status of Submitted on an opportunity no longer accepting
+  # proposals is refused with "This opportunity is no longer accepting proposals." So the
+  # second request must carry a valid status, Draft being the safest, and name a published
+  # opportunity that is still accepting proposals. Once it does, the remaining fields (the
+  # proposal text, the attachments, the individual proponent's details) do not change the
+  # outcome: it is refused under conflict with "You already have a proposal for this
+  # opportunity.", and refusal_messages reads it. Send it with an individual
+  # proponent: an organization that already has a proposal on the opportunity is refused
+  # first, with "Please select a different organization." That no second proposal was made
+  # is read on proposal-vendor-dashboard, which lists the opportunity once.
   #
   # The old service reads an organization proponent before validating anything else, and
   # when the identifier names no organization it puts a blank individual proponent in its
