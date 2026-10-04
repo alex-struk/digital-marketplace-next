@@ -10852,6 +10852,11 @@ rebind:
     app_tree: 442e56645028251f6c7cdd62a406022fe123ebc1
     by: runner:verify
     at: 2026-10-04T09:03:46.735Z
+    closed: &a47
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-04T09:28:03.468Z
   - id: R-1.26
     target: new
     why: "unbound: proposal-cwu-view.award_proposal —
@@ -10886,6 +10891,7 @@ rebind:
     app_tree: 442e56645028251f6c7cdd62a406022fe123ebc1
     by: runner:verify
     at: 2026-10-04T09:03:46.735Z
+    closed: *a47
   - id: R-2.5
     target: new
     why: 'unbound: evaluation-individual-list-swu.open — the management screen
@@ -10905,6 +10911,11 @@ rebind:
     app_tree: 442e56645028251f6c7cdd62a406022fe123ebc1
     by: runner:verify
     at: 2026-10-04T09:03:46.735Z
+    closed: &a48
+      outcome: withdrawn
+      why: slice 16 no longer claims it
+      by: runner:verify
+      at: 2026-10-04T09:28:03.836Z
   - id: R-2.26
     target: new
     why: "unbound: proposal-cwu-view.enter_score —
@@ -10928,6 +10939,7 @@ rebind:
     app_tree: 442e56645028251f6c7cdd62a406022fe123ebc1
     by: runner:verify
     at: 2026-10-04T09:03:46.735Z
+    closed: *a47
   - id: R-2.27
     target: new
     why: "unbound: proposal-cwu-view.disqualify_proposal —
@@ -10979,6 +10991,7 @@ rebind:
     app_tree: 442e56645028251f6c7cdd62a406022fe123ebc1
     by: runner:verify
     at: 2026-10-04T09:03:46.735Z
+    closed: *a47
   - id: R-2.33
     target: new
     why: "unbound: proposal-cwu-view.disqualify_proposal —
@@ -11016,6 +11029,7 @@ rebind:
     app_tree: 442e56645028251f6c7cdd62a406022fe123ebc1
     by: runner:verify
     at: 2026-10-04T09:03:46.735Z
+    closed: *a47
   - id: R-2.34
     target: new
     why: "unbound: proposal-cwu-view.disqualify_proposal —
@@ -11077,6 +11091,7 @@ rebind:
     app_tree: 442e56645028251f6c7cdd62a406022fe123ebc1
     by: runner:verify
     at: 2026-10-04T09:03:46.735Z
+    closed: *a47
   - id: R-2.35
     target: new
     why: "unbound: proposal-swu-view.score_code_challenge — the proposal's screen
@@ -11102,3 +11117,4 @@ rebind:
     app_tree: 442e56645028251f6c7cdd62a406022fe123ebc1
     by: runner:verify
     at: 2026-10-04T09:03:46.735Z
+    closed: *a48
