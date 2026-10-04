@@ -14,8 +14,10 @@ import { PANEL_LOCKED } from "../src/rules/other-program-content";
 import {
   INCOMPLETE_EVALUATION,
   MOVED_TO_CONSENSUS_NOTE,
+  NAMED_PROPOSAL_NOT_UNDER_REVIEW,
   NOT_AN_EVALUATOR,
   SUBMITTED_EVALUATION_FIXED,
+  UNREADABLE_NAMED_PROPOSALS,
   unrecognisedEvaluationRequest,
 } from "../src/rules/individual-evaluation";
 
@@ -193,8 +195,28 @@ describe("a Sprint With Us panel scoring its proponents individually, to consens
     await ask("POST", swuEvaluations(proponents[1]!.id), token, { status: "DRAFT", scores: scores([4, 4, 4, 4]) });
     const refused = await ask("PUT", `/api/opportunities/sprint-with-us/${CLOSED_SWU}`, token, { tag: "submitIndividualQuestionEvaluations" });
     expect(refused).toEqual({ status: 400, body: { errors: [INCOMPLETE_EVALUATION] } });
+    // Named, the out-of-range draft still makes the set incomplete.
+    const named = { tag: "submitIndividualQuestionEvaluations", value: { note: "", proposals: [proponents[0]!.id, proponents[1]!.id] } };
+    expect(await ask("PUT", `/api/opportunities/sprint-with-us/${CLOSED_SWU}`, token, named)).toEqual({ status: 400, body: { errors: [INCOMPLETE_EVALUATION] } });
     const own = await ask("GET", `/api/opportunity/sprint-with-us/${CLOSED_SWU}/team-questions/evaluations`, token);
     expect(own.body.map((evaluation: { status: string }) => evaluation.status)).toEqual(["DRAFT", "DRAFT"]);
+  });
+
+  it("checks and submits only the proposals a submission names (R-5.25)", async () => {
+    const token = await tokens.staff();
+    const address = `/api/opportunities/sprint-with-us/${CLOSED_SWU}`;
+    const elsewhere = { tag: "submitIndividualQuestionEvaluations", value: { note: "", proposals: [sid(21, 101)] } };
+    expect(await ask("PUT", address, token, elsewhere)).toEqual({ status: 400, body: { errors: [NAMED_PROPOSAL_NOT_UNDER_REVIEW] } });
+    const unreadable = { tag: "submitIndividualQuestionEvaluations", value: { note: "", proposals: "all" } };
+    expect(await ask("PUT", address, token, unreadable)).toEqual({ status: 400, body: { errors: [UNREADABLE_NAMED_PROPOSALS] } });
+
+    // The second proponent is complete; the first is not, and the third has no evaluation at all.
+    const one = { tag: "submitIndividualQuestionEvaluations", value: { note: "", proposals: [proponents[1]!.id] } };
+    const submitted = await ask("PUT", address, token, one);
+    expect(submitted.status).toBe(200);
+    expect(submitted.body.status).toBe("EVAL_QUESTIONS_INDIVIDUAL");
+    expect((await ask("GET", `${swuEvaluations(proponents[1]!.id)}/${STAFF}`, token)).body.status).toBe("SUBMITTED");
+    expect((await ask("GET", `${swuEvaluations(proponents[0]!.id)}/${STAFF}`, token)).body.status).toBe("DRAFT");
   });
 
   it("lets nobody but its evaluator read an evaluation before consensus (R-5.28)", async () => {
@@ -225,12 +247,17 @@ describe("a Sprint With Us panel scoring its proponents individually, to consens
     expect(fixed).toEqual({ status: 400, body: { errors: [SUBMITTED_EVALUATION_FIXED] } });
   });
 
-  it("moves to consensus once the last evaluator submits, and tells the chair and the owner (R-5.27)", async () => {
+  it("moves to consensus once the last evaluator submits, counting only the proponents that submission names, and tells the chair and the owner (R-5.27)", async () => {
     const token = await tokens.admin();
-    for (const proponent of proponents) {
+    // The last evaluator scores two of the three proponents and names only those.
+    const named = proponents.slice(0, 2);
+    for (const proponent of named) {
       expect((await ask("POST", swuEvaluations(proponent.id), token, { status: "DRAFT", scores: scores([4, 4, 4, 4]) })).status).toBe(201);
     }
-    const submitted = await ask("PUT", `/api/opportunities/sprint-with-us/${CLOSED_SWU}`, token, { tag: "submitIndividualQuestionEvaluations" });
+    const submitted = await ask("PUT", `/api/opportunities/sprint-with-us/${CLOSED_SWU}`, token, {
+      tag: "submitIndividualQuestionEvaluations",
+      value: { note: "", proposals: named.map((proponent) => proponent.id) },
+    });
     expect(submitted.status).toBe(200);
     expect(submitted.body.status).toBe("EVAL_QUESTIONS_CONSENSUS");
     expect(await latestStatus("swuOpportunityStatuses", CLOSED_SWU)).toEqual({
@@ -241,19 +268,15 @@ describe("a Sprint With Us panel scoring its proponents individually, to consens
 
     const about = "Seeded closed Sprint With Us opportunity";
     const notices = () => catcher.caught.filter((_, index) => text(index).includes("Ready for Consensus"));
-    await expect.poll(() => notices().length).toBe(2);
-    // The chair and the owner each in a message of their own, visibly addressed to them alone,
-    // so each is seen to be told and neither sees the other.
-    for (const [reader, other] of [
-      ["admin.one@example.test", "staff.one@example.test"],
-      ["staff.one@example.test", "admin.one@example.test"],
-    ]) {
-      const notice = notices().find((mail) => mail.recipients.includes(reader!))!;
-      expect([...notice.recipients]).toEqual([reader]);
-      expect(notice.data).toMatch(new RegExp(`^To: .*${reader!.replace(/\./g, "\\.")}`, "im"));
-      expect(notice.data).not.toContain(other);
-      expect(text(catcher.caught.indexOf(notice))).toContain(about);
-    }
+    // The chair and the owner as blind copies of one message visibly addressed to the service
+    // alone, so neither sees the other (R-6.15).
+    await expect.poll(() => notices().length).toBe(1);
+    const notice = notices()[0]!;
+    expect([...notice.recipients].sort()).toEqual(["admin.one@example.test", "donotreply@example.test", "staff.one@example.test"]);
+    expect(notice.data).toMatch(/^To: .*donotreply@example\.test\s*$/im);
+    expect(notice.data).not.toContain("admin.one@example.test");
+    expect(notice.data).not.toContain("staff.one@example.test");
+    expect(text(catcher.caught.indexOf(notice))).toContain(about);
   });
 
   it("then shows every panel member the others' scores beside their names (R-5.28)", async () => {

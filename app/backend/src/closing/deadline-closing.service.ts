@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from "@nestjs/common";
 import { MAIL_SETTINGS, Mailer } from "../mail/mailer";
-import { Envelope, addressedToEach } from "../mail/message";
+import { Envelope, blindCopiedToStaff } from "../mail/message";
 import { readyForEvaluationToAuthor, readyForEvaluationToEvaluators } from "../mail/notifications/closing";
 import { MailSettings } from "../mail/settings";
 import { CLOCK, Clock } from "../opportunities/cwu-opportunities.service";
@@ -76,7 +76,7 @@ export class DeadlineClosing {
         return author ? [{ to: [author], message: readyForEvaluationToAuthor(subject, origin) }] : [];
       }
       const evaluators = await this.store.addressesOf(closed.evaluators);
-      return addressedToEach(evaluators, readyForEvaluationToEvaluators(subject, origin));
+      return blindCopiedToStaff(evaluators, readyForEvaluationToEvaluators(subject, origin), this.mail.batchSize);
     })()
       .then((envelopes) => this.mailer.sendEach(envelopes))
       .catch((error: unknown) =>

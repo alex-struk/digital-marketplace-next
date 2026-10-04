@@ -11,6 +11,7 @@ import {
   mayReadIndividualEvaluation,
   mayRecordIndividualEvaluation,
   readEnteredScores,
+  readNamedProposals,
   scoreProblems,
   storedScore,
 } from "../src/rules/individual-evaluation";
@@ -152,6 +153,28 @@ describe("the move to consensus (R-5.27)", () => {
     // A panel that grows during individual evaluation waits for its new member too (R-5.16 note).
     expect(individualEvaluationIsComplete({ ...base, evaluators: ["a", "b", "c"], submitted: all })).toBe(false);
     expect(individualEvaluationIsComplete({ ...base, proposals: [], submitted: [] })).toBe(false);
+    // Counted only over the proponents the triggering submission names (R-5.27 v2).
+    const twoOfThree = ["p1", "p2"].flatMap((proposal) => [submitted("a", proposal), submitted("b", proposal)]);
+    expect(individualEvaluationIsComplete({ ...base, proposals: ["p1", "p2"], submitted: twoOfThree })).toBe(true);
+  });
+});
+
+describe("the proposals a submission names (R-5.25, R-5.27)", () => {
+  it("reads each named proposal once, in lower case", () => {
+    expect(readNamedProposals({ note: "", proposals: ["A1", "b2", "a1"] })).toEqual(["a1", "b2"]);
+    expect(readNamedProposals({ proposals: [] })).toEqual([]);
+  });
+
+  it("takes a value naming none as the whole set", () => {
+    expect(readNamedProposals(undefined)).toBeNull();
+    expect(readNamedProposals({ note: "Done." })).toBeNull();
+    expect(readNamedProposals({ proposals: null })).toBeNull();
+  });
+
+  it("cannot read anything but a list of identifiers", () => {
+    expect(readNamedProposals({ proposals: "all" })).toBeUndefined();
+    expect(readNamedProposals({ proposals: ["a1", 2] })).toBeUndefined();
+    expect(readNamedProposals({ proposals: [""] })).toBeUndefined();
   });
 });
 

@@ -263,6 +263,25 @@ whose evaluation, and at which stage, is `mayReadIndividualEvaluation` in
 screens are `frontend/src/screens/evaluation-*.tsx`. Decision record 0062 has the answers and
 refusals.
 
+The consensus is the chair's. On the Consensus tab the chair opens each proponent at
+`.../consensus/create` (or `.../consensus/<the chair>/edit` once started) and records one agreed
+score and comment per question, with every evaluator's own beside their name. The chair submits the
+set from the tab (`submitConsensusQuestionEvaluations`), with a confirmation, once every proponent
+has a complete consensus; the owner and every administrator are emailed. A submitted consensus can
+still be changed, and submitted again, until it is finalized. The rest of the panel reads the list
+and the evaluators' scores from the consensus stage; an owner off the panel is told why the agreed
+scores are not shown yet. Finalizing is the one way out of the stage: "Finalize consensus scores" in
+the action bar, offered to the owner and administrators (`finalizeQuestionConsensuses`). It is
+refused, with the reason, until every proponent under review has a submitted consensus and one met
+every minimum; otherwise it writes each proponent's agreed scores on its history, screens in the
+best four (Sprint With Us) or three (Team With Us) that met every minimum, moves the opportunity to
+the code challenge or the challenge, and emails the chair and the owner. The rules are
+`backend/src/rules/consensus.ts`; decision record 0063 has the answers and refusals.
+
+Staff notices to a small named group — the panel at closing, the chair and owner, the
+administrators — go as every other multi-recipient notice does: the group as blind copies, the
+service's own address the only visible recipient (`blindCopiedToStaff`, R-6.15, decision record 0063).
+
 ## Organizations
 
 Anybody browses at `/organizations`: every organization not archived, by legal name, fifty to a

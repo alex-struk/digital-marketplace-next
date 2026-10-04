@@ -28,7 +28,7 @@ import {
 } from "../src/mail/notifications/team";
 import { termsUpdated } from "../src/mail/notifications/terms-updated";
 import { readyForEvaluationToAuthor, readyForEvaluationToEvaluators } from "../src/mail/notifications/closing";
-import { readyForConsensus } from "../src/mail/notifications/evaluation";
+import { consensusFinalized, consensusSubmitted, readyForConsensus } from "../src/mail/notifications/evaluation";
 import {
   proposalAwarded,
   proposalNotAwarded,
@@ -100,6 +100,10 @@ const EVERY_MESSAGE: readonly Envelope[] = [
   to(readyForEvaluationToEvaluators({ program: "sprint-with-us", id: swu.id, title: swu.title }, origin)),
   to(readyForConsensus({ program: "sprint-with-us", id: swu.id, title: swu.title }, origin)),
   to(readyForConsensus({ program: "team-with-us", id: "00000000-0000-4000-8000-000000000801", title: "A team" }, origin)),
+  to(consensusSubmitted({ program: "sprint-with-us", id: swu.id, title: swu.title }, origin)),
+  to(consensusSubmitted({ program: "team-with-us", id: "00000000-0000-4000-8000-000000000801", title: "A team" }, origin)),
+  to(consensusFinalized({ program: "sprint-with-us", id: swu.id, title: swu.title }, origin)),
+  to(consensusFinalized({ program: "team-with-us", id: "00000000-0000-4000-8000-000000000801", title: "A team" }, origin)),
   to(proposalSubmitted(proposalSubject, origin)),
   to(proposalWithdrawnToVendor(proposalSubject, origin)),
   to(proposalWithdrawnToAdministrators(proposalSubject, organization.legalName, origin)),

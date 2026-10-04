@@ -1,7 +1,7 @@
 import { BadRequestException, Inject, Injectable, Logger, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { NamedRefusal } from "../common/refusals";
 import { MAIL_SETTINGS, Mailer } from "../mail/mailer";
-import { addressedToEach } from "../mail/message";
+import { blindCopiedToStaff } from "../mail/message";
 import { readyForConsensus } from "../mail/notifications/evaluation";
 import { MailSettings } from "../mail/settings";
 import { CLOCK, Clock } from "../opportunities/cwu-opportunities.service";
@@ -13,6 +13,7 @@ import {
   EvaluationReader,
   EvaluationStatus,
   INCOMPLETE_EVALUATION,
+  NAMED_PROPOSAL_NOT_UNDER_REVIEW,
   NEW_EVALUATION_IS_A_DRAFT,
   NOT_AN_EVALUATOR,
   NOT_AT_INDIVIDUAL_EVALUATION,
@@ -33,8 +34,11 @@ import {
   mayAskForEvaluations,
   mayReadIndividualEvaluation,
   readEnteredScores,
+  readNamedProposals,
+  UNREADABLE_NAMED_PROPOSALS,
   unrecognisedEvaluationRequest,
 } from "../rules/individual-evaluation";
+import { mayReadConsensus } from "../rules/consensus";
 import type { OtherProgram } from "../rules/other-program-drafts";
 import { INDIVIDUAL_EVALUATION_STORE, IndividualEvaluationStore, Proponent, StoredEvaluation } from "./individual-evaluation";
 
@@ -163,28 +167,35 @@ export class IndividualEvaluationsService {
   }
 
   /**
-   * Submits the person's whole set (R-5.25, R-5.26): only once they hold a complete evaluation of
-   * every proponent under review of the questions, and otherwise none of it. When that brings the
-   * submitted scores to one per question per proponent per evaluator, the opportunity moves to
-   * consensus and the chair and the owner are told (R-5.27).
+   * Submits the person's evaluations of the proposals the request names (R-5.25, R-5.26; decision
+   * record 0064): only when each named one is complete, and otherwise none of it; a proponent left
+   * unnamed is neither checked nor submitted. A request naming none means every proponent under
+   * review of the questions. When that brings the submitted scores to one per question per
+   * evaluator for each proponent the submission named, the opportunity moves to consensus and the
+   * chair and the owner are told (R-5.27).
    */
-  async submitAll(viewer: EvaluationReader | null, opportunity: StoredSummary): Promise<void> {
+  async submitAll(viewer: EvaluationReader | null, opportunity: StoredSummary, value?: unknown): Promise<void> {
     const context = evaluatedOf(opportunity);
     this.mustRecord(viewer, context);
     const evaluator = viewer as EvaluationReader;
     const program = opportunity.program;
     const questions = questionsOf(opportunity);
-    const awaited = (await this.store.proponents(program, opportunity.id)).filter((proponent) => proponent.status === UNDER_REVIEW_OF_QUESTIONS);
+    const named = readNamedProposals(value);
+    if (named === undefined) throw new BadRequestException([UNREADABLE_NAMED_PROPOSALS]);
+    const underReview = (await this.store.proponents(program, opportunity.id)).filter((proponent) => proponent.status === UNDER_REVIEW_OF_QUESTIONS);
+    const awaited = named === null ? underReview : named.map((id) => underReview.find((proponent) => proponent.id === id));
+    if (awaited.some((proponent) => proponent === undefined)) throw new BadRequestException([NAMED_PROPOSAL_NOT_UNDER_REVIEW]);
     if (awaited.length === 0) throw new BadRequestException([NO_PROPONENTS_TO_EVALUATE]);
+    const proposals = awaited.map((proponent) => (proponent as Proponent).id);
     const mine = (await this.store.evaluations(program, { opportunity: opportunity.id })).filter((evaluation) => evaluation.evaluator.id === evaluator.id);
-    const own = awaited.map((proponent) => mine.find((evaluation) => evaluation.proposal.id === proponent.id));
+    const own = proposals.map((id) => mine.find((evaluation) => evaluation.proposal.id === id));
     if (own.every((evaluation) => evaluation?.status === "SUBMITTED")) throw new BadRequestException([SCORES_ALREADY_SUBMITTED]);
     if (own.some((evaluation) => !evaluation || !isCompleteEvaluation(questions, evaluation.scores))) {
       throw new BadRequestException([INCOMPLETE_EVALUATION]);
     }
     const drafts = own.filter((evaluation): evaluation is StoredEvaluation => evaluation?.status === "DRAFT").map((evaluation) => evaluation.proposal.id);
     const evaluators = context.panel.filter((seat) => seat.evaluator).map((seat) => seat.user);
-    const proposals = awaited.map((proponent) => proponent.id);
+    // Counted over the proponents this submission names, as R-5.27 v2 has it.
     const { movedToConsensus } = await this.store.submit(program, opportunity.id, drafts, evaluator.id, this.clock(), (submitted) =>
       individualEvaluationIsComplete({ evaluators, proposals, questionCount: questions.length, submitted }),
     );
@@ -193,11 +204,12 @@ export class IndividualEvaluationsService {
 
   /**
    * The proponents the panel evaluates, by anonymous name and in that order, with their answers
-   * (R-5.35), told only to the panel's members and only once the opportunity has closed.
+   * (R-5.35), told only once the opportunity has closed, and only to the panel's members and to
+   * whoever may read the consensus listed by them (R-5.12, R-5.28; decision record 0063).
    */
   async proponentsFor(viewer: EvaluationReader | null, opportunity: StoredSummary): Promise<ProponentAnswer[] | undefined> {
     const context = evaluatedOf(opportunity);
-    if (!isOnPanel(viewer, context) || !hasClosedForEvaluation(opportunity.status)) return undefined;
+    if (!(isOnPanel(viewer, context) || mayReadConsensus(viewer, context)) || !hasClosedForEvaluation(opportunity.status)) return undefined;
     const proponents = await this.store.proponents(opportunity.program, opportunity.id);
     return proponents
       .filter((proponent) => !NOT_EVALUATED.has(proponent.status ?? ""))
@@ -222,9 +234,9 @@ export class IndividualEvaluationsService {
   // ---------------------------------------------------------------------- telling people
 
   /**
-   * The chair and the owner, each in a message of their own addressed to them alone, so each is
-   * visibly told and nobody sees who else was (R-5.27, R-6.15; decision record 0062, as the closing
-   * notice in 0060), each an active account (R-6.17). Sent after the answer; a failure to look them
+   * The chair and the owner, as blind copies of one message visibly addressed to the service alone,
+   * so nobody sees who else was told (R-5.27, R-6.15; decision record 0063), each an active account
+   * (R-6.17). Sent after the answer; a failure to look them
    * up never fails the submission (R-6.2).
    */
   private async tellOfConsensus(opportunity: StoredSummary): Promise<void> {
@@ -236,7 +248,7 @@ export class IndividualEvaluationsService {
       const recipients = await Promise.all([...people].map((person) => this.records.recipient(person)));
       const addresses = recipients.filter((person) => person !== null).map((person) => person.email);
       const message = readyForConsensus({ program: opportunity.program, id: opportunity.id, title: opportunity.title }, this.mail.serviceOrigin);
-      this.mailer.sendEach(addressedToEach(addresses, message));
+      this.mailer.sendEach(blindCopiedToStaff(addresses, message, this.mail.batchSize));
     } catch (error: unknown) {
       this.log.error(`The people to tell could not be read: ${error instanceof Error ? error.name : "fault"}.`);
     }
@@ -254,7 +266,7 @@ export function evaluatedOf(opportunity: StoredSummary): EvaluatedOpportunity {
 
 const questionsOf = (opportunity: StoredSummary) => opportunity.details?.questions ?? [];
 
-function answerOf(evaluation: StoredEvaluation): EvaluationAnswer {
+export function answerOf(evaluation: StoredEvaluation): EvaluationAnswer {
   return {
     proposal: evaluation.proposal,
     evaluationPanelMember: evaluation.evaluator,

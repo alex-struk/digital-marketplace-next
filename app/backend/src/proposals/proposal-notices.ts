@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from "@nestjs/common";
 import { MAIL_SETTINGS, Mailer } from "../mail/mailer";
-import { Envelope, addressedToEach } from "../mail/message";
+import { Envelope, blindCopiedToStaff } from "../mail/message";
 import {
   ProposalSubject,
   proposalAwarded,
@@ -76,7 +76,7 @@ export class ProposalNotices {
       const [address, administrators] = await Promise.all([this.addressOf(proposal.vendor), this.recipients.administrators()]);
       return [
         ...(address ? [{ to: [address], message: proposalWithdrawnToVendor(proposal.subject, origin) }] : []),
-        ...addressedToEach(administrators, proposalWithdrawnToAdministrators(proposal.subject, proponent, origin)),
+        ...blindCopiedToStaff(administrators, proposalWithdrawnToAdministrators(proposal.subject, proponent, origin), this.mail.batchSize),
       ];
     });
   }

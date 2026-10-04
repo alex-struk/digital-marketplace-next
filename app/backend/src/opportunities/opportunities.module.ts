@@ -21,8 +21,12 @@ import { INDIVIDUAL_EVALUATION_STORE } from "../evaluations/individual-evaluatio
 import { IndividualEvaluationsController } from "../evaluations/individual-evaluations.controller";
 import { IndividualEvaluationsService } from "../evaluations/individual-evaluations.service";
 import { PrismaIndividualEvaluationStore } from "../evaluations/prisma-individual-evaluation.store";
+import { CONSENSUS_STORE } from "../evaluations/consensus";
+import { ConsensusController } from "../evaluations/consensus.controller";
+import { ConsensusService } from "../evaluations/consensus.service";
+import { PrismaConsensusStore } from "../evaluations/prisma-consensus.store";
 
-/** Opportunities in all three programs, and the individual evaluation of Sprint With Us and Team With Us ones. */
+/** Opportunities in all three programs, and the evaluation of Sprint With Us and Team With Us ones' questions. */
 @Module({
   imports: [UsersModule, FileStoreModule, WatchingModule],
   controllers: [
@@ -31,6 +35,7 @@ import { PrismaIndividualEvaluationStore } from "../evaluations/prisma-individua
     OtherProgramListsController,
     MetricsController,
     IndividualEvaluationsController,
+    ConsensusController,
   ],
   providers: [
     CwuOpportunitiesService,
@@ -39,6 +44,8 @@ import { PrismaIndividualEvaluationStore } from "../evaluations/prisma-individua
     OpportunityRunningService,
     IndividualEvaluationsService,
     { provide: INDIVIDUAL_EVALUATION_STORE, useClass: PrismaIndividualEvaluationStore },
+    ConsensusService,
+    { provide: CONSENSUS_STORE, useClass: PrismaConsensusStore },
     { provide: CWU_OPPORTUNITY_STORE, useClass: PrismaCwuOpportunityStore },
     { provide: OPPORTUNITY_RECORDS_STORE, useClass: PrismaOpportunityRecordsStore },
     { provide: OTHER_PROGRAMS_STORE, useClass: PrismaOtherProgramsStore },

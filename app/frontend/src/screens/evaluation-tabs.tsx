@@ -23,7 +23,7 @@ import { FormattedText } from "../lib/formatted-text/formatted-text";
  * The evaluator's two tabs on the manage page (R-5.34): the program's evaluation instructions,
  * which are a page of the service's own prose (evaluation-instructions-swu, -twu), and their own
  * list of proponents with the one submit action (evaluation-individual-list-swu, -twu; R-5.25,
- * R-5.35); and the Consensus tab as it stands before the consensus screens exist.
+ * R-5.35). The Consensus tab is `evaluation-consensus-tab.tsx`.
  */
 
 const badge = {
@@ -237,19 +237,5 @@ export function EvaluationListTab({
         </Stack>
       ) : null}
     </>
-  );
-}
-
-/**
- * The Consensus tab, offered to the chair, the owner and administrators once the opportunity has
- * closed (R-5.34). Agreeing the consensus is the consensus stage's own screens'.
- */
-export function ConsensusTab({ opportunity }: { opportunity: OtherProgramOpportunity }) {
-  return (
-    <Text elementType="p">
-      {hasReachedConsensus(opportunity.status)
-        ? "Every evaluator on the panel has submitted their scores. The panel's chair agrees one consensus score for each proponent."
-        : "The consensus stage begins once every evaluator on the panel has submitted their scores."}
-    </Text>
   );
 }

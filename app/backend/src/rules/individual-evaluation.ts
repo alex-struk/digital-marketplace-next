@@ -281,6 +281,22 @@ export function individualEvaluationIsComplete(input: {
   return counted === awaited;
 }
 
+export const UNREADABLE_NAMED_PROPOSALS = "The proposals to submit must be given as a list of proposal identifiers.";
+export const NAMED_PROPOSAL_NOT_UNDER_REVIEW = "A proposal named for submission is not a proponent of this opportunity being evaluated on its questions.";
+
+/**
+ * The proposals a submission names in its value, `{ note, proposals: [id, ...] }` (contract,
+ * decision record 0064): each once, in lower case. `null` when the value names none, so the whole
+ * set under review is meant; `undefined` when what it names cannot be read.
+ */
+export function readNamedProposals(value: unknown): readonly string[] | null | undefined {
+  if (typeof value !== "object" || value === null || !("proposals" in value)) return null;
+  const named = (value as { proposals: unknown }).proposals;
+  if (named === undefined || named === null) return null;
+  if (!Array.isArray(named) || !named.every((id): id is string => typeof id === "string" && id.length > 0)) return undefined;
+  return [...new Set(named.map((id) => id.toLowerCase()))];
+}
+
 /** Proponents in their anonymous names' order, "Proponent 2" before "Proponent 10" (R-5.35). */
 export function byAnonymousName(a: { readonly anonymousProponentName: string }, b: { readonly anonymousProponentName: string }): number {
   return a.anonymousProponentName.localeCompare(b.anonymousProponentName, "en", { numeric: true });

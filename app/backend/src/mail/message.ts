@@ -7,6 +7,8 @@
  * own (R-6.5, decision record 0013).
  */
 
+import { DEFAULT_BATCH_SIZE } from "./settings";
+
 /** A run of words, or a link with its label. */
 export type Inline = string | { readonly text: string; readonly href: string };
 
@@ -63,18 +65,24 @@ export function blindCopiedBatches(
 }
 
 /**
- * One message to each of several people, every copy visibly addressed to its reader alone, so each
- * is told by name and still nobody sees who else was told. A recipient with no address is skipped
- * (R-6.28). Used for the small, named groups a staff notice goes to — a panel's evaluators, the
- * administrators — rather than the open-ended audiences `blindCopiedBatches` serves.
+ * One notice to a small, named group of staff — a panel's evaluators, its chair and the
+ * opportunity's owner, the administrators — carried exactly as every other multi-recipient notice
+ * is: the group as blind copies, the service's own address the only visible recipient, so nobody
+ * sees who else was told (R-6.15; decision record 0063). A recipient with no address is left out
+ * (R-6.28), and one named twice is told once.
  */
-export function addressedToEach(recipients: readonly (string | null | undefined)[], message: Message): Envelope[] {
+export function blindCopiedToStaff(
+  recipients: readonly (string | null | undefined)[],
+  message: Message,
+  size: number = DEFAULT_BATCH_SIZE,
+): Envelope[] {
   const seen = new Set<string>();
-  const envelopes: Envelope[] = [];
+  const distinct: string[] = [];
   for (const recipient of recipients) {
-    if (!recipient || seen.has(recipient.toLowerCase())) continue;
-    seen.add(recipient.toLowerCase());
-    envelopes.push({ to: [recipient], message });
+    const address = (recipient ?? "").trim();
+    if (!address || seen.has(address.toLowerCase())) continue;
+    seen.add(address.toLowerCase());
+    distinct.push(address);
   }
-  return envelopes;
+  return blindCopiedBatches(distinct, message, size);
 }

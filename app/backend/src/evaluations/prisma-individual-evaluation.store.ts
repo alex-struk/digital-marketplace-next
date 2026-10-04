@@ -7,7 +7,7 @@ import type { OtherProgram } from "../rules/other-program-drafts";
 import { IndividualEvaluationStore, Proponent, StoredEvaluation } from "./individual-evaluation";
 
 /** The kept schema's tables for each program, quoted for SQL; every name is this file's own constant. */
-function tablesOf(program: OtherProgram) {
+export function tablesOf(program: OtherProgram) {
   const p = program === "sprint-with-us" ? "swu" : "twu";
   const questions = program === "sprint-with-us" ? "TeamQuestion" : "ResourceQuestion";
   return {
@@ -18,6 +18,8 @@ function tablesOf(program: OtherProgram) {
     responses: `"${p}${questions}Responses"`,
     evaluations: `"${p}${questions}ResponseEvaluatorEvaluations"`,
     evaluationStatuses: `"${p}${questions}ResponseEvaluatorEvaluationStatuses"`,
+    consensuses: `"${p}${questions}ResponseChairEvaluations"`,
+    consensusStatuses: `"${p}${questions}ResponseChairEvaluationStatuses"`,
   };
 }
 
@@ -61,48 +63,7 @@ export class PrismaIndividualEvaluationStore implements IndividualEvaluationStor
 
   async evaluations(program: OtherProgram, of: { readonly proposal: string } | { readonly opportunity: string }): Promise<StoredEvaluation[]> {
     const t = tablesOf(program);
-    const where = "proposal" in of ? `s."proposal" = $1::uuid` : `p."opportunity" = $1::uuid`;
-    const rows = await this.prisma.$queryRawUnsafe<EvaluationRow[]>(
-      `SELECT s."proposal"::text AS "proposal", p."anonymousProponentName", s."evaluationPanelMember"::text AS "member",
-              u."name", e."questionOrder",
-              CASE WHEN e."score" = 'NaN'::real THEN NULL ELSE e."score"::float8 END AS "score",
-              e."notes", e."createdAt", e."updatedAt", s."status", s."createdAt" AS "statusAt"
-         FROM (SELECT DISTINCT ON ("proposal", "evaluationPanelMember") "proposal", "evaluationPanelMember", "status", "createdAt"
-                 FROM ${t.evaluationStatuses}
-                ORDER BY "proposal", "evaluationPanelMember", "createdAt" DESC) s
-         JOIN ${t.proposals} p ON p."id" = s."proposal"
-         JOIN "users" u ON u."id" = s."evaluationPanelMember"
-         LEFT JOIN ${t.evaluations} e ON e."proposal" = s."proposal" AND e."evaluationPanelMember" = s."evaluationPanelMember"
-        WHERE ${where}
-        ORDER BY s."proposal", s."evaluationPanelMember", e."questionOrder"`,
-      "proposal" in of ? of.proposal : of.opportunity,
-    );
-    type Gathering = { -readonly [K in keyof StoredEvaluation]: StoredEvaluation[K] } & { scores: EnteredScore[] };
-    const evaluations = new Map<string, Gathering>();
-    for (const row of rows) {
-      const key = `${row.proposal}/${row.member}`;
-      let evaluation = evaluations.get(key);
-      if (!evaluation) {
-        evaluation = {
-          proposal: { id: row.proposal, anonymousProponentName: row.anonymousProponentName },
-          evaluator: { id: row.member, name: row.name },
-          status: row.status === "SUBMITTED" ? "SUBMITTED" : "DRAFT",
-          scores: [],
-          createdAt: row.createdAt ?? row.statusAt,
-          updatedAt: row.updatedAt ?? row.statusAt,
-        };
-        evaluations.set(key, evaluation);
-      }
-      if (row.questionOrder === null) continue;
-      evaluation.scores.push({
-        order: row.questionOrder,
-        score: row.score === null || !Number.isFinite(row.score) ? null : storedScore(row.score),
-        notes: row.notes ?? "",
-      });
-      if (row.createdAt && row.createdAt < evaluation.createdAt) evaluation.createdAt = row.createdAt;
-      if (row.updatedAt && row.updatedAt > evaluation.updatedAt) evaluation.updatedAt = row.updatedAt;
-    }
-    return [...evaluations.values()];
+    return readScoreSets(this.prisma, program, { scores: t.evaluations, statuses: t.evaluationStatuses }, of);
   }
 
   async create(program: OtherProgram, proposalId: string, evaluatorId: string, scores: readonly EnteredScore[], at: Date): Promise<boolean> {
@@ -124,19 +85,7 @@ export class PrismaIndividualEvaluationStore implements IndividualEvaluationStor
 
   async update(program: OtherProgram, proposalId: string, evaluatorId: string, scores: readonly EnteredScore[], at: Date): Promise<void> {
     const t = tablesOf(program);
-    await this.prisma.$transaction(async (tx) => {
-      const [first] = await tx.$queryRawUnsafe<{ createdAt: Date | null }[]>(
-        `SELECT min("createdAt") AS "createdAt" FROM ${t.evaluationStatuses} WHERE "proposal" = $1::uuid AND "evaluationPanelMember" = $2::uuid`,
-        proposalId,
-        evaluatorId,
-      );
-      await tx.$executeRawUnsafe(
-        `DELETE FROM ${t.evaluations} WHERE "proposal" = $1::uuid AND "evaluationPanelMember" = $2::uuid`,
-        proposalId,
-        evaluatorId,
-      );
-      await writeScores(tx, t.evaluations, proposalId, evaluatorId, scores, first?.createdAt ?? at, at);
-    });
+    await this.prisma.$transaction((tx) => replaceScores(tx, { scores: t.evaluations, statuses: t.evaluationStatuses }, proposalId, evaluatorId, scores, at));
   }
 
   async submit(
@@ -212,7 +161,87 @@ export class PrismaIndividualEvaluationStore implements IndividualEvaluationStor
   }
 }
 
-async function writeScores(
+/** One pair of the kept schema's tables holding sets of scores: an evaluator's evaluations, or the chair's consensus. */
+export interface ScoreTables {
+  readonly scores: string;
+  readonly statuses: string;
+}
+
+/**
+ * Every set of scores held in one pair of tables — each its status history, the newest row
+ * standing, and one row per question it holds a score or comment for — for one proposal or for
+ * every proposal of one opportunity.
+ */
+export async function readScoreSets(
+  prisma: PrismaService,
+  program: OtherProgram,
+  tables: ScoreTables,
+  of: { readonly proposal: string } | { readonly opportunity: string },
+): Promise<StoredEvaluation[]> {
+  const t = { ...tablesOf(program), evaluations: tables.scores, evaluationStatuses: tables.statuses };
+  const where = "proposal" in of ? `s."proposal" = $1::uuid` : `p."opportunity" = $1::uuid`;
+  const rows = await prisma.$queryRawUnsafe<EvaluationRow[]>(
+    `SELECT s."proposal"::text AS "proposal", p."anonymousProponentName", s."evaluationPanelMember"::text AS "member",
+            u."name", e."questionOrder",
+            CASE WHEN e."score" = 'NaN'::real THEN NULL ELSE e."score"::float8 END AS "score",
+            e."notes", e."createdAt", e."updatedAt", s."status", s."createdAt" AS "statusAt"
+       FROM (SELECT DISTINCT ON ("proposal", "evaluationPanelMember") "proposal", "evaluationPanelMember", "status", "createdAt"
+               FROM ${t.evaluationStatuses}
+              ORDER BY "proposal", "evaluationPanelMember", "createdAt" DESC) s
+       JOIN ${t.proposals} p ON p."id" = s."proposal"
+       JOIN "users" u ON u."id" = s."evaluationPanelMember"
+       LEFT JOIN ${t.evaluations} e ON e."proposal" = s."proposal" AND e."evaluationPanelMember" = s."evaluationPanelMember"
+      WHERE ${where}
+      ORDER BY s."proposal", s."evaluationPanelMember", e."questionOrder"`,
+    "proposal" in of ? of.proposal : of.opportunity,
+  );
+  type Gathering = { -readonly [K in keyof StoredEvaluation]: StoredEvaluation[K] } & { scores: EnteredScore[] };
+  const evaluations = new Map<string, Gathering>();
+  for (const row of rows) {
+    const key = `${row.proposal}/${row.member}`;
+    let evaluation = evaluations.get(key);
+    if (!evaluation) {
+      evaluation = {
+        proposal: { id: row.proposal, anonymousProponentName: row.anonymousProponentName },
+        evaluator: { id: row.member, name: row.name },
+        status: row.status === "SUBMITTED" ? "SUBMITTED" : "DRAFT",
+        scores: [],
+        createdAt: row.createdAt ?? row.statusAt,
+        updatedAt: row.updatedAt ?? row.statusAt,
+      };
+      evaluations.set(key, evaluation);
+    }
+    if (row.questionOrder === null) continue;
+    evaluation.scores.push({
+      order: row.questionOrder,
+      score: row.score === null || !Number.isFinite(row.score) ? null : storedScore(row.score),
+      notes: row.notes ?? "",
+    });
+    if (row.createdAt && row.createdAt < evaluation.createdAt) evaluation.createdAt = row.createdAt;
+    if (row.updatedAt && row.updatedAt > evaluation.updatedAt) evaluation.updatedAt = row.updatedAt;
+  }
+  return [...evaluations.values()];
+}
+
+/** Replaces the scores of one set, keeping the moment it was first made. */
+export async function replaceScores(
+  tx: Prisma.TransactionClient,
+  tables: ScoreTables,
+  proposalId: string,
+  memberId: string,
+  scores: readonly EnteredScore[],
+  at: Date,
+): Promise<void> {
+  const [first] = await tx.$queryRawUnsafe<{ createdAt: Date | null }[]>(
+    `SELECT min("createdAt") AS "createdAt" FROM ${tables.statuses} WHERE "proposal" = $1::uuid AND "evaluationPanelMember" = $2::uuid`,
+    proposalId,
+    memberId,
+  );
+  await tx.$executeRawUnsafe(`DELETE FROM ${tables.scores} WHERE "proposal" = $1::uuid AND "evaluationPanelMember" = $2::uuid`, proposalId, memberId);
+  await writeScores(tx, tables.scores, proposalId, memberId, scores, first?.createdAt ?? at, at);
+}
+
+export async function writeScores(
   tx: Prisma.TransactionClient,
   table: string,
   proposalId: string,
@@ -236,7 +265,7 @@ async function writeScores(
   }
 }
 
-async function writeStatus(
+export async function writeStatus(
   tx: Prisma.TransactionClient,
   table: string,
   proposalId: string,
