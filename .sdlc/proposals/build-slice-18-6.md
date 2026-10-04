@@ -38,3 +38,14 @@ I fixed the failure the ruling escalated, and `npm --prefix app run check` passe
 - **The move to consensus:** that end-to-end test now has the last evaluator score and name only two of the three proponents. The opportunity moves to consensus and sends the single blind-copied notice to the chair and the owner.
 
 I touched nothing outside `app/` and `docs/decisions/`. Nothing here needed a change to the spec, contract, plan or design. A later slice will find the submit screen still sending only the tag; if a screen ever submits fewer than every proponent, it will need to name them in `value.proposals`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Does slice 18 do what its criteria say? Approve. Verify recorded a current pass for build-slice-18-6, 15 of 15 claimed criteria met, against app tree 4108841, which matches HEAD:app on this branch. The only commit after the build adds the result file. The revision does what the escalated condition asked. IndividualEvaluationsService.submitAll now reads value.proposals through readNamedProposals and checks completeness over the signed-in evaluator's evaluations of the named proposals only. It submits all of them or none, refuses a named proposal that is not under review of this opportunity's questions, and refuses an unreadable list. It counts toward consensus as evaluators x named proposals x questions, per R-5.27 v2. The chair-and-owner notice stays one message visibly addressed to the service with both as blind copies (R-6.15). End-to-end tests cover each case, and decision record 0064 records the reading. A request naming no proposals still means every proponent under review, which fits R-5.25 v3 because only a set containing an incomplete evaluation is refused. Tier is STANDARD and no residual risk is marked unaccepted. What would change this ruling: a stale or failing verify result, or a named submission accepting an incomplete evaluation. The missing tests for R-1.1 and R-5.27, owed by calibrate, are not settled here and stay open.
+
+**Conditions:**
+- condition-met build-slice-18-5#1: submitAll in app/backend/src/evaluations/individual-evaluations.service.ts reads value.proposals via readNamedProposals (app/backend/src/rules/individual-evaluation.ts). It checks and submits only the signed-in evaluator's evaluations of the named proposals, all or none, and counts toward consensus over the named proposals (R-5.27 v2). The notice is still one blind-copied message (R-6.15). Covered by app/backend/tests/individual-evaluation-end-to-end.test.ts ('checks and submits only the proposals a submission names', and the move to consensus naming two of three proponents), and recorded in docs/decisions/0064-an-individual-submission-covers-the-proposals-it-names.md.
