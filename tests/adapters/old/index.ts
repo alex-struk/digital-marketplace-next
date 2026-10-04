@@ -7786,6 +7786,13 @@ export default function create(
   function evaluationPanel(where: string, route: string) {
     return {
       ...at(route),
+      // "Edit" in the top bar turns the read-only tab into the panel's form, with a
+      // "Panel Member*" chooser per evaluator, "Add an evaluator" and the "Chair*" chooser
+      // (seen as the administrator on the seeded closed Sprint With Us opportunity). A panel
+      // shown locked offers no "Edit"; that is left for panel_locked_after_consensus to report.
+      startEditing: async () => {
+        await editingPanel(`${where}.start_editing`);
+      },
       addPanelMember: (input: unknown) => addPanelMember(`${where}.add_panel_member`, input),
       removePanelMember: (input: unknown) => removePanelMember(`${where}.remove_panel_member`, input),
       choosePanelChair: (input: unknown) => makeChair(`${where}.choose_panel_chair`, input, true),
