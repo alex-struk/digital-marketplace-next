@@ -419,6 +419,11 @@
 - 11:16:42 drive: step 5: `sdlc run verify --slice 19` — 6 unbound rows to check again now that their adapter has changed for slice 19 owed by verify
 - 11:20:07 verify slice 19: R-2.30 fail. R-2.30 stopped where the adapter found the application does not serve the page, which this build, another slice or the adapter may be the one to answer, so build-slice-19 is left open for agent:reviewer to send each failure to the build, to bind-adapter or to the plan.
 - 11:20:08 run verify: regenerated 4 files in .sdlc, site, tests
+- 11:21:07 drive: step 7: `sdlc run derive-tests --domain proposals --stale` — 1 test to derive again (redo) in proposals owed by derive-tests
+- 11:22:19 run derive-tests: ok, cost 0.5121802000000001, turns 12, on claude claude-opus-5-5 (2.1.288 (Claude Code))
+- 11:22:19 propose derive-tests-proposals-stale-21 at G3
+- 11:22:24 drive: step 8: `sdlc rule derive-tests-proposals-stale-21 --by agent:reviewer` — derive-tests-proposals-stale-21 is open at G3, held by agent:reviewer
+- 11:22:29 rule derive-tests-proposals-stale-21 approve at G3 by runner:checks (agent)
 
 # Run record 2026-10-03
 

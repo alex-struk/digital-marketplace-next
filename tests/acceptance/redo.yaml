@@ -1261,3 +1261,8 @@ redo:
       an export or printable copy of the proposal, so the test must observe the
       price score without requiring that page to exist
     verb: test-overreaches
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on proposals
+      by: runner:derive-tests
+      at: 2026-10-04T18:22:19.297Z
