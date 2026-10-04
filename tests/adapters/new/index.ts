@@ -17,21 +17,29 @@
 // Signing in goes through the sandbox identity provider's own form ("Sign in as a vendor" /
 // "Sign in as a public sector employee" on /sign-in), and signIn() fills it. The screens
 // behind a session were walked signed in (as the vendors, the public sector employee, the
-// administrator, the vendor still to complete a profile and the first-time accounts). The
-// running build serves a signed-in person /dashboard (to the administrator and public sector
-// staff, "Create an opportunity" over a table of opportunities, each linked), their
-// own profile at /users/me or /users/<their own id> (editable, with its picture picker) with
-// its Capabilities, Organizations, Notifications and Legal sections, another account's
-// /users/:userId and the list of accounts at /users to the administrator, the content
-// management screens (/content, /content/create, /content/:slug/edit) to the administrator,
-// and /sign-up/complete to a vendor still to complete a profile. To the administrator and
-// public sector staff it also serves the program chooser (/opportunities/create), the three
-// programs' forms (/opportunities/{code,sprint,team}-with-us/create) and each program's
-// management screen (/opportunities/<program>/:opportunityId/edit, its ?tab= sections and
-// form, attachments included); a Code With Us opportunity's public page opens for anybody.
-// Every other screen that needs a session — a Sprint With Us or Team With Us opportunity's
-// public page, proposals, organizations, evaluation, a report —
-// answers "Page not found" (so does /users, to anyone but the administrator), and
+// administrator, the vendor still to complete a profile and the first-time accounts), and
+// walked again on the current build (2026-10-03). The running build serves a signed-in
+// person /dashboard (to the administrator and public sector staff, "Create an opportunity"
+// over a table of opportunities, each linked; to a vendor, "My proposals" and "My
+// organizations' proposals"), their own profile at /users/me or /users/<their own id>
+// (editable, with its picture picker) with its Capabilities, Organizations, Notifications
+// and Legal sections, another account's /users/:userId and the list of accounts at /users
+// to the administrator, the content management screens (/content, /content/create,
+// /content/:slug/edit) to the administrator, /sign-up/complete to a vendor still to
+// complete a profile, the organization screens (/organizations, /organizations/create, an
+// organization's /organizations/:orgId/edit with its qualification sections, and its
+// Sprint With Us and Team With Us terms screens), every program's public opportunity page,
+// and to a vendor the three programs' proposal forms and their own proposal's screen
+// (.../proposals/:proposalId/edit). To the administrator and public sector staff it also
+// serves the program chooser (/opportunities/create), the three programs' forms
+// (/opportunities/{code,sprint,team}-with-us/create), each program's management screen
+// (/opportunities/<program>/:opportunityId/edit, its ?tab= sections, Proposals among them,
+// and form, attachments included) and the Code With Us proposal's screen
+// (/opportunities/code-with-us/:opportunityId/proposals/:proposalId). It still answers
+// "Page not found", to everybody walked, at /proposals, at a Sprint With Us or Team With Us
+// proposal's screen, at every program's printable copies (.../proposals/:proposalId/export,
+// .../proposals/export) and .../complete, and at the evaluation and consensus screens
+// (.../team-questions/..., .../resource-questions/...); and
 // /admin/email-notification-reference is not a screen at all (the service answers it 404
 // "Cannot GET", to the administrator too). Those screens' open() reports "unbound:
 // <page>.open — <reason>" only when the address really answers with that refusal, and
@@ -297,13 +305,18 @@ export default function create(
 
   const camel = (name: string): string => name.replace(/_([a-z0-9])/g, (_match, c: string) => c.toUpperCase());
 
-  // What walking the target signed in found: the dashboard, one's own account screens (the
-  // Organizations section among them), the organization list, the organization create and
-  // edit screens, the opportunity list, and to public sector staff and the administrator the
-  // program chooser, the forms and the three programs' management screens; the proposal,
-  // evaluation and organization terms screens answer "Page not found".
+  // What walking the target signed in found, walked again on the current build (2026-10-03)
+  // as the administrator, the public sector employee who sits on the seeded panels, the
+  // organization-owner vendor and a vendor with no proposals: the dashboards, one's own
+  // account screens, the organization screens with their qualification sections and terms
+  // screens, every program's public opportunity page, the three programs' proposal forms
+  // and a vendor's own proposal's screen, to public sector staff and the administrator the
+  // program chooser, the forms, the three programs' management screens and the Code With Us
+  // proposal's screen. What still answers "Page not found" is named at the end: /proposals,
+  // a Sprint With Us or Team With Us proposal's screen, every printable copy, every
+  // .../complete and the evaluation and consensus screens.
   const NOBODY_SIGNS_IN =
-    'walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor\'s screens — the seeded organization owner, an organization member and the invited vendor for the organization screens — with the seeded records\' identifiers), the running build serves a signed-in person /dashboard, /opportunities, the account screens under /users (a vendor\'s Organizations section, /users/me?tab=organizations, draws "Organizations you own" with "Create organization" and the owned table, and "Organizations you belong to"), /organizations ("Create organization", "My organizations" and the list), /organizations/create, and to an organization\'s owner /organizations/:orgId/edit (the "Organization" section with "Edit organization", and "Archive organization"; its Team members section draws the team table, its row actions and "Add team members", its Changelog section the changes to administrator rights and ownership, and its Sprint With Us qualification and Team With Us qualification sections say only "This section is not available yet."), to the administrator the content-management screens under /content, and to the administrator and public sector staff /opportunities/create, the three programs\' forms and their management screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (whose sections on the seeded Sprint With Us and Team With Us opportunities are Summary, Opportunity, Addenda, History and Evaluation panel, with no evaluation, consensus or instructions section), and to a vendor the Code With Us proposal form /opportunities/code-with-us/:opportunityId/proposals/create (reached from "Start a proposal" on the opportunity) and the vendor\'s own proposal\'s screen .../proposals/:proposalId/edit; rechecked on the current build as the vendor and as the organization owner, the Sprint With Us and Team With Us proposal forms answer "Page not found" even on the seeded Sprint With Us opportunity still open for proposals (00000000-0000-4000-a025-000000000001, deadline November 2, 2026), whose page offers those vendors only "Watch" and no way to start a proposal, and the Code With Us proposal\'s evaluation view answers "Page not found" to the administrator on the seeded opportunity with three proposals; the other proposal and evaluation screens — /proposals, the Sprint With Us and Team With Us proposal forms, the Code With Us proposal\'s evaluation view .../proposals/:proposalId, its "Printable copy" .../proposals/:proposalId/export (to its own author too) and .../proposals/export (to the administrator too), and /opportunities/code-with-us/:opportunityId/complete included — and /organizations/:orgId/sprint-with-us-terms-and-conditions and /organizations/:orgId/team-with-us-terms-and-conditions (opened as the seeded qualified organization\'s owner) answer "Page not found", as /organizations/:orgId/edit does to a member who does not own the organization';
+    'walked signed in on the current build (as the administrator, as the public sector employee who owns the seeded opportunities and sits on their panels, and as vendors — the seeded organization owner, who wrote the seeded proposals, and a vendor with none — with the seeded records\' identifiers), the running build serves a signed-in person /dashboard (to staff "Create an opportunity" over "My opportunities", to the administrator every opportunity, to a vendor "My proposals" and "My organizations\' proposals"), /opportunities and every program\'s public opportunity page (with "Watch this opportunity", and "Start a proposal" while it takes proposals), the account screens under /users, /organizations, /organizations/create, /organizations/:orgId/edit (its Sprint With Us and Team With Us qualification sections drawing the requirements and "Read the … terms and conditions") and /organizations/:orgId/{sprint,team}-with-us-terms-and-conditions, to the administrator the content-management screens under /content, to a vendor the three programs\' proposal forms .../proposals/create and their own proposal\'s screen .../proposals/:proposalId/edit, and to the administrator and public sector staff /opportunities/create, the three programs\' forms, their management screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (sections Summary, Opportunity, Addenda, History, Proposals — proponents in plain text with no link onward — and, on Sprint With Us and Team With Us, Evaluation panel; no instructions, evaluation or consensus section, ?tab=instructions, ?tab=evaluation and ?tab=consensus drawing the Summary) and the Code With Us proposal\'s screen /opportunities/code-with-us/:opportunityId/proposals/:proposalId (proponent, Status, Submitted, Proposal ID, Score, "Printable copy", and the sections Proposal and History, with no button); walked the same way it still answers "Page not found" at /proposals, at a Sprint With Us or Team With Us proposal\'s screen .../proposals/:proposalId (to the administrator and to the panel\'s public sector employee), at every program\'s .../proposals/:proposalId/export (where the Code With Us screen\'s "Printable copy" lands, to the proposal\'s own author too) and .../proposals/export, at every program\'s .../complete, and at the evaluation and consensus screens under .../team-questions/ and .../resource-questions/';
 
   // What each such address answered a signed-out visitor when it was last opened: /dashboard
   // and /sign-up/complete send them to /sign-in?redirectOnSuccess=…, and everything else
@@ -318,6 +331,11 @@ export default function create(
 
   const behindSession = (route: string): string =>
     `${route} is offered only to a signed-in person, and ${NOBODY_SIGNS_IN}; opened signed out (with the seeded record's identifier where it takes one) it ${signedOutAnswer(route)}`;
+
+  // The evaluation sections a Sprint With Us or Team With Us management screen does not have:
+  // the screen itself opens, and ?tab=<section> draws its Summary.
+  const sectionMissing = (program: "sprint-with-us" | "team-with-us", tab: string): string =>
+    `the management screen /opportunities/${program}/:opportunityId/edit opens, signed in, to the administrator and to the public sector employee who owns the seeded opportunities and sits on their panels, but offers no instructions, evaluation or consensus section: walked on the current build on the seeded ${program === "sprint-with-us" ? "Sprint With Us opportunities at individual evaluation (with an evaluation already begun), at consensus and at the code challenge" : "Team With Us opportunities at individual evaluation (with an evaluation already begun), at consensus and at the challenge"}, its sections are Summary, Opportunity, Addenda, History, Proposals and Evaluation panel, and ?tab=${tab} draws the Summary; opened signed out the screen shows the "Page not found" screen`;
 
   function absent<T>(
     pageId: string,
@@ -1636,8 +1654,47 @@ export default function create(
     "team-with-us": "Team With Us",
   };
 
-  const signedInOnly = (what: string): string =>
-    `${what} is offered on an opportunity's page only to a signed-in person — signed out, the seeded published Code With Us opportunity says "If you already have a vendor account, please sign in." where it would be — and ${NOBODY_SIGNS_IN}`;
+  // "Watch this opportunity", a checkbox each program's public page offers a signed-in
+  // person; pressing it saves at once. An input that says which way it should end up is
+  // honoured, and a box already that way is left alone.
+  async function toggleWatchBox(where: string, walked: string, input: unknown): Promise<void> {
+    const box = seen(page.getByRole("main").getByRole("checkbox", { name: /^\s*watch( this opportunity)?\s*$/i })).first();
+    await box.waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+    if (!(await box.count())) {
+      unbound(where, `${walked}: the page offers a signed-in person a "Watch this opportunity" box, and on ${page.url()} as ${actingId()} there is none; it offers ${await offered()}`);
+    }
+    if (await isDisabled(box)) throw new Error(`${where} — the "Watch this opportunity" box is disabled on ${page.url()}`);
+    const was = await box.isChecked();
+    const wanted = boxWanted(input, ["watch", "watching", "watched", "subscribed"]);
+    if (wanted !== undefined && wanted === was) return;
+    await box.click();
+    await settle();
+    await page
+      .waitForFunction(
+        (before) => {
+          const found = Array.from(document.querySelectorAll("main input[type=checkbox]")) as HTMLInputElement[];
+          return found.some((one) => one.checked !== before);
+        },
+        was,
+        { timeout: 5000 },
+      )
+      .catch(() => undefined);
+  }
+
+  // "Start a proposal", a link to .../proposals/create, offered to a signed-in vendor while
+  // the opportunity takes proposals. A vendor who already holds a proposal on it is offered
+  // "View your proposal" in its place (the service keeps one per vendor), which is its one
+  // way on from here to that proposal; the old target's binding does the same.
+  async function startProposalLink(where: string, walked: string): Promise<void> {
+    const control =
+      (await findControl(page, /^\s*(start|create|submit|write)( a)? proposal\s*$/i)) ??
+      (await findControl(page, /^\s*view (your|my)? ?proposal\s*$/i));
+    if (!control) unbound(where, `${walked}: signed in as a vendor on an opportunity still taking proposals the page offers "Start a proposal" (or "View your proposal" once the vendor holds one), and on ${page.url()} as ${actingId()} it offers neither; it offers ${await offered()}`);
+    if (await isDisabled(control)) throw new Error(`${where} — "${(await control.innerText().catch(() => "")).trim()}" is disabled on ${page.url()}`);
+    await control.click();
+    await settle();
+    await ready();
+  }
 
   // Read on the seeded published, awarded and closed opportunities of each program. The
   // header reads "Published <date> | Updated <date>" over the title, the program's name
@@ -1652,18 +1709,20 @@ export default function create(
     added: Record<string, () => Promise<string>>,
   ): T {
     const where = (member: string): string => `${pageId}.${member}`;
-    const pressOffered = async (member: string, name: RegExp, what: string): Promise<void> => {
-      await opportunityLines(where(member));
-      const control = await findControl(page, name);
-      if (!control) unbound(where(member), `no control named ${name} on ${page.url()}: ${signedInOnly(what)}`);
-      if (await isDisabled(control)) unbound(where(member), `the control named ${name} is disabled on ${page.url()}`);
-      await control.click();
-      await settle();
-    };
+    // Walked on the current build signed in as the organization-owner vendor: the seeded open
+    // Sprint With Us opportunity draws "Watch this opportunity" and "Start a proposal" as the
+    // Code With Us page does; a closed one (Sprint With Us or Team With Us) the box alone.
+    const walked = `walked signed in as the organization-owner vendor on the seeded open Sprint With Us opportunity and on closed Sprint With Us and Team With Us ones (the seed holds no Team With Us opportunity still taking proposals)`;
     const built: Record<string, unknown> = {
       open: (params?: Record<string, string>) => go(route, params),
-      toggleWatch: () => pressOffered("toggle_watch", /^(watch|watching|unwatch)$/i, "watching an opportunity"),
-      startProposal: () => pressOffered("start_proposal", /^start proposal$/i, "starting a proposal"),
+      toggleWatch: async (input: unknown) => {
+        await opportunityLines(where("toggle_watch"));
+        await toggleWatchBox(where("toggle_watch"), walked, input);
+      },
+      startProposal: async () => {
+        await opportunityLines(where("start_proposal"));
+        await startProposalLink(where("start_proposal"), walked);
+      },
       opportunityIdentifier: async () => {
         await opportunityLines(where("opportunity_identifier"));
         const segment = new RegExp(`^/opportunities/${program}/([^/?#]+)`).exec(new URL(page.url()).pathname)?.[1] ?? "";
@@ -1758,13 +1817,14 @@ export default function create(
   // ---------------------------------------------------------------- the evaluation screens
 
   // Opened for real, so that what a person who may not have it is shown can be read: this
-  // target answers every one of them, signed out, with its "Not Found" screen.
+  // target answers every one of them with its "Page not found" screen, signed out and, on the
+  // current build, signed in as the administrator and as the panel's public sector employee.
   function evaluationScreen<T>(pageId: string, route: string, earlier: readonly string[]): T {
     return {
       ...absent<Record<string, unknown>>(
         pageId,
         route,
-        `${behindSession(route)}; signed in as the public sector employee who sits on the seeded panels, with the seeded Sprint With Us opportunity at "Questions: individual evaluation" (opportunities.swuEvaluationAlreadyBegun) and its seeded proposal, this address and the proposal's own page answer "Page not found", and that opportunity's management screen offers only Summary, Opportunity, Addenda, History and Evaluation panel — nothing that opens a proponent's evaluation`,
+        `${behindSession(route)}; signed in as the public sector employee who sits on the seeded panels, with the seeded Sprint With Us opportunity at "Team questions: individual evaluation" (opportunities.swuEvaluationAlreadyBegun) and the Team With Us one (opportunities.twuEvaluationAlreadyBegun) and their seeded proposals, this address and the proposal's own page answer "Page not found", and those opportunities' management screens offer only Summary, Opportunity, Addenda, History, Proposals (proponents in plain text, no link onward) and Evaluation panel — nothing that opens a proponent's evaluation`,
         earlier,
       ),
       open: (params?: Record<string, string>) => go(route, params),
@@ -3761,17 +3821,34 @@ export default function create(
     signInFailedNotice: () => noticeSaying(/^sign.?in failed/i),
   };
 
-  // /proposals: the words "Proposal List" and nothing else.
+  // /proposals once drew the words "Proposal List" and nothing else. Walked on the current
+  // build it answers the "Page not found" screen signed out and signed in (as the
+  // administrator and as the organization-owner vendor), and nothing in the application leads
+  // to it — a vendor's proposals are on /dashboard. So the reading decides when it runs:
+  // absent while the address answers "Page not found", unbound if it answers anything else,
+  // since that screen has not been seen.
   const proposalListStub: S.ProposalListStubPage = {
     open: () => go("/proposals"),
-    placeholderText: () => mainText(),
+    placeholderText: async () => {
+      if (new URL(page.url()).pathname !== "/proposals") await go("/proposals");
+      if (await notFoundShown()) {
+        throw new Error(
+          `absent: proposal-list-stub.placeholder_text — /proposals answered ${actingId()} the application's "Page not found" screen at ${page.url()}; walked on the current build signed out and signed in as the administrator and as the organization-owner vendor it answers the same, and no link, tab, menu or button in the application leads to it`,
+        );
+      }
+      return unbound(
+        "proposal-list-stub.placeholder_text",
+        `/proposals no longer answers "Page not found" (it shows "${await firstHeading()}" at ${page.url()}); the page has been built since this binding was written and its placeholder has not been seen, so the next binding run binds it`,
+      );
+    },
   };
 
   // ================================================================ signed-in screens, found at run time
   //
   // The screens below are shown only to a signed-in person. Walked signed in, the running
-  // build draws /dashboard, /sign-up/complete, one's own profile and the organization
-  // screens, and answers the proposal and evaluation screens with "Page not found". Each
+  // build draws /dashboard, /sign-up/complete, one's own profile, the organization screens
+  // and the proposal forms and screens named in NOBODY_SIGNS_IN, and answers the rest of the
+  // proposal screens and the evaluation screens with "Page not found". Each
   // member looks for what the contract names by role and accessible name — the way a person
   // reads the screen — and throws "unbound: …" naming what it looked for, and what the
   // screen offers instead, when it is not there. Nothing here returns a reading from a screen
@@ -4531,14 +4608,14 @@ export default function create(
     if (!adder) {
       unbound(where, `no "Add attachment" control on ${page.url()}; it offers ${await offered()}`);
     }
-    // The Sprint With Us and Team With Us create forms draw "Attachments" with a disabled
-    // "Add attachment" and the note "Files cannot be attached to a <program> opportunity in
-    // this version of the service. Code With Us opportunities take attachments."
+    // The Sprint With Us and Team With Us create forms once drew "Attachments" with a disabled
+    // "Add attachment"; on the current build they offer it enabled, as the Code With Us form
+    // does. A disabled one is the page holding it back, and is reported at once.
     if (await isDisabled(adder!)) {
       const note = lined(await attachmentRegion().innerText().catch(() => ""))
         .filter((line) => !/^\s*(attachments|add attachment)\s*$/i.test(line))
         .join(" ");
-      unbound(where, `"Add attachment" is disabled on ${page.url()}${note ? `, which says "${note}"` : ""}; walked as the administrator on the Sprint With Us and Team With Us create forms (disabled there) and on the seeded open Sprint With Us opportunity's form at ?tab=opportunity after "Edit" (no "Attachments" part at all)`);
+      throw new Error(`${where} — "Add attachment" is disabled on ${page.url()}${note ? `, which says "${note}"` : ""}`);
     }
     const name = await offerFile(where, control, input);
     const region = attachmentRegion();
@@ -4851,7 +4928,20 @@ export default function create(
       if (remote !== undefined && remote !== null) await chooseRemote(where(member), remote);
       const skills = given(input, CWU_SKILLS);
       if (skills !== undefined && skills !== null) await chooseSkills(where(member), skills);
-      await fillFrom(where(member), input, PROGRAM_FIELDS, [...CWU_REMOTE, ...CWU_SKILLS, ...PHASE_KEYS, ...QUESTION_KEYS, ...RESOURCE_KEYS, ...PANEL_KEYS, ...WEIGHT_KEYS]);
+      // The Sprint With Us form has no start or completion date of its own: "Key dates" holds
+      // only the proposal deadline and the assignment date, and every "Start date" and
+      // "Completion date" box sits inside a phase group (walked as the administrator with the
+      // implementation and prototype phases shown). A start or completion date given for the
+      // opportunity as a whole therefore has no box here, and is never written into a phase's
+      // (the first "Completion date" on the page is the prototype phase's); the phases' own
+      // dates come from addPhase.
+      const phaseDates = kind === "sprint" ? ["startDate", "completionDate", "endDate"] : [];
+      for (const key of phaseDates) {
+        if (given(input, [key]) !== undefined) {
+          noteRefusal(`${where(member)} — "${key}" names the opportunity's own date, which the Sprint With Us form at ${page.url()} does not take (its dates belong to the phase groups); left to the phases`);
+        }
+      }
+      await fillFrom(where(member), input, PROGRAM_FIELDS, [...CWU_REMOTE, ...CWU_SKILLS, ...PHASE_KEYS, ...QUESTION_KEYS, ...RESOURCE_KEYS, ...PANEL_KEYS, ...WEIGHT_KEYS, ...phaseDates]);
       for (const [key, value] of Object.entries(record(input))) {
         if (squash(key) === "phases") for (const one of [value].flat()) await addPhase(member, one);
         else if (["inception", "prototype", "implementation"].includes(squash(key))) await addPhase(member, { ...record(value), phase: key });
@@ -5038,9 +5128,10 @@ export default function create(
     return { label, region: (await region.count()) ? region : null };
   }
   // Opens a section for a member that acts or reads inside it. A section the build draws but
-  // has not filled — on the current build both qualification sections say only "This section
-  // is not available yet." — offers none of what the member needs, which is unbound, not
-  // empty. Team members and Changelog are drawn: the Changelog region holds the table
+  // has not filled — both qualification sections once said only "This section is not
+  // available yet."; on the current build they draw the requirements, the approved service
+  // areas and "Read the … terms and conditions" — offers none of what the member needs,
+  // which is unbound, not empty. Team members and Changelog are drawn: the Changelog region holds the table
   // "Changes to administrator rights and ownership, newest first" (Date | Change | Member |
   // Made by, e.g. "Admin Rights Given") or, with none, "No administrator rights have been
   // given or withdrawn, and ownership has not been transferred."
@@ -5433,13 +5524,15 @@ export default function create(
       await press(where, /^\s*save service areas\s*$/i);
       await confirmIfAsked(where, /^\s*save/i);
     },
+    // "Read the Sprint With Us terms and conditions" / "Read the Team With Us terms and
+    // conditions", the link closing each qualification section, to the terms screen.
     viewSwuTerms: async () => {
       await orgTabOpen("view_swu_terms", ORG_TAB.swu);
-      await press(orgEdit.where("view_swu_terms"), /terms/i);
+      await press(orgEdit.where("view_swu_terms"), /^\s*read the sprint with us terms( and conditions)?\s*$/i, page.getByRole("main"));
     },
     viewTwuTerms: async () => {
       await orgTabOpen("view_twu_terms", ORG_TAB.twu);
-      await press(orgEdit.where("view_twu_terms"), /terms/i);
+      await press(orgEdit.where("view_twu_terms"), /^\s*read the team with us terms( and conditions)?\s*$/i, page.getByRole("main"));
     },
     changeLogo: async (input) => {
       await orgEditing("change_logo");
@@ -6978,54 +7071,80 @@ export default function create(
 
   // ---------------------------------------------------------------- the vendor's dashboard
 
-  // Walked signed in as vendors with and without proposals (and as public sector staff and
-  // the administrator), /dashboard is "Dashboard" over "You are signed in as <name>." and
-  // nothing else: no proposals, no tables, no controls. A vendor still to complete a profile
-  // is sent on to /sign-up/complete instead.
+  // Walked on the current build signed in as the organization-owner vendor (who wrote the
+  // seeded proposals) and as the first vendor (who wrote none): /dashboard is "Dashboard",
+  // the navigation "Dashboard sections" with the links "My proposals" (#my-proposals) and
+  // "My organizations' proposals" (#organization-proposals), and a region for each. "My
+  // proposals" holds the table "Proposals you wrote, most recently updated first"
+  // (Opportunity — a link to the proposal's screen — | Program | Status | Last updated), or
+  // "You have not started any proposals. Browse opportunities to find one to bid on.";
+  // "My organizations' proposals" the table "Proposals written for organizations you own or
+  // administer" (Opportunity | Organization | Program | Written by | Status), or "No one has
+  // started a proposal for an organization you own or administer." A vendor still to
+  // complete a profile is sent on to /sign-up/complete instead.
   const vendorDash = signedInScreen("proposal-vendor-dashboard", "/dashboard");
+  const MY_PROPOSALS = /^\s*my proposals\s*$/i;
+  const ORG_PROPOSALS = /^\s*my organi[sz]ations.? proposals\s*$/i;
   async function vendorDashShown(member: string): Promise<boolean> {
     await vendorDash.on(member);
     return new URL(page.url()).pathname !== "/sign-up/complete";
   }
+  const vendorDashRegion = (name: RegExp): Locator => seen(regionNamed(page.getByRole("main"), name)).first();
   async function vendorDashPress(member: string, name: RegExp): Promise<void> {
     const where = vendorDash.where(member);
     if (!(await vendorDashShown(member))) {
       unbound(where, `/dashboard sent this person on to ${page.url()} ("Complete Your Profile") instead of showing a dashboard`);
     }
-    const control = seen(page.getByRole("tab", { name }).or(page.getByRole("button", { name })).or(page.getByRole("link", { name })));
+    const sections = seen(page.getByRole("navigation", { name: /dashboard sections/i }));
+    const control = seen(sections.getByRole("link", { name }).or(page.getByRole("tab", { name })));
     if (!(await control.count())) {
       unbound(
         where,
-        `signed in as ${actingId()}, /dashboard at ${page.url()} reads only "${(await mainText()).replace(/\n+/g, " / ")}" and offers no control named ${name}; looked again signed in as the organization-owner vendor, who wrote a seeded proposal: the dashboard is that heading and sentence alone, the header offers only Dashboard, My profile and Sign out, /proposals answers "Page not found", the seeded published Code With Us opportunity's page offers no way to start a proposal, and the profile's Organizations section lists organizations but no proposals; looked once more as that vendor: /dashboard?tab=myProposals shows the same heading and sentence, the seeded awarded Code With Us opportunity's page (whose winning proposal this vendor wrote) offers no proposal link, and that proposal's own screen /opportunities/code-with-us/:opportunityId/proposals/:proposalId answers "Page not found"`,
+        `signed in as ${actingId()}, /dashboard at ${page.url()} offers no section link named ${name}; walked on the current build as the organization-owner vendor and the first vendor, its "Dashboard sections" are "My proposals" and "My organizations' proposals"; this one offers ${await offered()}`,
       );
     }
     await control.first().click();
     await settle();
+    await vendorDashRegion(name).scrollIntoViewIfNeeded().catch(() => undefined);
   }
-  // Each reading answers empty when the dashboard shows no proposals (it draws none for
-  // anybody) or when the page sent the person on to complete a profile.
-  async function vendorDashRows(member: string): Promise<string> {
+  // A section's rows, one line per row with its cells joined by " | "; nothing when the
+  // section holds no table, or when the page sent the person on to complete a profile.
+  async function vendorDashRows(member: string, name: RegExp): Promise<string[]> {
+    if (!(await vendorDashShown(member))) return [];
+    const region = vendorDashRegion(name);
+    if (!(await region.count())) {
+      unbound(vendorDash.where(member), `/dashboard at ${page.url()} draws no section headed ${name} for ${actingId()}; it offers ${await offered()}`);
+    }
+    return tableRows(region);
+  }
+  // A section's own words while it holds no table: its empty message.
+  async function vendorDashEmpty(member: string, name: RegExp): Promise<string> {
     if (!(await vendorDashShown(member))) return "";
-    return (await tableRows()).join("\n");
+    const region = vendorDashRegion(name);
+    if (!(await region.count())) {
+      unbound(vendorDash.where(member), `/dashboard at ${page.url()} draws no section headed ${name} for ${actingId()}; it offers ${await offered()}`);
+    }
+    if (await seen(region.getByRole("table")).count()) return "";
+    return (await paragraphs(region)).map((one) => one.replace(/\s+/g, " ").trim()).join("\n");
   }
   const proposalVendorDashboard: S.ProposalVendorDashboardPage = {
     open: () => vendorDash.open(),
-    showMyProposals: () => vendorDashPress("show_my_proposals", /my proposals/i),
-    showOrgProposals: () => vendorDashPress("show_org_proposals", /organi[sz]ation.*proposals|team proposals/i),
-    myProposalsTable: () => vendorDashRows("my_proposals_table"),
-    orgProposalsTable: () => vendorDashRows("org_proposals_table"),
+    showMyProposals: () => vendorDashPress("show_my_proposals", MY_PROPOSALS),
+    showOrgProposals: () => vendorDashPress("show_org_proposals", ORG_PROPOSALS),
+    myProposalsTable: async () => (await vendorDashRows("my_proposals_table", MY_PROPOSALS)).join("\n"),
+    orgProposalsTable: async () => (await vendorDashRows("org_proposals_table", ORG_PROPOSALS)).join("\n"),
+    // The "Status" column of "My proposals" (the third: Opportunity | Program | Status | Last
+    // updated), one per row.
     proposalStatus: async () => {
-      if (!(await vendorDashShown("proposal_status"))) return "";
-      return (await columnOf(/^status$/i)).join("\n");
+      const rows = await vendorDashRows("proposal_status", MY_PROPOSALS);
+      const region = vendorDashRegion(MY_PROPOSALS);
+      const headers = (await seen(region.getByRole("columnheader")).allInnerTexts()).map((one) => one.trim());
+      const at = headers.findIndex((one) => /^status$/i.test(one));
+      if (at < 0) return "";
+      return rows.map((row) => row.split(" | ")[at] ?? "").filter(Boolean).join("\n");
     },
-    emptyMyProposalsMessage: async () => {
-      if (!(await vendorDashShown("empty_my_proposals_message"))) return "";
-      return linesMatching(/\bno\b.*proposals|haven.t .*proposal|have not .*proposal/i);
-    },
-    emptyOrgProposalsMessage: async () => {
-      if (!(await vendorDashShown("empty_org_proposals_message"))) return "";
-      return linesMatching(/\bno\b.*(organi[sz]ation|team).*proposals|no proposals .*organi[sz]ation/i);
-    },
+    emptyMyProposalsMessage: () => vendorDashEmpty("empty_my_proposals_message", MY_PROPOSALS),
+    emptyOrgProposalsMessage: () => vendorDashEmpty("empty_org_proposals_message", ORG_PROPOSALS),
   };
 
   // ---------------------------------------------------------------- choosing a program
@@ -7114,8 +7233,10 @@ export default function create(
   // a "Manage this opportunity" link, and the Description (with its Attachments), Skills, Key
   // dates ("Assignment date: <date>", ...) and Addenda sections. Walked as the administrator,
   // a public sector employee and a vendor on the seeded published, draft and awarded
-  // opportunities: it offers no way to start a proposal, and an awarded opportunity names no
-  // successful proponent anywhere on it.
+  // opportunities: an awarded opportunity names no successful proponent anywhere on it, and
+  // to a vendor, while the opportunity takes proposals, it offers the link "Start a proposal"
+  // to .../proposals/create (the Sprint With Us and Team With Us pages draw the same box and
+  // link on the current build).
   //
   // A draft is shown only to whoever may see it: the seeded draft of another staff member
   // opens for the administrator (its Status "Draft") and answers a vendor and the other
@@ -7168,48 +7289,15 @@ export default function create(
     "walked as the administrator, a public sector employee and a vendor on the seeded published, draft and awarded Code With Us opportunities";
   const opportunityCwuView: S.OpportunityCwuViewPage = {
     open: (params) => go("/opportunities/code-with-us/:opportunityId", params as unknown as Record<string, string>),
-    // "Watch this opportunity", a checkbox; pressing it saves at once. An input that says
-    // which way it should end up is honoured, and a box already that way is left alone.
+    // "Watch this opportunity" and "Start a proposal", as toggleWatchBox and
+    // startProposalLink read them on every program's page.
     toggleWatch: async (input) => {
-      const where = cwuView.where("toggle_watch");
       await cwuViewShown("toggle_watch");
-      const box = seen(page.getByRole("main").getByRole("checkbox", { name: /^\s*watch( this opportunity)?\s*$/i })).first();
-      await box.waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
-      if (!(await box.count())) {
-        unbound(where, `${CWU_VIEW_WALKED}: the page offers a signed-in person a "Watch this opportunity" box, and on ${page.url()} as ${actingId()} there is none; it offers ${await offered()}`);
-      }
-      if (await isDisabled(box)) throw new Error(`${where} — the "Watch this opportunity" box is disabled on ${page.url()}`);
-      const was = await box.isChecked();
-      const wanted = boxWanted(input, ["watch", "watching", "watched", "subscribed"]);
-      if (wanted !== undefined && wanted === was) return;
-      await box.click();
-      await settle();
-      await page
-        .waitForFunction(
-          (before) => {
-            const found = Array.from(document.querySelectorAll("main input[type=checkbox]")) as HTMLInputElement[];
-            return found.some((one) => one.checked !== before);
-          },
-          was,
-          { timeout: 5000 },
-        )
-        .catch(() => undefined);
+      await toggleWatchBox(cwuView.where("toggle_watch"), CWU_VIEW_WALKED, input);
     },
     startProposal: async () => {
-      // "Start a proposal", a link to .../proposals/create, offered to a signed-in vendor while
-      // the opportunity takes proposals. A vendor who already holds a proposal on it is
-      // offered "View your proposal" in its place (the service keeps one per vendor), which
-      // is its one way on from here to that proposal; the old target's binding does the same.
-      const where = cwuView.where("start_proposal");
       await cwuViewShown("start_proposal");
-      const control =
-        (await findControl(page, /^\s*(start|create|submit|write)( a)? proposal\s*$/i)) ??
-        (await findControl(page, /^\s*view (your|my)? ?proposal\s*$/i));
-      if (!control) unbound(where, `${CWU_VIEW_WALKED}: signed in as a vendor on the seeded published opportunity (proposal deadline in 2030) the page offers "Start a proposal" (or "View your proposal" once the vendor holds one), and on ${page.url()} as ${actingId()} it offers neither; it offers ${await offered()}`);
-      if (await isDisabled(control)) throw new Error(`${where} — "${(await control.innerText().catch(() => "")).trim()}" is disabled on ${page.url()}`);
-      await control.click();
-      await settle();
-      await ready();
+      await startProposalLink(cwuView.where("start_proposal"), CWU_VIEW_WALKED);
     },
     opportunityIdentifier: async () => {
       if (!(await onCwuView("opportunity_identifier"))) return "";
@@ -7610,8 +7698,19 @@ export default function create(
     opportunityTab: () => formSectionText("opportunity_tab", "Opportunity"),
     addendaTab: () => sectionText("addenda_tab", "Addenda"),
     historyTab: () => sectionText("history_tab", "History"),
+    // Before the opportunity closes the section withholds every proposal: it draws only
+    // "Proposals are not shown until the opportunity closes … can be read once it has closed
+    // to proposals, at …" and no table (seen as public sector staff and the administrator on
+    // the seeded published opportunity). That withholding reads as nothing, as the old
+    // binding reads its own "will be displayed here once this opportunity has closed".
     proposalsTab: async () => {
-      if (await toSection("proposals_tab", "Proposals")) return sectionText("proposals_tab", "Proposals");
+      if (await toSection("proposals_tab", "Proposals")) {
+        const region = seen(regionNamed(page.getByRole("main"), /^proposals$/i)).first();
+        const said = (await region.count()) ? lined(await region.innerText()).join("\n") : "";
+        const listed = (await region.count()) ? await seen(region.getByRole("row")).count() : 0;
+        if (!listed && /not shown until the opportunity closes|once it has closed to proposals/i.test(said)) return "";
+        return sectionText("proposals_tab", "Proposals");
+      }
       return unbound(
         cwuManage.where("proposals_tab"),
         `the management screen at ${page.url()} offers only the sections ${(await seen(page.getByRole("navigation", { name: /opportunity sections/i }).getByRole("link")).allInnerTexts()).map((one) => `"${one.trim()}"`).join(", ")}, and ?tab=proposals shows the summary; ${CWU_MANAGE_WALKED}`,
@@ -7660,8 +7759,16 @@ export default function create(
   // incomplete draft with the alert "This opportunity is incomplete") and "Delete" (which
   // asks "Delete this opportunity?" with "Delete opportunity" and lands on /dashboard).
   // ?tab=evaluation, ?tab=consensus and ?tab=instructions still fall back to the Summary.
+  // On the current build (walked 2026-10-03 as the administrator and as the public sector
+  // employee who sits on the seeded panels) there is also a "Proposals" section: the table
+  // "Every proposal submitted to this opportunity" (Proponent | Status | Submitted, names in
+  // plain text, no link onward), or, before the opportunity closes, only "Proposals are not
+  // shown until the opportunity closes". That withholding reads as nothing, as on the Code
+  // With Us screen.
+  const proposalsShown = (said: string): string =>
+    /not shown until the opportunity closes|once it has closed to proposals/i.test(said) && !/\|/.test(said) && !/every proposal submitted/i.test(said) ? "" : said;
   const programWalked = (program: string, states: string, slug: string): string =>
-    `walked as the administrator on the seeded ${program} opportunities ${states} and on a draft just saved from /opportunities/${slug}/create, as the owning public sector employee on seeded ones and on such a draft, and as a vendor (answered "Page not found"): the screen offers the sections Summary, Opportunity, Addenda (not on a draft), History and Evaluation panel, the actions "Edit", "Submit for review" and "Delete" on a draft and "Cancel opportunity" (to the administrator, from published to processing); ?tab=evaluation, ?tab=consensus, ?tab=instructions and other section names fall back to the Summary`;
+    `walked as the administrator on the seeded ${program} opportunities ${states} and on a draft just saved from /opportunities/${slug}/create, as the owning public sector employee on seeded ones and on such a draft, and as a vendor (answered "Page not found"): the screen offers the sections Summary, Opportunity, Addenda (not on a draft), History, Proposals (added on the current build) and Evaluation panel, the actions "Edit", "Submit for review" and "Delete" on a draft and "Cancel opportunity" (to the administrator, from published to processing); ?tab=evaluation, ?tab=consensus, ?tab=instructions and other section names fall back to the Summary`;
   const MONTHS = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"];
   function programManage(
     pageId: string,
@@ -8017,7 +8124,7 @@ export default function create(
     opportunityTab: () => swuManage.savedForm("opportunity_tab"),
     addendaTab: () => swuManage.sectionText("addenda_tab", "Addenda"),
     historyTab: () => swuManage.sectionText("history_tab", "History"),
-    proposalsTab: () => swuManage.absentSection("proposals_tab", "Proposals", '"Proposals" section (the Summary counts "Proposals submitted" only)'),
+    proposalsTab: async () => proposalsShown(await swuManage.absentSection("proposals_tab", "Proposals", '"Proposals" section')),
     // No section of its own: the saved team questions are the "Team questions" of the
     // Opportunity section's form.
     teamQuestionsTab: () => swuManage.savedForm("team_questions_tab", /^team questions$/i),
@@ -8025,8 +8132,8 @@ export default function create(
     teamScenarioTab: () => swuManage.absentSection("team_scenario_tab", "Team scenario", '"Team scenario" section'),
     evaluationPanelTab: () => swuManage.absentSection("evaluation_panel_tab", "Evaluation panel", '"Evaluation panel" section'),
     consensusTab: () => swuManage.absentSection("consensus_tab", "Consensus", '"Consensus" section'),
-    instructionsTab: () => swuManage.absentSection("instructions_tab", "Instructions", '"Instructions" section (a panel evaluator is answered "Page not found")'),
-    evaluationTab: () => swuManage.absentSection("evaluation_tab", "Evaluation", '"Evaluation" section (a panel evaluator is answered "Page not found")'),
+    instructionsTab: () => swuManage.absentSection("instructions_tab", "Instructions", '"Instructions" section (walked as the panel\'s public sector employee too, ?tab=instructions drawing the Summary)'),
+    evaluationTab: () => swuManage.absentSection("evaluation_tab", "Evaluation", '"Evaluation" section (walked as the panel\'s public sector employee too, ?tab=evaluation drawing the Summary)'),
     proposalDeadline: () => swuManage.summaryDate("proposal_deadline", /^proposal deadline$/i),
     assignmentDate: () => swuManage.summaryDate("assignment_date", /^assignment date$/i),
     // The "Team questions" of the Opportunity section's form.
@@ -8066,15 +8173,15 @@ export default function create(
     opportunityTab: () => twuManage.savedForm("opportunity_tab"),
     addendaTab: () => twuManage.sectionText("addenda_tab", "Addenda"),
     historyTab: () => twuManage.sectionText("history_tab", "History"),
-    proposalsTab: () => twuManage.absentSection("proposals_tab", "Proposals", '"Proposals" section (the Summary counts "Proposals submitted" only)'),
+    proposalsTab: async () => proposalsShown(await twuManage.absentSection("proposals_tab", "Proposals", '"Proposals" section')),
     // No section of its own: the saved resource questions are the "Resource questions" of
     // the Opportunity section's form.
     resourceQuestionsTab: () => twuManage.savedForm("resource_questions_tab", /^resource questions$/i),
     challengeTab: () => twuManage.absentSection("challenge_tab", "Challenge", '"Challenge" section'),
     evaluationPanelTab: () => twuManage.absentSection("evaluation_panel_tab", "Evaluation panel", '"Evaluation panel" section'),
     consensusTab: () => twuManage.absentSection("consensus_tab", "Consensus", '"Consensus" section'),
-    instructionsTab: () => twuManage.absentSection("instructions_tab", "Instructions", '"Instructions" section (a panel evaluator is answered "Page not found")'),
-    evaluationTab: () => twuManage.absentSection("evaluation_tab", "Evaluation", '"Evaluation" section (a panel evaluator is answered "Page not found")'),
+    instructionsTab: () => twuManage.absentSection("instructions_tab", "Instructions", '"Instructions" section (walked as the panel\'s public sector employee too, ?tab=instructions drawing the Summary)'),
+    evaluationTab: () => twuManage.absentSection("evaluation_tab", "Evaluation", '"Evaluation" section (walked as the panel\'s public sector employee too, ?tab=evaluation drawing the Summary)'),
     offeredStateChanges: twuManage.offeredStateChanges,
     proposalDeadline: () => twuManage.summaryDate("proposal_deadline", /^proposal deadline$/i),
     assignmentDate: () => twuManage.summaryDate("assignment_date", /^assignment date$/i),
@@ -8216,8 +8323,11 @@ export default function create(
   // this opportunity. …" with its "Download <name>" link, a "Name for <name> (optional)" box,
   // "Will be saved as: <name>" and "Remove <name>"; one over the
   // limit is "New: <name>, <size>." with the alert "<name> is too large to attach". Changes
-  // are kept by the form's "Save changes" (or by the create form's own action). The Sprint
-  // With Us and Team With Us forms answer "Page not found".
+  // are kept by the form's "Save changes" (or by the create form's own action). On the
+  // current build the Sprint With Us and Team With Us opportunity forms open to the
+  // administrator and public sector staff and end with the same "Attachments" part (seen on
+  // /opportunities/sprint-with-us/create and /opportunities/team-with-us/create); the
+  // proposal forms' attachments are their own pages' add_attachment.
   const ATTACH = "file-attachment-control";
   function attachmentRegion(): Locator {
     return seen(regionNamed(page, /^attachments$/i)).first();
@@ -8232,7 +8342,7 @@ export default function create(
     }
     const why = await whyNotHere();
     if (why) {
-      unbound(where, `the form at ${page.url()} did not open: ${why.replace(/\n+/g, " ")}; the attachment control sits on an opportunity's form, offered only to the administrator and public sector staff, and ${NOBODY_SIGNS_IN}`);
+      unbound(where, `the form at ${page.url()} did not open for ${actingId()}: ${why.replace(/\n+/g, " ")}; the attachment control sits on an opportunity's form, offered only to the administrator and public sector staff; ${NOBODY_SIGNS_IN}`);
     }
     if (!(await attachmentRegion().count()) || !(await findControl(attachmentRegion(), /^\s*add attachment\s*$/i))) {
       const manage = manageAddress();
@@ -8240,16 +8350,11 @@ export default function create(
     }
     const region = attachmentRegion();
     if (!(await region.count())) {
-      // Rechecked as the administrator on the seeded open Sprint With Us and Team With Us
-      // opportunities: their forms at ?tab=opportunity carry no "Attachments" part, and the
-      // two programs' create forms say of theirs "Files cannot be attached to a <program>
-      // opportunity in this version of the service. Code With Us opportunities take
-      // attachments."
-      const program = /\/opportunities\/(sprint-with-us|team-with-us)\//.exec(new URL(page.url()).pathname)?.[1];
-      const said = program
-        ? `; walked as the administrator on the seeded ${PROGRAM_NAME[program] ?? program} opportunities, the form offers no attachments, and /opportunities/${program}/create says "Files cannot be attached to a ${PROGRAM_NAME[program] ?? program} opportunity in this version of the service. Code With Us opportunities take attachments."`
-        : "";
-      unbound(where, `no "Attachments" part on the form at ${page.url()}${said}; it offers ${await offered()}`);
+      // Walked on the current build as the public sector employee: the Sprint With Us and Team
+      // With Us create forms end with the same "Attachments" part as the Code With Us one
+      // ("Any type of file, up to 10 MB each.", "Add attachment"), so a form without it is
+      // the page lacking it, not the program.
+      unbound(where, `no "Attachments" part on the form at ${page.url()} for ${actingId()}; walked on the current build, each program's create form (/opportunities/{code,sprint,team}-with-us/create) ends with one ("Any type of file, up to 10 MB each." and "Add attachment"); this one offers ${await offered()}`);
     }
     return region;
   }
@@ -9471,6 +9576,996 @@ export default function create(
     availableActions: async () => ((await proposalShown()) ? proposalActionNames() : ""),
   };
 
+  // ---------------------------------------------------------------- a Code With Us proposal, as staff read it
+  //
+  // /opportunities/code-with-us/:opportunityId/proposals/:proposalId, walked on the current
+  // build as the administrator on the seeded Code With Us proposals submitted (on the lapsed
+  // opportunities for scoring, with three proposals, at the final stage and for an award),
+  // withdrawn, evaluated in processing (...a007...101, "82%") and awarded / not awarded
+  // (...a008...), as the public sector employee on ...a007...101, and as the proposal's own
+  // vendor on ...a003...101: "Code With Us proposal" over the proponent's name (the level-1
+  // heading), the terms Opportunity (a link), Status, Submitted and Proposal ID, a "Score"
+  // region with the term Score ("82%", or "Not yet scored"), the link "Printable copy" to
+  // .../export, and under the navigation "Proposal sections" the links Proposal (?tab=proposal:
+  // the regions Proponent — Proponent type, Organization —, Proposal text, Additional comments
+  // and Attachments) and History (?tab=history: the table "Every change of state and every
+  // score entered, newest first", Date | Entry | By | Note). The vendor is also offered
+  // "Manage this proposal". In no state walked is there a button of any kind: no score to
+  // enter, no award, no disqualification, and no rank anywhere.
+  const PCWU_VIEW = "proposal-cwu-view";
+  const PCWU_VIEW_ROUTE = "/opportunities/code-with-us/:opportunityId/proposals/:proposalId";
+  const PCWU_VIEW_WALKED =
+    'walked on the current build as the administrator on the seeded Code With Us proposals submitted (...a002...101, ...a003...101, ...a004...101, ...a005...101), withdrawn (...a005...103), evaluated in processing (...a007...101 at 82%, ...a007...102 at 74%) and awarded / not awarded (...a008...101 at 91%, ...a008...102 at 77%), and as the public sector employee on ...a007...101: the screen draws the terms Opportunity, Status, Submitted and Proposal ID, the Score region, "Printable copy" and the sections Proposal and History, and no button of any kind; the opportunity\'s management screen offers, in its "Proposals" section, only the table Proponent | Status | Submitted';
+  // A control the screen has never been seen to offer: unbound, saying what is there. Should
+  // the screen one day offer it, that is said too, so the next binding run binds it.
+  async function cwuViewLacks(member: string, name: RegExp, what: string): Promise<never> {
+    const where = `${PCWU_VIEW}.${member}`;
+    await ready();
+    const why = await whyNotHere();
+    if (why) unbound(where, `the proposal's screen did not open at ${page.url()} for ${actingId()}: ${why.replace(/\n+/g, " ")}; ${PCWU_VIEW_WALKED}`);
+    const offeredNow = seen(page.getByRole("main").getByRole("button", { name }).or(page.getByRole("main").getByRole("link", { name })));
+    if (await offeredNow.count()) {
+      unbound(where, `${page.url()} now offers ${actingId()} a control named ${name}, which this binding has not seen; the next binding run binds it (${PCWU_VIEW_WALKED})`);
+    }
+    return unbound(where, `the Code With Us proposal's screen offers no ${what}: ${PCWU_VIEW_WALKED}; on ${page.url()} as ${actingId()} it offers ${await offered()}`);
+  }
+  // One of the screen's sections, opened from "Proposal sections", read whole.
+  async function cwuViewSection(name: RegExp): Promise<string> {
+    if (!(await proposalShown())) return "";
+    const link = seen(proposalMain().getByRole("navigation", { name: /proposal sections/i }).getByRole("link", { name })).first();
+    if (!(await link.count())) return "";
+    const href = (await link.getAttribute("href")) ?? "";
+    const wanted = /[?&]tab=([^&#]+)/.exec(href)?.[1] ?? "";
+    if (!wanted || new URL(page.url()).searchParams.get("tab") !== wanted) {
+      await link.click();
+      await ready();
+    }
+    const region = seen(regionNamed(proposalMain(), name)).first();
+    await region.waitFor({ state: "visible", timeout: 10000 }).catch(() => undefined);
+    return (await region.count()) ? lined(await region.innerText()).join("\n") : "";
+  }
+  const proposalCwuView: S.ProposalCwuViewPage = {
+    open: async (params) => {
+      await go(PCWU_VIEW_ROUTE, params as unknown as Record<string, string>);
+      await ready();
+    },
+    enterScore: () => cwuViewLacks("enter_score", /^\s*(enter|edit) score\s*$/i, '"Enter score" control'),
+    awardProposal: () => cwuViewLacks("award_proposal", /^\s*award( proposal| opportunity)?\s*$/i, '"Award" control'),
+    disqualifyProposal: () => cwuViewLacks("disqualify_proposal", /^\s*disqualify( proposal)?\s*$/i, '"Disqualify" control'),
+    proposalIdentifier: async () => ((await proposalShown()) ? (await proposalTerm(/^proposal id$/i)) || proposalPathId() : ""),
+    // The "Proposal" section: Proponent (type and organization or name), Proposal text,
+    // Additional comments, Attachments.
+    proposalTab: () => cwuViewSection(/^\s*proposal\s*$/i),
+    // The "History" section: its caption and table, one line per row, cells tab-separated as
+    // the screen draws them.
+    historyTab: () => cwuViewSection(/^\s*history\s*$/i),
+    // The name the screen gives the proponent: its level-1 heading.
+    proponent: async () => {
+      if (!(await proposalShown())) return "";
+      const heading = seen(proposalMain().getByRole("heading", { level: 1 })).first();
+      return (await heading.count()) ? (await heading.innerText()).trim() : "";
+    },
+    // The Score term as shown: "82%", or "Not yet scored".
+    score: () => proposalTerm(/^score$/i),
+    rank: async () => {
+      if (!(await proposalShown())) return "";
+      const shown = await proposalTerm(/^rank(ing)?$/i);
+      if (shown) return shown;
+      return unbound(`${PCWU_VIEW}.rank`, `the Code With Us proposal's screen shows no rank or ranking: ${PCWU_VIEW_WALKED}`);
+    },
+    // "Printable copy", a link: "enabled" while the screen offers it, "absent" when it does not.
+    exportLink: async () => {
+      if (!(await proposalShown())) return "absent";
+      const link = seen(proposalMain().getByRole("link", { name: /^\s*(printable copy|export( proposal)?)\s*$/i })).first();
+      if (!(await link.count())) return "absent";
+      return (await isDisabled(link)) ? "disabled" : "enabled";
+    },
+  };
+
+  // ---------------------------------------------------------------- Sprint With Us and Team With Us proposals
+  //
+  // Walked signed in as the organization owner (Northern Pines Digital Ltd. and Salt Marsh Labs
+  // Ltd.) on the seeded open Sprint With Us opportunity, and as the owner of the unqualified
+  // organization on the seeded closed Team With Us opportunity (the create form is drawn there
+  // too; a vendor already holding a proposal is sent to it instead). Both create forms are one
+  // page of regions: "The opportunity", "Organization" (an "Organization (required)" chooser
+  // over the organizations the vendor owns or administers, and — for one not qualified — a note
+  // "<name> is not qualified for <program>"; Team With Us adds "<name> does not provide <service
+  // area>, which this opportunity needs."), "Team", "Capabilities" (Sprint With Us), "Cost",
+  // "Team questions" / "Resource questions" ("Response to question N (required)"), "References"
+  // (Sprint With Us: "Add a reference", each "Reference N" with Name, Email address and Phone
+  // number (optional)) and "Attachments", then the "Proposal actions" Cancel, Save draft and
+  // Submit proposal.
+  //
+  // Sprint With Us draws one group per phase the opportunity has ("Implementation phase", and
+  // "Prototype phase" / "Inception phase" where it has them): its dates and budget, a paragraph
+  // "Incomplete: …" while its team falls short, the list "Capabilities the <phase> phase
+  // requires" ("Backend Development: held" / "not held"), the radio group "Scrum master for the
+  // <phase> phase" listing each member (a pending one marked "Membership pending") with its
+  // "Scrum master: <name>, <phase> phase" radio and "Remove", the chooser "Team member to add to
+  // the <phase> phase" (pending people offered as "<name> (pending)") with "Add team member to
+  // the <phase> phase", and "Proposed cost for the <phase> phase(required)", whose message
+  // ("Please enter a Proposed Cost less than or equal to 500,000.") follows its hint once the
+  // cost is over the phase's budget. "Submit proposal" stays disabled while any phase is
+  // incomplete or any cost over budget. Team With Us draws one group per resource ("Resource 1:
+  // Full stack developer, 100% of full time") with "Team member to add to resource N", "Add team
+  // member to resource N", and per member "Hourly rate for <name>(required)" and "Remove".
+  //
+  // Submitting opens "Submit your proposal" with "I accept the <program> terms and conditions
+  // (required)" and "I accept the Digital Marketplace terms and conditions (required)" and its own
+  // "Submit proposal"; a refusal before it is the alert "This proposal has N problems" with
+  // "<Field>: <message>" lines. Saving lands on the proposal's own screen
+  // (…/proposals/:proposalId/edit): Status, Submitted, Proposal ID, Opportunity ID and Proposal
+  // deadline as terms, the "Proposal actions" (a draft: Edit, Submit proposal, Delete; a
+  // submitted proposal: Edit, Withdraw), the sections "Proposal" and "History", and "Edit" opens
+  // the create form's own controls with the "Save choices" Cancel, Save changes and Save changes
+  // and submit. A refused submit from there raises the alert "Your proposal was not submitted"
+  // with the service's reason ("implementationPhase.members: User is not an active member of the
+  // organization."); a refused save "Your changes were not saved".
+
+  const PSWU_CREATE = "proposal-swu-create";
+  const PSWU_EDIT = "proposal-swu-edit";
+  const PTWU_CREATE = "proposal-twu-create";
+  const PTWU_EDIT = "proposal-twu-edit";
+  const TEAM_PROGRAM_TERMS = /^\s*i accept the (sprint|team) with us terms/i;
+  const TEAM_PHASES = ["inception", "prototype", "implementation"] as const;
+  const MEMBER_KEYS = ["members", "member", "teamMembers", "teamMember", "users", "user", "people", "person", "resourceName", "memberName", "name"];
+
+  // What the form said when its submit was last refused or held back, and on which address.
+  let teamRefusal: { path: string; lines: string[] } | null = null;
+  const teamTermsAgreed = new Set<"program" | "app">();
+  let teamOrganizationWithheld = false;
+  let lastTeamPhase = "";
+  let lastTeamResource = 0;
+
+  function forgetTeamForm(): void {
+    teamRefusal = null;
+    teamTermsAgreed.clear();
+    teamOrganizationWithheld = false;
+    lastTeamPhase = "";
+    lastTeamResource = 0;
+  }
+
+  async function openTeamProposal(route: string, params: unknown): Promise<void> {
+    forgetTeamForm();
+    await go(route, params as Record<string, string>);
+    await ready();
+    // The form draws "Loading opportunity…" under its heading until the opportunity is in.
+    await seen(page.getByRole("progressbar")).first().waitFor({ state: "hidden", timeout: 15000 }).catch(() => undefined);
+    await settle();
+  }
+
+  const teamOrgChooser = (): Locator => seen(proposalMain().getByRole("button", { name: /organization\s*\(required\)/i })).first();
+
+  // The form's controls are on screen to be used: the create form, or the proposal's screen
+  // once "Edit" is pressed.
+  async function teamFieldsOpen(): Promise<boolean> {
+    return (await teamOrgChooser().count()) > 0 && !(await isDisabled(teamOrgChooser()));
+  }
+
+  async function openTeamFields(where: string): Promise<boolean> {
+    if (!(await onProposal(where))) return false;
+    if (await teamFieldsOpen()) return true;
+    const edit = seen(proposalActions().getByRole("button", { name: /^\s*edit\s*$/i })).first();
+    if (!(await edit.count())) {
+      noteRefusal(`${where} — ${page.url()} (Status: ${(await proposalTerm(/^status$/i)) || "not shown"}) offers no "Edit" (its actions: ${(await proposalActionNames()) || "none"})`);
+      return false;
+    }
+    await edit.click();
+    await teamOrgChooser().waitFor({ state: "visible", timeout: 10000 }).catch(() => undefined);
+    await settle();
+    return teamFieldsOpen();
+  }
+
+  // A chooser drawn as a button that opens a list: the option named, or its pending form
+  // ("Quinn Placeholder (pending)"). False, with the list put away, when it is not offered.
+  async function pickListed(opener: Locator, name: string): Promise<{ picked: boolean; offered: string[] }> {
+    await opener.click();
+    const options = seen(page.getByRole("option"));
+    await options.first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+    const offered = (await options.allInnerTexts().catch(() => [] as string[])).map((one) => one.trim()).filter(Boolean);
+    const wanted = offered.find((one) => squash(one) === squash(name)) ?? offered.find((one) => squash(one) === squash(`${name} (pending)`));
+    if (!wanted) {
+      await page.keyboard.press("Escape").catch(() => undefined);
+      await settle();
+      return { picked: false, offered };
+    }
+    await seen(page.getByRole("option", { name: wanted, exact: true })).first().click();
+    await settle();
+    return { picked: true, offered };
+  }
+
+  // The organization a test names, by seed handle, identifier, record or legal name. One the
+  // chooser does not offer is left unchosen — never replaced by another — and recorded: the
+  // refusal the test goes on to read.
+  async function chooseTeamOrganization(where: string, value: unknown): Promise<void> {
+    const chooser = teamOrgChooser();
+    if (!(await chooser.count())) unbound(where, `no "Organization (required)" chooser on ${page.url()}; it offers ${await offered()}`);
+    const named = typeof value === "string" ? value : given(value, PROPOSAL_ORG_KEYS) ?? value;
+    const name = proposalOrganizationName(named);
+    if (!name) unbound(where, `the input ${JSON.stringify(value)} names no organization`);
+    if (squash(await chooser.innerText().catch(() => "")).startsWith(squash(name))) {
+      teamOrganizationWithheld = false;
+      return;
+    }
+    const { picked, offered: listed } = await pickListed(chooser, name);
+    teamOrganizationWithheld = !picked;
+    if (!picked) noteRefusal(`${where} — the "Organization" chooser on ${page.url()} does not offer "${name}" (it offers: ${listed.join(", ") || "nothing"})`);
+  }
+
+  // The team controls show people only once an organization is chosen. When the test chose
+  // none, the first the chooser offers is taken; one it named and was refused is never
+  // replaced. Resolves whether an organization is chosen.
+  async function ensureTeamOrganization(): Promise<boolean> {
+    const chooser = teamOrgChooser();
+    if (!(await chooser.count())) return true;
+    if (!/^\s*select an item/i.test(await chooser.innerText().catch(() => ""))) return true;
+    if (teamOrganizationWithheld) return false;
+    await chooser.click();
+    const first = seen(page.getByRole("option")).first();
+    await first.waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+    if (!(await first.count())) {
+      await page.keyboard.press("Escape").catch(() => undefined);
+      return false;
+    }
+    await first.click();
+    await settle();
+    return true;
+  }
+
+  // "Prototype", "Proof of Concept", "implementation phase" -> the phase's word on this form.
+  function phaseWord(value: unknown): string {
+    const said = squash(textOf(value)).replace(/phase$/, "");
+    if (said === "proofofconcept") return "prototype";
+    return TEAM_PHASES.find((one) => one === said) ?? "";
+  }
+  const phaseTitle = (word: string): string => word.charAt(0).toUpperCase() + word.slice(1);
+  // The phases the form draws a group for, in the form's order (inception, prototype,
+  // implementation, as it lays them out).
+  async function phasesShown(): Promise<string[]> {
+    const shown: string[] = [];
+    for (const word of TEAM_PHASES) {
+      if (await seen(proposalMain().getByRole("group", { name: new RegExp(`^\\s*${word} phase\\s*$`, "i") })).count()) shown.push(word);
+    }
+    return shown;
+  }
+
+  // The phase a test names, else the one last used, else the first the form shows.
+  async function phaseGroupFor(where: string, input: unknown): Promise<{ word: string; group: Locator }> {
+    const shown = await phasesShown();
+    const named = phaseWord(typeof input === "string" && phaseWord(input) ? input : given(input, ["phase", "phaseName"]));
+    const word = named || (shown.includes(lastTeamPhase) ? lastTeamPhase : shown[0] ?? "");
+    const group = seen(proposalMain().getByRole("group", { name: new RegExp(`^\\s*${word} phase\\s*$`, "i") })).first();
+    if (!word || !(await group.count())) {
+      unbound(where, `no "${named ? phaseTitle(named) : "phase"} phase" group on ${page.url()}; the form shows the phases ${shown.map(phaseTitle).join(", ") || "none"}`);
+    }
+    lastTeamPhase = word;
+    return { word, group };
+  }
+
+  // The people an input names, by account name as the choosers show them.
+  async function teamNames(input: unknown): Promise<string[]> {
+    const people = (value: unknown): unknown[] => {
+      if (value === undefined || value === null) return [];
+      if (Array.isArray(value)) return value.flatMap(people);
+      if (typeof value !== "object") return textOf(value) ? [value] : [];
+      const inner = given(value, MEMBER_KEYS.filter((key) => key !== "name"));
+      if (inner !== undefined && inner !== null) return people(inner);
+      return [value];
+    };
+    const names: string[] = [];
+    for (const one of people(input)) {
+      const name = await personName(one);
+      if (name) names.push(name);
+    }
+    return names;
+  }
+
+  async function onPhase(group: Locator, name: string): Promise<boolean> {
+    return (await seen(group.getByRole("radio", { name: new RegExp(`^\\s*scrum master: ${escapeRx(name)},`, "i") })).count()) > 0;
+  }
+
+  async function tickScrumMaster(where: string, word: string, group: Locator, name: string): Promise<void> {
+    const radio = seen(group.getByRole("radio", { name: new RegExp(`^\\s*scrum master: ${escapeRx(name)},`, "i") })).first();
+    if (!(await radio.count())) {
+      throw new Error(`${where} — "${name}" is not on the ${word} phase's team on ${page.url()}, so there is no "Scrum master: ${name}, ${word} phase" to choose`);
+    }
+    if (!(await radio.isChecked())) await radio.check({ force: true });
+    await settle();
+  }
+
+  async function addPhaseMembers(where: string, input: unknown): Promise<void> {
+    if (!(await ensureTeamOrganization())) {
+      noteRefusal(`${where} — no organization is chosen on ${page.url()}, so no team member can be named`);
+      return;
+    }
+    const { word, group } = await phaseGroupFor(where, input);
+    const names = await teamNames(typeof input === "string" && phaseWord(input) ? undefined : input);
+    if (!names.length) unbound(where, `the input ${JSON.stringify(input)} names nobody for the ${word} phase`);
+    for (const name of names) {
+      if (await onPhase(group, name)) continue;
+      const opener = seen(group.getByRole("button", { name: new RegExp(`team member to add to the ${word} phase`, "i") })).first();
+      if (!(await opener.count())) unbound(where, `the ${word} phase on ${page.url()} offers no "Team member to add to the ${word} phase" chooser`);
+      const { picked, offered: listed } = await pickListed(opener, name);
+      if (!picked) {
+        noteRefusal(`${where} — the ${word} phase's chooser on ${page.url()} does not offer "${name}" (it offers: ${listed.join(", ") || "nobody"})`);
+        continue;
+      }
+      const add = seen(group.getByRole("button", { name: new RegExp(`^\\s*add team member to the ${word} phase\\s*$`, "i") })).first();
+      if (await isDisabled(add)) throw new Error(`${where} — "Add team member to the ${word} phase" is disabled on ${page.url()} with "${name}" chosen`);
+      await add.click();
+      await settle();
+    }
+    const flag = given(input, ["scrumMaster", "scrum_master", "isScrumMaster"]);
+    if (flag !== undefined && flag !== null && typeof flag !== "object" && saysYes(flag) && names.length) {
+      await tickScrumMaster(where, word, group, names[0]);
+    }
+  }
+
+  async function setPhaseScrumMaster(where: string, input: unknown): Promise<void> {
+    await ensureTeamOrganization();
+    const { word, group } = await phaseGroupFor(where, input);
+    const names = await teamNames(input);
+    if (!names.length) unbound(where, `the input ${JSON.stringify(input)} names nobody to be the ${word} phase's scrum master`);
+    await tickScrumMaster(where, word, group, names[0]);
+  }
+
+  async function setPhaseCost(where: string, input: unknown): Promise<void> {
+    const { word, group } = await phaseGroupFor(where, input);
+    const value =
+      typeof input === "number" || (typeof input === "string" && !phaseWord(input))
+        ? String(input)
+        : field(input, "cost", "proposedCost", "proposed_cost", "amount", "price", "value");
+    const box = seen(group.getByRole("textbox", { name: new RegExp(`^\\s*proposed cost for the ${word} phase`, "i") })).first();
+    if (!(await box.count())) unbound(where, `the ${word} phase on ${page.url()} has no "Proposed cost for the ${word} phase" box`);
+    await box.fill(value);
+    await box.blur().catch(() => undefined);
+    await settle();
+  }
+
+  // "Resource N: <service area>, <allocation>" groups, by number (from 1), order (from 0) or
+  // service area, else the one last used, else the first.
+  const resourceGroups = (): Locator => seen(proposalMain().getByRole("group", { name: /^\s*resource \d+:/i }));
+  async function resourceGroupFor(where: string, input: unknown): Promise<{ at: number; group: Locator }> {
+    const names = await resourceGroups().evaluateAll((groups) => groups.map((one) => (one as HTMLElement).innerText.split("\n")[0].trim()));
+    let at = -1;
+    const numbered = Number.parseInt(field(input, "resource", "resourceNumber", "number"), 10);
+    const ordered = Number.parseInt(field(input, "order", "index", "resourceIndex", "position"), 10);
+    const area = field(input, "serviceArea", "service_area", "area");
+    if (Number.isFinite(numbered) && numbered > 0) at = numbered;
+    else if (Number.isFinite(ordered) && ordered >= 0) at = ordered + 1;
+    else if (area) {
+      const words = squash(/^[A-Z_]+$/.test(area) ? area.replace(/_/g, " ") : area);
+      const found = names.findIndex((one) => squash(one).includes(words));
+      if (found >= 0) at = found + 1;
+    }
+    if (at < 0) at = lastTeamResource || 1;
+    const group = seen(proposalMain().getByRole("group", { name: new RegExp(`^\\s*resource ${at}:`, "i") })).first();
+    if (!(await group.count())) unbound(where, `no "Resource ${at}" group on ${page.url()}; the form shows ${names.join(" | ") || "no resource"}`);
+    lastTeamResource = at;
+    return { at, group };
+  }
+
+  async function fillHourlyRate(where: string, group: Locator, name: string, rate: string): Promise<void> {
+    const boxes = seen(group.getByRole("textbox", { name: name ? new RegExp(`^\\s*hourly rate for ${escapeRx(name)}`, "i") : /^\s*hourly rate for/i }));
+    if (!(await boxes.count())) unbound(where, `no "Hourly rate for ${name || "<member>"}" box in the resource on ${page.url()}${name ? "" : " (nobody is named on it yet)"}`);
+    const box = name ? boxes.first() : boxes.last();
+    await box.fill(rate);
+    await box.blur().catch(() => undefined);
+    await settle();
+  }
+
+  async function addResourceMember(where: string, input: unknown): Promise<void> {
+    if (!(await ensureTeamOrganization())) {
+      noteRefusal(`${where} — no organization is chosen on ${page.url()}, so no team member can be named`);
+      return;
+    }
+    const { at, group } = await resourceGroupFor(where, input);
+    const names = await teamNames(input);
+    if (!names.length) unbound(where, `the input ${JSON.stringify(input)} names nobody for resource ${at}`);
+    const rate = field(input, "hourlyRate", "hourly_rate", "rate");
+    for (const name of names) {
+      const already = await seen(group.getByRole("textbox", { name: new RegExp(`^\\s*hourly rate for ${escapeRx(name)}`, "i") })).count();
+      if (!already) {
+        const opener = seen(group.getByRole("button", { name: new RegExp(`team member to add to resource ${at}`, "i") })).first();
+        if (!(await opener.count())) unbound(where, `resource ${at} on ${page.url()} offers no "Team member to add to resource ${at}" chooser`);
+        const { picked, offered: listed } = await pickListed(opener, name);
+        if (!picked) {
+          noteRefusal(`${where} — the chooser for resource ${at} on ${page.url()} does not offer "${name}" (it offers: ${listed.join(", ") || "nobody"})`);
+          continue;
+        }
+        const add = seen(group.getByRole("button", { name: new RegExp(`^\\s*add team member to resource ${at}\\s*$`, "i") })).first();
+        if (await isDisabled(add)) throw new Error(`${where} — "Add team member to resource ${at}" is disabled on ${page.url()} with "${name}" chosen`);
+        await add.click();
+        await settle();
+      }
+      if (rate) await fillHourlyRate(where, group, name, rate);
+    }
+  }
+
+  async function setResourceRate(where: string, input: unknown): Promise<void> {
+    const { group } = await resourceGroupFor(where, input);
+    const rate =
+      typeof input === "number" || typeof input === "string"
+        ? String(input)
+        : field(input, "hourlyRate", "hourly_rate", "rate", "value", "amount");
+    const names = await teamNames(given(input, MEMBER_KEYS.filter((key) => key !== "name")));
+    await fillHourlyRate(where, group, names[0] ?? "", rate);
+  }
+
+  // "Response to question N (required)", N by number (from 1) or order (from 0), else 1.
+  async function answerTeamQuestion(where: string, input: unknown, place?: number): Promise<void> {
+    const numbered = Number.parseInt(field(input, "question", "questionNumber", "number"), 10);
+    const ordered = Number.parseInt(field(input, "order", "index", "position"), 10);
+    const at = place ?? (Number.isFinite(numbered) && numbered > 0 ? numbered : Number.isFinite(ordered) && ordered >= 0 ? ordered + 1 : 1);
+    const text = typeof input === "string" || typeof input === "number" ? String(input) : field(input, "response", "answer", "text", "body", "value", "content");
+    const box = seen(proposalMain().getByRole("textbox", { name: new RegExp(`^\\s*response to question ${at}\\b`, "i") })).first();
+    if (!(await box.count())) unbound(where, `no "Response to question ${at}" box on ${page.url()}; it offers ${await offered()}`);
+    await box.fill(text);
+    await box.blur().catch(() => undefined);
+  }
+
+  // Each reference goes under "Reference N" (N its number, its order plus one, or its place in
+  // the list), "Add a reference" making room for it; Name, Email address and Phone number are
+  // the boxes each one has. A key with no box is reported, never dropped.
+  async function addTeamReferences(where: string, input: unknown): Promise<void> {
+    const region = seen(proposalMain().getByRole("region", { name: /^\s*references\s*$/i })).first();
+    if (!(await region.count())) unbound(where, `no "References" section on ${page.url()}; it offers ${await offered()}`);
+    const boxes: [RegExp, string[]][] = [
+      [/^\s*name\b/i, ["name", "fullName", "full_name", "referenceName"]],
+      [/^\s*email\b/i, ["email", "emailAddress", "email_address"]],
+      [/^\s*phone\b/i, ["phone", "phoneNumber", "phone_number", "telephone"]],
+    ];
+    const known = new Set(["order", "index", "position", "number", ...boxes.flatMap(([, keys]) => keys)].map(squash));
+    const list = Array.isArray(input) ? input : [input];
+    for (const [place, reference] of list.entries()) {
+      for (const key of Object.keys(record(reference))) {
+        if (!known.has(squash(key))) unbound(where, `no box on "Reference N" takes "${key}" (each reference has Name, Email address and Phone number (optional)) on ${page.url()}`);
+      }
+      const numbered = Number.parseInt(field(reference, "number"), 10);
+      const ordered = Number.parseInt(field(reference, "order", "index", "position"), 10);
+      const at = Number.isFinite(numbered) && numbered > 0 ? numbered : Number.isFinite(ordered) && ordered >= 0 ? ordered + 1 : place + 1;
+      const group = (): Locator => seen(region.getByRole("group", { name: new RegExp(`^\\s*reference ${at}\\s*$`, "i") })).first();
+      for (let tries = 0; tries < at && !(await group().count()); tries++) {
+        await press(where, /^\s*add a reference\s*$/i, region);
+      }
+      if (!(await group().count())) unbound(where, `"Add a reference" made no "Reference ${at}" on ${page.url()}`);
+      for (const [label, keys] of boxes) {
+        const value = given(reference, keys);
+        if (value === undefined || value === null) continue;
+        const box = seen(group().getByRole("textbox", { name: label })).first();
+        await box.fill(textOf(value));
+      }
+    }
+    await settle();
+  }
+
+  // Every value a test hands a save or a submit, entered before anything is pressed: the
+  // organization first (it decides who may be named), then the team, costs, rates, answers,
+  // references and files. A key nothing on the form takes is reported, never dropped.
+  async function fillTeamProposal(where: string, program: "sprint" | "team", input: unknown): Promise<void> {
+    if (input === undefined || input === null) return;
+    if (typeof input !== "object" || Array.isArray(input)) unbound(where, `the input ${JSON.stringify(input)} names no field of the proposal form`);
+    const entries = Object.entries(record(input)).filter(([, value]) => value !== undefined);
+    const is = (key: string, names: string[]): boolean => names.map(squash).includes(squash(key));
+    const org = entries.find(([key]) => is(key, PROPOSAL_ORG_KEYS));
+    if (org) await chooseTeamOrganization(where, org[1]);
+    for (const [key, value] of entries) {
+      if (is(key, PROPOSAL_ORG_KEYS) || is(key, PROPOSAL_FILE_DETAIL)) continue;
+      if (is(key, PROPOSAL_FILE_KEYS)) {
+        if (!Array.isArray(value) && typeof value !== "object") await addAttachmentFile(where, input);
+        else for (const one of [value].flat()) await addAttachmentFile(where, one);
+      } else if (is(key, ["team", "teamMembers", "members", "phases", "resources"])) {
+        for (const one of [value].flat()) {
+          if (program === "sprint") await addPhaseMembers(where, one);
+          else await addResourceMember(where, one);
+        }
+      } else if (program === "sprint" && is(key, ["scrumMaster"])) {
+        await setPhaseScrumMaster(where, value);
+      } else if (program === "sprint" && is(key, ["cost", "proposedCost", "costs", "phaseCosts"])) {
+        if (value && typeof value === "object" && !Array.isArray(value) && !given(value, ["cost", "proposedCost"])) {
+          for (const [phase, cost] of Object.entries(record(value))) await setPhaseCost(where, { phase, cost });
+        } else for (const one of [value].flat()) await setPhaseCost(where, one);
+      } else if (program === "team" && is(key, ["hourlyRate", "rate", "rates"])) {
+        for (const one of [value].flat()) await setResourceRate(where, one);
+      } else if (is(key, ["answers", "responses", "questions", "teamQuestions", "resourceQuestions", "questionResponses"])) {
+        const list = [value].flat();
+        for (let i = 0; i < list.length; i++) {
+          const one = list[i];
+          const placed = one && typeof one === "object" && (given(one, ["question", "questionNumber", "number", "order", "index", "position"]) !== undefined);
+          await answerTeamQuestion(where, one, placed ? undefined : i + 1);
+        }
+      } else if (is(key, ["references", "reference"])) {
+        await addTeamReferences(where, value);
+      } else {
+        unbound(where, `no field on ${page.url()} takes "${key}"; it offers ${await offered()}`);
+      }
+    }
+    await settle();
+  }
+
+  // A test hands a submit only the values its criterion is about; a question response left
+  // empty is given something, so the form is refused only for what the test is about.
+  async function completeTeamAnswers(): Promise<void> {
+    const boxes = seen(proposalMain().getByRole("textbox", { name: /^\s*response to question \d+/i }));
+    for (let i = 0; i < (await boxes.count()); i++) {
+      const box = boxes.nth(i);
+      if (!(await box.isEditable().catch(() => false))) continue;
+      if ((await box.inputValue().catch(() => "x")).trim()) continue;
+      await box.fill("Entered by the acceptance adapter so the proposal can be submitted.");
+    }
+    await settle();
+  }
+
+  // Why the form holds its submit back: each phase's "Incomplete: …", the messages against
+  // its fields, the Capabilities and Cost notices, and its own "Submitting is available once …".
+  async function heldBackReasons(): Promise<string[]> {
+    const lines: string[] = [];
+    for (const one of await paragraphs(proposalMain())) {
+      const flat = one.replace(/\s+/g, " ").trim();
+      if (/^incomplete:|^submitting is available once|does not hold every capability|exceeds the maximum budget|does not provide|is not qualified/i.test(flat)) lines.push(flat);
+    }
+    lines.push(...lined(await teamFieldErrors()));
+    return [...new Set(lines)];
+  }
+
+  // The message of every field marked invalid — the last of what describes it, its hint coming
+  // first — as "<field label>: <message>"; nothing when no field is.
+  async function teamFieldErrors(): Promise<string> {
+    const found = await proposalMain()
+      .getByRole("textbox")
+      .evaluateAll((boxes) =>
+        boxes.map((element) => {
+          if (element.getAttribute("aria-invalid") !== "true") return "";
+          const ids = (element.getAttribute("aria-describedby") ?? "").split(/\s+/).filter(Boolean);
+          const said = ids.length ? (document.getElementById(ids[ids.length - 1])?.innerText ?? "").trim() : "";
+          return said;
+        }),
+      )
+      .catch(() => [] as string[]);
+    return [...new Set(found.filter(Boolean))].join("\n");
+  }
+
+  // The terms dialog open, with the terms agreed to ticked; false when the form held its
+  // submit back or refused it (the reasons kept for the readers).
+  async function openTeamTerms(where: string, submitName: RegExp, group: () => Locator): Promise<boolean> {
+    if (await dialogShown(300)) return tickTeamTerms();
+    if (!(await onProposal(where))) return false;
+    const submit = seen(group().getByRole("button", { name: submitName })).first();
+    if (!(await submit.count())) {
+      noteRefusal(`${where} — ${page.url()} (Status: ${(await proposalTerm(/^status$/i)) || "not shown"}) offers no ${submitName}; its actions: ${(await proposalActionNames()) || "none"}`);
+      return false;
+    }
+    // The contract has submit held back while a phase is incomplete or a cost over budget:
+    // that is the form's answer, kept with its reasons for the readers, not something to wait
+    // out.
+    if (await isDisabled(submit)) {
+      teamRefusal = { path: new URL(page.url()).pathname, lines: await heldBackReasons() };
+      noteRefusal(`${where} — ${submitName} is disabled on ${page.url()}: ${teamRefusal.lines.join(" | ") || "the page gives no reason"}`);
+      return false;
+    }
+    await submit.click();
+    const deadline = Date.now() + 10000;
+    while (Date.now() < deadline) {
+      if (await openDialog().count()) break;
+      if ((await proposalAlertLines()).length) break;
+      await page.waitForTimeout(200);
+    }
+    if (await dialogShown(500)) return tickTeamTerms();
+    teamRefusal = { path: new URL(page.url()).pathname, lines: await proposalAlertLines() };
+    noteRefusal(`${where} — the form on ${page.url()} refused to submit: ${teamRefusal.lines.join(" | ") || "it raised no terms dialog"}`);
+    return false;
+  }
+
+  async function tickTeamTerms(): Promise<boolean> {
+    const box = openDialog().first();
+    for (const which of teamTermsAgreed) {
+      const tick = seen(box.getByRole("checkbox", { name: which === "program" ? TEAM_PROGRAM_TERMS : APP_TERMS })).first();
+      if ((await tick.count()) && !(await tick.isChecked())) await tick.check();
+    }
+    return true;
+  }
+
+  async function agreeToTeamTerms(where: string, which: "program" | "app", group: () => Locator): Promise<void> {
+    teamTermsAgreed.add(which);
+    if (!(await openTeamTerms(where, /^\s*submit proposal\s*$/i, group))) return;
+    const tick = seen(openDialog().first().getByRole("checkbox", { name: which === "program" ? TEAM_PROGRAM_TERMS : APP_TERMS })).first();
+    if (!(await tick.count())) {
+      unbound(where, `the "Submit your proposal" dialog on ${page.url()} has no box accepting the ${which === "program" ? "program's" : "Digital Marketplace"} terms; it reads: ${(await openDialog().first().innerText()).replace(/\s+/g, " ")}`);
+    }
+    if (!(await tick.isChecked())) await tick.check();
+    // Put away so the form behind it can be reached again; the submit reopens and reticks it.
+    await closeDialog();
+  }
+
+  // A save or a submit lands on the proposal's own screen with its form closed, or stays
+  // under an alert; either ends the wait.
+  async function teamLanded(): Promise<void> {
+    await settle();
+    const deadline = Date.now() + 20000;
+    while (Date.now() < deadline) {
+      if (await seen(proposalMain().getByRole("alert")).count()) break;
+      const path = new URL(page.url()).pathname;
+      if (/\/proposals\/[0-9a-f-]{36}\/edit$/i.test(path) && !(await openDialog().count()) && (await proposalActions().count()) && !(await saveChoices().count())) break;
+      if (/^\/dashboard$/.test(path)) break;
+      await page.waitForTimeout(250);
+    }
+    await ready();
+  }
+
+  async function confirmTeamSubmit(where: string): Promise<void> {
+    const box = openDialog().first();
+    const confirm = seen(box.getByRole("button", { name: /^\s*submit( proposal)?\s*$/i })).first();
+    if (!(await confirm.count())) unbound(where, `the "Submit your proposal" dialog on ${page.url()} offers no "Submit proposal"`);
+    if (await isDisabled(confirm)) {
+      throw new Error(`${where} — "Submit proposal" in the terms dialog is disabled on ${page.url()}; the terms were not all accepted (${(await seen(box.getByRole("checkbox")).count())} boxes, ${[...teamTermsAgreed].join(", ") || "none"} agreed)`);
+    }
+    await confirm.click();
+    await openDialog().first().waitFor({ state: "hidden", timeout: 15000 }).catch(() => undefined);
+    await teamLanded();
+    teamTermsAgreed.clear();
+  }
+
+  async function teamSaveDraft(where: string, program: "sprint" | "team", input: unknown): Promise<void> {
+    await closeDialog();
+    if (!(await openTeamFields(where))) return;
+    await fillTeamProposal(where, program, input);
+    const save = seen(proposalMain().getByRole("button", { name: /^\s*save draft\s*$/i })).first();
+    if (!(await save.count())) {
+      noteRefusal(`${where} — ${page.url()} offers no "Save draft" (its actions: ${(await proposalActionNames()) || "none"})`);
+      return;
+    }
+    if (await isDisabled(save)) throw new Error(`${where} — "Save draft" is disabled on ${page.url()}`);
+    await save.click();
+    await teamLanded();
+  }
+
+  async function teamCreateSubmit(where: string, program: "sprint" | "team", input: unknown): Promise<void> {
+    await closeDialog();
+    teamRefusal = null;
+    if (!(await openTeamFields(where))) return;
+    await fillTeamProposal(where, program, input);
+    await completeTeamAnswers();
+    if (!(await openTeamTerms(where, /^\s*submit proposal\s*$/i, proposalActions))) return;
+    await confirmTeamSubmit(where);
+  }
+
+  // The create form's readings.
+  async function teamFormMessages(): Promise<string> {
+    if (!(await proposalShown())) return "";
+    if (await openDialog().count()) return lined(await openDialog().first().innerText()).filter((line) => /tick|accept/i.test(line) && !/^\s*i accept/i.test(line)).join("\n");
+    const found = [...(await proposalAlertLines()), ...lined(await teamFieldErrors())];
+    if (teamRefusal && teamRefusal.path === new URL(page.url()).pathname) for (const line of teamRefusal.lines) if (!found.includes(line)) found.push(line);
+    return [...new Set(found)].join("\n");
+  }
+
+  // Notes on the Organization section saying the chosen organization is not qualified, each
+  // as its lines; nothing when it is qualified or none is chosen.
+  async function unqualifiedNotice(): Promise<string> {
+    if (!(await proposalShown())) return "";
+    const notes = seen(proposalMain().getByRole("note")).filter({ hasText: /not qualified/i });
+    const lines: string[] = [];
+    for (let i = 0; i < (await notes.count()); i++) lines.push(...lined(await notes.nth(i).innerText()));
+    return lines.join("\n");
+  }
+
+  async function capabilityGap(): Promise<string> {
+    if (!(await proposalShown())) return "";
+    const region = seen(proposalMain().getByRole("region", { name: /^\s*capabilities\s*$/i })).first();
+    const lines = (await region.count()) ? lined(await region.innerText()).filter((line) => /\bdoes not (yet )?hold\b/i.test(line)) : [];
+    for (const line of (await teamFormMessages()).split("\n")) if (line && /capabilit/i.test(line) && !lines.includes(line)) lines.push(line);
+    return lines.join("\n");
+  }
+
+  async function budgetExceeded(): Promise<string> {
+    if (!(await proposalShown())) return "";
+    const lines: string[] = [];
+    for (const line of [...(await costErrorLines()).map((one) => one.replace(/^[^:]+:\s*/, "")), ...(await teamFormMessages()).split("\n")]) {
+      if (line && /budget|exceed/i.test(line) && !lines.includes(line)) lines.push(line);
+    }
+    return lines.join("\n");
+  }
+
+  // "<Phase>: <message>" for each phase cost marked invalid, "total: <message>" for the Cost
+  // section's own notice; nothing when every cost is within its budget.
+  async function costErrorLines(): Promise<string[]> {
+    const found: string[] = [];
+    for (const word of await phasesShown()) {
+      const box = seen(proposalMain().getByRole("textbox", { name: new RegExp(`^\\s*proposed cost for the ${word} phase`, "i") })).first();
+      if (!(await box.count())) continue;
+      const said = await box
+        .evaluate((element) => {
+          if (element.getAttribute("aria-invalid") !== "true") return "";
+          const ids = (element.getAttribute("aria-describedby") ?? "").split(/\s+/).filter(Boolean);
+          return ids.length > 1 ? (document.getElementById(ids[ids.length - 1])?.innerText ?? "").trim() : "";
+        })
+        .catch(() => "");
+      if (said) found.push(`${phaseTitle(word)}: ${said}`);
+    }
+    const region = seen(proposalMain().getByRole("region", { name: /^\s*cost\s*$/i })).first();
+    if (await region.count()) {
+      for (const line of lined(await region.innerText())) {
+        if (/^cost$|^total proposed cost:|^each hourly rate|^estimated cost/i.test(line)) continue;
+        found.push(`total: ${line}`);
+      }
+    }
+    return found;
+  }
+
+  // The people a chooser offers, one per line by name alone ("Quinn Placeholder (pending)" read
+  // as "Quinn Placeholder"); the list is put away without choosing anybody. With no
+  // organization chosen there is nobody to offer.
+  async function choicesOffered(opener: Locator): Promise<string> {
+    await opener.click();
+    const options = seen(page.getByRole("option"));
+    await options.first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+    const names = (await options.allInnerTexts().catch(() => [] as string[])).map((one) => one.replace(/\s*\(pending\)\s*$/i, "").trim()).filter(Boolean);
+    await page.keyboard.press("Escape").catch(() => undefined);
+    await settle();
+    return names.join("\n");
+  }
+
+  async function swuMemberChoices(where: string): Promise<string> {
+    if (!(await proposalShown())) return "";
+    if (!(await ensureTeamOrganization())) return "";
+    const { word, group } = await phaseGroupFor(where, undefined);
+    const opener = seen(group.getByRole("button", { name: new RegExp(`team member to add to the ${word} phase`, "i") })).first();
+    if (!(await opener.count())) unbound(where, `the ${word} phase on ${page.url()} offers no "Team member to add to the ${word} phase" chooser`);
+    return choicesOffered(opener);
+  }
+
+  async function twuMemberChoices(where: string): Promise<string> {
+    if (!(await proposalShown())) return "";
+    if (!(await ensureTeamOrganization())) return "";
+    const { at, group } = await resourceGroupFor(where, undefined);
+    const opener = seen(group.getByRole("button", { name: new RegExp(`team member to add to resource ${at}`, "i") })).first();
+    if (!(await opener.count())) unbound(where, `resource ${at} on ${page.url()} offers no "Team member to add to resource ${at}" chooser`);
+    return choicesOffered(opener);
+  }
+
+  // "<name> — Pending" for each member named on a phase whose membership is still pending.
+  async function pendingMembers(): Promise<string> {
+    if (!(await proposalShown())) return "";
+    const items = seen(proposalMain().getByRole("radiogroup", { name: /^\s*scrum master for the/i }).getByRole("listitem"));
+    const found: string[] = [];
+    for (const words of await items.allInnerTexts()) {
+      const lines = lined(words);
+      if (!lines.some((line) => /^membership pending$/i.test(line))) continue;
+      const entry = `${lines[0]} — Pending`;
+      if (!found.includes(entry)) found.push(entry);
+    }
+    return found.join("\n");
+  }
+
+  async function phaseSections(): Promise<string> {
+    if (!(await proposalShown())) return "";
+    return (await phasesShown()).map(phaseTitle).join("\n");
+  }
+
+  // "<Phase> | complete|incomplete | <required capabilities the team does not hold>".
+  async function phaseRequirementLines(): Promise<string> {
+    if (!(await proposalShown())) return "";
+    const lines: string[] = [];
+    for (const word of await phasesShown()) {
+      const group = seen(proposalMain().getByRole("group", { name: new RegExp(`^\\s*${word} phase\\s*$`, "i") })).first();
+      const incomplete = (await paragraphs(group)).some((one) => /^\s*incomplete:/i.test(one));
+      const items = await seen(group.getByRole("list", { name: /^\s*capabilities the .* phase requires/i }).getByRole("listitem")).allInnerTexts();
+      const missing = items.map((one) => one.trim()).filter((one) => /:\s*not held$/i.test(one)).map((one) => one.replace(/:\s*not held$/i, "").trim());
+      lines.push(`${phaseTitle(word)} | ${incomplete ? "incomplete" : "complete"} | ${missing.join(", ")}`);
+    }
+    return lines.join("\n");
+  }
+
+  // The proposal's own screen.
+  async function teamEditSave(where: string, program: "sprint" | "team", input: unknown): Promise<void> {
+    if (!(await openTeamFields(where))) return;
+    await fillTeamProposal(where, program, input);
+    const save = seen(saveChoices().getByRole("button", { name: /^\s*save changes\s*$/i })).first();
+    if (!(await save.count())) unbound(where, `no "Save changes" among the save choices on ${page.url()}; it offers ${await offered()}`);
+    if (await isDisabled(save)) throw new Error(`${where} — "Save changes" is disabled on ${page.url()}: ${(await heldBackReasons()).join(" | ") || "the page gives no reason"}`);
+    await save.click();
+    await teamLanded();
+  }
+
+  async function teamEditSaveAndSubmit(where: string, program: "sprint" | "team", input: unknown): Promise<void> {
+    teamRefusal = null;
+    if (!(await openTeamFields(where))) return;
+    await fillTeamProposal(where, program, input);
+    teamTermsAgreed.add("program");
+    teamTermsAgreed.add("app");
+    if (!(await openTeamTerms(where, /^\s*save changes and submit\s*$/i, saveChoices))) return;
+    await confirmTeamSubmit(where);
+  }
+
+  async function teamEditSubmit(where: string): Promise<void> {
+    teamRefusal = null;
+    if (!(await onProposal(where))) return;
+    await closeDialog();
+    teamTermsAgreed.add("program");
+    teamTermsAgreed.add("app");
+    const group = (await teamFieldsOpen()) ? saveChoices : proposalActions;
+    const name = (await teamFieldsOpen()) ? /^\s*save changes and submit\s*$/i : /^\s*submit proposal\s*$/i;
+    if (!(await openTeamTerms(where, name, group))) return;
+    await confirmTeamSubmit(where);
+  }
+
+  // What the screen reports when a submission from it was refused: the alert it raises
+  // ("Your proposal was not submitted" over the service's reason), or the reasons the form gave
+  // for holding its submit back. Nothing when the submission went through.
+  async function teamSubmissionRefusal(): Promise<string> {
+    if (!(await proposalShown())) return "";
+    const lines: string[] = [];
+    const alerts = seen(proposalMain().getByRole("alert")).filter({ hasText: /not submitted|problem|could not|cannot|unable/i });
+    for (let i = 0; i < (await alerts.count()); i++) lines.push(...lined(await alerts.nth(i).innerText()));
+    if (teamRefusal && teamRefusal.path === new URL(page.url()).pathname) for (const line of teamRefusal.lines) if (!lines.includes(line)) lines.push(line);
+    return lines.join("\n");
+  }
+
+  // The messages against the form after a save was refused: the alert "Your changes were not
+  // saved" with the service's reason, and every field marked invalid. Nothing once the save
+  // went through (the form closes).
+  async function teamEditFieldErrors(): Promise<string> {
+    if (!(await proposalShown())) return "";
+    const lines: string[] = [];
+    const alerts = seen(proposalMain().getByRole("alert")).filter({ hasText: /not saved|problem/i });
+    for (let i = 0; i < (await alerts.count()); i++) lines.push(...lined(await alerts.nth(i).innerText()));
+    lines.push(...lined(await teamFieldErrors()));
+    return [...new Set(lines)].join("\n");
+  }
+
+  // The organization the proposal names: the chooser's choice while the form is open, else the
+  // "Organization" part of the Proposal section.
+  async function teamOrganization(): Promise<string> {
+    if (!(await proposalShown())) return "";
+    if (await teamFieldsOpen()) {
+      const shown = (await teamOrgChooser().innerText()).trim();
+      return /^select an item$/i.test(shown) ? "" : shown;
+    }
+    const region = seen(proposalMain().getByRole("region", { name: /^\s*organization\s*$/i })).first();
+    if (!(await region.count())) return "";
+    return (await paragraphs(region))[0]?.trim() ?? "";
+  }
+
+  // The "Proposal" section's text, with what each box holds while the form is open.
+  async function teamProposalTab(where: string): Promise<string> {
+    if (!(await proposalShown())) return "";
+    const link = seen(proposalMain().getByRole("navigation", { name: /proposal sections/i }).getByRole("link", { name: /^\s*proposal\s*$/i })).first();
+    if ((await link.count()) && /tab=(?!proposal)/.test(new URL(page.url()).search)) {
+      await link.click();
+      await ready();
+    }
+    const region = seen(proposalMain().getByRole("region", { name: /^\s*proposal\s*$/i })).first();
+    if (!(await region.count())) unbound(where, `no "Proposal" section on ${page.url()}; it offers ${await offered()}`);
+    const lines = lined(await region.innerText());
+    const boxes = seen(region.getByRole("textbox"));
+    for (let i = 0; i < (await boxes.count()); i++) {
+      const value = (await boxes.nth(i).inputValue().catch(() => "")).trim();
+      if (value && !lines.includes(value)) lines.push(value);
+    }
+    return lines.join("\n");
+  }
+
+  // A vendor's proposal screen carries the sections "Proposal" and "History" only: walked as
+  // the organization owner on the seeded awarded Sprint With Us proposal, the seeded Team With
+  // Us proposal under review at the challenge, the seeded closed Team With Us proposal and a
+  // fresh draft, none has a "Scoresheet" section.
+  async function teamScoresheet(where: string): Promise<string> {
+    if (!(await proposalShown())) return "";
+    const link = seen(proposalMain().getByRole("navigation", { name: /proposal sections/i }).getByRole("link", { name: /scoresheet|scores?/i })).first();
+    if (!(await link.count())) {
+      const sections = (await seen(proposalMain().getByRole("navigation", { name: /proposal sections/i }).getByRole("link")).allInnerTexts()).map((one) => `"${one.trim()}"`).join(", ");
+      unbound(where, `the proposal's screen at ${page.url()} offers ${actingId()} only the sections ${sections || "none"}; walked as the organization owner on the seeded awarded Sprint With Us proposal (00000000-0000-4000-a020-000000000101), the seeded Team With Us proposal under review at the challenge (00000000-0000-4000-a035-000000000101), the seeded closed Team With Us proposal and a fresh draft, and none has a "Scoresheet" section`);
+    }
+    await link.click();
+    await ready();
+    const region = seen(proposalMain().getByRole("region", { name: /scoresheet|scores?/i })).first();
+    return (await region.count()) ? lined(await region.innerText()).join("\n") : "";
+  }
+
+  function teamEditPage(id: string, route: string, program: "sprint" | "team") {
+    return {
+      open: (params: unknown) => openTeamProposal(route, params),
+      startEditing: async () => {
+        await openTeamFields(`${id}.start_editing`);
+      },
+      chooseOrganization: async (input?: unknown) => {
+        const where = `${id}.choose_organization`;
+        if (!(await openTeamFields(where))) return;
+        await chooseTeamOrganization(where, input);
+      },
+      saveChanges: (input?: unknown) => teamEditSave(`${id}.save_changes`, program, input),
+      saveChangesAndSubmit: (input?: unknown) => teamEditSaveAndSubmit(`${id}.save_changes_and_submit`, program, input),
+      submitProposal: () => teamEditSubmit(`${id}.submit_proposal`),
+      withdrawProposal: async () => {
+        await proposalAction(`${id}.withdraw_proposal`, /^\s*withdraw\s*$/i, /^\s*withdraw( proposal)?\s*$/i);
+      },
+      deleteProposal: async () => {
+        await proposalAction(`${id}.delete_proposal`, /^\s*delete\s*$/i, /^\s*delete( proposal)?\s*$/i);
+      },
+      submissionRefusal: () => teamSubmissionRefusal(),
+      fieldError: () => teamEditFieldErrors(),
+      organization: () => teamOrganization(),
+      proposalIdentifier: async () => ((await proposalShown()) ? (await proposalTerm(/^proposal id$/i)) || proposalPathId() : ""),
+      opportunityIdentifier: async () => ((await proposalShown()) ? (await proposalTerm(/^opportunity id$/i)) || opportunityPathId() : ""),
+      proposalTab: () => teamProposalTab(`${id}.proposal_tab`),
+      scoresheetTab: () => teamScoresheet(`${id}.scoresheet_tab`),
+      status: () => proposalTerm(/^status$/i),
+      // The vendor's screen shows no anonymous name, score or rank in any state walked (draft,
+      // submitted, under review, awarded); none shown reads as nothing.
+      anonymousProponentName: () => proposalTerm(/^(anonymous name|anonymi[sz]ed name|proponent)$/i),
+      totalScore: () => proposalTerm(/^(total )?score$/i),
+      rank: () => proposalTerm(/^rank(ing)?$/i),
+    };
+  }
+
+  // Each team action opens the form ("Edit" on the proposal's screen) first.
+  const onTeamForm =
+    (where: string, run: (input: unknown) => Promise<void>) =>
+    async (input?: unknown): Promise<void> => {
+      await closeDialog();
+      if (!(await openTeamFields(where))) return;
+      await run(input);
+    };
+
+  const proposalSwuCreate: S.ProposalSwuCreatePage = {
+    open: (params) => openTeamProposal("/opportunities/sprint-with-us/:opportunityId/proposals/create", params),
+    chooseOrganization: onTeamForm(`${PSWU_CREATE}.choose_organization`, (input) => chooseTeamOrganization(`${PSWU_CREATE}.choose_organization`, input)),
+    addPhaseTeamMember: onTeamForm(`${PSWU_CREATE}.add_phase_team_member`, (input) => addPhaseMembers(`${PSWU_CREATE}.add_phase_team_member`, input)),
+    setScrumMaster: onTeamForm(`${PSWU_CREATE}.set_scrum_master`, (input) => setPhaseScrumMaster(`${PSWU_CREATE}.set_scrum_master`, input)),
+    setPhaseProposedCost: onTeamForm(`${PSWU_CREATE}.set_phase_proposed_cost`, (input) => setPhaseCost(`${PSWU_CREATE}.set_phase_proposed_cost`, input)),
+    answerTeamQuestion: onTeamForm(`${PSWU_CREATE}.answer_team_question`, (input) => answerTeamQuestion(`${PSWU_CREATE}.answer_team_question`, input)),
+    addReference: onTeamForm(`${PSWU_CREATE}.add_reference`, (input) => addTeamReferences(`${PSWU_CREATE}.add_reference`, input)),
+    addAttachment: onTeamForm(`${PSWU_CREATE}.add_attachment`, (input) => addAttachmentFile(`${PSWU_CREATE}.add_attachment`, input)),
+    saveDraft: (input) => teamSaveDraft(`${PSWU_CREATE}.save_draft`, "sprint", input),
+    submitProposal: (input) => teamCreateSubmit(`${PSWU_CREATE}.submit_proposal`, "sprint", input),
+    acceptProgramTerms: onTeamForm(`${PSWU_CREATE}.accept_program_terms`, (input) => fillTeamProposal(`${PSWU_CREATE}.accept_program_terms`, "sprint", input).then(() => completeTeamAnswers()).then(() => agreeToTeamTerms(`${PSWU_CREATE}.accept_program_terms`, "program", proposalActions))),
+    acceptAppTerms: onTeamForm(`${PSWU_CREATE}.accept_app_terms`, (input) => fillTeamProposal(`${PSWU_CREATE}.accept_app_terms`, "sprint", input).then(() => completeTeamAnswers()).then(() => agreeToTeamTerms(`${PSWU_CREATE}.accept_app_terms`, "app", proposalActions))),
+    fieldError: () => teamFormMessages(),
+    capabilityGapError: () => capabilityGap(),
+    budgetExceededError: () => budgetExceeded(),
+    unqualifiedOrganizationNotice: () => unqualifiedNotice(),
+    pendingTeamMember: () => pendingMembers(),
+    teamMemberChoices: () => swuMemberChoices(`${PSWU_CREATE}.team_member_choices`),
+    phaseTeamSections: () => phaseSections(),
+    phaseRequirements: () => phaseRequirementLines(),
+    costErrors: async () => ((await proposalShown()) ? (await costErrorLines()).join("\n") : ""),
+  };
+
+  const proposalSwuEdit: S.ProposalSwuEditPage = {
+    ...teamEditPage(PSWU_EDIT, "/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit", "sprint"),
+    addPhaseTeamMember: onTeamForm(`${PSWU_EDIT}.add_phase_team_member`, (input) => addPhaseMembers(`${PSWU_EDIT}.add_phase_team_member`, input)),
+    setScrumMaster: onTeamForm(`${PSWU_EDIT}.set_scrum_master`, (input) => setPhaseScrumMaster(`${PSWU_EDIT}.set_scrum_master`, input)),
+  };
+
+  const proposalTwuCreate: S.ProposalTwuCreatePage = {
+    open: (params) => openTeamProposal("/opportunities/team-with-us/:opportunityId/proposals/create", params),
+    chooseOrganization: onTeamForm(`${PTWU_CREATE}.choose_organization`, (input) => chooseTeamOrganization(`${PTWU_CREATE}.choose_organization`, input)),
+    addTeamMemberForResource: onTeamForm(`${PTWU_CREATE}.add_team_member_for_resource`, (input) => addResourceMember(`${PTWU_CREATE}.add_team_member_for_resource`, input)),
+    setHourlyRate: onTeamForm(`${PTWU_CREATE}.set_hourly_rate`, (input) => setResourceRate(`${PTWU_CREATE}.set_hourly_rate`, input)),
+    answerResourceQuestion: onTeamForm(`${PTWU_CREATE}.answer_resource_question`, (input) => answerTeamQuestion(`${PTWU_CREATE}.answer_resource_question`, input)),
+    addAttachment: onTeamForm(`${PTWU_CREATE}.add_attachment`, (input) => addAttachmentFile(`${PTWU_CREATE}.add_attachment`, input)),
+    saveDraft: (input) => teamSaveDraft(`${PTWU_CREATE}.save_draft`, "team", input),
+    submitProposal: (input) => teamCreateSubmit(`${PTWU_CREATE}.submit_proposal`, "team", input),
+    acceptProgramTerms: onTeamForm(`${PTWU_CREATE}.accept_program_terms`, (input) => fillTeamProposal(`${PTWU_CREATE}.accept_program_terms`, "team", input).then(() => completeTeamAnswers()).then(() => agreeToTeamTerms(`${PTWU_CREATE}.accept_program_terms`, "program", proposalActions))),
+    acceptAppTerms: onTeamForm(`${PTWU_CREATE}.accept_app_terms`, (input) => fillTeamProposal(`${PTWU_CREATE}.accept_app_terms`, "team", input).then(() => completeTeamAnswers()).then(() => agreeToTeamTerms(`${PTWU_CREATE}.accept_app_terms`, "app", proposalActions))),
+    fieldError: () => teamFormMessages(),
+    // "<name> does not provide <service area>, which this opportunity needs." under the
+    // chosen organization, and any refusal naming a service area.
+    serviceAreaError: async () => {
+      if (!(await proposalShown())) return "";
+      const lines = (await paragraphs(proposalMain())).map((one) => one.replace(/\s+/g, " ").trim()).filter((one) => /\bdoes not provide\b/i.test(one));
+      for (const line of (await teamFormMessages()).split("\n")) if (line && /service area/i.test(line) && !lines.includes(line)) lines.push(line);
+      return lines.join("\n");
+    },
+    unqualifiedOrganizationNotice: () => unqualifiedNotice(),
+    teamMemberChoices: () => twuMemberChoices(`${PTWU_CREATE}.team_member_choices`),
+  };
+
+  const proposalTwuEdit: S.ProposalTwuEditPage = {
+    ...teamEditPage(PTWU_EDIT, "/opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit", "team"),
+    addTeamMemberForResource: onTeamForm(`${PTWU_EDIT}.add_team_member_for_resource`, (input) => addResourceMember(`${PTWU_EDIT}.add_team_member_for_resource`, input)),
+  };
+
   const surface: S.Surface = {
     signIn,
     signOut,
@@ -9566,23 +10661,7 @@ export default function create(
 
     proposalCwuEdit,
 
-    proposalCwuView: absent<S.ProposalCwuViewPage>(
-      "proposal-cwu-view",
-      "/opportunities/code-with-us/:opportunityId/proposals/:proposalId",
-      behindSession("/opportunities/code-with-us/:opportunityId/proposals/:proposalId"),
-      [
-        "enter_score",
-        "award_proposal",
-        "disqualify_proposal",
-        "proposal_identifier",
-        "proposal_tab",
-        "history_tab",
-        "proponent",
-        "score",
-        "rank",
-        "export_link",
-      ],
-    ),
+    proposalCwuView,
 
     proposalCwuExportOne: absent<S.ProposalCwuExportOnePage>(
       "proposal-cwu-export-one",
@@ -9598,77 +10677,14 @@ export default function create(
       ["exported_proposal"],
     ),
 
-    proposalSwuCreate: {
-      ...unboundMembers(
-        "proposal-swu-create",
-        behindSignIn("the Sprint With Us proposal form", 'shows the "Not Found" screen (tried with the seeded closed Sprint With Us opportunity)'),
-        ["team_member_choices", "phase_team_sections", "phase_requirements", "cost_errors"],
-      ),
-      ...absent<S.ProposalSwuCreatePage>(
-      "proposal-swu-create",
-      "/opportunities/sprint-with-us/:opportunityId/proposals/create",
-      behindSession("/opportunities/sprint-with-us/:opportunityId/proposals/create"),
-      [
-        "choose_organization",
-        "add_phase_team_member",
-        "set_scrum_master",
-        "set_phase_proposed_cost",
-        "answer_team_question",
-        "add_reference",
-        "add_attachment",
-        "save_draft",
-        "submit_proposal",
-        "accept_program_terms",
-        "accept_app_terms",
-        "field_error",
-        "capability_gap_error",
-        "budget_exceeded_error",
-        "unqualified_organization_notice",
-        "pending_team_member",
-      ],
-    ),
-    } as S.ProposalSwuCreatePage,
+    proposalSwuCreate,
 
-    proposalSwuEdit: {
-      ...unboundMembers(
-        "proposal-swu-edit",
-        behindSignIn("a Sprint With Us proposal's edit screen", 'shows the "Not Found" screen (tried with the seeded Sprint With Us proposals)'),
-        [
-          "choose_organization",
-          "add_phase_team_member",
-          "set_scrum_master",
-          "submission_refusal",
-          "field_error",
-          "organization",
-        ],
-      ),
-      ...absent<S.ProposalSwuEditPage>(
-      "proposal-swu-edit",
-      "/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit",
-      behindSession("/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit"),
-      [
-        "start_editing",
-        "save_changes",
-        "save_changes_and_submit",
-        "submit_proposal",
-        "withdraw_proposal",
-        "delete_proposal",
-        "proposal_identifier",
-        "opportunity_identifier",
-        "proposal_tab",
-        "scoresheet_tab",
-        "status",
-        "anonymous_proponent_name",
-        "total_score",
-        "rank",
-      ],
-    ),
-    } as S.ProposalSwuEditPage,
+    proposalSwuEdit,
 
     proposalSwuView: {
       ...unboundMembers(
         "proposal-swu-view",
-        behindSignIn("a Sprint With Us proposal's evaluation screen", 'shows the "Not Found" screen (tried with the seeded Sprint With Us proposals)'),
+        behindSignIn("a Sprint With Us proposal's evaluation screen", 'shows the "Page not found" screen (tried with the seeded Sprint With Us proposals)'),
         ["history_entries", "rank", "offered_score_actions"],
       ),
       ...absent<S.ProposalSwuViewPage>(
@@ -9712,66 +10728,14 @@ export default function create(
       ["exported_proposal"],
     ),
 
-    proposalTwuCreate: {
-      ...unboundMembers(
-        "proposal-twu-create",
-        behindSignIn("the Team With Us proposal form", 'shows the "Not Found" screen (tried with the seeded closed Team With Us opportunity)'),
-        ["team_member_choices"],
-      ),
-      ...absent<S.ProposalTwuCreatePage>(
-      "proposal-twu-create",
-      "/opportunities/team-with-us/:opportunityId/proposals/create",
-      behindSession("/opportunities/team-with-us/:opportunityId/proposals/create"),
-      [
-        "choose_organization",
-        "add_team_member_for_resource",
-        "set_hourly_rate",
-        "answer_resource_question",
-        "add_attachment",
-        "save_draft",
-        "submit_proposal",
-        "accept_program_terms",
-        "accept_app_terms",
-        "field_error",
-        "service_area_error",
-        "unqualified_organization_notice",
-      ],
-    ),
-    } as S.ProposalTwuCreatePage,
+    proposalTwuCreate,
 
-    proposalTwuEdit: {
-      ...unboundMembers(
-        "proposal-twu-edit",
-        behindSignIn("a Team With Us proposal's edit screen", 'shows the "Not Found" screen (tried with the seeded Team With Us proposals)'),
-        ["choose_organization", "add_team_member_for_resource", "submission_refusal", "field_error", "organization"],
-      ),
-      ...absent<S.ProposalTwuEditPage>(
-      "proposal-twu-edit",
-      "/opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit",
-      behindSession("/opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit"),
-      [
-        "start_editing",
-        "save_changes",
-        "save_changes_and_submit",
-        "submit_proposal",
-        "withdraw_proposal",
-        "delete_proposal",
-        "proposal_identifier",
-        "opportunity_identifier",
-        "proposal_tab",
-        "scoresheet_tab",
-        "status",
-        "anonymous_proponent_name",
-        "total_score",
-        "rank",
-      ],
-    ),
-    } as S.ProposalTwuEditPage,
+    proposalTwuEdit,
 
     proposalTwuView: {
       ...unboundMembers(
         "proposal-twu-view",
-        behindSignIn("a Team With Us proposal's evaluation screen", 'shows the "Not Found" screen (tried with the seeded Team With Us proposals)'),
+        behindSignIn("a Team With Us proposal's evaluation screen", 'shows the "Page not found" screen (tried with the seeded Team With Us proposals)'),
         ["history_entries", "rank", "offered_score_actions"],
       ),
       ...absent<S.ProposalTwuViewPage>(
@@ -9871,20 +10835,36 @@ export default function create(
       "/users/me?tab=organizations",
     ) as S.OrganizationUserMembershipsSelfPage,
 
-    evaluationPanelDashboard: absent<S.EvaluationPanelDashboardPage>(
-      "evaluation-panel-dashboard",
-      "/dashboard",
-      'walked signed in as the public sector employee, a first-time public sector employee, the administrator and vendors, /dashboard reads only "Dashboard" over "You are signed in as <name>." — no tabs, tables, links or buttons, so no panel\'s opportunities are shown to anybody',
-      [
-        "show_my_opportunities",
-        "show_panel_opportunities",
-        "open_opportunity",
-        "evaluations_tab",
-        "panel_opportunities_table",
-        "opportunity_status",
-        "empty_panel_opportunities_message",
-      ],
-    ),
+    // Walked on the current build as the public sector employee who sits on the seeded
+    // panels: /dashboard is "Dashboard", "Create an opportunity" and the one section "My
+    // opportunities" (the table "Opportunities you created": Title, each a link | Program |
+    // Status | Last updated), drawn without being asked for. Nothing on it is about the
+    // panels one sits on.
+    evaluationPanelDashboard: {
+      ...absent<S.EvaluationPanelDashboardPage>(
+        "evaluation-panel-dashboard",
+        "/dashboard",
+        'walked on the current build signed in as the public sector employee who sits on the seeded Sprint With Us and Team With Us panels, /dashboard draws "Dashboard", the link "Create an opportunity" and one section, "My opportunities" (the table "Opportunities you created": Title | Program | Status | Last updated) — no "Evaluations" tab, section, table or message for the panels one sits on; the administrator\'s dashboard lists every opportunity instead, and a vendor\'s lists proposals',
+        [
+          "show_panel_opportunities",
+          "evaluations_tab",
+          "panel_opportunities_table",
+          "opportunity_status",
+          "empty_panel_opportunities_message",
+        ],
+      ),
+      open: () => dash.open(),
+      // The section is always drawn; showing it is bringing it into view.
+      showMyOpportunities: async () => {
+        await dash.on("show_my_opportunities");
+        const region = seen(page.getByRole("main").getByRole("heading", { name: /^\s*(my|all) opportunities\s*$/i })).first();
+        if (!(await region.count())) {
+          unbound("evaluation-panel-dashboard.show_my_opportunities", `/dashboard at ${page.url()} draws no "My opportunities" section for ${actingId()}; it offers ${await offered()}`);
+        }
+        await region.scrollIntoViewIfNeeded().catch(() => undefined);
+      },
+      openOpportunity: (input: unknown) => opportunityDashboard.openOpportunity(input as never),
+    } as unknown as S.EvaluationPanelDashboardPage,
 
     evaluationPanelSwu: evaluationPanelPage<S.EvaluationPanelSwuPage>(
       "evaluation-panel-swu",
@@ -9899,21 +10879,21 @@ export default function create(
     evaluationInstructionsSwu: absent<S.EvaluationInstructionsSwuPage>(
       "evaluation-instructions-swu",
       "/opportunities/sprint-with-us/:opportunityId/edit?tab=instructions",
-      behindSession("/opportunities/sprint-with-us/:opportunityId/edit?tab=instructions"),
+      sectionMissing("sprint-with-us", "instructions"),
       ["instructions_body", "visible_to_evaluators_only"],
     ),
 
     evaluationInstructionsTwu: absent<S.EvaluationInstructionsTwuPage>(
       "evaluation-instructions-twu",
       "/opportunities/team-with-us/:opportunityId/edit?tab=instructions",
-      behindSession("/opportunities/team-with-us/:opportunityId/edit?tab=instructions"),
+      sectionMissing("team-with-us", "instructions"),
       ["instructions_body", "visible_to_evaluators_only"],
     ),
 
     evaluationIndividualListSwu: absent<S.EvaluationIndividualListSwuPage>(
       "evaluation-individual-list-swu",
       "/opportunities/sprint-with-us/:opportunityId/edit?tab=evaluation",
-      behindSession("/opportunities/sprint-with-us/:opportunityId/edit?tab=evaluation"),
+      sectionMissing("sprint-with-us", "evaluation"),
       [
         "open_proponent_evaluation",
         "submit_scores_for_consensus",
@@ -9929,7 +10909,7 @@ export default function create(
     evaluationIndividualListTwu: absent<S.EvaluationIndividualListTwuPage>(
       "evaluation-individual-list-twu",
       "/opportunities/team-with-us/:opportunityId/edit?tab=evaluation",
-      behindSession("/opportunities/team-with-us/:opportunityId/edit?tab=evaluation"),
+      sectionMissing("team-with-us", "evaluation"),
       [
         "open_proponent_evaluation",
         "submit_scores_for_consensus",
@@ -9945,7 +10925,7 @@ export default function create(
     evaluationConsensusListSwu: absent<S.EvaluationConsensusListSwuPage>(
       "evaluation-consensus-list-swu",
       "/opportunities/sprint-with-us/:opportunityId/edit?tab=consensus",
-      behindSession("/opportunities/sprint-with-us/:opportunityId/edit?tab=consensus"),
+      sectionMissing("sprint-with-us", "consensus"),
       [
         "open_proponent_consensus",
         "submit_final_consensus_scores",
@@ -9966,7 +10946,7 @@ export default function create(
     evaluationConsensusListTwu: absent<S.EvaluationConsensusListTwuPage>(
       "evaluation-consensus-list-twu",
       "/opportunities/team-with-us/:opportunityId/edit?tab=consensus",
-      behindSession("/opportunities/team-with-us/:opportunityId/edit?tab=consensus"),
+      sectionMissing("team-with-us", "consensus"),
       [
         "open_proponent_consensus",
         "submit_final_consensus_scores",
