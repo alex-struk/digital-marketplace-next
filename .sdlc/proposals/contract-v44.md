@@ -28,3 +28,14 @@ I rewrote the mail note in `spec/contract/observables.yaml` (now lines 152–167
 - **Run `node $SDLC_BIN oracle up` and `down`:** the command was refused because the `$SDLC_BIN` variable could not be checked before running, and so was `echo "$SDLC_BIN"`. No containers were started, so none are left running. The Compose override is unchanged from the version already approved, so this run shows nothing new about whether the oracle starts.
 
 There is one ruling request and I answered it, so there is no deferred-request line. The change to the note is all that needs to be on main before the R-5.31 and R-5.33 tests are rewritten to read blind-copy lists.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:product-owner
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+The question is whether the rewritten mail note in spec/contract/observables.yaml is the contract the R-5.31 and R-5.33 tests should act through. I approve. The previous note told test writers to search for a notice by a reader's visible address, which contradicts R-6.15 (several recipients means only the service's address is visible and every reader is a blind copy), and that is why those tests fail against a build that meets R-6.15. The new note states R-6.15 correctly. It tells a test to find a multi-recipient notice by subject, open it with read_one_message and read the blind-copy list, repeating this for every message when a batch was split. It keeps single-recipient notices findable by address. Both names it uses, configured_sender_address and read_one_message, are defined in the same contract. I checked the old-application caveat against the source. In sprint-with-us.tsx, the deadline-reached, question-consensus-ready, consensus-submitted and consensus-finalized notices use `to: batch.map(...)`, while the announcement and panel notices use `to: MAILER_REPLY, bcc: batch`. team-with-us.tsx matches, except that its deadline notice goes to the government author, which the note's 'panel, author or administrators' wording already covers. So the caveat correctly tells test writers that failures on those notices are the old system's fault, not the test's, which agrees with what the criteria index already records against R-6.15. The new text is a well-indented folded block in the existing notes list. No criterion's wording or confidence changes. Two things would change this ruling: a YAML parse failure in the edited region, or old code showing any of the notices the caveat names using the blind-copy form after all.
+
+**Conditions:**
+none
