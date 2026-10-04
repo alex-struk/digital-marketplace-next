@@ -11118,3 +11118,730 @@ rebind:
     by: runner:verify
     at: 2026-10-04T09:03:46.735Z
     closed: *a48
+  - id: R-5.11
+    target: new
+    why: "unbound: evaluation-individual-edit-swu.evaluation_status —
+      /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-q\
+      uestions/evaluations/:userId/edit is offered only to a signed-in p…"
+    found: unbound
+    adapter: b7c0195825d1cab1e29397414dbafc57ef238839
+    slice: 17
+    app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
+    by: runner:verify
+    at: 2026-10-04T12:06:18.445Z
+  - id: R-5.16
+    target: new
+    why: "unbound: evaluation-individual-create-swu.enter_question_score —
+      /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-q\
+      uestions/evaluations/create is offered only to a signed-in person, and
+      walked signed in on the current build (as the administrator, as the public
+      sector employee who owns the seeded opportunities and sits on their
+      panels, and as vendors — the seeded organization owner, who wrote the
+      seeded proposals, and a vendor with none — with the seeded records'
+      identifiers), the running build serves a signed-in person /dashboard (to
+      staff \"Create an opportunity\" over \"My opportunities\", to the
+      administrator every opportunity, to a vendor \"My proposals\" and \"My
+      organizations' proposals\"), /opportunities and every program's public
+      opportunity page (with \"Watch this opportunity\", and \"Start a
+      proposal\" while it takes proposals), the account screens under /users,
+      /organizations, /organizations/create, /organizations/:orgId/edit (its
+      Sprint With Us and Team With Us qualification sections drawing the
+      requirements and \"Read the … terms and conditions\") and
+      /organizations/:orgId/{sprint,team}-with-us-terms-and-conditions, to the
+      administrator the content-management screens under /content, to a vendor
+      the three programs' proposal forms .../proposals/create and their own
+      proposal's screen .../proposals/:proposalId/edit, and to the administrator
+      and public sector staff /opportunities/create, the three programs' forms,
+      their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (sections
+      Summary, Opportunity, Addenda, History, Proposals — proponents in plain
+      text with no link onward — and, on Sprint With Us and Team With Us,
+      Evaluation panel; no instructions, evaluation or consensus section,
+      ?tab=instructions, ?tab=evaluation and ?tab=consensus drawing the Summary)
+      and the Code With Us proposal's screen
+      /opportunities/code-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Status, Submitted, Proposal ID, Score, \"Printable copy\", and
+      the sections Proposal and History, with no button); the Sprint With Us and
+      Team With Us proposal's screen
+      /opportunities/{sprint,team}-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Opportunity, Status, Submitted, Proposal ID, \"Printable
+      copy\", and the sections Proposal and History, with no button); walked the
+      same way it still answers \"Page not found\" at /proposals, at every
+      program's .../proposals/:proposalId/export (where the Code With Us
+      screen's \"Printable copy\" lands, to the proposal's own author too) and
+      .../proposals/export, at every program's .../complete, and at the
+      evaluation and consensus screens under .../team-questions/ and
+      .../resource-questions/; opened signed out (with the seeded record's
+      identifier where it takes one) it shows the \"Page not found\" screen;
+      signed in as the public sector employee who sits on the seeded panels,
+      with the seeded Sprint With Us opportunity at \"Team questions: individual
+      evaluation\" (opportunities.swuEvaluationAlreadyBegun) and the Team With
+      Us one (opportunities.twuEvaluationAlreadyBegun) and their seeded
+      proposals, this address and the proposal's own page answer \"Page not
+      found\", and those opportunities' management screens offer only Summary,
+      Opportunity, Addenda, History, Proposals (proponents in plain text, no
+      link onward) and Evaluation panel — nothing that opens a proponent's
+      evaluation"
+    found: unbound
+    adapter: b7c0195825d1cab1e29397414dbafc57ef238839
+    slice: 17
+    app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
+    by: runner:verify
+    at: 2026-10-04T12:06:18.445Z
+  - id: R-5.19
+    target: new
+    why: "unbound: evaluation-panel-dashboard.evaluations_tab — walked on the
+      current build signed in as the public sector employee who sits on the
+      seeded Sprint With Us and Team With Us panels, /dashboard dra…"
+    found: unbound
+    adapter: b7c0195825d1cab1e29397414dbafc57ef238839
+    slice: 17
+    app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
+    by: runner:verify
+    at: 2026-10-04T12:06:18.445Z
+  - id: R-5.21
+    target: new
+    why: "unbound: evaluation-individual-create-swu.enter_question_score —
+      /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-q\
+      uestions/evaluations/create is offered only to a signed-in pe…"
+    found: unbound
+    adapter: b7c0195825d1cab1e29397414dbafc57ef238839
+    slice: 17
+    app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
+    by: runner:verify
+    at: 2026-10-04T12:06:18.445Z
+  - id: R-5.22
+    target: new
+    why: "unbound: evaluation-individual-create-swu.enter_question_score —
+      /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-q\
+      uestions/evaluations/create is offered only to a signed-in person, and
+      walked signed in on the current build (as the administrator, as the public
+      sector employee who owns the seeded opportunities and sits on their
+      panels, and as vendors — the seeded organization owner, who wrote the
+      seeded proposals, and a vendor with none — with the seeded records'
+      identifiers), the running build serves a signed-in person /dashboard (to
+      staff \"Create an opportunity\" over \"My opportunities\", to the
+      administrator every opportunity, to a vendor \"My proposals\" and \"My
+      organizations' proposals\"), /opportunities and every program's public
+      opportunity page (with \"Watch this opportunity\", and \"Start a
+      proposal\" while it takes proposals), the account screens under /users,
+      /organizations, /organizations/create, /organizations/:orgId/edit (its
+      Sprint With Us and Team With Us qualification sections drawing the
+      requirements and \"Read the … terms and conditions\") and
+      /organizations/:orgId/{sprint,team}-with-us-terms-and-conditions, to the
+      administrator the content-management screens under /content, to a vendor
+      the three programs' proposal forms .../proposals/create and their own
+      proposal's screen .../proposals/:proposalId/edit, and to the administrator
+      and public sector staff /opportunities/create, the three programs' forms,
+      their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (sections
+      Summary, Opportunity, Addenda, History, Proposals — proponents in plain
+      text with no link onward — and, on Sprint With Us and Team With Us,
+      Evaluation panel; no instructions, evaluation or consensus section,
+      ?tab=instructions, ?tab=evaluation and ?tab=consensus drawing the Summary)
+      and the Code With Us proposal's screen
+      /opportunities/code-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Status, Submitted, Proposal ID, Score, \"Printable copy\", and
+      the sections Proposal and History, with no button); the Sprint With Us and
+      Team With Us proposal's screen
+      /opportunities/{sprint,team}-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Opportunity, Status, Submitted, Proposal ID, \"Printable
+      copy\", and the sections Proposal and History, with no button); walked the
+      same way it still answers \"Page not found\" at /proposals, at every
+      program's .../proposals/:proposalId/export (where the Code With Us
+      screen's \"Printable copy\" lands, to the proposal's own author too) and
+      .../proposals/export, at every program's .../complete, and at the
+      evaluation and consensus screens under .../team-questions/ and
+      .../resource-questions/; opened signed out (with the seeded record's
+      identifier where it takes one) it shows the \"Page not found\" screen;
+      signed in as the public sector employee who sits on the seeded panels,
+      with the seeded Sprint With Us opportunity at \"Team questions: individual
+      evaluation\" (opportunities.swuEvaluationAlreadyBegun) and the Team With
+      Us one (opportunities.twuEvaluationAlreadyBegun) and their seeded
+      proposals, this address and the proposal's own page answer \"Page not
+      found\", and those opportunities' management screens offer only Summary,
+      Opportunity, Addenda, History, Proposals (proponents in plain text, no
+      link onward) and Evaluation panel — nothing that opens a proponent's
+      evaluation; unbound: evaluation-individual-create-twu.enter_question_score
+      —
+      /opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource\
+      -questions/evaluations/create is offered only to a signed-in person, and
+      walked signed in on the current build (as the administrator, as the public
+      sector employee who owns the seeded opportunities and sits on their
+      panels, and as vendors — the seeded organization owner, who wrote the
+      seeded proposals, and a vendor with none — with the seeded records'
+      identifiers), the running build serves a signed-in person /dashboard (to
+      staff \"Create an opportunity\" over \"My opportunities\", to the
+      administrator every opportunity, to a vendor \"My proposals\" and \"My
+      organizations' proposals\"), /opportunities and every program's public
+      opportunity page (with \"Watch this opportunity\", and \"Start a
+      proposal\" while it takes proposals), the account screens under /users,
+      /organizations, /organizations/create, /organizations/:orgId/edit (its
+      Sprint With Us and Team With Us qualification sections drawing the
+      requirements and \"Read the … terms and conditions\") and
+      /organizations/:orgId/{sprint,team}-with-us-terms-and-conditions, to the
+      administrator the content-management screens under /content, to a vendor
+      the three programs' proposal forms .../proposals/create and their own
+      proposal's screen .../proposals/:proposalId/edit, and to the administrator
+      and public sector staff /opportunities/create, the three programs' forms,
+      their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (sections
+      Summary, Opportunity, Addenda, History, Proposals — proponents in plain
+      text with no link onward — and, on Sprint With Us and Team With Us,
+      Evaluation panel; no instructions, evaluation or consensus section,
+      ?tab=instructions, ?tab=evaluation and ?tab=consensus drawing the Summary)
+      and the Code With Us proposal's screen
+      /opportunities/code-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Status, Submitted, Proposal ID, Score, \"Printable copy\", and
+      the sections Proposal and History, with no button); the Sprint With Us and
+      Team With Us proposal's screen
+      /opportunities/{sprint,team}-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Opportunity, Status, Submitted, Proposal ID, \"Printable
+      copy\", and the sections Proposal and History, with no button); walked the
+      same way it still answers \"Page not found\" at /proposals, at every
+      program's .../proposals/:proposalId/export (where the Code With Us
+      screen's \"Printable copy\" lands, to the proposal's own author too) and
+      .../proposals/export, at every program's .../complete, and at the
+      evaluation and consensus screens under .../team-questions/ and
+      .../resource-questions/; opened signed out (with the seeded record's
+      identifier where it takes one) it shows the \"Page not found\" screen;
+      signed in as the public sector employee who sits on the seeded panels,
+      with the seeded Sprint With Us opportunity at \"Team questions: individual
+      evaluation\" (opportunities.swuEvaluationAlreadyBegun) and the Team With
+      Us one (opportunities.twuEvaluationAlreadyBegun) and their seeded
+      proposals, this address and the proposal's own page answer \"Page not
+      found\", and those opportunities' management screens offer only Summary,
+      Opportunity, Addenda, History, Proposals (proponents in plain text, no
+      link onward) and Evaluation panel — nothing that opens a proponent's
+      evaluation"
+    found: unbound
+    adapter: b7c0195825d1cab1e29397414dbafc57ef238839
+    slice: 17
+    app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
+    by: runner:verify
+    at: 2026-10-04T12:06:18.445Z
+  - id: R-5.23
+    target: new
+    why: "unbound: evaluation-individual-create-swu.enter_question_score —
+      /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-q\
+      uestions/evaluations/create is offered only to a signed-in person, and
+      walked signed in on the current build (as the administrator, as the public
+      sector employee who owns the seeded opportunities and sits on their
+      panels, and as vendors — the seeded organization owner, who wrote the
+      seeded proposals, and a vendor with none — with the seeded records'
+      identifiers), the running build serves a signed-in person /dashboard (to
+      staff \"Create an opportunity\" over \"My opportunities\", to the
+      administrator every opportunity, to a vendor \"My proposals\" and \"My
+      organizations' proposals\"), /opportunities and every program's public
+      opportunity page (with \"Watch this opportunity\", and \"Start a
+      proposal\" while it takes proposals), the account screens under /users,
+      /organizations, /organizations/create, /organizations/:orgId/edit (its
+      Sprint With Us and Team With Us qualification sections drawing the
+      requirements and \"Read the … terms and conditions\") and
+      /organizations/:orgId/{sprint,team}-with-us-terms-and-conditions, to the
+      administrator the content-management screens under /content, to a vendor
+      the three programs' proposal forms .../proposals/create and their own
+      proposal's screen .../proposals/:proposalId/edit, and to the administrator
+      and public sector staff /opportunities/create, the three programs' forms,
+      their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (sections
+      Summary, Opportunity, Addenda, History, Proposals — proponents in plain
+      text with no link onward — and, on Sprint With Us and Team With Us,
+      Evaluation panel; no instructions, evaluation or consensus section,
+      ?tab=instructions, ?tab=evaluation and ?tab=consensus drawing the Summary)
+      and the Code With Us proposal's screen
+      /opportunities/code-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Status, Submitted, Proposal ID, Score, \"Printable copy\", and
+      the sections Proposal and History, with no button); the Sprint With Us and
+      Team With Us proposal's screen
+      /opportunities/{sprint,team}-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Opportunity, Status, Submitted, Proposal ID, \"Printable
+      copy\", and the sections Proposal and History, with no button); walked the
+      same way it still answers \"Page not found\" at /proposals, at every
+      program's .../proposals/:proposalId/export (where the Code With Us
+      screen's \"Printable copy\" lands, to the proposal's own author too) and
+      .../proposals/export, at every program's .../complete, and at the
+      evaluation and consensus screens under .../team-questions/ and
+      .../resource-questions/; opened signed out (with the seeded record's
+      identifier where it takes one) it shows the \"Page not found\" screen;
+      signed in as the public sector employee who sits on the seeded panels,
+      with the seeded Sprint With Us opportunity at \"Team questions: individual
+      evaluation\" (opportunities.swuEvaluationAlreadyBegun) and the Team With
+      Us one (opportunities.twuEvaluationAlreadyBegun) and their seeded
+      proposals, this address and the proposal's own page answer \"Page not
+      found\", and those opportunities' management screens offer only Summary,
+      Opportunity, Addenda, History, Proposals (proponents in plain text, no
+      link onward) and Evaluation panel — nothing that opens a proponent's
+      evaluation"
+    found: unbound
+    adapter: b7c0195825d1cab1e29397414dbafc57ef238839
+    slice: 17
+    app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
+    by: runner:verify
+    at: 2026-10-04T12:06:18.445Z
+  - id: R-5.24
+    target: new
+    why: "unbound: evaluation-individual-create-swu.enter_question_score —
+      /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-q\
+      uestions/evaluations/create is offered only to a signed-in person, and
+      walked signed in on the current build (as the administrator, as the public
+      sector employee who owns the seeded opportunities and sits on their
+      panels, and as vendors — the seeded organization owner, who wrote the
+      seeded proposals, and a vendor with none — with the seeded records'
+      identifiers), the running build serves a signed-in person /dashboard (to
+      staff \"Create an opportunity\" over \"My opportunities\", to the
+      administrator every opportunity, to a vendor \"My proposals\" and \"My
+      organizations' proposals\"), /opportunities and every program's public
+      opportunity page (with \"Watch this opportunity\", and \"Start a
+      proposal\" while it takes proposals), the account screens under /users,
+      /organizations, /organizations/create, /organizations/:orgId/edit (its
+      Sprint With Us and Team With Us qualification sections drawing the
+      requirements and \"Read the … terms and conditions\") and
+      /organizations/:orgId/{sprint,team}-with-us-terms-and-conditions, to the
+      administrator the content-management screens under /content, to a vendor
+      the three programs' proposal forms .../proposals/create and their own
+      proposal's screen .../proposals/:proposalId/edit, and to the administrator
+      and public sector staff /opportunities/create, the three programs' forms,
+      their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (sections
+      Summary, Opportunity, Addenda, History, Proposals — proponents in plain
+      text with no link onward — and, on Sprint With Us and Team With Us,
+      Evaluation panel; no instructions, evaluation or consensus section,
+      ?tab=instructions, ?tab=evaluation and ?tab=consensus drawing the Summary)
+      and the Code With Us proposal's screen
+      /opportunities/code-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Status, Submitted, Proposal ID, Score, \"Printable copy\", and
+      the sections Proposal and History, with no button); the Sprint With Us and
+      Team With Us proposal's screen
+      /opportunities/{sprint,team}-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Opportunity, Status, Submitted, Proposal ID, \"Printable
+      copy\", and the sections Proposal and History, with no button); walked the
+      same way it still answers \"Page not found\" at /proposals, at every
+      program's .../proposals/:proposalId/export (where the Code With Us
+      screen's \"Printable copy\" lands, to the proposal's own author too) and
+      .../proposals/export, at every program's .../complete, and at the
+      evaluation and consensus screens under .../team-questions/ and
+      .../resource-questions/; opened signed out (with the seeded record's
+      identifier where it takes one) it shows the \"Page not found\" screen;
+      signed in as the public sector employee who sits on the seeded panels,
+      with the seeded Sprint With Us opportunity at \"Team questions: individual
+      evaluation\" (opportunities.swuEvaluationAlreadyBegun) and the Team With
+      Us one (opportunities.twuEvaluationAlreadyBegun) and their seeded
+      proposals, this address and the proposal's own page answer \"Page not
+      found\", and those opportunities' management screens offer only Summary,
+      Opportunity, Addenda, History, Proposals (proponents in plain text, no
+      link onward) and Evaluation panel — nothing that opens a proponent's
+      evaluation"
+    found: unbound
+    adapter: b7c0195825d1cab1e29397414dbafc57ef238839
+    slice: 17
+    app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
+    by: runner:verify
+    at: 2026-10-04T12:06:18.445Z
+  - id: R-5.25
+    target: new
+    why: "unbound: evaluation-individual-create-swu.enter_question_score —
+      /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-q\
+      uestions/evaluations/create is offered only to a signed-in person, and
+      walked signed in on the current build (as the administrator, as the public
+      sector employee who owns the seeded opportunities and sits on their
+      panels, and as vendors — the seeded organization owner, who wrote the
+      seeded proposals, and a vendor with none — with the seeded records'
+      identifiers), the running build serves a signed-in person /dashboard (to
+      staff \"Create an opportunity\" over \"My opportunities\", to the
+      administrator every opportunity, to a vendor \"My proposals\" and \"My
+      organizations' proposals\"), /opportunities and every program's public
+      opportunity page (with \"Watch this opportunity\", and \"Start a
+      proposal\" while it takes proposals), the account screens under /users,
+      /organizations, /organizations/create, /organizations/:orgId/edit (its
+      Sprint With Us and Team With Us qualification sections drawing the
+      requirements and \"Read the … terms and conditions\") and
+      /organizations/:orgId/{sprint,team}-with-us-terms-and-conditions, to the
+      administrator the content-management screens under /content, to a vendor
+      the three programs' proposal forms .../proposals/create and their own
+      proposal's screen .../proposals/:proposalId/edit, and to the administrator
+      and public sector staff /opportunities/create, the three programs' forms,
+      their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (sections
+      Summary, Opportunity, Addenda, History, Proposals — proponents in plain
+      text with no link onward — and, on Sprint With Us and Team With Us,
+      Evaluation panel; no instructions, evaluation or consensus section,
+      ?tab=instructions, ?tab=evaluation and ?tab=consensus drawing the Summary)
+      and the Code With Us proposal's screen
+      /opportunities/code-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Status, Submitted, Proposal ID, Score, \"Printable copy\", and
+      the sections Proposal and History, with no button); the Sprint With Us and
+      Team With Us proposal's screen
+      /opportunities/{sprint,team}-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Opportunity, Status, Submitted, Proposal ID, \"Printable
+      copy\", and the sections Proposal and History, with no button); walked the
+      same way it still answers \"Page not found\" at /proposals, at every
+      program's .../proposals/:proposalId/export (where the Code With Us
+      screen's \"Printable copy\" lands, to the proposal's own author too) and
+      .../proposals/export, at every program's .../complete, and at the
+      evaluation and consensus screens under .../team-questions/ and
+      .../resource-questions/; opened signed out (with the seeded record's
+      identifier where it takes one) it shows the \"Page not found\" screen;
+      signed in as the public sector employee who sits on the seeded panels,
+      with the seeded Sprint With Us opportunity at \"Team questions: individual
+      evaluation\" (opportunities.swuEvaluationAlreadyBegun) and the Team With
+      Us one (opportunities.twuEvaluationAlreadyBegun) and their seeded
+      proposals, this address and the proposal's own page answer \"Page not
+      found\", and those opportunities' management screens offer only Summary,
+      Opportunity, Addenda, History, Proposals (proponents in plain text, no
+      link onward) and Evaluation panel — nothing that opens a proponent's
+      evaluation"
+    found: unbound
+    adapter: b7c0195825d1cab1e29397414dbafc57ef238839
+    slice: 17
+    app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
+    by: runner:verify
+    at: 2026-10-04T12:06:18.445Z
+  - id: R-5.26
+    target: new
+    why: "unbound: evaluation-individual-create-swu.enter_question_score —
+      /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-q\
+      uestions/evaluations/create is offered only to a signed-in person, and
+      walked signed in on the current build (as the administrator, as the public
+      sector employee who owns the seeded opportunities and sits on their
+      panels, and as vendors — the seeded organization owner, who wrote the
+      seeded proposals, and a vendor with none — with the seeded records'
+      identifiers), the running build serves a signed-in person /dashboard (to
+      staff \"Create an opportunity\" over \"My opportunities\", to the
+      administrator every opportunity, to a vendor \"My proposals\" and \"My
+      organizations' proposals\"), /opportunities and every program's public
+      opportunity page (with \"Watch this opportunity\", and \"Start a
+      proposal\" while it takes proposals), the account screens under /users,
+      /organizations, /organizations/create, /organizations/:orgId/edit (its
+      Sprint With Us and Team With Us qualification sections drawing the
+      requirements and \"Read the … terms and conditions\") and
+      /organizations/:orgId/{sprint,team}-with-us-terms-and-conditions, to the
+      administrator the content-management screens under /content, to a vendor
+      the three programs' proposal forms .../proposals/create and their own
+      proposal's screen .../proposals/:proposalId/edit, and to the administrator
+      and public sector staff /opportunities/create, the three programs' forms,
+      their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (sections
+      Summary, Opportunity, Addenda, History, Proposals — proponents in plain
+      text with no link onward — and, on Sprint With Us and Team With Us,
+      Evaluation panel; no instructions, evaluation or consensus section,
+      ?tab=instructions, ?tab=evaluation and ?tab=consensus drawing the Summary)
+      and the Code With Us proposal's screen
+      /opportunities/code-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Status, Submitted, Proposal ID, Score, \"Printable copy\", and
+      the sections Proposal and History, with no button); the Sprint With Us and
+      Team With Us proposal's screen
+      /opportunities/{sprint,team}-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Opportunity, Status, Submitted, Proposal ID, \"Printable
+      copy\", and the sections Proposal and History, with no button); walked the
+      same way it still answers \"Page not found\" at /proposals, at every
+      program's .../proposals/:proposalId/export (where the Code With Us
+      screen's \"Printable copy\" lands, to the proposal's own author too) and
+      .../proposals/export, at every program's .../complete, and at the
+      evaluation and consensus screens under .../team-questions/ and
+      .../resource-questions/; opened signed out (with the seeded record's
+      identifier where it takes one) it shows the \"Page not found\" screen;
+      signed in as the public sector employee who sits on the seeded panels,
+      with the seeded Sprint With Us opportunity at \"Team questions: individual
+      evaluation\" (opportunities.swuEvaluationAlreadyBegun) and the Team With
+      Us one (opportunities.twuEvaluationAlreadyBegun) and their seeded
+      proposals, this address and the proposal's own page answer \"Page not
+      found\", and those opportunities' management screens offer only Summary,
+      Opportunity, Addenda, History, Proposals (proponents in plain text, no
+      link onward) and Evaluation panel — nothing that opens a proponent's
+      evaluation"
+    found: unbound
+    adapter: b7c0195825d1cab1e29397414dbafc57ef238839
+    slice: 17
+    app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
+    by: runner:verify
+    at: 2026-10-04T12:06:18.445Z
+  - id: R-5.27
+    target: new
+    why: "unbound: evaluation-individual-create-swu.enter_question_score —
+      /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-q\
+      uestions/evaluations/create is offered only to a signed-in person, and
+      walked signed in on the current build (as the administrator, as the public
+      sector employee who owns the seeded opportunities and sits on their
+      panels, and as vendors — the seeded organization owner, who wrote the
+      seeded proposals, and a vendor with none — with the seeded records'
+      identifiers), the running build serves a signed-in person /dashboard (to
+      staff \"Create an opportunity\" over \"My opportunities\", to the
+      administrator every opportunity, to a vendor \"My proposals\" and \"My
+      organizations' proposals\"), /opportunities and every program's public
+      opportunity page (with \"Watch this opportunity\", and \"Start a
+      proposal\" while it takes proposals), the account screens under /users,
+      /organizations, /organizations/create, /organizations/:orgId/edit (its
+      Sprint With Us and Team With Us qualification sections drawing the
+      requirements and \"Read the … terms and conditions\") and
+      /organizations/:orgId/{sprint,team}-with-us-terms-and-conditions, to the
+      administrator the content-management screens under /content, to a vendor
+      the three programs' proposal forms .../proposals/create and their own
+      proposal's screen .../proposals/:proposalId/edit, and to the administrator
+      and public sector staff /opportunities/create, the three programs' forms,
+      their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (sections
+      Summary, Opportunity, Addenda, History, Proposals — proponents in plain
+      text with no link onward — and, on Sprint With Us and Team With Us,
+      Evaluation panel; no instructions, evaluation or consensus section,
+      ?tab=instructions, ?tab=evaluation and ?tab=consensus drawing the Summary)
+      and the Code With Us proposal's screen
+      /opportunities/code-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Status, Submitted, Proposal ID, Score, \"Printable copy\", and
+      the sections Proposal and History, with no button); the Sprint With Us and
+      Team With Us proposal's screen
+      /opportunities/{sprint,team}-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Opportunity, Status, Submitted, Proposal ID, \"Printable
+      copy\", and the sections Proposal and History, with no button); walked the
+      same way it still answers \"Page not found\" at /proposals, at every
+      program's .../proposals/:proposalId/export (where the Code With Us
+      screen's \"Printable copy\" lands, to the proposal's own author too) and
+      .../proposals/export, at every program's .../complete, and at the
+      evaluation and consensus screens under .../team-questions/ and
+      .../resource-questions/; opened signed out (with the seeded record's
+      identifier where it takes one) it shows the \"Page not found\" screen;
+      signed in as the public sector employee who sits on the seeded panels,
+      with the seeded Sprint With Us opportunity at \"Team questions: individual
+      evaluation\" (opportunities.swuEvaluationAlreadyBegun) and the Team With
+      Us one (opportunities.twuEvaluationAlreadyBegun) and their seeded
+      proposals, this address and the proposal's own page answer \"Page not
+      found\", and those opportunities' management screens offer only Summary,
+      Opportunity, Addenda, History, Proposals (proponents in plain text, no
+      link onward) and Evaluation panel — nothing that opens a proponent's
+      evaluation"
+    found: unbound
+    adapter: b7c0195825d1cab1e29397414dbafc57ef238839
+    slice: 17
+    app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
+    by: runner:verify
+    at: 2026-10-04T12:06:18.445Z
+  - id: R-5.28
+    target: new
+    why: "unbound: evaluation-individual-create-swu.enter_question_score —
+      /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-q\
+      uestions/evaluations/create is offered only to a signed-in person, and
+      walked signed in on the current build (as the administrator, as the public
+      sector employee who owns the seeded opportunities and sits on their
+      panels, and as vendors — the seeded organization owner, who wrote the
+      seeded proposals, and a vendor with none — with the seeded records'
+      identifiers), the running build serves a signed-in person /dashboard (to
+      staff \"Create an opportunity\" over \"My opportunities\", to the
+      administrator every opportunity, to a vendor \"My proposals\" and \"My
+      organizations' proposals\"), /opportunities and every program's public
+      opportunity page (with \"Watch this opportunity\", and \"Start a
+      proposal\" while it takes proposals), the account screens under /users,
+      /organizations, /organizations/create, /organizations/:orgId/edit (its
+      Sprint With Us and Team With Us qualification sections drawing the
+      requirements and \"Read the … terms and conditions\") and
+      /organizations/:orgId/{sprint,team}-with-us-terms-and-conditions, to the
+      administrator the content-management screens under /content, to a vendor
+      the three programs' proposal forms .../proposals/create and their own
+      proposal's screen .../proposals/:proposalId/edit, and to the administrator
+      and public sector staff /opportunities/create, the three programs' forms,
+      their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (sections
+      Summary, Opportunity, Addenda, History, Proposals — proponents in plain
+      text with no link onward — and, on Sprint With Us and Team With Us,
+      Evaluation panel; no instructions, evaluation or consensus section,
+      ?tab=instructions, ?tab=evaluation and ?tab=consensus drawing the Summary)
+      and the Code With Us proposal's screen
+      /opportunities/code-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Status, Submitted, Proposal ID, Score, \"Printable copy\", and
+      the sections Proposal and History, with no button); the Sprint With Us and
+      Team With Us proposal's screen
+      /opportunities/{sprint,team}-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Opportunity, Status, Submitted, Proposal ID, \"Printable
+      copy\", and the sections Proposal and History, with no button); walked the
+      same way it still answers \"Page not found\" at /proposals, at every
+      program's .../proposals/:proposalId/export (where the Code With Us
+      screen's \"Printable copy\" lands, to the proposal's own author too) and
+      .../proposals/export, at every program's .../complete, and at the
+      evaluation and consensus screens under .../team-questions/ and
+      .../resource-questions/; opened signed out (with the seeded record's
+      identifier where it takes one) it shows the \"Page not found\" screen;
+      signed in as the public sector employee who sits on the seeded panels,
+      with the seeded Sprint With Us opportunity at \"Team questions: individual
+      evaluation\" (opportunities.swuEvaluationAlreadyBegun) and the Team With
+      Us one (opportunities.twuEvaluationAlreadyBegun) and their seeded
+      proposals, this address and the proposal's own page answer \"Page not
+      found\", and those opportunities' management screens offer only Summary,
+      Opportunity, Addenda, History, Proposals (proponents in plain text, no
+      link onward) and Evaluation panel — nothing that opens a proponent's
+      evaluation"
+    found: unbound
+    adapter: b7c0195825d1cab1e29397414dbafc57ef238839
+    slice: 17
+    app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
+    by: runner:verify
+    at: 2026-10-04T12:06:18.445Z
+  - id: R-5.35
+    target: new
+    why: 'unbound: evaluation-individual-list-swu.evaluation_status — the management
+      screen /opportunities/sprint-with-us/:opportunityId/edit opens, signed in,
+      to the administrator and to the public sector employee who owns the seeded
+      opportunities and sits on their panels, but offers no instructions,
+      evaluation or consensus section: walked on the current build on the seeded
+      Sprint With Us opportunities at individual evaluation (with an evaluation
+      already begun), at consensus and at the code challenge, its sections are
+      Summary, Opportunity, Addenda, History, Proposals and Evaluation panel,
+      and ?tab=evaluation draws the Summary; opened signed out the screen shows
+      the "Page not found" screen; unbound:
+      evaluation-individual-list-swu.anonymous_proponent_name — the management
+      screen /opportunities/sprint-with-us/:opportunityId/edit opens, signed in,
+      to the administrator and to the public sector employee who owns the seeded
+      opportunities and sits on their panels, but offers no instructions,
+      evaluation or consensus section: walked on the current build on the seeded
+      Sprint With Us opportunities at individual evaluation (with an evaluation
+      already begun), at consensus and at the code challenge, its sections are
+      Summary, Opportunity, Addenda, History, Proposals and Evaluation panel,
+      and ?tab=evaluation draws the Summary; opened signed out the screen shows
+      the "Page not found" screen'
+    found: unbound
+    adapter: b7c0195825d1cab1e29397414dbafc57ef238839
+    slice: 17
+    app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
+    by: runner:verify
+    at: 2026-10-04T12:06:18.445Z
+  - id: R-5.36
+    target: new
+    why: "unbound: evaluation-individual-create-swu.enter_question_score —
+      /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-q\
+      uestions/evaluations/create is offered only to a signed-in person, and
+      walked signed in on the current build (as the administrator, as the public
+      sector employee who owns the seeded opportunities and sits on their
+      panels, and as vendors — the seeded organization owner, who wrote the
+      seeded proposals, and a vendor with none — with the seeded records'
+      identifiers), the running build serves a signed-in person /dashboard (to
+      staff \"Create an opportunity\" over \"My opportunities\", to the
+      administrator every opportunity, to a vendor \"My proposals\" and \"My
+      organizations' proposals\"), /opportunities and every program's public
+      opportunity page (with \"Watch this opportunity\", and \"Start a
+      proposal\" while it takes proposals), the account screens under /users,
+      /organizations, /organizations/create, /organizations/:orgId/edit (its
+      Sprint With Us and Team With Us qualification sections drawing the
+      requirements and \"Read the … terms and conditions\") and
+      /organizations/:orgId/{sprint,team}-with-us-terms-and-conditions, to the
+      administrator the content-management screens under /content, to a vendor
+      the three programs' proposal forms .../proposals/create and their own
+      proposal's screen .../proposals/:proposalId/edit, and to the administrator
+      and public sector staff /opportunities/create, the three programs' forms,
+      their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (sections
+      Summary, Opportunity, Addenda, History, Proposals — proponents in plain
+      text with no link onward — and, on Sprint With Us and Team With Us,
+      Evaluation panel; no instructions, evaluation or consensus section,
+      ?tab=instructions, ?tab=evaluation and ?tab=consensus drawing the Summary)
+      and the Code With Us proposal's screen
+      /opportunities/code-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Status, Submitted, Proposal ID, Score, \"Printable copy\", and
+      the sections Proposal and History, with no button); the Sprint With Us and
+      Team With Us proposal's screen
+      /opportunities/{sprint,team}-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Opportunity, Status, Submitted, Proposal ID, \"Printable
+      copy\", and the sections Proposal and History, with no button); walked the
+      same way it still answers \"Page not found\" at /proposals, at every
+      program's .../proposals/:proposalId/export (where the Code With Us
+      screen's \"Printable copy\" lands, to the proposal's own author too) and
+      .../proposals/export, at every program's .../complete, and at the
+      evaluation and consensus screens under .../team-questions/ and
+      .../resource-questions/; opened signed out (with the seeded record's
+      identifier where it takes one) it shows the \"Page not found\" screen;
+      signed in as the public sector employee who sits on the seeded panels,
+      with the seeded Sprint With Us opportunity at \"Team questions: individual
+      evaluation\" (opportunities.swuEvaluationAlreadyBegun) and the Team With
+      Us one (opportunities.twuEvaluationAlreadyBegun) and their seeded
+      proposals, this address and the proposal's own page answer \"Page not
+      found\", and those opportunities' management screens offer only Summary,
+      Opportunity, Addenda, History, Proposals (proponents in plain text, no
+      link onward) and Evaluation panel — nothing that opens a proponent's
+      evaluation; unbound: evaluation-individual-create-twu.enter_question_score
+      —
+      /opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource\
+      -questions/evaluations/create is offered only to a signed-in person, and
+      walked signed in on the current build (as the administrator, as the public
+      sector employee who owns the seeded opportunities and sits on their
+      panels, and as vendors — the seeded organization owner, who wrote the
+      seeded proposals, and a vendor with none — with the seeded records'
+      identifiers), the running build serves a signed-in person /dashboard (to
+      staff \"Create an opportunity\" over \"My opportunities\", to the
+      administrator every opportunity, to a vendor \"My proposals\" and \"My
+      organizations' proposals\"), /opportunities and every program's public
+      opportunity page (with \"Watch this opportunity\", and \"Start a
+      proposal\" while it takes proposals), the account screens under /users,
+      /organizations, /organizations/create, /organizations/:orgId/edit (its
+      Sprint With Us and Team With Us qualification sections drawing the
+      requirements and \"Read the … terms and conditions\") and
+      /organizations/:orgId/{sprint,team}-with-us-terms-and-conditions, to the
+      administrator the content-management screens under /content, to a vendor
+      the three programs' proposal forms .../proposals/create and their own
+      proposal's screen .../proposals/:proposalId/edit, and to the administrator
+      and public sector staff /opportunities/create, the three programs' forms,
+      their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (sections
+      Summary, Opportunity, Addenda, History, Proposals — proponents in plain
+      text with no link onward — and, on Sprint With Us and Team With Us,
+      Evaluation panel; no instructions, evaluation or consensus section,
+      ?tab=instructions, ?tab=evaluation and ?tab=consensus drawing the Summary)
+      and the Code With Us proposal's screen
+      /opportunities/code-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Status, Submitted, Proposal ID, Score, \"Printable copy\", and
+      the sections Proposal and History, with no button); the Sprint With Us and
+      Team With Us proposal's screen
+      /opportunities/{sprint,team}-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Opportunity, Status, Submitted, Proposal ID, \"Printable
+      copy\", and the sections Proposal and History, with no button); walked the
+      same way it still answers \"Page not found\" at /proposals, at every
+      program's .../proposals/:proposalId/export (where the Code With Us
+      screen's \"Printable copy\" lands, to the proposal's own author too) and
+      .../proposals/export, at every program's .../complete, and at the
+      evaluation and consensus screens under .../team-questions/ and
+      .../resource-questions/; opened signed out (with the seeded record's
+      identifier where it takes one) it shows the \"Page not found\" screen;
+      signed in as the public sector employee who sits on the seeded panels,
+      with the seeded Sprint With Us opportunity at \"Team questions: individual
+      evaluation\" (opportunities.swuEvaluationAlreadyBegun) and the Team With
+      Us one (opportunities.twuEvaluationAlreadyBegun) and their seeded
+      proposals, this address and the proposal's own page answer \"Page not
+      found\", and those opportunities' management screens offer only Summary,
+      Opportunity, Addenda, History, Proposals (proponents in plain text, no
+      link onward) and Evaluation panel — nothing that opens a proponent's
+      evaluation"
+    found: unbound
+    adapter: b7c0195825d1cab1e29397414dbafc57ef238839
+    slice: 17
+    app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
+    by: runner:verify
+    at: 2026-10-04T12:06:18.445Z
+  - id: R-1.24
+    target: new
+    why: "unbound: evaluation-individual-list-swu.anonymous_proponent_name — the
+      management screen /opportunities/sprint-with-us/:opportunityId/edit opens,
+      signed in, to the administrator and to the public sec…; unbound:
+      evaluation-individual-list-twu.anonymous_proponent_name — the management
+      screen /opportunities/team-with-us/:opportunityId/edit opens, signed in,
+      to the administrator and to the public secto…"
+    found: unbound
+    adapter: b7c0195825d1cab1e29397414dbafc57ef238839
+    slice: 17
+    app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
+    by: runner:verify
+    at: 2026-10-04T12:06:18.445Z
+  - id: R-2.5
+    target: new
+    why: 'unbound: evaluation-individual-list-swu.open — the management screen
+      /opportunities/sprint-with-us/:opportunityId/edit opens, signed in, to the
+      administrator and to the public sector employee who owns the seeded
+      opportunities and sits on their panels, but offers no instructions,
+      evaluation or consensus section: walked on the current build on the seeded
+      Sprint With Us opportunities at individual evaluation (with an evaluation
+      already begun), at consensus and at the code challenge, its sections are
+      Summary, Opportunity, Addenda, History, Proposals and Evaluation panel,
+      and ?tab=evaluation draws the Summary; opened signed out the screen shows
+      the "Page not found" screen (it shows "Page not found" at
+      http://localhost:4800/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=evaluation)'
+    found: unbound
+    adapter: b7c0195825d1cab1e29397414dbafc57ef238839
+    slice: 17
+    app_tree: 77f7271b82a75d99ff74bd424922562dee83e722
+    by: runner:verify
+    at: 2026-10-04T12:06:18.445Z
