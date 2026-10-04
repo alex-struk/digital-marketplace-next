@@ -9838,10 +9838,12 @@ export default function create(
   // of state and every score entered, newest first", Date | Entry | By | Note). Under
   // "Proposal actions" are "Award" and "Disqualify" as the state allows, and no other
   // button: no stage tab (team questions, code challenge, team scenario, resource
-  // questions, challenge), no score and no rank, though the seeded proposals hold scores.
+  // questions, challenge) and no score control. The current build adds, under the terms, a
+  // "Scores" region holding each stage's score, the price score, the total and the rank
+  // (see scoreTermIn), which the score observations read.
   function teamViewWalked(program: string): string {
     const seeded = program === "sprint-with-us" ? "...a016...101 (scored on the code challenge and the team scenario)" : "...a032...101 (scored on the challenge) and ...a032...102";
-    return `walked on the current build as the administrator, from the proponent links of the opportunity's Proposals section, on the seeded ${program} proposal(s) ${seeded}: the screen draws the terms Opportunity, Status, Submitted and Proposal ID, "Printable copy", the sections Proposal and History, under "Proposal actions" only "Award" and "Disqualify" as the state allows, and no stage tab, score control, score or rank`;
+    return `walked on the current build as the administrator, from the proponent links of the opportunity's Proposals section, on the seeded ${program} proposal(s) ${seeded}: the screen draws the terms Opportunity, Status, Submitted and Proposal ID, "Printable copy", the "Scores" region, the sections Proposal and History, under "Proposal actions" only "Award" and "Disqualify" as the state allows, and no stage tab or score control`;
   }
   // A control or reading the screen has never been seen to offer: unbound, saying what is
   // there. Should the screen one day offer it, that is said too, so the next run binds it.
@@ -9903,7 +9905,32 @@ export default function create(
     }
     return built as unknown as T;
   }
-  const SCORE_LACKS = (stage: string, member: string) => ({ member, name: new RegExp(`^\\s*${stage}( score)?\\s*$`, "i"), what: `${stage} score` });
+  // The scores a proposal's screen draws as terms in a region (staff: "Scores"; the vendor:
+  // "Scoresheet"), paired by position. Re-walked on the current build as the administrator:
+  // Sprint With Us ...a018...101 "Team questions 100%, Code challenge 80%, Team scenario 70%,
+  // Price 100%, Total score 87.5%, Rank 1 of 2"; Team With Us ...a032...101 "Resource
+  // questions 100%, Challenge 80%, Price 100%, Total score 92%, Rank 1 of 1", and
+  // ...a032...102, still at the challenge, "Challenge Not scored, Price Not scored, Total
+  // score Not yet calculated" with no Rank term. A figure not yet held reads as nothing.
+  async function scoreTermIn(region: RegExp, label: RegExp): Promise<string> {
+    if (!(await proposalShown())) return "";
+    const scope = seen(regionNamed(proposalMain(), region)).first();
+    if (!(await scope.count())) return "";
+    const names = (await seen(scope.getByRole("term")).allInnerTexts()).map((one) => one.trim());
+    const values = (await seen(scope.getByRole("definition")).allInnerTexts()).map((one) => one.trim());
+    const at = names.findIndex((name) => label.test(name));
+    const shown = at >= 0 && names.length === values.length ? values[at] : "";
+    return /^(not (yet )?(scored|calculated|ranked)|[—–-])$/i.test(shown) ? "" : shown;
+  }
+  // The screen draws a rank as "1 of 2"; it is read as the place the contract names ("1st").
+  function asPlace(shown: string): string {
+    const place = /^\s*(\d+)\s+of\s+\d+\s*$/.exec(shown)?.[1];
+    if (!place) return shown;
+    const n = Number(place);
+    const suffix = n % 100 >= 11 && n % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][n % 10] ?? "th";
+    return `${n}${suffix}`;
+  }
+  const SCORES = /^\s*scores\s*$/i;
   // Award and Disqualify are the screen's "Proposal actions", bound as on Code With Us.
   const proposalSwuViewBound: S.ProposalSwuViewPage = {
     ...teamProposalView<S.ProposalSwuViewPage>(
@@ -9919,15 +9946,15 @@ export default function create(
       { member: "code_challenge_tab", name: /^\s*code challenge\s*$/i, what: '"Code challenge" section' },
       { member: "team_scenario_tab", name: /^\s*team scenario\s*$/i, what: '"Team scenario" section' },
       { member: "wrong_stage_error", name: /^\s*(enter|edit) .*score\s*$/i, what: "score control, so no stage message can be raised from it" },
-      SCORE_LACKS("team questions", "questions_score"),
-      SCORE_LACKS("code challenge", "challenge_score"),
-      SCORE_LACKS("team scenario", "scenario_score"),
-      SCORE_LACKS("price", "price_score"),
-      SCORE_LACKS("total", "total_score"),
-      { member: "rank", name: /^\s*rank(ing)?\s*$/i, what: "rank or ranking" },
       { member: "offered_score_actions", name: /^\s*(enter|edit) .*score\s*$/i, what: "stage tab or score control to read offered score actions from" },
     ],
     ),
+    questionsScore: () => scoreTermIn(SCORES, /^team questions( score)?$/i),
+    challengeScore: () => scoreTermIn(SCORES, /^code challenge( score)?$/i),
+    scenarioScore: () => scoreTermIn(SCORES, /^team scenario( score)?$/i),
+    priceScore: () => scoreTermIn(SCORES, /^price( score)?$/i),
+    totalScore: () => scoreTermIn(SCORES, /^total( score)?$/i),
+    rank: async () => asPlace(await scoreTermIn(SCORES, /^rank(ing)?$/i)),
     awardProposal: () => awardProposalBy("proposal-swu-view.award_proposal"),
     disqualifyProposal: (input) => disqualifyProposalBy("proposal-swu-view.disqualify_proposal", input),
   };
@@ -9944,14 +9971,14 @@ export default function create(
       { member: "resource_questions_tab", name: /^\s*resource questions\s*$/i, what: '"Resource questions" stage section (the Proposal section lists the questions with the responses, and no scores)' },
       { member: "challenge_tab", name: /^\s*(interview\/)?challenge\s*$/i, what: '"Challenge" section' },
       { member: "wrong_stage_error", name: /^\s*(enter|edit) .*score\s*$/i, what: "score control, so no stage message can be raised from it" },
-      SCORE_LACKS("resource questions", "questions_score"),
-      SCORE_LACKS("challenge", "challenge_score"),
-      SCORE_LACKS("price", "price_score"),
-      SCORE_LACKS("total", "total_score"),
-      { member: "rank", name: /^\s*rank(ing)?\s*$/i, what: "rank or ranking" },
       { member: "offered_score_actions", name: /^\s*(enter|edit) .*score\s*$/i, what: "stage tab or score control to read offered score actions from" },
     ],
     ),
+    questionsScore: () => scoreTermIn(SCORES, /^resource questions( score)?$/i),
+    challengeScore: () => scoreTermIn(SCORES, /^(interview\/)?challenge( score)?$/i),
+    priceScore: () => scoreTermIn(SCORES, /^price( score)?$/i),
+    totalScore: () => scoreTermIn(SCORES, /^total( score)?$/i),
+    rank: async () => asPlace(await scoreTermIn(SCORES, /^rank(ing)?$/i)),
     awardProposal: () => awardProposalBy("proposal-twu-view.award_proposal"),
     disqualifyProposal: (input) => disqualifyProposalBy("proposal-twu-view.disqualify_proposal", input),
   };
@@ -10741,21 +10768,43 @@ export default function create(
     return lines.join("\n");
   }
 
-  // A vendor's proposal screen carries the sections "Proposal" and "History" only: walked as
-  // the organization owner on the seeded awarded Sprint With Us proposal, the seeded Team With
-  // Us proposal under review at the challenge, the seeded closed Team With Us proposal and a
-  // fresh draft, none has a "Scoresheet" section.
-  async function teamScoresheet(where: string): Promise<string> {
-    if (!(await proposalShown())) return "";
-    const link = seen(proposalMain().getByRole("navigation", { name: /proposal sections/i }).getByRole("link", { name: /scoresheet|scores?/i })).first();
-    if (!(await link.count())) {
-      const sections = (await seen(proposalMain().getByRole("navigation", { name: /proposal sections/i }).getByRole("link")).allInnerTexts()).map((one) => `"${one.trim()}"`).join(", ");
-      unbound(where, `the proposal's screen at ${page.url()} offers ${actingId()} only the sections ${sections || "none"}; walked as the organization owner on the seeded awarded Sprint With Us proposal (00000000-0000-4000-a020-000000000101), the seeded Team With Us proposal under review at the challenge (00000000-0000-4000-a035-000000000101), the seeded closed Team With Us proposal and a fresh draft, and none has a "Scoresheet" section`);
+  // Once a proposal is awarded or not awarded, the vendor's screen adds a "Scoresheet"
+  // section between Proposal and History (?tab=scoresheet). Re-walked on the current build
+  // as the organization owner on the seeded awarded Sprint With Us proposal
+  // (00000000-0000-4000-a020-000000000101): the region "Scoresheet" says "During
+  // evaluation, evaluators saw this proposal as Proponent 1." over the terms Team questions
+  // 100%, Code challenge 80%, Team scenario 70%, Price 100%, Total 87.5% and Rank 1 of 2.
+  // A proposal not yet decided (...a018...101 evaluated at the team scenario, the Team
+  // With Us ...a035...101 under review at the challenge) offers only Proposal and History
+  // and no score in its header: the screen was reached and withholds the scoresheet, which
+  // reads as nothing.
+  async function openTeamScoresheet(): Promise<boolean> {
+    if (!(await proposalShown())) return false;
+    const link = seen(proposalMain().getByRole("navigation", { name: /proposal sections/i }).getByRole("link", { name: /^\s*scoresheet\s*$/i })).first();
+    if (!(await link.count())) return false;
+    if (new URL(page.url()).searchParams.get("tab") !== "scoresheet") {
+      await link.click();
+      await ready();
     }
-    await link.click();
-    await ready();
-    const region = seen(proposalMain().getByRole("region", { name: /scoresheet|scores?/i })).first();
+    await seen(regionNamed(proposalMain(), /^\s*scoresheet\s*$/i)).first().waitFor({ state: "visible", timeout: 10000 }).catch(() => undefined);
+    return true;
+  }
+  async function teamScoresheet(): Promise<string> {
+    if (!(await openTeamScoresheet())) return "";
+    const region = seen(regionNamed(proposalMain(), /^\s*scoresheet\s*$/i)).first();
     return (await region.count()) ? lined(await region.innerText()).join("\n") : "";
+  }
+  // One figure of the Scoresheet, read and the section the screen was on opened again, so
+  // a reader of the Proposal section after it finds it where it was.
+  async function teamScoresheetTerm(label: RegExp): Promise<string> {
+    const back = page.url();
+    if (!(await openTeamScoresheet())) return "";
+    const shown = await scoreTermIn(/^\s*scoresheet\s*$/i, label);
+    if (page.url() !== back) {
+      await page.goto(back);
+      await ready();
+    }
+    return shown;
   }
 
   function teamEditPage(id: string, route: string, program: "sprint" | "team") {
@@ -10784,13 +10833,15 @@ export default function create(
       proposalIdentifier: async () => ((await proposalShown()) ? (await proposalTerm(/^proposal id$/i)) || proposalPathId() : ""),
       opportunityIdentifier: async () => ((await proposalShown()) ? (await proposalTerm(/^opportunity id$/i)) || opportunityPathId() : ""),
       proposalTab: () => teamProposalTab(`${id}.proposal_tab`),
-      scoresheetTab: () => teamScoresheet(`${id}.scoresheet_tab`),
+      scoresheetTab: () => teamScoresheet(),
       status: () => proposalTerm(/^status$/i),
-      // The vendor's screen shows no anonymous name, score or rank in any state walked (draft,
+      // The vendor's screen shows no anonymous name in its header in any state walked (draft,
       // submitted, under review, awarded); none shown reads as nothing.
       anonymousProponentName: () => proposalTerm(/^(anonymous name|anonymi[sz]ed name|proponent)$/i),
-      totalScore: () => proposalTerm(/^(total )?score$/i),
-      rank: () => proposalTerm(/^rank(ing)?$/i),
+      // The Scoresheet's "Total" and "Rank" (the rank as a place, "1st"); nothing before the
+      // proposal is decided, when the screen offers no Scoresheet.
+      totalScore: () => teamScoresheetTerm(/^total( score)?$/i),
+      rank: async () => asPlace(await teamScoresheetTerm(/^rank(ing)?$/i)),
     };
   }
 
