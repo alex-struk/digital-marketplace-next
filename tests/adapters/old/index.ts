@@ -10515,16 +10515,22 @@ export default function create(
   const ORG_FIELDS: [string, string[]][] = [
     ["legalName", ["legalName", "legal_name", "name", "organizationName"]],
     ["websiteUrl", ["websiteUrl", "website", "websiteAddress", "url"]],
-    ["streetAddress1", ["streetAddress1", "streetAddress", "street", "street1", "addressLine1", "address1", "address"]],
-    ["streetAddress2", ["streetAddress2", "street2", "addressLine2", "address2"]],
+    ["streetAddress1", [
+      "streetAddress1", "streetAddress", "street", "street1", "addressLine1", "address1", "address",
+      "addressLine", "addressLineOne", "streetAddressOne", "addressOne", "firstAddressLine",
+    ]],
+    ["streetAddress2", [
+      "streetAddress2", "street2", "addressLine2", "address2",
+      "addressLineTwo", "streetAddressTwo", "addressTwo", "secondAddressLine",
+    ]],
     ["city", ["city"]],
-    ["region", ["region", "province", "state"]],
-    ["mailCode", ["mailCode", "postalCode", "postal", "zip", "zipCode"]],
+    ["region", ["region", "province", "state", "provinceOrState"]],
+    ["mailCode", ["mailCode", "postalCode", "postal", "zip", "zipCode", "postalCodeOrZipCode", "postalOrZipCode"]],
     ["country", ["country"]],
     ["contactName", ["contactName"]],
     ["contactTitle", ["contactTitle", "title"]],
-    ["contactEmail", ["contactEmail", "email", "emailAddress"]],
-    ["contactPhone", ["contactPhone", "phone", "phoneNumber"]],
+    ["contactEmail", ["contactEmail", "email", "emailAddress", "contactEmailAddress"]],
+    ["contactPhone", ["contactPhone", "phone", "phoneNumber", "contactPhoneNumber"]],
   ];
   const ORG_IDENTIFIER_KEYS = ["orgId", "organizationId", "organization", "org", "id"];
   const ORG_GROUPS = ["profile", "registration", "fields", "values", "address"];
