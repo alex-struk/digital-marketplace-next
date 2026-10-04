@@ -34,3 +34,23 @@ I've answered both conditions in this run, so neither is deferred. I couldn't ru
 - **Anonymous proponent name.** The vendor's Scoresheet now also carries the anonymous name ("…as Proponent 1"), which `anonymous_proponent_name` doesn't read yet. Neither condition named it, so I left that binding unchanged; it is a likely candidate for the next round.
 
 I also updated the explanatory comments in `tests/adapters/new/index.ts` and `tests/adapters/new/bindings.yaml` so they no longer claim these screens show no scores. Nothing else changed, and no route in `surface.yaml` failed to resolve for the pages I touched.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Question: does bind-adapter-new-79 bind every surface action and observation on the new target, and nothing else? Ruling: approve. The diff touches only tests/adapters/new (bindings.yaml, index.ts) plus pipeline records, and nothing under tests/acceptance. The new bindings are navigation and locators only: scoreTermIn reads term/definition pairs from the named 'Scores' or 'Scoresheet' region, openTeamScoresheet clicks the vendor's Scoresheet section, and teamScoresheetTerm returns to the section that was open. None asserts or decides an outcome. Mapping 'Not scored', 'Not yet calculated', a dash or a missing term to empty reads a reached page that holds no figure, as the earlier binding did. The 'N of M' to ordinal rank conversion cannot change an outcome: R-2.32 checks the vendor's rank only for whether it contains a digit (spec lines 57 and 77), and R-1.27 reads only totalScore. The remaining unbound members (stage tabs, score control, wrong_stage_error, offered_score_actions) still carry real reasons naming what the walked screen lacks. The runner's typecheck on revision 2f39efbc passed with no diagnostics under adapters/new. Both open revision requests from build-slice-16-3 are answered. What would change the ruling: a verify run showing the Scores or Scoresheet readers return the wrong term or fail to find the region the walk describes, or a vendor screen that shows scores before the proposal is decided while the adapter reads empty.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `2f39efbccb48873b5b30b3ef6bfa76b666fb48d6`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
