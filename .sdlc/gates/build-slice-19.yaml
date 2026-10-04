@@ -1,0 +1,16 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The question is whether slice 19 (Sprint With Us and Team With Us proposals go through their challenge stages to an award) does what its criteria say. Verify recorded a current result against tree eab038a: six of the seven criteria pass (R-1.25, R-1.42, R-1.49, R-2.28, R-2.31, R-2.35) and R-2.30 fails, so the ruling is a return. The R-2.30 failure is the adapter finding no proposal export page at /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/export. plan/tasks.md gives that printable copy to Slice 20, not this slice. R-2.30 says nothing about an export or printable copy: it asks only that the price score be the share of the lowest bid in contention, calculated when the last human-entered score is recorded, recorded in history, and that the proposal become fully evaluated. The test's own design reads the price score from several places and needs only one of them to show 50, and it wraps each read in readOrEmpty. But it calls proposalSwuExportOne.open outside that guard (spec line 52), so the absence of a page this slice was never asked to build fails the criterion. That is a test reaching past its criterion, not missing application work, and rebuilding cannot fix it. Nothing else in the diff argues for a return: the stage-score refusal order matches R-2.28, price scores and the move to processing are written in one locked transaction, and the new rules have unit and end-to-end coverage. The ruling would change to an approval once R-2.30's test is regenerated without depending on the export page and a verify run on this branch passes all seven criteria.
+conditions:
+  - "test-overreaches R-2.30: the test opens the proposal's printable-copy/export page for the Sprint With Us proposal (proposalSwuExportOne.open, unguarded) and fails when that page is not served, but R-2.30 asks only that the price score be the bid's share of the lowest bid in contention as a percentage, calculated when the last human-entered score is recorded, recorded in the proposal's history, and that the proposal become fully evaluated; it never asks for an export or printable copy of the proposal, so the test must observe the price score without requiring that page to exist"
+cost: 0.8239838000000002
+turns: 5
+session: "2b687a11-8722-4166-8477-ac58bfce831c"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T18:20:58.107Z
