@@ -502,12 +502,12 @@ pages:
   proposal-cwu-export-one:
     actions: {}
     observations:
-      exported_proposal: "unbound: the proposal export screens (/opportunities/:program/:opportunityId/proposals/:proposalId/export and .../proposals/export) are offered only to signed-in public sector staff, and walked signed in (as the administrator, and as a vendor for a vendor's screens, with the seeded records' identifiers) the running build answers it with 'Page not found'; rechecked on the current build as the administrator, as the public sector employee who sits on the seeded panels and as the organization-owner vendor, with the seeded records' identifiers: the build now serves a vendor's dashboard of proposals, every program's public opportunity page (with 'Watch this opportunity', and 'Start a proposal' while it takes proposals), the three programs' proposal forms .../proposals/create and a vendor's own proposal's screen .../proposals/:proposalId/edit, the management screens' Proposals section (proponents named in plain text, with no link onward), the organizations' qualification sections and terms screens, and, to the administrator and public sector staff, the Code With Us proposal's screen /opportunities/code-with-us/:opportunityId/proposals/:proposalId; it still answers 'Page not found' at /proposals, at a Sprint With Us or Team With Us proposal's screen .../proposals/:proposalId, at every program's .../proposals/:proposalId/export (where the Code With Us proposal's 'Printable copy' link lands) and .../proposals/export, at every program's .../complete, and at the evaluation and consensus screens under .../team-questions/ and .../resource-questions/; opened signed out with the seeded opportunity and proposal identifiers they show the 'Page not found' screen"
+      exported_proposal: "absent: /opportunities/code-with-us/:opportunityId/proposals/:proposalId/export answers the application's 'Page not found' screen ('The page you are looking for does not exist.', 'Back to home'): walked on the current build as the administrator with the seeded Code With Us proposal's identifier (...a004...101), and on earlier runs as the public sector employee who owns the seeded opportunities, as the proposal's own author and as a vendor with none, and signed out; the proposal screen's own 'Printable copy' link lands on that same 'Page not found' screen, and nothing in the application reaches a screen that serves it. Decided when it runs: unbound instead once the address answers anything else"
 
   proposal-cwu-export-all:
     actions: {}
     observations:
-      exported_proposal: "unbound: the proposal export screens (/opportunities/:program/:opportunityId/proposals/:proposalId/export and .../proposals/export) are offered only to signed-in public sector staff, and walked signed in (as the administrator, and as a vendor for a vendor's screens, with the seeded records' identifiers) the running build answers it with 'Page not found'; rechecked on the current build as the administrator, as the public sector employee who sits on the seeded panels and as the organization-owner vendor, with the seeded records' identifiers: the build now serves a vendor's dashboard of proposals, every program's public opportunity page (with 'Watch this opportunity', and 'Start a proposal' while it takes proposals), the three programs' proposal forms .../proposals/create and a vendor's own proposal's screen .../proposals/:proposalId/edit, the management screens' Proposals section (proponents named in plain text, with no link onward), the organizations' qualification sections and terms screens, and, to the administrator and public sector staff, the Code With Us proposal's screen /opportunities/code-with-us/:opportunityId/proposals/:proposalId; it still answers 'Page not found' at /proposals, at a Sprint With Us or Team With Us proposal's screen .../proposals/:proposalId, at every program's .../proposals/:proposalId/export (where the Code With Us proposal's 'Printable copy' link lands) and .../proposals/export, at every program's .../complete, and at the evaluation and consensus screens under .../team-questions/ and .../resource-questions/; opened signed out with the seeded opportunity and proposal identifiers they show the 'Page not found' screen"
+      exported_proposal: "absent: /opportunities/code-with-us/:opportunityId/proposals/export answers the application's 'Page not found' screen ('The page you are looking for does not exist.', 'Back to home'): walked on the current build as the administrator with the seeded Code With Us opportunity's identifier (...a007...001), and on earlier runs as the public sector employee who owns the seeded opportunities and as vendors, and signed out; no link, tab, menu or button in the application leads to it. Decided when it runs: unbound instead once the address answers anything else"
 
   # Defaults the adapter supplies, which change what is submitted:
   # - submit_proposal, accept_program_terms and accept_app_terms fill every "Response to
@@ -578,24 +578,37 @@ pages:
   # challenge 80%, Team scenario 70%, Price 100%, Total score 87.5%, Rank 1 of 2), which the
   # score observations read; a figure the proposal does not yet hold ("Not scored", "Not yet
   # calculated", no Rank term) reads as nothing, and the rank is read as a place ("1st"). Its "Proposal actions" now hold "Award" and "Disqualify" as the
-  # state allows (both on ...a019...101), bound with the dialogs they open as on Code With Us. Each member below that the screen lacks reports unbound when it
-  # runs, and says so if the screen has since started to offer it.
+  # state allows (both on ...a019...101), bound with the dialogs they open as on Code With Us.
+  # Re-walked again on the current build as the administrator: the screen now has a section
+  # per stage under "Proposal sections" — Proposal, Team questions, Code challenge, Team
+  # scenario, History — loaded from ?tab=teamQuestions / codeChallenge / teamScenario. Each
+  # stage's section holds its score term and, under "<Stage> actions", "Enter code challenge
+  # score" / "Enter team scenario score" while the opportunity is at that stage and the
+  # proposal in it (...a021...101, ...a027...101/102, ...a030...102 on the code challenge;
+  # ...a015...101/102, ...a016...101, ...a017...102 on the team scenario); a stage not yet
+  # reached says "This proposal can be scored once the opportunity has reached the team
+  # scenario." (...a030...101, ...a011...101) and one already over "The team scenario is
+  # over." (...a018...101, ...a020...101). On the code challenge, once scored, "Screen in to
+  # team scenario" / "Screen out from team scenario" apply at once with no dialog. Driven
+  # through on ...a021...101: a score of 150 kept the dialog open under "Enter a score between
+  # 0 and 100, with no more than two decimal places", 85 was entered ("The code challenge
+  # score has been entered."), then screened in and back out.
   proposal-swu-view:
     actions:
-      score_code_challenge: "unbound: signed in as the administrator, opened the seeded Sprint With Us proposal at the team scenario (...a016...101) from the opportunity's Proposals section; the screen has the sections Proposal and History and no button but 'Award' and 'Disqualify' under 'Proposal actions', so no control enters a code challenge score; looked again on the current build on the seeded proposal past consensus at the code challenge (...a027...101): the sections are still Proposal and History, and its 'Proposal actions' hold only 'Disqualify'"
-      screen_in_to_team_scenario: "unbound: signed in as the administrator, opened the seeded Sprint With Us proposal from the opportunity's Proposals section; the screen has no button but 'Award' and 'Disqualify' under 'Proposal actions', no 'Screen in' control"
-      screen_out_from_team_scenario: "unbound: signed in as the administrator, opened the seeded Sprint With Us proposal from the opportunity's Proposals section; the screen has no button but 'Award' and 'Disqualify' under 'Proposal actions', no 'Screen out' control"
-      score_team_scenario: "unbound: signed in as the administrator, opened the seeded Sprint With Us proposal at the team scenario (...a016...101); the screen has no button but 'Award' and 'Disqualify' under 'Proposal actions', so no control enters a team scenario score"
+      score_code_challenge: bound
+      screen_in_to_team_scenario: bound
+      screen_out_from_team_scenario: bound
+      score_team_scenario: bound
       award_proposal: bound
       disqualify_proposal: bound
     observations:
       proposal_identifier: bound
       proposal_tab: bound
-      team_questions_tab: "unbound: signed in as the administrator, opened the seeded Sprint With Us proposal; its sections are only Proposal and History (the Proposal section lists the team questions with the responses and no scores); there is no team questions stage section"
-      code_challenge_tab: "unbound: signed in as the administrator, opened the seeded Sprint With Us proposal scored on the code challenge (...a016...101); its sections are only Proposal and History, no code challenge section"
-      team_scenario_tab: "unbound: signed in as the administrator, opened the seeded Sprint With Us proposal scored on the team scenario (...a016...101); its sections are only Proposal and History, no team scenario section"
+      team_questions_tab: bound
+      code_challenge_tab: bound
+      team_scenario_tab: bound
       history_tab: bound
-      wrong_stage_error: "unbound: signed in as the administrator, opened the seeded Sprint With Us proposals; the screen offers no score control, so no stage message can be raised from it"
+      wrong_stage_error: bound
       questions_score: bound
       challenge_score: bound
       scenario_score: bound
@@ -603,18 +616,18 @@ pages:
       total_score: bound
       history_entries: bound
       rank: bound
-      offered_score_actions: "unbound: signed in as the administrator, opened the seeded Sprint With Us proposals; the screen has no stage tab and no score control to read the offered score actions from"
+      offered_score_actions: bound
 
   proposal-swu-export-one:
     actions: {}
     observations:
-      exported_proposal: "unbound: the proposal export screens (/opportunities/:program/:opportunityId/proposals/:proposalId/export and .../proposals/export) are offered only to signed-in public sector staff, and walked signed in (as the administrator, and as a vendor for a vendor's screens, with the seeded records' identifiers) the running build answers it with 'Page not found'; rechecked on the current build as the administrator, as the public sector employee who sits on the seeded panels and as the organization-owner vendor, with the seeded records' identifiers: the build now serves a vendor's dashboard of proposals, every program's public opportunity page (with 'Watch this opportunity', and 'Start a proposal' while it takes proposals), the three programs' proposal forms .../proposals/create and a vendor's own proposal's screen .../proposals/:proposalId/edit, the management screens' Proposals section (proponents named in plain text, with no link onward), the organizations' qualification sections and terms screens, and, to the administrator and public sector staff, the Code With Us proposal's screen /opportunities/code-with-us/:opportunityId/proposals/:proposalId; it still answers 'Page not found' at /proposals, at a Sprint With Us or Team With Us proposal's screen .../proposals/:proposalId, at every program's .../proposals/:proposalId/export (where the Code With Us proposal's 'Printable copy' link lands) and .../proposals/export, at every program's .../complete, and at the evaluation and consensus screens under .../team-questions/ and .../resource-questions/; opened signed out with the seeded opportunity and proposal identifiers they show the 'Page not found' screen"
-      anonymous_proponent_name: "unbound: the proposal export screens (/opportunities/:program/:opportunityId/proposals/:proposalId/export and .../proposals/export) are offered only to signed-in public sector staff, and walked signed in (as the administrator, and as a vendor for a vendor's screens, with the seeded records' identifiers) the running build answers it with 'Page not found'; rechecked on the current build as the administrator, as the public sector employee who sits on the seeded panels and as the organization-owner vendor, with the seeded records' identifiers: the build now serves a vendor's dashboard of proposals, every program's public opportunity page (with 'Watch this opportunity', and 'Start a proposal' while it takes proposals), the three programs' proposal forms .../proposals/create and a vendor's own proposal's screen .../proposals/:proposalId/edit, the management screens' Proposals section (proponents named in plain text, with no link onward), the organizations' qualification sections and terms screens, and, to the administrator and public sector staff, the Code With Us proposal's screen /opportunities/code-with-us/:opportunityId/proposals/:proposalId; it still answers 'Page not found' at /proposals, at a Sprint With Us or Team With Us proposal's screen .../proposals/:proposalId, at every program's .../proposals/:proposalId/export (where the Code With Us proposal's 'Printable copy' link lands) and .../proposals/export, at every program's .../complete, and at the evaluation and consensus screens under .../team-questions/ and .../resource-questions/; opened signed out with the seeded opportunity and proposal identifiers they show the 'Page not found' screen"
+      exported_proposal: "absent: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/export answers the application's 'Page not found' screen ('The page you are looking for does not exist.', 'Back to home'): walked on the current build as the administrator with the seeded Sprint With Us proposals' identifiers (...a015...102, ...a017...102), by address and by following the proposal screen's own 'Printable copy' link, which lands on that same 'Page not found' screen; on earlier runs as the public sector employee who owns the seeded opportunities, as the organization owner who wrote the seeded proposals and as a vendor with none, and signed out, it answered the same; nothing in the application reaches a screen that serves it. Decided when it runs: unbound instead once the address answers anything else"
+      anonymous_proponent_name: "absent: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/export answers the application's 'Page not found' screen ('The page you are looking for does not exist.', 'Back to home'): walked on the current build as the administrator with the seeded Sprint With Us proposals' identifiers (...a015...102, ...a017...102), by address and by following the proposal screen's own 'Printable copy' link, which lands on that same 'Page not found' screen; on earlier runs as the public sector employee who owns the seeded opportunities, as the organization owner who wrote the seeded proposals and as a vendor with none, and signed out, it answered the same; nothing in the application reaches a screen that serves it. Decided when it runs: unbound instead once the address answers anything else"
 
   proposal-swu-export-all:
     actions: {}
     observations:
-      exported_proposal: "unbound: the proposal export screens (/opportunities/:program/:opportunityId/proposals/:proposalId/export and .../proposals/export) are offered only to signed-in public sector staff, and walked signed in (as the administrator, and as a vendor for a vendor's screens, with the seeded records' identifiers) the running build answers it with 'Page not found'; rechecked on the current build as the administrator, as the public sector employee who sits on the seeded panels and as the organization-owner vendor, with the seeded records' identifiers: the build now serves a vendor's dashboard of proposals, every program's public opportunity page (with 'Watch this opportunity', and 'Start a proposal' while it takes proposals), the three programs' proposal forms .../proposals/create and a vendor's own proposal's screen .../proposals/:proposalId/edit, the management screens' Proposals section (proponents named in plain text, with no link onward), the organizations' qualification sections and terms screens, and, to the administrator and public sector staff, the Code With Us proposal's screen /opportunities/code-with-us/:opportunityId/proposals/:proposalId; it still answers 'Page not found' at /proposals, at a Sprint With Us or Team With Us proposal's screen .../proposals/:proposalId, at every program's .../proposals/:proposalId/export (where the Code With Us proposal's 'Printable copy' link lands) and .../proposals/export, at every program's .../complete, and at the evaluation and consensus screens under .../team-questions/ and .../resource-questions/; opened signed out with the seeded opportunity and proposal identifiers they show the 'Page not found' screen"
+      exported_proposal: "absent: /opportunities/sprint-with-us/:opportunityId/proposals/export answers the application's 'Page not found' screen ('The page you are looking for does not exist.', 'Back to home'): walked on the current build as the administrator with the seeded Sprint With Us opportunity's identifier (...a017...001), and on earlier runs as the public sector employee who owns the seeded opportunities and as vendors, and signed out; no link, tab, menu or button in the application leads to it. Decided when it runs: unbound instead once the address answers anything else"
 
   # Defaults the adapter supplies, which change what is submitted:
   # - submit_proposal, accept_program_terms and accept_app_terms fill every "Response to
@@ -678,38 +691,46 @@ pages:
   # on Sprint With Us. Its
   # "Proposal actions" now hold "Disqualify" (...8000...841) and, once evaluated at the
   # challenge, "Award" (...a033...101), bound as on Code With Us.
+  # Re-walked again on the current build as the administrator: the screen now has a section
+  # per stage under "Proposal sections" — Proposal, Resource questions, Challenge, History —
+  # loaded from ?tab=resourceQuestions / ?tab=challenge. Challenge holds "Challenge score"
+  # and, under "Challenge actions", "Enter challenge score" once the opportunity has reached
+  # the challenge (...a032...101/102, ...a033...101/102, ...a035...101); before then it says
+  # "This proposal can be scored once the opportunity has reached the challenge." and offers
+  # no score (...a034...101, ...a038...101/102). The score dialog was driven through on
+  # ...a032...101 ("The challenge score has been entered.").
   proposal-twu-view:
     actions:
-      score_resource_questions: "unbound: signed in as the administrator, opened the seeded Team With Us proposals at the challenge (...a032...101, ...102) from the opportunity's Proposals section; the screen has no button but 'Award' and 'Disqualify' under 'Proposal actions', so no control enters resource question scores"
-      screen_in_to_challenge: "unbound: signed in as the administrator, opened the seeded Team With Us proposals from the opportunity's Proposals section; the screen has no button but 'Award' and 'Disqualify' under 'Proposal actions', no 'Screen in' control"
-      screen_out_from_challenge: "unbound: signed in as the administrator, opened the seeded Team With Us proposals from the opportunity's Proposals section; the screen has no button but 'Award' and 'Disqualify' under 'Proposal actions', no 'Screen out' control"
-      score_challenge: "unbound: signed in as the administrator, opened the seeded Team With Us proposal still to be scored on the challenge (...a032...102); the screen has no button but 'Award' and 'Disqualify' under 'Proposal actions', so no control enters a challenge score"
+      score_resource_questions: "unbound: signed in as the administrator, opened the seeded Team With Us proposals at the resource questions consensus (...a034...101, ...a038...101 screened into the challenge early, ...a038...102) and at the challenge (...a032...102, ...a035...101) and walked to the Resource questions section: it lists the responses under 'Question scores are agreed by the evaluation panel on the opportunity's Consensus tab' and offers no control to enter resource question scores, nor does any other section of the proposal's screen"
+      screen_in_to_challenge: "unbound: signed in as the administrator, opened the seeded Team With Us proposals at the resource questions consensus (...a038...101 screened into the challenge early, ...a038...102 still at the questions, ...a034...101) and at the challenge (...a032...101/102, ...a033...101/102, ...a035...101), and walked their Resource questions and Challenge sections: no 'Screen in' control anywhere on the proposal's screen (screening into the challenge follows from the consensus)"
+      screen_out_from_challenge: "unbound: signed in as the administrator, opened the seeded Team With Us proposal screened into the challenge early (...a038...101) and the proposals at the challenge (...a032...101/102, ...a033...101/102, ...a035...101), and walked their Resource questions and Challenge sections: no 'Screen out' control anywhere on the proposal's screen"
+      score_challenge: bound
       award_proposal: bound
       disqualify_proposal: bound
     observations:
       proposal_identifier: bound
       proposal_tab: bound
-      resource_questions_tab: "unbound: signed in as the administrator, opened the seeded Team With Us proposals; its sections are only Proposal and History, no resource questions stage section"
-      challenge_tab: "unbound: signed in as the administrator, opened the seeded Team With Us proposal scored on the challenge (...a032...101); its sections are only Proposal and History, no challenge section"
+      resource_questions_tab: bound
+      challenge_tab: bound
       history_tab: bound
-      wrong_stage_error: "unbound: signed in as the administrator, opened the seeded Team With Us proposals; the screen offers no score control, so no stage message can be raised from it"
+      wrong_stage_error: bound
       questions_score: bound
       challenge_score: bound
       price_score: bound
       total_score: bound
       history_entries: bound
       rank: bound
-      offered_score_actions: "unbound: signed in as the administrator, opened the seeded Team With Us proposals at the challenge; the screen has no stage tab and no score control to read the offered score actions from"
+      offered_score_actions: bound
 
   proposal-twu-export-one:
     actions: {}
     observations:
-      exported_proposal: "unbound: the proposal export screens (/opportunities/:program/:opportunityId/proposals/:proposalId/export and .../proposals/export) are offered only to signed-in public sector staff, and walked signed in (as the administrator, and as a vendor for a vendor's screens, with the seeded records' identifiers) the running build answers it with 'Page not found'; rechecked on the current build as the administrator, as the public sector employee who sits on the seeded panels and as the organization-owner vendor, with the seeded records' identifiers: the build now serves a vendor's dashboard of proposals, every program's public opportunity page (with 'Watch this opportunity', and 'Start a proposal' while it takes proposals), the three programs' proposal forms .../proposals/create and a vendor's own proposal's screen .../proposals/:proposalId/edit, the management screens' Proposals section (proponents named in plain text, with no link onward), the organizations' qualification sections and terms screens, and, to the administrator and public sector staff, the Code With Us proposal's screen /opportunities/code-with-us/:opportunityId/proposals/:proposalId; it still answers 'Page not found' at /proposals, at a Sprint With Us or Team With Us proposal's screen .../proposals/:proposalId, at every program's .../proposals/:proposalId/export (where the Code With Us proposal's 'Printable copy' link lands) and .../proposals/export, at every program's .../complete, and at the evaluation and consensus screens under .../team-questions/ and .../resource-questions/; opened signed out with the seeded opportunity and proposal identifiers they show the 'Page not found' screen"
+      exported_proposal: "absent: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/export answers the application's 'Page not found' screen ('The page you are looking for does not exist.', 'Back to home'): walked on the current build as the administrator with the seeded Team With Us proposals' identifiers (...a032...102), and on earlier runs as the public sector employee who owns the seeded opportunities, as the organization owner who wrote the seeded proposals and as a vendor with none, and signed out; the proposal screen's own 'Printable copy' link lands on that same 'Page not found' screen, and nothing in the application reaches a screen that serves it. Decided when it runs: unbound instead once the address answers anything else"
 
   proposal-twu-export-all:
     actions: {}
     observations:
-      exported_proposal: "unbound: the proposal export screens (/opportunities/:program/:opportunityId/proposals/:proposalId/export and .../proposals/export) are offered only to signed-in public sector staff, and walked signed in (as the administrator, and as a vendor for a vendor's screens, with the seeded records' identifiers) the running build answers it with 'Page not found'; rechecked on the current build as the administrator, as the public sector employee who sits on the seeded panels and as the organization-owner vendor, with the seeded records' identifiers: the build now serves a vendor's dashboard of proposals, every program's public opportunity page (with 'Watch this opportunity', and 'Start a proposal' while it takes proposals), the three programs' proposal forms .../proposals/create and a vendor's own proposal's screen .../proposals/:proposalId/edit, the management screens' Proposals section (proponents named in plain text, with no link onward), the organizations' qualification sections and terms screens, and, to the administrator and public sector staff, the Code With Us proposal's screen /opportunities/code-with-us/:opportunityId/proposals/:proposalId; it still answers 'Page not found' at /proposals, at a Sprint With Us or Team With Us proposal's screen .../proposals/:proposalId, at every program's .../proposals/:proposalId/export (where the Code With Us proposal's 'Printable copy' link lands) and .../proposals/export, at every program's .../complete, and at the evaluation and consensus screens under .../team-questions/ and .../resource-questions/; opened signed out with the seeded opportunity and proposal identifiers they show the 'Page not found' screen"
+      exported_proposal: "absent: /opportunities/team-with-us/:opportunityId/proposals/export answers the application's 'Page not found' screen ('The page you are looking for does not exist.', 'Back to home'): walked on the current build as the administrator with the seeded Team With Us opportunity's identifier (...a032...001), and on earlier runs as the public sector employee who owns the seeded opportunities and as vendors, and signed out; no link, tab, menu or button in the application leads to it. Decided when it runs: unbound instead once the address answers anything else"
 
   # Re-walked on the current build signed in as the organization-owner vendor and as the
   # first vendor (no proposals): /dashboard is "Dashboard", the navigation "Dashboard

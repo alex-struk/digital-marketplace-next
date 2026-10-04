@@ -375,6 +375,33 @@ export default function create(
     return built as unknown as T;
   }
 
+  // A page the application does not build: its route answers the client's own "Page not
+  // found" screen, and the one way into it the application offers lands on that same screen.
+  // Decided when it runs: absent while the address answers "Page not found", unbound when it
+  // answers anything else — sign-in, or a screen built since, whose controls nobody has seen.
+  function unserved<T>(pageId: string, route: string, walked: string, members: readonly string[]): T {
+    const decide = async (member: string): Promise<void> => {
+      const where = `${pageId}.${member}`;
+      if (await notFoundShown()) {
+        throw new Error(`absent: ${where} — ${route} answered ${actingId()} the application's "Page not found" screen at ${page.url()}; ${walked}`);
+      }
+      const why = await whyNotHere().catch(() => "");
+      if (why) unbound(where, `${route} did not open for ${actingId()} at ${page.url()}: ${why.replace(/\n+/g, " ")}; ${walked}`);
+      unbound(where, `${route} no longer answers "Page not found" (it shows "${await firstHeading().catch(() => "")}" at ${page.url()}); the page has been built since this binding was written and nothing on it has been seen, so the next binding run binds it`);
+    };
+    const built: Record<string, unknown> = {
+      open: async (params?: Record<string, string>): Promise<void> => {
+        await page.goto(leniently(route, params), { waitUntil: "domcontentloaded" }).catch(() => undefined);
+        await settle();
+        if (await notFoundShown()) await decide("open");
+      },
+    };
+    for (const member of members) built[camel(member)] = () => decide(member);
+    return built as unknown as T;
+  }
+  const exportWalked = (program: string, one: boolean): string =>
+    `walked on the current build as the administrator with the seeded ${program} records' identifiers${one ? `, by address and by following the proposal screen's own "Printable copy" link (which lands on this same "Page not found" screen)` : ""}, and on earlier runs as the public sector employee who owns the seeded opportunities, as the seeded organization owner who wrote the seeded proposals and as a vendor with none, it answers the same; no link, tab, menu or button in the application reaches a screen that serves it`;
+
   // ---------------------------------------------------------------- sign in and out
 
   type SignInEntry = { route?: string; username?: string; unavailable?: string };
@@ -10676,14 +10703,15 @@ export default function create(
   // Proposal (?tab=proposal: the regions Organization, Team, Team questions / Resource
   // questions, References and Attachments) and History (?tab=history: the table "Every change
   // of state and every score entered, newest first", Date | Entry | By | Note). Under
-  // "Proposal actions" are "Award" and "Disqualify" as the state allows, and no other
-  // button: no stage tab (team questions, code challenge, team scenario, resource
-  // questions, challenge) and no score control. The current build adds, under the terms, a
-  // "Scores" region holding each stage's score, the price score, the total and the rank
-  // (see scoreTermIn), which the score observations read.
+  // "Proposal actions" are "Award" and "Disqualify" as the state allows. The current build
+  // adds, under the terms, a "Scores" region holding each stage's score, the price score, the
+  // total and the rank (see scoreTermIn), which the score observations read; and, between
+  // Proposal and History, a section per evaluation stage (see stageSection).
   function teamViewWalked(program: string): string {
-    const seeded = program === "sprint-with-us" ? "...a016...101 (scored on the code challenge and the team scenario)" : "...a032...101 (scored on the challenge) and ...a032...102";
-    return `walked on the current build as the administrator, from the proponent links of the opportunity's Proposals section, on the seeded ${program} proposal(s) ${seeded}: the screen draws the terms Opportunity, Status, Submitted and Proposal ID, "Printable copy", the "Scores" region, the sections Proposal and History, under "Proposal actions" only "Award" and "Disqualify" as the state allows, and no stage tab or score control`;
+    if (program === "sprint-with-us") {
+      return `walked on the current build as the administrator on the seeded Sprint With Us proposals at the questions consensus (...a011...101), at the code challenge (...a021...101, ...a027...101/102, ...a030...101/102), at the team scenario (...a015...101/102, ...a016...101, ...a017...102) and past it (...a018...101/103, ...a020...101/102): the sections are Proposal, Team questions, Code challenge, Team scenario and History, each stage's section holding its score and, under "<stage> actions", "Enter <stage> score" while the opportunity is at that stage and the proposal in it, and on the code challenge "Screen in to team scenario" / "Screen out from team scenario" once it is scored`;
+    }
+    return `walked on the current build as the administrator on the seeded Team With Us proposals at the resource questions consensus (...a034...101, ...a038...101 screened into the challenge early, ...a038...102) and at the challenge (...a032...101/102, ...a033...101/102, ...a035...101): the sections are Proposal, Resource questions (the responses, under the note "Question scores are agreed by the evaluation panel on the opportunity's Consensus tab"), Challenge (the challenge score and, under "Challenge actions", "Enter challenge score" once the opportunity has reached the challenge) and History, and "Proposal actions" holds only "Award" and "Disqualify" as the state allows`;
   }
   // A control or reading the screen has never been seen to offer: unbound, saying what is
   // there. Should the screen one day offer it, that is said too, so the next run binds it.
@@ -10771,56 +10799,193 @@ export default function create(
     return `${n}${suffix}`;
   }
   const SCORES = /^\s*scores\s*$/i;
+
+  // Each evaluation stage is a section of its own under "Proposal sections" (?tab=
+  // teamQuestions, codeChallenge, teamScenario on Sprint With Us; resourceQuestions,
+  // challenge on Team With Us), a region named for the stage. Walked on the current build as
+  // the administrator (see teamViewWalked): the region says where the opportunity stands
+  // ("This opportunity is at the code challenge stage."), gives the stage's score as a term
+  // ("Code challenge score" — "80%" or "Not yet scored") and gathers its controls under
+  // "<Stage> actions": "Enter code challenge score" / "Enter team scenario score" / "Enter
+  // challenge score" (the same label once a score is held) while the opportunity is at that
+  // stage and the proposal in it, and on the code challenge, once scored, "Screen in to team
+  // scenario" or "Screen out from team scenario" (applied at once, no dialog: "The proposal
+  // has been screened in to the team scenario."). A stage the opportunity has not reached
+  // says "This proposal can be scored once the opportunity has reached the team scenario."
+  // and offers no score; a stage the opportunity is past says "The team scenario is over.".
+  // The question stages hold the responses under "Question scores are agreed by the evaluation
+  // panel on the opportunity's Consensus tab", with no control. "Enter … score" opens a
+  // dialog of that name: a "<Stage> score (%)(required)" box, then "Cancel" | "Enter score"; a
+  // value outside 0 to 100 keeps it open under "Enter a score between 0 and 100, with no more
+  // than two decimal places".
+  const SCORE_BUTTON = /^\s*(enter|edit)\b.*\bscore\s*$/i;
+  const STAGE_NOT_REACHED = /can be scored once/i;
+  const SWU_STAGES = [
+    { action: "score_code_challenge", tab: /^\s*code challenge\s*$/i },
+    { action: "score_team_scenario", tab: /^\s*team scenario\s*$/i },
+  ];
+  const TWU_STAGES = [
+    { action: "score_resource_questions", tab: /^\s*resource questions\s*$/i },
+    { action: "score_challenge", tab: /^\s*(interview\/)?challenge\s*$/i },
+  ];
+  const sectionsNav = (): Locator => seen(proposalMain().getByRole("navigation", { name: /^\s*proposal sections\s*$/i })).first();
+  const stageActions = (region: Locator): Locator => seen(region.getByRole("group", { name: /\bactions\s*$/i })).first();
+  async function sectionNames(): Promise<string> {
+    return (await seen(sectionsNav().getByRole("link")).allInnerTexts()).map((one) => one.trim()).filter(Boolean).join(", ");
+  }
+  // The stage's section, loaded from its own address so nothing of the section shown before
+  // lingers; null when the screen offers this reader no such section.
+  async function stageSection(tab: RegExp): Promise<Locator | null> {
+    const link = seen(sectionsNav().getByRole("link", { name: tab })).first();
+    if (!(await link.count())) return null;
+    const href = (await link.getAttribute("href")) ?? "";
+    const wanted = /[?&]tab=([^&#]+)/.exec(href)?.[1] ?? "";
+    if (!wanted || new URL(page.url()).searchParams.get("tab") !== wanted) {
+      if (href) await visit(href);
+      else await link.click();
+      await ready();
+    }
+    const region = seen(regionNamed(proposalMain(), tab)).first();
+    await region.waitFor({ state: "visible", timeout: 10000 }).catch(() => undefined);
+    return (await region.count()) ? region : null;
+  }
+  async function stageNotice(scope: Locator): Promise<string> {
+    return (await seen(scope.getByRole("paragraph")).allInnerTexts())
+      .map((one) => one.replace(/\s+/g, " ").trim())
+      .filter((one) => STAGE_NOT_REACHED.test(one))
+      .join("\n");
+  }
+  // The notice the last score refused for the stage met, with the proposal it was on, so
+  // wrong_stage_error still reads it once the reader has left the section.
+  let stageRefusal: { proposal: string; notice: string } | null = null;
+  async function onStage(where: string, program: string, tab: RegExp): Promise<Locator | null> {
+    if (!(await onProposal(where))) return null;
+    await closeDialog();
+    const region = await stageSection(tab);
+    if (!region) {
+      unbound(where, `${page.url()} offers ${actingId()} no section named ${tab} under "Proposal sections" (its sections: ${(await sectionNames()) || "none"}); ${teamViewWalked(program)}`);
+    }
+    return region;
+  }
+  // A stage's score: its section's "Enter … score", the dialog filled from the input. A
+  // section saying the proposal "can be scored once" the opportunity reaches the stage is
+  // the page refusing: nothing is scored, and the notice is kept for wrong_stage_error. Any
+  // other section without the control is the page withholding it, recorded and left.
+  async function scoreStage(where: string, program: string, tab: RegExp, input: unknown): Promise<void> {
+    const region = await onStage(where, program, tab);
+    if (!region) return;
+    const control = seen(stageActions(region).getByRole("button", { name: SCORE_BUTTON })).first();
+    if (!(await control.count())) {
+      const notice = await stageNotice(region);
+      if (notice) stageRefusal = { proposal: new URL(page.url()).pathname, notice };
+      noteRefusal(`${where} — ${page.url()} offers ${actingId()} no score in its ${tab} section, which says: ${lined(await region.innerText()).join(" ")}`);
+      return;
+    }
+    stageRefusal = null;
+    if (await isDisabled(control)) throw new Error(`${where} — the control named ${SCORE_BUTTON} is disabled on ${page.url()}`);
+    await control.click();
+    if (!(await dialogShown())) unbound(where, `pressing "${(await control.innerText().catch(() => "")).trim()}" on ${page.url()} opened no dialog`);
+    const dialog = openDialog().first();
+    await fillDialog(where, dialog, input, { label: /score/i, keys: ["score", "value", "total", "totalScore", "percent"] });
+    await confirmStaffDialog(where, dialog, /^\s*(enter|edit|save|submit) score\s*$/i);
+  }
+  // Screening in or out on the code challenge's section, applied at once; a confirmation,
+  // should one ever be asked, is answered with the same words.
+  async function screenStage(where: string, program: string, tab: RegExp, name: RegExp): Promise<void> {
+    const region = await onStage(where, program, tab);
+    if (!region) return;
+    const control = seen(stageActions(region).getByRole("button", { name })).first();
+    if (!(await control.count())) {
+      noteRefusal(`${where} — ${page.url()} offers ${actingId()} no control named ${name} in its ${tab} section, which says: ${lined(await region.innerText()).join(" ")}`);
+      return;
+    }
+    if (await isDisabled(control)) throw new Error(`${where} — the control named ${name} is disabled on ${page.url()}`);
+    await control.click();
+    if (await dialogShown(2000)) await confirmStaffDialog(where, openDialog().first(), name);
+    await settle();
+  }
+  // wrong_stage_error: the "can be scored once" notice the screen shows now, else the one the
+  // score just refused on this same proposal met; empty when there is none.
+  async function wrongStageError(): Promise<string> {
+    if (!(await proposalShown())) return "";
+    const shown = await stageNotice(proposalMain());
+    if (shown) return shown;
+    return stageRefusal && stageRefusal.proposal === new URL(page.url()).pathname ? stageRefusal.notice : "";
+  }
+  // offered_score_actions: the page's own action names, one per line, for each stage whose
+  // section offers "Enter … score" to this reader now; empty when none does. The reader is
+  // put back on the section it was on.
+  async function offeredScoreActions(stages: { action: string; tab: RegExp }[]): Promise<string> {
+    if (!(await proposalShown())) return "";
+    const back = page.url();
+    const offered: string[] = [];
+    for (const stage of stages) {
+      const region = await stageSection(stage.tab);
+      if (!region) continue;
+      if (await seen(stageActions(region).getByRole("button", { name: SCORE_BUTTON })).count()) offered.push(stage.action);
+    }
+    if (page.url() !== back) {
+      await visit(back);
+      await ready();
+    }
+    return offered.join("\n");
+  }
+
   // Award and Disqualify are the screen's "Proposal actions", bound as on Code With Us.
+  const PSWU_VIEW = "proposal-swu-view";
   const proposalSwuViewBound: S.ProposalSwuViewPage = {
-    ...teamProposalView<S.ProposalSwuViewPage>(
-    "proposal-swu-view",
-    "/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId",
-    "sprint-with-us",
-    [
-      { member: "score_code_challenge", name: /^\s*(enter|edit) (code challenge )?score\s*$/i, what: "control to enter a code challenge score" },
-      { member: "screen_in_to_team_scenario", name: /^\s*screen in\b/i, what: '"Screen in" control' },
-      { member: "screen_out_from_team_scenario", name: /^\s*screen out\b/i, what: '"Screen out" control' },
-      { member: "score_team_scenario", name: /^\s*(enter|edit) (team scenario )?score\s*$/i, what: "control to enter a team scenario score" },
-      { member: "team_questions_tab", name: /^\s*team questions\s*$/i, what: '"Team questions" stage section (the Proposal section lists the questions with the responses, and no scores)' },
-      { member: "code_challenge_tab", name: /^\s*code challenge\s*$/i, what: '"Code challenge" section' },
-      { member: "team_scenario_tab", name: /^\s*team scenario\s*$/i, what: '"Team scenario" section' },
-      { member: "wrong_stage_error", name: /^\s*(enter|edit) .*score\s*$/i, what: "score control, so no stage message can be raised from it" },
-      { member: "offered_score_actions", name: /^\s*(enter|edit) .*score\s*$/i, what: "stage tab or score control to read offered score actions from" },
-    ],
-    ),
+    ...teamProposalView<S.ProposalSwuViewPage>(PSWU_VIEW, "/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId", "sprint-with-us", []),
+    scoreCodeChallenge: (input) => scoreStage(`${PSWU_VIEW}.score_code_challenge`, "sprint-with-us", SWU_STAGES[0].tab, input),
+    screenInToTeamScenario: () =>
+      screenStage(`${PSWU_VIEW}.screen_in_to_team_scenario`, "sprint-with-us", SWU_STAGES[0].tab, /^\s*screen in( to (the )?team scenario)?\s*$/i),
+    screenOutFromTeamScenario: () =>
+      screenStage(`${PSWU_VIEW}.screen_out_from_team_scenario`, "sprint-with-us", SWU_STAGES[0].tab, /^\s*screen out( (of|from) (the )?team scenario)?\s*$/i),
+    scoreTeamScenario: (input) => scoreStage(`${PSWU_VIEW}.score_team_scenario`, "sprint-with-us", SWU_STAGES[1].tab, input),
+    // Each stage's section read whole, one line per line the screen draws.
+    teamQuestionsTab: () => cwuViewSection(/^\s*team questions\s*$/i),
+    codeChallengeTab: () => cwuViewSection(SWU_STAGES[0].tab),
+    teamScenarioTab: () => cwuViewSection(SWU_STAGES[1].tab),
+    wrongStageError: () => wrongStageError(),
+    offeredScoreActions: () => offeredScoreActions(SWU_STAGES),
     questionsScore: () => scoreTermIn(SCORES, /^team questions( score)?$/i),
     challengeScore: () => scoreTermIn(SCORES, /^code challenge( score)?$/i),
     scenarioScore: () => scoreTermIn(SCORES, /^team scenario( score)?$/i),
     priceScore: () => scoreTermIn(SCORES, /^price( score)?$/i),
     totalScore: () => scoreTermIn(SCORES, /^total( score)?$/i),
     rank: async () => asPlace(await scoreTermIn(SCORES, /^rank(ing)?$/i)),
-    awardProposal: () => awardProposalBy("proposal-swu-view.award_proposal"),
-    disqualifyProposal: (input) => disqualifyProposalBy("proposal-swu-view.disqualify_proposal", input),
+    awardProposal: () => awardProposalBy(`${PSWU_VIEW}.award_proposal`),
+    disqualifyProposal: (input) => disqualifyProposalBy(`${PSWU_VIEW}.disqualify_proposal`, input),
+  };
+  // Resource question scores are agreed on the opportunity's consensus, and screening into the
+  // challenge follows from it: neither has a control on this screen. Each is looked for on the
+  // Resource questions section when asked, and reported unbound with what is there.
+  const PTWU_VIEW = "proposal-twu-view";
+  const twuLacks = (member: string, name: RegExp, what: string) => async (): Promise<never> => {
+    if (await proposalShown()) await stageSection(TWU_STAGES[0].tab);
+    return teamViewLacks(PTWU_VIEW, "team-with-us", member, name, what);
   };
   const proposalTwuViewBound: S.ProposalTwuViewPage = {
-    ...teamProposalView<S.ProposalTwuViewPage>(
-    "proposal-twu-view",
-    "/opportunities/team-with-us/:opportunityId/proposals/:proposalId",
-    "team-with-us",
-    [
-      { member: "score_resource_questions", name: /^\s*(enter|edit) (resource questions? )?score/i, what: "control to enter resource question scores" },
-      { member: "screen_in_to_challenge", name: /^\s*screen in\b/i, what: '"Screen in" control' },
-      { member: "screen_out_from_challenge", name: /^\s*screen out\b/i, what: '"Screen out" control' },
-      { member: "score_challenge", name: /^\s*(enter|edit) (challenge )?score\s*$/i, what: "control to enter a challenge score" },
-      { member: "resource_questions_tab", name: /^\s*resource questions\s*$/i, what: '"Resource questions" stage section (the Proposal section lists the questions with the responses, and no scores)' },
-      { member: "challenge_tab", name: /^\s*(interview\/)?challenge\s*$/i, what: '"Challenge" section' },
-      { member: "wrong_stage_error", name: /^\s*(enter|edit) .*score\s*$/i, what: "score control, so no stage message can be raised from it" },
-      { member: "offered_score_actions", name: /^\s*(enter|edit) .*score\s*$/i, what: "stage tab or score control to read offered score actions from" },
-    ],
+    ...teamProposalView<S.ProposalTwuViewPage>(PTWU_VIEW, "/opportunities/team-with-us/:opportunityId/proposals/:proposalId", "team-with-us", []),
+    scoreResourceQuestions: twuLacks(
+      "score_resource_questions",
+      /^\s*(enter|edit) (resource questions? )?scores?\s*$/i,
+      "control to enter resource question scores (its Resource questions section sends the reader to the opportunity's Consensus tab, where the panel agrees them)",
     ),
+    screenInToChallenge: twuLacks("screen_in_to_challenge", /^\s*screen in\b/i, '"Screen in" control on the Resource questions or Challenge section'),
+    screenOutFromChallenge: twuLacks("screen_out_from_challenge", /^\s*screen out\b/i, '"Screen out" control on the Resource questions or Challenge section'),
+    scoreChallenge: (input) => scoreStage(`${PTWU_VIEW}.score_challenge`, "team-with-us", TWU_STAGES[1].tab, input),
+    resourceQuestionsTab: () => cwuViewSection(TWU_STAGES[0].tab),
+    challengeTab: () => cwuViewSection(TWU_STAGES[1].tab),
+    wrongStageError: () => wrongStageError(),
+    // Resource questions never offers a score here, so only score_challenge can be listed.
+    offeredScoreActions: () => offeredScoreActions(TWU_STAGES),
     questionsScore: () => scoreTermIn(SCORES, /^resource questions( score)?$/i),
     challengeScore: () => scoreTermIn(SCORES, /^(interview\/)?challenge( score)?$/i),
     priceScore: () => scoreTermIn(SCORES, /^price( score)?$/i),
     totalScore: () => scoreTermIn(SCORES, /^total( score)?$/i),
     rank: async () => asPlace(await scoreTermIn(SCORES, /^rank(ing)?$/i)),
-    awardProposal: () => awardProposalBy("proposal-twu-view.award_proposal"),
-    disqualifyProposal: (input) => disqualifyProposalBy("proposal-twu-view.disqualify_proposal", input),
+    awardProposal: () => awardProposalBy(`${PTWU_VIEW}.award_proposal`),
+    disqualifyProposal: (input) => disqualifyProposalBy(`${PTWU_VIEW}.disqualify_proposal`, input),
   };
 
   // ---------------------------------------------------------------- Sprint With Us and Team With Us proposals
@@ -11854,17 +12019,17 @@ export default function create(
 
     proposalCwuView,
 
-    proposalCwuExportOne: absent<S.ProposalCwuExportOnePage>(
+    proposalCwuExportOne: unserved<S.ProposalCwuExportOnePage>(
       "proposal-cwu-export-one",
       "/opportunities/code-with-us/:opportunityId/proposals/:proposalId/export",
-      behindSession("/opportunities/code-with-us/:opportunityId/proposals/:proposalId/export"),
+      exportWalked("Code With Us", true),
       ["exported_proposal"],
     ),
 
-    proposalCwuExportAll: absent<S.ProposalCwuExportAllPage>(
+    proposalCwuExportAll: unserved<S.ProposalCwuExportAllPage>(
       "proposal-cwu-export-all",
       "/opportunities/code-with-us/:opportunityId/proposals/export",
-      behindSession("/opportunities/code-with-us/:opportunityId/proposals/export"),
+      exportWalked("Code With Us", false),
       ["exported_proposal"],
     ),
 
@@ -11874,17 +12039,17 @@ export default function create(
 
     proposalSwuView: proposalSwuViewBound,
 
-    proposalSwuExportOne: absent<S.ProposalSwuExportOnePage>(
+    proposalSwuExportOne: unserved<S.ProposalSwuExportOnePage>(
       "proposal-swu-export-one",
       "/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/export",
-      behindSession("/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/export"),
+      exportWalked("Sprint With Us", true),
       ["exported_proposal", "anonymous_proponent_name"],
     ),
 
-    proposalSwuExportAll: absent<S.ProposalSwuExportAllPage>(
+    proposalSwuExportAll: unserved<S.ProposalSwuExportAllPage>(
       "proposal-swu-export-all",
       "/opportunities/sprint-with-us/:opportunityId/proposals/export",
-      behindSession("/opportunities/sprint-with-us/:opportunityId/proposals/export"),
+      exportWalked("Sprint With Us", false),
       ["exported_proposal"],
     ),
 
@@ -11894,17 +12059,17 @@ export default function create(
 
     proposalTwuView: proposalTwuViewBound,
 
-    proposalTwuExportOne: absent<S.ProposalTwuExportOnePage>(
+    proposalTwuExportOne: unserved<S.ProposalTwuExportOnePage>(
       "proposal-twu-export-one",
       "/opportunities/team-with-us/:opportunityId/proposals/:proposalId/export",
-      behindSession("/opportunities/team-with-us/:opportunityId/proposals/:proposalId/export"),
+      exportWalked("Team With Us", true),
       ["exported_proposal"],
     ),
 
-    proposalTwuExportAll: absent<S.ProposalTwuExportAllPage>(
+    proposalTwuExportAll: unserved<S.ProposalTwuExportAllPage>(
       "proposal-twu-export-all",
       "/opportunities/team-with-us/:opportunityId/proposals/export",
-      behindSession("/opportunities/team-with-us/:opportunityId/proposals/export"),
+      exportWalked("Team With Us", false),
       ["exported_proposal"],
     ),
 
