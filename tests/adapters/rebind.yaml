@@ -13899,3 +13899,109 @@ rebind:
       why: tests/adapters/new has changed since this was found
       by: runner:verify
       at: 2026-10-04T18:20:06.551Z
+  - id: R-1.40
+    target: new
+    why: "unbound: opportunity-cwu-complete.open —
+      /opportunities/code-with-us/:opportunityId/complete is offered only to a
+      signed-in person, and walked signed in on the current build (as the
+      administrator, as the public sector employee who owns the seeded
+      opportunities and sits on their panels, and as vendors — the seeded
+      organization owner, who wrote the seeded proposals, and a vendor with none
+      — with the seeded records' identifiers), the running build serves a
+      signed-in person /dashboard (to staff \"Create an opportunity\" over \"My
+      opportunities\", to the administrator every opportunity, to a vendor \"My
+      proposals\" and \"My organizations' proposals\"), /opportunities and every
+      program's public opportunity page (with \"Watch this opportunity\", and
+      \"Start a proposal\" while it takes proposals), the account screens under
+      /users, /organizations, /organizations/create, /organizations/:orgId/edit
+      (its Sprint With Us and Team With Us qualification sections drawing the
+      requirements and \"Read the … terms and conditions\") and
+      /organizations/:orgId/{sprint,team}-with-us-terms-and-conditions, to the
+      administrator the content-management screens under /content, to a vendor
+      the three programs' proposal forms .../proposals/create and their own
+      proposal's screen .../proposals/:proposalId/edit, and to the administrator
+      and public sector staff /opportunities/create, the three programs' forms,
+      their management screens
+      /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (sections
+      Summary, Opportunity, Addenda, History, Proposals — proponents in plain
+      text with no link onward — and, on Sprint With Us and Team With Us,
+      Evaluation panel and, since 2026-10-04, to the panel's members
+      Instructions, Evaluation and Consensus) and the Code With Us proposal's
+      screen /opportunities/code-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Status, Submitted, Proposal ID, Score, \"Printable copy\", and
+      the sections Proposal and History, with no button); the Sprint With Us and
+      Team With Us proposal's screen
+      /opportunities/{sprint,team}-with-us/:opportunityId/proposals/:proposalId
+      (proponent, Opportunity, Status, Submitted, Proposal ID, \"Printable
+      copy\", and the sections Proposal and History, with no button); walked the
+      same way it still answers \"Page not found\" at /proposals, at every
+      program's .../proposals/:proposalId/export (where the Code With Us
+      screen's \"Printable copy\" lands, to the proposal's own author too) and
+      .../proposals/export, at every program's .../complete, and at the
+      consensus score sheets under .../team-questions/consensus/ and
+      .../resource-questions/consensus/ (the individual score sheets under
+      .../evaluations/ open, since 2026-10-04, to the panel's evaluators);
+      opened signed out (with the seeded record's identifier where it takes one)
+      it shows the \"Page not found\" screen (it shows \"Page not found\" at
+      http://localhost:4300/opportunities/code-with-us/00000000-0000-4000-a008-\
+      000000000001/complete); unbound: opportunity-cwu-complete.full_report —
+      /opportunities/code-with-us/:opportunityId/complete is offered only to a
+      signed-in person, and walked signed in on the current build (as the
+      administra…"
+    found: unbound
+    adapter: d44ea8519aeeda3c286127e83558725e565b8b96
+    slice: 20
+    app_tree: 16902bebe2d721b0a2458887bbddeb24235da6be
+    by: runner:verify
+    at: 2026-10-04T19:15:47.446Z
+  - id: R-2.37
+    target: new
+    why: 'unbound: proposal-cwu-export-one.exported_proposal —
+      /opportunities/code-with-us/:opportunityId/proposals/:proposalId/export no
+      longer answers "Page not found" (it shows "R-2.37 opportunity whose
+      proposal is taken away as a printable copy" at
+      http://localhost:4400/opportunities/code-with-us/91c534d4-081a-460c-9ce3-b62f04e056e2/proposals/172ab1e5-25a7-4bd7-84cc-db29ba1554e9/export);
+      the page has been built since this binding was written and nothing on it
+      has been seen, so the next binding run binds it; unbound:
+      proposal-swu-export-one.exported_proposal —
+      /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/export
+      no longer answers "Page not found" (it shows "R-2.37 Sprint With Us
+      opportunity whose vendor reads their own copy" at
+      http://localhost:4400/opportunities/sprint-with-us/af0b7cb0-432e-45c5-a116-eefba894f5d6/proposals/b7d634db-f5d0-4b7c-b139-c06a75e7343b/export);
+      the page has been built since this binding was written and nothing on it
+      has been seen, so the next binding run binds it; unbound:
+      proposal-swu-export-one.anonymous_proponent_name —
+      /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/export
+      no longer answers "Page not found" (it shows "Seeded closed Sprint With Us
+      opportunity" at
+      http://localhost:4400/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/proposals/00000000-0000-4000-8000-000000000741/export);
+      the page has been built since this binding was written and nothing on it
+      has been seen, so the next binding run binds it'
+    found: unbound
+    adapter: d44ea8519aeeda3c286127e83558725e565b8b96
+    slice: 20
+    app_tree: 16902bebe2d721b0a2458887bbddeb24235da6be
+    by: runner:verify
+    at: 2026-10-04T19:15:47.446Z
+  - id: R-2.38
+    target: new
+    why: 'unbound: proposal-cwu-export-one.exported_proposal —
+      /opportunities/code-with-us/:opportunityId/proposals/:proposalId/export no
+      longer answers "Page not found" (it shows "R-2.38 opportunity whose vendor
+      asks for every proposal at once" at
+      http://localhost:4500/opportunities/code-with-us/88c8f325-15d6-4c76-ac8e-34054fbda56a/proposals/88278141-21e1-42ad-a2b8-9bd0ff81d51b/export);
+      the page has been built since this binding was written and nothing on it
+      has been seen, so the next binding run binds it; unbound:
+      proposal-swu-export-all.exported_proposal —
+      /opportunities/sprint-with-us/:opportunityId/proposals/export no longer
+      answers "Page not found" (it shows "Seeded closed Sprint With Us
+      opportunity" at
+      http://localhost:4500/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/proposals/export);
+      the page has been built since this binding was written and nothing on it
+      has been seen, so the next binding run binds it'
+    found: unbound
+    adapter: d44ea8519aeeda3c286127e83558725e565b8b96
+    slice: 20
+    app_tree: 16902bebe2d721b0a2458887bbddeb24235da6be
+    by: runner:verify
+    at: 2026-10-04T19:15:47.446Z
