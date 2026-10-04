@@ -1,0 +1,15 @@
+gate: G1
+verdict: return
+by: agent:product-owner
+held_by: agent
+rationale: |2-
+  Question: is spec/contract/surface.yaml, with the new R-2.2 guidance on proposal-cwu-request, the contract the tests will act through? Ruling: return. The guidance points to the right action and reader: submit_with_individual_proponent sends the create request, and refusal_messages reads the reply. Three of its claims check out against the old create handler (sources/old/src/back-end/lib/resources/proposal/code-with-us.ts). The duplicate check runs after the opportunity lookup (line 306). An organization proponent with an existing proposal is refused first with 'Please select a different organization.' (lines 331-351). The refusal comes back under `conflict` with 'You already have a proposal for this opportunity.' (lines 365-368). But the comment states as fact that the check runs 'before it looks at any field, so the second request is refused with that message whatever its fields hold', and the code contradicts this. The `status` field is checked first (lines 296-304): a missing or invalid status is refused under `status`. A status of Submitted on an opportunity that is no longer accepting proposals is refused next (lines 321-328) with 'This opportunity is no longer accepting proposals.' The test writer works blind from this contract, so the overstatement would lead them to send a request that gets a different refusal, and the resulting failure would surface as a calibration question about the product when it is a contract error. What would change the ruling: reword the sentence so that the second request must carry a valid status (Draft is safest) against a published opportunity still accepting proposals, and only the remaining fields (proposal text, attachments, the individual proponent's details) do not affect the refusal. Everything else in the change can stand as written, including the pointer comment on proposal-cwu-create and the re-address of missing-test/R-2.2 to derive-tests.
+conditions: []
+cost: 0.3235058
+turns: 5
+session: "5aee447e-056e-4341-a3ae-842c8c356f37"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T01:51:34.073Z
