@@ -1,0 +1,519 @@
+{
+  "slice": 18,
+  "proposal": "build-slice-18-6",
+  "app_tree": "4108841eb86a8bebd3e6b106ffe7d80f7f366c7c",
+  "at": "2026-10-04T17:40:35.287Z",
+  "verdict": "pass",
+  "adapter": "bc06d29b027aea6f035985a44733726afd83cc45",
+  "rechecked": [
+    "R-7.1",
+    "R-7.2",
+    "R-7.3",
+    "R-7.4",
+    "R-7.18",
+    "R-7.19",
+    "R-4.1",
+    "R-4.2",
+    "R-4.3",
+    "R-4.17",
+    "R-4.24",
+    "R-8.1",
+    "R-8.2",
+    "R-8.5",
+    "R-8.6",
+    "R-8.7",
+    "R-8.10",
+    "R-8.11",
+    "R-8.12",
+    "R-8.18",
+    "R-8.23",
+    "R-8.24",
+    "R-6.7",
+    "R-4.5",
+    "R-4.6",
+    "R-4.8",
+    "R-4.9",
+    "R-4.18",
+    "R-4.25",
+    "R-4.26",
+    "R-4.27",
+    "R-4.28",
+    "R-4.29",
+    "R-4.34",
+    "R-4.4",
+    "R-4.12",
+    "R-4.14",
+    "R-4.19",
+    "R-4.20",
+    "R-4.21",
+    "R-4.30",
+    "R-4.31",
+    "R-4.32",
+    "R-7.5",
+    "R-7.6",
+    "R-7.7",
+    "R-7.8",
+    "R-7.9",
+    "R-7.10",
+    "R-7.12",
+    "R-7.16",
+    "R-7.20",
+    "R-7.21",
+    "R-7.22",
+    "R-7.23",
+    "R-7.24",
+    "R-7.25",
+    "R-7.26",
+    "R-7.27",
+    "R-7.28",
+    "R-8.29",
+    "R-7.13",
+    "R-6.18",
+    "R-6.23",
+    "R-6.24",
+    "R-6.28",
+    "R-4.16",
+    "R-4.33",
+    "R-8.17",
+    "R-8.27",
+    "R-6.8",
+    "R-1.4",
+    "R-1.7",
+    "R-1.10",
+    "R-1.11",
+    "R-1.12",
+    "R-1.14",
+    "R-1.21",
+    "R-1.22",
+    "R-1.23",
+    "R-1.29",
+    "R-1.34",
+    "R-1.37",
+    "R-6.20",
+    "R-6.21",
+    "R-6.27",
+    "R-1.2",
+    "R-1.3",
+    "R-1.5",
+    "R-1.6",
+    "R-1.38",
+    "R-4.22",
+    "R-6.17",
+    "R-1.20",
+    "R-1.28",
+    "R-1.30",
+    "R-1.32",
+    "R-7.17",
+    "R-5.1",
+    "R-5.9",
+    "R-5.17",
+    "R-5.18",
+    "R-5.37",
+    "R-1.8",
+    "R-1.9",
+    "R-1.13",
+    "R-1.15",
+    "R-1.16",
+    "R-1.17",
+    "R-1.18",
+    "R-1.39",
+    "R-1.43",
+    "R-1.48",
+    "R-1.53",
+    "R-1.55",
+    "R-1.56",
+    "R-8.13",
+    "R-8.21",
+    "R-8.28",
+    "R-8.30",
+    "R-3.1",
+    "R-3.2",
+    "R-3.3",
+    "R-3.18",
+    "R-3.19",
+    "R-3.20",
+    "R-3.21",
+    "R-3.22",
+    "R-3.24",
+    "R-6.16",
+    "R-3.6",
+    "R-3.7",
+    "R-3.8",
+    "R-3.9",
+    "R-3.10",
+    "R-3.11",
+    "R-3.12",
+    "R-3.13",
+    "R-3.14",
+    "R-3.15",
+    "R-3.17",
+    "R-3.23",
+    "R-3.30",
+    "R-3.31",
+    "R-3.32",
+    "R-3.33",
+    "R-3.34",
+    "R-3.35",
+    "R-3.25",
+    "R-3.26",
+    "R-3.27",
+    "R-3.28",
+    "R-8.22",
+    "R-8.31",
+    "R-6.2",
+    "R-6.3",
+    "R-6.4",
+    "R-6.5",
+    "R-1.35",
+    "R-1.36",
+    "R-2.1",
+    "R-2.2",
+    "R-2.3",
+    "R-2.4",
+    "R-2.12",
+    "R-2.13",
+    "R-2.14",
+    "R-2.15",
+    "R-2.23",
+    "R-4.23",
+    "R-8.19",
+    "R-8.20",
+    "R-8.25",
+    "R-1.31",
+    "R-2.7",
+    "R-2.9",
+    "R-2.10",
+    "R-2.11",
+    "R-2.16",
+    "R-2.17",
+    "R-2.18",
+    "R-2.19",
+    "R-2.20",
+    "R-2.21",
+    "R-2.22",
+    "R-2.24",
+    "R-2.25",
+    "R-5.20",
+    "R-6.25",
+    "R-1.1",
+    "R-1.19",
+    "R-1.26",
+    "R-1.27",
+    "R-2.26",
+    "R-2.27",
+    "R-2.32",
+    "R-2.33",
+    "R-2.34",
+    "R-2.36",
+    "R-5.3",
+    "R-5.11",
+    "R-5.16",
+    "R-5.19",
+    "R-5.21",
+    "R-5.22",
+    "R-5.23",
+    "R-5.24",
+    "R-5.25",
+    "R-5.26",
+    "R-5.27",
+    "R-5.34",
+    "R-5.35",
+    "R-1.24",
+    "R-2.5"
+  ],
+  "rows": [
+    {
+      "id": "R-5.10",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.10.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the refusal on a Sprint With Us opportunity names the Code Challenge",
+          "status": "passed"
+        },
+        {
+          "title": "the refusal on a Team With Us opportunity names the Challenge",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "2b751c58491c63e5e602f1bf67aa01c24f5a74eb",
+      "adapter": "bc06d29b027aea6f035985a44733726afd83cc45"
+    },
+    {
+      "id": "R-5.12",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.12.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the consensus list tells the owner why it is withheld rather than opening empty",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "44ac66c2d747e049206f8cc2dfbf0c60d6a2415d",
+      "adapter": "bc06d29b027aea6f035985a44733726afd83cc45"
+    },
+    {
+      "id": "R-5.13",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.13.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "Finalising the consensus scores must be refused unless every proponent still under review of the questions has a submitted consensus, so that no proponent is left neither screened in nor screened out.",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "6b6f64e5d7789d8a22316b367f68ad1a83d399e1",
+      "adapter": "bc06d29b027aea6f035985a44733726afd83cc45"
+    },
+    {
+      "id": "R-5.14",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.14.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the action that finalises consensus scores is offered to the opportunity's owner",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "67cdc8f24bf2c2a7e1a538bf772e3b4e30da3054",
+      "adapter": "bc06d29b027aea6f035985a44733726afd83cc45"
+    },
+    {
+      "id": "R-5.28",
+      "version": 2,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.28.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "once an opportunity reaches consensus every panel member can read every evaluator's individual scores and comments",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "6c99c0f9a42796655d04ef050a62a937f82c3a8e",
+      "adapter": "bc06d29b027aea6f035985a44733726afd83cc45"
+    },
+    {
+      "id": "R-5.29",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.29.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "Only the chair may record and change the consensus, one consensus per proponent, and only while the opportunity is in consensus. (an evaluator who is not the chair tries to record an agreed score, and is refused, while the chair records it)",
+          "status": "passed"
+        },
+        {
+          "title": "Only the chair may record and change the consensus, one consensus per proponent, and only while the opportunity is in consensus. (the chair records a second consensus for a proponent they have already agreed, and is refused as a duplicate)",
+          "status": "passed"
+        },
+        {
+          "title": "Only the chair may record and change the consensus, one consensus per proponent, and only while the opportunity is in consensus. (the chair tries to record a consensus before the opportunity is in consensus, and none is recorded)",
+          "status": "passed"
+        },
+        {
+          "title": "Only the chair may record and change the consensus, one consensus per proponent, and only while the opportunity is in consensus. (Sprint With Us: an evaluator who is not the chair tries to change the chair's consensus, and is refused, while the chair may change it)",
+          "status": "passed"
+        },
+        {
+          "title": "Only the chair may record and change the consensus, one consensus per proponent, and only while the opportunity is in consensus. (Sprint With Us: the chair tries to change a consensus once the opportunity has moved past consensus, and is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "Only the chair may record and change the consensus, one consensus per proponent, and only while the opportunity is in consensus. (Team With Us: an evaluator who is not the chair tries to change the chair's consensus, and is refused, while the chair may change it)",
+          "status": "passed"
+        },
+        {
+          "title": "Only the chair may record and change the consensus, one consensus per proponent, and only while the opportunity is in consensus. (Team With Us: the chair tries to change a consensus once the opportunity has moved past consensus, and is refused)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "fb9374b69afbc1b9475e440cdc94ff8b57278050",
+      "adapter": "bc06d29b027aea6f035985a44733726afd83cc45"
+    },
+    {
+      "id": "R-5.30",
+      "version": 2,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.30.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "The chair may change the agreed scores of a consensus they have already submitted, as often as they like until it is finalised; each change is saved directly and the consensus stays submitted, with no second submission, unlike an individual evaluation, which is fixed once submitted. (Sprint With Us: the chair changes a submitted consensus twice, each change saved directly, and it stays submitted)",
+          "status": "passed"
+        },
+        {
+          "title": "The chair may change the agreed scores of a consensus they have already submitted, as often as they like until it is finalised; each change is saved directly and the consensus stays submitted, with no second submission, unlike an individual evaluation, which is fixed once submitted. (Sprint With Us: once finalised, the chair's change is not taken)",
+          "status": "passed"
+        },
+        {
+          "title": "The chair may change the agreed scores of a consensus they have already submitted, as often as they like until it is finalised; each change is saved directly and the consensus stays submitted, with no second submission, unlike an individual evaluation, which is fixed once submitted. (Team With Us: the chair changes a submitted consensus twice, each change saved directly, and it stays submitted)",
+          "status": "passed"
+        },
+        {
+          "title": "The chair may change the agreed scores of a consensus they have already submitted, as often as they like until it is finalised; each change is saved directly and the consensus stays submitted, with no second submission, unlike an individual evaluation, which is fixed once submitted. (Team With Us: once finalised, the chair's change is not taken)",
+          "status": "passed"
+        },
+        {
+          "title": "The chair may change the agreed scores of a consensus they have already submitted, as often as they like until it is finalised; each change is saved directly and the consensus stays submitted, with no second submission, unlike an individual evaluation, which is fixed once submitted. (an individual evaluation, once submitted, cannot be changed)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "15bcf77ca740e4f0a566f045d370930541cd3768",
+      "adapter": "bc06d29b027aea6f035985a44733726afd83cc45"
+    },
+    {
+      "id": "R-5.31",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.31.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "When the chair submits the consensus, the opportunity's owner and every administrator are told.",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "b439ebe1c07d0f286ff90a96a9a52527c53bb496",
+      "adapter": "bc06d29b027aea6f035985a44733726afd83cc45"
+    },
+    {
+      "id": "R-5.32",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.32.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "Finalising the consensus records the agreed scores against each proponent, screens in the highest-scoring proponents that met every minimum score — at most four for Sprint With Us and at most three for Team With Us — and moves the opportunity to its next stage. (Sprint With Us)",
+          "status": "passed"
+        },
+        {
+          "title": "Finalising the consensus records the agreed scores against each proponent, screens in the highest-scoring proponents that met every minimum score — at most four for Sprint With Us and at most three for Team With Us — and moves the opportunity to its next stage. (Team With Us)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "235998c6475568e04cc5387c5fae93ff27dc3e3f",
+      "adapter": "bc06d29b027aea6f035985a44733726afd83cc45"
+    },
+    {
+      "id": "R-5.33",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.33.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "When the consensus scores are finalised, the chair and the opportunity's owner are told.",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "79efb6f83dbb8bf240421ef98724013b171b9379",
+      "adapter": "bc06d29b027aea6f035985a44733726afd83cc45"
+    },
+    {
+      "id": "R-5.36",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.36.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a Sprint With Us opportunity runs from individual evaluation through consensus to the Code Challenge",
+          "status": "passed"
+        },
+        {
+          "title": "a Team With Us opportunity runs the same course and ends at the Challenge",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "4d6eafce35be8d30d084b8b304e5e83f610947dd",
+      "adapter": "bc06d29b027aea6f035985a44733726afd83cc45"
+    },
+    {
+      "id": "R-6.15",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.15.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "A notice sent to more than one person must hide every recipient from the others, carrying the batch as blind copies with the service's own address as the visible recipient, and this applies to the notices sent to an evaluation panel and to an opportunity's owner exactly as it does to every other multi-recipient notice (the notice sent to an evaluation panel)",
+          "status": "passed"
+        },
+        {
+          "title": "A notice sent to more than one person must hide every recipient from the others, carrying the batch as blind copies with the service's own address as the visible recipient, and this applies to the notices sent to an evaluation panel and to an opportunity's owner exactly as it does to every other multi-recipient notice (the notice sent to an opportunity's owner)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "6f0039750ad77cbe645a2b1b5be45cce814cc2a7",
+      "adapter": "bc06d29b027aea6f035985a44733726afd83cc45"
+    },
+    {
+      "id": "R-1.41",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.41.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "Advancing a Sprint With Us or Team With Us opportunity out of the consensus stage is refused unless every consensus evaluation has been submitted and at least one proponent has met the minimum score on every question that sets one. (Sprint With Us: a consensus evaluation still unsubmitted)",
+          "status": "passed"
+        },
+        {
+          "title": "Advancing a Sprint With Us or Team With Us opportunity out of the consensus stage is refused unless every consensus evaluation has been submitted and at least one proponent has met the minimum score on every question that sets one. (Sprint With Us: no proponent has met every minimum score)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "962a2ec24a86f0e58d5a72284ef6fb26b7dd444a",
+      "adapter": "bc06d29b027aea6f035985a44733726afd83cc45"
+    },
+    {
+      "id": "R-1.50",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.50.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "There is exactly one path out of a questions consensus stage, and it refuses to advance unless every consensus evaluation has been submitted and at least one proponent has met the minimum score on every question that sets one. (a consensus evaluation still unsubmitted)",
+          "status": "passed"
+        },
+        {
+          "title": "There is exactly one path out of a questions consensus stage, and it refuses to advance unless every consensus evaluation has been submitted and at least one proponent has met the minimum score on every question that sets one. (no proponent has met every minimum score)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "8c482af339113f9b120042324278cd34a9c88f72",
+      "adapter": "bc06d29b027aea6f035985a44733726afd83cc45"
+    },
+    {
+      "id": "R-2.29",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.29.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "After the questions of a Sprint With Us or Team With Us opportunity have been scored, only proposals meeting every question's minimum score are ranked by that score and the highest few are carried into the next stage. (Sprint With Us)",
+          "status": "passed"
+        },
+        {
+          "title": "After the questions of a Sprint With Us or Team With Us opportunity have been scored, only proposals meeting every question's minimum score are ranked by that score and the highest few are carried into the next stage. (Team With Us)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "8934ddf6cce1a4766f232d9d9d969b28c46e5199",
+      "adapter": "bc06d29b027aea6f035985a44733726afd83cc45"
+    }
+  ]
+}
