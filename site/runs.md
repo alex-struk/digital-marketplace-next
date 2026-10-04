@@ -67,6 +67,11 @@
 - 21:01:26 drive: step 2: `sdlc rule build-slice-14-2 --by agent:reviewer` — build-slice-14-2 is open at G3, held by agent:reviewer, and did not pass verify, so it is ruled by name to return or escalate it
 - 21:03:33 rule build-slice-14-2 refused at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.288 (Claude Code)): rule build-slice-14-2: "app/frontend/src/router.tsx: serve the proposal-cwu-view screen drawn in design/catalogue/proposal-cwu-view.*.stories.tsx at /opportunities/code-with-us/:opportunityId/proposals/:proposalId. A vendor opening a proposal they may not read (another vendor's) must get the screen's not-found state, as GET /api/proposals/code-with-us/:id already refuses it. Verify reported proposal-cwu-view.open unbound for R-2.24 'a vendor never sees another vendor's proposal'." asks for design/catalogue/proposal-cwu-view, which build cannot deliver — build delivers app, docs/decisions, and everything else its workspace carries is there to be read. A condition it cannot carry out is one it either fails at or finds a way round, and the second is reported as done. design delivers it. Address the condition there instead: addressed-to design: <what that stage has to change, and what showed it>
 - 21:03:36 drive: stopped after 2 steps — step 2 (`sdlc rule build-slice-14-2 --by agent:reviewer`) failed
+- 21:16:09 drive: step 5: `sdlc run plan --revise` — plan-21 was returned at G2 by agent:tech-lead
+- 21:18:20 run plan: ok, cost 0.7290525999999998, turns 31, on claude claude-opus-5-5 (2.1.288 (Claude Code))
+- 21:18:21 propose plan-22 at G2
+- 21:18:25 drive: step 6: `sdlc rule plan-22 --by agent:architect` — plan-22 is open at G2, held by agent:architect
+- 21:19:12 rule plan-22 approve at G2 by agent:architect (agent) on claude claude-opus-5-5 (2.1.288 (Claude Code))
 
 # Run record 2026-10-03
 

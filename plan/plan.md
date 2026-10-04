@@ -50,7 +50,9 @@ init container on the backend: knex migrate:latest over app/migrations  (departu
   function that both sides call is how the rebuild stops that class of defect coming back. The
   rules sit inside `app/backend` so the profile's layout holds (0001).
 - **`app/migrations`** — the old application's Knex migration history, carried over unchanged,
-  plus the rebuild's three migrations (0002).
+  plus the rebuild's own migrations: the reconstructed baseline (0007), 0012's restores of the old
+  tables the seed writes to, and the six 0002 lists — three that change data or a constraint, and
+  three that restore old opportunity attachment tables the baseline lacks.
 - **`app/compose`** — PostgreSQL, a sandbox Keycloak realm with the persona accounts, and Mailpit,
   for a builder's machine only.
 
@@ -69,8 +71,10 @@ because the root filesystem is read-only (0006).
 
 ## The data it inherits
 
-The PostgreSQL schema is kept (J5, decision record 0002): no table or column is added, dropped or
-renamed. The old migration history is continued rather than restarted, by Knex from
+The PostgreSQL schema is kept (J5, decision record 0002): no table or column the old application
+did not have is added, and none is dropped or renamed. Restoring the old application's own tables
+where the reconstructed baseline lacks them is within J5 by tech-lead ruling (see "Tables restored"
+below). The old migration history is continued rather than restarted, by Knex from
 `app/migrations/`, so a database the old application left behind upgrades in place. Prisma reads
 the result and never migrates it, so no bookkeeping table of its own is added (0001, departure 1).
 The rebuild does not write to the kept `sessions` table, because sign-in is PKCE (0004). The
@@ -104,6 +108,17 @@ awarded (R-1.49); panels must have exactly one chair and every member a role (R-
 R-5.37); new accounts start with new-opportunity notices off (R-6.20); an opportunity attachment
 records no read access on the file itself and is read through what it hangs on (R-8.19, R-8.20,
 R-8.25); a deactivated account is sent nothing but keeps its watches (R-6.17).
+
+**Tables restored where the reconstructed baseline lacks them.** The old application kept
+attachments on all three programs' opportunities, but the kept schema as reconstructed (0007)
+carries no attachment table for Sprint With Us or Team With Us opportunities. Slice 7 restored the
+Code With Us one, `cwuOpportunityAttachments`, where absent (0029). Slice 15 restores the other
+two the same way as `swuOpportunityAttachments` and `twuOpportunityAttachments`, each with
+columns `opportunityVersion` and `file` (0055). Those two names are the rebuild's own under 0007's
+rule for names the seed does not fix, and are reconciled if the old repository becomes available.
+A database the old application left behind already holds the tables and is not changed. The tech
+lead has ruled that restoring the old application's own tables, only where the baseline lacks
+them, is within J5. All three restores are rows in 0002's migration table.
 
 **Seed data for sandboxes** is synthetic only (P3, J3): the persona accounts named in
 `spec/contract/personas.yaml`, the first administrator written directly into the data as R-4.13
@@ -254,9 +269,42 @@ reader's attention.
   order but does not depend on Slice 10, and placing them there would have meant adding that
   dependency and holding the Code With Us proposal slice back for Sprint With Us creation; Slice 15
   needs no dependency change. Both rules are still built in Slice 7, and the proposal half of
-  R-8.25 in Slice 14 with R-8.20. The fit is uneasy in the same way as the items above: a file
+  R-8.25 in Slice 14. The fit is uneasy in the same way as the items above: a file
   rule is answered for by the Sprint With Us and Team With Us proposal slice, only because that is
-  where its test first can run.
+  where its test first can run. A later G3 ruling on the build of Slice 14 showed that the Sprint
+  With Us and Team With Us halves of R-8.19 had nothing to run against even in Slice 15: Slice 10
+  draws the attachment control on those programs' forms but disabled ("Files cannot be attached to
+  a Sprint With Us opportunity in this version of the service"), because the kept schema as
+  reconstructed lacks their attachment tables (0036, 0045), and 0045 left that work to Slice 15
+  without Slice 15's deliverables saying so. Slice 15 now names it: it enables the control on both
+  programs' opportunity forms, restores the two attachment tables and adds their read paths
+  (decision record 0055).
+- **R-8.20 (Slice 15)** — one read rule for files attached to opportunities and proposals in all
+  three programs — was placed in Slice 14 with the Code With Us proposal attachments. The same G3
+  ruling on the build of Slice 14 found its Sprint With Us and Team With Us cases unbound there:
+  they attach files to those programs' opportunities, which neither Slice 14 nor anything before it
+  can do. It now sits in Slice 15, which builds those attachments (see the item above) and whose
+  closure (Slices 14, 13, 10 and back through 7) holds the Code With Us opportunity and proposal
+  attachments as well. Assigning it to Slice 10, which builds the forms, was not taken: Slice 10
+  is already built and approved, and reopening it for attachment tables would hold nothing back
+  that Slice 15 does not already wait for. The Code With Us half of the rule is still built in
+  Slices 7 and 14.
+- **R-1.31, R-2.7, R-2.9, R-2.11, R-2.24 and R-2.25 (Slice 15)** were placed in Slice 14, which
+  builds the Code With Us proposal and every rule here for that program. Each speaks of all three
+  programs, and a G3 ruling on the build of Slice 14 found the Sprint With Us and Team With Us
+  cases of their tests unbound there, because they open `proposal-swu-create`,
+  `proposal-twu-create` and the Proposals tab of `opportunity-swu-edit`, which Slice 15 builds.
+  Each sits whole in Slice 15, whose closure holds Slice 14 and so the Code With Us cases too;
+  splitting each into a Code With Us criterion and a criterion for the other two would need new
+  criterion IDs, which are the spec's to author. Slice 15 therefore also builds the Proposals tab
+  on the Sprint With Us and Team With Us manage pages, which 0045 left to a later slice. One risk
+  is worth naming: R-1.31's and R-2.25's second clause reads the list once the opportunity has
+  closed, and a Sprint With Us or Team With Us opportunity only closes when Slice 16's deadline
+  hook runs. The ruling found only the screens unbound, not the closure, and the Code With Us
+  cases were not returned, so the plan takes the screens as what was missing; if verification of
+  Slice 15 finds the closed half unreachable, both criteria move on to Slice 16, as R-1.19 did, and
+  nothing else changes. The fit is uneasy in the same way as the items above: rules built for Code
+  With Us in Slice 14 are answered for where their tests can first run in every program.
 - **R-1.1 (Slice 16)** is one sentence about three programs. Its Code With Us half is demonstrated
   in the same slice as the rest of Code With Us evaluation; its Sprint With Us and Team With Us
   half (the evaluators being told) is why Slice 16 waits for Slice 15.
@@ -419,7 +467,7 @@ the named slice should raise them rather than silently pick a reading.
   owner "at every stage"; R-5.28 says no one but the evaluator reads them before consensus, and an
   administrator off the panel only after the question stages. Both are in Slice 17. They cannot
   both hold for an administrator during individual evaluation.
-- **R-8.25 vs R-8.20 (slices 15 and 14).** R-8.25 names only Code With Us and Sprint With Us
+- **R-8.25 vs R-8.20 (both Slice 15).** R-8.25 names only Code With Us and Sprint With Us
   attachments; R-8.20 requires one rule for all three programs. The plan applies R-8.25's rule to
   Team With Us too.
 - **R-4.31 (Slice 4) against the direction of R-5.9 (Slice 10).** R-4.31 keeps a rule on the interface alone (an
@@ -505,9 +553,17 @@ no `supersededBy` appears in exactly one slice's `criteria:` line in `plan/tasks
 reports any placed ID that is unknown or not accepted. Run it with
 `node plan/check-coverage.mjs .` from the workspace root. It exits non-zero on any failure.
 
-The planning session could not run it: running a script needed an approval that session could not
-get. Its output is therefore **not** attached, and whoever next holds a shell should run it. In its
-place, the placements were checked by hand against the index, domain by domain. This revision moved
+**Result for this revision: not run.** On 2026-10-03 the planning session tried
+`node plan/check-coverage.mjs .` and an equivalent inline script. The session's permission guard
+refused both because they needed an approval nobody was there to give. No output exists to attach,
+and whoever next holds a shell should run it and record what it prints here. The evidence this
+revision relies on instead is a hand count of every `criteria:` line in `plan/tasks.md`: **248
+IDs placed** across 21 slices. Slice by slice, 1–21 hold 6, 6, 24, 10, 18, 7, 16, 9, 6, 20, 13,
+19, 4, 18, 17, 15, 15, 13, 6, 3 and 3, so **Slice 14 holds 18 and Slice 15 holds 17**. This
+revision moves no criterion. It changes only decision records 0002 and 0055 and this plan's
+account of the migrations.
+
+Earlier revisions could not run it either. In its place, the placements were checked by hand against the index, domain by domain. This revision moved
 two IDs and no others: R-7.12 from Slice 1 to Slice 5, and R-7.17 from Slice 1 to Slice 10. Both
 stay in the content domain, and both land in slices the table below already lists, so every count in
 it is unchanged. A later revision moved R-8.19 and R-8.25 from Slice 7 to Slice 15; the files row
@@ -517,7 +573,10 @@ The most recent revision moved R-1.35 and R-1.36 from Slice 9 to Slice 14 and ad
 Slice 14's dependencies; Slice 9 still answers for other opportunities criteria and Slice 14 was
 already in the opportunities row, so no row changes. The revision after that moved R-3.6, R-3.15
 and R-3.23 from Slice 11 to Slice 12; both slices were already in the organizations row, so no row
-changes.
+changes. This revision moved R-1.31, R-2.7, R-2.9, R-2.11, R-2.24, R-2.25 and R-8.20 from Slice 14
+to Slice 15. Slice 14 still answers for other opportunities (R-1.35, R-1.36), proposals and files
+(R-8.22, R-8.31) criteria, and Slice 15 was already in the proposals and files rows; the
+opportunities row gains Slice 15 and no count changes.
 
 | Domain | Accepted, not superseded | Placed | Slices |
 | --- | --- | --- | --- |
@@ -525,7 +584,7 @@ changes.
 | evaluation (R-5) | 30 | 30 | 10, 16, 17, 18 |
 | files (R-8) | 24 | 24 | 3, 5, 7, 14, 15 |
 | notifications (R-6) | 21 | 21 | 2, 3, 6, 7, 8, 9, 16, 21 |
-| opportunities (R-1) | 50 | 50 | 7, 8, 9, 10, 14, 16, 18, 19, 20 |
+| opportunities (R-1) | 50 | 50 | 7, 8, 9, 10, 14, 15, 16, 18, 19, 20 |
 | organizations (R-3) | 31 | 31 | 11, 12, 13 |
 | proposals (R-2) | 36 | 36 | 14, 15, 16, 18, 19, 20 |
 | users (R-4) | 30 | 30 | 2, 3, 4, 6 |
@@ -608,10 +667,19 @@ opportunity, proposal, proponent, organisation, affiliation, evaluation stage, a
 programs — and code names follow them.
 
 **J5 — Non-functional baselines.** Authentication is Keycloak over OpenID Connect, by PKCE from
-the single-page app (0004). The existing PostgreSQL schema is kept. The only migrations are the
-three named in 0002, run by Knex so that no migration tool adds its own table. One of them narrows
-a status check constraint for R-1.51, and that narrowing is escalated to the tech lead as a schema
-change. Accessibility is WCAG 2.1 AA, as under P1.
+the single-page app (0004). The existing PostgreSQL schema is kept. Beyond the reconstructed baseline (0007)
+and 0012's restores of the old tables the seed writes to, the only migrations are the six named in
+0002, all run by Knex so that no migration tool adds its own table. Three change data or a
+constraint: the suspended-to-cancelled mapping with its constraint narrowing (R-1.51), the service
+level agreement page (R-7.18), and the fresh installation's page set (R-7.12). The narrowing is
+escalated to the tech lead as a schema change. The other three restore the old application's own
+opportunity attachment tables, created only where the reconstructed baseline lacks them:
+`cwuOpportunityAttachments` (Slice 7, 0029), and `swuOpportunityAttachments` and
+`twuOpportunityAttachments` (Slice 15, 0055, named there with their columns). No table or column
+the old application did not have is added. The tech lead has ruled that restoring the old
+application's own tables where the baseline lacks them keeps the schema J5 keeps, and does not
+loosen the article.
+Accessibility is WCAG 2.1 AA, as under P1.
 
 **J6 — Recorded exceptions.** None needed and none requested. J6 records exceptions to platform
 articles. The two departures in 0001 are from the stack profile, not from any platform article,

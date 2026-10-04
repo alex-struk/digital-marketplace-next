@@ -1,0 +1,18 @@
+gate: G2
+verdict: approve
+by: agent:architect
+held_by: agent
+rationale: |2-
+  Plan-22 makes the three changes plan-21's tech-lead ruling asked for. Decision record 0002 now says no table or column the old application did not have is added, says restoring the old application's own tables where the rebuilt baseline lacks them is within J5 by tech-lead ruling, lists the three attachment-table restores (cwu, swu, twu) as rows, and points to the migrations of 0007 and 0012 so the list of migrations is complete. The J5 paragraph and layout line in plan/plan.md match it. Decision record 0055 names swuOpportunityAttachments and twuOpportunityAttachments itself, each with opportunityVersion and file columns keyed on the pair, modelled on cwuOpportunityAttachments and marked as the rebuild's own names under 0007's rule. The opportunity-version tables those keys point at are present in app/migrations/migrations/20200101000000_baseline_kept_schema.cjs, so the builder is not left to invent a name. The coverage script still could not be run, and the plan says so with a hand count. A recount of every criteria: line in plan/tasks.md gives 6,6,24,10,18,7,16,9,6,20,13,19,4,18,17,15,15,13,6,3,3, which is 248, with Slice 14 at 18 and Slice 15 at 17. No criterion moved in this revision, and Slice 15 depends on Slices 10, 13 and 14, so the criteria it holds can be demonstrated there. The only schema change is the attachment-table restores, which the tech lead's plan-21 ruling asked for, so there is nothing new to escalate. The R-1.51 constraint narrowing is still escalated and is not settled by this approval. The domain table's Slices column was already wrong before this revision (files leaves out Slice 11, notifications leaves out 12, 14 and 18) although its counts are right. It does not affect any placement. Would change: a coverage-script run reporting a duplicate, missing or unknown ID, or a tech-lead ruling that restoring tables breaks J5.
+conditions:
+  - "condition-met plan-21#1: docs/decisions/0002 rewords the no-added-tables sentence to 'no table or column the old application did not have', cites the tech-lead ruling for restoring the old application's own tables, adds migration-table rows for cwuOpportunityAttachments (0029) and swuOpportunityAttachments and twuOpportunityAttachments (0055), and points to 0007 and 0012; the J5 paragraph and the app/migrations layout line in plan/plan.md now name the six migrations instead of 'the three named in 0002'."
+  - "condition-met plan-21#2: docs/decisions/0055 drops the instruction to take names from the old migration history and names swuOpportunityAttachments and twuOpportunityAttachments with columns opportunityVersion and file and primary key (opportunityVersion, file), marked as the rebuild's own names under 0007's rule and reconciled by a rename migration if the old repository becomes available."
+  - "condition-met plan-21#3: the coverage-check section of plan/plan.md records that node plan/check-coverage.mjs . could not be run (permission guard) and states the hand count of 248 placed criteria, with Slice 14 at 18 and Slice 15 at 17 and the count for every slice; a recount of plan/tasks.md at this ruling confirms the per-slice counts and the total."
+cost: 0.5203618000000001
+turns: 5
+session: "0c53833a-db27-42bc-b632-b197dc9813bb"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T04:19:12.530Z
