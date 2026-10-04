@@ -10146,13 +10146,14 @@ export default function create(
   }
 
   // Each reference goes under "Reference N" (N its number, its order plus one, or its place in
-  // the list), "Add a reference" making room for it; Name, Email address and Phone number are
-  // the boxes each one has. A key with no box is reported, never dropped.
+  // the list), "Add a reference" making room for it; Name, Company, Email address and Phone
+  // number are the boxes each one has. A key with no box is reported, never dropped.
   async function addTeamReferences(where: string, input: unknown): Promise<void> {
     const region = seen(proposalMain().getByRole("region", { name: /^\s*references\s*$/i })).first();
     if (!(await region.count())) unbound(where, `no "References" section on ${page.url()}; it offers ${await offered()}`);
     const boxes: [RegExp, string[]][] = [
       [/^\s*name\b/i, ["name", "fullName", "full_name", "referenceName"]],
+      [/^\s*company\b/i, ["company", "companyName", "company_name", "organization"]],
       [/^\s*email\b/i, ["email", "emailAddress", "email_address"]],
       [/^\s*phone\b/i, ["phone", "phoneNumber", "phone_number", "telephone"]],
     ];
@@ -10160,7 +10161,7 @@ export default function create(
     const list = Array.isArray(input) ? input : [input];
     for (const [place, reference] of list.entries()) {
       for (const key of Object.keys(record(reference))) {
-        if (!known.has(squash(key))) unbound(where, `no box on "Reference N" takes "${key}" (each reference has Name, Email address and Phone number (optional)) on ${page.url()}; walked as the organization-owner vendor on the seeded open Sprint With Us opportunity's create form (pressing "Add a reference") and on the seeded Sprint With Us proposals' edit forms, and neither the form nor a saved proposal's References section holds a company, employer or organization for a reference`);
+        if (!known.has(squash(key))) unbound(where, `no box on "Reference N" takes "${key}" (each reference has Name, Company, Email address and Phone number (optional)) on ${page.url()}`);
       }
       const numbered = Number.parseInt(field(reference, "number"), 10);
       const ordered = Number.parseInt(field(reference, "order", "index", "position"), 10);
@@ -10174,6 +10175,7 @@ export default function create(
         const value = given(reference, keys);
         if (value === undefined || value === null) continue;
         const box = seen(group().getByRole("textbox", { name: label })).first();
+        if (!(await box.count())) unbound(where, `"Reference ${at}" has no box labelled ${label} on ${page.url()}`);
         await box.fill(textOf(value));
       }
     }
