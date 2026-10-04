@@ -1596,6 +1596,23 @@ export default function create(
     return lines.join("\n");
   }
 
+  // The winner's name as an awarded opportunity's page draws it on every program: a region
+  // under the level-2 heading "Successful proponent" whose paragraph is the name ("Northern
+  // Pines Digital Ltd." on the seeded awarded Code With Us and Sprint With Us opportunities).
+  // The first line below the heading, as the old target hands back the name alone; nothing
+  // when the page has no such region.
+  async function successfulProponentShown(): Promise<string> {
+    // The heading is up while "Loading opportunity…" still stands in for the page.
+    await seen(page.getByRole("progressbar"))
+      .first()
+      .waitFor({ state: "hidden", timeout: 10000 })
+      .catch(() => undefined);
+    const region = seen(regionNamed(page.getByRole("main"), /^\s*successful proponent\s*$/i)).first();
+    if (!(await region.count())) return "";
+    const lines = lined(await region.innerText()).filter((line) => !/^successful proponent$/i.test(line));
+    return (lines[0] ?? "").trim();
+  }
+
   const CONTACT_DETAIL = /@|\+?\d[\d\s().-]{8,}\d|\b(contact|e-?mail|phone)\b/i;
   const SCORE_DETAIL = /\bscore\b|\d+(\.\d+)?\s*%|\bpoints?\b/i;
 
@@ -1758,8 +1775,13 @@ export default function create(
         const section = await sectionBehind(where("addenda"), "Addenda");
         return /^(there are currently no addenda|no addenda have been added)/i.test(section) ? "" : section;
       },
+      // The "Successful proponent" region's name; an older layout's "awarded to <name>" alert
+      // otherwise.
       successfulProponent: async () => {
-        const banner = (await opportunityLines(where("successful_proponent"))).find((line) => /awarded to\s+\S/i.test(line));
+        const lines = await opportunityLines(where("successful_proponent"));
+        const named = await successfulProponentShown();
+        if (named) return named;
+        const banner = lines.find((line) => /awarded to\s+\S/i.test(line));
         return banner ? (/awarded to\s+(.+)$/i.exec(banner)?.[1] ?? "").replace(/\.$/, "").trim() : "";
       },
       ...added,
@@ -7373,10 +7395,12 @@ export default function create(
         .filter((line) => !/^no addenda have been added\.?$/i.test(line))
         .join("\n");
     },
-    // An awarded opportunity's page names no winner (seen on the seeded awarded one), so
-    // these read as nothing on a page that opened.
+    // An awarded opportunity's page names the winner in its "Successful proponent" region
+    // (seen on the seeded awarded one); a page without one reads as nothing.
     successfulProponent: async () => {
       if (!(await onCwuView("successful_proponent"))) return "";
+      const named = await successfulProponentShown();
+      if (named) return named;
       const said = (await textLines()).find((line) => /awarded to\s+\S/i.test(line));
       return said ? (/awarded to\s+(.+)$/i.exec(said)?.[1] ?? "").replace(/\.$/, "").trim() : definitionOf(/^(successful proponent|awarded to)$/i);
     },
@@ -9639,24 +9663,112 @@ export default function create(
   // the regions Proponent — Proponent type, Organization —, Proposal text, Additional comments
   // and Attachments) and History (?tab=history: the table "Every change of state and every
   // score entered, newest first", Date | Entry | By | Note). The vendor is also offered
-  // "Manage this proposal". In no state walked is there a button of any kind: no score to
-  // enter, no award, no disqualification, and no rank anywhere.
+  // "Manage this proposal". To staff the screen now also draws a "Proposal actions" group
+  // ("Enter score", "Award", "Disqualify" as the state allows; see staffProposalAction) and,
+  // once evaluated, a Rank term beside the Score ("1 of 2").
   const PCWU_VIEW = "proposal-cwu-view";
   const PCWU_VIEW_ROUTE = "/opportunities/code-with-us/:opportunityId/proposals/:proposalId";
   const PCWU_VIEW_WALKED =
-    'walked on the current build as the administrator on the seeded Code With Us proposals submitted (...a002...101, ...a003...101, ...a004...101, ...a005...101), withdrawn (...a005...103), evaluated in processing (...a007...101 at 82%, ...a007...102 at 74%) and awarded / not awarded (...a008...101 at 91%, ...a008...102 at 77%), and as the public sector employee on ...a007...101: the screen draws the terms Opportunity, Status, Submitted and Proposal ID, the Score region, "Printable copy" and the sections Proposal and History, and no button of any kind; the opportunity\'s management screen offers, in its "Proposals" section, only the table Proponent | Status | Submitted';
-  // A control the screen has never been seen to offer: unbound, saying what is there. Should
-  // the screen one day offer it, that is said too, so the next binding run binds it.
-  async function cwuViewLacks(member: string, name: RegExp, what: string): Promise<never> {
-    const where = `${PCWU_VIEW}.${member}`;
-    await ready();
-    const why = await whyNotHere();
-    if (why) unbound(where, `the proposal's screen did not open at ${page.url()} for ${actingId()}: ${why.replace(/\n+/g, " ")}; ${PCWU_VIEW_WALKED}`);
-    const offeredNow = seen(page.getByRole("main").getByRole("button", { name }).or(page.getByRole("main").getByRole("link", { name })));
-    if (await offeredNow.count()) {
-      unbound(where, `${page.url()} now offers ${actingId()} a control named ${name}, which this binding has not seen; the next binding run binds it (${PCWU_VIEW_WALKED})`);
+    'walked on the current build as the administrator on the seeded Code With Us proposals submitted (...a002...101, ...a003...101, ...a004...101, ...a005...101), withdrawn (...a005...103), evaluated in processing (...a007...101 at 82%, ...a007...102 at 74%) and awarded / not awarded (...a008...101 at 91%, ...a008...102 at 77%), and as the public sector employee on ...a007...101: the screen draws the terms Opportunity, Status, Submitted and Proposal ID, the Score region, "Printable copy", the sections Proposal and History, and under "Proposal actions" "Enter score", "Award" and "Disqualify" as the state allows; the opportunity\'s management screen offers, in its "Proposals" section, only the table Proponent | Status | Submitted';
+  // The staff actions every program's proposal screen gathers under "Proposal actions", as
+  // the state and the reader allow: "Enter score" (Code With Us, while under review),
+  // "Award" (once evaluated) and "Disqualify". Walked on the current build as the
+  // administrator: Code With Us ...a003...101 offers "Enter score" and "Disqualify",
+  // ...a007...101 (evaluated, 82%) "Award" and "Disqualify"; Sprint With Us ...a019...101
+  // "Award" and "Disqualify"; Team With Us ...8000...841 "Disqualify" and ...a033...101
+  // (evaluated at the challenge) "Award" and "Disqualify". Each opens a dialog:
+  //   "Enter score": a "Score (%)(required)" box, then "Cancel" | "Enter score"; a value
+  //     outside 0 to 100 or left out keeps the dialog open under "Enter a score between 0
+  //     and 100, with no more than two decimal places".
+  //   "Disqualify this proposal?": a "Reason (required)" box, then "Cancel" | "Disqualify
+  //     proposal"; no reason keeps it open under "Enter a reason for disqualifying this
+  //     proposal".
+  //   "Award this proposal?": "Cancel" | "Award proposal".
+  // A screen not offering the control to this reader in this state is the page withholding
+  // it, recorded and left, as on the vendor's own proposal screen; a dialog that stays open
+  // after its confirmation has refused, and is put away with what it said recorded.
+  async function staffProposalAction(where: string, name: RegExp, inDialog: (dialog: Locator) => Promise<void>): Promise<void> {
+    if (!(await onProposal(where))) return;
+    await closeDialog();
+    await proposalActions().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+    const control = seen(proposalActions().getByRole("button", { name })).first();
+    if (!(await control.count())) {
+      noteRefusal(`${where} — ${page.url()} (Status: ${(await proposalTerm(/^status$/i)) || "not shown"}) does not offer ${actingId()} a control named ${name}; its actions: ${(await proposalActionNames()) || "none"}`);
+      return;
     }
-    return unbound(where, `the Code With Us proposal's screen offers no ${what}: ${PCWU_VIEW_WALKED}; on ${page.url()} as ${actingId()} it offers ${await offered()}`);
+    if (await isDisabled(control)) throw new Error(`${where} — the control named ${name} is disabled on ${page.url()}`);
+    await control.click();
+    if (!(await dialogShown())) unbound(where, `pressing ${name} on ${page.url()} opened no dialog`);
+    await inDialog(openDialog().first());
+  }
+  async function confirmStaffDialog(where: string, dialog: Locator, name: RegExp): Promise<void> {
+    const confirm = seen(dialog.getByRole("button", { name })).first();
+    if (!(await confirm.count())) {
+      const offers = (await seen(dialog.getByRole("button")).allInnerTexts()).map((one) => one.trim()).filter(Boolean);
+      unbound(where, `the dialog on ${page.url()} offers no control named ${name}; it offers ${offers.join(", ") || "nothing"}`);
+    }
+    if (await isDisabled(confirm)) {
+      const said = lined(await dialog.innerText()).join(" ");
+      await closeDialog();
+      throw new Error(`${where} — the control named ${name} is disabled on ${page.url()}; the dialog says: ${said}`);
+    }
+    await confirm.click();
+    await dialog.waitFor({ state: "hidden", timeout: 10000 }).catch(() => undefined);
+    if (await openDialog().count()) {
+      noteRefusal(`${where} — ${page.url()} kept the dialog open: ${lined(await openDialog().first().innerText()).join(" ")}`);
+      await closeDialog();
+    }
+    await settle();
+  }
+  // The one box a dialog asks for, by its label; refused by name when the dialog has none,
+  // saying which boxes it does have.
+  async function dialogBox(where: string, dialog: Locator, label: RegExp, key: string): Promise<Locator> {
+    const box = seen(dialog.getByRole("textbox", { name: label }).or(dialog.getByRole("spinbutton", { name: label }))).first();
+    if (!(await box.count())) {
+      const boxes = seen(dialog.getByRole("textbox").or(dialog.getByRole("spinbutton")));
+      const names: string[] = [];
+      for (let i = 0; i < (await boxes.count()); i++) names.push(((await boxes.nth(i).getAttribute("aria-label")) ?? "").trim() || `box ${i + 1}`);
+      await closeDialog();
+      unbound(where, `the dialog on ${page.url()} has no field for "${key}" (labelled ${label}); its fields: ${names.join(", ") || "none"}`);
+    }
+    return box;
+  }
+  // Fills the dialog from the input: a bare value goes in the dialog's own box (`main`), and
+  // each key of a record in the box labelled for it — `main.keys` are that same box's
+  // names, any other key is looked up by its words ("disqualificationNote" → "note"), and a
+  // key the dialog has no box for is refused by name, saying which boxes it does have.
+  async function fillDialog(where: string, dialog: Locator, input: unknown, main: { label: RegExp; keys: string[] }): Promise<void> {
+    if (!input || typeof input !== "object" || Array.isArray(input)) {
+      await (await dialogBox(where, dialog, main.label, main.keys[0])).fill(textOf(input));
+      return;
+    }
+    const entries = Object.entries(input as Record<string, unknown>);
+    if (!entries.length) {
+      await (await dialogBox(where, dialog, main.label, main.keys[0])).fill("");
+      return;
+    }
+    for (const [key, value] of entries) {
+      const words = key.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/[_-]+/g, " ").trim();
+      const label = main.keys.includes(key) ? main.label : new RegExp(words.split(/\s+/).join(".*"), "i");
+      await (await dialogBox(where, dialog, label, key)).fill(textOf(value));
+    }
+  }
+  async function enterProposalScore(where: string, input: unknown): Promise<void> {
+    await staffProposalAction(where, /^\s*(enter|edit) score\s*$/i, async (dialog) => {
+      await fillDialog(where, dialog, input, { label: /score/i, keys: ["score", "value", "total", "totalScore", "percent"] });
+      await confirmStaffDialog(where, dialog, /^\s*(enter|edit|save|submit) score\s*$/i);
+    });
+  }
+  async function disqualifyProposalBy(where: string, input: unknown): Promise<void> {
+    await staffProposalAction(where, /^\s*disqualify( proposal)?\s*$/i, async (dialog) => {
+      await fillDialog(where, dialog, input, { label: /reason/i, keys: ["reason", "disqualificationReason", "note", "text"] });
+      await confirmStaffDialog(where, dialog, /^\s*disqualify( proposal)?\s*$/i);
+    });
+  }
+  async function awardProposalBy(where: string): Promise<void> {
+    await staffProposalAction(where, /^\s*award( proposal)?\s*$/i, (dialog) =>
+      confirmStaffDialog(where, dialog, /^\s*award( proposal| opportunity)?\s*$/i),
+    );
   }
   // One of the screen's sections, opened from "Proposal sections", read whole.
   async function cwuViewSection(name: RegExp): Promise<string> {
@@ -9678,9 +9790,9 @@ export default function create(
       await go(PCWU_VIEW_ROUTE, params as unknown as Record<string, string>);
       await ready();
     },
-    enterScore: () => cwuViewLacks("enter_score", /^\s*(enter|edit) score\s*$/i, '"Enter score" control'),
-    awardProposal: () => cwuViewLacks("award_proposal", /^\s*award( proposal| opportunity)?\s*$/i, '"Award" control'),
-    disqualifyProposal: () => cwuViewLacks("disqualify_proposal", /^\s*disqualify( proposal)?\s*$/i, '"Disqualify" control'),
+    enterScore: (input) => enterProposalScore(`${PCWU_VIEW}.enter_score`, input),
+    awardProposal: () => awardProposalBy(`${PCWU_VIEW}.award_proposal`),
+    disqualifyProposal: (input) => disqualifyProposalBy(`${PCWU_VIEW}.disqualify_proposal`, input),
     proposalIdentifier: async () => ((await proposalShown()) ? (await proposalTerm(/^proposal id$/i)) || proposalPathId() : ""),
     // The "Proposal" section: Proponent (type and organization or name), Proposal text,
     // Additional comments, Attachments.
@@ -9723,12 +9835,13 @@ export default function create(
   // "Printable copy" to .../export, and under the navigation "Proposal sections" the links
   // Proposal (?tab=proposal: the regions Organization, Team, Team questions / Resource
   // questions, References and Attachments) and History (?tab=history: the table "Every change
-  // of state and every score entered, newest first", Date | Entry | By | Note). There is no
-  // button of any kind, no stage tab (team questions, code challenge, team scenario, resource
+  // of state and every score entered, newest first", Date | Entry | By | Note). Under
+  // "Proposal actions" are "Award" and "Disqualify" as the state allows, and no other
+  // button: no stage tab (team questions, code challenge, team scenario, resource
   // questions, challenge), no score and no rank, though the seeded proposals hold scores.
   function teamViewWalked(program: string): string {
     const seeded = program === "sprint-with-us" ? "...a016...101 (scored on the code challenge and the team scenario)" : "...a032...101 (scored on the challenge) and ...a032...102";
-    return `walked on the current build as the administrator, from the proponent links of the opportunity's Proposals section, on the seeded ${program} proposal(s) ${seeded}: the screen draws the terms Opportunity, Status, Submitted and Proposal ID, "Printable copy", the sections Proposal and History, and no button, stage tab, score or rank`;
+    return `walked on the current build as the administrator, from the proponent links of the opportunity's Proposals section, on the seeded ${program} proposal(s) ${seeded}: the screen draws the terms Opportunity, Status, Submitted and Proposal ID, "Printable copy", the sections Proposal and History, under "Proposal actions" only "Award" and "Disqualify" as the state allows, and no stage tab, score control, score or rank`;
   }
   // A control or reading the screen has never been seen to offer: unbound, saying what is
   // there. Should the screen one day offer it, that is said too, so the next run binds it.
@@ -9791,7 +9904,9 @@ export default function create(
     return built as unknown as T;
   }
   const SCORE_LACKS = (stage: string, member: string) => ({ member, name: new RegExp(`^\\s*${stage}( score)?\\s*$`, "i"), what: `${stage} score` });
-  const proposalSwuViewBound = teamProposalView<S.ProposalSwuViewPage>(
+  // Award and Disqualify are the screen's "Proposal actions", bound as on Code With Us.
+  const proposalSwuViewBound: S.ProposalSwuViewPage = {
+    ...teamProposalView<S.ProposalSwuViewPage>(
     "proposal-swu-view",
     "/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId",
     "sprint-with-us",
@@ -9800,8 +9915,6 @@ export default function create(
       { member: "screen_in_to_team_scenario", name: /^\s*screen in\b/i, what: '"Screen in" control' },
       { member: "screen_out_from_team_scenario", name: /^\s*screen out\b/i, what: '"Screen out" control' },
       { member: "score_team_scenario", name: /^\s*(enter|edit) (team scenario )?score\s*$/i, what: "control to enter a team scenario score" },
-      { member: "award_proposal", name: /^\s*award( proposal)?\s*$/i, what: '"Award" control' },
-      { member: "disqualify_proposal", name: /^\s*disqualify( proposal)?\s*$/i, what: '"Disqualify" control' },
       { member: "team_questions_tab", name: /^\s*team questions\s*$/i, what: '"Team questions" stage section (the Proposal section lists the questions with the responses, and no scores)' },
       { member: "code_challenge_tab", name: /^\s*code challenge\s*$/i, what: '"Code challenge" section' },
       { member: "team_scenario_tab", name: /^\s*team scenario\s*$/i, what: '"Team scenario" section' },
@@ -9814,8 +9927,12 @@ export default function create(
       { member: "rank", name: /^\s*rank(ing)?\s*$/i, what: "rank or ranking" },
       { member: "offered_score_actions", name: /^\s*(enter|edit) .*score\s*$/i, what: "stage tab or score control to read offered score actions from" },
     ],
-  );
-  const proposalTwuViewBound = teamProposalView<S.ProposalTwuViewPage>(
+    ),
+    awardProposal: () => awardProposalBy("proposal-swu-view.award_proposal"),
+    disqualifyProposal: (input) => disqualifyProposalBy("proposal-swu-view.disqualify_proposal", input),
+  };
+  const proposalTwuViewBound: S.ProposalTwuViewPage = {
+    ...teamProposalView<S.ProposalTwuViewPage>(
     "proposal-twu-view",
     "/opportunities/team-with-us/:opportunityId/proposals/:proposalId",
     "team-with-us",
@@ -9824,8 +9941,6 @@ export default function create(
       { member: "screen_in_to_challenge", name: /^\s*screen in\b/i, what: '"Screen in" control' },
       { member: "screen_out_from_challenge", name: /^\s*screen out\b/i, what: '"Screen out" control' },
       { member: "score_challenge", name: /^\s*(enter|edit) (challenge )?score\s*$/i, what: "control to enter a challenge score" },
-      { member: "award_proposal", name: /^\s*award( proposal)?\s*$/i, what: '"Award" control' },
-      { member: "disqualify_proposal", name: /^\s*disqualify( proposal)?\s*$/i, what: '"Disqualify" control' },
       { member: "resource_questions_tab", name: /^\s*resource questions\s*$/i, what: '"Resource questions" stage section (the Proposal section lists the questions with the responses, and no scores)' },
       { member: "challenge_tab", name: /^\s*(interview\/)?challenge\s*$/i, what: '"Challenge" section' },
       { member: "wrong_stage_error", name: /^\s*(enter|edit) .*score\s*$/i, what: "score control, so no stage message can be raised from it" },
@@ -9836,7 +9951,10 @@ export default function create(
       { member: "rank", name: /^\s*rank(ing)?\s*$/i, what: "rank or ranking" },
       { member: "offered_score_actions", name: /^\s*(enter|edit) .*score\s*$/i, what: "stage tab or score control to read offered score actions from" },
     ],
-  );
+    ),
+    awardProposal: () => awardProposalBy("proposal-twu-view.award_proposal"),
+    disqualifyProposal: (input) => disqualifyProposalBy("proposal-twu-view.disqualify_proposal", input),
+  };
 
   // ---------------------------------------------------------------- Sprint With Us and Team With Us proposals
   //
