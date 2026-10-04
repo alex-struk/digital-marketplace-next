@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-18-5 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">639</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">633</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">514</span></a></li><li><a href="../runs.html">Run log <span class="count">22</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-18-5</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-04 16:28</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.288 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 18 (The chair agrees a consensus and the questions stage is finalised) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> The ruling on slice 18 asked for no change to the application, and I made none: nothing under <code>app/</code> or <code>docs/decisions/</code> was edited in this revision.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.288 (Claude Code))</p>
+<p>The ruling on slice 18 asked for no change to the application, and I made none: nothing under <code>app/</code> or <code>docs/decisions/</code> was edited in this revision.</p>
+<p><strong>Why nothing changed.</strong> All fifteen criteria this slice claims now pass. That includes R-5.31 and R-5.33, whose tests were rewritten to find the notice through the service&#39;s own address and check its blind-copy list. The fail verdict came from three earlier slices&#39; criteria that went backwards: R-1.1 (the evaluator clause), R-2.36 (the administrator clause) and R-5.27. Their tests look notices up by the visible To line. R-6.15 requires every notice with several recipients to put its readers in blind copy, with the service&#39;s own address as the only visible recipient. The application does this (decision record 0063), so a reader&#39;s address can never appear on the To line those tests search. Changing the application to make them pass would break R-6.15. The three requests to rewrite those tests are filed with the test-writing stage, and I left them alone.</p>
+<p><strong>What I checked.</strong> The first run of <code>npm --prefix app run check</code> failed only because this workspace had no installed packages (<code>tsc: not found</code>). After <code>npm --prefix app ci</code> it passed:</p>
+<ul><li><strong>Typechecks:</strong> pass for the migrations, backend and frontend packages.</li><li><strong>Migrations:</strong> 16 of 16 unit tests pass.</li><li><strong>Backend:</strong> 805 of 805 pass across 50 files, including the slice&#39;s tests for blind-copy notices and the consensus and finalise rules.</li><li><strong>Frontend:</strong> 494 of 494 pass across 28 files.</li></ul>
+<p><strong>Still open:</strong></p>
+<ul><li>Per the ruling, the build can be approved as it stands once those three tests read the blind-copy list and a verify passes every claimed and rechecked criterion.</li><li>The earlier ruling&#39;s request for a contract note is still open with another stage.</li><li>If the shared mail helper in <code>tests/fixtures/mail.ts</code> cannot be changed, that is a pipeline problem to escalate, not something to fix in the application.</li><li>The next slice inherits slice 18 as it was, with nothing new missing.</li></ul></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by agent:tech-lead (persona agent · claude claude-opus-5-5) on 2026-10-04 17:00.</p>
+<div class="body"><p>Slice 18&#39;s fifteen claimed criteria all pass verify, but the escalated failure is R-5.27 (approved at slice 17), case &#39;only over the proponents named in the submission that triggers the check&#39;: a submission naming two of three proponents is refused as incomplete. That is the application&#39;s fault, not the test&#39;s. IndividualEvaluationsService.submitAll (app/backend/src/evaluations/individual-evaluations.service.ts:172-193) ignores the proposals the submission names: it checks completeness over every proponent under review of the questions, and counts toward the automatic move to consensus over all of them as well. R-5.25 v3 refuses only a submitted set containing an incomplete evaluation, and R-5.27 v2 counts only over the proponents named in the triggering submission. The proposal&#39;s account, that the failures come from tests reading the visible To line, does not hold for this case: the test stops at the refusal, before any mail is read. So the condition goes to build rather than derive-tests: the test asks for what the criterion says. Approvable once submitAll takes the named proposals and a verify passes every claimed and rechecked criterion.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>submitIndividualQuestionEvaluations must read the proposals named in the request&#39;s value, as the contract&#39;s tagged change specifies. In IndividualEvaluationsService.submitAll (app/backend/src/evaluations/individual-evaluations.service.ts), check completeness over the signed-in evaluator&#39;s evaluations of the named proposals only, and submit only those, so that a submission naming two complete proponents is accepted even when a third proponent of the opportunity has no scores at all (R-5.25 v3: the service refuses only a submitted set that contains an incomplete evaluation). Count toward the automatic move to consensus over the proponents named in the triggering submission (R-5.27 v2), and keep the chair-and-owner notice as blind copies of one message visibly addressed to the service (R-6.15). What showed it: verify&#39;s R-5.27 recheck sent a submission naming two of three proponents and received the refusal &#39;This evaluation could not be submitted for review because it is incomplete…&#39;. Record the reading in a decision record under docs/decisions/.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
