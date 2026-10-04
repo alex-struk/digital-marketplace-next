@@ -147,7 +147,9 @@ pages:
       proposal_deadline: bound
       reward: bound
       addenda: bound
-      # The seeded awarded opportunity's page names no winner; on a page that opened these read empty.
+      # An awarded opportunity's page names the winner in a "Successful proponent" region (level-2
+      # heading over the name, "Northern Pines Digital Ltd." on the seeded awarded one), read
+      # likewise on the Sprint With Us and Team With Us pages; a page without one reads empty.
       successful_proponent: bound
       assignment_date: bound
       start_date: bound
@@ -467,15 +469,21 @@ pages:
   # sections" the links Proposal (the regions Proponent, Proposal text, Additional comments,
   # Attachments) and History (the table "Every change of state and every score entered,
   # newest first": Date | Entry | By | Note). The vendor is also offered "Manage this
-  # proposal". In no state is there a button of any kind on the screen. score reads the
+  # proposal". To staff the current build adds a "Proposal actions" group: "Enter score" and
+  # "Disqualify" on a submitted proposal (...a003...101), "Award" and "Disqualify" on an
+  # evaluated one (...a007...101); each opens a dialog ("Enter score": "Score (%)(required)"
+  # then "Enter score"; "Disqualify this proposal?": "Reason (required)" then "Disqualify
+  # proposal"; "Award this proposal?": "Award proposal"). A state or reader not offered the
+  # control is the page withholding it, recorded and left; a dialog refusing its input
+  # (no reason, a score out of range) stays open with its message and is put away. score reads the
   # term's value as shown ("82%", "Not yet scored"); export_link reads "enabled" for the
   # "Printable copy" link (its address answers "Page not found", which proposal-cwu-export-one
   # reports); proponent reads the heading, the name the screen gives the proponent.
   proposal-cwu-view:
     actions:
-      enter_score: "unbound: the Code With Us proposal's screen offers no way to enter a score: walked on the current build as the administrator (and as the public sector employee on ...a007...101) on the seeded Code With Us proposals submitted (lapsed for scoring ...a002...101, with three proposals ...a003...101, at the final stage ...a004...101, for an award ...a005...101), evaluated in processing (...a007...101) and awarded (...a008...101), the screen draws no button at all — only the terms Opportunity, Status, Submitted, Proposal ID, the Score region ('Not yet scored' / '82%'), 'Printable copy' and the Proposal and History sections — and the opportunity's management screen's Proposals section (Proponent | Status | Submitted) offers no score control either"
-      award_proposal: "unbound: the Code With Us proposal's screen offers no 'Award' control: walked on the current build as the administrator (and as the public sector employee on ...a007...101) on the seeded Code With Us proposals evaluated in processing (...a007...101 at 82%, ...a007...102), submitted on the lapsed opportunity for an award (...a005...101, ...a005...102) and awarded (...a008...101), the screen draws no button at all — only the terms Opportunity, Status, Submitted, Proposal ID, the Score region, 'Printable copy' and the Proposal and History sections — and the management screen's Proposals section and its 'Opportunity actions' ('Edit', 'Cancel opportunity') offer no award either"
-      disqualify_proposal: "unbound: the Code With Us proposal's screen offers no 'Disqualify' control: walked on the current build as the administrator (and as the public sector employee on ...a007...101) on the seeded Code With Us proposals submitted, evaluated in processing, awarded, not awarded and withdrawn, the screen draws no button at all — only the terms Opportunity, Status, Submitted, Proposal ID, the Score region, 'Printable copy' and the Proposal and History sections"
+      enter_score: bound
+      award_proposal: bound
+      disqualify_proposal: bound
     observations:
       proposal_identifier: bound
       proposal_tab: bound
@@ -557,18 +565,19 @@ pages:
   # proponent's link in the opportunity's Proposals section (edit?tab=proposals). It draws
   # "Sprint With Us proposal" over the proponent's name, the terms Opportunity, Status,
   # Submitted and Proposal ID, "Printable copy", and the sections Proposal and History (the
-  # table Date | Entry | By | Note, newest first). No button, stage tab, score or rank, on the
+  # table Date | Entry | By | Note, newest first). No stage tab, score or rank, on the
   # seeded proposal at the team scenario (...a016...101) whose code challenge and team
-  # scenario are scored. Each member below that the screen lacks reports unbound when it
+  # scenario are scored. Its "Proposal actions" now hold "Award" and "Disqualify" as the
+  # state allows (both on ...a019...101), bound with the dialogs they open as on Code With Us. Each member below that the screen lacks reports unbound when it
   # runs, and says so if the screen has since started to offer it.
   proposal-swu-view:
     actions:
-      score_code_challenge: "unbound: signed in as the administrator, opened the seeded Sprint With Us proposal at the team scenario (...a016...101) from the opportunity's Proposals section; the screen has the sections Proposal and History and no button of any kind, so no control enters a code challenge score"
-      screen_in_to_team_scenario: "unbound: signed in as the administrator, opened the seeded Sprint With Us proposal from the opportunity's Proposals section; the screen has no button of any kind, no 'Screen in' control"
-      screen_out_from_team_scenario: "unbound: signed in as the administrator, opened the seeded Sprint With Us proposal from the opportunity's Proposals section; the screen has no button of any kind, no 'Screen out' control"
-      score_team_scenario: "unbound: signed in as the administrator, opened the seeded Sprint With Us proposal at the team scenario (...a016...101); the screen has no button of any kind, so no control enters a team scenario score"
-      award_proposal: "unbound: signed in as the administrator, opened the seeded Sprint With Us proposal; the screen has no button of any kind, no 'Award' control"
-      disqualify_proposal: "unbound: signed in as the administrator, opened the seeded Sprint With Us proposal; the screen has no button of any kind, no 'Disqualify' control"
+      score_code_challenge: "unbound: signed in as the administrator, opened the seeded Sprint With Us proposal at the team scenario (...a016...101) from the opportunity's Proposals section; the screen has the sections Proposal and History and no button but 'Award' and 'Disqualify' under 'Proposal actions', so no control enters a code challenge score; looked again on the current build on the seeded proposal past consensus at the code challenge (...a027...101): the sections are still Proposal and History, and its 'Proposal actions' hold only 'Disqualify'"
+      screen_in_to_team_scenario: "unbound: signed in as the administrator, opened the seeded Sprint With Us proposal from the opportunity's Proposals section; the screen has no button but 'Award' and 'Disqualify' under 'Proposal actions', no 'Screen in' control"
+      screen_out_from_team_scenario: "unbound: signed in as the administrator, opened the seeded Sprint With Us proposal from the opportunity's Proposals section; the screen has no button but 'Award' and 'Disqualify' under 'Proposal actions', no 'Screen out' control"
+      score_team_scenario: "unbound: signed in as the administrator, opened the seeded Sprint With Us proposal at the team scenario (...a016...101); the screen has no button but 'Award' and 'Disqualify' under 'Proposal actions', so no control enters a team scenario score"
+      award_proposal: bound
+      disqualify_proposal: bound
     observations:
       proposal_identifier: bound
       proposal_tab: bound
@@ -651,16 +660,18 @@ pages:
   # :proposalId is served to the administrator and to public sector staff, reached from each
   # proponent's link in the opportunity's Proposals section. The same screen as Sprint With
   # Us ("Team With Us proposal"): the terms Opportunity, Status, Submitted and Proposal ID,
-  # "Printable copy", and the sections Proposal and History; no button, stage tab, score or
-  # rank, on the seeded proposals at the challenge (...a032...101 scored, ...a032...102 not).
+  # "Printable copy", and the sections Proposal and History; no stage tab, score or rank, on
+  # the seeded proposals at the challenge (...a032...101 scored, ...a032...102 not). Its
+  # "Proposal actions" now hold "Disqualify" (...8000...841) and, once evaluated at the
+  # challenge, "Award" (...a033...101), bound as on Code With Us.
   proposal-twu-view:
     actions:
-      score_resource_questions: "unbound: signed in as the administrator, opened the seeded Team With Us proposals at the challenge (...a032...101, ...102) from the opportunity's Proposals section; the screen has no button of any kind, so no control enters resource question scores"
-      screen_in_to_challenge: "unbound: signed in as the administrator, opened the seeded Team With Us proposals from the opportunity's Proposals section; the screen has no button of any kind, no 'Screen in' control"
-      screen_out_from_challenge: "unbound: signed in as the administrator, opened the seeded Team With Us proposals from the opportunity's Proposals section; the screen has no button of any kind, no 'Screen out' control"
-      score_challenge: "unbound: signed in as the administrator, opened the seeded Team With Us proposal still to be scored on the challenge (...a032...102); the screen has no button of any kind, so no control enters a challenge score"
-      award_proposal: "unbound: signed in as the administrator, opened the seeded Team With Us proposals; the screen has no button of any kind, no 'Award' control"
-      disqualify_proposal: "unbound: signed in as the administrator, opened the seeded Team With Us proposals; the screen has no button of any kind, no 'Disqualify' control"
+      score_resource_questions: "unbound: signed in as the administrator, opened the seeded Team With Us proposals at the challenge (...a032...101, ...102) from the opportunity's Proposals section; the screen has no button but 'Award' and 'Disqualify' under 'Proposal actions', so no control enters resource question scores"
+      screen_in_to_challenge: "unbound: signed in as the administrator, opened the seeded Team With Us proposals from the opportunity's Proposals section; the screen has no button but 'Award' and 'Disqualify' under 'Proposal actions', no 'Screen in' control"
+      screen_out_from_challenge: "unbound: signed in as the administrator, opened the seeded Team With Us proposals from the opportunity's Proposals section; the screen has no button but 'Award' and 'Disqualify' under 'Proposal actions', no 'Screen out' control"
+      score_challenge: "unbound: signed in as the administrator, opened the seeded Team With Us proposal still to be scored on the challenge (...a032...102); the screen has no button but 'Award' and 'Disqualify' under 'Proposal actions', so no control enters a challenge score"
+      award_proposal: bound
+      disqualify_proposal: bound
     observations:
       proposal_identifier: bound
       proposal_tab: bound
