@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Should the derive-tests-proposals-stale-18 tests be accepted as following from R-2.10 and nothing else? Approve. The one remaining test checks only what R-2.10 says on the create path. It uses two opportunities of the same shape: the $100-an-hour proposal is a control and is accepted, and the $5,000-an-hour proposal is refused with a field error. The rates are far enough apart that the test does not depend on how the service counts working days, and no implementation detail leaks in. The returned edit-path test, which saved an over-budget draft that the criterion never asks for, is deleted. Its clause ('the check runs on both the create and the edit path') is recorded in not-testable.yaml as a clause-scoped blocked entry owned by contract. The reason checks out against spec/contract/surface.yaml: proposal-twu-edit declares no set_hourly_rate action, and proposal-team-request only creates and submits a new proposal. So the edit-path half stays owed and is not silently closed by this test passing; the checks already list it as missing-test/R-2.10 owed by contract. The typecheck run by the runner passes. The removal of R-2.10's old calibrate-triage ruling from tests/results/old/applied.yaml is housekeeping for the replaced test. build-slice-15-2#1 is unrelated and stays open. The ruling would change if the contract offered an edit path the test could reach, or if the create-path assertions went beyond the criterion.
+conditions: []
+cost: 0.3743238
+turns: 5
+session: "fd14d01d-aa43-4262-8633-0f2ee06081fd"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T06:48:29.514Z

@@ -31,3 +31,23 @@ I also considered lowering the opportunity's budget after the proposal was saved
 - **Alternatively:** an update action on `proposal-team-request` that sends new hourly rates for an existing proposal by its identifier, with its refusal observations.
 
 I changed no files outside `tests/acceptance`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Should the derive-tests-proposals-stale-18 tests be accepted as following from R-2.10 and nothing else? Approve. The one remaining test checks only what R-2.10 says on the create path. It uses two opportunities of the same shape: the $100-an-hour proposal is a control and is accepted, and the $5,000-an-hour proposal is refused with a field error. The rates are far enough apart that the test does not depend on how the service counts working days, and no implementation detail leaks in. The returned edit-path test, which saved an over-budget draft that the criterion never asks for, is deleted. Its clause ('the check runs on both the create and the edit path') is recorded in not-testable.yaml as a clause-scoped blocked entry owned by contract. The reason checks out against spec/contract/surface.yaml: proposal-twu-edit declares no set_hourly_rate action, and proposal-team-request only creates and submits a new proposal. So the edit-path half stays owed and is not silently closed by this test passing; the checks already list it as missing-test/R-2.10 owed by contract. The typecheck run by the runner passes. The removal of R-2.10's old calibrate-triage ruling from tests/results/old/applied.yaml is housekeeping for the replaced test. build-slice-15-2#1 is unrelated and stays open. The ruling would change if the contract offered an edit path the test could reach, or if the create-path assertions went beyond the criterion.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `16fc3d31068299263ef62a6459515ae450d6c04e`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/proposals/`, which this proposal answers for.
+
+    No diagnostics.
