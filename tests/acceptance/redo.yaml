@@ -19,7 +19,7 @@ redo:
       own rights and changing the owner's are refused; treat a choice that is
       shown but cannot be changed as the refusal, and confirm afterwards that
       both people's rights are unchanged
-    closed: &a1
+    closed:
       outcome: met
       why: derived again by a derive-tests run on organizations
       by: runner:derive-tests
@@ -31,7 +31,11 @@ redo:
       is shown none, so it stops before opening the organization; establish that
       the account holds no administrator rights without depending on such a
       statement being present
-    closed: *a1
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on organizations
+      by: runner:derive-tests
+      at: 2026-09-25T11:06:36.320Z
   - id: R-3.13
     version: 1
     why: the refusal of a pending member is that they cannot be chosen as the new
@@ -39,14 +43,22 @@ redo:
       assert that instead; the transfer half needs a way to answer the
       invitation that the suite does not yet provide, so record it as blocked
       until it does
-    closed: *a1
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on organizations
+      by: runner:derive-tests
+      at: 2026-09-25T11:06:36.320Z
   - id: R-3.28
     version: 1
     why: the test does not establish that the organization is approved for two
       service areas before editing, and it does not tick a third area as the
       given describes; establish the two starting approvals, clear one and tick
       a third, then read the approvals once the save has completed
-    closed: *a1
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on organizations
+      by: runner:derive-tests
+      at: 2026-09-25T11:06:36.320Z
   - id: R-5.1
     version: 1
     why: the panel of one was never assembled, because the draft's panel already
@@ -57,7 +69,7 @@ redo:
       reducing it to exactly one, count a chair that moves rather than doubles
       as the second chair being refused, and keep requiring the rule to be named
       when the same person is named twice
-    closed: &a2
+    closed:
       outcome: met
       why: derived again by a derive-tests run on evaluation
       by: runner:derive-tests
@@ -69,14 +81,22 @@ redo:
       panel put forward names nobody as chair before reading whether it is
       refused, and if no available action can put such a panel forward, record
       the criterion as blocked until one can reach the service
-    closed: *a2
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on evaluation
+      by: runner:derive-tests
+      at: 2026-09-25T11:19:39.965Z
   - id: R-5.17
     version: 1
     why: the notice to a person added to a panel reaches them as a hidden recipient,
       and the test searched only the addressees each message shows, so it would
       find nothing for anyone; read every recipient each message was delivered
       to, for the person added and for the two already on the panel alike
-    closed: *a2
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on evaluation
+      by: runner:derive-tests
+      at: 2026-09-25T11:19:39.965Z
   - id: R-1.55
     version: 1
     why: in the no-chair cases the person removed stayed named as chair, so the
@@ -86,7 +106,7 @@ redo:
       refusal, keep requiring the reason when the same person is named twice,
       and where the Team With Us draft a case depends on was never stored,
       record that case as blocked rather than failed
-    closed: &a3
+    closed:
       outcome: met
       why: derived again by derive-tests-opportunities-stale-3, in the line of work
         approved as derive-tests-opportunities-7
@@ -101,21 +121,42 @@ redo:
       establish that the draft was stored before reading which program it
       belongs to, and record the case as blocked rather than failed when it was
       not
-    closed: *a3
+    closed:
+      outcome: met
+      why: derived again by derive-tests-opportunities-stale-3, in the line of work
+        approved as derive-tests-opportunities-7
+      by: derive-tests-opportunities-7
+      at: 2026-09-25T10:31:42.728Z
+      gate: G3
+      approved_by: agent:reviewer
   - id: R-1.13
     version: 1
     why: the Team With Us opportunity was never published, so its absence from the
       list says nothing about a budget limit; establish that it was published
       with its budget before reading the list, and record the case as blocked
       rather than failed when the target would not store it
-    closed: *a3
+    closed:
+      outcome: met
+      why: derived again by derive-tests-opportunities-stale-3, in the line of work
+        approved as derive-tests-opportunities-7
+      by: derive-tests-opportunities-7
+      at: 2026-09-25T10:31:42.728Z
+      gate: G3
+      approved_by: agent:reviewer
   - id: R-1.48
     version: 1
     why: the Team With Us draft was never stored on this target, for a reason the
       criterion does not govern, so the test says nothing about who may create
       one; establish that each draft was stored before reading its state, and
       record the Team With Us case as blocked rather than failed when it was not
-    closed: *a3
+    closed:
+      outcome: met
+      why: derived again by derive-tests-opportunities-stale-3, in the line of work
+        approved as derive-tests-opportunities-7
+      by: derive-tests-opportunities-7
+      at: 2026-09-25T10:31:42.728Z
+      gate: G3
+      approved_by: agent:reviewer
   - id: R-1.53
     version: 2
     why: four tests stop at setup by requiring a statement of permissions that an
@@ -125,7 +166,14 @@ redo:
       stored, so establish that each draft was stored before asking to delete
       it, and record the Team With Us part as blocked rather than failed when it
       was not
-    closed: *a3
+    closed:
+      outcome: met
+      why: derived again by derive-tests-opportunities-stale-3, in the line of work
+        approved as derive-tests-opportunities-7
+      by: derive-tests-opportunities-7
+      at: 2026-09-25T10:31:42.728Z
+      gate: G3
+      approved_by: agent:reviewer
   - id: R-1.56
     version: 1
     why: in the Sprint With Us case the administrator's publication did not take
@@ -133,7 +181,14 @@ redo:
       which the criterion permits; confirm the opportunity reads as published
       before its author tries, and in the Team With Us case, where the draft was
       never stored, record the case as blocked rather than failed
-    closed: *a3
+    closed:
+      outcome: met
+      why: derived again by derive-tests-opportunities-stale-3, in the line of work
+        approved as derive-tests-opportunities-7
+      by: derive-tests-opportunities-7
+      at: 2026-09-25T10:31:42.728Z
+      gate: G3
+      approved_by: agent:reviewer
   - id: R-1.10
     version: 1
     why: publication of the over-length teaser was withheld, with the publish
@@ -141,7 +196,14 @@ redo:
       on the step the form was left on; look for the reason against the teaser
       where it is entered, allowing time for it, treat a publication that stays
       unavailable as the refusal, and check that nothing was published
-    closed: *a3
+    closed:
+      outcome: met
+      why: derived again by derive-tests-opportunities-stale-3, in the line of work
+        approved as derive-tests-opportunities-7
+      by: derive-tests-opportunities-7
+      at: 2026-09-25T10:31:42.728Z
+      gate: G3
+      approved_by: agent:reviewer
   - id: R-1.18
     version: 1
     why: the target allocation and the service area are each chosen from a list that
@@ -151,7 +213,14 @@ redo:
       refused, confirm that the value chosen is the one the case names before
       publishing, and record a case as blocked rather than failed when the
       target will not store the Team With Us opportunity
-    closed: *a3
+    closed:
+      outcome: met
+      why: derived again by derive-tests-opportunities-stale-3, in the line of work
+        approved as derive-tests-opportunities-7
+      by: derive-tests-opportunities-7
+      at: 2026-09-25T10:31:42.728Z
+      gate: G3
+      approved_by: agent:reviewer
   - id: R-1.21
     version: 1
     why: the draft was not incomplete, because a new opportunity's location starts
@@ -159,7 +228,14 @@ redo:
       submission was rightly accepted for review; empty the location explicitly,
       confirm the saved draft shows it blank, then submit it and read what the
       author is told
-    closed: *a3
+    closed:
+      outcome: met
+      why: derived again by derive-tests-opportunities-stale-3, in the line of work
+        approved as derive-tests-opportunities-7
+      by: derive-tests-opportunities-7
+      at: 2026-09-25T10:31:42.728Z
+      gate: G3
+      approved_by: agent:reviewer
   - id: R-1.24
     version: 1
     why: in the Team With Us case the given was established only from the address
@@ -167,7 +243,14 @@ redo:
       opportunity can be read; establish it from the opportunity's own title and
       status before closure, and record the case as blocked rather than failed
       when the opportunity cannot be read
-    closed: *a3
+    closed:
+      outcome: met
+      why: derived again by derive-tests-opportunities-stale-3, in the line of work
+        approved as derive-tests-opportunities-7
+      by: derive-tests-opportunities-7
+      at: 2026-09-25T10:31:42.728Z
+      gate: G3
+      approved_by: agent:reviewer
   - id: R-3.26
     version: 1
     why: the first test does not establish that the seeded organization holds its
@@ -177,7 +260,11 @@ redo:
       every approval box was clear after the save; establish both before
       reading, and record the test as blocked rather than failed when the
       approval cannot be recorded
-    closed: *a1
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on organizations
+      by: runner:derive-tests
+      at: 2026-09-25T11:06:36.320Z
   - id: R-2.14
     version: 2
     why: the criterion promises that the submission is refused and each offending
@@ -233,7 +320,7 @@ redo:
       third person was added; confirm the catcher is empty first, then count
       only messages about this opportunity, identified by its title, for the
       person added and for the two already on the panel alike
-    closed: &a4
+    closed:
       outcome: met
       why: derived again by a derive-tests run on evaluation
       by: runner:derive-tests
@@ -245,7 +332,11 @@ redo:
       question evaluation first, then treat a scoring form not offered to that
       person, or an attempt after which no evaluation by that person exists, as
       the refusal, and keep the evaluator's recorded score as the contrast
-    closed: *a4
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on evaluation
+      by: runner:derive-tests
+      at: 2026-09-28T05:42:24.240Z
   - id: R-1.34
     version: 1
     why: the test detects the author's confirmation by the number of messages
@@ -254,7 +345,7 @@ redo:
       count cannot rise; confirm the catcher was emptied, then find the
       confirmation among the messages to the author by what it is about (this
       opportunity's title), not by a count
-    closed: &a5
+    closed:
       outcome: met
       why: derived again by derive-tests-opportunities-stale-4, in the line of work
         approved as derive-tests-opportunities-8
@@ -270,7 +361,14 @@ redo:
       confirm the catcher was emptied, then find the notice among the messages
       to the author by what it is about (this opportunity's title), not by a
       count
-    closed: *a5
+    closed:
+      outcome: met
+      why: derived again by derive-tests-opportunities-stale-4, in the line of work
+        approved as derive-tests-opportunities-8
+      by: derive-tests-opportunities-8
+      at: 2026-09-28T05:17:47.377Z
+      gate: G3
+      approved_by: agent:reviewer
   - id: R-1.37
     version: 1
     why: the test detects the author's confirmation by the number of messages
@@ -279,7 +377,14 @@ redo:
       count cannot rise; confirm the catcher was emptied, then find the
       confirmation among the messages to the author by what it is about (this
       opportunity's title), not by a count
-    closed: *a5
+    closed:
+      outcome: met
+      why: derived again by derive-tests-opportunities-stale-4, in the line of work
+        approved as derive-tests-opportunities-8
+      by: derive-tests-opportunities-8
+      at: 2026-09-28T05:17:47.377Z
+      gate: G3
+      approved_by: agent:reviewer
   - id: R-2.27
     version: 1
     why: the criterion names a state, not the words shown for it, and the test
@@ -287,7 +392,7 @@ redo:
       criterion never promised; establish that the proposal was taken out of
       contention because its status changed from what it was and the given
       reason is recorded against it, not because a particular label appears
-    closed: &a6
+    closed:
       outcome: met
       why: derived again by derive-tests-proposals-stale-4, in the line of work
         approved as derive-tests-proposals-6
@@ -303,7 +408,14 @@ redo:
       because its status changed from what it was and the given reason is
       recorded against it, then check that its status and the withdrawn
       proposal's are unchanged by the award
-    closed: *a6
+    closed:
+      outcome: met
+      why: derived again by derive-tests-proposals-stale-4, in the line of work
+        approved as derive-tests-proposals-6
+      by: derive-tests-proposals-6
+      at: 2026-09-28T05:25:52.462Z
+      gate: G3
+      approved_by: agent:reviewer
   - id: R-2.34
     version: 1
     why: the criterion names a state, not the words shown for it; the test required
@@ -313,7 +425,14 @@ redo:
       Establish disqualification because the status changed and the reason is
       recorded, read the reason once the history can be read or wherever the
       reason is shown, and establish a refusal because the status is unchanged
-    closed: *a6
+    closed:
+      outcome: met
+      why: derived again by derive-tests-proposals-stale-4, in the line of work
+        approved as derive-tests-proposals-6
+      by: derive-tests-proposals-6
+      at: 2026-09-28T05:25:52.462Z
+      gate: G3
+      approved_by: agent:reviewer
   - id: R-5.29
     version: 1
     why: the test reads whether the evaluator who is not the chair is offered
@@ -369,7 +488,7 @@ redo:
       one evaluation by that evaluator exists for the proponent, and require the
       quoted message only where a second evaluation is actually requested of the
       service
-    closed: &a7
+    closed:
       outcome: met
       why: derived again by a derive-tests run on evaluation
       by: runner:derive-tests
@@ -382,7 +501,11 @@ redo:
       finalising has been refused. Establish that the opportunity remains in
       consensus and no proponent was screened in or out, and still attempt the
       finalise wherever the service accepts such a request
-    closed: *a7
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on evaluation
+      by: runner:derive-tests
+      at: 2026-09-28T22:17:30.440Z
   - id: R-5.19
     version: 1
     why: the test fails in its own setup, requiring the creator's name to be shown
@@ -390,14 +513,18 @@ redo:
       establish that the panel member did not create the opportunity from the
       seeded record or from who created it, then check the dashboard listing and
       access as the criterion states
-    closed: *a7
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on evaluation
+      by: runner:derive-tests
+      at: 2026-09-28T22:17:30.440Z
   - id: R-8.30
     version: 1
     why: the test reads the refusal right after choosing the file and then abandons
       the change, but the criterion is about the upload, which happens when the
       choice is saved; save the change, then read the refusal and establish that
       the stored picture is unchanged
-    closed: &a11
+    closed:
       outcome: met
       why: derived again by a derive-tests run on files
       by: runner:derive-tests
@@ -409,7 +536,7 @@ redo:
       establish that the published opportunity carries an implementation phase
       instead of demanding a refusal message, and keep the
       inception-without-prototype case as written
-    closed: &a8
+    closed:
       outcome: met
       why: derived again by derive-tests-opportunities-stale-6, in the line of work
         approved as derive-tests-opportunities-9
@@ -424,7 +551,14 @@ redo:
       contact details and score wherever that reader is shown the awarded
       proposal or the award summary, and keep checking that a visitor is shown
       neither anywhere they can reach
-    closed: *a8
+    closed:
+      outcome: met
+      why: derived again by derive-tests-opportunities-stale-6, in the line of work
+        approved as derive-tests-opportunities-9
+      by: derive-tests-opportunities-9
+      at: 2026-09-28T19:26:51.952Z
+      gate: G3
+      approved_by: agent:reviewer
   - id: R-3.9
     version: 1
     why: the criterion says the owner's attempt is refused, not that a message is
@@ -433,7 +567,7 @@ redo:
       pending' case never makes the membership active first; have the invited
       person accept, then make a further attempt and establish that the
       membership is unchanged
-    closed: &a9
+    closed:
       outcome: met
       why: derived again by derive-tests-organizations-stale-5, in the line of work
         approved as derive-tests-organizations-7
@@ -446,14 +580,21 @@ redo:
     why: the mailbox is read once, immediately after the acceptance returns, but the
       messages may be sent just afterwards; wait for both messages to arrive
       within a bounded time before concluding either is missing
-    closed: *a9
+    closed:
+      outcome: met
+      why: derived again by derive-tests-organizations-stale-5, in the line of work
+        approved as derive-tests-organizations-7
+      by: derive-tests-organizations-7
+      at: 2026-09-28T22:11:06.385Z
+      gate: G3
+      approved_by: agent:reviewer
   - id: R-2.30
     version: 1
     why: the test reads the price score from a page where it is not shown, and the
       criterion does not say where it appears; read it wherever an entitled
       reader is shown the proposal's individual scores, together with the
       history entry and the evaluated state
-    closed: &a10
+    closed:
       outcome: met
       why: derived again by a derive-tests run on proposals
       by: runner:derive-tests
@@ -465,27 +606,43 @@ redo:
       shown under another label; establish that each state change and score
       entry appears newest first with its author, time and note, matching the
       disqualification by its note rather than by a label
-    closed: *a10
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on proposals
+      by: runner:derive-tests
+      at: 2026-09-28T19:58:14.941Z
   - id: R-2.14
     version: 2
     why: ten proposal attempts in one test cannot finish within the time a single
       test is allowed; give each missing or malformed field its own test, or
       allow the test the time its attempts need, so that a timeout never stands
       in for a result
-    closed: *a10
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on proposals
+      by: runner:derive-tests
+      at: 2026-09-28T19:58:14.941Z
   - id: R-5.32
     version: 1
     why: it reads whether a proponent was screened into the code challenge from the
       vendor's own view of their proposal, which shows 'Under Review' at every
       evaluation stage and never names the stage; screening must be read from a
       view that names the proposal's stage
-    closed: *a7
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on evaluation
+      by: runner:derive-tests
+      at: 2026-09-28T22:17:30.440Z
   - id: R-8.5
     version: 1
     why: the second upload is made by a vendor account that is no longer active, so
       it is refused before the criterion is reached; the second uploader must be
       an active account able to upload
-    closed: *a11
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on files
+      by: runner:derive-tests
+      at: 2026-09-29T00:22:20.552Z
   - id: R-8.2
     version: 1
     why: it reads an empty file identifier from an upload the service refused before
@@ -493,21 +650,33 @@ redo:
       were accepted elsewhere in the run; the test must start from an account
       able to upload and report the refusal it received instead of reading an
       empty identifier
-    closed: *a11
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on files
+      by: runner:derive-tests
+      at: 2026-09-29T00:22:20.552Z
   - id: R-8.7
     version: 1
     why: its first upload was refused before any read access was tested, while
       uploads by the same persona were accepted elsewhere in the run; the test
       must start from an account able to upload and report the refusal it
       received instead of reading an empty identifier
-    closed: *a11
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on files
+      by: runner:derive-tests
+      at: 2026-09-29T00:22:20.552Z
   - id: R-8.12
     version: 1
     why: its upload of a file the vendor may not read was refused before the
       vendor's request was made, while uploads by the same persona were accepted
       elsewhere in the run; the test must start from an account able to upload
       and report the refusal it received instead of reading an empty identifier
-    closed: *a11
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on files
+      by: runner:derive-tests
+      at: 2026-09-29T00:22:20.552Z
   - id: R-6.1
     version: 1
     why: it recorded no result because it skips itself unless the run supplies a
@@ -528,7 +697,14 @@ redo:
       time zone, but the deadline is shown in Pacific time, so near midnight UTC
       the day of the month differs by one; the expected day must be taken in the
       time zone the deadline is displayed in
-    closed: *a8
+    closed:
+      outcome: met
+      why: derived again by derive-tests-opportunities-stale-6, in the line of work
+        approved as derive-tests-opportunities-9
+      by: derive-tests-opportunities-9
+      at: 2026-09-28T19:26:51.952Z
+      gate: G3
+      approved_by: agent:reviewer
   - id: R-5.13
     version: 1
     why: the test fails while reading a proposal's history, which the criterion does
@@ -556,7 +732,7 @@ redo:
       cannot be saved at all; the proposal must be otherwise complete so that
       the organization change is the only thing under test, both when refused
       and when accepted.
-    closed: &a12
+    closed:
       outcome: met
       why: derived again by a derive-tests run on proposals
       by: runner:derive-tests
@@ -567,31 +743,47 @@ redo:
       does not mention before it reaches the question responses; it should vary
       only the response to an opportunity question and observe that response's
       rejection.
-    closed: *a12
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on proposals
+      by: runner:derive-tests
+      at: 2026-09-29T00:11:43.775Z
   - id: R-2.17
     version: 1
     why: the test observed no outcome at all rather than an acceptance; it must
       first confirm that the proposal names the organization lacking the service
       area and is actually submitted, then read the refusal.
-    closed: *a12
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on proposals
+      by: runner:derive-tests
+      at: 2026-09-29T00:11:43.775Z
   - id: R-2.28
     version: 1
     why: the test depends on a control being offered at a stage where the action is
       out of place; it should observe the refusal of the out-of-stage action
       itself, and not treat the action's absence from the screen as a failure.
-    closed: *a12
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on proposals
+      by: runner:derive-tests
+      at: 2026-09-29T00:11:43.775Z
   - id: R-2.31
     version: 1
     why: the test timed out reading a rank it could not parse as a number; it should
       read the total and rank for fully evaluated proposals where they are
       presented, and set up every stage score before reading.
-    closed: *a12
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on proposals
+      by: runner:derive-tests
+      at: 2026-09-29T00:11:43.775Z
   - id: R-4.3
     version: 1
     why: the test needs a vendor who has not yet completed their profile and signs
       in as an established vendor instead, so it never reaches the agreement
       step; it must begin as a first-time vendor persona.
-    closed: &a13
+    closed:
       outcome: met
       why: derived again by a derive-tests run on users
       by: runner:derive-tests
@@ -601,7 +793,11 @@ redo:
     why: the test needs a person who has not yet completed their profile and signs
       in as an established account instead, so it never reaches the
       profile-completion step; it must begin as a first-time persona.
-    closed: *a13
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on users
+      by: runner:derive-tests
+      at: 2026-09-29T00:15:06.852Z
   - id: R-8.11
     version: 1
     why: it ends by reading the file's content as an administrator, whom the rules
@@ -633,7 +829,7 @@ redo:
       field message after a submission the form did not send; the form
       withholding the submission is itself the refusal, and the quoted message
       should be expected only where the service is what refuses
-    closed: &a14
+    closed:
       outcome: met
       why: derived again by a derive-tests run on proposals
       by: runner:derive-tests
@@ -644,7 +840,11 @@ redo:
       organization's members, and the test did not do this, so the edit could
       not be saved for an unrelated reason; the proposal must be complete after
       the change so that only the organization rule is under test
-    closed: *a14
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on proposals
+      by: runner:derive-tests
+      at: 2026-09-29T02:15:26.296Z
   - id: R-6.2
     version: 1
     why: the test restores delivery without first showing that the action's notices
@@ -671,7 +871,7 @@ redo:
       dashboard; the first case needs a vendor who has never agreed to the
       terms, and that persona has to be supplied by the seed and fixtures rather
       than derived from an established vendor
-    closed: &a15
+    closed:
       outcome: met
       why: derived again by a derive-tests run on users
       by: runner:derive-tests
@@ -682,7 +882,11 @@ redo:
       can sign in as has already completed their profile; it needs a vendor who
       has never completed their profile, supplied by the seed and fixtures, and
       must tick the new-opportunity notice while completing it
-    closed: *a15
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on users
+      by: runner:derive-tests
+      at: 2026-09-29T07:09:29.847Z
   - id: R-3.24
     version: 1
     why: the test reads the owner's mailbox once, immediately after the archive
@@ -786,7 +990,7 @@ redo:
       watcher count. The contract's counters observable (watcher_count, read
       directly) already observes what the criterion names.
     verb: test-overreaches
-    closed: &a16
+    closed:
       outcome: met
       why: derived again by a derive-tests run on opportunities
       by: runner:derive-tests
@@ -802,7 +1006,11 @@ redo:
       observes what the criterion names, and it can check an increase of exactly
       one rather than only a change.
     verb: test-overreaches
-    closed: *a16
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on opportunities
+      by: runner:derive-tests
+      at: 2026-10-01T13:42:08.137Z
   - id: R-6.17
     version: 1
     why: the test sends an organization team-membership invitation (adding the
@@ -829,7 +1037,7 @@ redo:
       has submitted proposals. It does not ask that a vendor can list or view
       their own proposals.
     verb: test-overreaches
-    closed: &a17
+    closed:
       outcome: met
       why: derived again by derive-tests-opportunities-stale-16, in the line of work
         approved as derive-tests-opportunities-13
@@ -845,7 +1053,14 @@ redo:
       has submitted proposals. It does not ask that a vendor can list or view
       their own proposals.
     verb: test-overreaches
-    closed: *a17
+    closed:
+      outcome: met
+      why: derived again by derive-tests-opportunities-stale-16, in the line of work
+        approved as derive-tests-opportunities-13
+      by: derive-tests-opportunities-13
+      at: 2026-10-02T10:53:33.016Z
+      gate: G3
+      approved_by: agent:reviewer
   - id: R-6.17
     version: 1
     why: the test calls mail.clear() straight after confirmActivationChange and then
@@ -897,7 +1112,7 @@ redo:
       control. The test demands driving controls the criterion requires to be
       absent, rather than showing the service's refusal some way the UI allows.
     verb: test-overreaches
-    closed: &a18
+    closed:
       outcome: met
       why: derived again by derive-tests-organizations-stale-10, in the line of work
         approved as derive-tests-organizations-9
@@ -913,7 +1128,14 @@ redo:
       'Page not found'), and the test cannot bind because it insists the form be
       filled in.
     verb: test-overreaches
-    closed: *a18
+    closed:
+      outcome: met
+      why: derived again by derive-tests-organizations-stale-10, in the line of work
+        approved as derive-tests-organizations-9
+      by: derive-tests-organizations-9
+      at: 2026-10-03T14:51:06.094Z
+      gate: G3
+      approved_by: agent:reviewer
   - id: R-2.10
     version: 1
     why: the edit-path case requires that a Team With Us proposal whose hourly rates
@@ -955,7 +1177,7 @@ redo:
       both administrators from its blind-copy list
       (caughtMessage.copiedRecipients after opening it by id).
     verb: test-overreaches
-    closed: &a19
+    closed:
       outcome: met
       why: derived again by a derive-tests run on evaluation
       by: runner:derive-tests
@@ -970,7 +1192,11 @@ redo:
       another way and assert the chair and the owner from its blind-copy list
       (caughtMessage.copiedRecipients after opening it by id).
     verb: test-overreaches
-    closed: *a19
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on evaluation
+      by: runner:derive-tests
+      at: 2026-10-04T14:32:57.708Z
   - id: R-1.1
     version: 3
     why: "the Sprint With Us / Team With Us clause looks for the
@@ -1024,3 +1250,14 @@ redo:
       why: derived again by a derive-tests run on evaluation
       by: runner:derive-tests
       at: 2026-10-04T15:21:47.394Z
+  - id: R-2.30
+    version: 1
+    why: the test opens the proposal's printable-copy/export page for the Sprint
+      With Us proposal (proposalSwuExportOne.open, unguarded) and fails when
+      that page is not served, but R-2.30 asks only that the price score be the
+      bid's share of the lowest bid in contention as a percentage, calculated
+      when the last human-entered score is recorded, recorded in the proposal's
+      history, and that the proposal become fully evaluated; it never asks for
+      an export or printable copy of the proposal, so the test must observe the
+      price score without requiring that page to exist
+    verb: test-overreaches
