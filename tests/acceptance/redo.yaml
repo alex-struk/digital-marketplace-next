@@ -1266,3 +1266,12 @@ redo:
       why: derived again by a derive-tests run on proposals
       by: runner:derive-tests
       at: 2026-10-04T18:22:19.297Z
+  - id: R-2.36
+    version: 1
+    why: the criterion requires that every administrator is notified of a withdrawal
+      and says nothing about how the notice is addressed; the test only counted
+      administrators found as blind copies on messages addressed to the
+      service's own address, so a notice reaching an administrator any other way
+      was missed. It should accept any withdrawal notice that reaches each
+      administrator, as a visible or a blind-copied recipient, as the awarding
+      case already does.
