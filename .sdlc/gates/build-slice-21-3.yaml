@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Slice 21 asks whether an administrator can preview every message the service sends. The verify result is current for this proposal (application tree 1c8585c) and shows R-6.6, R-6.13 and R-6.19 all passing. The diff matches those criteria and goes no further. The reference builds each message with the same builder the mailer uses, from invented sample data. A unit test enumerates every builder module under src/mail/notifications and fails if any builder is missing, which is the R-6.19 guarantee. Anyone who is not an administrator is answered 404, and both the backend end-to-end tests and the frontend tests check this. Decision record 0068 stops the browser cache from answering the shared page-and-JSON address, from the client request, the Caddy web server and the controller header. Widening the bearer-token check to /admin affects only this route, because the reference is the only backend route under /admin. This revision's one change rewrites the R-1.17 frontend unit test to start from a stored draft with 100 questions. It keeps the same limit assertion (100 to 101, then the add button is disabled) and changes no application code. No secrets or personal data appear, and nothing belongs to another slice. R-6.6 as written conflicts with R-6.16. Decision record 0067 records the conflict and follows R-6.16, and R-6.6's test passes, so it does not block. The R-2.3 adapter issue is outside this slice and is already with bind-adapter. The ruling would change if a fresh verify run went stale or failed on slice 21's criteria, or if R-6.16 were withdrawn in favour of R-6.6 as written.
+conditions: []
+cost: 0.5156886
+turns: 2
+session: "08ecd0d8-690e-40f6-ab6b-9dde76d2ef37"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T21:44:43.441Z
