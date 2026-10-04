@@ -270,8 +270,12 @@ personas:
   # the chair, and a chair who does not score. On the oracle these are the government
   # account and the administrator account respectively, because those are the only two
   # public sector identities a session route can reach and a panel needs at least two
-  # members. On the rebuilt target they are separate accounts that hold no
-  # administrator rights, which is the arrangement the criteria describe.
+  # members. On the rebuilt target the chair is a separate account that holds no
+  # administrator rights. The evaluator signs in on both targets as the government
+  # account (users.staffOne), because that is the account every seeded panel seats as an
+  # evaluator who is not the chair; a separate evaluator account would have to be a third
+  # evaluator, and the seeded panels are two evaluators because consensus waits on every
+  # one of them (R-5.27). users.staffPanelEvaluator stays seeded but sits on no panel.
   - id: evaluation-panel-evaluator
     domain: evaluation
     can:
@@ -285,7 +289,7 @@ personas:
       ]
     sign_in:
       session-route: { route: /auth/createsessiongov }
-      sandbox-idp: { username: gov-panel-evaluator }
+      sandbox-idp: { username: test-gov }
 
   - id: evaluation-panel-chair
     domain: evaluation

@@ -287,7 +287,7 @@ export const persona = {
         "route": "/auth/createsessiongov"
       },
       "sandbox-idp": {
-        "username": "gov-panel-evaluator"
+        "username": "test-gov"
       }
     }
   },
