@@ -13954,6 +13954,11 @@ rebind:
     app_tree: 16902bebe2d721b0a2458887bbddeb24235da6be
     by: runner:verify
     at: 2026-10-04T19:15:47.446Z
+    closed:
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-04T19:54:02.009Z
   - id: R-2.37
     target: new
     why: 'unbound: proposal-cwu-export-one.exported_proposal —
@@ -13983,6 +13988,11 @@ rebind:
     app_tree: 16902bebe2d721b0a2458887bbddeb24235da6be
     by: runner:verify
     at: 2026-10-04T19:15:47.446Z
+    closed:
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-04T19:54:02.009Z
   - id: R-2.38
     target: new
     why: 'unbound: proposal-cwu-export-one.exported_proposal —
@@ -14005,3 +14015,8 @@ rebind:
     app_tree: 16902bebe2d721b0a2458887bbddeb24235da6be
     by: runner:verify
     at: 2026-10-04T19:15:47.446Z
+    closed:
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-04T19:54:02.009Z
