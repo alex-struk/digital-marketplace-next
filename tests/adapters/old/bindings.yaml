@@ -1362,6 +1362,14 @@ pages:
       evaluation_created: bound
       creation_refusal_message: bound
 
+  evaluation-individual-submission-request-swu:
+    actions:
+      submit_scores_for_consensus_naming: bound
+    observations:
+      request_accepted: bound
+      refusal_messages: bound
+      stored_status: bound
+
   evaluation-consensus-request-swu:
     actions:
       change_consensus_by_request: bound

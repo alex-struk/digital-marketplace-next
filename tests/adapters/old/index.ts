@@ -10836,6 +10836,67 @@ export default function create(
     "/api/proposal/team-with-us/:proposalId/resource-questions/consensus/:userId",
   );
 
+  // An evaluator's submission for consensus naming the proposals it covers, sent as the
+  // opportunity's change PUT {tag: "submitIndividualQuestionEvaluations", value: {note,
+  // proposals: [proposal id, ...]}}. On this target, signed in through
+  // /auth/createsessiongov on opportunities.swuSubmissionNamesTwoOfThree, naming only
+  // proposals.swuLeftOut (no evaluation begun) was answered 400 {"opportunity":{"tag":
+  // "submitIndividualQuestionEvaluations","value":["The specified team question response
+  // evaluation was not found."]}} and the opportunity stayed EVAL_QUESTIONS_INDIVIDUAL.
+  const SUBMISSION_REQUEST = "evaluation-individual-submission-request-swu";
+  let submissionOpportunity = "";
+
+  // The proposals an input names: a list of them, a list under "proposals" (or a like key),
+  // or one per field; each a seed.proposals handle, an identifier, or a record with an id.
+  function proposalsNamed(input: unknown): string[] {
+    if (input === undefined || input === null) return [];
+    if (typeof input === "string") return input.split(/\s*,\s*/).filter(Boolean).map((each) => seededId(each, "proposals"));
+    if (Array.isArray(input)) return input.flatMap((each) => proposalsNamed(each));
+    if (typeof input !== "object") return [seededId(String(input), "proposals")];
+    const record = input as Record<string, unknown>;
+    for (const key of ["proposals", "proposalIds", "proponents", "named", "names"]) {
+      if (record[key] !== undefined) return proposalsNamed(record[key]);
+    }
+    if (typeof record.id === "string") return [record.id];
+    for (const key of ["proposal", "proposalId", "proponent"]) {
+      if (record[key] !== undefined) return proposalsNamed(record[key]);
+    }
+    return [];
+  }
+
+  const evaluationIndividualSubmissionRequestSwu: PageOf<"evaluationIndividualSubmissionRequestSwu"> = {
+    open: async (params?: { opportunityId?: string }) => {
+      submissionOpportunity = seededId(params?.opportunityId, "opportunities");
+      lastAnswer = null;
+      if (!submissionOpportunity) nothing(`${SUBMISSION_REQUEST}.open — no opportunity was named`);
+    },
+    async submitScoresForConsensusNaming(input?: unknown) {
+      const where = `${SUBMISSION_REQUEST}.submit_scores_for_consensus_naming`;
+      if (!submissionOpportunity) nothing(`${where} — no opportunity has been opened`);
+      const proposals = proposalsNamed(input);
+      if (!proposals.length) nothing(`${where} — the input names no proposals (${JSON.stringify(input)})`);
+      const record = input && typeof input === "object" && !Array.isArray(input) ? (input as Record<string, unknown>) : {};
+      const note = record.note ?? record.notes ?? record.comment ?? "";
+      await send(
+        where,
+        "PUT",
+        `${baseURL}/api/opportunities/sprint-with-us/${encodeURIComponent(submissionOpportunity)}`,
+        { tag: "submitIndividualQuestionEvaluations", value: { note: String(note), proposals } },
+      );
+    },
+    requestAccepted: async () => accepted(`${SUBMISSION_REQUEST}.request_accepted`),
+    refusalMessages: async () =>
+      (lastRefusal(`${SUBMISSION_REQUEST}.refusal_messages`) ?? []).map((entry) => entry.message).join("\n"),
+    // Read afresh as the signed-in person, not taken from the request's answer.
+    storedStatus: async () => {
+      if (!submissionOpportunity) nothing(`${SUBMISSION_REQUEST}.stored_status — no opportunity has been opened`);
+      const found = await peek(`${baseURL}/api/opportunities/sprint-with-us/${encodeURIComponent(submissionOpportunity)}`);
+      return found.status === 200 && found.json && typeof found.json === "object"
+        ? String((found.json as Record<string, unknown>).status ?? "")
+        : "";
+    },
+  };
+
   // The panel is sent as the opportunity's "editEvaluationPanel" change, every member as
   // {user, chair, evaluator, order}: the members it has now, and the one the test names
   // holding neither role. On this target, as an administrator on the seeded closed Sprint
@@ -11831,6 +11892,7 @@ export default function create(
     contentRequest,
     evaluationIndividualRequestSwu,
     evaluationIndividualRequestTwu,
+    evaluationIndividualSubmissionRequestSwu,
     evaluationConsensusRequestSwu,
     evaluationConsensusRequestTwu,
     evaluationPanelRequest,
