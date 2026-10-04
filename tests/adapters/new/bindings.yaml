@@ -118,7 +118,11 @@ pages:
   opportunity-cwu-view:
     actions:
       toggle_watch: bound
-      start_proposal: "unbound: walked signed in as a vendor (and as the administrator and a public sector employee) on the seeded published Code With Us opportunity, whose proposal deadline is in 2030: the page's only control is the 'Watch this opportunity' checkbox (and 'Manage this opportunity', to staff), with no way to start a proposal, and /opportunities/code-with-us/:opportunityId/proposals/create answers 'Page not found' to the vendor"
+      # Signed in as a vendor on the seeded published opportunity (deadline in 2030) the page
+      # offers the link "Start a proposal" to .../proposals/create; a vendor already holding
+      # a proposal there is offered "View your proposal" instead, which is followed, as the
+      # old target's binding follows "View Proposal".
+      start_proposal: bound
     observations:
       opportunity_identifier: bound
       # The administrator reads the seeded draft of another staff member as "Draft"; a
@@ -165,7 +169,7 @@ pages:
       opportunity_tab: bound
       addenda_tab: bound
       history_tab: bound
-      proposals_tab: "unbound: walked as the administrator on the seeded lapsed Code With Us opportunity with three proposals (and on the published, awarded and draft ones): the sections offered are Summary, Opportunity, Addenda and History only, and ?tab=proposals shows the summary"
+      proposals_tab: "unbound: walked as the administrator on the seeded lapsed Code With Us opportunity with three proposals (00000000-0000-4000-a003-000000000001, rechecked on the current build) and on the published, awarded and draft ones: the 'Opportunity sections' navigation offers Summary, Opportunity, Addenda and History only, ?tab=proposals shows the Summary, and the proposals' own evaluation view .../proposals/:proposalId answers 'Page not found' to the administrator"
       reporting_views: bound
       reporting_watchers: bound
       reporting_proposals: bound
@@ -264,7 +268,7 @@ pages:
       opportunity_tab: bound
       addenda_tab: bound
       history_tab: bound
-      proposals_tab: "unbound: the management screen offers no 'Proposals' section in any state walked (seeded published with a submitted proposal, lapsed, at individual evaluation, at consensus, at the code challenge, at the team scenario, in processing and awarded) as the administrator or as the owning public sector employee; its sections are Summary, Opportunity, Addenda, History and Evaluation panel, its Summary counts 'Proposals submitted' only, and ?tab=proposals falls back to the Summary"
+      proposals_tab: "unbound: the management screen offers no 'Proposals' section in any state walked (seeded published with a submitted proposal — 00000000-0000-4000-a025-000000000001, rechecked on the current build —, lapsed, at individual evaluation, at consensus, at the code challenge, at the team scenario, in processing and awarded) as the administrator or as the owning public sector employee; its sections are Summary, Opportunity, Addenda, History and Evaluation panel, its Summary counts 'Proposals submitted' only, and ?tab=proposals falls back to the Summary"
       team_questions_tab: bound
       code_challenge_tab: "unbound: the management screen offers no 'Code challenge' section, walked as the administrator on the seeded Sprint With Us opportunities at the code challenge, at the team scenario, in processing and awarded; its sections are Summary, Opportunity, Addenda, History and Evaluation panel"
       team_scenario_tab: "unbound: the management screen offers no 'Team scenario' section, walked as the administrator on the seeded Sprint With Us opportunities at the team scenario, in processing and awarded; its sections are Summary, Opportunity, Addenda, History and Evaluation panel"
@@ -1563,8 +1567,12 @@ pages:
       # "Name for <name>" box and "Will be saved as: <name>"; one saved since has a
       # read-only name, a "Download <name>" link to /api/files/<id>?type=blob and
       # "Remove <name>". A row with that link counts as stored, whatever its wording. The Sprint
-      # With Us and Team With Us forms answer "Page not found", where every member reports
-      # unbound at run time.
+      # With Us and Team With Us forms at ?tab=opportunity open but carry no "Attachments"
+      # part (rechecked as the administrator on the seeded open ones; their create forms say
+      # "Files cannot be attached to a <program> opportunity in this version of the service"),
+      # so there every member reports unbound at run time. attachment_address read on a Code
+      # With Us proposal's own screen returns the "Download <name>" links of its Attachments
+      # part, and nothing when the proposal holds none.
       add_attachment: bound
       rename_new_attachment: bound
       remove_new_attachment: bound
