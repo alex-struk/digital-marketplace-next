@@ -39,8 +39,11 @@
 // Team With Us ones reached from the proponent links of the opportunity's Proposals
 // section). It still answers "Page not found", to everybody walked, at /proposals, at
 // every program's printable copies (.../proposals/:proposalId/export,
-// .../proposals/export) and .../complete, and at the evaluation and consensus screens
-// (.../team-questions/..., .../resource-questions/...); and
+// .../proposals/export) and .../complete, and at the consensus score sheets
+// (.../team-questions/consensus/..., .../resource-questions/consensus/...), to the panel's
+// chair too. Since 2026-10-04 it serves the panel's members the management screens'
+// Instructions, Evaluation and Consensus sections, the individual score sheets, and the
+// dashboard's Evaluations section; and
 // /admin/email-notification-reference is not a screen at all (the service answers it 404
 // "Cannot GET", to the administrator too). Those screens' open() reports "unbound:
 // <page>.open — <reason>" only when the address really answers with that refusal, and
@@ -318,7 +321,7 @@ export default function create(
   // every printable copy, every
   // .../complete and the evaluation and consensus screens.
   const NOBODY_SIGNS_IN =
-    'walked signed in on the current build (as the administrator, as the public sector employee who owns the seeded opportunities and sits on their panels, and as vendors — the seeded organization owner, who wrote the seeded proposals, and a vendor with none — with the seeded records\' identifiers), the running build serves a signed-in person /dashboard (to staff "Create an opportunity" over "My opportunities", to the administrator every opportunity, to a vendor "My proposals" and "My organizations\' proposals"), /opportunities and every program\'s public opportunity page (with "Watch this opportunity", and "Start a proposal" while it takes proposals), the account screens under /users, /organizations, /organizations/create, /organizations/:orgId/edit (its Sprint With Us and Team With Us qualification sections drawing the requirements and "Read the … terms and conditions") and /organizations/:orgId/{sprint,team}-with-us-terms-and-conditions, to the administrator the content-management screens under /content, to a vendor the three programs\' proposal forms .../proposals/create and their own proposal\'s screen .../proposals/:proposalId/edit, and to the administrator and public sector staff /opportunities/create, the three programs\' forms, their management screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (sections Summary, Opportunity, Addenda, History, Proposals — proponents in plain text with no link onward — and, on Sprint With Us and Team With Us, Evaluation panel; no instructions, evaluation or consensus section, ?tab=instructions, ?tab=evaluation and ?tab=consensus drawing the Summary) and the Code With Us proposal\'s screen /opportunities/code-with-us/:opportunityId/proposals/:proposalId (proponent, Status, Submitted, Proposal ID, Score, "Printable copy", and the sections Proposal and History, with no button); the Sprint With Us and Team With Us proposal\'s screen /opportunities/{sprint,team}-with-us/:opportunityId/proposals/:proposalId (proponent, Opportunity, Status, Submitted, Proposal ID, "Printable copy", and the sections Proposal and History, with no button); walked the same way it still answers "Page not found" at /proposals, at every program\'s .../proposals/:proposalId/export (where the Code With Us screen\'s "Printable copy" lands, to the proposal\'s own author too) and .../proposals/export, at every program\'s .../complete, and at the evaluation and consensus screens under .../team-questions/ and .../resource-questions/';
+    'walked signed in on the current build (as the administrator, as the public sector employee who owns the seeded opportunities and sits on their panels, and as vendors — the seeded organization owner, who wrote the seeded proposals, and a vendor with none — with the seeded records\' identifiers), the running build serves a signed-in person /dashboard (to staff "Create an opportunity" over "My opportunities", to the administrator every opportunity, to a vendor "My proposals" and "My organizations\' proposals"), /opportunities and every program\'s public opportunity page (with "Watch this opportunity", and "Start a proposal" while it takes proposals), the account screens under /users, /organizations, /organizations/create, /organizations/:orgId/edit (its Sprint With Us and Team With Us qualification sections drawing the requirements and "Read the … terms and conditions") and /organizations/:orgId/{sprint,team}-with-us-terms-and-conditions, to the administrator the content-management screens under /content, to a vendor the three programs\' proposal forms .../proposals/create and their own proposal\'s screen .../proposals/:proposalId/edit, and to the administrator and public sector staff /opportunities/create, the three programs\' forms, their management screens /opportunities/{code,sprint,team}-with-us/:opportunityId/edit (sections Summary, Opportunity, Addenda, History, Proposals — proponents in plain text with no link onward — and, on Sprint With Us and Team With Us, Evaluation panel and, since 2026-10-04, to the panel\'s members Instructions, Evaluation and Consensus) and the Code With Us proposal\'s screen /opportunities/code-with-us/:opportunityId/proposals/:proposalId (proponent, Status, Submitted, Proposal ID, Score, "Printable copy", and the sections Proposal and History, with no button); the Sprint With Us and Team With Us proposal\'s screen /opportunities/{sprint,team}-with-us/:opportunityId/proposals/:proposalId (proponent, Opportunity, Status, Submitted, Proposal ID, "Printable copy", and the sections Proposal and History, with no button); walked the same way it still answers "Page not found" at /proposals, at every program\'s .../proposals/:proposalId/export (where the Code With Us screen\'s "Printable copy" lands, to the proposal\'s own author too) and .../proposals/export, at every program\'s .../complete, and at the consensus score sheets under .../team-questions/consensus/ and .../resource-questions/consensus/ (the individual score sheets under .../evaluations/ open, since 2026-10-04, to the panel\'s evaluators)';
 
   // What each such address answered a signed-out visitor when it was last opened: /dashboard
   // and /sign-up/complete send them to /sign-in?redirectOnSuccess=…, and everything else
@@ -333,11 +336,6 @@ export default function create(
 
   const behindSession = (route: string): string =>
     `${route} is offered only to a signed-in person, and ${NOBODY_SIGNS_IN}; opened signed out (with the seeded record's identifier where it takes one) it ${signedOutAnswer(route)}`;
-
-  // The evaluation sections a Sprint With Us or Team With Us management screen does not have:
-  // the screen itself opens, and ?tab=<section> draws its Summary.
-  const sectionMissing = (program: "sprint-with-us" | "team-with-us", tab: string): string =>
-    `the management screen /opportunities/${program}/:opportunityId/edit opens, signed in, to the administrator and to the public sector employee who owns the seeded opportunities and sits on their panels, but offers no instructions, evaluation or consensus section: walked on the current build on the seeded ${program === "sprint-with-us" ? "Sprint With Us opportunities at individual evaluation (with an evaluation already begun), at consensus and at the code challenge" : "Team With Us opportunities at individual evaluation (with an evaluation already begun), at consensus and at the challenge"}, its sections are Summary, Opportunity, Addenda, History, Proposals and Evaluation panel, and ?tab=${tab} draws the Summary; opened signed out the screen shows the "Page not found" screen`;
 
   function absent<T>(
     pageId: string,
@@ -1840,21 +1838,496 @@ export default function create(
 
   // ---------------------------------------------------------------- the evaluation screens
 
-  // Opened for real, so that what a person who may not have it is shown can be read: this
-  // target answers every one of them with its "Page not found" screen, signed out and, on the
-  // current build, signed in as the administrator and as the panel's public sector employee.
-  function evaluationScreen<T>(pageId: string, route: string, earlier: readonly string[]): T {
+  // Walked on the current build (2026-10-04) signed in as the public sector employee who
+  // sits on the seeded panels (test-gov), as the administrator who chairs them, as the
+  // public sector employee on no panel and as the owner who is not on the panel.
+  //
+  // The Sprint With Us and Team With Us management screens carry three sections for the
+  // panel's members:
+  //   "Instructions" — a region of that name holding the service's evaluation instructions
+  //     page, rendered ("Initial version" on the seeded build);
+  //   "Evaluation" — a region of that name: a paragraph on the stage, then the table "Your
+  //     evaluations, by anonymous proponent name" (Proponent | Your evaluation | Action), one
+  //     row per proponent ("Proponent 1 | Draft: complete | Continue evaluation", "Proponent
+  //     2 | Not started | Start evaluation", once consensus has begun "Submitted | View
+  //     evaluation"), each action a link to that proponent's score sheet, and under it the
+  //     button "Submit scores for consensus", disabled until every evaluation is complete;
+  //   "Consensus" — a region of that name with one sentence ("The consensus stage begins
+  //     once every evaluator on the panel has submitted their scores.", at consensus "Every
+  //     evaluator on the panel has submitted their scores. The panel's chair agrees one
+  //     consensus score for each proponent.") and nothing else, to the chair too.
+  // The owner who is not on the panel is offered only "Consensus"; ?tab=evaluation and
+  // ?tab=instructions answer them "Page not found", as the screen does a public sector
+  // employee with no part in the opportunity, and a vendor.
+  //
+  // A score sheet (".../team-questions/evaluations/create", ".../resource-questions/...")
+  // is headed by the proponent's anonymous name ("Proponent 2", "Proponent 2 of 2"), then
+  // one group per question ("Question 1": the question, "Worth up to 5 points.", the
+  // proponent's response, a "Score for question 1(required)" box and a "Comment for
+  // question 1 (required)" box), then "Evaluation actions": "Save and go to previous
+  // proponent", "Save draft" and "Save and go to next proponent". The first save moves the
+  // sheet to ".../evaluations/<member>/edit?saved=draft", where it reads "Status: Draft:
+  // incomplete" (or "Draft: complete") and offers "Save changes" in place of "Save draft".
+  // A save stores what was entered and lists what is still wrong in an alert ("Your changes
+  // were saved as you entered them. Your scores cannot be submitted until these are fixed."
+  // over "Question 1: enter a score between 0 and 5", "Question 1: enter a comment"), each
+  // field marked invalid with its own message ("Enter a score between 0 and 5 for question
+  // 1.", "Enter a comment for question 1."). A submitted evaluation is shown read-only: a
+  // note "This evaluation has been submitted" / "Submitted scores and comments cannot be
+  // changed." over each question's "Your score" and "Your comment", and a "Next proponent"
+  // link. A sheet the reader may not have answers "Page not found".
+  //
+  // The consensus sheets (".../consensus/create", ".../consensus/:userId/edit") answer
+  // "Page not found" to the chair too, and nothing leads to them.
+
+  const SWU_TABS = "/opportunities/sprint-with-us/:opportunityId/edit";
+  const TWU_TABS = "/opportunities/team-with-us/:opportunityId/edit";
+
+  // A section of an opportunity's management screen. A reader other than the administrator
+  // whom the screen answers with its refusal is shown none of it: a reading is nothing (the
+  // refusal logged), and an action is refused. The administrator refused, or a screen that
+  // opened without the section, could not reach the place, and that is unbound.
+  function evaluationTab(pageId: string, route: string, tab: string) {
+    const screen = signedInScreen(pageId, route);
+    const where = screen.where;
+    const region = (): Locator => seen(regionNamed(page.getByRole("main"), new RegExp(`^\\s*${tab}\\s*$`, "i"))).first();
+    async function shownRefusal(member: string): Promise<string> {
+      await ready();
+      const why = await refusalShown();
+      if (!why) return "";
+      if (!actingAs || actingMay(/any opportunity$/i)) {
+        unbound(where(member), `${route} answered ${actingId()} with ${why.replace(/\n+/g, " ")} at ${page.url()}`);
+      }
+      noteRefusal(`${where(member)} — the management screen answered ${actingId()} with ${why.replace(/\n+/g, " ")} at ${page.url()}`);
+      return why;
+    }
+    // Whether the section is on screen: false for a refused reader, unbound for a screen
+    // that opened without it.
+    async function reached(member: string): Promise<boolean> {
+      if (await shownRefusal(member)) return false;
+      await region().waitFor({ state: "visible", timeout: 10000 }).catch(() => undefined);
+      if (await region().count()) return true;
+      const sections = await seen(page.getByRole("navigation", { name: /opportunity sections/i }).getByRole("link")).allInnerTexts().catch(() => [] as string[]);
+      return unbound(
+        where(member),
+        `${page.url()} shows no "${tab}" section to ${actingId()}; the screen's sections are ${sections.map((one) => `"${one.trim()}"`).join(", ") || "none"}`,
+      );
+    }
+    // An action needs the section: a refused reader is refused the action.
+    async function mustReach(member: string): Promise<void> {
+      const why = await shownRefusal(member);
+      if (why) throw new Error(`${where(member)} — refused: the management screen answered ${actingId()} with ${why.replace(/\n+/g, " ")} at ${page.url()}`);
+      await reached(member);
+    }
+    // The section's words, its own heading left off.
+    async function words(): Promise<string> {
+      const lines = lined(await region().innerText());
+      return (new RegExp(`^${tab}$`, "i").test(lines[0] ?? "") ? lines.slice(1) : lines).join("\n");
+    }
+    return { screen, where, region, reached, mustReach, words };
+  }
+
+  function evaluationInstructionsPage<T>(pageId: string, route: string): T {
+    const tab = evaluationTab(pageId, route, "Instructions");
     return {
-      ...absent<Record<string, unknown>>(
-        pageId,
-        route,
-        `${behindSession(route)}; signed in as the public sector employee who sits on the seeded panels, with the seeded Sprint With Us opportunity at "Team questions: individual evaluation" (opportunities.swuEvaluationAlreadyBegun) and the Team With Us one (opportunities.twuEvaluationAlreadyBegun) and their seeded proposals, this address and the proposal's own page answer "Page not found", and those opportunities' management screens offer only Summary, Opportunity, Addenda, History, Proposals (proponents in plain text, no link onward) and Evaluation panel — nothing that opens a proponent's evaluation`,
-        earlier,
-      ),
-      open: (params?: Record<string, string>) => go(route, params),
-      refusedWhenNotPermitted: () => refusalShown(),
+      open: (params?: Record<string, string>) => tab.screen.open(params),
+      // The instructions page as rendered in the section; a section left empty (the page
+      // could not be read) is nothing.
+      instructionsBody: async (): Promise<string> => ((await tab.reached("instructions_body")) ? tab.words() : ""),
+      // The "Instructions" section link, by its name, to a reader shown it; nothing to one
+      // the screen opens for without it (the owner not on the panel) or refuses.
+      visibleToEvaluatorsOnly: async (): Promise<string> => {
+        await ready();
+        if (await refusalShown()) return "";
+        const links = seen(page.getByRole("navigation", { name: /opportunity sections/i }).getByRole("link", { name: /^\s*instructions\s*$/i }));
+        return (await links.count()) ? (await links.first().innerText()).trim() : "";
+      },
     } as unknown as T;
   }
+
+  // The proponent rows of a section's table, one line each, cells joined with " | ".
+  async function proponentRows(scope: Locator): Promise<string[]> {
+    return tableRows(seen(scope.getByRole("table")).first());
+  }
+
+  // A row picked by the proposal's identifier (the address its link carries), by its place
+  // (a number, the first row being 0, as the old binding counts), or by the proponent's
+  // anonymous name or other words in it.
+  async function proponentRow(where: string, scope: Locator, input: unknown): Promise<Locator> {
+    const rows = seen(scope.getByRole("row")).filter({ has: page.getByRole("cell") });
+    await rows.first().waitFor({ state: "visible", timeout: 10000 }).catch(() => undefined);
+    const total = await rows.count();
+    const proposal = given(input, ["proposal", "proposalId", "id"]) ?? (typeof input === "string" ? input : undefined);
+    const id = seededId(proposal ?? "", "proposals");
+    if (id && /^[0-9a-f-]{36}$/i.test(id)) {
+      for (let i = 0; i < total; i++) {
+        const hrefs = await rows.nth(i).getByRole("link").evaluateAll((links) => links.map((one) => one.getAttribute("href") ?? ""));
+        if (hrefs.some((href) => href.includes(id))) return rows.nth(i);
+      }
+    }
+    const place = typeof input === "number" ? input : Number.parseInt(field(input, "index", "position", "row", "order"), 10);
+    if (Number.isFinite(place) && place >= 0 && place < total) return rows.nth(place);
+    const name = typeof input === "string" ? input : givenText(input, ["proponent", "name", "anonymousName"]);
+    if (name) {
+      const named = rows.filter({ hasText: name });
+      if (await named.count()) return named.first();
+    }
+    if (input === undefined || input === null) {
+      if (total) return rows.first();
+    }
+    return unbound(where, `no proponent row on ${page.url()} for ${JSON.stringify(input)}; the rows read: ${(await proponentRows(scope)).join(" / ") || "none"}`);
+  }
+
+  const SUBMIT_FOR_CONSENSUS = /^\s*submit (scores )?for consensus\s*$|^\s*submit scores for consensus\s*$/i;
+
+  function evaluationIndividualListPage<T>(pageId: string, route: string): T {
+    const tab = evaluationTab(pageId, route, "Evaluation");
+    // Why the last "Submit scores for consensus" was refused, for incomplete_evaluation_error.
+    let submitRefusal = "";
+    const submit = (): Locator => seen(tab.region().getByRole("button", { name: SUBMIT_FOR_CONSENSUS })).first();
+    const rows = async (member: string): Promise<string> =>
+      (await tab.reached(member)) ? (await proponentRows(tab.region())).join("\n") : "";
+    return {
+      open: (params?: Record<string, string>) => tab.screen.open(params),
+      openProponentEvaluation: async (input?: unknown): Promise<void> => {
+        const member = "open_proponent_evaluation";
+        await tab.mustReach(member);
+        const row = await proponentRow(tab.where(member), tab.region(), input);
+        const link = seen(row.getByRole("link")).first();
+        if (!(await link.count())) unbound(tab.where(member), `the row "${(await row.innerText()).replace(/\s+/g, " ").trim()}" on ${page.url()} carries no link to the evaluation`);
+        await link.click();
+        await settle();
+        await ready();
+      },
+      // Disabled, with "You can submit once every proponent has a complete evaluation" beside
+      // it, while any evaluation is incomplete: that is the page's answer, reported at once
+      // and kept for incomplete_evaluation_error rather than pressed.
+      submitScoresForConsensus: async (): Promise<void> => {
+        const member = "submit_scores_for_consensus";
+        submitRefusal = "";
+        await tab.mustReach(member);
+        if (!(await submit().count())) {
+          submitRefusal = `"Submit scores for consensus" is not offered`;
+          const said = (await tab.words()).replace(/\n+/g, " | ");
+          throw new Error(`${tab.where(member)} — refused: ${submitRefusal} on ${page.url()} (the section shows: ${said})`);
+        }
+        if (await isDisabled(submit())) {
+          const rule = await linesMatching(/can submit once|complete evaluation/i);
+          const listed = (await proponentRows(tab.region())).join(" ; ");
+          submitRefusal = `"Submit scores for consensus" is disabled: evaluations are incomplete${listed ? ` (${listed})` : ""}${rule ? ` — ${rule}` : ""}`;
+          throw new Error(`${tab.where(member)} — refused: ${submitRefusal} on ${page.url()}`);
+        }
+        const before = page.url();
+        await submit().click();
+        await settle();
+        await confirmIfAsked(tab.where(member), /^\s*submit( scores)?( for consensus)?\s*$/i);
+        const deadline = Date.now() + 10000;
+        while (Date.now() < deadline) {
+          if (await seen(page.getByRole("alert")).count()) break;
+          if (await seen(page.getByRole("status").filter({ hasText: /\S/ })).count()) break;
+          if (!(await submit().count()) || page.url() !== before) break;
+          await page.waitForTimeout(250);
+        }
+        await ready();
+      },
+      proponentRow: () => rows("proponent_row"),
+      // The anonymous names, one per line, from the table's first column.
+      anonymousProponentName: async (): Promise<string> => {
+        if (!(await tab.reached("anonymous_proponent_name"))) return "";
+        return (await proponentRows(tab.region())).map((row) => row.split(" | ")[0] ?? "").filter(Boolean).join("\n");
+      },
+      evaluationStatus: () => rows("evaluation_status"),
+      // Empty when "Submit scores for consensus" may be pressed; otherwise why it is withheld.
+      submitDisabledUntilComplete: async (): Promise<string> => {
+        if (!(await tab.reached("submit_disabled_until_complete"))) return "";
+        if (!(await submit().count())) return `"Submit scores for consensus" is not offered`;
+        if (!(await isDisabled(submit()))) return "";
+        const rule = await linesMatching(/can submit once|complete evaluation/i);
+        return `"Submit scores for consensus" is disabled${rule ? `\n${rule}` : ""}`;
+      },
+      incompleteEvaluationError: async (): Promise<string> => {
+        await ready();
+        const alerts = lined((await seen(page.getByRole("alert")).allInnerTexts().catch(() => [] as string[])).join("\n")).filter((line) => /complete|incomplete/i.test(line));
+        return [...new Set([...alerts, submitRefusal].filter(Boolean))].join("\n");
+      },
+      ownEvaluationsOnly: () => rows("own_evaluations_only"),
+    } as unknown as T;
+  }
+
+  // The consensus section: drawn, at consensus, as one sentence to the chair too, with no
+  // table of proponents and no control. A control or table a later build draws is used where
+  // it appears; until then each is unbound, saying what the section does show.
+  function evaluationConsensusListPage<T>(pageId: string, route: string): T {
+    const tab = evaluationTab(pageId, route, "Consensus");
+    const shows = async (): Promise<string> => `the "Consensus" section on ${page.url()} shows ${actingId()} only: ${(await tab.words()).replace(/\n+/g, " | ") || "nothing"}`;
+    async function control(member: string, name: RegExp, scope?: Locator): Promise<void> {
+      await tab.mustReach(member);
+      const found = await findControl(scope ?? tab.region(), name);
+      if (!found) unbound(tab.where(member), `no control named ${name}: ${await shows()} (status: ${(await textLines()).find((line) => /^status:/i.test(line)) ?? "not shown"})`);
+      if (await isDisabled(found)) throw new Error(`${tab.where(member)} — refused: the control named ${name} is disabled on ${page.url()}`);
+      await found.click();
+      await settle();
+    }
+    async function inOpenDialog(member: string, name: RegExp): Promise<void> {
+      await tab.mustReach(member);
+      await dialog().waitFor({ state: "visible", timeout: 3000 }).catch(() => undefined);
+      if (!(await dialog().count())) unbound(tab.where(member), `no dialog is open on ${page.url()}; ${await shows()}`);
+      await press(tab.where(member), name, dialog());
+    }
+    async function table(member: string): Promise<string> {
+      if (!(await tab.reached(member))) return "";
+      if (!(await seen(tab.region().getByRole("table")).count())) unbound(tab.where(member), `no table of proponents: ${await shows()}`);
+      return (await proponentRows(tab.region())).join("\n");
+    }
+    // The confirmations and the refusals below follow pressing one of the section's controls.
+    // A section offering no control at all has nothing that could raise them, and is
+    // unbound rather than read as a quiet "nothing shown".
+    async function afterAControl(member: string): Promise<boolean> {
+      if (!(await tab.reached(member))) return false;
+      if (await dialog().count()) return true;
+      if (await seen(tab.region().getByRole("button")).count()) return true;
+      return unbound(tab.where(member), `nothing on the section raises it: ${await shows()}`);
+    }
+    const dialogWords = async (member: string, only?: RegExp): Promise<string> => {
+      if (!(await afterAControl(member))) return "";
+      if (!(await dialog().count())) return "";
+      const said = (await dialog().innerText()).trim();
+      return only && !only.test(said) ? "" : said;
+    };
+    const alertsAbout = async (member: string, about: RegExp): Promise<string> => {
+      if (!(await afterAControl(member))) return "";
+      return [...new Set(lined((await seen(page.getByRole("alert")).allInnerTexts().catch(() => [] as string[])).join("\n")).filter((line) => about.test(line)))].join("\n");
+    };
+    return {
+      open: (params?: Record<string, string>) => tab.screen.open(params),
+      openProponentConsensus: async (input?: unknown): Promise<void> => {
+        const member = "open_proponent_consensus";
+        await tab.mustReach(member);
+        if (!(await seen(tab.region().getByRole("table")).count())) unbound(tab.where(member), `no proponent to open: ${await shows()}`);
+        const row = await proponentRow(tab.where(member), tab.region(), input);
+        await seen(row.getByRole("link")).first().click();
+        await settle();
+      },
+      submitFinalConsensusScores: () => control("submit_final_consensus_scores", /^\s*submit (final )?consensus( scores)?\s*$/i),
+      confirmSubmitConsensus: () => inOpenDialog("confirm_submit_consensus", /^\s*submit (final )?consensus( scores)?\s*$|^\s*submit\s*$/i),
+      finalizeConsensusScores: () => control("finalize_consensus_scores", /^\s*finali[sz]e( consensus)?( scores)?\s*$/i),
+      confirmFinalizeConsensus: () => inOpenDialog("confirm_finalize_consensus", /^\s*finali[sz]e( consensus)?( scores)?\s*$/i),
+      cancelModal: () => inOpenDialog("cancel_modal", /^\s*cancel\s*$/i),
+      proponentRow: () => table("proponent_row"),
+      consensusStatus: () => table("consensus_status"),
+      submitConfirmationModal: () => dialogWords("submit_confirmation_modal", /submit/i),
+      finalizeConfirmationModal: () => dialogWords("finalize_confirmation_modal", /finali[sz]e/i),
+      notAllConsensusesSubmittedError: () => alertsAbout("not_all_consensuses_submitted_error", /consensus|all/i),
+      noScreenableProponentError: () => alertsAbout("no_screenable_proponent_error", /screen|proponent/i),
+      // What the section tells this reader, its heading left off; nothing to a reader the
+      // screen refuses.
+      emptyForOwnerNotOnPanel: async (): Promise<string> => ((await tab.reached("empty_for_owner_not_on_panel")) ? tab.words() : ""),
+    } as unknown as T;
+  }
+
+  // ---------------------------------------------------------------- the score sheets
+
+  // Which question an input names: "question" or "questionNumber" counted from 1, "order",
+  // "index" or "position" counted from 0 (the order the sheet shows them in); the first
+  // question when it names none.
+  function questionNumber(input: unknown): number {
+    const numbered = Number.parseInt(field(input, "question", "questionNumber"), 10);
+    if (Number.isFinite(numbered) && numbered > 0) return numbered;
+    const ordered = Number.parseInt(field(input, "order", "index", "position", "row"), 10);
+    if (Number.isFinite(ordered) && ordered >= 0) return ordered + 1;
+    return 1;
+  }
+
+  function scoreSheetPage(pageId: string, route: string) {
+    const where = (member: string): string => `${pageId}.${member}`;
+    const submittedNote = (): Locator => seen(page.getByRole("note").filter({ hasText: /has been submitted|cannot be changed/i })).first();
+
+    // The sheet as the reader is shown it. A sheet answered with "Page not found" to a reader
+    // other than the administrator is the sheet withheld from them (seen as the public sector
+    // employee with no part in opportunities.swuCodeChallengeOfOtherStaff, whose panel's
+    // sheets the administrator on that panel reads): an action is refused, and a reading is
+    // nothing, the refusal logged. The administrator refused, or a hand-off to the identity
+    // provider, means the sheet was never reached, and that is unbound.
+    async function refusedReader(member: string): Promise<string> {
+      await ready();
+      const why = await whyNotHere();
+      if (!why) return "";
+      if (!actingAs || actingMay(/any opportunity$/i) || /^handed off/.test(why)) {
+        unbound(where(member), `${route} did not open as a score sheet for ${actingId()} at ${page.url()}: ${why.replace(/\n+/g, " ")}`);
+      }
+      noteRefusal(`${where(member)} — the score sheet answered ${actingId()} with ${why.replace(/\n+/g, " ")} at ${page.url()}`);
+      return why;
+    }
+    async function onSheet(member: string): Promise<void> {
+      const why = await refusedReader(member);
+      if (why) throw new Error(`${where(member)} — refused: the score sheet answered ${actingId()} with ${why.replace(/\n+/g, " ")} at ${page.url()}`);
+    }
+    const readable = async (member: string): Promise<boolean> => !(await refusedReader(member));
+
+    // The box for one question, by its label, looked up on the sheet as it stands.
+    async function box(member: string, kind: "Score" | "Comment", input: unknown): Promise<Locator> {
+      await onSheet(member);
+      const n = questionNumber(input);
+      const found = seen(page.getByRole("textbox", { name: new RegExp(`^\\s*${kind} for question ${n}\\b`, "i") }))
+        .or(seen(page.getByRole("spinbutton", { name: new RegExp(`^\\s*${kind} for question ${n}\\b`, "i") })))
+        .first();
+      if (await found.count()) return found;
+      if (await submittedNote().count()) {
+        throw new Error(`${where(member)} — refused: the sheet on ${page.url()} says "${(await submittedNote().innerText()).replace(/\s+/g, " ").trim()}" and offers no box to change`);
+      }
+      const boxes = (await seen(page.getByRole("main").getByRole("textbox")).evaluateAll((all) =>
+        all.map((one) => (one.getAttribute("aria-label") || (one as HTMLInputElement).labels?.[0]?.innerText || "").trim()),
+      )).filter(Boolean);
+      return unbound(where(member), `no box labelled "${kind} for question ${n}" on ${page.url()}; it offers ${boxes.map((one) => `"${one}"`).join(", ") || "no boxes"}`);
+    }
+
+    async function enterIn(member: string, kind: "Score" | "Comment", input: unknown): Promise<void> {
+      const value = kind === "Score" ? given(input, ["score", "value"]) : given(input, ["notes", "note", "comment", "comments", "value"]);
+      const text = value !== undefined ? textOf(value) : typeof input === "object" && input !== null ? "" : textOf(input);
+      const target = await box(member, kind, input);
+      if (await isDisabled(target)) {
+        throw new Error(`${where(member)} — refused: the "${kind} for question ${questionNumber(input)}" box is disabled on ${page.url()}`);
+      }
+      await target.fill(text);
+      await target.blur().catch(() => undefined);
+      await settle();
+    }
+
+    // Press one of the sheet's actions and wait for the save to answer: the address moving
+    // on, an alert, or a status saying it was saved.
+    async function save(member: string, names: RegExp[]): Promise<void> {
+      await onSheet(member);
+      const group = seen(page.getByRole("group", { name: /evaluation actions/i })).first();
+      const scope = (await group.count()) ? group : page.getByRole("main");
+      let control: Locator | null = null;
+      for (const name of names) {
+        const found = seen(scope.getByRole("button", { name }).or(scope.getByRole("link", { name }))).first();
+        if (await found.count()) {
+          control = found;
+          break;
+        }
+      }
+      if (!control) {
+        if (await submittedNote().count()) {
+          throw new Error(`${where(member)} — refused: the sheet on ${page.url()} says "${(await submittedNote().innerText()).replace(/\s+/g, " ").trim()}" and offers ${await offered()}`);
+        }
+        unbound(where(member), `no control named ${names.join(" or ")} on ${page.url()}; it offers ${await offered()}`);
+      }
+      if (await isDisabled(control)) throw new Error(`${where(member)} — refused: "${(await control.innerText()).trim()}" is disabled on ${page.url()}`);
+      const before = page.url();
+      await control.click();
+      const deadline = Date.now() + 10000;
+      while (Date.now() < deadline) {
+        if (page.url() !== before) break;
+        if (await seen(page.getByRole("alert")).count()) break;
+        if (await seen(page.getByRole("status").filter({ hasText: /saved/i })).count()) break;
+        await page.waitForTimeout(250);
+      }
+      await settle();
+      await ready();
+    }
+
+    // The sheet's messages that match: the alert's lines and each invalid box's own message.
+    async function messagesAbout(member: string, about: RegExp): Promise<string> {
+      await ready();
+      if (await whyNotHere()) return "";
+      return lined(await formMessages()).filter((line) => about.test(line)).join("\n");
+    }
+
+    return {
+      where,
+      onSheet,
+      readable,
+      save,
+      submittedNote,
+      open: (params?: Record<string, string>) => go(route, params),
+      enterQuestionScore: (input?: unknown) => enterIn("enter_question_score", "Score", input),
+      enterQuestionNotes: (input?: unknown) => enterIn("enter_question_notes", "Comment", input),
+      saveAndGoToNextProponent: () => save("save_and_go_to_next_proponent", [/^\s*save and go to next proponent\s*$/i, /^\s*next proponent\b/i]),
+      // "Question 1: enter a score between 0 and 5", "Enter a score between 0 and 5 for
+      // question 1." — the hint drawn under every box is left out.
+      scoreOutOfRangeError: () => messagesAbout("score_out_of_range_error", /enter a score|out of range|score must|no more than|at least 0/i),
+      emptyNotesError: () => messagesAbout("empty_notes_error", /enter a comment|comment is required|comment.*(empty|blank)/i),
+      refusedWhenNotPermitted: () => refusalShown(),
+    };
+  }
+
+  // A sheet's proponent, by the anonymous name it is headed with ("Proponent 2").
+  async function sheetProponent(): Promise<string> {
+    await ready();
+    if (await whyNotHere()) return "";
+    const heading = seen(page.getByRole("heading", { level: 1 })).first();
+    const said = (await heading.count()) ? (await heading.innerText()).trim() : "";
+    if (/^Proponent\s+\d+/.test(said)) return said;
+    return (await linesMatching(/^Proponent\s+\d+$/)).split("\n")[0] ?? "";
+  }
+
+  function evaluationCreatePage<T>(pageId: string, route: string): T {
+    const sheet = scoreSheetPage(pageId, route);
+    return {
+      ...sheet,
+      // The first save is "Save draft"; once saved the sheet offers "Save changes" in its place.
+      saveDraft: () => sheet.save("save_draft", [/^\s*save draft\s*$/i, /^\s*save changes\s*$/i]),
+      saveAndGoToPreviousProponent: () =>
+        sheet.save("save_and_go_to_previous_proponent", [/^\s*save and go to previous proponent\s*$/i, /^\s*previous proponent\b/i]),
+      anonymousProponentName: () => sheetProponent(),
+      // The sheet as read, the questions with the proponent's responses among them.
+      questionResponse: async (): Promise<string> => ((await sheet.readable("question_response")) ? mainText() : ""),
+      duplicateEvaluationError: async (): Promise<string> => {
+        await ready();
+        if (await whyNotHere()) return "";
+        return lined(await formMessages()).filter((line) => /already|duplicate|exists/i.test(line)).join("\n");
+      },
+    } as unknown as T;
+  }
+
+  function evaluationEditPage<T>(pageId: string, route: string): T {
+    const sheet = scoreSheetPage(pageId, route);
+    return {
+      ...sheet,
+      saveChanges: () => sheet.save("save_changes", [/^\s*save changes\s*$/i]),
+      // "Status: Draft: incomplete", "Status: Draft: complete", "Status: Submitted".
+      evaluationStatus: async (): Promise<string> =>
+        (await sheet.readable("evaluation_status")) ? labelledValue(["Status", "Evaluation status"]) : "",
+      // "read-only" for a submitted sheet, which shows its scores as text and no box to
+      // change; nothing for one still open to change, or withheld from this reader.
+      readOnlyAfterSubmitted: async (): Promise<string> => {
+        if (!(await sheet.readable("read_only_after_submitted"))) return "";
+        if (await sheet.submittedNote().count()) return "read-only";
+        const boxes = seen(page.getByRole("main").getByRole("textbox"));
+        for (let i = 0; i < (await boxes.count()); i++) if (!(await isDisabled(boxes.nth(i)))) return "";
+        return (await boxes.count()) ? "read-only" : "";
+      },
+    } as unknown as T;
+  }
+
+  // A page the application does not serve: its address answers "Page not found" and
+  // nothing leads to it. Decided when the method runs: absent while the address still
+  // answers that, unbound once it answers anything else, because then the page has been
+  // built since it was looked at and nobody has seen its controls yet.
+  function notServed<T>(pageId: string, route: string, walked: string, members: readonly string[]): T {
+    let lastRoute = "";
+    const verdict = async (member: string): Promise<never> => {
+      await ready();
+      if (await notFoundShown()) {
+        throw new Error(`absent: ${pageId}.${member} — ${walked}; this time ${lastRoute || page.url()} answered "Page not found" to ${actingId()}`);
+      }
+      throw new Error(`unbound: ${pageId}.${member} — ${page.url()} now answers ${actingId()} with something other than "Page not found" ("${await firstHeading()}"), so the page has been built since it was walked and its controls have not been seen yet`);
+    };
+    const built: Record<string, unknown> = {
+      open: async (params?: Record<string, string>): Promise<void> => {
+        lastRoute = leniently(route, params);
+        await page.goto(lastRoute, { waitUntil: "domcontentloaded" }).catch(() => undefined);
+        await settle();
+        await verdict("open");
+      },
+    };
+    for (const member of members) built[camel(member)] = () => verdict(member);
+    return built as unknown as T;
+  }
+
+  const consensusSheetWalked = (program: string, base: string): string =>
+    `${base} answers the "Page not found" screen and nothing in the application leads to it: walked on the current build signed in as the administrator, who chairs the seeded ${program} panels, with the seeded opportunities at consensus and their proposals' identifiers (and the chair's own identifier for :userId), and as the public sector employee who evaluates on them — the management screen's "Consensus" section shows only "Every evaluator on the panel has submitted their scores. The panel's chair agrees one consensus score for each proponent." with no proponent, link or control, and the "Evaluation" section's links lead only to each evaluator's own sheets`;
 
   // ---------------------------------------------------------------- the mail catcher
 
@@ -4093,8 +4566,8 @@ export default function create(
   }
 
   // The values of one column, found by its header.
-  async function columnOf(header: RegExp): Promise<string[]> {
-    const headers = seen(page.getByRole("columnheader"));
+  async function columnOf(header: RegExp, scope: Scope = page): Promise<string[]> {
+    const headers = seen(scope.getByRole("columnheader"));
     let at = -1;
     for (let i = 0; i < (await headers.count()); i++) {
       if (header.test((await headers.nth(i).innerText()).trim())) {
@@ -4103,7 +4576,7 @@ export default function create(
       }
     }
     if (at < 0) return [];
-    return (await tableRows()).map((row) => row.split(" | ")[at] ?? "").filter(Boolean);
+    return (await tableRows(scope)).map((row) => row.split(" | ")[at] ?? "").filter(Boolean);
   }
 
   // The name a screen shows for a person named by seed handle, persona, identifier or
@@ -4469,6 +4942,11 @@ export default function create(
   // not created any opportunities yet." and no table.
 
   const dash = signedInScreen("opportunity-dashboard", "/dashboard");
+  // The "My opportunities" (or the administrator's "All opportunities") section. Since
+  // 2026-10-04 the dashboard also has an "Evaluations" section with a table of its own, so
+  // the opportunity readers keep to their section and the page is read whole only when it
+  // draws no such section.
+  const ownSection = (): Locator => seen(regionNamed(page.getByRole("main"), /^\s*(my|all) opportunities\s*$/i)).first();
   async function dashboardRows(member: string): Promise<string> {
     await dash.on(member);
     const tab = seen(page.getByRole("tab", { name: /opportunities/i }));
@@ -4476,7 +4954,7 @@ export default function create(
       await tab.first().click();
       await settle();
     }
-    return (await tableRows()).join("\n");
+    return (await tableRows((await ownSection().count()) ? ownSection() : page)).join("\n");
   }
   const opportunityDashboard: S.OpportunityDashboardPage = {
     open: () => dash.open(),
@@ -4502,12 +4980,68 @@ export default function create(
     myOpportunitiesTable: () => dashboardRows("my_opportunities_table"),
     opportunityStatus: async () => {
       await dashboardRows("opportunity_status");
-      return (await columnOf(/^status$/i)).join("\n");
+      return (await columnOf(/^status$/i, (await ownSection().count()) ? ownSection() : page)).join("\n");
     },
     ownOpportunitiesOnly: () => dashboardRows("own_opportunities_only"),
     allOpportunitiesForAdministrator: () => dashboardRows("all_opportunities_for_administrator"),
     emptyMyOpportunitiesMessage: () =>
       dash.lines("empty_my_opportunities_message", /\bno\b.*opportunit|haven.t|have not|nothing to show|get started/i),
+  };
+
+  // Walked on the current build (2026-10-04): /dashboard draws, under "Dashboard", a
+  // "Dashboard sections" menu of links ("My opportunities" or, to the administrator, "All
+  // opportunities", then "Evaluations", each to its section on the page) and the sections
+  // themselves, all drawn without being asked for. To public sector staff and the
+  // administrator the "Evaluations" section reads "Opportunities whose evaluation panel you
+  // sit on, including drafts that are not yet public." over the table "Opportunities you are
+  // evaluating" (Title, each a link to the management screen | Program | Your role
+  // ("Evaluator", "Chair") | Status), or, on no panel, "You are not on the evaluation panel
+  // of any opportunity. When an opportunity's owner adds you to its panel, it is listed
+  // here." A vendor's dashboard has no such section.
+  const panelSection = (): Locator => seen(regionNamed(page.getByRole("main"), /^\s*evaluations\s*$/i)).first();
+  const sectionMenu = (): Locator => seen(page.getByRole("navigation", { name: /dashboard sections/i })).first();
+  async function panelSectionShown(member: string): Promise<boolean> {
+    await dash.on(member);
+    await panelSection().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+    return (await panelSection().count()) > 0;
+  }
+  async function toDashboardSection(member: string, name: RegExp, region: Locator): Promise<void> {
+    await dash.on(member);
+    const link = seen(sectionMenu().getByRole("link", { name })).first();
+    if (await link.count()) {
+      await link.click();
+      await settle();
+    } else if (!(await region.count())) {
+      unbound(`evaluation-panel-dashboard.${member}`, `/dashboard at ${page.url()} draws no section named ${name} for ${actingId()}; it offers ${await offered()}`);
+    }
+    await region.scrollIntoViewIfNeeded().catch(() => undefined);
+  }
+  async function panelRows(member: string): Promise<string> {
+    if (!(await panelSectionShown(member))) return "";
+    return (await tableRows(panelSection())).join("\n");
+  }
+  const panelDashboard: S.EvaluationPanelDashboardPage = {
+    open: () => dash.open(),
+    showMyOpportunities: () => toDashboardSection("show_my_opportunities", /^\s*(my|all) opportunities\s*$/i, ownSection()),
+    showPanelOpportunities: () => toDashboardSection("show_panel_opportunities", /^\s*evaluations\s*$/i, panelSection()),
+    openOpportunity: (input) => opportunityDashboard.openOpportunity(input as never),
+    // The section's words, its heading left off; nothing on a dashboard without it.
+    evaluationsTab: async () => {
+      if (!(await panelSectionShown("evaluations_tab"))) return "";
+      const lines = lined(await panelSection().innerText());
+      return (/^evaluations$/i.test(lines[0] ?? "") ? lines.slice(1) : lines).join("\n");
+    },
+    panelOpportunitiesTable: () => panelRows("panel_opportunities_table"),
+    // Each row whole, as the old binding reads the table, so the status stands beside the
+    // opportunity it belongs to.
+    opportunityStatus: () => panelRows("opportunity_status"),
+    // The section's words when it lists no opportunity; nothing when it lists any.
+    emptyPanelOpportunitiesMessage: async () => {
+      if (!(await panelSectionShown("empty_panel_opportunities_message"))) return "";
+      if ((await tableRows(panelSection())).length) return "";
+      const lines = lined(await panelSection().innerText());
+      return (/^evaluations$/i.test(lines[0] ?? "") ? lines.slice(1) : lines).join("\n");
+    },
   };
 
   // ---------------------------------------------------------------- the Code With Us form
@@ -7456,7 +7990,8 @@ export default function create(
     const link = seen(page.getByRole("navigation", { name: /opportunity sections/i }).getByRole("link", { name: new RegExp(`^\\s*${tab}\\s*$`, "i") }));
     if (!(await link.count())) return false;
     const href = (await link.first().getAttribute("href")) ?? "";
-    if (!new URL(page.url()).search.includes(`tab=${tab.toLowerCase()}`)) {
+    const wanted = href ? new URL(href, baseURL).searchParams.get("tab") : tab.toLowerCase();
+    if (new URL(page.url()).searchParams.get("tab") !== wanted) {
       if (href) await visit(href);
       else await link.first().click();
       await ready();
@@ -7840,8 +8375,9 @@ export default function create(
   // offers its owning public sector employee "Edit", "Submit for review" (refused on an
   // incomplete draft with the alert "This opportunity is incomplete") and "Delete" (which
   // asks "Delete this opportunity?" with "Delete opportunity" and lands on /dashboard).
-  // ?tab=evaluation, ?tab=consensus and ?tab=instructions still fall back to the Summary.
-  // On the current build (walked 2026-10-03 as the administrator and as the public sector
+  // Since 2026-10-04 the Sprint With Us and Team With Us screens also carry "Instructions",
+  // "Evaluation" and "Consensus" sections, drawn for the panel's members (the owner who is
+  // not on the panel is offered only "Consensus"). On the current build (walked 2026-10-03 as the administrator and as the public sector
   // employee who sits on the seeded panels) there is also a "Proposals" section: the table
   // "Every proposal submitted to this opportunity" (Proponent | Status | Submitted, names in
   // plain text, no link onward), or, before the opportunity closes, only "Proposals are not
@@ -7850,7 +8386,7 @@ export default function create(
   const proposalsShown = (said: string): string =>
     /not shown until the opportunity closes|once it has closed to proposals/i.test(said) && !/\|/.test(said) && !/every proposal submitted/i.test(said) ? "" : said;
   const programWalked = (program: string, states: string, slug: string): string =>
-    `walked as the administrator on the seeded ${program} opportunities ${states} and on a draft just saved from /opportunities/${slug}/create, as the owning public sector employee on seeded ones and on such a draft, and as a vendor (answered "Page not found"): the screen offers the sections Summary, Opportunity, Addenda (not on a draft), History, Proposals (added on the current build) and Evaluation panel, the actions "Edit", "Submit for review" and "Delete" on a draft and "Cancel opportunity" (to the administrator, from published to processing); ?tab=evaluation, ?tab=consensus, ?tab=instructions and other section names fall back to the Summary`;
+    `walked as the administrator on the seeded ${program} opportunities ${states} and on a draft just saved from /opportunities/${slug}/create, as the owning public sector employee on seeded ones and on such a draft, and as a vendor (answered "Page not found"): the screen offers the sections Summary, Opportunity, Addenda (not on a draft), History, Proposals (added on the current build) and Evaluation panel, and on Sprint With Us and Team With Us to the panel's members Instructions, Evaluation and Consensus, the actions "Edit", "Submit for review" and "Delete" on a draft and "Cancel opportunity" (to the administrator, from published to processing); other section names fall back to the Summary`;
   const MONTHS = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"];
   function programManage(
     pageId: string,
@@ -7890,7 +8426,10 @@ export default function create(
       const link = sectionLinks().filter({ hasText: new RegExp(`^\\s*${tab}\\s*$`, "i") });
       if (!(await link.count())) return false;
       const href = (await link.first().getAttribute("href")) ?? "";
-      if (!new URL(page.url()).search.includes(`tab=${tab.toLowerCase()}`)) {
+      // "Evaluation" and "Evaluation panel" are both sections, so the section is told by the
+      // whole ?tab= value its link carries rather than by how the address begins.
+      const wanted = href ? new URL(href, baseURL).searchParams.get("tab") : tab.toLowerCase();
+      if (new URL(page.url()).searchParams.get("tab") !== wanted) {
         if (href) await visit(href);
         else await link.first().click();
         await ready();
@@ -8214,8 +8753,10 @@ export default function create(
     teamScenarioTab: () => swuManage.absentSection("team_scenario_tab", "Team scenario", '"Team scenario" section'),
     evaluationPanelTab: () => swuManage.absentSection("evaluation_panel_tab", "Evaluation panel", '"Evaluation panel" section'),
     consensusTab: () => swuManage.absentSection("consensus_tab", "Consensus", '"Consensus" section'),
-    instructionsTab: () => swuManage.absentSection("instructions_tab", "Instructions", '"Instructions" section (walked as the panel\'s public sector employee too, ?tab=instructions drawing the Summary)'),
-    evaluationTab: () => swuManage.absentSection("evaluation_tab", "Evaluation", '"Evaluation" section (walked as the panel\'s public sector employee too, ?tab=evaluation drawing the Summary)'),
+    // Drawn for the panel's members only; a reader the screen opens for without them (the
+    // owner who is not on the panel) is shown neither, and reads nothing.
+    instructionsTab: () => swuManage.sectionText("instructions_tab", "Instructions"),
+    evaluationTab: () => swuManage.sectionText("evaluation_tab", "Evaluation"),
     proposalDeadline: () => swuManage.summaryDate("proposal_deadline", /^proposal deadline$/i),
     assignmentDate: () => swuManage.summaryDate("assignment_date", /^assignment date$/i),
     // The "Team questions" of the Opportunity section's form.
@@ -8262,8 +8803,8 @@ export default function create(
     challengeTab: () => twuManage.absentSection("challenge_tab", "Challenge", '"Challenge" section'),
     evaluationPanelTab: () => twuManage.absentSection("evaluation_panel_tab", "Evaluation panel", '"Evaluation panel" section'),
     consensusTab: () => twuManage.absentSection("consensus_tab", "Consensus", '"Consensus" section'),
-    instructionsTab: () => twuManage.absentSection("instructions_tab", "Instructions", '"Instructions" section (walked as the panel\'s public sector employee too, ?tab=instructions drawing the Summary)'),
-    evaluationTab: () => twuManage.absentSection("evaluation_tab", "Evaluation", '"Evaluation" section (walked as the panel\'s public sector employee too, ?tab=evaluation drawing the Summary)'),
+    instructionsTab: () => twuManage.sectionText("instructions_tab", "Instructions"),
+    evaluationTab: () => twuManage.sectionText("evaluation_tab", "Evaluation"),
     offeredStateChanges: twuManage.offeredStateChanges,
     proposalDeadline: () => twuManage.summaryDate("proposal_deadline", /^proposal deadline$/i),
     assignmentDate: () => twuManage.summaryDate("assignment_date", /^assignment date$/i),
@@ -11135,36 +11676,7 @@ export default function create(
       "/users/me?tab=organizations",
     ) as S.OrganizationUserMembershipsSelfPage,
 
-    // Walked on the current build as the public sector employee who sits on the seeded
-    // panels: /dashboard is "Dashboard", "Create an opportunity" and the one section "My
-    // opportunities" (the table "Opportunities you created": Title, each a link | Program |
-    // Status | Last updated), drawn without being asked for. Nothing on it is about the
-    // panels one sits on.
-    evaluationPanelDashboard: {
-      ...absent<S.EvaluationPanelDashboardPage>(
-        "evaluation-panel-dashboard",
-        "/dashboard",
-        'walked on the current build signed in as the public sector employee who sits on the seeded Sprint With Us and Team With Us panels, /dashboard draws "Dashboard", the link "Create an opportunity" and one section, "My opportunities" (the table "Opportunities you created": Title | Program | Status | Last updated) — no "Evaluations" tab, section, table or message for the panels one sits on; the administrator\'s dashboard lists every opportunity instead, and a vendor\'s lists proposals',
-        [
-          "show_panel_opportunities",
-          "evaluations_tab",
-          "panel_opportunities_table",
-          "opportunity_status",
-          "empty_panel_opportunities_message",
-        ],
-      ),
-      open: () => dash.open(),
-      // The section is always drawn; showing it is bringing it into view.
-      showMyOpportunities: async () => {
-        await dash.on("show_my_opportunities");
-        const region = seen(page.getByRole("main").getByRole("heading", { name: /^\s*(my|all) opportunities\s*$/i })).first();
-        if (!(await region.count())) {
-          unbound("evaluation-panel-dashboard.show_my_opportunities", `/dashboard at ${page.url()} draws no "My opportunities" section for ${actingId()}; it offers ${await offered()}`);
-        }
-        await region.scrollIntoViewIfNeeded().catch(() => undefined);
-      },
-      openOpportunity: (input: unknown) => opportunityDashboard.openOpportunity(input as never),
-    } as unknown as S.EvaluationPanelDashboardPage,
+    evaluationPanelDashboard: panelDashboard,
 
     evaluationPanelSwu: evaluationPanelPage<S.EvaluationPanelSwuPage>(
       "evaluation-panel-swu",
@@ -11176,131 +11688,51 @@ export default function create(
       "/opportunities/team-with-us/:opportunityId/edit?tab=evaluationPanel",
     ),
 
-    evaluationInstructionsSwu: absent<S.EvaluationInstructionsSwuPage>(
+    evaluationInstructionsSwu: evaluationInstructionsPage<S.EvaluationInstructionsSwuPage>(
       "evaluation-instructions-swu",
-      "/opportunities/sprint-with-us/:opportunityId/edit?tab=instructions",
-      sectionMissing("sprint-with-us", "instructions"),
-      ["instructions_body", "visible_to_evaluators_only"],
+      `${SWU_TABS}?tab=instructions`,
     ),
 
-    evaluationInstructionsTwu: absent<S.EvaluationInstructionsTwuPage>(
+    evaluationInstructionsTwu: evaluationInstructionsPage<S.EvaluationInstructionsTwuPage>(
       "evaluation-instructions-twu",
-      "/opportunities/team-with-us/:opportunityId/edit?tab=instructions",
-      sectionMissing("team-with-us", "instructions"),
-      ["instructions_body", "visible_to_evaluators_only"],
+      `${TWU_TABS}?tab=instructions`,
     ),
 
-    evaluationIndividualListSwu: absent<S.EvaluationIndividualListSwuPage>(
+    evaluationIndividualListSwu: evaluationIndividualListPage<S.EvaluationIndividualListSwuPage>(
       "evaluation-individual-list-swu",
-      "/opportunities/sprint-with-us/:opportunityId/edit?tab=evaluation",
-      sectionMissing("sprint-with-us", "evaluation"),
-      [
-        "open_proponent_evaluation",
-        "submit_scores_for_consensus",
-        "proponent_row",
-        "anonymous_proponent_name",
-        "evaluation_status",
-        "submit_disabled_until_complete",
-        "incomplete_evaluation_error",
-        "own_evaluations_only",
-      ],
+      `${SWU_TABS}?tab=evaluation`,
     ),
 
-    evaluationIndividualListTwu: absent<S.EvaluationIndividualListTwuPage>(
+    evaluationIndividualListTwu: evaluationIndividualListPage<S.EvaluationIndividualListTwuPage>(
       "evaluation-individual-list-twu",
-      "/opportunities/team-with-us/:opportunityId/edit?tab=evaluation",
-      sectionMissing("team-with-us", "evaluation"),
-      [
-        "open_proponent_evaluation",
-        "submit_scores_for_consensus",
-        "proponent_row",
-        "anonymous_proponent_name",
-        "evaluation_status",
-        "submit_disabled_until_complete",
-        "incomplete_evaluation_error",
-        "own_evaluations_only",
-      ],
+      `${TWU_TABS}?tab=evaluation`,
     ),
 
-    evaluationConsensusListSwu: absent<S.EvaluationConsensusListSwuPage>(
+    evaluationConsensusListSwu: evaluationConsensusListPage<S.EvaluationConsensusListSwuPage>(
       "evaluation-consensus-list-swu",
-      "/opportunities/sprint-with-us/:opportunityId/edit?tab=consensus",
-      sectionMissing("sprint-with-us", "consensus"),
-      [
-        "open_proponent_consensus",
-        "submit_final_consensus_scores",
-        "confirm_submit_consensus",
-        "finalize_consensus_scores",
-        "confirm_finalize_consensus",
-        "cancel_modal",
-        "proponent_row",
-        "consensus_status",
-        "submit_confirmation_modal",
-        "finalize_confirmation_modal",
-        "not_all_consensuses_submitted_error",
-        "no_screenable_proponent_error",
-        "empty_for_owner_not_on_panel",
-      ],
+      `${SWU_TABS}?tab=consensus`,
     ),
 
-    evaluationConsensusListTwu: absent<S.EvaluationConsensusListTwuPage>(
+    evaluationConsensusListTwu: evaluationConsensusListPage<S.EvaluationConsensusListTwuPage>(
       "evaluation-consensus-list-twu",
-      "/opportunities/team-with-us/:opportunityId/edit?tab=consensus",
-      sectionMissing("team-with-us", "consensus"),
-      [
-        "open_proponent_consensus",
-        "submit_final_consensus_scores",
-        "confirm_submit_consensus",
-        "finalize_consensus_scores",
-        "confirm_finalize_consensus",
-        "cancel_modal",
-        "proponent_row",
-        "consensus_status",
-        "submit_confirmation_modal",
-        "finalize_confirmation_modal",
-        "not_all_consensuses_submitted_error",
-        "no_screenable_proponent_error",
-        "empty_for_owner_not_on_panel",
-      ],
+      `${TWU_TABS}?tab=consensus`,
     ),
 
-    // Opened for real so that what a person who may not evaluate is shown can be read.
-    evaluationIndividualCreateSwu: evaluationScreen<S.EvaluationIndividualCreateSwuPage>(
+    evaluationIndividualCreateSwu: evaluationCreatePage<S.EvaluationIndividualCreateSwuPage>(
       "evaluation-individual-create-swu",
       "/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/evaluations/create",
-      [
-        "enter_question_score",
-        "enter_question_notes",
-        "save_draft",
-        "save_and_go_to_next_proponent",
-        "save_and_go_to_previous_proponent",
-        "anonymous_proponent_name",
-        "question_response",
-        "score_out_of_range_error",
-        "empty_notes_error",
-        "duplicate_evaluation_error",
-      ],
     ),
 
-    evaluationIndividualEditSwu: evaluationScreen<S.EvaluationIndividualEditSwuPage>(
+    evaluationIndividualEditSwu: evaluationEditPage<S.EvaluationIndividualEditSwuPage>(
       "evaluation-individual-edit-swu",
       "/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/evaluations/:userId/edit",
-      [
-        "enter_question_score",
-        "enter_question_notes",
-        "save_changes",
-        "save_and_go_to_next_proponent",
-        "evaluation_status",
-        "read_only_after_submitted",
-        "score_out_of_range_error",
-        "empty_notes_error",
-      ],
     ),
 
-    evaluationConsensusCreateSwu: absent<S.EvaluationConsensusCreateSwuPage>(
+    evaluationConsensusCreateSwu: notServed<S.EvaluationConsensusCreateSwuPage>(
       "evaluation-consensus-create-swu",
       "/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/create",
-      behindSession(
+      consensusSheetWalked(
+        "Sprint With Us",
         "/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/create",
       ),
       [
@@ -11316,10 +11748,11 @@ export default function create(
       ],
     ),
 
-    evaluationConsensusEditSwu: absent<S.EvaluationConsensusEditSwuPage>(
+    evaluationConsensusEditSwu: notServed<S.EvaluationConsensusEditSwuPage>(
       "evaluation-consensus-edit-swu",
       "/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/:userId/edit",
-      behindSession(
+      consensusSheetWalked(
+        "Sprint With Us",
         "/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/:userId/edit",
       ),
       [
@@ -11334,42 +11767,21 @@ export default function create(
       ],
     ),
 
-    evaluationIndividualCreateTwu: evaluationScreen<S.EvaluationIndividualCreateTwuPage>(
+    evaluationIndividualCreateTwu: evaluationCreatePage<S.EvaluationIndividualCreateTwuPage>(
       "evaluation-individual-create-twu",
       "/opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/evaluations/create",
-      [
-        "enter_question_score",
-        "enter_question_notes",
-        "save_draft",
-        "save_and_go_to_next_proponent",
-        "save_and_go_to_previous_proponent",
-        "anonymous_proponent_name",
-        "question_response",
-        "score_out_of_range_error",
-        "empty_notes_error",
-        "duplicate_evaluation_error",
-      ],
     ),
 
-    evaluationIndividualEditTwu: evaluationScreen<S.EvaluationIndividualEditTwuPage>(
+    evaluationIndividualEditTwu: evaluationEditPage<S.EvaluationIndividualEditTwuPage>(
       "evaluation-individual-edit-twu",
       "/opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/evaluations/:userId/edit",
-      [
-        "enter_question_score",
-        "enter_question_notes",
-        "save_changes",
-        "save_and_go_to_next_proponent",
-        "evaluation_status",
-        "read_only_after_submitted",
-        "score_out_of_range_error",
-        "empty_notes_error",
-      ],
     ),
 
-    evaluationConsensusCreateTwu: absent<S.EvaluationConsensusCreateTwuPage>(
+    evaluationConsensusCreateTwu: notServed<S.EvaluationConsensusCreateTwuPage>(
       "evaluation-consensus-create-twu",
       "/opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/consensus/create",
-      behindSession(
+      consensusSheetWalked(
+        "Team With Us",
         "/opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/consensus/create",
       ),
       [
@@ -11385,10 +11797,11 @@ export default function create(
       ],
     ),
 
-    evaluationConsensusEditTwu: absent<S.EvaluationConsensusEditTwuPage>(
+    evaluationConsensusEditTwu: notServed<S.EvaluationConsensusEditTwuPage>(
       "evaluation-consensus-edit-twu",
       "/opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/consensus/:userId/edit",
-      behindSession(
+      consensusSheetWalked(
+        "Team With Us",
         "/opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/consensus/:userId/edit",
       ),
       [
