@@ -929,3 +929,12 @@ redo:
       why: derived again by a derive-tests run on proposals
       by: runner:derive-tests
       at: 2026-10-04T06:47:45.525Z
+  - id: R-4.2
+    version: 1
+    why: the test asserts the mail catcher holds zero messages for anyone after a
+      first-time person with no email address signs in, while the criterion asks
+      only that no welcome message is attempted for that person; the closing
+      notices R-1.1 and R-5.20 require, sent on that sign-in's first /api
+      request, make the catcher hold 14 unrelated messages, so the test must
+      look only for a welcome message rather than counting all mail.
+    verb: test-overreaches
