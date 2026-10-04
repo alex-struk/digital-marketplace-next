@@ -13722,6 +13722,11 @@ rebind:
     app_tree: eab038a6ea4ed4a8129aebe6332183c2f9bafe09
     by: runner:verify
     at: 2026-10-04T18:05:34.423Z
+    closed:
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-04T18:20:06.551Z
   - id: R-1.49
     target: new
     why: "unbound: proposal-twu-view.score_challenge — the proposal's screen offers
@@ -13749,6 +13754,11 @@ rebind:
     app_tree: eab038a6ea4ed4a8129aebe6332183c2f9bafe09
     by: runner:verify
     at: 2026-10-04T18:05:34.423Z
+    closed:
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-04T18:20:06.551Z
   - id: R-2.28
     target: new
     why: "unbound: proposal-swu-view.offered_score_actions — the proposal's screen
@@ -13763,6 +13773,11 @@ rebind:
     app_tree: eab038a6ea4ed4a8129aebe6332183c2f9bafe09
     by: runner:verify
     at: 2026-10-04T18:05:34.423Z
+    closed:
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-04T18:20:06.551Z
   - id: R-2.30
     target: new
     why: "unbound: proposal-swu-export-one.open —
@@ -13815,6 +13830,11 @@ rebind:
     app_tree: eab038a6ea4ed4a8129aebe6332183c2f9bafe09
     by: runner:verify
     at: 2026-10-04T18:05:34.423Z
+    closed:
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-04T18:20:06.551Z
   - id: R-2.31
     target: new
     why: "unbound: proposal-swu-view.score_team_scenario — the proposal's screen
@@ -13842,6 +13862,11 @@ rebind:
     app_tree: eab038a6ea4ed4a8129aebe6332183c2f9bafe09
     by: runner:verify
     at: 2026-10-04T18:05:34.423Z
+    closed:
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-04T18:20:06.551Z
   - id: R-2.35
     target: new
     why: "unbound: proposal-swu-view.score_code_challenge — the proposal's screen
@@ -13869,3 +13894,8 @@ rebind:
     app_tree: eab038a6ea4ed4a8129aebe6332183c2f9bafe09
     by: runner:verify
     at: 2026-10-04T18:05:34.423Z
+    closed:
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-04T18:20:06.551Z
