@@ -2670,6 +2670,17 @@ conditions:
     stage: plan
     by: agent:tech-lead
     at: 2026-10-04T04:16:04.131Z
+    closed:
+      outcome: met
+      why: docs/decisions/0002 rewords the no-added-tables sentence to 'no table or
+        column the old application did not have', cites the tech-lead ruling for
+        restoring the old application's own tables, adds migration-table rows
+        for cwuOpportunityAttachments (0029) and swuOpportunityAttachments and
+        twuOpportunityAttachments (0055), and points to 0007 and 0012; the J5
+        paragraph and the app/migrations layout line in plan/plan.md now name
+        the six migrations instead of 'the three named in 0002'.
+      by: agent:architect
+      at: 2026-10-04T04:19:12.561Z
   - ref: plan-21#2
     text: "docs/decisions/0055: replace the instruction that the builder take the
       table and column names 'from the old application's migration history'.
@@ -2685,6 +2696,16 @@ conditions:
     stage: plan
     by: agent:tech-lead
     at: 2026-10-04T04:16:04.131Z
+    closed:
+      outcome: met
+      why: docs/decisions/0055 drops the instruction to take names from the old
+        migration history and names swuOpportunityAttachments and
+        twuOpportunityAttachments with columns opportunityVersion and file and
+        primary key (opportunityVersion, file), marked as the rebuild's own
+        names under 0007's rule and reconciled by a rename migration if the old
+        repository becomes available.
+      by: agent:architect
+      at: 2026-10-04T04:19:12.582Z
   - ref: plan-21#3
     text: "plan/plan.md: run `node plan/check-coverage.mjs .` and record its result
       in the coverage-check section. If it cannot be run, say so there, and
@@ -2696,3 +2717,12 @@ conditions:
     stage: plan
     by: agent:tech-lead
     at: 2026-10-04T04:16:04.131Z
+    closed:
+      outcome: met
+      why: the coverage-check section of plan/plan.md records that node
+        plan/check-coverage.mjs . could not be run (permission guard) and states
+        the hand count of 248 placed criteria, with Slice 14 at 18 and Slice 15
+        at 17 and the count for every slice; a recount of plan/tasks.md at this
+        ruling confirms the per-slice counts and the total.
+      by: agent:architect
+      at: 2026-10-04T04:19:12.600Z
