@@ -2776,6 +2776,17 @@ conditions:
     stage: build
     by: agent:reviewer
     at: 2026-10-04T05:42:27.726Z
+    closed:
+      outcome: met
+      why: the read-only Sprint With Us and Team With Us proposal pages are built at
+        app/frontend/src/screens/proposal-team-view.tsx and routed in
+        app/frontend/src/router.tsx, with every row of the shared Proposals tab
+        (opportunity-cwu-proposals-tab.tsx) linking to its program's page. Staff
+        get the missing page for a draft or a refused proposal
+        (app/frontend/tests/team-proposals.test.tsx). Binding the acceptance
+        test to the page is addressed to bind-adapter.
+      by: agent:reviewer
+      at: 2026-10-04T06:37:44.114Z
   - ref: bind-adapter-new-72#1
     text: "proposal-cwu-view: bind proposal_identifier, proposal_tab, history_tab,
       proponent, score, rank and export_link against
@@ -2846,3 +2857,22 @@ conditions:
         first-offered-organization default
       by: agent:reviewer
       at: 2026-10-04T06:22:59.605Z
+  - ref: build-slice-15-2#1
+    text: "R-2.19, in the case \"a proposal meeting every rule is submitted\":
+      Error: unbound: proposal-swu-create.add_reference — no box on \"Reference
+      N\" takes \"company\" (each reference has Name, Email address and Phone
+      number (optional)) on
+      http://localhost:4300/opportunities/sprint-with-us/61d2336e-178f-4582-817\
+      6-bf34445e0193/proposals/create — at
+      tests/acceptance/proposals/R-2.19.spec.ts:182. Each Sprint With Us
+      reference in app/frontend/src/screens/proposal-team-form.tsx must take a
+      Company, as the service (ReferenceInput.company,
+      swuProposalReferences.company) and the old application's reference form
+      do; the same missing box stops R-2.7, R-2.9, R-2.11, R-2.16, R-2.18 and
+      R-2.22's Sprint With Us cases at addReference."
+    from: build-slice-15-2
+    family: build-slice-15
+    gate: G3
+    stage: build
+    by: agent:reviewer
+    at: 2026-10-04T06:37:43.960Z
