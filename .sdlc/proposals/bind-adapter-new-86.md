@@ -36,3 +36,23 @@ I've bound all four missing members, on the evaluation-individual-submission-req
 I deliberately did not send a submission that would succeed against any opportunity, because it would have changed shared seeded state and sent email. So I never saw an accepted answer on this target, and `request_accepted` is written on the assumption that a success comes back as an ordinary 2xx answer, as it does on the old target.
 
 No other page needed rebinding this run, and I changed nothing outside `tests/adapters/new/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Question: does this adapter bind every surface action and observation on new for evaluation-individual-submission-request-swu, and nothing else? Approve. The diff adds exactly the contract page's members (open, submit_scores_for_consensus_naming, request_accepted, refusal_messages, stored_status) to tests/adapters/new/ and lists them bound in bindings.yaml; each is navigation or request transport only — open resolves the opportunity through the seed, the action builds the PUT {tag: submitIndividualQuestionEvaluations, value: {note, proposals}} from seed handles or identifiers and throws unbound rather than send an empty list, request_accepted and refusal_messages report the last answer, and stored_status re-reads the opportunity as the signed-in person as the contract specifies. Nothing decides a pass, nothing under tests/acceptance changed (no test for this page exists yet), and the runner's own typecheck on 60e142ef8 passed with no diagnostics under adapters/new/. The live probe on the target refused an incomplete submission with the contract's exact refusal text and left the status unchanged, which is evidence the route and request shape are right. The seed opportunity swuSubmissionNamesTwoOfThree answering 404 is a target whose database predates the manifest (the record is defined in tests/seed/manifest.yaml), not an adapter fault, and verify will surface it. Residual risk: an accepted submission was not observed on this target, so request_accepted assumes a 2xx success as on old. The already-owed missing-test on R-5.27 stands unchanged. This becomes a return if a verify run with the seed loaded shows the adapter mis-reading an accepted answer or failing to reach the page's members.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `60e142ef8ca7d96d559ae14893b782170e734734`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.

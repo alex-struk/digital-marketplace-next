@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does this adapter bind every surface action and observation on new for evaluation-individual-submission-request-swu, and nothing else? Approve. The diff adds exactly the contract page's members (open, submit_scores_for_consensus_naming, request_accepted, refusal_messages, stored_status) to tests/adapters/new/ and lists them bound in bindings.yaml; each is navigation or request transport only — open resolves the opportunity through the seed, the action builds the PUT {tag: submitIndividualQuestionEvaluations, value: {note, proposals}} from seed handles or identifiers and throws unbound rather than send an empty list, request_accepted and refusal_messages report the last answer, and stored_status re-reads the opportunity as the signed-in person as the contract specifies. Nothing decides a pass, nothing under tests/acceptance changed (no test for this page exists yet), and the runner's own typecheck on 60e142ef8 passed with no diagnostics under adapters/new/. The live probe on the target refused an incomplete submission with the contract's exact refusal text and left the status unchanged, which is evidence the route and request shape are right. The seed opportunity swuSubmissionNamesTwoOfThree answering 404 is a target whose database predates the manifest (the record is defined in tests/seed/manifest.yaml), not an adapter fault, and verify will surface it. Residual risk: an accepted submission was not observed on this target, so request_accepted assumes a 2xx success as on old. The already-owed missing-test on R-5.27 stands unchanged. This becomes a return if a verify run with the seed loaded shows the adapter mis-reading an accepted answer or failing to reach the page's members.
+conditions: []
+cost: 0.35885620000000007
+turns: 6
+session: "6fe1b9ad-8508-43e9-ac2a-71834c02ed0a"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.288 (Claude Code)"
+isolation: "none"
+at: 2026-10-04T16:22:04.227Z
