@@ -26,3 +26,14 @@ I made no change to the application in this revision. The ruling sent the propos
 **Check:** with dependencies installed, `npm --prefix app run check` passed: typecheck clean, all unit tests in every package green. An earlier run in this workspace failed only because the packages weren't installed yet (`tsc` not found); after `npm ci` it passed. The error lines in the output are logged by tests that deliberately exercise failure paths, such as a closing run that hits a database error or mail that can't be delivered. They are not failures.
 
 **For the next stage:** if R-4.20 still reads "Inactive" once the adapter waits for the activation change to land, the fault is in the application and should come back here. Otherwise, by the ruling's own terms, the proposal can be approved as it stands. The next slice will find nothing missing from this one.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.288 (Claude Code))
+
+Question: does slice 16 (opportunities close at their deadline; a Code With Us one is scored and awarded) do what its criteria say? Ruling: approve. The verify result is current for this proposal (app tree bff4988 matches the branch) and every one of the 12 claimed criteria (R-1.1, R-1.19, R-1.26, R-1.27, R-2.26, R-2.27, R-2.32, R-2.33, R-2.34, R-2.36, R-5.20, R-6.25) passes. No re-checked criterion has a failing or unbound row; R-4.20, the failure in the last round, passes now that its binding waits for the activation change, and R-2.15 and R-4.2 pass. Reading the code against the criteria: the deadline hook runs in front of /api and /status, closes each lapsed published opportunity under a row lock so two runs close it once, records the note 'This opportunity has closed.', moves submitted proposals to review (with Proponent N names for SWU/TWU only), notifies the CWU author or only the panel's evaluators, skips inactive accounts, and logs failures without failing the request. CWU scoring enforces 0-100 with at most two decimal places and records the exact history note. The move to processing ignores draft, withdrawn and disqualified proposals. A disqualification needs a reason of 1-5,000 characters. Awarding runs in one transaction, marks only the proposals still in contention as not awarded, and the award and decision notices name the winner or an em dash. The winner's contact details and score, and a vendor's own score and rank, are gated as the criteria say. Raw SQL builds table names from constants only and passes ids as parameters; logs carry only event names and error types, with no personal data or credentials. Unit and end-to-end tests cover the new seams (the closing hook, the evaluation rules, the notices, the full close-score-award flow). What would change the ruling: a stale or failing verify result for this code, or a regression in an earlier slice's criterion.
+
+**Conditions:**
+none
